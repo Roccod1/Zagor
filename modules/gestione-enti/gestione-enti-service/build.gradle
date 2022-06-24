@@ -1,0 +1,11 @@
+dependencies {
+	compile project(":modules:gestione-enti:gestione-enti-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../gestione-enti-api/src/main/java"
+}
+
+group = "it.servizidigitali.gestioneenti"

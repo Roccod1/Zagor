@@ -1,0 +1,11 @@
+dependencies {
+	compile project(":modules:gestione-servizi:gestione-servizi-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../gestione-servizi-api/src/main/java"
+}
+
+group = "it.servizidigitali.gestioneservizi"

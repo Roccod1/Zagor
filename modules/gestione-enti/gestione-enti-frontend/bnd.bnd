@@ -1,0 +1,4 @@
+Bundle-Name: gestione-enti-frontend
+Bundle-SymbolicName: it.servizidigitali.gestioneenti.frontend
+Bundle-Version: 1.0.0
+Export-Package: it.servizidigitali.gestioneenti.frontend.constants
