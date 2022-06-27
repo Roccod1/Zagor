@@ -2,20 +2,24 @@
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
 
 <service-builder dependency-injector="ds" package-path="it.servizidigitali.gestioneservizi">
-	<namespace>FOO</namespace>
-	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="true"">-->
-	<entity local-service="true" name="Foo" remote-service="true" uuid="true">
+	<namespace>servizi_digitali_gestione_servizi</namespace>
+	<entity 
+		name="Servizio"
+		table="servizio"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
 
 		<!-- PK fields -->
-
-		<column name="fooId" primary="true" type="long" />
+		<column name="servizioId" primary="true" type="long" />
 
 		<!-- Group instance -->
-
 		<column name="groupId" type="long" />
 
 		<!-- Audit fields -->
-
 		<column name="companyId" type="long" />
 		<column name="userId" type="long" />
 		<column name="userName" type="String" />
@@ -23,28 +27,88 @@
 		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
-
-		<column name="field1" type="String" />
-		<column name="field2" type="boolean" />
-		<column name="field3" type="int" />
-		<column name="field4" type="Date" />
-		<column name="field5" type="String" />
+		<column name="nome" type="String" />
+		<column name="descrizione" type="String" />
+		<column name="descrizioneEstesa" type="String" />
+		<column name="codice" type="String" />
+		<column name="uri" type="String" />
+		<column name="uriGuest" type="String" />
+		<column name="uriScheda" type="String" />
+		<column name="autenticazione" type="boolean" />
+		<column name="dataInizioAttivazione" type="Date" />
+		<column name="dataFineAttivazione" type="Date" />
+		<column name="cittadino" type="boolean" />
+		<column name="azienda" type="boolean" />
+		<column name="delega" type="boolean" />
+		<column name="chatbot" type="boolean" />
+		<column name="gestioneBackoffice" type="boolean" />
+		<column name="prenotabile" type="boolean" />
+		<column name="codicePrestazioneINPS" type="String" />
+		<column name="privacyDelega" type="boolean" />
+		<column name="allegatoDelega" type="boolean" />
+		<column name="timbroCertificato" type="boolean" />
+		<column name="attivo" type="boolean" />
 
 		<!-- Order -->
-
 		<order by="asc">
-			<order-column name="field1" />
+			<order-column name="nome" />
 		</order>
 
 		<!-- Finder methods -->
-
-		<finder name="Field2" return-type="Collection">
-			<finder-column name="field2" />
+		<finder name="Codice" return-type="Servizio">
+			<finder-column name="codice" />
 		</finder>
 
-		<!-- References -->
+		<finder name="Attivo" return-type="Collection">
+			<finder-column name="attivo" />
+		</finder>
+	</entity>
 
-		<reference entity="AssetEntry" package-path="com.liferay.portlet.asset" />
-		<reference entity="AssetTag" package-path="com.liferay.portlet.asset" />
+	<entity 
+		name="AreaTematica"
+		table="area_tematica"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="areaTematicaId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="nome" type="String" />
+		<column name="descrizione" type="String" />
+		<column name="codice" type="String" />
+		<column name="sportello" type="String" />
+		<column name="uriVocabolario" type="String" />
+		<column name="ordine" type="int" />
+		<column name="visibile" type="boolean" />
+		<column name="attiva" type="boolean" />
+
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="nome" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="Codice" return-type="AreaTematica">
+			<finder-column name="codice" />
+		</finder>
+
+		<finder name="Attiva" return-type="Collection">
+			<finder-column name="attiva" />
+		</finder>
 	</entity>
 </service-builder>
