@@ -1,0 +1,11 @@
+dependencies {
+	compile project(":modules:gestione-appuntamenti:gestione-appuntamenti-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../gestione-appuntamenti-api/src/main/java"
+}
+
+group = "it.servizidigitali.gestioneappuntamenti"

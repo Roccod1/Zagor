@@ -1,0 +1,11 @@
+dependencies {
+	compile project(":modules:gestione-metriche-chatbot:gestione-metriche-chatbot-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../gestione-metriche-chatbot-api/src/main/java"
+}
+
+group = "it.servizidigitali.gestionemetrichechatbot"

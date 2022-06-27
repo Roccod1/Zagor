@@ -1,0 +1,11 @@
+dependencies {
+	compile project(":modules:profilo-utente:profilo-utente-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../profilo-utente-api/src/main/java"
+}
+
+group = "it.servizidigitali.profiloutente"

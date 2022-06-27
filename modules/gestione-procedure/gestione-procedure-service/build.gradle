@@ -1,0 +1,11 @@
+dependencies {
+	compile project(":modules:gestione-procedure:gestione-procedure-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../gestione-procedure-api/src/main/java"
+}
+
+group = "it.servizidigitali.gestioneprocedure"

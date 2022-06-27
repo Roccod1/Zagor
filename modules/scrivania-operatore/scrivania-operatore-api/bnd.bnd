@@ -1,0 +1,10 @@
+Bundle-Name: scrivania-operatore-api
+Bundle-SymbolicName: it.servizidigitali.scrivaniaoperatore.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	it.servizidigitali.scrivaniaoperatore.exception,\
+	it.servizidigitali.scrivaniaoperatore.model,\
+	it.servizidigitali.scrivaniaoperatore.service,\
+	it.servizidigitali.scrivaniaoperatore.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../scrivania-operatore-service/service.xml

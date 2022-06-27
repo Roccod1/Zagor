@@ -1,0 +1,11 @@
+dependencies {
+	compile project(":modules:presentatore-forms:presentatore-forms-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../presentatore-forms-api/src/main/java"
+}
+
+group = "it.servizidigitali.presentatoreforms"

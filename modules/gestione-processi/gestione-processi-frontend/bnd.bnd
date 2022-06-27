@@ -1,0 +1,4 @@
+Bundle-Name: gestione-processi-frontend
+Bundle-SymbolicName: it.servizidigitali.gestioneprocessi.frontend
+Bundle-Version: 1.0.0
+Export-Package: it.servizidigitali.gestioneprocessi.frontend.constants

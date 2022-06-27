@@ -1,0 +1,11 @@
+dependencies {
+	compile project(":modules:intermediari:intermediari-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../intermediari-api/src/main/java"
+}
+
+group = "it.servizidigitali.intermediari"
