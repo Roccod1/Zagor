@@ -6,11 +6,6 @@ import com.liferay.portal.kernel.util.PropsUtil;
 
 import javax.sql.DataSource;
 
-/**
- * 
- * @author pindi
- *
- */
 public class DataSourceProviderImpl implements DataSourceProvider {
 
 	@Override
