@@ -6,6 +6,7 @@ dependencies {
 
 buildService {
 	apiDir = "../gestione-enti-api/src/main/java"
+	databaseNameMaxLength = 64
 }
 
 group = "it.servizidigitali.gestioneenti"

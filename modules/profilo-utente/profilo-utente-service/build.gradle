@@ -6,6 +6,7 @@ dependencies {
 
 buildService {
 	apiDir = "../profilo-utente-api/src/main/java"
+	databaseNameMaxLength = 64
 }
 
 group = "it.servizidigitali.profiloutente"

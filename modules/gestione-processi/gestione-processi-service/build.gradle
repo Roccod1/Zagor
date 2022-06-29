@@ -6,6 +6,7 @@ dependencies {
 
 buildService {
 	apiDir = "../gestione-processi-api/src/main/java"
+	databaseNameMaxLength = 64
 }
 
 group = "it.servizidigitali.gestioneprocessi"

@@ -6,6 +6,7 @@ dependencies {
 
 buildService {
 	apiDir = "../scrivania-operatore-api/src/main/java"
+	databaseNameMaxLength = 64
 }
 
 group = "it.servizidigitali.scrivaniaoperatore"

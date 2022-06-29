@@ -6,6 +6,7 @@ dependencies {
 
 buildService {
 	apiDir = "../presentatore-forms-api/src/main/java"
+	databaseNameMaxLength = 64
 }
 
 group = "it.servizidigitali.presentatoreforms"

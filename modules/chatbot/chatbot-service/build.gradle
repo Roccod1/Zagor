@@ -6,6 +6,7 @@ dependencies {
 
 buildService {
 	apiDir = "../chatbot-api/src/main/java"
+	databaseNameMaxLength = 64
 }
 
 group = "it.servizidigitali.chatbot"
