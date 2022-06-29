@@ -88,7 +88,8 @@ public class ServizioModelImpl
 		{"prenotabile", Types.BOOLEAN},
 		{"codicePrestazioneINPS", Types.VARCHAR},
 		{"privacyDelega", Types.BOOLEAN}, {"allegatoDelega", Types.BOOLEAN},
-		{"timbroCertificato", Types.BOOLEAN}, {"attivo", Types.BOOLEAN}
+		{"timbroCertificato", Types.BOOLEAN}, {"attivo", Types.BOOLEAN},
+		{"areaTematicaId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -124,10 +125,11 @@ public class ServizioModelImpl
 		TABLE_COLUMNS_MAP.put("allegatoDelega", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("timbroCertificato", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("attivo", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("areaTematicaId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table servizio (uuid_ VARCHAR(75) null,servizioId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,descrizioneEstesa VARCHAR(75) null,codice VARCHAR(75) null,uri VARCHAR(75) null,uriGuest VARCHAR(75) null,uriScheda VARCHAR(75) null,autenticazione BOOLEAN,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,gestioneBackoffice BOOLEAN,prenotabile BOOLEAN,codicePrestazioneINPS VARCHAR(75) null,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,attivo BOOLEAN)";
+		"create table servizio (uuid_ VARCHAR(75) null,servizioId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,descrizioneEstesa VARCHAR(75) null,codice VARCHAR(75) null,uri VARCHAR(75) null,uriGuest VARCHAR(75) null,uriScheda VARCHAR(75) null,autenticazione BOOLEAN,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,gestioneBackoffice BOOLEAN,prenotabile BOOLEAN,codicePrestazioneINPS VARCHAR(75) null,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,attivo BOOLEAN,areaTematicaId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table servizio";
 
@@ -191,6 +193,21 @@ public class ServizioModelImpl
 	@Deprecated
 	public static void setFinderCacheEnabled(boolean finderCacheEnabled) {
 	}
+
+	public static final String
+		MAPPING_TABLE_SERVIZIDIGITALIGESTIONESERVIZI_SERVIZIO_TIPOLOGIA_NAME =
+			"ServiziDigitaliGestioneServizi_servizio_tipologia";
+
+	public static final Object[][]
+		MAPPING_TABLE_SERVIZIDIGITALIGESTIONESERVIZI_SERVIZIO_TIPOLOGIA_COLUMNS =
+			{
+				{"companyId", Types.BIGINT}, {"servizioId", Types.BIGINT},
+				{"tipologiaId", Types.BIGINT}
+			};
+
+	public static final String
+		MAPPING_TABLE_SERVIZIDIGITALIGESTIONESERVIZI_SERVIZIO_TIPOLOGIA_SQL_CREATE =
+			"create table ServiziDigitaliGestioneServizi_servizio_tipologia (companyId LONG not null,servizioId LONG not null,tipologiaId LONG not null,primary key (servizioId, tipologiaId))";
 
 	public ServizioModelImpl() {
 	}
@@ -423,6 +440,11 @@ public class ServizioModelImpl
 		attributeGetterFunctions.put("attivo", Servizio::getAttivo);
 		attributeSetterBiConsumers.put(
 			"attivo", (BiConsumer<Servizio, Boolean>)Servizio::setAttivo);
+		attributeGetterFunctions.put(
+			"areaTematicaId", Servizio::getAreaTematicaId);
+		attributeSetterBiConsumers.put(
+			"areaTematicaId",
+			(BiConsumer<Servizio, Long>)Servizio::setAreaTematicaId);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -1011,6 +1033,20 @@ public class ServizioModelImpl
 	}
 
 	@Override
+	public long getAreaTematicaId() {
+		return _areaTematicaId;
+	}
+
+	@Override
+	public void setAreaTematicaId(long areaTematicaId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_areaTematicaId = areaTematicaId;
+	}
+
+	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
 			PortalUtil.getClassNameId(Servizio.class.getName()));
@@ -1101,6 +1137,7 @@ public class ServizioModelImpl
 		servizioImpl.setAllegatoDelega(isAllegatoDelega());
 		servizioImpl.setTimbroCertificato(isTimbroCertificato());
 		servizioImpl.setAttivo(isAttivo());
+		servizioImpl.setAreaTematicaId(getAreaTematicaId());
 
 		servizioImpl.resetOriginalValues();
 
@@ -1161,6 +1198,8 @@ public class ServizioModelImpl
 		servizioImpl.setTimbroCertificato(
 			this.<Boolean>getColumnOriginalValue("timbroCertificato"));
 		servizioImpl.setAttivo(this.<Boolean>getColumnOriginalValue("attivo"));
+		servizioImpl.setAreaTematicaId(
+			this.<Long>getColumnOriginalValue("areaTematicaId"));
 
 		return servizioImpl;
 	}
@@ -1386,6 +1425,8 @@ public class ServizioModelImpl
 
 		servizioCacheModel.attivo = isAttivo();
 
+		servizioCacheModel.areaTematicaId = getAreaTematicaId();
+
 		return servizioCacheModel;
 	}
 
@@ -1506,6 +1547,7 @@ public class ServizioModelImpl
 	private boolean _allegatoDelega;
 	private boolean _timbroCertificato;
 	private boolean _attivo;
+	private long _areaTematicaId;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1567,6 +1609,7 @@ public class ServizioModelImpl
 		_columnOriginalValues.put("allegatoDelega", _allegatoDelega);
 		_columnOriginalValues.put("timbroCertificato", _timbroCertificato);
 		_columnOriginalValues.put("attivo", _attivo);
+		_columnOriginalValues.put("areaTematicaId", _areaTematicaId);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1647,6 +1690,8 @@ public class ServizioModelImpl
 		columnBitmasks.put("timbroCertificato", 134217728L);
 
 		columnBitmasks.put("attivo", 268435456L);
+
+		columnBitmasks.put("areaTematicaId", 536870912L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

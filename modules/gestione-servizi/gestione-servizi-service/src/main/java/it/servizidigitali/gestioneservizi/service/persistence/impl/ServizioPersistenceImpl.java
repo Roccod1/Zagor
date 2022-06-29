@@ -31,7 +31,11 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.persistence.BasePersistence;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.portal.kernel.service.persistence.impl.TableMapper;
+import com.liferay.portal.kernel.service.persistence.impl.TableMapperFactory;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -44,6 +48,7 @@ import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import it.servizidigitali.gestioneservizi.exception.NoSuchServizioException;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.model.ServizioTable;
+import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.model.impl.ServizioImpl;
 import it.servizidigitali.gestioneservizi.model.impl.ServizioModelImpl;
 import it.servizidigitali.gestioneservizi.service.persistence.ServizioPersistence;
@@ -58,6 +63,7 @@ import java.lang.reflect.InvocationHandler;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -2375,6 +2381,9 @@ public class ServizioPersistenceImpl
 
 	@Override
 	protected Servizio removeImpl(Servizio servizio) {
+		servizioToTipologiaTableMapper.deleteLeftPrimaryKeyTableMappings(
+			servizio.getPrimaryKey());
+
 		Session session = null;
 
 		try {
@@ -2716,6 +2725,305 @@ public class ServizioPersistenceImpl
 		return count.intValue();
 	}
 
+	/**
+	 * Returns the primaryKeys of tipologias associated with the servizio.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @return long[] of the primaryKeys of tipologias associated with the servizio
+	 */
+	@Override
+	public long[] getTipologiaPrimaryKeys(long pk) {
+		long[] pks = servizioToTipologiaTableMapper.getRightPrimaryKeys(pk);
+
+		return pks.clone();
+	}
+
+	/**
+	 * Returns all the servizio associated with the tipologia.
+	 *
+	 * @param pk the primary key of the tipologia
+	 * @return the servizios associated with the tipologia
+	 */
+	@Override
+	public List<Servizio> getTipologiaServizios(long pk) {
+		return getTipologiaServizios(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+	}
+
+	/**
+	 * Returns all the servizio associated with the tipologia.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ServizioModelImpl</code>.
+	 * </p>
+	 *
+	 * @param pk the primary key of the tipologia
+	 * @param start the lower bound of the range of tipologias
+	 * @param end the upper bound of the range of tipologias (not inclusive)
+	 * @return the range of servizios associated with the tipologia
+	 */
+	@Override
+	public List<Servizio> getTipologiaServizios(long pk, int start, int end) {
+		return getTipologiaServizios(pk, start, end, null);
+	}
+
+	/**
+	 * Returns all the servizio associated with the tipologia.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ServizioModelImpl</code>.
+	 * </p>
+	 *
+	 * @param pk the primary key of the tipologia
+	 * @param start the lower bound of the range of tipologias
+	 * @param end the upper bound of the range of tipologias (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of servizios associated with the tipologia
+	 */
+	@Override
+	public List<Servizio> getTipologiaServizios(
+		long pk, int start, int end,
+		OrderByComparator<Servizio> orderByComparator) {
+
+		return servizioToTipologiaTableMapper.getLeftBaseModels(
+			pk, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns the number of tipologias associated with the servizio.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @return the number of tipologias associated with the servizio
+	 */
+	@Override
+	public int getTipologiasSize(long pk) {
+		long[] pks = servizioToTipologiaTableMapper.getRightPrimaryKeys(pk);
+
+		return pks.length;
+	}
+
+	/**
+	 * Returns <code>true</code> if the tipologia is associated with the servizio.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologiaPK the primary key of the tipologia
+	 * @return <code>true</code> if the tipologia is associated with the servizio; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean containsTipologia(long pk, long tipologiaPK) {
+		return servizioToTipologiaTableMapper.containsTableMapping(
+			pk, tipologiaPK);
+	}
+
+	/**
+	 * Returns <code>true</code> if the servizio has any tipologias associated with it.
+	 *
+	 * @param pk the primary key of the servizio to check for associations with tipologias
+	 * @return <code>true</code> if the servizio has any tipologias associated with it; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean containsTipologias(long pk) {
+		if (getTipologiasSize(pk) > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
+	 * Adds an association between the servizio and the tipologia. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologiaPK the primary key of the tipologia
+	 */
+	@Override
+	public void addTipologia(long pk, long tipologiaPK) {
+		Servizio servizio = fetchByPrimaryKey(pk);
+
+		if (servizio == null) {
+			servizioToTipologiaTableMapper.addTableMapping(
+				CompanyThreadLocal.getCompanyId(), pk, tipologiaPK);
+		}
+		else {
+			servizioToTipologiaTableMapper.addTableMapping(
+				servizio.getCompanyId(), pk, tipologiaPK);
+		}
+	}
+
+	/**
+	 * Adds an association between the servizio and the tipologia. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologia the tipologia
+	 */
+	@Override
+	public void addTipologia(long pk, Tipologia tipologia) {
+		Servizio servizio = fetchByPrimaryKey(pk);
+
+		if (servizio == null) {
+			servizioToTipologiaTableMapper.addTableMapping(
+				CompanyThreadLocal.getCompanyId(), pk,
+				tipologia.getPrimaryKey());
+		}
+		else {
+			servizioToTipologiaTableMapper.addTableMapping(
+				servizio.getCompanyId(), pk, tipologia.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Adds an association between the servizio and the tipologias. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologiaPKs the primary keys of the tipologias
+	 */
+	@Override
+	public void addTipologias(long pk, long[] tipologiaPKs) {
+		long companyId = 0;
+
+		Servizio servizio = fetchByPrimaryKey(pk);
+
+		if (servizio == null) {
+			companyId = CompanyThreadLocal.getCompanyId();
+		}
+		else {
+			companyId = servizio.getCompanyId();
+		}
+
+		servizioToTipologiaTableMapper.addTableMappings(
+			companyId, pk, tipologiaPKs);
+	}
+
+	/**
+	 * Adds an association between the servizio and the tipologias. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologias the tipologias
+	 */
+	@Override
+	public void addTipologias(long pk, List<Tipologia> tipologias) {
+		addTipologias(
+			pk,
+			ListUtil.toLongArray(tipologias, Tipologia.TIPOLOGIA_ID_ACCESSOR));
+	}
+
+	/**
+	 * Clears all associations between the servizio and its tipologias. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio to clear the associated tipologias from
+	 */
+	@Override
+	public void clearTipologias(long pk) {
+		servizioToTipologiaTableMapper.deleteLeftPrimaryKeyTableMappings(pk);
+	}
+
+	/**
+	 * Removes the association between the servizio and the tipologia. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologiaPK the primary key of the tipologia
+	 */
+	@Override
+	public void removeTipologia(long pk, long tipologiaPK) {
+		servizioToTipologiaTableMapper.deleteTableMapping(pk, tipologiaPK);
+	}
+
+	/**
+	 * Removes the association between the servizio and the tipologia. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologia the tipologia
+	 */
+	@Override
+	public void removeTipologia(long pk, Tipologia tipologia) {
+		servizioToTipologiaTableMapper.deleteTableMapping(
+			pk, tipologia.getPrimaryKey());
+	}
+
+	/**
+	 * Removes the association between the servizio and the tipologias. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologiaPKs the primary keys of the tipologias
+	 */
+	@Override
+	public void removeTipologias(long pk, long[] tipologiaPKs) {
+		servizioToTipologiaTableMapper.deleteTableMappings(pk, tipologiaPKs);
+	}
+
+	/**
+	 * Removes the association between the servizio and the tipologias. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologias the tipologias
+	 */
+	@Override
+	public void removeTipologias(long pk, List<Tipologia> tipologias) {
+		removeTipologias(
+			pk,
+			ListUtil.toLongArray(tipologias, Tipologia.TIPOLOGIA_ID_ACCESSOR));
+	}
+
+	/**
+	 * Sets the tipologias associated with the servizio, removing and adding associations as necessary. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologiaPKs the primary keys of the tipologias to be associated with the servizio
+	 */
+	@Override
+	public void setTipologias(long pk, long[] tipologiaPKs) {
+		Set<Long> newTipologiaPKsSet = SetUtil.fromArray(tipologiaPKs);
+		Set<Long> oldTipologiaPKsSet = SetUtil.fromArray(
+			servizioToTipologiaTableMapper.getRightPrimaryKeys(pk));
+
+		Set<Long> removeTipologiaPKsSet = new HashSet<Long>(oldTipologiaPKsSet);
+
+		removeTipologiaPKsSet.removeAll(newTipologiaPKsSet);
+
+		servizioToTipologiaTableMapper.deleteTableMappings(
+			pk, ArrayUtil.toLongArray(removeTipologiaPKsSet));
+
+		newTipologiaPKsSet.removeAll(oldTipologiaPKsSet);
+
+		long companyId = 0;
+
+		Servizio servizio = fetchByPrimaryKey(pk);
+
+		if (servizio == null) {
+			companyId = CompanyThreadLocal.getCompanyId();
+		}
+		else {
+			companyId = servizio.getCompanyId();
+		}
+
+		servizioToTipologiaTableMapper.addTableMappings(
+			companyId, pk, ArrayUtil.toLongArray(newTipologiaPKsSet));
+	}
+
+	/**
+	 * Sets the tipologias associated with the servizio, removing and adding associations as necessary. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologias the tipologias to be associated with the servizio
+	 */
+	@Override
+	public void setTipologias(long pk, List<Tipologia> tipologias) {
+		try {
+			long[] tipologiaPKs = new long[tipologias.size()];
+
+			for (int i = 0; i < tipologias.size(); i++) {
+				Tipologia tipologia = tipologias.get(i);
+
+				tipologiaPKs[i] = tipologia.getPrimaryKey();
+			}
+
+			setTipologias(pk, tipologiaPKs);
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+	}
+
 	@Override
 	public Set<String> getBadColumnNames() {
 		return _badColumnNames;
@@ -2748,6 +3056,11 @@ public class ServizioPersistenceImpl
 	public void activate() {
 		_valueObjectFinderCacheListThreshold = GetterUtil.getInteger(
 			PropsUtil.get(PropsKeys.VALUE_OBJECT_FINDER_CACHE_LIST_THRESHOLD));
+
+		servizioToTipologiaTableMapper = TableMapperFactory.getTableMapper(
+			"ServiziDigitaliGestioneServizi_servizio_tipologia#servizioId",
+			"ServiziDigitaliGestioneServizi_servizio_tipologia", "companyId",
+			"servizioId", "tipologiaId", this, Tipologia.class);
 
 		_finderPathWithPaginationFindAll = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0],
@@ -2844,6 +3157,9 @@ public class ServizioPersistenceImpl
 		_setServizioUtilPersistence(null);
 
 		entityCache.removeCache(ServizioImpl.class.getName());
+
+		TableMapperFactory.removeTableMapper(
+			"ServiziDigitaliGestioneServizi_servizio_tipologia#servizioId");
 	}
 
 	private void _setServizioUtilPersistence(
@@ -2892,6 +3208,8 @@ public class ServizioPersistenceImpl
 
 	@Reference
 	protected FinderCache finderCache;
+
+	protected TableMapper<Servizio, Tipologia> servizioToTipologiaTableMapper;
 
 	private static final String _SQL_SELECT_SERVIZIO =
 		"SELECT servizio FROM Servizio servizio";

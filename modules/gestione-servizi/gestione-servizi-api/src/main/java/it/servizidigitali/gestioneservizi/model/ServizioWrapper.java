@@ -72,6 +72,7 @@ public class ServizioWrapper
 		attributes.put("allegatoDelega", isAllegatoDelega());
 		attributes.put("timbroCertificato", isTimbroCertificato());
 		attributes.put("attivo", isAttivo());
+		attributes.put("areaTematicaId", getAreaTematicaId());
 
 		return attributes;
 	}
@@ -255,6 +256,12 @@ public class ServizioWrapper
 		if (attivo != null) {
 			setAttivo(attivo);
 		}
+
+		Long areaTematicaId = (Long)attributes.get("areaTematicaId");
+
+		if (areaTematicaId != null) {
+			setAreaTematicaId(areaTematicaId);
+		}
 	}
 
 	@Override
@@ -270,6 +277,16 @@ public class ServizioWrapper
 	@Override
 	public boolean getAllegatoDelega() {
 		return model.getAllegatoDelega();
+	}
+
+	/**
+	 * Returns the area tematica ID of this servizio.
+	 *
+	 * @return the area tematica ID of this servizio
+	 */
+	@Override
+	public long getAreaTematicaId() {
+		return model.getAreaTematicaId();
 	}
 
 	/**
@@ -695,6 +712,16 @@ public class ServizioWrapper
 	@Override
 	public void setAllegatoDelega(boolean allegatoDelega) {
 		model.setAllegatoDelega(allegatoDelega);
+	}
+
+	/**
+	 * Sets the area tematica ID of this servizio.
+	 *
+	 * @param areaTematicaId the area tematica ID of this servizio
+	 */
+	@Override
+	public void setAreaTematicaId(long areaTematicaId) {
+		model.setAreaTematicaId(areaTematicaId);
 	}
 
 	/**

@@ -99,6 +99,8 @@ public class ServizioTable extends BaseTable<ServizioTable> {
 			Column.FLAG_DEFAULT);
 	public final Column<ServizioTable, Boolean> attivo = createColumn(
 		"attivo", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
+	public final Column<ServizioTable, Long> areaTematicaId = createColumn(
+		"areaTematicaId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 
 	private ServizioTable() {
 		super("servizio", ServizioTable::new);

@@ -48,6 +48,12 @@
 		<column name="allegatoDelega" type="boolean" />
 		<column name="timbroCertificato" type="boolean" />
 		<column name="attivo" type="boolean" />
+		
+		<!-- FK -->
+		<column name="areaTematicaId" type="long" />
+		
+		<!-- Relationship -->
+		<column name="tipologie" type="Collection" entity="Tipologia" mapping-table="servizio_tipologia"/>
 
 		<!-- Order -->
 		<order by="asc">
@@ -109,6 +115,49 @@
 
 		<finder name="Attiva" return-type="Collection">
 			<finder-column name="attiva" />
+		</finder>
+	</entity>
+
+	<entity 
+		name="Tipologia"
+		table="tipologia"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="tipologiaId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="nome" type="String" />
+		<column name="descrizione" type="String" />
+		<column name="visibile" type="boolean" />
+		<column name="invioEmailCittadino" type="boolean" />
+		
+		<!-- Relationship -->
+		<column name="servizi" type="Collection" entity="Servizio" mapping-table="servizio_tipologia"/>
+
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="nome" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="Visibile" return-type="Collection">
+			<finder-column name="visibile" />
 		</finder>
 	</entity>
 </service-builder>

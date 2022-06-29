@@ -583,6 +583,20 @@ public interface ServizioModel
 	 */
 	public void setAttivo(boolean attivo);
 
+	/**
+	 * Returns the area tematica ID of this servizio.
+	 *
+	 * @return the area tematica ID of this servizio
+	 */
+	public long getAreaTematicaId();
+
+	/**
+	 * Sets the area tematica ID of this servizio.
+	 *
+	 * @param areaTematicaId the area tematica ID of this servizio
+	 */
+	public void setAreaTematicaId(long areaTematicaId);
+
 	@Override
 	public Servizio cloneWithOriginalValues();
 

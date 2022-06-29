@@ -78,6 +78,17 @@ public interface ServizioLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public Servizio addServizio(Servizio servizio);
 
+	public void addTipologiaServizio(long tipologiaId, long servizioId);
+
+	public void addTipologiaServizio(long tipologiaId, Servizio servizio);
+
+	public void addTipologiaServizios(
+		long tipologiaId, List<Servizio> servizios);
+
+	public void addTipologiaServizios(long tipologiaId, long[] servizioIds);
+
+	public void clearTipologiaServizios(long tipologiaId);
+
 	/**
 	 * @throws PortalException
 	 */
@@ -126,6 +137,15 @@ public interface ServizioLocalService
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	public Servizio deleteServizio(Servizio servizio);
+
+	public void deleteTipologiaServizio(long tipologiaId, long servizioId);
+
+	public void deleteTipologiaServizio(long tipologiaId, Servizio servizio);
+
+	public void deleteTipologiaServizios(
+		long tipologiaId, List<Servizio> servizios);
+
+	public void deleteTipologiaServizios(long tipologiaId, long[] servizioIds);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public <T> T dslQuery(DSLQuery dslQuery);
@@ -306,6 +326,38 @@ public interface ServizioLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getServiziosCount();
+
+	/**
+	 * Returns the tipologiaIds of the tipologias associated with the servizio.
+	 *
+	 * @param servizioId the servizioId of the servizio
+	 * @return long[] the tipologiaIds of tipologias associated with the servizio
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public long[] getTipologiaPrimaryKeys(long servizioId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Servizio> getTipologiaServizios(long tipologiaId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Servizio> getTipologiaServizios(
+		long tipologiaId, int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Servizio> getTipologiaServizios(
+		long tipologiaId, int start, int end,
+		OrderByComparator<Servizio> orderByComparator);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getTipologiaServiziosCount(long tipologiaId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public boolean hasTipologiaServizio(long tipologiaId, long servizioId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public boolean hasTipologiaServizios(long tipologiaId);
+
+	public void setTipologiaServizios(long tipologiaId, long[] servizioIds);
 
 	/**
 	 * Updates the servizio in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

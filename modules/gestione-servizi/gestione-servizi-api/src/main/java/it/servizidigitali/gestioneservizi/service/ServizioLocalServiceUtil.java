@@ -60,6 +60,32 @@ public class ServizioLocalServiceUtil {
 		return getService().addServizio(servizio);
 	}
 
+	public static void addTipologiaServizio(long tipologiaId, long servizioId) {
+		getService().addTipologiaServizio(tipologiaId, servizioId);
+	}
+
+	public static void addTipologiaServizio(
+		long tipologiaId, Servizio servizio) {
+
+		getService().addTipologiaServizio(tipologiaId, servizio);
+	}
+
+	public static void addTipologiaServizios(
+		long tipologiaId, List<Servizio> servizios) {
+
+		getService().addTipologiaServizios(tipologiaId, servizios);
+	}
+
+	public static void addTipologiaServizios(
+		long tipologiaId, long[] servizioIds) {
+
+		getService().addTipologiaServizios(tipologiaId, servizioIds);
+	}
+
+	public static void clearTipologiaServizios(long tipologiaId) {
+		getService().clearTipologiaServizios(tipologiaId);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -119,6 +145,30 @@ public class ServizioLocalServiceUtil {
 	 */
 	public static Servizio deleteServizio(Servizio servizio) {
 		return getService().deleteServizio(servizio);
+	}
+
+	public static void deleteTipologiaServizio(
+		long tipologiaId, long servizioId) {
+
+		getService().deleteTipologiaServizio(tipologiaId, servizioId);
+	}
+
+	public static void deleteTipologiaServizio(
+		long tipologiaId, Servizio servizio) {
+
+		getService().deleteTipologiaServizio(tipologiaId, servizio);
+	}
+
+	public static void deleteTipologiaServizios(
+		long tipologiaId, List<Servizio> servizios) {
+
+		getService().deleteTipologiaServizios(tipologiaId, servizios);
+	}
+
+	public static void deleteTipologiaServizios(
+		long tipologiaId, long[] servizioIds) {
+
+		getService().deleteTipologiaServizios(tipologiaId, servizioIds);
 	}
 
 	public static <T> T dslQuery(DSLQuery dslQuery) {
@@ -341,6 +391,54 @@ public class ServizioLocalServiceUtil {
 	 */
 	public static int getServiziosCount() {
 		return getService().getServiziosCount();
+	}
+
+	/**
+	 * Returns the tipologiaIds of the tipologias associated with the servizio.
+	 *
+	 * @param servizioId the servizioId of the servizio
+	 * @return long[] the tipologiaIds of tipologias associated with the servizio
+	 */
+	public static long[] getTipologiaPrimaryKeys(long servizioId) {
+		return getService().getTipologiaPrimaryKeys(servizioId);
+	}
+
+	public static List<Servizio> getTipologiaServizios(long tipologiaId) {
+		return getService().getTipologiaServizios(tipologiaId);
+	}
+
+	public static List<Servizio> getTipologiaServizios(
+		long tipologiaId, int start, int end) {
+
+		return getService().getTipologiaServizios(tipologiaId, start, end);
+	}
+
+	public static List<Servizio> getTipologiaServizios(
+		long tipologiaId, int start, int end,
+		OrderByComparator<Servizio> orderByComparator) {
+
+		return getService().getTipologiaServizios(
+			tipologiaId, start, end, orderByComparator);
+	}
+
+	public static int getTipologiaServiziosCount(long tipologiaId) {
+		return getService().getTipologiaServiziosCount(tipologiaId);
+	}
+
+	public static boolean hasTipologiaServizio(
+		long tipologiaId, long servizioId) {
+
+		return getService().hasTipologiaServizio(tipologiaId, servizioId);
+	}
+
+	public static boolean hasTipologiaServizios(long tipologiaId) {
+		return getService().hasTipologiaServizios(tipologiaId);
+	}
+
+	public static void setTipologiaServizios(
+		long tipologiaId, long[] servizioIds) {
+
+		getService().setTipologiaServizios(tipologiaId, servizioIds);
 	}
 
 	/**

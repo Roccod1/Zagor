@@ -692,4 +692,176 @@ public interface ServizioPersistence extends BasePersistence<Servizio> {
 	 */
 	public int countAll();
 
+	/**
+	 * Returns the primaryKeys of tipologias associated with the servizio.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @return long[] of the primaryKeys of tipologias associated with the servizio
+	 */
+	public long[] getTipologiaPrimaryKeys(long pk);
+
+	/**
+	 * Returns all the servizio associated with the tipologia.
+	 *
+	 * @param pk the primary key of the tipologia
+	 * @return the servizios associated with the tipologia
+	 */
+	public java.util.List<Servizio> getTipologiaServizios(long pk);
+
+	/**
+	 * Returns all the servizio associated with the tipologia.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ServizioModelImpl</code>.
+	 * </p>
+	 *
+	 * @param pk the primary key of the tipologia
+	 * @param start the lower bound of the range of tipologias
+	 * @param end the upper bound of the range of tipologias (not inclusive)
+	 * @return the range of servizios associated with the tipologia
+	 */
+	public java.util.List<Servizio> getTipologiaServizios(
+		long pk, int start, int end);
+
+	/**
+	 * Returns all the servizio associated with the tipologia.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ServizioModelImpl</code>.
+	 * </p>
+	 *
+	 * @param pk the primary key of the tipologia
+	 * @param start the lower bound of the range of tipologias
+	 * @param end the upper bound of the range of tipologias (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of servizios associated with the tipologia
+	 */
+	public java.util.List<Servizio> getTipologiaServizios(
+		long pk, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<Servizio>
+			orderByComparator);
+
+	/**
+	 * Returns the number of tipologias associated with the servizio.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @return the number of tipologias associated with the servizio
+	 */
+	public int getTipologiasSize(long pk);
+
+	/**
+	 * Returns <code>true</code> if the tipologia is associated with the servizio.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologiaPK the primary key of the tipologia
+	 * @return <code>true</code> if the tipologia is associated with the servizio; <code>false</code> otherwise
+	 */
+	public boolean containsTipologia(long pk, long tipologiaPK);
+
+	/**
+	 * Returns <code>true</code> if the servizio has any tipologias associated with it.
+	 *
+	 * @param pk the primary key of the servizio to check for associations with tipologias
+	 * @return <code>true</code> if the servizio has any tipologias associated with it; <code>false</code> otherwise
+	 */
+	public boolean containsTipologias(long pk);
+
+	/**
+	 * Adds an association between the servizio and the tipologia. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologiaPK the primary key of the tipologia
+	 */
+	public void addTipologia(long pk, long tipologiaPK);
+
+	/**
+	 * Adds an association between the servizio and the tipologia. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologia the tipologia
+	 */
+	public void addTipologia(
+		long pk, it.servizidigitali.gestioneservizi.model.Tipologia tipologia);
+
+	/**
+	 * Adds an association between the servizio and the tipologias. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologiaPKs the primary keys of the tipologias
+	 */
+	public void addTipologias(long pk, long[] tipologiaPKs);
+
+	/**
+	 * Adds an association between the servizio and the tipologias. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologias the tipologias
+	 */
+	public void addTipologias(
+		long pk,
+		java.util.List<it.servizidigitali.gestioneservizi.model.Tipologia>
+			tipologias);
+
+	/**
+	 * Clears all associations between the servizio and its tipologias. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio to clear the associated tipologias from
+	 */
+	public void clearTipologias(long pk);
+
+	/**
+	 * Removes the association between the servizio and the tipologia. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologiaPK the primary key of the tipologia
+	 */
+	public void removeTipologia(long pk, long tipologiaPK);
+
+	/**
+	 * Removes the association between the servizio and the tipologia. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologia the tipologia
+	 */
+	public void removeTipologia(
+		long pk, it.servizidigitali.gestioneservizi.model.Tipologia tipologia);
+
+	/**
+	 * Removes the association between the servizio and the tipologias. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologiaPKs the primary keys of the tipologias
+	 */
+	public void removeTipologias(long pk, long[] tipologiaPKs);
+
+	/**
+	 * Removes the association between the servizio and the tipologias. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologias the tipologias
+	 */
+	public void removeTipologias(
+		long pk,
+		java.util.List<it.servizidigitali.gestioneservizi.model.Tipologia>
+			tipologias);
+
+	/**
+	 * Sets the tipologias associated with the servizio, removing and adding associations as necessary. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologiaPKs the primary keys of the tipologias to be associated with the servizio
+	 */
+	public void setTipologias(long pk, long[] tipologiaPKs);
+
+	/**
+	 * Sets the tipologias associated with the servizio, removing and adding associations as necessary. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	 *
+	 * @param pk the primary key of the servizio
+	 * @param tipologias the tipologias to be associated with the servizio
+	 */
+	public void setTipologias(
+		long pk,
+		java.util.List<it.servizidigitali.gestioneservizi.model.Tipologia>
+			tipologias);
+
 }

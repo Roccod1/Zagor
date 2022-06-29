@@ -62,7 +62,7 @@ public class ServizioCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(59);
+		StringBundler sb = new StringBundler(61);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -122,6 +122,8 @@ public class ServizioCacheModel
 		sb.append(timbroCertificato);
 		sb.append(", attivo=");
 		sb.append(attivo);
+		sb.append(", areaTematicaId=");
+		sb.append(areaTematicaId);
 		sb.append("}");
 
 		return sb.toString();
@@ -248,6 +250,7 @@ public class ServizioCacheModel
 		servizioImpl.setAllegatoDelega(allegatoDelega);
 		servizioImpl.setTimbroCertificato(timbroCertificato);
 		servizioImpl.setAttivo(attivo);
+		servizioImpl.setAreaTematicaId(areaTematicaId);
 
 		servizioImpl.resetOriginalValues();
 
@@ -300,6 +303,8 @@ public class ServizioCacheModel
 		timbroCertificato = objectInput.readBoolean();
 
 		attivo = objectInput.readBoolean();
+
+		areaTematicaId = objectInput.readLong();
 	}
 
 	@Override
@@ -408,6 +413,8 @@ public class ServizioCacheModel
 		objectOutput.writeBoolean(timbroCertificato);
 
 		objectOutput.writeBoolean(attivo);
+
+		objectOutput.writeLong(areaTematicaId);
 	}
 
 	public String uuid;
@@ -439,5 +446,6 @@ public class ServizioCacheModel
 	public boolean allegatoDelega;
 	public boolean timbroCertificato;
 	public boolean attivo;
+	public long areaTematicaId;
 
 }

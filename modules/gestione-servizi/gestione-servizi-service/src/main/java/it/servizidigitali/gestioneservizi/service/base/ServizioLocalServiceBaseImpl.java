@@ -50,6 +50,7 @@ import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalServiceUtil;
 import it.servizidigitali.gestioneservizi.service.persistence.AreaTematicaPersistence;
 import it.servizidigitali.gestioneservizi.service.persistence.ServizioPersistence;
+import it.servizidigitali.gestioneservizi.service.persistence.TipologiaPersistence;
 
 import java.io.Serializable;
 
@@ -506,6 +507,140 @@ public abstract class ServizioLocalServiceBaseImpl
 		return servizioPersistence.update(servizio);
 	}
 
+	/**
+	 */
+	@Override
+	public void addTipologiaServizio(long tipologiaId, long servizioId) {
+		tipologiaPersistence.addServizio(tipologiaId, servizioId);
+	}
+
+	/**
+	 */
+	@Override
+	public void addTipologiaServizio(long tipologiaId, Servizio servizio) {
+		tipologiaPersistence.addServizio(tipologiaId, servizio);
+	}
+
+	/**
+	 */
+	@Override
+	public void addTipologiaServizios(long tipologiaId, long[] servizioIds) {
+		tipologiaPersistence.addServizios(tipologiaId, servizioIds);
+	}
+
+	/**
+	 */
+	@Override
+	public void addTipologiaServizios(
+		long tipologiaId, List<Servizio> servizios) {
+
+		tipologiaPersistence.addServizios(tipologiaId, servizios);
+	}
+
+	/**
+	 */
+	@Override
+	public void clearTipologiaServizios(long tipologiaId) {
+		tipologiaPersistence.clearServizios(tipologiaId);
+	}
+
+	/**
+	 */
+	@Override
+	public void deleteTipologiaServizio(long tipologiaId, long servizioId) {
+		tipologiaPersistence.removeServizio(tipologiaId, servizioId);
+	}
+
+	/**
+	 */
+	@Override
+	public void deleteTipologiaServizio(long tipologiaId, Servizio servizio) {
+		tipologiaPersistence.removeServizio(tipologiaId, servizio);
+	}
+
+	/**
+	 */
+	@Override
+	public void deleteTipologiaServizios(long tipologiaId, long[] servizioIds) {
+		tipologiaPersistence.removeServizios(tipologiaId, servizioIds);
+	}
+
+	/**
+	 */
+	@Override
+	public void deleteTipologiaServizios(
+		long tipologiaId, List<Servizio> servizios) {
+
+		tipologiaPersistence.removeServizios(tipologiaId, servizios);
+	}
+
+	/**
+	 * Returns the tipologiaIds of the tipologias associated with the servizio.
+	 *
+	 * @param servizioId the servizioId of the servizio
+	 * @return long[] the tipologiaIds of tipologias associated with the servizio
+	 */
+	@Override
+	public long[] getTipologiaPrimaryKeys(long servizioId) {
+		return servizioPersistence.getTipologiaPrimaryKeys(servizioId);
+	}
+
+	/**
+	 */
+	@Override
+	public List<Servizio> getTipologiaServizios(long tipologiaId) {
+		return servizioPersistence.getTipologiaServizios(tipologiaId);
+	}
+
+	/**
+	 */
+	@Override
+	public List<Servizio> getTipologiaServizios(
+		long tipologiaId, int start, int end) {
+
+		return servizioPersistence.getTipologiaServizios(
+			tipologiaId, start, end);
+	}
+
+	/**
+	 */
+	@Override
+	public List<Servizio> getTipologiaServizios(
+		long tipologiaId, int start, int end,
+		OrderByComparator<Servizio> orderByComparator) {
+
+		return servizioPersistence.getTipologiaServizios(
+			tipologiaId, start, end, orderByComparator);
+	}
+
+	/**
+	 */
+	@Override
+	public int getTipologiaServiziosCount(long tipologiaId) {
+		return tipologiaPersistence.getServiziosSize(tipologiaId);
+	}
+
+	/**
+	 */
+	@Override
+	public boolean hasTipologiaServizio(long tipologiaId, long servizioId) {
+		return tipologiaPersistence.containsServizio(tipologiaId, servizioId);
+	}
+
+	/**
+	 */
+	@Override
+	public boolean hasTipologiaServizios(long tipologiaId) {
+		return tipologiaPersistence.containsServizios(tipologiaId);
+	}
+
+	/**
+	 */
+	@Override
+	public void setTipologiaServizios(long tipologiaId, long[] servizioIds) {
+		tipologiaPersistence.setServizios(tipologiaId, servizioIds);
+	}
+
 	@Deactivate
 	protected void deactivate() {
 		_setLocalServiceUtilService(null);
@@ -591,6 +726,9 @@ public abstract class ServizioLocalServiceBaseImpl
 
 	@Reference
 	protected ServizioPersistence servizioPersistence;
+
+	@Reference
+	protected TipologiaPersistence tipologiaPersistence;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService

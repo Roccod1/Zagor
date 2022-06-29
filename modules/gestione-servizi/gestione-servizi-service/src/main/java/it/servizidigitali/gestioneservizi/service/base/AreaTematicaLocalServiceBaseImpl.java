@@ -50,6 +50,7 @@ import it.servizidigitali.gestioneservizi.service.AreaTematicaLocalService;
 import it.servizidigitali.gestioneservizi.service.AreaTematicaLocalServiceUtil;
 import it.servizidigitali.gestioneservizi.service.persistence.AreaTematicaPersistence;
 import it.servizidigitali.gestioneservizi.service.persistence.ServizioPersistence;
+import it.servizidigitali.gestioneservizi.service.persistence.TipologiaPersistence;
 
 import java.io.Serializable;
 
@@ -601,6 +602,9 @@ public abstract class AreaTematicaLocalServiceBaseImpl
 
 	@Reference
 	protected ServizioPersistence servizioPersistence;
+
+	@Reference
+	protected TipologiaPersistence tipologiaPersistence;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService

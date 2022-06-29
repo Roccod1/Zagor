@@ -53,6 +53,38 @@ public class ServizioLocalServiceWrapper
 		return _servizioLocalService.addServizio(servizio);
 	}
 
+	@Override
+	public void addTipologiaServizio(long tipologiaId, long servizioId) {
+		_servizioLocalService.addTipologiaServizio(tipologiaId, servizioId);
+	}
+
+	@Override
+	public void addTipologiaServizio(
+		long tipologiaId,
+		it.servizidigitali.gestioneservizi.model.Servizio servizio) {
+
+		_servizioLocalService.addTipologiaServizio(tipologiaId, servizio);
+	}
+
+	@Override
+	public void addTipologiaServizios(
+		long tipologiaId,
+		java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
+			servizios) {
+
+		_servizioLocalService.addTipologiaServizios(tipologiaId, servizios);
+	}
+
+	@Override
+	public void addTipologiaServizios(long tipologiaId, long[] servizioIds) {
+		_servizioLocalService.addTipologiaServizios(tipologiaId, servizioIds);
+	}
+
+	@Override
+	public void clearTipologiaServizios(long tipologiaId) {
+		_servizioLocalService.clearTipologiaServizios(tipologiaId);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -122,6 +154,34 @@ public class ServizioLocalServiceWrapper
 		it.servizidigitali.gestioneservizi.model.Servizio servizio) {
 
 		return _servizioLocalService.deleteServizio(servizio);
+	}
+
+	@Override
+	public void deleteTipologiaServizio(long tipologiaId, long servizioId) {
+		_servizioLocalService.deleteTipologiaServizio(tipologiaId, servizioId);
+	}
+
+	@Override
+	public void deleteTipologiaServizio(
+		long tipologiaId,
+		it.servizidigitali.gestioneservizi.model.Servizio servizio) {
+
+		_servizioLocalService.deleteTipologiaServizio(tipologiaId, servizio);
+	}
+
+	@Override
+	public void deleteTipologiaServizios(
+		long tipologiaId,
+		java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
+			servizios) {
+
+		_servizioLocalService.deleteTipologiaServizios(tipologiaId, servizios);
+	}
+
+	@Override
+	public void deleteTipologiaServizios(long tipologiaId, long[] servizioIds) {
+		_servizioLocalService.deleteTipologiaServizios(
+			tipologiaId, servizioIds);
 	}
 
 	@Override
@@ -387,6 +447,65 @@ public class ServizioLocalServiceWrapper
 	@Override
 	public int getServiziosCount() {
 		return _servizioLocalService.getServiziosCount();
+	}
+
+	/**
+	 * Returns the tipologiaIds of the tipologias associated with the servizio.
+	 *
+	 * @param servizioId the servizioId of the servizio
+	 * @return long[] the tipologiaIds of tipologias associated with the servizio
+	 */
+	@Override
+	public long[] getTipologiaPrimaryKeys(long servizioId) {
+		return _servizioLocalService.getTipologiaPrimaryKeys(servizioId);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
+		getTipologiaServizios(long tipologiaId) {
+
+		return _servizioLocalService.getTipologiaServizios(tipologiaId);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
+		getTipologiaServizios(long tipologiaId, int start, int end) {
+
+		return _servizioLocalService.getTipologiaServizios(
+			tipologiaId, start, end);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
+		getTipologiaServizios(
+			long tipologiaId, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<it.servizidigitali.gestioneservizi.model.Servizio>
+					orderByComparator) {
+
+		return _servizioLocalService.getTipologiaServizios(
+			tipologiaId, start, end, orderByComparator);
+	}
+
+	@Override
+	public int getTipologiaServiziosCount(long tipologiaId) {
+		return _servizioLocalService.getTipologiaServiziosCount(tipologiaId);
+	}
+
+	@Override
+	public boolean hasTipologiaServizio(long tipologiaId, long servizioId) {
+		return _servizioLocalService.hasTipologiaServizio(
+			tipologiaId, servizioId);
+	}
+
+	@Override
+	public boolean hasTipologiaServizios(long tipologiaId) {
+		return _servizioLocalService.hasTipologiaServizios(tipologiaId);
+	}
+
+	@Override
+	public void setTipologiaServizios(long tipologiaId, long[] servizioIds) {
+		_servizioLocalService.setTipologiaServizios(tipologiaId, servizioIds);
 	}
 
 	/**
