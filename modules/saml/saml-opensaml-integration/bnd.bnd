@@ -11,6 +11,8 @@ Export-Package:\
 	com.liferay.saml.opensaml.integration.processor.factory,\
 	com.liferay.saml.opensaml.integration.resolver
 Import-Package:\
+	!org.apache.avalon.framework.logger,\
+    !org.slf4j.impl,\
 	!bsh,\
 	\
 	!com.beust.jcommander.*,\
@@ -48,9 +50,6 @@ Import-Package:\
 	!org.apache.oro.*,\
 	!org.apache.poi.*,\
 	!org.apache.tools.ant.*,\
-	!org.apache.xml.dtm.*,\
-	!org.apache.xml.utils.*,\
-	!org.apache.xpath.*,\
 	\
 	!org.checkerframework.*,\
 	\
