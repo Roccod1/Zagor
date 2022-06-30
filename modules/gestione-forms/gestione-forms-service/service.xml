@@ -2,20 +2,24 @@
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
 
 <service-builder dependency-injector="ds" package-path="it.servizidigitali.gestioneforms">
-	<namespace>FOO</namespace>
-	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="true"">-->
-	<entity local-service="true" name="Foo" remote-service="true" uuid="true">
+	<namespace>ServiziDigitaliGestioneForms</namespace>
+	<entity 
+		name="Form"
+		table="form"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
 
 		<!-- PK fields -->
-
-		<column name="fooId" primary="true" type="long" />
+		<column name="formId" primary="true" type="long" />
 
 		<!-- Group instance -->
-
 		<column name="groupId" type="long" />
 
 		<!-- Audit fields -->
-
 		<column name="companyId" type="long" />
 		<column name="userId" type="long" />
 		<column name="userName" type="String" />
@@ -23,28 +27,29 @@
 		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
-
-		<column name="field1" type="String" />
-		<column name="field2" type="boolean" />
-		<column name="field3" type="int" />
-		<column name="field4" type="Date" />
-		<column name="field5" type="String" />
-
+		<column name="nome" type="String" />
+		<column name="descrizione" type="String" />
+		<column name="codice" type="String" />
+		<column name="json" type="String" />
+		<column name="principale" type="boolean" />
+		<column name="multiutente" type="boolean" />
+		
+		<!-- FK -->
+		<column name="organizationId" type="long" />
+		
 		<!-- Order -->
-
 		<order by="asc">
-			<order-column name="field1" />
+			<order-column name="nome" />
 		</order>
 
 		<!-- Finder methods -->
-
-		<finder name="Field2" return-type="Collection">
-			<finder-column name="field2" />
+		<finder name="Codice" return-type="Form">
+			<finder-column name="codice" />
 		</finder>
 
-		<!-- References -->
-
-		<reference entity="AssetEntry" package-path="com.liferay.portlet.asset" />
-		<reference entity="AssetTag" package-path="com.liferay.portlet.asset" />
+		<finder name="Principale" return-type="Collection">
+			<finder-column name="principale" />
+		</finder>
 	</entity>
+
 </service-builder>

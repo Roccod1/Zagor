@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="it.servizidigitali.gestioneforms.model.Form">
+		<field name="uuid" type="String" />
+		<field name="formId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="nome" type="String" />
+		<field name="descrizione" type="String" />
+		<field name="codice" type="String" />
+		<field name="json" type="String" />
+		<field name="principale" type="boolean" />
+		<field name="multiutente" type="boolean" />
+		<field name="organizationId" type="long" />
+	</model>
+</model-hints>
