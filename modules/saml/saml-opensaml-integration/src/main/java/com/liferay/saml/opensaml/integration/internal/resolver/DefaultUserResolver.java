@@ -212,7 +212,15 @@ public class DefaultUserResolver implements UserResolver {
 			return null;
 		}
 
-		return String.valueOf(values.get(0));
+		return removePrefixes(String.valueOf(values.get(0)));
+	}
+	
+	private String removePrefixes(String value) {
+		String result = value;
+		if (result.toUpperCase().contains("TINIT-") && !result.contains(StringPool.AT)) {
+			result = result.toUpperCase().substring("TINIT-".length());
+		}
+		return result;
 	}
 
 	private User _importUser(
