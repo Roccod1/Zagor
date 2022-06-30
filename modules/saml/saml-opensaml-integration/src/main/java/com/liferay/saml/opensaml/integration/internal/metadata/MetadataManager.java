@@ -1,11 +1,10 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
+ * The contents of this file are subject to the terms of the Liferay Enterprise Subscription License
+ * ("License"). You may not use this file except in compliance with the License. You can obtain a
+ * copy of the License by contacting Liferay, Inc. See the License for the specific language
+ * governing permissions and limitations under the License, including but not limited to
  * distribution rights of the Software.
  *
  *
@@ -38,9 +37,7 @@ public interface MetadataManager {
 
 	public Credential getEncryptionCredential() throws SamlException;
 
-	public EntityDescriptor getEntityDescriptor(
-			HttpServletRequest httpServletRequest)
-		throws SamlException;
+	public EntityDescriptor getEntityDescriptor(HttpServletRequest httpServletRequest) throws SamlException;
 
 	public MetadataCredentialResolver getMetadataCredentialResolver();
 
@@ -50,10 +47,7 @@ public interface MetadataManager {
 
 	public String getNameIdFormat(String entityId);
 
-	public MessageHandler<?> getSecurityMessageHandler(
-			HttpServletRequest httpServletRequest,
-			String communicationProfileId, boolean requireSignature)
-		throws SamlException;
+	public MessageHandler<?> getSecurityMessageHandler(HttpServletRequest httpServletRequest, String communicationProfileId, boolean requireSignature, String entityId) throws SamlException;
 
 	public SignatureTrustEngine getSignatureTrustEngine() throws SamlException;
 

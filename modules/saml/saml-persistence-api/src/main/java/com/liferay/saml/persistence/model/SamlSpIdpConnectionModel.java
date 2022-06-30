@@ -1,15 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *
- *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.saml.persistence.model;
@@ -246,6 +246,106 @@ public interface SamlSpIdpConnectionModel
 	 * @param forceAuthn the force authn of this saml sp idp connection
 	 */
 	public void setForceAuthn(boolean forceAuthn);
+
+	/**
+	 * Returns the add passive authn request of this saml sp idp connection.
+	 *
+	 * @return the add passive authn request of this saml sp idp connection
+	 */
+	public boolean getAddPassiveAuthnRequest();
+
+	/**
+	 * Returns <code>true</code> if this saml sp idp connection is add passive authn request.
+	 *
+	 * @return <code>true</code> if this saml sp idp connection is add passive authn request; <code>false</code> otherwise
+	 */
+	public boolean isAddPassiveAuthnRequest();
+
+	/**
+	 * Sets whether this saml sp idp connection is add passive authn request.
+	 *
+	 * @param addPassiveAuthnRequest the add passive authn request of this saml sp idp connection
+	 */
+	public void setAddPassiveAuthnRequest(boolean addPassiveAuthnRequest);
+
+	/**
+	 * Returns the is passive of this saml sp idp connection.
+	 *
+	 * @return the is passive of this saml sp idp connection
+	 */
+	public boolean getIsPassive();
+
+	/**
+	 * Returns <code>true</code> if this saml sp idp connection is is passive.
+	 *
+	 * @return <code>true</code> if this saml sp idp connection is is passive; <code>false</code> otherwise
+	 */
+	public boolean isIsPassive();
+
+	/**
+	 * Sets whether this saml sp idp connection is is passive.
+	 *
+	 * @param isPassive the is passive of this saml sp idp connection
+	 */
+	public void setIsPassive(boolean isPassive);
+
+	/**
+	 * Returns the check mandatory authentication of this saml sp idp connection.
+	 *
+	 * @return the check mandatory authentication of this saml sp idp connection
+	 */
+	public boolean getCheckMandatoryAuthentication();
+
+	/**
+	 * Returns <code>true</code> if this saml sp idp connection is check mandatory authentication.
+	 *
+	 * @return <code>true</code> if this saml sp idp connection is check mandatory authentication; <code>false</code> otherwise
+	 */
+	public boolean isCheckMandatoryAuthentication();
+
+	/**
+	 * Sets whether this saml sp idp connection is check mandatory authentication.
+	 *
+	 * @param checkMandatoryAuthentication the check mandatory authentication of this saml sp idp connection
+	 */
+	public void setCheckMandatoryAuthentication(
+		boolean checkMandatoryAuthentication);
+
+	/**
+	 * Returns the requested authn context of this saml sp idp connection.
+	 *
+	 * @return the requested authn context of this saml sp idp connection
+	 */
+	public boolean getRequestedAuthnContext();
+
+	/**
+	 * Returns <code>true</code> if this saml sp idp connection is requested authn context.
+	 *
+	 * @return <code>true</code> if this saml sp idp connection is requested authn context; <code>false</code> otherwise
+	 */
+	public boolean isRequestedAuthnContext();
+
+	/**
+	 * Sets whether this saml sp idp connection is requested authn context.
+	 *
+	 * @param requestedAuthnContext the requested authn context of this saml sp idp connection
+	 */
+	public void setRequestedAuthnContext(boolean requestedAuthnContext);
+
+	/**
+	 * Returns the authn context class ref of this saml sp idp connection.
+	 *
+	 * @return the authn context class ref of this saml sp idp connection
+	 */
+	@AutoEscape
+	public String getAuthnContextClassRef();
+
+	/**
+	 * Sets the authn context class ref of this saml sp idp connection.
+	 *
+	 * @param authnContextClassRef the authn context class ref of this saml sp idp connection
+	 */
+	public void setAuthnContextClassRef(String authnContextClassRef);
 
 	/**
 	 * Returns the ldap import enabled of this saml sp idp connection.

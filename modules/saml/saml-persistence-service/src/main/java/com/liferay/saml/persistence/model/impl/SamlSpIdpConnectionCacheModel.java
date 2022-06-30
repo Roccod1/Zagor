@@ -1,15 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *
- *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.saml.persistence.model.impl;
@@ -64,7 +64,7 @@ public class SamlSpIdpConnectionCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(53);
 
 		sb.append("{samlSpIdpConnectionId=");
 		sb.append(samlSpIdpConnectionId);
@@ -86,6 +86,16 @@ public class SamlSpIdpConnectionCacheModel
 		sb.append(enabled);
 		sb.append(", forceAuthn=");
 		sb.append(forceAuthn);
+		sb.append(", addPassiveAuthnRequest=");
+		sb.append(addPassiveAuthnRequest);
+		sb.append(", isPassive=");
+		sb.append(isPassive);
+		sb.append(", checkMandatoryAuthentication=");
+		sb.append(checkMandatoryAuthentication);
+		sb.append(", requestedAuthnContext=");
+		sb.append(requestedAuthnContext);
+		sb.append(", authnContextClassRef=");
+		sb.append(authnContextClassRef);
 		sb.append(", ldapImportEnabled=");
 		sb.append(ldapImportEnabled);
 		sb.append(", metadataUpdatedDate=");
@@ -148,6 +158,21 @@ public class SamlSpIdpConnectionCacheModel
 		samlSpIdpConnectionImpl.setClockSkew(clockSkew);
 		samlSpIdpConnectionImpl.setEnabled(enabled);
 		samlSpIdpConnectionImpl.setForceAuthn(forceAuthn);
+		samlSpIdpConnectionImpl.setAddPassiveAuthnRequest(
+			addPassiveAuthnRequest);
+		samlSpIdpConnectionImpl.setIsPassive(isPassive);
+		samlSpIdpConnectionImpl.setCheckMandatoryAuthentication(
+			checkMandatoryAuthentication);
+		samlSpIdpConnectionImpl.setRequestedAuthnContext(requestedAuthnContext);
+
+		if (authnContextClassRef == null) {
+			samlSpIdpConnectionImpl.setAuthnContextClassRef("");
+		}
+		else {
+			samlSpIdpConnectionImpl.setAuthnContextClassRef(
+				authnContextClassRef);
+		}
+
 		samlSpIdpConnectionImpl.setLdapImportEnabled(ldapImportEnabled);
 
 		if (metadataUpdatedDate == Long.MIN_VALUE) {
@@ -239,6 +264,15 @@ public class SamlSpIdpConnectionCacheModel
 
 		forceAuthn = objectInput.readBoolean();
 
+		addPassiveAuthnRequest = objectInput.readBoolean();
+
+		isPassive = objectInput.readBoolean();
+
+		checkMandatoryAuthentication = objectInput.readBoolean();
+
+		requestedAuthnContext = objectInput.readBoolean();
+		authnContextClassRef = objectInput.readUTF();
+
 		ldapImportEnabled = objectInput.readBoolean();
 		metadataUpdatedDate = objectInput.readLong();
 		metadataUrl = objectInput.readUTF();
@@ -279,6 +313,21 @@ public class SamlSpIdpConnectionCacheModel
 		objectOutput.writeBoolean(enabled);
 
 		objectOutput.writeBoolean(forceAuthn);
+
+		objectOutput.writeBoolean(addPassiveAuthnRequest);
+
+		objectOutput.writeBoolean(isPassive);
+
+		objectOutput.writeBoolean(checkMandatoryAuthentication);
+
+		objectOutput.writeBoolean(requestedAuthnContext);
+
+		if (authnContextClassRef == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(authnContextClassRef);
+		}
 
 		objectOutput.writeBoolean(ldapImportEnabled);
 		objectOutput.writeLong(metadataUpdatedDate);
@@ -347,6 +396,11 @@ public class SamlSpIdpConnectionCacheModel
 	public long clockSkew;
 	public boolean enabled;
 	public boolean forceAuthn;
+	public boolean addPassiveAuthnRequest;
+	public boolean isPassive;
+	public boolean checkMandatoryAuthentication;
+	public boolean requestedAuthnContext;
+	public String authnContextClassRef;
 	public boolean ldapImportEnabled;
 	public long metadataUpdatedDate;
 	public String metadataUrl;

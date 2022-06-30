@@ -1,15 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *
- *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.saml.persistence.model.impl;
@@ -33,6 +33,7 @@ import com.liferay.saml.persistence.model.SamlPeerBindingModel;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 
 import java.sql.Blob;
@@ -260,6 +261,34 @@ public class SamlPeerBindingModelImpl
 		getAttributeSetterBiConsumers() {
 
 		return _attributeSetterBiConsumers;
+	}
+
+	private static Function<InvocationHandler, SamlPeerBinding>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			SamlPeerBinding.class.getClassLoader(), SamlPeerBinding.class,
+			ModelWrapper.class);
+
+		try {
+			Constructor<SamlPeerBinding> constructor =
+				(Constructor<SamlPeerBinding>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException
+							reflectiveOperationException) {
+
+					throw new InternalError(reflectiveOperationException);
+				}
+			};
+		}
+		catch (NoSuchMethodException noSuchMethodException) {
+			throw new InternalError(noSuchMethodException);
+		}
 	}
 
 	private static final Map<String, Function<SamlPeerBinding, Object>>
@@ -989,9 +1018,7 @@ public class SamlPeerBindingModelImpl
 	private static class EscapedModelProxyProviderFunctionHolder {
 
 		private static final Function<InvocationHandler, SamlPeerBinding>
-			_escapedModelProxyProviderFunction =
-				ProxyUtil.getProxyProviderFunction(
-					SamlPeerBinding.class, ModelWrapper.class);
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
 
 	}
 

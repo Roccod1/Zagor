@@ -1,11 +1,10 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
+ * The contents of this file are subject to the terms of the Liferay Enterprise Subscription License
+ * ("License"). You may not use this file except in compliance with the License. You can obtain a
+ * copy of the License by contacting Liferay, Inc. See the License for the specific language
+ * governing permissions and limitations under the License, including but not limited to
  * distribution rights of the Software.
  *
  *
@@ -28,9 +27,7 @@ import com.liferay.saml.persistence.service.SamlSpIdpConnectionLocalService;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-
 import java.nio.charset.StandardCharsets;
-
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Activate;
@@ -40,133 +37,86 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Stian Sigvartsen
  */
-@Component(
-	property = {"prefix=", "processing.index:Integer=" + Integer.MAX_VALUE},
-	service = SamlSpIdpConnectionFieldExpressionHandler.class
-)
-public class DefaultSamlSpIdpConnectionFieldExpressionHandler
-	implements SamlSpIdpConnectionFieldExpressionHandler {
+@Component(property = { "prefix=", "processing.index:Integer=" + Integer.MAX_VALUE }, service = SamlSpIdpConnectionFieldExpressionHandler.class)
+public class DefaultSamlSpIdpConnectionFieldExpressionHandler implements SamlSpIdpConnectionFieldExpressionHandler {
 
 	@Override
-	public void bindProcessorContext(
-		SamlSpIdpConnectionProcessorContext
-			samlSpIdpConnectionProcessorContext) {
+	public void bindProcessorContext(SamlSpIdpConnectionProcessorContext samlSpIdpConnectionProcessorContext) {
 
-		SamlSpIdpConnectionProcessorContext.SamlSpIdpConnectionBind
-			<SamlSpIdpConnection> samlSpIdpConnectionBind =
-				samlSpIdpConnectionProcessorContext.bind(
-					Integer.MIN_VALUE,
-					(currentSamlSpIdpConnection, newSamlSpIdpConnection,
-					 serviceContext) -> newSamlSpIdpConnection);
+		SamlSpIdpConnectionProcessorContext.SamlSpIdpConnectionBind<SamlSpIdpConnection> samlSpIdpConnectionBind = samlSpIdpConnectionProcessorContext.bind(Integer.MIN_VALUE,
+				(currentSamlSpIdpConnection, newSamlSpIdpConnection, serviceContext) -> newSamlSpIdpConnection);
 
-		samlSpIdpConnectionBind.mapBoolean(
-			"assertionSignatureRequired",
-			SamlSpIdpConnection::setAssertionSignatureRequired);
-		samlSpIdpConnectionBind.mapLong(
-			"clockSkew", SamlSpIdpConnection::setClockSkew);
-		samlSpIdpConnectionBind.mapBoolean(
-			"enabled", SamlSpIdpConnection::setEnabled);
-		samlSpIdpConnectionBind.mapBoolean(
-			"forceAuthn", SamlSpIdpConnection::setForceAuthn);
-		samlSpIdpConnectionBind.mapBoolean(
-			"ldapImportEnabled", SamlSpIdpConnection::setLdapImportEnabled);
-		samlSpIdpConnectionBind.mapBoolean(
-			"unknownUsersAreStrangers",
-			SamlSpIdpConnection::setUnknownUsersAreStrangers);
+		samlSpIdpConnectionBind.mapBoolean("assertionSignatureRequired", SamlSpIdpConnection::setAssertionSignatureRequired);
+		samlSpIdpConnectionBind.mapLong("clockSkew", SamlSpIdpConnection::setClockSkew);
+		samlSpIdpConnectionBind.mapBoolean("enabled", SamlSpIdpConnection::setEnabled);
+		samlSpIdpConnectionBind.mapBoolean("forceAuthn", SamlSpIdpConnection::setForceAuthn);
+		samlSpIdpConnectionBind.mapBoolean("ldapImportEnabled", SamlSpIdpConnection::setLdapImportEnabled);
+		samlSpIdpConnectionBind.mapBoolean("unknownUsersAreStrangers", SamlSpIdpConnection::setUnknownUsersAreStrangers);
 
-		samlSpIdpConnectionBind.mapString(
-			"metadataDelivery",
-			(samlSpIdpConnection, metadataDelivery) -> {
-				if (metadataDelivery.equals("metadataXml")) {
-					samlSpIdpConnection.setMetadataUrl(null);
+		samlSpIdpConnectionBind.mapString("metadataDelivery", (samlSpIdpConnection, metadataDelivery) -> {
+			if (metadataDelivery.equals("metadataXml")) {
+				samlSpIdpConnection.setMetadataUrl(null);
 
-					samlSpIdpConnectionBind.handleFileItemArray(
-						"metadataXml", this::_setMetadataXml);
-				}
-				else {
-					samlSpIdpConnection.setMetadataXml(null);
+				samlSpIdpConnectionBind.handleFileItemArray("metadataXml", this::_setMetadataXml);
+			}
+			else {
+				samlSpIdpConnection.setMetadataXml(null);
 
-					samlSpIdpConnectionBind.mapString(
-						"metadataUrl", SamlSpIdpConnection::setMetadataUrl);
-				}
-			});
+				samlSpIdpConnectionBind.mapString("metadataUrl", SamlSpIdpConnection::setMetadataUrl);
+			}
+		});
 
 		samlSpIdpConnectionBind.mapString("name", SamlSpIdpConnection::setName);
-		samlSpIdpConnectionBind.mapString(
-			"nameIdFormat", SamlSpIdpConnection::setNameIdFormat);
-		samlSpIdpConnectionBind.mapString(
-			"samlIdpEntityId", SamlSpIdpConnection::setSamlIdpEntityId);
-		samlSpIdpConnectionBind.mapBoolean(
-			"signAuthnRequest", SamlSpIdpConnection::setSignAuthnRequest);
-		samlSpIdpConnectionBind.mapString(
-			"userIdentifierExpression",
-			SamlSpIdpConnection::setUserIdentifierExpression);
+		samlSpIdpConnectionBind.mapString("nameIdFormat", SamlSpIdpConnection::setNameIdFormat);
+		samlSpIdpConnectionBind.mapString("samlIdpEntityId", SamlSpIdpConnection::setSamlIdpEntityId);
+		samlSpIdpConnectionBind.mapBoolean("signAuthnRequest", SamlSpIdpConnection::setSignAuthnRequest);
+		samlSpIdpConnectionBind.mapString("userIdentifierExpression", SamlSpIdpConnection::setUserIdentifierExpression);
 
-		samlSpIdpConnectionProcessorContext.bind(
-			_processingIndex, this::_persist);
+		samlSpIdpConnectionBind.mapBoolean("isPassive", SamlSpIdpConnection::setIsPassive);
+		samlSpIdpConnectionBind.mapBoolean("addPassiveAuthnRequest", SamlSpIdpConnection::setAddPassiveAuthnRequest);
+		samlSpIdpConnectionBind.mapBoolean("requestedAuthnContext", SamlSpIdpConnection::setRequestedAuthnContext);
+		samlSpIdpConnectionBind.mapString("authnContextClassRef", SamlSpIdpConnection::setAuthnContextClassRef);
+		samlSpIdpConnectionBind.mapBoolean("checkMandatoryAuthentication", SamlSpIdpConnection::setCheckMandatoryAuthentication);
+
+		samlSpIdpConnectionProcessorContext.bind(_processingIndex, this::_persist);
 	}
 
 	@Activate
 	protected void activate(Map<String, Object> properties) {
-		_processingIndex = GetterUtil.getInteger(
-			properties.get("processing.index"));
+		_processingIndex = GetterUtil.getInteger(properties.get("processing.index"));
 	}
 
-	private SamlSpIdpConnection _persist(
-			SamlSpIdpConnection currentSamlSpIdpConnection,
-			SamlSpIdpConnection newSamlSpIdpConnection,
-			ServiceContext serviceContext)
-		throws PortalException {
+	private SamlSpIdpConnection _persist(SamlSpIdpConnection currentSamlSpIdpConnection, SamlSpIdpConnection newSamlSpIdpConnection, ServiceContext serviceContext) throws PortalException {
 
 		String metadataXml = newSamlSpIdpConnection.getMetadataXml();
 		InputStream metadataXmlInputStream = null;
 
 		if (Validator.isNotNull(metadataXml)) {
-			metadataXmlInputStream = new ByteArrayInputStream(
-				metadataXml.getBytes(StandardCharsets.UTF_8));
+			metadataXmlInputStream = new ByteArrayInputStream(metadataXml.getBytes(StandardCharsets.UTF_8));
 		}
 
 		if (newSamlSpIdpConnection.getSamlSpIdpConnectionId() <= 0) {
-			_samlSpIdpConnectionLocalService.addSamlSpIdpConnection(
-				newSamlSpIdpConnection.isAssertionSignatureRequired(),
-				newSamlSpIdpConnection.getClockSkew(),
-				newSamlSpIdpConnection.isEnabled(),
-				newSamlSpIdpConnection.isForceAuthn(),
-				newSamlSpIdpConnection.isLdapImportEnabled(),
-				newSamlSpIdpConnection.getMetadataUrl(), metadataXmlInputStream,
-				newSamlSpIdpConnection.getName(),
-				newSamlSpIdpConnection.getNameIdFormat(),
-				newSamlSpIdpConnection.getSamlIdpEntityId(),
-				newSamlSpIdpConnection.isSignAuthnRequest(),
-				newSamlSpIdpConnection.isUnknownUsersAreStrangers(),
-				newSamlSpIdpConnection.getUserAttributeMappings(),
-				newSamlSpIdpConnection.getUserIdentifierExpression(),
-				serviceContext);
+			_samlSpIdpConnectionLocalService.addSamlSpIdpConnection(newSamlSpIdpConnection.isAssertionSignatureRequired(), newSamlSpIdpConnection.getClockSkew(), newSamlSpIdpConnection.isEnabled(),
+					newSamlSpIdpConnection.isForceAuthn(), newSamlSpIdpConnection.isLdapImportEnabled(), newSamlSpIdpConnection.getMetadataUrl(), metadataXmlInputStream,
+					newSamlSpIdpConnection.getName(), newSamlSpIdpConnection.getNameIdFormat(), newSamlSpIdpConnection.getSamlIdpEntityId(), newSamlSpIdpConnection.isSignAuthnRequest(),
+					newSamlSpIdpConnection.isUnknownUsersAreStrangers(), newSamlSpIdpConnection.getUserAttributeMappings(), newSamlSpIdpConnection.getUserIdentifierExpression(),
+					newSamlSpIdpConnection.getIsPassive(), newSamlSpIdpConnection.getAddPassiveAuthnRequest(), newSamlSpIdpConnection.getRequestedAuthnContext(),
+					newSamlSpIdpConnection.getAuthnContextClassRef(), newSamlSpIdpConnection.getCheckMandatoryAuthentication(), serviceContext);
 		}
 		else {
-			_samlSpIdpConnectionLocalService.updateSamlSpIdpConnection(
-				newSamlSpIdpConnection.getSamlSpIdpConnectionId(),
-				newSamlSpIdpConnection.isAssertionSignatureRequired(),
-				newSamlSpIdpConnection.getClockSkew(),
-				newSamlSpIdpConnection.isEnabled(),
-				newSamlSpIdpConnection.isForceAuthn(),
-				newSamlSpIdpConnection.isLdapImportEnabled(),
-				newSamlSpIdpConnection.getMetadataUrl(), metadataXmlInputStream,
-				newSamlSpIdpConnection.getName(),
-				newSamlSpIdpConnection.getNameIdFormat(),
-				newSamlSpIdpConnection.getSamlIdpEntityId(),
-				newSamlSpIdpConnection.isSignAuthnRequest(),
-				newSamlSpIdpConnection.isUnknownUsersAreStrangers(),
-				newSamlSpIdpConnection.getUserAttributeMappings(),
-				newSamlSpIdpConnection.getUserIdentifierExpression(),
-				serviceContext);
+			_samlSpIdpConnectionLocalService.updateSamlSpIdpConnection(newSamlSpIdpConnection.getSamlSpIdpConnectionId(), newSamlSpIdpConnection.isAssertionSignatureRequired(),
+					newSamlSpIdpConnection.getClockSkew(), newSamlSpIdpConnection.isEnabled(), newSamlSpIdpConnection.isForceAuthn(), newSamlSpIdpConnection.isLdapImportEnabled(),
+					newSamlSpIdpConnection.getMetadataUrl(), metadataXmlInputStream, newSamlSpIdpConnection.getName(), newSamlSpIdpConnection.getNameIdFormat(),
+					newSamlSpIdpConnection.getSamlIdpEntityId(), newSamlSpIdpConnection.isSignAuthnRequest(), newSamlSpIdpConnection.isUnknownUsersAreStrangers(),
+					newSamlSpIdpConnection.getUserAttributeMappings(), newSamlSpIdpConnection.getUserIdentifierExpression(), newSamlSpIdpConnection.getIsPassive(),
+					newSamlSpIdpConnection.getAddPassiveAuthnRequest(), newSamlSpIdpConnection.getRequestedAuthnContext(), newSamlSpIdpConnection.getAuthnContextClassRef(),
+					newSamlSpIdpConnection.getCheckMandatoryAuthentication(), serviceContext);
 		}
 
 		return null;
 	}
 
-	private void _setMetadataXml(
-		SamlSpIdpConnection samlSpIdpConnection, FileItem[] fileItems) {
+	private void _setMetadataXml(SamlSpIdpConnection samlSpIdpConnection, FileItem[] fileItems) {
 
 		if (ArrayUtil.isEmpty(fileItems)) {
 
@@ -188,7 +138,6 @@ public class DefaultSamlSpIdpConnectionFieldExpressionHandler
 	private SamlSpIdpConnectionLocalService _samlSpIdpConnectionLocalService;
 
 	@Reference
-	private UserFieldExpressionHandlerRegistry
-		_userFieldExpressionHandlerRegistry;
+	private UserFieldExpressionHandlerRegistry _userFieldExpressionHandlerRegistry;
 
 }

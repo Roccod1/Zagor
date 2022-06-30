@@ -172,9 +172,9 @@ public abstract class BaseProfile {
 
 		MessageHandler<SAMLObject> messageHandler =
 			(MessageHandler<SAMLObject>)
-				metadataManager.getSecurityMessageHandler(
+				metadataManager.getSecurityMessageHandler( 
 					httpServletRequest, samlBindingContext.getBindingUri(),
-					requireSignature);
+					requireSignature, samlPeerEntityContext.getEntityId());
 
 		SecurityParametersContext securityParametersContext =
 			inboundMessageContext.getSubcontext(

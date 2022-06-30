@@ -56,9 +56,9 @@ public class UpdateIdentityProviderConnectionMVCActionCommand
 	@Override
 	protected void doProcessAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws Exception {
+		throws Exception { 
 
-		UploadPortletRequest uploadPortletRequest =
+		UploadPortletRequest uploadPortletRequest = 
 			_portal.getUploadPortletRequest(actionRequest);
 
 		long samlSpIdpConnectionId = ParamUtil.getLong(

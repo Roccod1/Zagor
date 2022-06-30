@@ -187,6 +187,11 @@
 		<column name="clockSkew" type="long" />
 		<column name="enabled" type="boolean" />
 		<column name="forceAuthn" type="boolean" />
+		<column name="addPassiveAuthnRequest" type="boolean" />
+		<column name="isPassive" type="boolean" />
+		<column name="checkMandatoryAuthentication" type="boolean" />
+		<column name="requestedAuthnContext" type="boolean"/>
+		<column name="authnContextClassRef" type="String"/>
 		<column name="ldapImportEnabled" type="boolean" />
 		<column name="metadataUpdatedDate" type="Date" />
 		<column name="metadataUrl" type="String" />

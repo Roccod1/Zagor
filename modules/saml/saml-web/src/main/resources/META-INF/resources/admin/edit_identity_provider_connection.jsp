@@ -78,6 +78,16 @@ else {
 		<aui:input helpMessage="saml-sp-clock-skew-description" label="saml-sp-clock-skew" name="clockSkew" value="<%= String.valueOf(clockSkew) %>" />
 
 		<aui:input helpMessage="force-authn-help" name="forceAuthn" />
+		
+		<aui:input helpMessage="add-passive-authn-request-help" name="addPassiveAuthnRequest" />
+		
+		<aui:input helpMessage="is-passive-help" name="isPassive"/>
+		
+		<aui:input helpMessage="check-mandatory-authentication-help" name="checkMandatoryAuthentication" />
+		
+		<aui:input helpMessage="requested-authn-context-help" name="requestedAuthnContext" />
+		
+		<aui:input helpMessage="authn-context-class-ref-help" name="authnContextClassRef" />
 
 		<aui:input helpMessage="unknown-users-are-strangers-help" name="unknownUsersAreStrangers" />
 	</aui:fieldset>

@@ -90,6 +90,11 @@
 		<field name="clockSkew" type="long" />
 		<field name="enabled" type="boolean" />
 		<field name="forceAuthn" type="boolean" />
+		<field name="addPassiveAuthnRequest" type="boolean" />
+		<field name="isPassive" type="boolean" />
+		<field name="checkMandatoryAuthentication" type="boolean" />
+		<field name="requestedAuthnContext" type="boolean" />
+		<field name="authnContextClassRef" type="String" />
 		<field name="ldapImportEnabled" type="boolean" />
 		<field name="metadataUpdatedDate" type="Date" />
 		<field name="metadataUrl" type="String">

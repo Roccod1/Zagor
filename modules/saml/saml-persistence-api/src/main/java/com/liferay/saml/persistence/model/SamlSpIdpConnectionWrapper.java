@@ -1,15 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *
- *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.saml.persistence.model;
@@ -53,6 +53,12 @@ public class SamlSpIdpConnectionWrapper
 		attributes.put("clockSkew", getClockSkew());
 		attributes.put("enabled", isEnabled());
 		attributes.put("forceAuthn", isForceAuthn());
+		attributes.put("addPassiveAuthnRequest", isAddPassiveAuthnRequest());
+		attributes.put("isPassive", isIsPassive());
+		attributes.put(
+			"checkMandatoryAuthentication", isCheckMandatoryAuthentication());
+		attributes.put("requestedAuthnContext", isRequestedAuthnContext());
+		attributes.put("authnContextClassRef", getAuthnContextClassRef());
 		attributes.put("ldapImportEnabled", isLdapImportEnabled());
 		attributes.put("metadataUpdatedDate", getMetadataUpdatedDate());
 		attributes.put("metadataUrl", getMetadataUrl());
@@ -134,6 +140,40 @@ public class SamlSpIdpConnectionWrapper
 			setForceAuthn(forceAuthn);
 		}
 
+		Boolean addPassiveAuthnRequest = (Boolean)attributes.get(
+			"addPassiveAuthnRequest");
+
+		if (addPassiveAuthnRequest != null) {
+			setAddPassiveAuthnRequest(addPassiveAuthnRequest);
+		}
+
+		Boolean isPassive = (Boolean)attributes.get("isPassive");
+
+		if (isPassive != null) {
+			setIsPassive(isPassive);
+		}
+
+		Boolean checkMandatoryAuthentication = (Boolean)attributes.get(
+			"checkMandatoryAuthentication");
+
+		if (checkMandatoryAuthentication != null) {
+			setCheckMandatoryAuthentication(checkMandatoryAuthentication);
+		}
+
+		Boolean requestedAuthnContext = (Boolean)attributes.get(
+			"requestedAuthnContext");
+
+		if (requestedAuthnContext != null) {
+			setRequestedAuthnContext(requestedAuthnContext);
+		}
+
+		String authnContextClassRef = (String)attributes.get(
+			"authnContextClassRef");
+
+		if (authnContextClassRef != null) {
+			setAuthnContextClassRef(authnContextClassRef);
+		}
+
 		Boolean ldapImportEnabled = (Boolean)attributes.get(
 			"ldapImportEnabled");
 
@@ -211,6 +251,16 @@ public class SamlSpIdpConnectionWrapper
 	}
 
 	/**
+	 * Returns the add passive authn request of this saml sp idp connection.
+	 *
+	 * @return the add passive authn request of this saml sp idp connection
+	 */
+	@Override
+	public boolean getAddPassiveAuthnRequest() {
+		return model.getAddPassiveAuthnRequest();
+	}
+
+	/**
 	 * Returns the assertion signature required of this saml sp idp connection.
 	 *
 	 * @return the assertion signature required of this saml sp idp connection
@@ -218,6 +268,26 @@ public class SamlSpIdpConnectionWrapper
 	@Override
 	public boolean getAssertionSignatureRequired() {
 		return model.getAssertionSignatureRequired();
+	}
+
+	/**
+	 * Returns the authn context class ref of this saml sp idp connection.
+	 *
+	 * @return the authn context class ref of this saml sp idp connection
+	 */
+	@Override
+	public String getAuthnContextClassRef() {
+		return model.getAuthnContextClassRef();
+	}
+
+	/**
+	 * Returns the check mandatory authentication of this saml sp idp connection.
+	 *
+	 * @return the check mandatory authentication of this saml sp idp connection
+	 */
+	@Override
+	public boolean getCheckMandatoryAuthentication() {
+		return model.getCheckMandatoryAuthentication();
 	}
 
 	/**
@@ -268,6 +338,16 @@ public class SamlSpIdpConnectionWrapper
 	@Override
 	public boolean getForceAuthn() {
 		return model.getForceAuthn();
+	}
+
+	/**
+	 * Returns the is passive of this saml sp idp connection.
+	 *
+	 * @return the is passive of this saml sp idp connection
+	 */
+	@Override
+	public boolean getIsPassive() {
+		return model.getIsPassive();
 	}
 
 	/**
@@ -355,6 +435,16 @@ public class SamlSpIdpConnectionWrapper
 	@Override
 	public long getPrimaryKey() {
 		return model.getPrimaryKey();
+	}
+
+	/**
+	 * Returns the requested authn context of this saml sp idp connection.
+	 *
+	 * @return the requested authn context of this saml sp idp connection
+	 */
+	@Override
+	public boolean getRequestedAuthnContext() {
+		return model.getRequestedAuthnContext();
 	}
 
 	/**
@@ -448,6 +538,16 @@ public class SamlSpIdpConnectionWrapper
 	}
 
 	/**
+	 * Returns <code>true</code> if this saml sp idp connection is add passive authn request.
+	 *
+	 * @return <code>true</code> if this saml sp idp connection is add passive authn request; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isAddPassiveAuthnRequest() {
+		return model.isAddPassiveAuthnRequest();
+	}
+
+	/**
 	 * Returns <code>true</code> if this saml sp idp connection is assertion signature required.
 	 *
 	 * @return <code>true</code> if this saml sp idp connection is assertion signature required; <code>false</code> otherwise
@@ -455,6 +555,16 @@ public class SamlSpIdpConnectionWrapper
 	@Override
 	public boolean isAssertionSignatureRequired() {
 		return model.isAssertionSignatureRequired();
+	}
+
+	/**
+	 * Returns <code>true</code> if this saml sp idp connection is check mandatory authentication.
+	 *
+	 * @return <code>true</code> if this saml sp idp connection is check mandatory authentication; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isCheckMandatoryAuthentication() {
+		return model.isCheckMandatoryAuthentication();
 	}
 
 	/**
@@ -478,6 +588,16 @@ public class SamlSpIdpConnectionWrapper
 	}
 
 	/**
+	 * Returns <code>true</code> if this saml sp idp connection is is passive.
+	 *
+	 * @return <code>true</code> if this saml sp idp connection is is passive; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isIsPassive() {
+		return model.isIsPassive();
+	}
+
+	/**
 	 * Returns <code>true</code> if this saml sp idp connection is ldap import enabled.
 	 *
 	 * @return <code>true</code> if this saml sp idp connection is ldap import enabled; <code>false</code> otherwise
@@ -485,6 +605,16 @@ public class SamlSpIdpConnectionWrapper
 	@Override
 	public boolean isLdapImportEnabled() {
 		return model.isLdapImportEnabled();
+	}
+
+	/**
+	 * Returns <code>true</code> if this saml sp idp connection is requested authn context.
+	 *
+	 * @return <code>true</code> if this saml sp idp connection is requested authn context; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isRequestedAuthnContext() {
+		return model.isRequestedAuthnContext();
 	}
 
 	/**
@@ -513,6 +643,16 @@ public class SamlSpIdpConnectionWrapper
 	}
 
 	/**
+	 * Sets whether this saml sp idp connection is add passive authn request.
+	 *
+	 * @param addPassiveAuthnRequest the add passive authn request of this saml sp idp connection
+	 */
+	@Override
+	public void setAddPassiveAuthnRequest(boolean addPassiveAuthnRequest) {
+		model.setAddPassiveAuthnRequest(addPassiveAuthnRequest);
+	}
+
+	/**
 	 * Sets whether this saml sp idp connection is assertion signature required.
 	 *
 	 * @param assertionSignatureRequired the assertion signature required of this saml sp idp connection
@@ -522,6 +662,28 @@ public class SamlSpIdpConnectionWrapper
 		boolean assertionSignatureRequired) {
 
 		model.setAssertionSignatureRequired(assertionSignatureRequired);
+	}
+
+	/**
+	 * Sets the authn context class ref of this saml sp idp connection.
+	 *
+	 * @param authnContextClassRef the authn context class ref of this saml sp idp connection
+	 */
+	@Override
+	public void setAuthnContextClassRef(String authnContextClassRef) {
+		model.setAuthnContextClassRef(authnContextClassRef);
+	}
+
+	/**
+	 * Sets whether this saml sp idp connection is check mandatory authentication.
+	 *
+	 * @param checkMandatoryAuthentication the check mandatory authentication of this saml sp idp connection
+	 */
+	@Override
+	public void setCheckMandatoryAuthentication(
+		boolean checkMandatoryAuthentication) {
+
+		model.setCheckMandatoryAuthentication(checkMandatoryAuthentication);
 	}
 
 	/**
@@ -572,6 +734,16 @@ public class SamlSpIdpConnectionWrapper
 	@Override
 	public void setForceAuthn(boolean forceAuthn) {
 		model.setForceAuthn(forceAuthn);
+	}
+
+	/**
+	 * Sets whether this saml sp idp connection is is passive.
+	 *
+	 * @param isPassive the is passive of this saml sp idp connection
+	 */
+	@Override
+	public void setIsPassive(boolean isPassive) {
+		model.setIsPassive(isPassive);
 	}
 
 	/**
@@ -652,6 +824,16 @@ public class SamlSpIdpConnectionWrapper
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		model.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	 * Sets whether this saml sp idp connection is requested authn context.
+	 *
+	 * @param requestedAuthnContext the requested authn context of this saml sp idp connection
+	 */
+	@Override
+	public void setRequestedAuthnContext(boolean requestedAuthnContext) {
+		model.setRequestedAuthnContext(requestedAuthnContext);
 	}
 
 	/**

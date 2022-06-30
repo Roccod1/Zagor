@@ -1,15 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *
- *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.saml.persistence.model.impl;
@@ -33,6 +33,7 @@ import com.liferay.saml.persistence.model.SamlSpIdpConnectionModel;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 
 import java.sql.Blob;
@@ -75,7 +76,12 @@ public class SamlSpIdpConnectionModelImpl
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"assertionSignatureRequired", Types.BOOLEAN},
 		{"clockSkew", Types.BIGINT}, {"enabled", Types.BOOLEAN},
-		{"forceAuthn", Types.BOOLEAN}, {"ldapImportEnabled", Types.BOOLEAN},
+		{"forceAuthn", Types.BOOLEAN},
+		{"addPassiveAuthnRequest", Types.BOOLEAN}, {"isPassive", Types.BOOLEAN},
+		{"checkMandatoryAuthentication", Types.BOOLEAN},
+		{"requestedAuthnContext", Types.BOOLEAN},
+		{"authnContextClassRef", Types.VARCHAR},
+		{"ldapImportEnabled", Types.BOOLEAN},
 		{"metadataUpdatedDate", Types.TIMESTAMP},
 		{"metadataUrl", Types.VARCHAR}, {"metadataXml", Types.CLOB},
 		{"name", Types.VARCHAR}, {"nameIdFormat", Types.VARCHAR},
@@ -99,6 +105,11 @@ public class SamlSpIdpConnectionModelImpl
 		TABLE_COLUMNS_MAP.put("clockSkew", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("enabled", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("forceAuthn", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("addPassiveAuthnRequest", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("isPassive", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("checkMandatoryAuthentication", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("requestedAuthnContext", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("authnContextClassRef", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("ldapImportEnabled", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("metadataUpdatedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("metadataUrl", Types.VARCHAR);
@@ -113,7 +124,7 @@ public class SamlSpIdpConnectionModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table SamlSpIdpConnection (samlSpIdpConnectionId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,assertionSignatureRequired BOOLEAN,clockSkew LONG,enabled BOOLEAN,forceAuthn BOOLEAN,ldapImportEnabled BOOLEAN,metadataUpdatedDate DATE null,metadataUrl VARCHAR(1024) null,metadataXml TEXT null,name VARCHAR(75) null,nameIdFormat VARCHAR(1024) null,samlIdpEntityId VARCHAR(1024) null,signAuthnRequest BOOLEAN,unknownUsersAreStrangers BOOLEAN,userAttributeMappings STRING null,userIdentifierExpression VARCHAR(200) null)";
+		"create table SamlSpIdpConnection (samlSpIdpConnectionId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,assertionSignatureRequired BOOLEAN,clockSkew LONG,enabled BOOLEAN,forceAuthn BOOLEAN,addPassiveAuthnRequest BOOLEAN,isPassive BOOLEAN,checkMandatoryAuthentication BOOLEAN,requestedAuthnContext BOOLEAN,authnContextClassRef VARCHAR(75) null,ldapImportEnabled BOOLEAN,metadataUpdatedDate DATE null,metadataUrl VARCHAR(1024) null,metadataXml TEXT null,name VARCHAR(75) null,nameIdFormat VARCHAR(1024) null,samlIdpEntityId VARCHAR(1024) null,signAuthnRequest BOOLEAN,unknownUsersAreStrangers BOOLEAN,userAttributeMappings STRING null,userIdentifierExpression VARCHAR(200) null)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table SamlSpIdpConnection";
@@ -248,6 +259,34 @@ public class SamlSpIdpConnectionModelImpl
 		return _attributeSetterBiConsumers;
 	}
 
+	private static Function<InvocationHandler, SamlSpIdpConnection>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			SamlSpIdpConnection.class.getClassLoader(),
+			SamlSpIdpConnection.class, ModelWrapper.class);
+
+		try {
+			Constructor<SamlSpIdpConnection> constructor =
+				(Constructor<SamlSpIdpConnection>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException
+							reflectiveOperationException) {
+
+					throw new InternalError(reflectiveOperationException);
+				}
+			};
+		}
+		catch (NoSuchMethodException noSuchMethodException) {
+			throw new InternalError(noSuchMethodException);
+		}
+	}
+
 	private static final Map<String, Function<SamlSpIdpConnection, Object>>
 		_attributeGetterFunctions;
 	private static final Map<String, BiConsumer<SamlSpIdpConnection, Object>>
@@ -323,6 +362,40 @@ public class SamlSpIdpConnectionModelImpl
 			"forceAuthn",
 			(BiConsumer<SamlSpIdpConnection, Boolean>)
 				SamlSpIdpConnection::setForceAuthn);
+		attributeGetterFunctions.put(
+			"addPassiveAuthnRequest",
+			SamlSpIdpConnection::getAddPassiveAuthnRequest);
+		attributeSetterBiConsumers.put(
+			"addPassiveAuthnRequest",
+			(BiConsumer<SamlSpIdpConnection, Boolean>)
+				SamlSpIdpConnection::setAddPassiveAuthnRequest);
+		attributeGetterFunctions.put(
+			"isPassive", SamlSpIdpConnection::getIsPassive);
+		attributeSetterBiConsumers.put(
+			"isPassive",
+			(BiConsumer<SamlSpIdpConnection, Boolean>)
+				SamlSpIdpConnection::setIsPassive);
+		attributeGetterFunctions.put(
+			"checkMandatoryAuthentication",
+			SamlSpIdpConnection::getCheckMandatoryAuthentication);
+		attributeSetterBiConsumers.put(
+			"checkMandatoryAuthentication",
+			(BiConsumer<SamlSpIdpConnection, Boolean>)
+				SamlSpIdpConnection::setCheckMandatoryAuthentication);
+		attributeGetterFunctions.put(
+			"requestedAuthnContext",
+			SamlSpIdpConnection::getRequestedAuthnContext);
+		attributeSetterBiConsumers.put(
+			"requestedAuthnContext",
+			(BiConsumer<SamlSpIdpConnection, Boolean>)
+				SamlSpIdpConnection::setRequestedAuthnContext);
+		attributeGetterFunctions.put(
+			"authnContextClassRef",
+			SamlSpIdpConnection::getAuthnContextClassRef);
+		attributeSetterBiConsumers.put(
+			"authnContextClassRef",
+			(BiConsumer<SamlSpIdpConnection, String>)
+				SamlSpIdpConnection::setAuthnContextClassRef);
 		attributeGetterFunctions.put(
 			"ldapImportEnabled", SamlSpIdpConnection::getLdapImportEnabled);
 		attributeSetterBiConsumers.put(
@@ -590,6 +663,103 @@ public class SamlSpIdpConnectionModelImpl
 		}
 
 		_forceAuthn = forceAuthn;
+	}
+
+	@Override
+	public boolean getAddPassiveAuthnRequest() {
+		return _addPassiveAuthnRequest;
+	}
+
+	@Override
+	public boolean isAddPassiveAuthnRequest() {
+		return _addPassiveAuthnRequest;
+	}
+
+	@Override
+	public void setAddPassiveAuthnRequest(boolean addPassiveAuthnRequest) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_addPassiveAuthnRequest = addPassiveAuthnRequest;
+	}
+
+	@Override
+	public boolean getIsPassive() {
+		return _isPassive;
+	}
+
+	@Override
+	public boolean isIsPassive() {
+		return _isPassive;
+	}
+
+	@Override
+	public void setIsPassive(boolean isPassive) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_isPassive = isPassive;
+	}
+
+	@Override
+	public boolean getCheckMandatoryAuthentication() {
+		return _checkMandatoryAuthentication;
+	}
+
+	@Override
+	public boolean isCheckMandatoryAuthentication() {
+		return _checkMandatoryAuthentication;
+	}
+
+	@Override
+	public void setCheckMandatoryAuthentication(
+		boolean checkMandatoryAuthentication) {
+
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_checkMandatoryAuthentication = checkMandatoryAuthentication;
+	}
+
+	@Override
+	public boolean getRequestedAuthnContext() {
+		return _requestedAuthnContext;
+	}
+
+	@Override
+	public boolean isRequestedAuthnContext() {
+		return _requestedAuthnContext;
+	}
+
+	@Override
+	public void setRequestedAuthnContext(boolean requestedAuthnContext) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_requestedAuthnContext = requestedAuthnContext;
+	}
+
+	@Override
+	public String getAuthnContextClassRef() {
+		if (_authnContextClassRef == null) {
+			return "";
+		}
+		else {
+			return _authnContextClassRef;
+		}
+	}
+
+	@Override
+	public void setAuthnContextClassRef(String authnContextClassRef) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_authnContextClassRef = authnContextClassRef;
 	}
 
 	@Override
@@ -875,6 +1045,15 @@ public class SamlSpIdpConnectionModelImpl
 		samlSpIdpConnectionImpl.setClockSkew(getClockSkew());
 		samlSpIdpConnectionImpl.setEnabled(isEnabled());
 		samlSpIdpConnectionImpl.setForceAuthn(isForceAuthn());
+		samlSpIdpConnectionImpl.setAddPassiveAuthnRequest(
+			isAddPassiveAuthnRequest());
+		samlSpIdpConnectionImpl.setIsPassive(isIsPassive());
+		samlSpIdpConnectionImpl.setCheckMandatoryAuthentication(
+			isCheckMandatoryAuthentication());
+		samlSpIdpConnectionImpl.setRequestedAuthnContext(
+			isRequestedAuthnContext());
+		samlSpIdpConnectionImpl.setAuthnContextClassRef(
+			getAuthnContextClassRef());
 		samlSpIdpConnectionImpl.setLdapImportEnabled(isLdapImportEnabled());
 		samlSpIdpConnectionImpl.setMetadataUpdatedDate(
 			getMetadataUpdatedDate());
@@ -921,6 +1100,17 @@ public class SamlSpIdpConnectionModelImpl
 			this.<Boolean>getColumnOriginalValue("enabled"));
 		samlSpIdpConnectionImpl.setForceAuthn(
 			this.<Boolean>getColumnOriginalValue("forceAuthn"));
+		samlSpIdpConnectionImpl.setAddPassiveAuthnRequest(
+			this.<Boolean>getColumnOriginalValue("addPassiveAuthnRequest"));
+		samlSpIdpConnectionImpl.setIsPassive(
+			this.<Boolean>getColumnOriginalValue("isPassive"));
+		samlSpIdpConnectionImpl.setCheckMandatoryAuthentication(
+			this.<Boolean>getColumnOriginalValue(
+				"checkMandatoryAuthentication"));
+		samlSpIdpConnectionImpl.setRequestedAuthnContext(
+			this.<Boolean>getColumnOriginalValue("requestedAuthnContext"));
+		samlSpIdpConnectionImpl.setAuthnContextClassRef(
+			this.<String>getColumnOriginalValue("authnContextClassRef"));
 		samlSpIdpConnectionImpl.setLdapImportEnabled(
 			this.<Boolean>getColumnOriginalValue("ldapImportEnabled"));
 		samlSpIdpConnectionImpl.setMetadataUpdatedDate(
@@ -1062,6 +1252,29 @@ public class SamlSpIdpConnectionModelImpl
 		samlSpIdpConnectionCacheModel.enabled = isEnabled();
 
 		samlSpIdpConnectionCacheModel.forceAuthn = isForceAuthn();
+
+		samlSpIdpConnectionCacheModel.addPassiveAuthnRequest =
+			isAddPassiveAuthnRequest();
+
+		samlSpIdpConnectionCacheModel.isPassive = isIsPassive();
+
+		samlSpIdpConnectionCacheModel.checkMandatoryAuthentication =
+			isCheckMandatoryAuthentication();
+
+		samlSpIdpConnectionCacheModel.requestedAuthnContext =
+			isRequestedAuthnContext();
+
+		samlSpIdpConnectionCacheModel.authnContextClassRef =
+			getAuthnContextClassRef();
+
+		String authnContextClassRef =
+			samlSpIdpConnectionCacheModel.authnContextClassRef;
+
+		if ((authnContextClassRef != null) &&
+			(authnContextClassRef.length() == 0)) {
+
+			samlSpIdpConnectionCacheModel.authnContextClassRef = null;
+		}
 
 		samlSpIdpConnectionCacheModel.ldapImportEnabled = isLdapImportEnabled();
 
@@ -1231,9 +1444,7 @@ public class SamlSpIdpConnectionModelImpl
 	private static class EscapedModelProxyProviderFunctionHolder {
 
 		private static final Function<InvocationHandler, SamlSpIdpConnection>
-			_escapedModelProxyProviderFunction =
-				ProxyUtil.getProxyProviderFunction(
-					SamlSpIdpConnection.class, ModelWrapper.class);
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
 
 	}
 
@@ -1248,6 +1459,11 @@ public class SamlSpIdpConnectionModelImpl
 	private long _clockSkew;
 	private boolean _enabled;
 	private boolean _forceAuthn;
+	private boolean _addPassiveAuthnRequest;
+	private boolean _isPassive;
+	private boolean _checkMandatoryAuthentication;
+	private boolean _requestedAuthnContext;
+	private String _authnContextClassRef;
 	private boolean _ldapImportEnabled;
 	private Date _metadataUpdatedDate;
 	private String _metadataUrl;
@@ -1299,6 +1515,15 @@ public class SamlSpIdpConnectionModelImpl
 		_columnOriginalValues.put("clockSkew", _clockSkew);
 		_columnOriginalValues.put("enabled", _enabled);
 		_columnOriginalValues.put("forceAuthn", _forceAuthn);
+		_columnOriginalValues.put(
+			"addPassiveAuthnRequest", _addPassiveAuthnRequest);
+		_columnOriginalValues.put("isPassive", _isPassive);
+		_columnOriginalValues.put(
+			"checkMandatoryAuthentication", _checkMandatoryAuthentication);
+		_columnOriginalValues.put(
+			"requestedAuthnContext", _requestedAuthnContext);
+		_columnOriginalValues.put(
+			"authnContextClassRef", _authnContextClassRef);
 		_columnOriginalValues.put("ldapImportEnabled", _ldapImportEnabled);
 		_columnOriginalValues.put("metadataUpdatedDate", _metadataUpdatedDate);
 		_columnOriginalValues.put("metadataUrl", _metadataUrl);
@@ -1346,27 +1571,37 @@ public class SamlSpIdpConnectionModelImpl
 
 		columnBitmasks.put("forceAuthn", 512L);
 
-		columnBitmasks.put("ldapImportEnabled", 1024L);
+		columnBitmasks.put("addPassiveAuthnRequest", 1024L);
 
-		columnBitmasks.put("metadataUpdatedDate", 2048L);
+		columnBitmasks.put("isPassive", 2048L);
 
-		columnBitmasks.put("metadataUrl", 4096L);
+		columnBitmasks.put("checkMandatoryAuthentication", 4096L);
 
-		columnBitmasks.put("metadataXml", 8192L);
+		columnBitmasks.put("requestedAuthnContext", 8192L);
 
-		columnBitmasks.put("name", 16384L);
+		columnBitmasks.put("authnContextClassRef", 16384L);
 
-		columnBitmasks.put("nameIdFormat", 32768L);
+		columnBitmasks.put("ldapImportEnabled", 32768L);
 
-		columnBitmasks.put("samlIdpEntityId", 65536L);
+		columnBitmasks.put("metadataUpdatedDate", 65536L);
 
-		columnBitmasks.put("signAuthnRequest", 131072L);
+		columnBitmasks.put("metadataUrl", 131072L);
 
-		columnBitmasks.put("unknownUsersAreStrangers", 262144L);
+		columnBitmasks.put("metadataXml", 262144L);
 
-		columnBitmasks.put("userAttributeMappings", 524288L);
+		columnBitmasks.put("name", 524288L);
 
-		columnBitmasks.put("userIdentifierExpression", 1048576L);
+		columnBitmasks.put("nameIdFormat", 1048576L);
+
+		columnBitmasks.put("samlIdpEntityId", 2097152L);
+
+		columnBitmasks.put("signAuthnRequest", 4194304L);
+
+		columnBitmasks.put("unknownUsersAreStrangers", 8388608L);
+
+		columnBitmasks.put("userAttributeMappings", 16777216L);
+
+		columnBitmasks.put("userIdentifierExpression", 33554432L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}
