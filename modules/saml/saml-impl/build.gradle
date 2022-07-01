@@ -2,6 +2,4 @@ dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.portal.api"
 	compileOnly project(":modules:saml:saml-api")
 	compileOnly project(":modules:saml:saml-persistence-api")
-	
-	testCompile group: "com.liferay.portal", name: "com.liferay.util.java", version: "default"
 }
