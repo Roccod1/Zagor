@@ -6,10 +6,6 @@
 				<h2><liferay-ui:message key="form"/></h2>
 </div>
 
-<liferay-ui:success key="eseguito-correttamente" message="operazione-eseguita-correttamente"/>
-<liferay-ui:error key="errore-salvataggio" message="compilare-tutti-i-campi-obbligatori" />
-
-
 <div class="container mb-4 pl-0 pr-0">
 	<aui:form action="${salvaModificaURL}" id="form" name="fm">
 		<div class="row">
@@ -20,12 +16,12 @@
 				<div class="form-group">
 					<c:choose>
 						<c:when test="${form.formId > 0}">
-							<aui:input label="codice-identificativo" id="codice-identificativo" name="codice-identificativo" type="text" value="${form.nome}" readonly="true">
+							<aui:input label="codice-identificativo" id="codice-identificativo" name="codice-identificativo" type="text" value="${form.codice}" readonly="true">
 							<aui:validator name="required"/>
 							</aui:input>	 
 						</c:when>
 						<c:otherwise>
-							<aui:input label="codice-identificativo" id="codice-identificativo" name="codice-identificativo" type="text" value="${form.nome}">
+							<aui:input label="codice-identificativo" id="codice-identificativo" name="codice-identificativo" type="text" value="${form.codice}">
 							<aui:validator name="required"/>
 							</aui:input>
 						</c:otherwise>
@@ -38,7 +34,7 @@
 
 			<div class="col-6">
 				<div class="form-group ">
-					<aui:input label="nome" id="nome" name="nome" value="${form.descrizione}" type="text">
+					<aui:input label="descrizione" id="descrizione" name="descrizione" value="${form.descrizione}" type="text">
 					<aui:validator name="required"/>
 					</aui:input>			
 				</div>	
@@ -52,7 +48,7 @@
 				<div class="form-group form-check">	
 					<c:choose>
 						<c:when test="${form.principale eq true }">
-							<aui:input label="principale" type="checkbox" id="principale" name="principale" checked="true"/>					
+							<aui:input label="principale" type="checkbox" id="principale" name="principale"/>					
 						</c:when>
 						<c:otherwise>
 							<aui:input label="principale" type="checkbox" id="principale" name="principale"/>
@@ -65,10 +61,10 @@
 				<div class="form-group form-check">	
 					<c:choose>
 						<c:when test="${form.multiutente eq true}">
-							<aui:input label="multiente" type="checkbox" id="multiente" name="multiente" checked="true"/>	
+							<aui:input label="multiente" type="checkbox" id="multiente" name="multiente" checked="true" disabled="true"/>	
 						</c:when>						
 						<c:otherwise>
-							<aui:input label="multiente" type="checkbox" id="multiente" name="multiente" />	
+							<aui:input label="multiente" type="checkbox" id="multiente" name="multiente" checked="true" disabled="true"/>	
 						</c:otherwise>
 					</c:choose>						
 				</div>

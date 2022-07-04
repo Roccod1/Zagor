@@ -1,10 +1,10 @@
-<portlet:renderURL var="dettaglioNuovoURL">
-				<portlet:param name="mvcRenderCommandName" value="/dettaglioNuovo" />
-				<portlet:param name="urlTornaIndietro" value="<%=urlTornaIndietro %>" />
-</portlet:renderURL>
-
 <portlet:actionURL name="/ricerca" var="ricercaURL" />
 
+<portlet:renderURL var="dettaglioNuovoURL">
+		<portlet:param name="mvcRenderCommandName" value="/dettaglioNuovo" />
+		<portlet:param name="urlTornaIndietro" value="<%=urlTornaIndietro %>" />
+		<portlet:param name="idForm" value="0" />
+</portlet:renderURL>
 <div class="container mb-4 pl-0 pr-0">
 	<aui:form action="${ricercaURL}" id="form" name="fm">
 	<div class="row">
@@ -34,7 +34,7 @@
 	
 
 		<aui:button-row cssClass="text-right">
-			<aui:button type="reset" value="annulla" id="annulla"/>
+			<aui:button type="button" value="annulla" id="annulla"/>
 			<aui:button type="submit" value="cerca" id="cerca"/>
 			<aui:button value="nuova" id="nuova" href="${dettaglioNuovoURL}"/>
 		</aui:button-row>

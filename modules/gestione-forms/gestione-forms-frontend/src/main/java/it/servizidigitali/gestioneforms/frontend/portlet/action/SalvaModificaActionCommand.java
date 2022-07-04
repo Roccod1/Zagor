@@ -1,5 +1,6 @@
 package it.servizidigitali.gestioneforms.frontend.portlet.action;
 
+import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -30,12 +31,16 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 	
 	@Reference
 	private FormLocalService formLocalService;
+	
+	@Reference
+    private CounterLocalService counterLocalService;
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		long idForm = ParamUtil.getLong(actionRequest, "idform");
 		String codiceIdentificativo = ParamUtil.getString(actionRequest, "codice-identificativo");
-		String nome = ParamUtil.getString(actionRequest, "nome");
+		String nome = ParamUtil.getString(actionRequest, "descrizione");
+		boolean principale = ParamUtil.getBoolean(actionRequest, "principale");
 		
 		Form form = null;
 		
@@ -52,14 +57,18 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		}
 		
 		
-		if(!Validator.isNull(idForm) && idForm>0) {
+		if(Validator.isNotNull(idForm) && idForm>0) {
 			form = formLocalService.getForm(idForm);
+			SessionMessages.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE);
 		}else {
-			form = formLocalService.createForm(idForm);	
+			form = formLocalService.createForm(counterLocalService.increment());	
+			SessionMessages.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE);
 		}
 		
 		form.setCodice(codiceIdentificativo);
 		form.setDescrizione(nome);
+		form.setMultiutente(true);
+		form.setPrincipale(principale);
 		
 		formLocalService.updateForm(form);
 	}

@@ -5,12 +5,16 @@ import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.util.JavaConstants;
 
 import java.io.IOException;
 import java.util.List;
 
 import javax.portlet.Portlet;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -46,9 +50,17 @@ public class GestioneFormsPortlet extends MVCPortlet {
 		List<Form> listaForm = (List<Form>) renderRequest.getAttribute(GestioneFormsPortletKeys.LISTA_FORM);
 		
 		if(listaForm==null) {
-			renderRequest.setAttribute(GestioneFormsPortletKeys.LISTA_FORM, formLocalService.getForms(QueryUtil.ALL_POS, QueryUtil.ALL_POS));
+			listaForm = formLocalService.getForms(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			renderRequest.setAttribute(GestioneFormsPortletKeys.LISTA_FORM, listaForm);
 		}
 		
 		super.render(renderRequest, renderResponse);
+		
+		
+		// Rimozione messaggi default
+		
+		PortletConfig portletConfig = (PortletConfig) renderRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+	    LiferayPortletConfig liferayPortletConfig = (LiferayPortletConfig) portletConfig;
+	    SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
 	}
 }

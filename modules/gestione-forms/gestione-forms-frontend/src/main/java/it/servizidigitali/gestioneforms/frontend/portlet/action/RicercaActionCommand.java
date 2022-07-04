@@ -1,5 +1,6 @@
 package it.servizidigitali.gestioneforms.frontend.portlet.action;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -38,19 +39,24 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 	
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		// TODO Auto-generated method stub
-		String nome = ParamUtil.getString(actionRequest, "nome");
+		String descrizione = ParamUtil.getString(actionRequest, "nome");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date dataInserimentoDa = ParamUtil.getDate(actionRequest, "dataInserimentoDa", sdf);
-		Date dataInserimentoA = ParamUtil.getDate(actionRequest, "dataInserimentoA",sdf);
+		String dataInserimentoDaString = ParamUtil.getString(actionRequest, "dataInserimentoDa");
+		String dataInserimentoAString = ParamUtil.getString(actionRequest, "dataInserimentoA");
 		DynamicQuery dynamicQuery = formLocalService.dynamicQuery();
 		
-		if(!Validator.isNull(nome)) {
-			dynamicQuery.add(RestrictionsFactoryUtil.like("descrizione", nome));
+		if(Validator.isNotNull(descrizione)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.like("descrizione", StringPool.PERCENT + descrizione + StringPool.PERCENT));
 		}
 		
-		if(!Validator.isNull(dataInserimentoDa)) {
-			dynamicQuery.add(RestrictionsFactoryUtil.between("createDate", dataInserimentoDa, dataInserimentoA));
+		if(Validator.isNotNull(dataInserimentoDaString)) {
+			Date dataInserimentoDa = sdf.parse(dataInserimentoDaString);
+			dynamicQuery.add(RestrictionsFactoryUtil.ge("createDate", dataInserimentoDa));
+		}
+		
+		if(Validator.isNotNull(dataInserimentoAString)) {
+			Date dataInserimentoA = sdf.parse(dataInserimentoAString);
+			dynamicQuery.add(RestrictionsFactoryUtil.le("createDate", dataInserimentoA));
 		}
 		
 		List<Form> listaForm = formLocalService.dynamicQuery(dynamicQuery);

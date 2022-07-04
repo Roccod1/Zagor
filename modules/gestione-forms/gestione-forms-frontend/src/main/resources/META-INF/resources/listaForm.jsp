@@ -1,3 +1,6 @@
+<liferay-ui:success key="eseguito-correttamente" message="operazione-eseguita-correttamente"/>
+<liferay-ui:error key="errore-salvataggio" message="compilare-tutti-i-campi-obbligatori" />
+
 <liferay-ui:search-container
 			delta="10"
 			emptyResultsMessage="non-e-presente-nessun-form"
@@ -14,9 +17,12 @@
 			
 			
 				
-				<liferay-ui:search-container-column-text property="nome" name="identificativo" />
-				<liferay-ui:search-container-column-text property="descrizione" name="denominazione" />
-				<liferay-ui:search-container-column-text property="modifiedDate" name="data-aggiornamento" />
+				<liferay-ui:search-container-column-text property="codice" name="identificativo" />
+				<liferay-ui:search-container-column-text property="descrizione" name="descrizione" />
+				
+				<fmt:formatDate value="${form.createDate}" var="createDate" pattern="dd/MM/yyyy"/>
+				
+				<liferay-ui:search-container-column-text value="${createDate}" name="data-creazione" />
 				
 				<c:choose>
 					<c:when test="${form.multiutente eq true}">
@@ -43,7 +49,7 @@
 					<portlet:param name="idForm" value="${form.formId}" />
 				</portlet:renderURL>
 				
-				<liferay-ui:search-container-column-text name="Azioni" align="center" value="<i class='icon-edit'></i>" href="${dettaglioNuovoURL}"/>
+				<liferay-ui:search-container-column-text name="Azioni" align="center" value="<i class='icon-edit'></i><i class='fa fa-trash'></i>" href="${dettaglioNuovoURL}"/>
 			
 			</liferay-ui:search-container-row>
 		<liferay-ui:search-iterator />
