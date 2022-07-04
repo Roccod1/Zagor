@@ -48,7 +48,7 @@ import it.servizidigitali.gestioneforms.model.impl.FormImpl;
 import it.servizidigitali.gestioneforms.model.impl.FormModelImpl;
 import it.servizidigitali.gestioneforms.service.persistence.FormPersistence;
 import it.servizidigitali.gestioneforms.service.persistence.FormUtil;
-import it.servizidigitali.gestioneforms.service.persistence.impl.constants.ServiziDigitaliGestioneFormsPersistenceConstants;
+import it.servizidigitali.gestioneforms.service.persistence.impl.constants.PersistenceConstants;
 
 import java.io.Serializable;
 
@@ -2842,15 +2842,14 @@ public class FormPersistenceImpl
 
 	@Override
 	@Reference(
-		target = ServiziDigitaliGestioneFormsPersistenceConstants.SERVICE_CONFIGURATION_FILTER,
-		unbind = "-"
+		target = PersistenceConstants.SERVICE_CONFIGURATION_FILTER, unbind = "-"
 	)
 	public void setConfiguration(Configuration configuration) {
 	}
 
 	@Override
 	@Reference(
-		target = ServiziDigitaliGestioneFormsPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
+		target = PersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
 		unbind = "-"
 	)
 	public void setDataSource(DataSource dataSource) {
@@ -2859,7 +2858,7 @@ public class FormPersistenceImpl
 
 	@Override
 	@Reference(
-		target = ServiziDigitaliGestioneFormsPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
+		target = PersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
 		unbind = "-"
 	)
 	public void setSessionFactory(SessionFactory sessionFactory) {
