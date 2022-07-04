@@ -159,20 +159,16 @@ public class TipologiaModelImpl
 	public static void setFinderCacheEnabled(boolean finderCacheEnabled) {
 	}
 
-	public static final String
-		MAPPING_TABLE_SERVIZIDIGITALIGESTIONESERVIZI_SERVIZIO_TIPOLOGIA_NAME =
-			"ServiziDigitaliGestioneServizi_servizio_tipologia";
+	public static final String MAPPING_TABLE_SERVIZIO_TIPOLOGIA_NAME =
+		"servizio_tipologia";
 
-	public static final Object[][]
-		MAPPING_TABLE_SERVIZIDIGITALIGESTIONESERVIZI_SERVIZIO_TIPOLOGIA_COLUMNS =
-			{
-				{"companyId", Types.BIGINT}, {"servizioId", Types.BIGINT},
-				{"tipologiaId", Types.BIGINT}
-			};
+	public static final Object[][] MAPPING_TABLE_SERVIZIO_TIPOLOGIA_COLUMNS = {
+		{"companyId", Types.BIGINT}, {"servizioId", Types.BIGINT},
+		{"tipologiaId", Types.BIGINT}
+	};
 
-	public static final String
-		MAPPING_TABLE_SERVIZIDIGITALIGESTIONESERVIZI_SERVIZIO_TIPOLOGIA_SQL_CREATE =
-			"create table ServiziDigitaliGestioneServizi_servizio_tipologia (companyId LONG not null,servizioId LONG not null,tipologiaId LONG not null,primary key (servizioId, tipologiaId))";
+	public static final String MAPPING_TABLE_SERVIZIO_TIPOLOGIA_SQL_CREATE =
+		"create table servizio_tipologia (companyId LONG not null,servizioId LONG not null,tipologiaId LONG not null,primary key (servizioId, tipologiaId))";
 
 	public TipologiaModelImpl() {
 	}

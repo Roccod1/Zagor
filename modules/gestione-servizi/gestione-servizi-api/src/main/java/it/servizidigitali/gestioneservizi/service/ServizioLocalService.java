@@ -87,6 +87,8 @@ public interface ServizioLocalService
 
 	public void addTipologiaServizios(long tipologiaId, long[] servizioIds);
 
+	public Servizio aggiornaServizio(Servizio servizioDaAggiornare);
+
 	public void clearTipologiaServizios(long tipologiaId);
 
 	/**
@@ -266,6 +268,9 @@ public interface ServizioLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Servizio getServizio(long servizioId) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Servizio getServizioById(Long servizioId);
 
 	/**
 	 * Returns the servizio matching the UUID and group.

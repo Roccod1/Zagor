@@ -82,6 +82,10 @@ public class ServizioLocalServiceUtil {
 		getService().addTipologiaServizios(tipologiaId, servizioIds);
 	}
 
+	public static Servizio aggiornaServizio(Servizio servizioDaAggiornare) {
+		return getService().aggiornaServizio(servizioDaAggiornare);
+	}
+
 	public static void clearTipologiaServizios(long tipologiaId) {
 		getService().clearTipologiaServizios(tipologiaId);
 	}
@@ -321,6 +325,10 @@ public class ServizioLocalServiceUtil {
 	 */
 	public static Servizio getServizio(long servizioId) throws PortalException {
 		return getService().getServizio(servizioId);
+	}
+
+	public static Servizio getServizioById(Long servizioId) {
+		return getService().getServizioById(servizioId);
 	}
 
 	/**

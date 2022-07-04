@@ -15,10 +15,15 @@
 package it.servizidigitali.gestioneservizi.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
-import it.servizidigitali.gestioneservizi.service.base.TipologiaLocalServiceBaseImpl;
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
+
+import it.servizidigitali.gestioneservizi.model.Tipologia;
+import it.servizidigitali.gestioneservizi.service.base.TipologiaLocalServiceBaseImpl;
 
 /**
  * @author Brian Wing Shun Chan
@@ -28,4 +33,16 @@ import org.osgi.service.component.annotations.Component;
 	service = AopService.class
 )
 public class TipologiaLocalServiceImpl extends TipologiaLocalServiceBaseImpl {
+	
+	private static final Log _log = LogFactoryUtil.getLog(TipologiaLocalServiceImpl.class);
+	
+	public Tipologia getTipologiaById(Long idTipologia) {
+		Tipologia tipologia = null;
+		try {
+			tipologia = tipologiaPersistence.findByPrimaryKey(idTipologia);
+		}catch(Exception e) {
+			_log.error("Non esiste la tipologia con ID: "+idTipologia);
+		}
+		return tipologia;
+	}
 }

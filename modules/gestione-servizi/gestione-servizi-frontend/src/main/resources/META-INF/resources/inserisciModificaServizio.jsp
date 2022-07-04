@@ -1,18 +1,29 @@
 <%@ include file="init.jsp" %>
 
+<% 
+	List<Tipologia> listaTipologieSelezionate = (List<Tipologia>) renderRequest.getAttribute(GestioneServiziPortletKeys.LISTA_TIPOLOGIE_SELEZIONATE);
+	List<Tipologia> listaTipologie = (List<Tipologia>) renderRequest.getAttribute(GestioneServiziPortletKeys.LISTA_TIPOLOGIE);
+%>
+
+<portlet:actionURL name="/salva" var="salvaURL">
+	<portlet:param name="indirizzoPrecedente" value="${indirizzoPrecedente }"/>
+</portlet:actionURL>
+
 <div class="container pl-0 pr-0 mb-4 mt-4">
-	<aui:form method="post" action="" modelAttribute="">
+	<aui:form method="post" action="${salvaURL}" id="inserisciModificaServizioForm">
+		<aui:input type="hidden" name="servizioId" value="${servizio.servizioId}"/>
+	
 		<div class="row">
 			<div class="col">
 				<div class="form-group required">
-					<aui:input type="text" name="nome" label="nome">
+					<aui:input type="text" name="nome" label="nome" value="${servizio.nome }">
 						<aui:validator name="required"/>
 					</aui:input>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group required">
-					<aui:input type="text" name="codiceServizio" label="codice-servizio">
+					<aui:input type="text" name="codice" label="codice-servizio" value="${servizio.codice}">
 						<aui:validator name="required"/>
 					</aui:input>
 				</div>
@@ -22,16 +33,16 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-					<aui:input type="textarea" resizable="false" name="descrizione" label="descrizione">
+					<aui:input type="textarea" resizable="false" name="descrizione" label="descrizione" value="${servizio.descrizione}">
 						<aui:validator name="required"/>
 					</aui:input>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group">
-					<aui:select type="text" name="areaTematica" label="area-tematica">
+					<aui:select type="text" name="areaTematicaId" label="area-tematica" value="${servizio.areaTematicaId}">
 						<aui:validator name="required"/>
-						<aui:option value="" selected="true" label="seleziona"/>
+						<aui:option value="1" selected="true" label="seleziona"/>
 					</aui:select>
 				</div>
 			</div>
@@ -40,7 +51,7 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-					<aui:input type="textarea" resizable="false" name="descrizioneEstesa" label="descrizione-estesa"/>				
+					<aui:input type="textarea" resizable="false" name="descrizioneEstesa" label="descrizione-estesa" value="${servizio.descrizioneEstesa}"/>				
 				</div>
 			</div>
 		</div>
@@ -48,12 +59,12 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-					<aui:input type="text" name="uriPrivata" label="uri-privata"/>
+					<aui:input type="text" name="uri" label="uri-privata" value="${servizio.uri}"/>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group">
-					<aui:input type="text" name="uriPubblica" label="uri-pubblica"/>
+					<aui:input type="text" name="uriGuest" label="uri-pubblica" value="${servizio.uriGuest}"/>
 				</div>
 			</div>
 		</div>
@@ -61,7 +72,7 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-					<aui:input type="text" name="uriScheda" label="uri-scheda"/>
+					<aui:input type="text" name="uriScheda" label="uri-scheda" value="${servizio.uriScheda}"/>
 				</div>
 			</div>
 		</div>
@@ -69,17 +80,18 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group form-check">
-					<aui:input type="checkbox" name="autenticazione" label="autenticazione"/>
+					<aui:input type="checkbox" name="autenticazione" label="autenticazione" value="${servizio.autenticazione}"/>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group form-check">
-					<aui:input type="checkbox" name="attivo" label="attivo"/>
+					<aui:input type="checkbox" name="attivo" label="attivo" value="${servizio.attivo}"/>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group">
-					<aui:input type="date" name="dataInizioAttivazione" label="data-inizio-attivazione"/>
+					<fmt:formatDate value="${servizio.dataInizioAttivazione }" pattern="yyyy-MM-dd" var="dataInizioAttivazioneFormattato"/>
+					<aui:input type="date" name="dataInizioAttivazione" label="data-inizio-attivazione" value="${dataInizioAttivazioneFormattato}"/>
 				</div>
 			</div>
 		</div>
@@ -87,17 +99,18 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group form-check">
-					<aui:input type="checkbox" name="cittadino" label="cittadino"/>
+					<aui:input type="checkbox" name="cittadino" label="cittadino" value="${servizio.cittadino}"/>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group form-check">
-					<aui:input type="checkbox" name="azienda" label="azienda"/>
+					<aui:input type="checkbox" name="azienda" label="azienda" value="${servizio.azienda}"/>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group">
-					<aui:input type="date" name="dataFineAttivazione" label="data-fine-attivazione"/>
+					<fmt:formatDate value="${servizio.dataFineAttivazione }" pattern="yyyy-MM-dd" var="dataFineAttivazioneFormattato"/>
+					<aui:input type="date" name="dataFineAttivazione" label="data-fine-attivazione" value="${dataFineAttivazioneFormattato}"/>
 				</div>
 			</div>
 		</div>
@@ -105,17 +118,17 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group form-check">
-					<aui:input type="checkbox" name="delega" label="delega"/>
+					<aui:input type="checkbox" name="delega" label="delega" value="${servizio.delega}"/>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group form-check">
-					<aui:input type="checkbox" name="allegatoDelegaObbligatorio" label="allegato-delega-obbligatorio"/>
+					<aui:input type="checkbox" name="allegatoDelega" label="allegato-delega-obbligatorio" value="${servizio.allegatoDelega}"/>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group form-check">
-					<aui:input type="checkbox" name="privacyDelegaAttivazione" label="privacy-servizio-delega"/>
+					<aui:input type="checkbox" name="privacyDelega" label="privacy-servizio-delega" value="${servizio.privacyDelega}"/>
 				</div>
 			</div>
 		</div>
@@ -123,34 +136,35 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group form-check">
-					<aui:input type="checkbox" name="prenotabile" label="prenotabile"/>
+					<aui:input type="checkbox" name="prenotabile" label="prenotabile" value="${servizio.prenotabile}"/>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group form-check">
-					<aui:input type="checkbox" name="chatbot" label="chatbot"/>
+					<aui:input type="checkbox" name="chatbot" label="chatbot" value="${servizio.chatbot}"/>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group form-check">
-					<aui:input type="checkbox" name="gestibileDaBackoffice" label="gestibile-da-backoffice"/>
+					<aui:input type="checkbox" name="gestioneBackoffice" label="gestibile-da-backoffice"  value="${servizio.gestioneBackoffice}"/>
 				</div>
 			</div>
 		</div>
-	</aui:form>
-</div>
 
-<div class="container pl-0 pr-0 mb-4 mt-4">
-	<table>
-		<thead>
-			<tr>
-				<th></th>
-				<th><liferay-ui:message key="nome"/></th>
-			</tr>
-		</thead>
+		<div class="row">
+			<div class="col">
+			<% for(Tipologia tipologia : listaTipologie){ %>
+				<div class="form-group form-check">
+					<aui:input id='<%="tipologia"+ tipologia.getTipologiaId()%>' name="listaTipologieSelezionate" type="checkbox" value="<%=tipologia.getTipologiaId() %>" checked="<%=listaTipologieSelezionate.contains(tipologia) ? true : false %>" label="<%=tipologia.getNome() %>"/>		
+				</div>
+			<% }%>
+			</div>
+		</div>
 		
-		<tbody>
-			<tr></tr>
-		</tbody>
-	</table>
+		<aui:button-row cssClass="text-right">
+			<aui:button type="submit" value="salva" />
+			<aui:button type="reset" value="reset" />
+			<aui:button type="cancel" value="annulla" href="${indirizzoPrecedente}"/>
+		</aui:button-row>
+	</aui:form>
 </div>

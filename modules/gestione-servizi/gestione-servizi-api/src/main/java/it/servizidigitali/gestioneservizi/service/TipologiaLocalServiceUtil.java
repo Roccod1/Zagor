@@ -356,6 +356,10 @@ public class TipologiaLocalServiceUtil {
 		return getService().getTipologia(tipologiaId);
 	}
 
+	public static Tipologia getTipologiaById(Long idTipologia) {
+		return getService().getTipologiaById(idTipologia);
+	}
+
 	/**
 	 * Returns the tipologia matching the UUID and group.
 	 *

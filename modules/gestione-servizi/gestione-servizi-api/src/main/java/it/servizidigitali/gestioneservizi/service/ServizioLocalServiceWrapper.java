@@ -81,6 +81,14 @@ public class ServizioLocalServiceWrapper
 	}
 
 	@Override
+	public it.servizidigitali.gestioneservizi.model.Servizio aggiornaServizio(
+		it.servizidigitali.gestioneservizi.model.Servizio
+			servizioDaAggiornare) {
+
+		return _servizioLocalService.aggiornaServizio(servizioDaAggiornare);
+	}
+
+	@Override
 	public void clearTipologiaServizios(long tipologiaId) {
 		_servizioLocalService.clearTipologiaServizios(tipologiaId);
 	}
@@ -366,6 +374,13 @@ public class ServizioLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _servizioLocalService.getServizio(servizioId);
+	}
+
+	@Override
+	public it.servizidigitali.gestioneservizi.model.Servizio getServizioById(
+		Long servizioId) {
+
+		return _servizioLocalService.getServizioById(servizioId);
 	}
 
 	/**

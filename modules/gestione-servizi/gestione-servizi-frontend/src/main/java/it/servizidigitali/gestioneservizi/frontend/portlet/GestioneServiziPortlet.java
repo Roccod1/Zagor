@@ -1,6 +1,7 @@
 package it.servizidigitali.gestioneservizi.frontend.portlet;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.gestioneservizi.frontend.constants.GestioneServiziPortletKeys;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 
 /**
  * @author pindi
@@ -41,11 +43,19 @@ public class GestioneServiziPortlet extends MVCPortlet {
 	
 	@Reference
 	private ServizioLocalService servizioLocalService;
+	
+	@Reference
+	private TipologiaLocalService tipologiaLocalService;
 
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
 		
-		List<Servizio> listaServizi = servizioLocalService.getServizios(-1, -1);
+		List<Servizio> listaServizi = (List<Servizio>) renderRequest.getAttribute(GestioneServiziPortletKeys.LISTA_SERVIZI);
+		
+		if(Validator.isNull(listaServizi)) {
+			listaServizi = servizioLocalService.getServizios(-1, -1);
+		}
+		
 		renderRequest.setAttribute(GestioneServiziPortletKeys.LISTA_SERVIZI, listaServizi);
 
 		super.render(renderRequest, renderResponse);
