@@ -1,11 +1,15 @@
 <%@ include file="init.jsp" %>
 
+<liferay-portlet:renderURL varImpl="iteratorURL">
+	<portlet:param name="nome" value="${nome}" />
+	<portlet:param name="codice" value="${codiceServizio}" />
+	<portlet:param name="soloAttivi" value="${soloServiziAttivi}" />
+	<portlet:param name="mvcPath" value="/view.jsp" />
+</liferay-portlet:renderURL>
 
-
-
-<liferay-ui:search-container delta="10" emptyResultsMessage="nessun-risultato-trovato" total="<%=listaServizi.size()%>">
-	<liferay-ui:search-container-results results="<%=ListUtil.subList(listaServizi, searchContainer.getStart(), searchContainer.getEnd()) %>" />
-	<liferay-ui:search-container-row className="it.servizidigitali.gestioneservizi.model.Servizio" modelVar="servizio">
+<liferay-ui:search-container delta="10" emptyResultsMessage="nessun-risultato-trovato" total="<%=listaServizi.size()%>" iteratorURL="${iteratorURL}" >
+	<liferay-ui:search-container-results results="<%=ListUtil.subList(listaServizi, searchContainer.getStart(), searchContainer.getEnd()) %>"/>
+	<liferay-ui:search-container-row className="it.servizidigitali.gestioneservizi.model.Servizio" modelVar="servizio" >
 		<liferay-ui:search-container-column-text property="codice" name="codice-servizio" orderable="true" orderableProperty="codice"/>
 		<liferay-ui:search-container-column-text property="nome" name="nome" orderable="true" orderableProperty="nome"/>
 		<liferay-ui:search-container-column-text property="descrizione" name="descrizione" orderable="true" orderableProperty="descrizione"/>

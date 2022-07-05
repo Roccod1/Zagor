@@ -49,6 +49,7 @@ import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalServiceUtil;
 import it.servizidigitali.gestioneservizi.service.persistence.AreaTematicaPersistence;
+import it.servizidigitali.gestioneservizi.service.persistence.ServizioFinder;
 import it.servizidigitali.gestioneservizi.service.persistence.ServizioPersistence;
 import it.servizidigitali.gestioneservizi.service.persistence.TipologiaPersistence;
 
@@ -726,6 +727,9 @@ public abstract class ServizioLocalServiceBaseImpl
 
 	@Reference
 	protected ServizioPersistence servizioPersistence;
+
+	@Reference
+	protected ServizioFinder servizioFinder;
 
 	@Reference
 	protected TipologiaPersistence tipologiaPersistence;

@@ -21,6 +21,10 @@ import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 
+/**
+ * @author filierim
+ * */
+
 @Component(
 	immediate = true,
 	property = {
@@ -45,7 +49,6 @@ public class AggiungiModificaServizioRenderCommand implements MVCRenderCommand{
 		
 		Servizio servizio = null;
 		List<Tipologia> listaTipologie = null;
-		List<Tipologia> listaTipologieSelezionate = new ArrayList<Tipologia>();
 		if(servizioId > 0) {
 			try {
 				servizio = servizioLocalService.getServizioById(servizioId);		

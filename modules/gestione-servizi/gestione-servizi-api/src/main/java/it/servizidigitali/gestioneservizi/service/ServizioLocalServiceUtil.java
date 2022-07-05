@@ -443,6 +443,25 @@ public class ServizioLocalServiceUtil {
 		return getService().hasTipologiaServizios(tipologiaId);
 	}
 
+	/**
+	 * @param nome
+	 * @param codice
+	 * @param soloServiziAttivi
+	 * @param cur: pagina attuale
+	 * @param delta: numero elementi per pagina
+	 * @param nomeOrdinamento
+	 * @param direzioneOrdinamento
+	 * @return
+	 */
+	public static List<Servizio> searchServizio(
+		String nome, String codice, Boolean soloServiziAttivi, int cur,
+		int delta, String nomeOrdinamento, String direzioneOrdinamento) {
+
+		return getService().searchServizio(
+			nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento,
+			direzioneOrdinamento);
+	}
+
 	public static void setTipologiaServizios(
 		long tipologiaId, long[] servizioIds) {
 

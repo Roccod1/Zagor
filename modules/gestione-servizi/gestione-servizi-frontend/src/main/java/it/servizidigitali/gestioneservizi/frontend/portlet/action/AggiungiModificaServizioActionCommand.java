@@ -4,7 +4,10 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -25,6 +28,9 @@ import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 
+/**
+ * @author filierim
+ * */
 
 @Component(
 	immediate = true,
@@ -96,7 +102,12 @@ public class AggiungiModificaServizioActionCommand extends BaseMVCActionCommand 
 		if(servizioId > 0) {
 			servizio = servizioLocalService.getServizio(servizioId);
 		}else {
+			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
+			ThemeDisplay tema = serviceContext.getThemeDisplay();
+			
 			servizio = servizioLocalService.createServizio(0L);
+//			servizio.setGroupId(tema.getCompanyGroupId());
+//			servizio.setUserId(tema.getUserId());
 		}
 		
 		servizio.setNome(nome);

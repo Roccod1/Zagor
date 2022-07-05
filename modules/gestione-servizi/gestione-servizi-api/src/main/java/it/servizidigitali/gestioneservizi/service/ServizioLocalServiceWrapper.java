@@ -518,6 +518,27 @@ public class ServizioLocalServiceWrapper
 		return _servizioLocalService.hasTipologiaServizios(tipologiaId);
 	}
 
+	/**
+	 * @param nome
+	 * @param codice
+	 * @param soloServiziAttivi
+	 * @param cur: pagina attuale
+	 * @param delta: numero elementi per pagina
+	 * @param nomeOrdinamento
+	 * @param direzioneOrdinamento
+	 * @return
+	 */
+	@Override
+	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
+		searchServizio(
+			String nome, String codice, Boolean soloServiziAttivi, int cur,
+			int delta, String nomeOrdinamento, String direzioneOrdinamento) {
+
+		return _servizioLocalService.searchServizio(
+			nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento,
+			direzioneOrdinamento);
+	}
+
 	@Override
 	public void setTipologiaServizios(long tipologiaId, long[] servizioIds) {
 		_servizioLocalService.setTipologiaServizios(tipologiaId, servizioIds);

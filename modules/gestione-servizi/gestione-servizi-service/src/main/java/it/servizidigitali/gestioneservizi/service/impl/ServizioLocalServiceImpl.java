@@ -14,22 +14,29 @@
 
 package it.servizidigitali.gestioneservizi.service.impl;
 
-import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
+
+import org.osgi.service.component.annotations.Component;
 
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.base.ServizioLocalServiceBaseImpl;
 
-import org.osgi.service.component.annotations.Component;
-
 /**
  * @author Brian Wing Shun Chan
+ */
+/**
+ * @author filierim
+ *
  */
 @Component(
 	property = "model.class.name=it.servizidigitali.gestioneservizi.model.Servizio",
@@ -81,6 +88,40 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl {
 		}
 		
 		return servizioAggiornato;
+	}
+	
+	/**
+	 * @param nome
+	 * @param codice
+	 * @param soloServiziAttivi
+	 * @param cur: pagina attuale
+	 * @param delta: numero elementi per pagina
+	 * @param nomeOrdinamento
+	 * @param direzioneOrdinamento
+	 * @return
+	 */
+	public List<Servizio> searchServizio(String nome, String codice, Boolean soloServiziAttivi, int cur, int delta, String nomeOrdinamento, String direzioneOrdinamento){
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+		
+		if(Validator.isNull(nomeOrdinamento)) {
+			nomeOrdinamento = "servizioId";
+		}
+		
+		if(inizio <= 0 || fine <= 0) {
+			inizio = QueryUtil.ALL_POS;
+			fine = QueryUtil.ALL_POS;
+		}
+		
+	
+		boolean direzione = "desc".equals(direzioneOrdinamento.toLowerCase()) ? false : true;
+		
+		OrderByComparator<Servizio> ordine = OrderByComparatorFactoryUtil.create("Servizio", nomeOrdinamento, direzione);
+		
+		List<Servizio> listaServizi = servizioFinder.findServizioByFilter(nome, codice, soloServiziAttivi, inizio, fine, ordine);
+	
+		return listaServizi;
 	}
 	
 }

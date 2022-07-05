@@ -1,6 +1,9 @@
 package it.servizidigitali.gestioneservizi.frontend.portlet;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
@@ -25,7 +28,7 @@ import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 @Component(
 	immediate = true,
 	property = {
-		"com.liferay.portlet.display-category=category.sample",
+		"com.liferay.portlet.display-category=category.servizidigitali",
 		"com.liferay.portlet.header-portlet-css=/css/main.css",
 		"com.liferay.portlet.instanceable=true",
 		"javax.portlet.display-name=GestioneServizi",
@@ -52,12 +55,30 @@ public class GestioneServiziPortlet extends MVCPortlet {
 		
 		List<Servizio> listaServizi = (List<Servizio>) renderRequest.getAttribute(GestioneServiziPortletKeys.LISTA_SERVIZI);
 		
-		if(Validator.isNull(listaServizi)) {
-			listaServizi = servizioLocalService.getServizios(-1, -1);
-		}
+		int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, GestioneServiziPortletKeys.DEFAULT_CUR);
+		int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, GestioneServiziPortletKeys.DEFAULT_DELTA);
+		String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
+		String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 		
-		renderRequest.setAttribute(GestioneServiziPortletKeys.LISTA_SERVIZI, listaServizi);
+		String nome = ParamUtil.getString(renderRequest, "nome");
+		String codice = ParamUtil.getString(renderRequest, "codice");
+		Boolean soloServiziAttivi = ParamUtil.getBoolean(renderRequest, "soloAttivi");
+		
+		listaServizi = servizioLocalService.searchServizio(
+					nome, 
+					codice, 
+					soloServiziAttivi, 
+					cur, delta, 
+					orderByCol, 
+					orderByType);
 
+		renderRequest.setAttribute(GestioneServiziPortletKeys.LISTA_SERVIZI, listaServizi);
+		
+		renderRequest.setAttribute(GestioneServiziPortletKeys.NOME, nome);
+		renderRequest.setAttribute(GestioneServiziPortletKeys.CODICE, codice);
+		renderRequest.setAttribute(GestioneServiziPortletKeys.SOLO_SERVIZI_ATTIVI, soloServiziAttivi);
+
+		
 		super.render(renderRequest, renderResponse);
 	}
 }

@@ -1,13 +1,11 @@
 package it.servizidigitali.gestioneservizi.frontend.portlet.action;
 
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
 
@@ -20,8 +18,10 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.gestioneservizi.frontend.constants.GestioneServiziPortletKeys;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
-import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 
+/**
+ * @author filierim
+ * */
 
 @Component(
 	immediate = true,
@@ -38,36 +38,24 @@ public class RicercaServizioActionCommand extends BaseMVCActionCommand {
 	@Reference
 	private ServizioLocalService servizioLocalService;
 	
-	@Reference
-	private TipologiaLocalService tipologiaLocalService;
-	
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-//		soloServiziAttiviCheckBox
-//		nome
-//		codiceServizio
+
+		int cur = ParamUtil.getInteger(actionRequest, SearchContainer.DEFAULT_CUR_PARAM, GestioneServiziPortletKeys.DEFAULT_CUR);
+		int delta = ParamUtil.getInteger(actionRequest, SearchContainer.DEFAULT_DELTA_PARAM, GestioneServiziPortletKeys.DEFAULT_DELTA);
+		String nomeOrdinamento = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
+		String direzioneOrdinamento = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 		
-		String nome = ParamUtil.getString(actionRequest, "nome");
-		String codiceServizio = ParamUtil.getString(actionRequest, "codiceServizio");
-		Boolean soloServiziAttivi = ParamUtil.getBoolean(actionRequest, "soloServiziAttiviCheckBox", false);
+		String nome = ParamUtil.getString(actionRequest, GestioneServiziPortletKeys.NOME);
+		String codice = ParamUtil.getString(actionRequest, GestioneServiziPortletKeys.CODICE);
+		Boolean soloServiziAttivi = ParamUtil.getBoolean(actionRequest, GestioneServiziPortletKeys.SOLO_SERVIZI_ATTIVI, false);
 		
-		DynamicQuery query = servizioLocalService.dynamicQuery();
-		
-		if(Validator.isNotNull(nome)) {
-			query.add(RestrictionsFactoryUtil.like("nome", "%" + nome + "%"));			
-		}
-		
-		if(Validator.isNotNull(codiceServizio)){
-			query.add(RestrictionsFactoryUtil.like("codice", "%" + codiceServizio + "%"));
-		}
-		
-		if(soloServiziAttivi) {
-			query.add(RestrictionsFactoryUtil.eq("attivo", true));
-		}
-		
-		List<Servizio> listaServiziFiltrata = servizioLocalService.dynamicQuery(query);
-		
+		List<Servizio> listaServiziFiltrata = servizioLocalService.searchServizio(nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento, direzioneOrdinamento);
 		actionRequest.setAttribute(GestioneServiziPortletKeys.LISTA_SERVIZI, listaServiziFiltrata);
 		
+		actionRequest.setAttribute(GestioneServiziPortletKeys.NOME, nome);
+		actionRequest.setAttribute(GestioneServiziPortletKeys.CODICE,codice);
+		actionRequest.setAttribute(GestioneServiziPortletKeys.SOLO_SERVIZI_ATTIVI, soloServiziAttivi);
+
 	}
 }

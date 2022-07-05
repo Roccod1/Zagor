@@ -362,6 +362,21 @@ public interface ServizioLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public boolean hasTipologiaServizios(long tipologiaId);
 
+	/**
+	 * @param nome
+	 * @param codice
+	 * @param soloServiziAttivi
+	 * @param cur: pagina attuale
+	 * @param delta: numero elementi per pagina
+	 * @param nomeOrdinamento
+	 * @param direzioneOrdinamento
+	 * @return
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Servizio> searchServizio(
+		String nome, String codice, Boolean soloServiziAttivi, int cur,
+		int delta, String nomeOrdinamento, String direzioneOrdinamento);
+
 	public void setTipologiaServizios(long tipologiaId, long[] servizioIds);
 
 	/**
