@@ -48,9 +48,11 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import it.servizidigitali.gestioneservizi.model.AreaTematica;
 import it.servizidigitali.gestioneservizi.service.AreaTematicaLocalService;
 import it.servizidigitali.gestioneservizi.service.AreaTematicaLocalServiceUtil;
+import it.servizidigitali.gestioneservizi.service.persistence.AreaTematicaFinder;
 import it.servizidigitali.gestioneservizi.service.persistence.AreaTematicaPersistence;
 import it.servizidigitali.gestioneservizi.service.persistence.ServizioFinder;
 import it.servizidigitali.gestioneservizi.service.persistence.ServizioPersistence;
+import it.servizidigitali.gestioneservizi.service.persistence.TipologiaFinder;
 import it.servizidigitali.gestioneservizi.service.persistence.TipologiaPersistence;
 
 import java.io.Serializable;
@@ -602,6 +604,9 @@ public abstract class AreaTematicaLocalServiceBaseImpl
 	protected AreaTematicaPersistence areaTematicaPersistence;
 
 	@Reference
+	protected AreaTematicaFinder areaTematicaFinder;
+
+	@Reference
 	protected ServizioPersistence servizioPersistence;
 
 	@Reference
@@ -609,6 +614,9 @@ public abstract class AreaTematicaLocalServiceBaseImpl
 
 	@Reference
 	protected TipologiaPersistence tipologiaPersistence;
+
+	@Reference
+	protected TipologiaFinder tipologiaFinder;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService
