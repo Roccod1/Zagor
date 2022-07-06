@@ -163,18 +163,27 @@
 				<div class="mb-3">
 					<h4><liferay-ui:message key="tipologia" /></h5>			
 				</div>
-			<% for(Tipologia tipologia : listaTipologie){ %>
-				<div class="form-group form-check">
-					<aui:input id='<%="tipologia"+ tipologia.getTipologiaId()%>' name="listaTipologieSelezionate" type="checkbox" value="<%=tipologia.getTipologiaId() %>" checked="<%=listaTipologieSelezionate.contains(tipologia) ? true : false %>" label="<%=tipologia.getNome() %>"/>		
-				</div>
-			<% }%>
+				<c:choose>
+					<c:when test="${not empty listaTipologie }">
+						<% for(Tipologia tipologia : listaTipologie){ %>
+							<div class="form-group form-check">
+								<aui:input id='<%="tipologia"+ tipologia.getTipologiaId()%>' name="listaTipologieSelezionate" type="checkbox" value="<%=tipologia.getTipologiaId() %>" checked="<%=listaTipologieSelezionate.contains(tipologia) ? true : false %>" label="<%=tipologia.getNome() %>"/>		
+							</div>
+						<% }%>					
+					</c:when>
+					<c:otherwise>
+						<div class="alert alert-warning" role="alert">
+							<liferay-ui:message key="nessuna-tipologia-presente"/>
+						</div>
+					</c:otherwise>
+				</c:choose>
+				
 			</div>
 		</div>
 		
 		<aui:button-row cssClass="text-right">
 			<aui:button type="submit" value="salva" />
 			<aui:button type="reset" value="reset" />
-<%-- 			<aui:button type="cancel" value="annulla" href="${indirizzoPrecedente}"/> --%>
 			<aui:button type="cancel" value="annulla" href="${homeURL}"/>
 		</aui:button-row>
 	</aui:form>
