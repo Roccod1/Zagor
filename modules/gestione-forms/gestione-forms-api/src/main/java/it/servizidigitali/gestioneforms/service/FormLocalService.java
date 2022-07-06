@@ -37,6 +37,7 @@ import it.servizidigitali.gestioneforms.model.Form;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -305,6 +306,11 @@ public interface FormLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Form> search(
+		String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta,
+		int cur, String orderByCol, String orderByType);
 
 	/**
 	 * Updates the form in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

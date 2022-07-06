@@ -378,6 +378,17 @@ public class FormLocalServiceWrapper
 		return _formLocalService.getPersistedModel(primaryKeyObj);
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.gestioneforms.model.Form> search(
+		String nome, java.util.Date dataInserimentoDa,
+		java.util.Date dataInserimentoA, int delta, int cur, String orderByCol,
+		String orderByType) {
+
+		return _formLocalService.search(
+			nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol,
+			orderByType);
+	}
+
 	/**
 	 * Updates the form in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

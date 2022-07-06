@@ -1,23 +1,27 @@
 package it.servizidigitali.gestioneforms.frontend.portlet.render;
 
 import com.liferay.portal.kernel.exception.PortalException;
+
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 
-import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.service.component.annotations.Component;
 
 import it.servizidigitali.gestioneforms.frontend.constants.GestioneFormsPortletKeys;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalServiceUtil;
+
+
+/**
+ * @author COSTABILEE
+ *
+ */
 @Component(
 		immediate = true,
 		property = {
@@ -44,7 +48,6 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 			try {
 				form = FormLocalServiceUtil.getForm(idForm);
 			} catch (PortalException e) {
-				// TODO Auto-generated catch block
 				_log.error("Impossibile recuperare il form!" + e.getMessage());
 			}
 			

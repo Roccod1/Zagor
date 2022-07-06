@@ -1,7 +1,7 @@
 <%@ include file="init.jsp" %>
 
 <portlet:actionURL name="/salvaModifica" var="salvaModificaURL" />
-
+<portlet:renderURL var="homeURL"></portlet:renderURL>
 <div class="page-header">
 				<h2><liferay-ui:message key="form"/></h2>
 </div>
@@ -73,9 +73,12 @@
 		</div>
 		
 		<aui:button-row cssClass="text-right">
-			<aui:button value="annulla" id="annulla" href="${urlTornaIndietro}"/>
+			<aui:button value="annulla" id="annulla" href="${homeURL}"/>
+			<aui:button value="reset" id="reset"/>
 			<aui:button type="submit" value="salva" id="salva"/>
 		</aui:button-row>
 	
 	</aui:form>
 </div>
+
+<%@ include file="builder.jsp" %>

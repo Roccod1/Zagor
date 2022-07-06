@@ -14,5 +14,7 @@ public class GestioneFormsPortletKeys {
 	public static final String JSP_AGGIUNGI_MODIFICA_FORM = "/aggiungiModificaForm.jsp";
 	public static final String SESSION_MESSAGE_ERRORE = "errore-salvataggio";
 	public static final String SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE = "eseguito-correttamente";
-
+	
+	public static final int DEFAULT_CUR = 1;
+	public static final int DEFAULT_DELTA = 10;
 }

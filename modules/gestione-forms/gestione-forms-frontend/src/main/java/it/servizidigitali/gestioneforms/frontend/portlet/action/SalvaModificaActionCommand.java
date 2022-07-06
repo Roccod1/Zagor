@@ -5,6 +5,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -19,6 +21,10 @@ import it.servizidigitali.gestioneforms.frontend.constants.GestioneFormsPortletK
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 
+/**
+ * @author COSTABILEE
+ *
+ */
 @Component(immediate = true, 
 property = { 
 			"javax.portlet.name=" + GestioneFormsPortletKeys.GESTIONEFORMS,
@@ -29,6 +35,8 @@ service = { MVCActionCommand.class }
 public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 	public static final Log _log = LogFactoryUtil.getLog(SalvaModificaActionCommand.class);
 	
+	
+	
 	@Reference
 	private FormLocalService formLocalService;
 	
@@ -37,6 +45,10 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+		
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
+		
+		
 		long idForm = ParamUtil.getLong(actionRequest, "idform");
 		String codiceIdentificativo = ParamUtil.getString(actionRequest, "codice-identificativo");
 		String nome = ParamUtil.getString(actionRequest, "descrizione");
@@ -46,13 +58,11 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		
 		if(Validator.isNull(nome)) {
 			SessionMessages.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE);
-			_log.error("Compilare obbligatoriamente il campo nome");
 			return;
 		}
 		
 		if(Validator.isNull(codiceIdentificativo)) {
 			SessionMessages.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE);
-			_log.error("Compilare obbligatoriamente il campo codiceIdentificativo");
 			return;
 		}
 		
@@ -69,6 +79,9 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		form.setDescrizione(nome);
 		form.setMultiutente(true);
 		form.setPrincipale(principale);
+		form.setUserId(serviceContext.getThemeDisplay().getUserId());
+		form.setGroupId(serviceContext.getThemeDisplay().getScopeGroupId());
+		form.setUserName(serviceContext.getThemeDisplay().getUser().getScreenName());
 		
 		formLocalService.updateForm(form);
 	}

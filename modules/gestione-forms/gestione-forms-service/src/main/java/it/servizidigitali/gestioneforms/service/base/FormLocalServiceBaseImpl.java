@@ -48,6 +48,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalServiceUtil;
+import it.servizidigitali.gestioneforms.service.persistence.FormFinder;
 import it.servizidigitali.gestioneforms.service.persistence.FormPersistence;
 
 import java.io.Serializable;
@@ -580,6 +581,9 @@ public abstract class FormLocalServiceBaseImpl
 
 	@Reference
 	protected FormPersistence formPersistence;
+
+	@Reference
+	protected FormFinder formFinder;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService

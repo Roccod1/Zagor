@@ -7,20 +7,18 @@
 <%@page import="it.servizidigitali.gestioneforms.frontend.constants.GestioneFormsPortletKeys"%>
 
 <%
-	String urlTornaIndietro = PortalUtil.getCurrentURL(request);
 	List<Form> listaForm = (List<Form>) renderRequest.getAttribute(GestioneFormsPortletKeys.LISTA_FORM);
 %>
 
 <div class="page-header">
-				<h2><liferay-ui:message key="elenco-form"/></h2>
+		<h2><liferay-ui:message key="elenco-form"/></h2>
 </div>
 
 
 <div class="row">
 	<div class="col-12">
-	<%@ include file="formRicerca.jsp" %>
-	<%@ include file="listaForm.jsp" %>
-	
+		<%@ include file="formRicerca.jsp" %>
+		<%@ include file="listaForm.jsp" %>
 	</div>
 
 </div>

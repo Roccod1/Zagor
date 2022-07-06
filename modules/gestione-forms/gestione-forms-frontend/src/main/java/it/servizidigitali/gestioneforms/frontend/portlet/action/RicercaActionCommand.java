@@ -1,8 +1,6 @@
 package it.servizidigitali.gestioneforms.frontend.portlet.action;
 
-import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -24,6 +22,10 @@ import it.servizidigitali.gestioneforms.frontend.constants.GestioneFormsPortletK
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 
+/**
+ * @author COSTABILEE
+ *
+ */
 @Component(immediate = true, 
 property = { 
 			"javax.portlet.name=" + GestioneFormsPortletKeys.GESTIONEFORMS,
@@ -39,29 +41,39 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 	
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		String descrizione = ParamUtil.getString(actionRequest, "nome");
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String codice = ParamUtil.getString(actionRequest, "codice");
+
 		String dataInserimentoDaString = ParamUtil.getString(actionRequest, "dataInserimentoDa");
 		String dataInserimentoAString = ParamUtil.getString(actionRequest, "dataInserimentoA");
-		DynamicQuery dynamicQuery = formLocalService.dynamicQuery();
 		
-		if(Validator.isNotNull(descrizione)) {
-			dynamicQuery.add(RestrictionsFactoryUtil.like("descrizione", StringPool.PERCENT + descrizione + StringPool.PERCENT));
-		}
+		Date dataInserimentoDa = null;
+		Date dataInserimentoA = null;
 		
 		if(Validator.isNotNull(dataInserimentoDaString)) {
-			Date dataInserimentoDa = sdf.parse(dataInserimentoDaString);
-			dynamicQuery.add(RestrictionsFactoryUtil.ge("createDate", dataInserimentoDa));
+			dataInserimentoDa = sdf.parse(dataInserimentoDaString);
 		}
-		
+			
 		if(Validator.isNotNull(dataInserimentoAString)) {
-			Date dataInserimentoA = sdf.parse(dataInserimentoAString);
-			dynamicQuery.add(RestrictionsFactoryUtil.le("createDate", dataInserimentoA));
+			dataInserimentoA = sdf.parse(dataInserimentoAString);
 		}
 		
-		List<Form> listaForm = formLocalService.dynamicQuery(dynamicQuery);
+		int cur = ParamUtil.getInteger(actionRequest, SearchContainer.DEFAULT_CUR_PARAM, GestioneFormsPortletKeys.DEFAULT_CUR);
+		int delta = ParamUtil.getInteger(actionRequest, SearchContainer.DEFAULT_DELTA_PARAM, GestioneFormsPortletKeys.DEFAULT_DELTA);
+		String orderByCol = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
+		String orderByType = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
+		
+		List<Form> listaForm = formLocalService.search(codice, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);
 		
 		actionRequest.setAttribute("listaForm", listaForm);
+		
+		
+		actionRequest.setAttribute("codice", codice);
+		actionRequest.setAttribute("dataInserimentoDa", dataInserimentoDaString);
+		actionRequest.setAttribute("dataInserimentoA", dataInserimentoAString);
+		
 	}
 
 }

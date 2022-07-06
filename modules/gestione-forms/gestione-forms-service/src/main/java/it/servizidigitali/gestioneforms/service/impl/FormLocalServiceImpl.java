@@ -15,7 +15,14 @@
 package it.servizidigitali.gestioneforms.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
 
+import java.util.Date;
+import java.util.List;
+
+import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.base.FormLocalServiceBaseImpl;
 
 import org.osgi.service.component.annotations.Component;
@@ -28,4 +35,22 @@ import org.osgi.service.component.annotations.Component;
 	service = AopService.class
 )
 public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
+	
+	public List<Form> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta, int cur, String orderByCol, String orderByType){
+		boolean direzione = false;
+		
+		if(orderByType.equalsIgnoreCase("asc")) {
+			direzione = true;
+		}
+		
+		if(Validator.isNull(orderByCol)) {
+			orderByCol = "formId";
+		}
+		
+		OrderByComparator<Form> comparator = OrderByComparatorFactoryUtil.create("Form", orderByCol, direzione);
+		
+		List<Form> listaForm = formFinder.findFormByFilter(nome, dataInserimentoDa, dataInserimentoA, cur, delta, comparator);
+		
+		return listaForm;
+	}
 }

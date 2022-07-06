@@ -1,10 +1,20 @@
 <liferay-ui:success key="eseguito-correttamente" message="operazione-eseguita-correttamente"/>
 <liferay-ui:error key="errore-salvataggio" message="compilare-tutti-i-campi-obbligatori" />
 
+<liferay-portlet:renderURL varImpl="iteratorURL">
+	<portlet:param name="codice" value="${codice}"/>
+	<portlet:param name="dataInserimentoDa" value="${dataInserimentoDa}"/>
+	<portlet:param name="dataInserimentoA" value="${dataInserimentoA}"/>
+	<portlet:param name="mvcPath" value="/view.jsp"/>
+</liferay-portlet:renderURL>
+
+
+
 <liferay-ui:search-container
 			delta="10"
 			emptyResultsMessage="non-e-presente-nessun-form"
 			total="<%=listaForm.size() %>"
+			iteratorURL="${iteratorURL}"
 			>
 			
 			
@@ -17,12 +27,12 @@
 			
 			
 				
-				<liferay-ui:search-container-column-text property="codice" name="identificativo" />
-				<liferay-ui:search-container-column-text property="descrizione" name="descrizione" />
+				<liferay-ui:search-container-column-text property="codice" name="codice" orderable="true" orderableProperty="codice"/>
+				<liferay-ui:search-container-column-text property="descrizione" name="descrizione" orderable="true" orderableProperty="descrizione"/>
 				
-				<fmt:formatDate value="${form.createDate}" var="createDate" pattern="dd/MM/yyyy"/>
+				<fmt:formatDate value="${form.createDate}" var="createDate" pattern="dd/MM/yyyy HH:mm:ss"/>
 				
-				<liferay-ui:search-container-column-text value="${createDate}" name="data-creazione" />
+				<liferay-ui:search-container-column-text value="${createDate}" name="data-creazione" orderable="true" orderableProperty="createDate"/>
 				
 				<c:choose>
 					<c:when test="${form.multiutente eq true}">
@@ -45,11 +55,10 @@
 				
 				<portlet:renderURL var="dettaglioNuovoURL">
 					<portlet:param name="mvcRenderCommandName" value="/dettaglioNuovo" />
-					<portlet:param name="urlTornaIndietro" value="<%=urlTornaIndietro %>" />
 					<portlet:param name="idForm" value="${form.formId}" />
 				</portlet:renderURL>
 				
-				<liferay-ui:search-container-column-text name="Azioni" align="center" value="<i class='icon-edit'></i><i class='fa fa-trash'></i>" href="${dettaglioNuovoURL}"/>
+				<liferay-ui:search-container-column-text name="azioni" align="center" value="<i class='icon-edit'></i><i class='fa fa-trash'></i>" href="${dettaglioNuovoURL}"/>
 			
 			</liferay-ui:search-container-row>
 		<liferay-ui:search-iterator />
