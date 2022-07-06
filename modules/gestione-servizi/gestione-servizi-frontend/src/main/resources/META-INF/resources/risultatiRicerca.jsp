@@ -28,7 +28,7 @@
 		<portlet:renderURL var="aggiungiModificaUrl">
 			<portlet:param name="mvcRenderCommandName" value="/aggiungiModifica" />
 			<portlet:param name="servizioId" value="${servizio.servizioId }"/>
-			<portlet:param name="indirizzoPrecedente" value="<%=indirizzoPrecedente %>"/>
+			<portlet:param name="indirizzoPrecedente" value="${homeURL}"/>
 		</portlet:renderURL>
 
 		<liferay-ui:search-container-column-text name="azioni" align="center" value="<a href='${aggiungiModificaUrl}'><i class='icon-edit' ></i></a>"/>

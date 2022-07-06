@@ -12,6 +12,7 @@ public class GestioneServiziPortletKeys {
 	public static final String LISTA_SERVIZI = "listaServizi";
 	public static final String LISTA_TIPOLOGIE = "listaTipologie";
 	public static final String LISTA_TIPOLOGIE_SELEZIONATE = "listaTipologieSelezionate";
+	public static final String LISTA_AREA_TEMATICA = "listaAreaTematica";
 	public static final String SERVIZIO = "servizio";
 	public static final String INDIRIZZO_PRECEDENTE = "indirizzoPrecedente";
 	

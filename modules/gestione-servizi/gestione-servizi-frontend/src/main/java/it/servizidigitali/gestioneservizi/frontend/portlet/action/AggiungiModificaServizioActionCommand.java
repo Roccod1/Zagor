@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +53,9 @@ public class AggiungiModificaServizioActionCommand extends BaseMVCActionCommand 
 	
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+		//formatter date
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
 		Long servizioId = ParamUtil.getLong(actionRequest, "servizioId");
 		String nome = ParamUtil.getString(actionRequest, "nome");
 		String codice = ParamUtil.getString(actionRequest, "codice");
@@ -63,10 +67,10 @@ public class AggiungiModificaServizioActionCommand extends BaseMVCActionCommand 
 		String uriScheda = ParamUtil.getString(actionRequest, "uriScheda");
 		Boolean autenticazione = ParamUtil.getBoolean(actionRequest, "autenticazione");
 		Boolean attivo = ParamUtil.getBoolean(actionRequest, "attivo");
-		Date dataInizioAttivazione = ParamUtil.getDate(actionRequest, "dataInizioAttivazione",DateUtil.getISOFormat());
+		Date dataInizioAttivazione = ParamUtil.getDate(actionRequest, "dataInizioAttivazione", simpleDateFormat, null);
 		Boolean cittadino = ParamUtil.getBoolean(actionRequest, "cittadino");
 		Boolean azienda = ParamUtil.getBoolean(actionRequest, "azienda");
-		Date dataFineAttivazione = ParamUtil.getDate(actionRequest, "dataFineAttivazione",DateUtil.getISOFormat());
+		Date dataFineAttivazione = ParamUtil.getDate(actionRequest, "dataFineAttivazione",simpleDateFormat, null);
 		Boolean delega = ParamUtil.getBoolean(actionRequest, "delega");
 		Boolean allegatoDelega = ParamUtil.getBoolean(actionRequest, "allegatoDelega");
 		Boolean privacyDelega = ParamUtil.getBoolean(actionRequest, "privacyDelega");
@@ -101,14 +105,14 @@ public class AggiungiModificaServizioActionCommand extends BaseMVCActionCommand 
 		
 		if(servizioId > 0) {
 			servizio = servizioLocalService.getServizio(servizioId);
-		}else {
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
-			ThemeDisplay tema = serviceContext.getThemeDisplay();
-			
+		}else {			
 			servizio = servizioLocalService.createServizio(0L);
-//			servizio.setGroupId(tema.getCompanyGroupId());
-//			servizio.setUserId(tema.getUserId());
 		}
+		
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
+		ThemeDisplay tema = serviceContext.getThemeDisplay();
+		servizio.setGroupId(tema.getCompanyGroupId());
+		servizio.setUserId(tema.getUserId());
 		
 		servizio.setNome(nome);
 		servizio.setServizioId(servizioId);

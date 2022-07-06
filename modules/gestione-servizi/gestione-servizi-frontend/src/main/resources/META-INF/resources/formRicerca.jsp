@@ -2,7 +2,7 @@
 
 <portlet:renderURL var="aggiungiModificaUrl">
 	<portlet:param name="mvcRenderCommandName" value="/aggiungiModifica" />
-	<portlet:param name="indirizzoPrecedente" value="<%=indirizzoPrecedente %>"/>
+	<portlet:param name="indirizzoPrecedente" value="${homeURL}"/>
 </portlet:renderURL>
 
 <portlet:actionURL name="/cerca" var="cercaURL">
@@ -33,7 +33,7 @@
 		
 		<aui:button-row cssClass="text-right">
 			<aui:button type="submit" value="cerca" />
-			<aui:button type="reset" value="reset"/>
+			<aui:button type="button" value="reset" href="${homeURL }"/>
 			<aui:button type="button" value="nuovo" href="${aggiungiModificaUrl}"/>
 		</aui:button-row>
 	</aui:form>

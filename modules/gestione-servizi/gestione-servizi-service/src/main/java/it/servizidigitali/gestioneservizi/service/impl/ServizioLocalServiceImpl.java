@@ -32,9 +32,6 @@ import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.base.ServizioLocalServiceBaseImpl;
 
 /**
- * @author Brian Wing Shun Chan
- */
-/**
  * @author filierim
  *
  */
@@ -101,6 +98,7 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl {
 	 * @return
 	 */
 	public List<Servizio> searchServizio(String nome, String codice, Boolean soloServiziAttivi, int cur, int delta, String nomeOrdinamento, String direzioneOrdinamento){
+
 		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
 		int inizio = posizioni[0];
 		int fine = posizioni[1];

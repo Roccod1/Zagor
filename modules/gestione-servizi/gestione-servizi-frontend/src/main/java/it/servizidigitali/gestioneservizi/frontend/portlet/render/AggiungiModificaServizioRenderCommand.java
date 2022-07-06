@@ -16,8 +16,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneservizi.frontend.constants.GestioneServiziPortletKeys;
+import it.servizidigitali.gestioneservizi.model.AreaTematica;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.model.Tipologia;
+import it.servizidigitali.gestioneservizi.service.AreaTematicaLocalService;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 
@@ -41,6 +43,9 @@ public class AggiungiModificaServizioRenderCommand implements MVCRenderCommand{
 	@Reference
 	private TipologiaLocalService tipologiaLocalService;
 	
+	@Reference
+	private AreaTematicaLocalService areaTematicaLocalService;
+	
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 		
@@ -58,8 +63,10 @@ public class AggiungiModificaServizioRenderCommand implements MVCRenderCommand{
 			}
 		}
 		
+		List<AreaTematica> listaAreaTematica = areaTematicaLocalService.getAreaTematicas(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 		listaTipologie = tipologiaLocalService.getTipologias(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
+		renderRequest.setAttribute(GestioneServiziPortletKeys.LISTA_AREA_TEMATICA, listaAreaTematica);
 		renderRequest.setAttribute(GestioneServiziPortletKeys.SERVIZIO, servizio);
 		renderRequest.setAttribute(GestioneServiziPortletKeys.LISTA_TIPOLOGIE_SELEZIONATE, Validator.isNotNull(servizio) ? servizio.getListaTipologie() : new ArrayList<Tipologia>());
 		renderRequest.setAttribute(GestioneServiziPortletKeys.LISTA_TIPOLOGIE, listaTipologie);

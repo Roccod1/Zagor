@@ -14,6 +14,11 @@ import org.osgi.service.component.annotations.Component;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.persistence.ServizioFinder;
 
+/**
+ * @author filierim
+ *
+ */
+
 @Component(service = ServizioFinder.class)
 public class ServizioFinderImpl extends ServizioFinderBaseImpl implements ServizioFinder{
 	

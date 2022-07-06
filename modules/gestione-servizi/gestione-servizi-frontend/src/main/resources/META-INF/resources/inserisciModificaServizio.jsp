@@ -5,9 +5,13 @@
 	List<Tipologia> listaTipologie = (List<Tipologia>) renderRequest.getAttribute(GestioneServiziPortletKeys.LISTA_TIPOLOGIE);
 %>
 
+<portlet:renderURL var="homeURL">
+</portlet:renderURL>
+
 <portlet:actionURL name="/salva" var="salvaURL">
-	<portlet:param name="indirizzoPrecedente" value="${indirizzoPrecedente }"/>
+	<portlet:param name="indirizzoPrecedente" value="${homeURL }"/>
 </portlet:actionURL>
+
 
 <div class="container pl-0 pr-0 mb-4 mt-4">
 	<aui:form method="post" action="${salvaURL}" id="inserisciModificaServizioForm">
@@ -42,7 +46,10 @@
 				<div class="form-group">
 					<aui:select type="text" name="areaTematicaId" label="area-tematica" value="${servizio.areaTematicaId}">
 						<aui:validator name="required"/>
-						<aui:option value="1" selected="true" label="seleziona"/>
+						<aui:option value="" selected="true" label="seleziona" disabled="true"/>
+						<c:forEach items="${listaAreaTematica}" var="areaTematica">
+							<aui:option value="${areaTematica.areaTematicaId }" selected="${areaTematica.areaTematicaId eq servizio.areaTematicaId ? true : false }" label="${areaTematica.nome}"/>
+						</c:forEach>
 					</aui:select>
 				</div>
 			</div>
@@ -151,8 +158,11 @@
 			</div>
 		</div>
 
-		<div class="row">
+		<div class="row mt-4">
 			<div class="col">
+				<div class="mb-3">
+					<h4><liferay-ui:message key="tipologia" /></h5>			
+				</div>
 			<% for(Tipologia tipologia : listaTipologie){ %>
 				<div class="form-group form-check">
 					<aui:input id='<%="tipologia"+ tipologia.getTipologiaId()%>' name="listaTipologieSelezionate" type="checkbox" value="<%=tipologia.getTipologiaId() %>" checked="<%=listaTipologieSelezionate.contains(tipologia) ? true : false %>" label="<%=tipologia.getNome() %>"/>		
@@ -164,7 +174,8 @@
 		<aui:button-row cssClass="text-right">
 			<aui:button type="submit" value="salva" />
 			<aui:button type="reset" value="reset" />
-			<aui:button type="cancel" value="annulla" href="${indirizzoPrecedente}"/>
+<%-- 			<aui:button type="cancel" value="annulla" href="${indirizzoPrecedente}"/> --%>
+			<aui:button type="cancel" value="annulla" href="${homeURL}"/>
 		</aui:button-row>
 	</aui:form>
 </div>

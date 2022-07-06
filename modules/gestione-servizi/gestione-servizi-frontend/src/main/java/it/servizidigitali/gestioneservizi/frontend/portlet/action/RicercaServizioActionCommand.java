@@ -53,6 +53,7 @@ public class RicercaServizioActionCommand extends BaseMVCActionCommand {
 		List<Servizio> listaServiziFiltrata = servizioLocalService.searchServizio(nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento, direzioneOrdinamento);
 		actionRequest.setAttribute(GestioneServiziPortletKeys.LISTA_SERVIZI, listaServiziFiltrata);
 		
+		//imposto nuovamente i parametri ricevuti in ingresso per l'integrazione tra formRicerca e searchContainer
 		actionRequest.setAttribute(GestioneServiziPortletKeys.NOME, nome);
 		actionRequest.setAttribute(GestioneServiziPortletKeys.CODICE,codice);
 		actionRequest.setAttribute(GestioneServiziPortletKeys.SOLO_SERVIZI_ATTIVI, soloServiziAttivi);
