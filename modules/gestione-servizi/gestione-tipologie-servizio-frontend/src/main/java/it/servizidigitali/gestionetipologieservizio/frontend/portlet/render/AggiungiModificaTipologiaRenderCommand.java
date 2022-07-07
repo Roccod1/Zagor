@@ -49,6 +49,7 @@ public class AggiungiModificaTipologiaRenderCommand implements MVCRenderCommand{
 				tipologia = tipologiaLocalService.getTipologia(tipologiaId);
 			}catch(Exception e) {
 				_log.error("Impossibile ottenere la tipologia con ID: " + tipologiaId);
+				return GestioneTipologieServizioPortletKeys.JSP_HOME;
 			}
 		}
 		
