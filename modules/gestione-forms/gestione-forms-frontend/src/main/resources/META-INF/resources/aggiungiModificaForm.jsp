@@ -61,10 +61,10 @@
 				<div class="form-group form-check">	
 					<c:choose>
 						<c:when test="${form.multiutente eq true}">
-							<aui:input label="multiente" type="checkbox" id="multiente" name="multiente" checked="true" disabled="true"/>	
+							<aui:input label="multiente" type="checkbox" id="multiente" name="multiente" checked="true"/>	
 						</c:when>						
 						<c:otherwise>
-							<aui:input label="multiente" type="checkbox" id="multiente" name="multiente" checked="true" disabled="true"/>	
+							<aui:input label="multiente" type="checkbox" id="multiente" name="multiente" />	
 						</c:otherwise>
 					</c:choose>						
 				</div>
@@ -74,9 +74,10 @@
 		
 		<aui:button-row cssClass="text-right">
 			<aui:button value="annulla" id="annulla" href="${homeURL}"/>
-			<aui:button value="reset" id="reset"/>
 			<aui:button type="submit" value="salva" id="salva"/>
 		</aui:button-row>
 	
 	</aui:form>
 </div>
+
+<%@ include file="editor.jsp" %>

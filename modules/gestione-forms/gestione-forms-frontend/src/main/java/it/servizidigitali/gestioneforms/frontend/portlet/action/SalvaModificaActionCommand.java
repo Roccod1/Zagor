@@ -7,6 +7,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -57,12 +58,12 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		Form form = null;
 		
 		if(Validator.isNull(nome)) {
-			SessionMessages.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE);
+			SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE);
 			return;
 		}
 		
 		if(Validator.isNull(codiceIdentificativo)) {
-			SessionMessages.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE);
+			SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE);
 			return;
 		}
 		
@@ -77,7 +78,6 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		
 		form.setCodice(codiceIdentificativo);
 		form.setDescrizione(nome);
-		form.setMultiutente(true);
 		form.setPrincipale(principale);
 		form.setUserId(serviceContext.getThemeDisplay().getUserId());
 		form.setGroupId(serviceContext.getThemeDisplay().getScopeGroupId());

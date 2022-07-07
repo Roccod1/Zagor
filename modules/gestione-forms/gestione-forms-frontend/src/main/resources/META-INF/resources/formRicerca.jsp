@@ -1,4 +1,5 @@
 <portlet:actionURL name="/ricerca" var="ricercaURL" />
+<portlet:renderURL var="homeURL"></portlet:renderURL>
 
 <portlet:renderURL var="dettaglioNuovoURL">
 		<portlet:param name="mvcRenderCommandName" value="/dettaglioNuovo" />
@@ -35,6 +36,7 @@
 
 		<aui:button-row cssClass="text-right">
 			<aui:button type="submit" value="cerca" id="cerca"/>
+			<aui:button type="button" value="reset" id="reset" href="${homeURL}" />
 			<aui:button value="nuovo" id="nuovo" href="${dettaglioNuovoURL}"/>
 		</aui:button-row>
 

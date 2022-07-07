@@ -8,7 +8,6 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +18,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneforms.frontend.constants.GestioneFormsPortletKeys;
+import it.servizidigitali.gestioneforms.frontend.portlet.GestioneFormsPortlet;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 
@@ -42,7 +42,6 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		String codice = ParamUtil.getString(actionRequest, "codice");
 
@@ -53,11 +52,11 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 		Date dataInserimentoA = null;
 		
 		if(Validator.isNotNull(dataInserimentoDaString)) {
-			dataInserimentoDa = sdf.parse(dataInserimentoDaString);
+			dataInserimentoDa = GestioneFormsPortlet.simpleDateFormat.parse(dataInserimentoDaString);
 		}
 			
 		if(Validator.isNotNull(dataInserimentoAString)) {
-			dataInserimentoA = sdf.parse(dataInserimentoAString);
+			dataInserimentoA = GestioneFormsPortlet.simpleDateFormat.parse(dataInserimentoAString);
 		}
 		
 		int cur = ParamUtil.getInteger(actionRequest, SearchContainer.DEFAULT_CUR_PARAM, GestioneFormsPortletKeys.DEFAULT_CUR);

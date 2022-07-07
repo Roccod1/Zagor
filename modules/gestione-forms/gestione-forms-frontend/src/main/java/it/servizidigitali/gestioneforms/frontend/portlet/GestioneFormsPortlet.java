@@ -50,12 +50,13 @@ import org.osgi.service.component.annotations.Reference;
 public class GestioneFormsPortlet extends MVCPortlet {
 	public static final Log _log = LogFactoryUtil.getLog(GestioneFormsPortlet.class);
 	
+	public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	
 	@Reference
 	private FormLocalService formLocalService;
 	
 	public void render (RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException{
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		List<Form> listaForm = (List<Form>) renderRequest.getAttribute(GestioneFormsPortletKeys.LISTA_FORM);
 		
@@ -76,11 +77,11 @@ public class GestioneFormsPortlet extends MVCPortlet {
 		try {
 			
 			if(Validator.isNotNull(dataInserimentoDaString)) {
-				dataInserimentoDa = sdf.parse(dataInserimentoDaString);
+				dataInserimentoDa = simpleDateFormat.parse(dataInserimentoDaString);
 			}
 			
 			if(Validator.isNotNull(dataInserimentoAString)) {
-				dataInserimentoA = sdf.parse(dataInserimentoAString);
+				dataInserimentoA = simpleDateFormat.parse(dataInserimentoAString);
 			}
 			
 		}catch(ParseException e) {
@@ -102,6 +103,9 @@ public class GestioneFormsPortlet extends MVCPortlet {
 		PortletConfig portletConfig = (PortletConfig) renderRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 	    LiferayPortletConfig liferayPortletConfig = (LiferayPortletConfig) portletConfig;
 	    SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+	    
+
+	    SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
 	    
 	    super.render(renderRequest, renderResponse);
 	}
