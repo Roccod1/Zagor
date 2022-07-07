@@ -18,8 +18,8 @@ import com.liferay.petra.lang.HashUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.model.CacheModel;
 
-import it.servizidigitali.gestioneenti.model.EnteServizio;
-import it.servizidigitali.gestioneenti.service.persistence.EnteServizioPK;
+import it.servizidigitali.gestioneenti.model.ServizioEnte;
+import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -29,13 +29,13 @@ import java.io.ObjectOutput;
 import java.util.Date;
 
 /**
- * The cache model class for representing EnteServizio in entity cache.
+ * The cache model class for representing ServizioEnte in entity cache.
  *
  * @author Brian Wing Shun Chan
  * @generated
  */
-public class EnteServizioCacheModel
-	implements CacheModel<EnteServizio>, Externalizable {
+public class ServizioEnteCacheModel
+	implements CacheModel<ServizioEnte>, Externalizable {
 
 	@Override
 	public boolean equals(Object object) {
@@ -43,14 +43,14 @@ public class EnteServizioCacheModel
 			return true;
 		}
 
-		if (!(object instanceof EnteServizioCacheModel)) {
+		if (!(object instanceof ServizioEnteCacheModel)) {
 			return false;
 		}
 
-		EnteServizioCacheModel enteServizioCacheModel =
-			(EnteServizioCacheModel)object;
+		ServizioEnteCacheModel servizioEnteCacheModel =
+			(ServizioEnteCacheModel)object;
 
-		if (enteServizioPK.equals(enteServizioCacheModel.enteServizioPK)) {
+		if (servizioEntePK.equals(servizioEnteCacheModel.servizioEntePK)) {
 			return true;
 		}
 
@@ -59,7 +59,7 @@ public class EnteServizioCacheModel
 
 	@Override
 	public int hashCode() {
-		return HashUtil.hash(0, enteServizioPK);
+		return HashUtil.hash(0, servizioEntePK);
 	}
 
 	@Override
@@ -68,10 +68,10 @@ public class EnteServizioCacheModel
 
 		sb.append("{uuid=");
 		sb.append(uuid);
-		sb.append(", organizationId=");
-		sb.append(organizationId);
 		sb.append(", servizioId=");
 		sb.append(servizioId);
+		sb.append(", organizationId=");
+		sb.append(organizationId);
 		sb.append(", groupId=");
 		sb.append(groupId);
 		sb.append(", companyId=");
@@ -122,105 +122,105 @@ public class EnteServizioCacheModel
 	}
 
 	@Override
-	public EnteServizio toEntityModel() {
-		EnteServizioImpl enteServizioImpl = new EnteServizioImpl();
+	public ServizioEnte toEntityModel() {
+		ServizioEnteImpl servizioEnteImpl = new ServizioEnteImpl();
 
 		if (uuid == null) {
-			enteServizioImpl.setUuid("");
+			servizioEnteImpl.setUuid("");
 		}
 		else {
-			enteServizioImpl.setUuid(uuid);
+			servizioEnteImpl.setUuid(uuid);
 		}
 
-		enteServizioImpl.setOrganizationId(organizationId);
-		enteServizioImpl.setServizioId(servizioId);
-		enteServizioImpl.setGroupId(groupId);
-		enteServizioImpl.setCompanyId(companyId);
-		enteServizioImpl.setUserId(userId);
+		servizioEnteImpl.setServizioId(servizioId);
+		servizioEnteImpl.setOrganizationId(organizationId);
+		servizioEnteImpl.setGroupId(groupId);
+		servizioEnteImpl.setCompanyId(companyId);
+		servizioEnteImpl.setUserId(userId);
 
 		if (userName == null) {
-			enteServizioImpl.setUserName("");
+			servizioEnteImpl.setUserName("");
 		}
 		else {
-			enteServizioImpl.setUserName(userName);
+			servizioEnteImpl.setUserName(userName);
 		}
 
 		if (createDate == Long.MIN_VALUE) {
-			enteServizioImpl.setCreateDate(null);
+			servizioEnteImpl.setCreateDate(null);
 		}
 		else {
-			enteServizioImpl.setCreateDate(new Date(createDate));
+			servizioEnteImpl.setCreateDate(new Date(createDate));
 		}
 
 		if (modifiedDate == Long.MIN_VALUE) {
-			enteServizioImpl.setModifiedDate(null);
+			servizioEnteImpl.setModifiedDate(null);
 		}
 		else {
-			enteServizioImpl.setModifiedDate(new Date(modifiedDate));
+			servizioEnteImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
 		if (uri == null) {
-			enteServizioImpl.setUri("");
+			servizioEnteImpl.setUri("");
 		}
 		else {
-			enteServizioImpl.setUri(uri);
+			servizioEnteImpl.setUri(uri);
 		}
 
 		if (uriGuest == null) {
-			enteServizioImpl.setUriGuest("");
+			servizioEnteImpl.setUriGuest("");
 		}
 		else {
-			enteServizioImpl.setUriGuest(uriGuest);
+			servizioEnteImpl.setUriGuest(uriGuest);
 		}
 
 		if (uriScheda == null) {
-			enteServizioImpl.setUriScheda("");
+			servizioEnteImpl.setUriScheda("");
 		}
 		else {
-			enteServizioImpl.setUriScheda(uriScheda);
+			servizioEnteImpl.setUriScheda(uriScheda);
 		}
 
-		enteServizioImpl.setAutenticazione(autenticazione);
+		servizioEnteImpl.setAutenticazione(autenticazione);
 
 		if (dataInizioAttivazione == Long.MIN_VALUE) {
-			enteServizioImpl.setDataInizioAttivazione(null);
+			servizioEnteImpl.setDataInizioAttivazione(null);
 		}
 		else {
-			enteServizioImpl.setDataInizioAttivazione(
+			servizioEnteImpl.setDataInizioAttivazione(
 				new Date(dataInizioAttivazione));
 		}
 
 		if (dataFineAttivazione == Long.MIN_VALUE) {
-			enteServizioImpl.setDataFineAttivazione(null);
+			servizioEnteImpl.setDataFineAttivazione(null);
 		}
 		else {
-			enteServizioImpl.setDataFineAttivazione(
+			servizioEnteImpl.setDataFineAttivazione(
 				new Date(dataFineAttivazione));
 		}
 
-		enteServizioImpl.setCittadino(cittadino);
-		enteServizioImpl.setAzienda(azienda);
-		enteServizioImpl.setDelega(delega);
-		enteServizioImpl.setChatbot(chatbot);
-		enteServizioImpl.setPrenotabile(prenotabile);
-		enteServizioImpl.setPrivacyDelega(privacyDelega);
-		enteServizioImpl.setAllegatoDelega(allegatoDelega);
-		enteServizioImpl.setTimbroCertificato(timbroCertificato);
-		enteServizioImpl.setIseeInps(iseeInps);
-		enteServizioImpl.setAttivo(attivo);
+		servizioEnteImpl.setCittadino(cittadino);
+		servizioEnteImpl.setAzienda(azienda);
+		servizioEnteImpl.setDelega(delega);
+		servizioEnteImpl.setChatbot(chatbot);
+		servizioEnteImpl.setPrenotabile(prenotabile);
+		servizioEnteImpl.setPrivacyDelega(privacyDelega);
+		servizioEnteImpl.setAllegatoDelega(allegatoDelega);
+		servizioEnteImpl.setTimbroCertificato(timbroCertificato);
+		servizioEnteImpl.setIseeInps(iseeInps);
+		servizioEnteImpl.setAttivo(attivo);
 
-		enteServizioImpl.resetOriginalValues();
+		servizioEnteImpl.resetOriginalValues();
 
-		return enteServizioImpl;
+		return servizioEnteImpl;
 	}
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		uuid = objectInput.readUTF();
 
-		organizationId = objectInput.readLong();
-
 		servizioId = objectInput.readLong();
+
+		organizationId = objectInput.readLong();
 
 		groupId = objectInput.readLong();
 
@@ -258,7 +258,7 @@ public class EnteServizioCacheModel
 
 		attivo = objectInput.readBoolean();
 
-		enteServizioPK = new EnteServizioPK(organizationId, servizioId);
+		servizioEntePK = new ServizioEntePK(servizioId, organizationId);
 	}
 
 	@Override
@@ -270,9 +270,9 @@ public class EnteServizioCacheModel
 			objectOutput.writeUTF(uuid);
 		}
 
-		objectOutput.writeLong(organizationId);
-
 		objectOutput.writeLong(servizioId);
+
+		objectOutput.writeLong(organizationId);
 
 		objectOutput.writeLong(groupId);
 
@@ -337,8 +337,8 @@ public class EnteServizioCacheModel
 	}
 
 	public String uuid;
-	public long organizationId;
 	public long servizioId;
+	public long organizationId;
 	public long groupId;
 	public long companyId;
 	public long userId;
@@ -361,6 +361,6 @@ public class EnteServizioCacheModel
 	public boolean timbroCertificato;
 	public boolean iseeInps;
 	public boolean attivo;
-	public transient EnteServizioPK enteServizioPK;
+	public transient ServizioEntePK servizioEntePK;
 
 }

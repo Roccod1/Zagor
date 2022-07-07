@@ -18,9 +18,9 @@ import com.liferay.portal.kernel.dao.orm.ArgumentsResolver;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.model.BaseModel;
 
-import it.servizidigitali.gestioneenti.model.EnteServizioTable;
-import it.servizidigitali.gestioneenti.model.impl.EnteServizioImpl;
-import it.servizidigitali.gestioneenti.model.impl.EnteServizioModelImpl;
+import it.servizidigitali.gestioneenti.model.ServizioEnteTable;
+import it.servizidigitali.gestioneenti.model.impl.ServizioEnteImpl;
+import it.servizidigitali.gestioneenti.model.impl.ServizioEnteModelImpl;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * The arguments resolver class for retrieving value from EnteServizio.
+ * The arguments resolver class for retrieving value from ServizioEnte.
  *
  * @author Brian Wing Shun Chan
  * @generated
@@ -36,10 +36,10 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	immediate = true,
 	service = {
-		EnteServizioModelArgumentsResolver.class, ArgumentsResolver.class
+		ServizioEnteModelArgumentsResolver.class, ArgumentsResolver.class
 	}
 )
-public class EnteServizioModelArgumentsResolver implements ArgumentsResolver {
+public class ServizioEnteModelArgumentsResolver implements ArgumentsResolver {
 
 	@Override
 	public Object[] getArguments(
@@ -56,13 +56,13 @@ public class EnteServizioModelArgumentsResolver implements ArgumentsResolver {
 			return null;
 		}
 
-		EnteServizioModelImpl enteServizioModelImpl =
-			(EnteServizioModelImpl)baseModel;
+		ServizioEnteModelImpl servizioEnteModelImpl =
+			(ServizioEnteModelImpl)baseModel;
 
-		long columnBitmask = enteServizioModelImpl.getColumnBitmask();
+		long columnBitmask = servizioEnteModelImpl.getColumnBitmask();
 
 		if (!checkColumn || (columnBitmask == 0)) {
-			return _getValue(enteServizioModelImpl, columnNames, original);
+			return _getValue(servizioEnteModelImpl, columnNames, original);
 		}
 
 		Long finderPathColumnBitmask = _finderPathColumnBitmasksCache.get(
@@ -73,7 +73,7 @@ public class EnteServizioModelArgumentsResolver implements ArgumentsResolver {
 
 			for (String columnName : columnNames) {
 				finderPathColumnBitmask |=
-					enteServizioModelImpl.getColumnBitmask(columnName);
+					servizioEnteModelImpl.getColumnBitmask(columnName);
 			}
 
 			_finderPathColumnBitmasksCache.put(
@@ -81,7 +81,7 @@ public class EnteServizioModelArgumentsResolver implements ArgumentsResolver {
 		}
 
 		if ((columnBitmask & finderPathColumnBitmask) != 0) {
-			return _getValue(enteServizioModelImpl, columnNames, original);
+			return _getValue(servizioEnteModelImpl, columnNames, original);
 		}
 
 		return null;
@@ -89,16 +89,16 @@ public class EnteServizioModelArgumentsResolver implements ArgumentsResolver {
 
 	@Override
 	public String getClassName() {
-		return EnteServizioImpl.class.getName();
+		return ServizioEnteImpl.class.getName();
 	}
 
 	@Override
 	public String getTableName() {
-		return EnteServizioTable.INSTANCE.getTableName();
+		return ServizioEnteTable.INSTANCE.getTableName();
 	}
 
 	private static Object[] _getValue(
-		EnteServizioModelImpl enteServizioModelImpl, String[] columnNames,
+		ServizioEnteModelImpl servizioEnteModelImpl, String[] columnNames,
 		boolean original) {
 
 		Object[] arguments = new Object[columnNames.length];
@@ -107,11 +107,11 @@ public class EnteServizioModelArgumentsResolver implements ArgumentsResolver {
 			String columnName = columnNames[i];
 
 			if (original) {
-				arguments[i] = enteServizioModelImpl.getColumnOriginalValue(
+				arguments[i] = servizioEnteModelImpl.getColumnOriginalValue(
 					columnName);
 			}
 			else {
-				arguments[i] = enteServizioModelImpl.getColumnValue(columnName);
+				arguments[i] = servizioEnteModelImpl.getColumnValue(columnName);
 			}
 		}
 

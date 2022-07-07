@@ -23,25 +23,17 @@ import java.io.Serializable;
  * @author Brian Wing Shun Chan
  * @generated
  */
-public class EnteServizioPK
-	implements Comparable<EnteServizioPK>, Serializable {
+public class ServizioEntePK
+	implements Comparable<ServizioEntePK>, Serializable {
 
-	public long organizationId;
 	public long servizioId;
+	public long organizationId;
 
-	public EnteServizioPK() {
+	public ServizioEntePK() {
 	}
 
-	public EnteServizioPK(long organizationId, long servizioId) {
-		this.organizationId = organizationId;
+	public ServizioEntePK(long servizioId, long organizationId) {
 		this.servizioId = servizioId;
-	}
-
-	public long getOrganizationId() {
-		return organizationId;
-	}
-
-	public void setOrganizationId(long organizationId) {
 		this.organizationId = organizationId;
 	}
 
@@ -53,18 +45,26 @@ public class EnteServizioPK
 		this.servizioId = servizioId;
 	}
 
+	public long getOrganizationId() {
+		return organizationId;
+	}
+
+	public void setOrganizationId(long organizationId) {
+		this.organizationId = organizationId;
+	}
+
 	@Override
-	public int compareTo(EnteServizioPK pk) {
+	public int compareTo(ServizioEntePK pk) {
 		if (pk == null) {
 			return -1;
 		}
 
 		int value = 0;
 
-		if (organizationId < pk.organizationId) {
+		if (servizioId < pk.servizioId) {
 			value = -1;
 		}
-		else if (organizationId > pk.organizationId) {
+		else if (servizioId > pk.servizioId) {
 			value = 1;
 		}
 		else {
@@ -75,10 +75,10 @@ public class EnteServizioPK
 			return value;
 		}
 
-		if (servizioId < pk.servizioId) {
+		if (organizationId < pk.organizationId) {
 			value = -1;
 		}
-		else if (servizioId > pk.servizioId) {
+		else if (organizationId > pk.organizationId) {
 			value = 1;
 		}
 		else {
@@ -98,14 +98,14 @@ public class EnteServizioPK
 			return true;
 		}
 
-		if (!(object instanceof EnteServizioPK)) {
+		if (!(object instanceof ServizioEntePK)) {
 			return false;
 		}
 
-		EnteServizioPK pk = (EnteServizioPK)object;
+		ServizioEntePK pk = (ServizioEntePK)object;
 
-		if ((organizationId == pk.organizationId) &&
-			(servizioId == pk.servizioId)) {
+		if ((servizioId == pk.servizioId) &&
+			(organizationId == pk.organizationId)) {
 
 			return true;
 		}
@@ -118,8 +118,8 @@ public class EnteServizioPK
 	public int hashCode() {
 		int hashCode = 0;
 
-		hashCode = HashUtil.hash(hashCode, organizationId);
 		hashCode = HashUtil.hash(hashCode, servizioId);
+		hashCode = HashUtil.hash(hashCode, organizationId);
 
 		return hashCode;
 	}
@@ -130,12 +130,12 @@ public class EnteServizioPK
 
 		sb.append("{");
 
-		sb.append("organizationId=");
-
-		sb.append(organizationId);
-		sb.append(", servizioId=");
+		sb.append("servizioId=");
 
 		sb.append(servizioId);
+		sb.append(", organizationId=");
+
+		sb.append(organizationId);
 
 		sb.append("}");
 

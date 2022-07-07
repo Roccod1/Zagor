@@ -11,11 +11,28 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+package it.servizidigitali.gestioneenti.exception;
 
-package it.servizidigitali.gestioneenti.model.impl;
+import com.liferay.portal.kernel.exception.NoSuchModelException;
 
 /**
  * @author Brian Wing Shun Chan
  */
-public class EnteServizioImpl extends EnteServizioBaseImpl {
+public class NoSuchServizioEnteException extends NoSuchModelException {
+
+	public NoSuchServizioEnteException() {
+	}
+
+	public NoSuchServizioEnteException(String msg) {
+		super(msg);
+	}
+
+	public NoSuchServizioEnteException(String msg, Throwable throwable) {
+		super(msg, throwable);
+	}
+
+	public NoSuchServizioEnteException(Throwable throwable) {
+		super(throwable);
+	}
+
 }

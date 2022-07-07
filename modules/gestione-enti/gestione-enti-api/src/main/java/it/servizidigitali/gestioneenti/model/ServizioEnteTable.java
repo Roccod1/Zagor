@@ -22,80 +22,80 @@ import java.sql.Types;
 import java.util.Date;
 
 /**
- * The table class for the &quot;ente_servizio&quot; database table.
+ * The table class for the &quot;servizio_ente&quot; database table.
  *
  * @author Brian Wing Shun Chan
- * @see EnteServizio
+ * @see ServizioEnte
  * @generated
  */
-public class EnteServizioTable extends BaseTable<EnteServizioTable> {
+public class ServizioEnteTable extends BaseTable<ServizioEnteTable> {
 
-	public static final EnteServizioTable INSTANCE = new EnteServizioTable();
+	public static final ServizioEnteTable INSTANCE = new ServizioEnteTable();
 
-	public final Column<EnteServizioTable, String> uuid = createColumn(
+	public final Column<ServizioEnteTable, String> uuid = createColumn(
 		"uuid_", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Long> organizationId = createColumn(
-		"organizationId", Long.class, Types.BIGINT, Column.FLAG_PRIMARY);
-	public final Column<EnteServizioTable, Long> servizioId = createColumn(
+	public final Column<ServizioEnteTable, Long> servizioId = createColumn(
 		"servizioId", Long.class, Types.BIGINT, Column.FLAG_PRIMARY);
-	public final Column<EnteServizioTable, Long> groupId = createColumn(
+	public final Column<ServizioEnteTable, Long> organizationId = createColumn(
+		"organizationId", Long.class, Types.BIGINT, Column.FLAG_PRIMARY);
+	public final Column<ServizioEnteTable, Long> groupId = createColumn(
 		"groupId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Long> companyId = createColumn(
+	public final Column<ServizioEnteTable, Long> companyId = createColumn(
 		"companyId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Long> userId = createColumn(
+	public final Column<ServizioEnteTable, Long> userId = createColumn(
 		"userId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, String> userName = createColumn(
+	public final Column<ServizioEnteTable, String> userName = createColumn(
 		"userName", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Date> createDate = createColumn(
+	public final Column<ServizioEnteTable, Date> createDate = createColumn(
 		"createDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Date> modifiedDate = createColumn(
+	public final Column<ServizioEnteTable, Date> modifiedDate = createColumn(
 		"modifiedDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, String> uri = createColumn(
+	public final Column<ServizioEnteTable, String> uri = createColumn(
 		"uri", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, String> uriGuest = createColumn(
+	public final Column<ServizioEnteTable, String> uriGuest = createColumn(
 		"uriGuest", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, String> uriScheda = createColumn(
+	public final Column<ServizioEnteTable, String> uriScheda = createColumn(
 		"uriScheda", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Boolean> autenticazione =
+	public final Column<ServizioEnteTable, Boolean> autenticazione =
 		createColumn(
 			"autenticazione", Boolean.class, Types.BOOLEAN,
 			Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Date> dataInizioAttivazione =
+	public final Column<ServizioEnteTable, Date> dataInizioAttivazione =
 		createColumn(
 			"dataInizioAttivazione", Date.class, Types.TIMESTAMP,
 			Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Date> dataFineAttivazione =
+	public final Column<ServizioEnteTable, Date> dataFineAttivazione =
 		createColumn(
 			"dataFineAttivazione", Date.class, Types.TIMESTAMP,
 			Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Boolean> cittadino = createColumn(
+	public final Column<ServizioEnteTable, Boolean> cittadino = createColumn(
 		"cittadino", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Boolean> azienda = createColumn(
+	public final Column<ServizioEnteTable, Boolean> azienda = createColumn(
 		"azienda", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Boolean> delega = createColumn(
+	public final Column<ServizioEnteTable, Boolean> delega = createColumn(
 		"delega", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Boolean> chatbot = createColumn(
+	public final Column<ServizioEnteTable, Boolean> chatbot = createColumn(
 		"chatbot", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Boolean> prenotabile = createColumn(
+	public final Column<ServizioEnteTable, Boolean> prenotabile = createColumn(
 		"prenotabile", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Boolean> privacyDelega =
+	public final Column<ServizioEnteTable, Boolean> privacyDelega =
 		createColumn(
 			"privacyDelega", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Boolean> allegatoDelega =
+	public final Column<ServizioEnteTable, Boolean> allegatoDelega =
 		createColumn(
 			"allegatoDelega", Boolean.class, Types.BOOLEAN,
 			Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Boolean> timbroCertificato =
+	public final Column<ServizioEnteTable, Boolean> timbroCertificato =
 		createColumn(
 			"timbroCertificato", Boolean.class, Types.BOOLEAN,
 			Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Boolean> iseeInps = createColumn(
+	public final Column<ServizioEnteTable, Boolean> iseeInps = createColumn(
 		"iseeInps", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
-	public final Column<EnteServizioTable, Boolean> attivo = createColumn(
+	public final Column<ServizioEnteTable, Boolean> attivo = createColumn(
 		"attivo", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 
-	private EnteServizioTable() {
-		super("ente_servizio", EnteServizioTable::new);
+	private ServizioEnteTable() {
+		super("servizio_ente", ServizioEnteTable::new);
 	}
 
 }

@@ -5,8 +5,8 @@
 	<namespace/>
 	
 	<entity 
-		name="EnteServizio"
-		table="ente_servizio"
+		name="ServizioEnte"
+		table="servizio_ente"
 		uuid="true"
 		local-service="true" 
 		remote-service="false" 
@@ -15,8 +15,8 @@
 		>
 
 		<!-- PK fields -->
-		<column name="organizationId" primary="true" type="long" />
 		<column name="servizioId" primary="true" type="long" />
+		<column name="organizationId" primary="true" type="long" />
 
 		<!-- Group instance -->
 		<column name="groupId" type="long" />
@@ -47,7 +47,7 @@
 		<column name="attivo" type="boolean" />
 		
 		<!-- Finder methods -->
-		<finder name="OrganizationId" return-type="Servizio">
+		<finder name="OrganizationId" return-type="Collection">
 			<finder-column name="organizationId" />
 		</finder>
 

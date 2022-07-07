@@ -24,19 +24,19 @@ import java.util.Map;
 
 /**
  * <p>
- * This class is a wrapper for {@link EnteServizio}.
+ * This class is a wrapper for {@link ServizioEnte}.
  * </p>
  *
  * @author Brian Wing Shun Chan
- * @see EnteServizio
+ * @see ServizioEnte
  * @generated
  */
-public class EnteServizioWrapper
-	extends BaseModelWrapper<EnteServizio>
-	implements EnteServizio, ModelWrapper<EnteServizio> {
+public class ServizioEnteWrapper
+	extends BaseModelWrapper<ServizioEnte>
+	implements ModelWrapper<ServizioEnte>, ServizioEnte {
 
-	public EnteServizioWrapper(EnteServizio enteServizio) {
-		super(enteServizio);
+	public ServizioEnteWrapper(ServizioEnte servizioEnte) {
+		super(servizioEnte);
 	}
 
 	@Override
@@ -44,8 +44,8 @@ public class EnteServizioWrapper
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("uuid", getUuid());
-		attributes.put("organizationId", getOrganizationId());
 		attributes.put("servizioId", getServizioId());
+		attributes.put("organizationId", getOrganizationId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("userId", getUserId());
@@ -80,16 +80,16 @@ public class EnteServizioWrapper
 			setUuid(uuid);
 		}
 
-		Long organizationId = (Long)attributes.get("organizationId");
-
-		if (organizationId != null) {
-			setOrganizationId(organizationId);
-		}
-
 		Long servizioId = (Long)attributes.get("servizioId");
 
 		if (servizioId != null) {
 			setServizioId(servizioId);
+		}
+
+		Long organizationId = (Long)attributes.get("organizationId");
+
+		if (organizationId != null) {
+			setOrganizationId(organizationId);
 		}
 
 		Long groupId = (Long)attributes.get("groupId");
@@ -228,14 +228,14 @@ public class EnteServizioWrapper
 	}
 
 	@Override
-	public EnteServizio cloneWithOriginalValues() {
+	public ServizioEnte cloneWithOriginalValues() {
 		return wrap(model.cloneWithOriginalValues());
 	}
 
 	/**
-	 * Returns the allegato delega of this ente servizio.
+	 * Returns the allegato delega of this servizio ente.
 	 *
-	 * @return the allegato delega of this ente servizio
+	 * @return the allegato delega of this servizio ente
 	 */
 	@Override
 	public boolean getAllegatoDelega() {
@@ -243,9 +243,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the attivo of this ente servizio.
+	 * Returns the attivo of this servizio ente.
 	 *
-	 * @return the attivo of this ente servizio
+	 * @return the attivo of this servizio ente
 	 */
 	@Override
 	public boolean getAttivo() {
@@ -253,9 +253,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the autenticazione of this ente servizio.
+	 * Returns the autenticazione of this servizio ente.
 	 *
-	 * @return the autenticazione of this ente servizio
+	 * @return the autenticazione of this servizio ente
 	 */
 	@Override
 	public boolean getAutenticazione() {
@@ -263,9 +263,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the azienda of this ente servizio.
+	 * Returns the azienda of this servizio ente.
 	 *
-	 * @return the azienda of this ente servizio
+	 * @return the azienda of this servizio ente
 	 */
 	@Override
 	public boolean getAzienda() {
@@ -273,9 +273,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the chatbot of this ente servizio.
+	 * Returns the chatbot of this servizio ente.
 	 *
-	 * @return the chatbot of this ente servizio
+	 * @return the chatbot of this servizio ente
 	 */
 	@Override
 	public boolean getChatbot() {
@@ -283,19 +283,24 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the cittadino of this ente servizio.
+	 * Returns the cittadino of this servizio ente.
 	 *
-	 * @return the cittadino of this ente servizio
+	 * @return the cittadino of this servizio ente
 	 */
 	@Override
 	public boolean getCittadino() {
 		return model.getCittadino();
 	}
 
+	@Override
+	public String getCodiceIPA() {
+		return model.getCodiceIPA();
+	}
+
 	/**
-	 * Returns the company ID of this ente servizio.
+	 * Returns the company ID of this servizio ente.
 	 *
-	 * @return the company ID of this ente servizio
+	 * @return the company ID of this servizio ente
 	 */
 	@Override
 	public long getCompanyId() {
@@ -303,9 +308,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the create date of this ente servizio.
+	 * Returns the create date of this servizio ente.
 	 *
-	 * @return the create date of this ente servizio
+	 * @return the create date of this servizio ente
 	 */
 	@Override
 	public Date getCreateDate() {
@@ -313,9 +318,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the data fine attivazione of this ente servizio.
+	 * Returns the data fine attivazione of this servizio ente.
 	 *
-	 * @return the data fine attivazione of this ente servizio
+	 * @return the data fine attivazione of this servizio ente
 	 */
 	@Override
 	public Date getDataFineAttivazione() {
@@ -323,9 +328,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the data inizio attivazione of this ente servizio.
+	 * Returns the data inizio attivazione of this servizio ente.
 	 *
-	 * @return the data inizio attivazione of this ente servizio
+	 * @return the data inizio attivazione of this servizio ente
 	 */
 	@Override
 	public Date getDataInizioAttivazione() {
@@ -333,19 +338,24 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the delega of this ente servizio.
+	 * Returns the delega of this servizio ente.
 	 *
-	 * @return the delega of this ente servizio
+	 * @return the delega of this servizio ente
 	 */
 	@Override
 	public boolean getDelega() {
 		return model.getDelega();
 	}
 
+	@Override
+	public String getDescrizione() {
+		return model.getDescrizione();
+	}
+
 	/**
-	 * Returns the group ID of this ente servizio.
+	 * Returns the group ID of this servizio ente.
 	 *
-	 * @return the group ID of this ente servizio
+	 * @return the group ID of this servizio ente
 	 */
 	@Override
 	public long getGroupId() {
@@ -353,9 +363,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the isee inps of this ente servizio.
+	 * Returns the isee inps of this servizio ente.
 	 *
-	 * @return the isee inps of this ente servizio
+	 * @return the isee inps of this servizio ente
 	 */
 	@Override
 	public boolean getIseeInps() {
@@ -363,19 +373,29 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the modified date of this ente servizio.
+	 * Returns the modified date of this servizio ente.
 	 *
-	 * @return the modified date of this ente servizio
+	 * @return the modified date of this servizio ente
 	 */
 	@Override
 	public Date getModifiedDate() {
 		return model.getModifiedDate();
 	}
 
+	@Override
+	public String getNome() {
+		return model.getNome();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.model.Organization getOrganization() {
+		return model.getOrganization();
+	}
+
 	/**
-	 * Returns the organization ID of this ente servizio.
+	 * Returns the organization ID of this servizio ente.
 	 *
-	 * @return the organization ID of this ente servizio
+	 * @return the organization ID of this servizio ente
 	 */
 	@Override
 	public long getOrganizationId() {
@@ -383,9 +403,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the prenotabile of this ente servizio.
+	 * Returns the prenotabile of this servizio ente.
 	 *
-	 * @return the prenotabile of this ente servizio
+	 * @return the prenotabile of this servizio ente
 	 */
 	@Override
 	public boolean getPrenotabile() {
@@ -393,21 +413,21 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the primary key of this ente servizio.
+	 * Returns the primary key of this servizio ente.
 	 *
-	 * @return the primary key of this ente servizio
+	 * @return the primary key of this servizio ente
 	 */
 	@Override
-	public it.servizidigitali.gestioneenti.service.persistence.EnteServizioPK
+	public it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK
 		getPrimaryKey() {
 
 		return model.getPrimaryKey();
 	}
 
 	/**
-	 * Returns the privacy delega of this ente servizio.
+	 * Returns the privacy delega of this servizio ente.
 	 *
-	 * @return the privacy delega of this ente servizio
+	 * @return the privacy delega of this servizio ente
 	 */
 	@Override
 	public boolean getPrivacyDelega() {
@@ -415,9 +435,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the servizio ID of this ente servizio.
+	 * Returns the servizio ID of this servizio ente.
 	 *
-	 * @return the servizio ID of this ente servizio
+	 * @return the servizio ID of this servizio ente
 	 */
 	@Override
 	public long getServizioId() {
@@ -425,9 +445,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the timbro certificato of this ente servizio.
+	 * Returns the timbro certificato of this servizio ente.
 	 *
-	 * @return the timbro certificato of this ente servizio
+	 * @return the timbro certificato of this servizio ente
 	 */
 	@Override
 	public boolean getTimbroCertificato() {
@@ -435,9 +455,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the uri of this ente servizio.
+	 * Returns the uri of this servizio ente.
 	 *
-	 * @return the uri of this ente servizio
+	 * @return the uri of this servizio ente
 	 */
 	@Override
 	public String getUri() {
@@ -445,9 +465,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the uri guest of this ente servizio.
+	 * Returns the uri guest of this servizio ente.
 	 *
-	 * @return the uri guest of this ente servizio
+	 * @return the uri guest of this servizio ente
 	 */
 	@Override
 	public String getUriGuest() {
@@ -455,9 +475,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the uri scheda of this ente servizio.
+	 * Returns the uri scheda of this servizio ente.
 	 *
-	 * @return the uri scheda of this ente servizio
+	 * @return the uri scheda of this servizio ente
 	 */
 	@Override
 	public String getUriScheda() {
@@ -465,9 +485,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the user ID of this ente servizio.
+	 * Returns the user ID of this servizio ente.
 	 *
-	 * @return the user ID of this ente servizio
+	 * @return the user ID of this servizio ente
 	 */
 	@Override
 	public long getUserId() {
@@ -475,9 +495,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the user name of this ente servizio.
+	 * Returns the user name of this servizio ente.
 	 *
-	 * @return the user name of this ente servizio
+	 * @return the user name of this servizio ente
 	 */
 	@Override
 	public String getUserName() {
@@ -485,9 +505,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the user uuid of this ente servizio.
+	 * Returns the user uuid of this servizio ente.
 	 *
-	 * @return the user uuid of this ente servizio
+	 * @return the user uuid of this servizio ente
 	 */
 	@Override
 	public String getUserUuid() {
@@ -495,9 +515,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns the uuid of this ente servizio.
+	 * Returns the uuid of this servizio ente.
 	 *
-	 * @return the uuid of this ente servizio
+	 * @return the uuid of this servizio ente
 	 */
 	@Override
 	public String getUuid() {
@@ -505,9 +525,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns <code>true</code> if this ente servizio is allegato delega.
+	 * Returns <code>true</code> if this servizio ente is allegato delega.
 	 *
-	 * @return <code>true</code> if this ente servizio is allegato delega; <code>false</code> otherwise
+	 * @return <code>true</code> if this servizio ente is allegato delega; <code>false</code> otherwise
 	 */
 	@Override
 	public boolean isAllegatoDelega() {
@@ -515,9 +535,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns <code>true</code> if this ente servizio is attivo.
+	 * Returns <code>true</code> if this servizio ente is attivo.
 	 *
-	 * @return <code>true</code> if this ente servizio is attivo; <code>false</code> otherwise
+	 * @return <code>true</code> if this servizio ente is attivo; <code>false</code> otherwise
 	 */
 	@Override
 	public boolean isAttivo() {
@@ -525,9 +545,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns <code>true</code> if this ente servizio is autenticazione.
+	 * Returns <code>true</code> if this servizio ente is autenticazione.
 	 *
-	 * @return <code>true</code> if this ente servizio is autenticazione; <code>false</code> otherwise
+	 * @return <code>true</code> if this servizio ente is autenticazione; <code>false</code> otherwise
 	 */
 	@Override
 	public boolean isAutenticazione() {
@@ -535,9 +555,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns <code>true</code> if this ente servizio is azienda.
+	 * Returns <code>true</code> if this servizio ente is azienda.
 	 *
-	 * @return <code>true</code> if this ente servizio is azienda; <code>false</code> otherwise
+	 * @return <code>true</code> if this servizio ente is azienda; <code>false</code> otherwise
 	 */
 	@Override
 	public boolean isAzienda() {
@@ -545,9 +565,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns <code>true</code> if this ente servizio is chatbot.
+	 * Returns <code>true</code> if this servizio ente is chatbot.
 	 *
-	 * @return <code>true</code> if this ente servizio is chatbot; <code>false</code> otherwise
+	 * @return <code>true</code> if this servizio ente is chatbot; <code>false</code> otherwise
 	 */
 	@Override
 	public boolean isChatbot() {
@@ -555,9 +575,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns <code>true</code> if this ente servizio is cittadino.
+	 * Returns <code>true</code> if this servizio ente is cittadino.
 	 *
-	 * @return <code>true</code> if this ente servizio is cittadino; <code>false</code> otherwise
+	 * @return <code>true</code> if this servizio ente is cittadino; <code>false</code> otherwise
 	 */
 	@Override
 	public boolean isCittadino() {
@@ -565,9 +585,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns <code>true</code> if this ente servizio is delega.
+	 * Returns <code>true</code> if this servizio ente is delega.
 	 *
-	 * @return <code>true</code> if this ente servizio is delega; <code>false</code> otherwise
+	 * @return <code>true</code> if this servizio ente is delega; <code>false</code> otherwise
 	 */
 	@Override
 	public boolean isDelega() {
@@ -575,9 +595,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns <code>true</code> if this ente servizio is isee inps.
+	 * Returns <code>true</code> if this servizio ente is isee inps.
 	 *
-	 * @return <code>true</code> if this ente servizio is isee inps; <code>false</code> otherwise
+	 * @return <code>true</code> if this servizio ente is isee inps; <code>false</code> otherwise
 	 */
 	@Override
 	public boolean isIseeInps() {
@@ -585,9 +605,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns <code>true</code> if this ente servizio is prenotabile.
+	 * Returns <code>true</code> if this servizio ente is prenotabile.
 	 *
-	 * @return <code>true</code> if this ente servizio is prenotabile; <code>false</code> otherwise
+	 * @return <code>true</code> if this servizio ente is prenotabile; <code>false</code> otherwise
 	 */
 	@Override
 	public boolean isPrenotabile() {
@@ -595,9 +615,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns <code>true</code> if this ente servizio is privacy delega.
+	 * Returns <code>true</code> if this servizio ente is privacy delega.
 	 *
-	 * @return <code>true</code> if this ente servizio is privacy delega; <code>false</code> otherwise
+	 * @return <code>true</code> if this servizio ente is privacy delega; <code>false</code> otherwise
 	 */
 	@Override
 	public boolean isPrivacyDelega() {
@@ -605,9 +625,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Returns <code>true</code> if this ente servizio is timbro certificato.
+	 * Returns <code>true</code> if this servizio ente is timbro certificato.
 	 *
-	 * @return <code>true</code> if this ente servizio is timbro certificato; <code>false</code> otherwise
+	 * @return <code>true</code> if this servizio ente is timbro certificato; <code>false</code> otherwise
 	 */
 	@Override
 	public boolean isTimbroCertificato() {
@@ -620,9 +640,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets whether this ente servizio is allegato delega.
+	 * Sets whether this servizio ente is allegato delega.
 	 *
-	 * @param allegatoDelega the allegato delega of this ente servizio
+	 * @param allegatoDelega the allegato delega of this servizio ente
 	 */
 	@Override
 	public void setAllegatoDelega(boolean allegatoDelega) {
@@ -630,9 +650,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets whether this ente servizio is attivo.
+	 * Sets whether this servizio ente is attivo.
 	 *
-	 * @param attivo the attivo of this ente servizio
+	 * @param attivo the attivo of this servizio ente
 	 */
 	@Override
 	public void setAttivo(boolean attivo) {
@@ -640,9 +660,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets whether this ente servizio is autenticazione.
+	 * Sets whether this servizio ente is autenticazione.
 	 *
-	 * @param autenticazione the autenticazione of this ente servizio
+	 * @param autenticazione the autenticazione of this servizio ente
 	 */
 	@Override
 	public void setAutenticazione(boolean autenticazione) {
@@ -650,9 +670,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets whether this ente servizio is azienda.
+	 * Sets whether this servizio ente is azienda.
 	 *
-	 * @param azienda the azienda of this ente servizio
+	 * @param azienda the azienda of this servizio ente
 	 */
 	@Override
 	public void setAzienda(boolean azienda) {
@@ -660,9 +680,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets whether this ente servizio is chatbot.
+	 * Sets whether this servizio ente is chatbot.
 	 *
-	 * @param chatbot the chatbot of this ente servizio
+	 * @param chatbot the chatbot of this servizio ente
 	 */
 	@Override
 	public void setChatbot(boolean chatbot) {
@@ -670,19 +690,24 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets whether this ente servizio is cittadino.
+	 * Sets whether this servizio ente is cittadino.
 	 *
-	 * @param cittadino the cittadino of this ente servizio
+	 * @param cittadino the cittadino of this servizio ente
 	 */
 	@Override
 	public void setCittadino(boolean cittadino) {
 		model.setCittadino(cittadino);
 	}
 
+	@Override
+	public void setCodiceIPA(String codiceIPA) {
+		model.setCodiceIPA(codiceIPA);
+	}
+
 	/**
-	 * Sets the company ID of this ente servizio.
+	 * Sets the company ID of this servizio ente.
 	 *
-	 * @param companyId the company ID of this ente servizio
+	 * @param companyId the company ID of this servizio ente
 	 */
 	@Override
 	public void setCompanyId(long companyId) {
@@ -690,9 +715,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets the create date of this ente servizio.
+	 * Sets the create date of this servizio ente.
 	 *
-	 * @param createDate the create date of this ente servizio
+	 * @param createDate the create date of this servizio ente
 	 */
 	@Override
 	public void setCreateDate(Date createDate) {
@@ -700,9 +725,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets the data fine attivazione of this ente servizio.
+	 * Sets the data fine attivazione of this servizio ente.
 	 *
-	 * @param dataFineAttivazione the data fine attivazione of this ente servizio
+	 * @param dataFineAttivazione the data fine attivazione of this servizio ente
 	 */
 	@Override
 	public void setDataFineAttivazione(Date dataFineAttivazione) {
@@ -710,9 +735,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets the data inizio attivazione of this ente servizio.
+	 * Sets the data inizio attivazione of this servizio ente.
 	 *
-	 * @param dataInizioAttivazione the data inizio attivazione of this ente servizio
+	 * @param dataInizioAttivazione the data inizio attivazione of this servizio ente
 	 */
 	@Override
 	public void setDataInizioAttivazione(Date dataInizioAttivazione) {
@@ -720,19 +745,24 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets whether this ente servizio is delega.
+	 * Sets whether this servizio ente is delega.
 	 *
-	 * @param delega the delega of this ente servizio
+	 * @param delega the delega of this servizio ente
 	 */
 	@Override
 	public void setDelega(boolean delega) {
 		model.setDelega(delega);
 	}
 
+	@Override
+	public void setDescrizione(String descrizione) {
+		model.setDescrizione(descrizione);
+	}
+
 	/**
-	 * Sets the group ID of this ente servizio.
+	 * Sets the group ID of this servizio ente.
 	 *
-	 * @param groupId the group ID of this ente servizio
+	 * @param groupId the group ID of this servizio ente
 	 */
 	@Override
 	public void setGroupId(long groupId) {
@@ -740,9 +770,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets whether this ente servizio is isee inps.
+	 * Sets whether this servizio ente is isee inps.
 	 *
-	 * @param iseeInps the isee inps of this ente servizio
+	 * @param iseeInps the isee inps of this servizio ente
 	 */
 	@Override
 	public void setIseeInps(boolean iseeInps) {
@@ -750,19 +780,31 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets the modified date of this ente servizio.
+	 * Sets the modified date of this servizio ente.
 	 *
-	 * @param modifiedDate the modified date of this ente servizio
+	 * @param modifiedDate the modified date of this servizio ente
 	 */
 	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		model.setModifiedDate(modifiedDate);
 	}
 
+	@Override
+	public void setNome(String nome) {
+		model.setNome(nome);
+	}
+
+	@Override
+	public void setOrganization(
+		com.liferay.portal.kernel.model.Organization organization) {
+
+		model.setOrganization(organization);
+	}
+
 	/**
-	 * Sets the organization ID of this ente servizio.
+	 * Sets the organization ID of this servizio ente.
 	 *
-	 * @param organizationId the organization ID of this ente servizio
+	 * @param organizationId the organization ID of this servizio ente
 	 */
 	@Override
 	public void setOrganizationId(long organizationId) {
@@ -770,9 +812,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets whether this ente servizio is prenotabile.
+	 * Sets whether this servizio ente is prenotabile.
 	 *
-	 * @param prenotabile the prenotabile of this ente servizio
+	 * @param prenotabile the prenotabile of this servizio ente
 	 */
 	@Override
 	public void setPrenotabile(boolean prenotabile) {
@@ -780,22 +822,22 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets the primary key of this ente servizio.
+	 * Sets the primary key of this servizio ente.
 	 *
-	 * @param primaryKey the primary key of this ente servizio
+	 * @param primaryKey the primary key of this servizio ente
 	 */
 	@Override
 	public void setPrimaryKey(
-		it.servizidigitali.gestioneenti.service.persistence.EnteServizioPK
+		it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK
 			primaryKey) {
 
 		model.setPrimaryKey(primaryKey);
 	}
 
 	/**
-	 * Sets whether this ente servizio is privacy delega.
+	 * Sets whether this servizio ente is privacy delega.
 	 *
-	 * @param privacyDelega the privacy delega of this ente servizio
+	 * @param privacyDelega the privacy delega of this servizio ente
 	 */
 	@Override
 	public void setPrivacyDelega(boolean privacyDelega) {
@@ -803,9 +845,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets the servizio ID of this ente servizio.
+	 * Sets the servizio ID of this servizio ente.
 	 *
-	 * @param servizioId the servizio ID of this ente servizio
+	 * @param servizioId the servizio ID of this servizio ente
 	 */
 	@Override
 	public void setServizioId(long servizioId) {
@@ -813,9 +855,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets whether this ente servizio is timbro certificato.
+	 * Sets whether this servizio ente is timbro certificato.
 	 *
-	 * @param timbroCertificato the timbro certificato of this ente servizio
+	 * @param timbroCertificato the timbro certificato of this servizio ente
 	 */
 	@Override
 	public void setTimbroCertificato(boolean timbroCertificato) {
@@ -823,9 +865,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets the uri of this ente servizio.
+	 * Sets the uri of this servizio ente.
 	 *
-	 * @param uri the uri of this ente servizio
+	 * @param uri the uri of this servizio ente
 	 */
 	@Override
 	public void setUri(String uri) {
@@ -833,9 +875,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets the uri guest of this ente servizio.
+	 * Sets the uri guest of this servizio ente.
 	 *
-	 * @param uriGuest the uri guest of this ente servizio
+	 * @param uriGuest the uri guest of this servizio ente
 	 */
 	@Override
 	public void setUriGuest(String uriGuest) {
@@ -843,9 +885,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets the uri scheda of this ente servizio.
+	 * Sets the uri scheda of this servizio ente.
 	 *
-	 * @param uriScheda the uri scheda of this ente servizio
+	 * @param uriScheda the uri scheda of this servizio ente
 	 */
 	@Override
 	public void setUriScheda(String uriScheda) {
@@ -853,9 +895,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets the user ID of this ente servizio.
+	 * Sets the user ID of this servizio ente.
 	 *
-	 * @param userId the user ID of this ente servizio
+	 * @param userId the user ID of this servizio ente
 	 */
 	@Override
 	public void setUserId(long userId) {
@@ -863,9 +905,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets the user name of this ente servizio.
+	 * Sets the user name of this servizio ente.
 	 *
-	 * @param userName the user name of this ente servizio
+	 * @param userName the user name of this servizio ente
 	 */
 	@Override
 	public void setUserName(String userName) {
@@ -873,9 +915,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets the user uuid of this ente servizio.
+	 * Sets the user uuid of this servizio ente.
 	 *
-	 * @param userUuid the user uuid of this ente servizio
+	 * @param userUuid the user uuid of this servizio ente
 	 */
 	@Override
 	public void setUserUuid(String userUuid) {
@@ -883,9 +925,9 @@ public class EnteServizioWrapper
 	}
 
 	/**
-	 * Sets the uuid of this ente servizio.
+	 * Sets the uuid of this servizio ente.
 	 *
-	 * @param uuid the uuid of this ente servizio
+	 * @param uuid the uuid of this servizio ente
 	 */
 	@Override
 	public void setUuid(String uuid) {
@@ -898,8 +940,8 @@ public class EnteServizioWrapper
 	}
 
 	@Override
-	protected EnteServizioWrapper wrap(EnteServizio enteServizio) {
-		return new EnteServizioWrapper(enteServizio);
+	protected ServizioEnteWrapper wrap(ServizioEnte servizioEnte) {
+		return new ServizioEnteWrapper(servizioEnte);
 	}
 
 }

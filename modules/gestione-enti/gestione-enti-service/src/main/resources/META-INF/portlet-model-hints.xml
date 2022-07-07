@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 
 <model-hints>
-	<model name="it.servizidigitali.gestioneenti.model.EnteServizio">
+	<model name="it.servizidigitali.gestioneenti.model.ServizioEnte">
 		<field name="uuid" type="String" />
-		<field name="organizationId" type="long" />
 		<field name="servizioId" type="long" />
+		<field name="organizationId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="userId" type="long" />
