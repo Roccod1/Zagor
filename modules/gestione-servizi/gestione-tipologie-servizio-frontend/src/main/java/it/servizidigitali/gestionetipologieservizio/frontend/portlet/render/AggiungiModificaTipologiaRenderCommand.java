@@ -3,6 +3,7 @@ package it.servizidigitali.gestionetipologieservizio.frontend.portlet.render;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -49,6 +50,7 @@ public class AggiungiModificaTipologiaRenderCommand implements MVCRenderCommand{
 				tipologia = tipologiaLocalService.getTipologia(tipologiaId);
 			}catch(Exception e) {
 				_log.error("Impossibile ottenere la tipologia con ID: " + tipologiaId);
+				SessionErrors.add(renderRequest, GestioneTipologieServizioPortletKeys.ERRORE_IMPOSSIBILE_OTTENERE_TIPOLOGIA);
 				return GestioneTipologieServizioPortletKeys.JSP_HOME;
 			}
 		}
