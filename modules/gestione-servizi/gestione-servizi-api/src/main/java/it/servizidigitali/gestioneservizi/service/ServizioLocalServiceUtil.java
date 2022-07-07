@@ -20,11 +20,10 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
-import it.servizidigitali.gestioneservizi.model.Servizio;
-
 import java.io.Serializable;
-
 import java.util.List;
+
+import it.servizidigitali.gestioneservizi.model.Servizio;
 
 /**
  * Provides the local service utility for Servizio. This utility wraps
@@ -82,7 +81,9 @@ public class ServizioLocalServiceUtil {
 		getService().addTipologiaServizios(tipologiaId, servizioIds);
 	}
 
-	public static Servizio aggiornaServizio(Servizio servizioDaAggiornare) {
+	public static Servizio aggiornaServizio(Servizio servizioDaAggiornare)
+		throws Exception {
+
 		return getService().aggiornaServizio(servizioDaAggiornare);
 	}
 
@@ -327,7 +328,7 @@ public class ServizioLocalServiceUtil {
 		return getService().getServizio(servizioId);
 	}
 
-	public static Servizio getServizioById(Long servizioId) {
+	public static Servizio getServizioById(Long servizioId) throws Exception {
 		return getService().getServizioById(servizioId);
 	}
 
@@ -454,8 +455,9 @@ public class ServizioLocalServiceUtil {
 	 * @return
 	 */
 	public static List<Servizio> searchServizio(
-		String nome, String codice, Boolean soloServiziAttivi, int cur,
-		int delta, String nomeOrdinamento, String direzioneOrdinamento) {
+			String nome, String codice, Boolean soloServiziAttivi, int cur,
+			int delta, String nomeOrdinamento, String direzioneOrdinamento)
+		throws Exception {
 
 		return getService().searchServizio(
 			nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento,

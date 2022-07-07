@@ -33,13 +33,12 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
-import it.servizidigitali.gestioneservizi.model.Servizio;
-
 import java.io.Serializable;
-
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
+
+import it.servizidigitali.gestioneservizi.model.Servizio;
 
 /**
  * Provides the local service interface for Servizio. Methods of this
@@ -87,7 +86,8 @@ public interface ServizioLocalService
 
 	public void addTipologiaServizios(long tipologiaId, long[] servizioIds);
 
-	public Servizio aggiornaServizio(Servizio servizioDaAggiornare);
+	public Servizio aggiornaServizio(Servizio servizioDaAggiornare)
+		throws Exception;
 
 	public void clearTipologiaServizios(long tipologiaId);
 
@@ -270,7 +270,7 @@ public interface ServizioLocalService
 	public Servizio getServizio(long servizioId) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public Servizio getServizioById(Long servizioId);
+	public Servizio getServizioById(Long servizioId) throws Exception;
 
 	/**
 	 * Returns the servizio matching the UUID and group.
@@ -374,8 +374,9 @@ public interface ServizioLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Servizio> searchServizio(
-		String nome, String codice, Boolean soloServiziAttivi, int cur,
-		int delta, String nomeOrdinamento, String direzioneOrdinamento);
+			String nome, String codice, Boolean soloServiziAttivi, int cur,
+			int delta, String nomeOrdinamento, String direzioneOrdinamento)
+		throws Exception;
 
 	public void setTipologiaServizios(long tipologiaId, long[] servizioIds);
 

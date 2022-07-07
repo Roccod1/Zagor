@@ -33,13 +33,12 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
-import it.servizidigitali.gestioneservizi.model.Tipologia;
-
 import java.io.Serializable;
-
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
+
+import it.servizidigitali.gestioneservizi.model.Tipologia;
 
 /**
  * Provides the local service interface for Tipologia. Methods of this
@@ -241,6 +240,12 @@ public interface TipologiaLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Tipologia> getListaTipologiaOrdinata(
+			int cur, int delta, String nomeOrdinamento,
+			String direzioneOrdinamento)
+		throws Exception;
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -289,9 +294,6 @@ public interface TipologiaLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Tipologia getTipologia(long tipologiaId) throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public Tipologia getTipologiaById(Long idTipologia);
 
 	/**
 	 * Returns the tipologia matching the UUID and group.
@@ -358,6 +360,8 @@ public interface TipologiaLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public boolean hasServizioTipologias(long servizioId);
+
+	public Tipologia salvaTipologia(Tipologia tipologia) throws Exception;
 
 	public void setServizioTipologias(long servizioId, long[] tipologiaIds);
 

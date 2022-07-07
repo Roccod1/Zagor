@@ -1,14 +1,16 @@
 package it.servizidigitali.gestioneservizi.frontend.portlet.render;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -37,6 +39,8 @@ import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 )
 public class AggiungiModificaServizioRenderCommand implements MVCRenderCommand{
 
+	public static final Log _log = LogFactoryUtil.getLog(AggiungiModificaServizioRenderCommand.class);
+
 	@Reference
 	private ServizioLocalService servizioLocalService;
 	
@@ -47,9 +51,9 @@ public class AggiungiModificaServizioRenderCommand implements MVCRenderCommand{
 	private AreaTematicaLocalService areaTematicaLocalService;
 	
 	@Override
-	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
+	public String render(RenderRequest renderRequest, RenderResponse renderResponse) {
 		
-		Long servizioId = ParamUtil.getLong(renderRequest, "servizioId", 0L);
+		Long servizioId = ParamUtil.getLong(renderRequest, GestioneServiziPortletKeys.SERVIZIO_ID, 0L);
 		String indirizzoPrecedente = ParamUtil.getString(renderRequest, GestioneServiziPortletKeys.INDIRIZZO_PRECEDENTE);
 		
 		Servizio servizio = null;
@@ -59,7 +63,9 @@ public class AggiungiModificaServizioRenderCommand implements MVCRenderCommand{
 				servizio = servizioLocalService.getServizioById(servizioId);		
 				listaTipologie = servizio.getListaTipologie();
 			}catch(Exception e) {
-				
+				_log.error("Impossibile recuperare il servizio con servizioId: " + servizioId, e);
+				SessionErrors.add(renderRequest, GestioneServiziPortletKeys.ERRORE_IMPOSSIBILE_OTTENERE_SERVIZIO);
+				return GestioneServiziPortletKeys.JSP_HOME;
 			}
 		}
 		

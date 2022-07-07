@@ -14,6 +14,7 @@
 
 package it.servizidigitali.gestioneservizi.service;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -82,8 +83,9 @@ public class ServizioLocalServiceWrapper
 
 	@Override
 	public it.servizidigitali.gestioneservizi.model.Servizio aggiornaServizio(
-		it.servizidigitali.gestioneservizi.model.Servizio
-			servizioDaAggiornare) {
+			it.servizidigitali.gestioneservizi.model.Servizio
+				servizioDaAggiornare)
+		throws Exception {
 
 		return _servizioLocalService.aggiornaServizio(servizioDaAggiornare);
 	}
@@ -378,7 +380,8 @@ public class ServizioLocalServiceWrapper
 
 	@Override
 	public it.servizidigitali.gestioneservizi.model.Servizio getServizioById(
-		Long servizioId) {
+			Long servizioId)
+		throws Exception {
 
 		return _servizioLocalService.getServizioById(servizioId);
 	}
@@ -530,9 +533,10 @@ public class ServizioLocalServiceWrapper
 	 */
 	@Override
 	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
-		searchServizio(
-			String nome, String codice, Boolean soloServiziAttivi, int cur,
-			int delta, String nomeOrdinamento, String direzioneOrdinamento) {
+			searchServizio(
+				String nome, String codice, Boolean soloServiziAttivi, int cur,
+				int delta, String nomeOrdinamento, String direzioneOrdinamento)
+		throws Exception {
 
 		return _servizioLocalService.searchServizio(
 			nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento,

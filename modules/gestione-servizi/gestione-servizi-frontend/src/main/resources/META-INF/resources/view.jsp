@@ -11,8 +11,9 @@
 <h2><liferay-ui:message key="elenco-servizi"/></h2>
 
 <liferay-ui:success key="salvataggio-successo" message="salvataggio-avvenuto-con-successo" />
-<liferay-ui:success key="edit-success" message="modifica-avvenuta-con-successo" />
-<liferay-ui:error key="validazione-campi-obbligatori-fallita" message="compilare-tutti-i-campi-per-procedere"/>
+<liferay-ui:error key="salvataggio-errore" message="errore-salvataggio"/>
+<liferay-ui:error key="errore-impossibile-ottenere-servizio" message="impossibile-ottenere-servizio-specificato"/>
+<liferay-ui:error key="validazione-campi-obbligatori-fallita" message="compilare-tutti-i-campi-per-procedere" />
 
 <%@ include file="formRicerca.jsp" %>
 <%@ include file="risultatiRicerca.jsp" %>

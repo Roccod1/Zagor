@@ -20,11 +20,10 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
-import it.servizidigitali.gestioneservizi.model.Tipologia;
-
 import java.io.Serializable;
-
 import java.util.List;
+
+import it.servizidigitali.gestioneservizi.model.Tipologia;
 
 /**
  * Provides the local service utility for Tipologia. This utility wraps
@@ -293,6 +292,15 @@ public class TipologiaLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
+	public static List<Tipologia> getListaTipologiaOrdinata(
+			int cur, int delta, String nomeOrdinamento,
+			String direzioneOrdinamento)
+		throws Exception {
+
+		return getService().getListaTipologiaOrdinata(
+			cur, delta, nomeOrdinamento, direzioneOrdinamento);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -354,10 +362,6 @@ public class TipologiaLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getTipologia(tipologiaId);
-	}
-
-	public static Tipologia getTipologiaById(Long idTipologia) {
-		return getService().getTipologiaById(idTipologia);
 	}
 
 	/**
@@ -438,6 +442,12 @@ public class TipologiaLocalServiceUtil {
 
 	public static boolean hasServizioTipologias(long servizioId) {
 		return getService().hasServizioTipologias(servizioId);
+	}
+
+	public static Tipologia salvaTipologia(Tipologia tipologia)
+		throws Exception {
+
+		return getService().salvaTipologia(tipologia);
 	}
 
 	public static void setServizioTipologias(

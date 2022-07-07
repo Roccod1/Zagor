@@ -1,9 +1,9 @@
 <%@ include file="init.jsp" %>
 
 <liferay-portlet:renderURL varImpl="iteratorURL">
-	<portlet:param name="nome" value="${nome}" />
-	<portlet:param name="codice" value="${codiceServizio}" />
-	<portlet:param name="soloAttivi" value="${soloServiziAttivi}" />
+	<portlet:param name="nomeRicerca" value="${nomeRicerca}" />
+	<portlet:param name="codiceRicerca" value="${codiceRicerca}" />
+	<portlet:param name="soloServiziAttiviRicerca" value="${soloServiziAttiviRicerca}" />
 	<portlet:param name="mvcPath" value="/view.jsp" />
 </liferay-portlet:renderURL>
 

@@ -46,17 +46,17 @@ public class RicercaServizioActionCommand extends BaseMVCActionCommand {
 		String nomeOrdinamento = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		String direzioneOrdinamento = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 		
-		String nome = ParamUtil.getString(actionRequest, GestioneServiziPortletKeys.NOME);
-		String codice = ParamUtil.getString(actionRequest, GestioneServiziPortletKeys.CODICE);
-		Boolean soloServiziAttivi = ParamUtil.getBoolean(actionRequest, GestioneServiziPortletKeys.SOLO_SERVIZI_ATTIVI, false);
+		String nome = ParamUtil.getString(actionRequest, GestioneServiziPortletKeys.NOME_RICERCA);
+		String codice = ParamUtil.getString(actionRequest, GestioneServiziPortletKeys.CODICE_RICERCA);
+		Boolean soloServiziAttivi = ParamUtil.getBoolean(actionRequest, GestioneServiziPortletKeys.SOLO_SERVIZI_ATTIVI_RICERCA, false);
 		
 		List<Servizio> listaServiziFiltrata = servizioLocalService.searchServizio(nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento, direzioneOrdinamento);
 		actionRequest.setAttribute(GestioneServiziPortletKeys.LISTA_SERVIZI, listaServiziFiltrata);
 		
 		//imposto nuovamente i parametri ricevuti in ingresso per l'integrazione tra formRicerca e searchContainer
-		actionRequest.setAttribute(GestioneServiziPortletKeys.NOME, nome);
-		actionRequest.setAttribute(GestioneServiziPortletKeys.CODICE,codice);
-		actionRequest.setAttribute(GestioneServiziPortletKeys.SOLO_SERVIZI_ATTIVI, soloServiziAttivi);
+		actionRequest.setAttribute(GestioneServiziPortletKeys.NOME_RICERCA, nome);
+		actionRequest.setAttribute(GestioneServiziPortletKeys.CODICE_RICERCA,codice);
+		actionRequest.setAttribute(GestioneServiziPortletKeys.SOLO_SERVIZI_ATTIVI_RICERCA, soloServiziAttivi);
 
 	}
 }

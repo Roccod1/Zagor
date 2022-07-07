@@ -19,11 +19,11 @@ public class GestioneServiziPortletKeys {
 	public static final String NOME = "nome";
 	public static final String CODICE = "codice";
 	public static final String SOLO_SERVIZI_ATTIVI = "soloServiziAttivi";
-//	public static final String NOME = "nome";
-//	public static final String NOME = "nome";
-
-
-
+	public static final String SERVIZIO_ID = "servizioId";
+	
+	public static final String NOME_RICERCA = "nomeRicerca";
+	public static final String CODICE_RICERCA = "codiceRicerca";
+	public static final String SOLO_SERVIZI_ATTIVI_RICERCA = "soloServiziAttiviRicerca";
 
 	//JSP
 	public static final String JSP_INSERIMENTO_MODIFICA_SERVIZIO = "/inserisciModificaServizio.jsp";
@@ -32,12 +32,15 @@ public class GestioneServiziPortletKeys {
 	public static final String JSP_HOME = "/view.jsp"; 
 	
 	public static final String ERRORE_CAMPI_OBBLIGATORI = "validazione-campi-obbligatori-fallita";
+	public static final String ERRORE_SALVATAGGIO = "salvataggio-errore";
+	public static final String ERRORE_BACKEND = "backend-errore";
+	public static final String ERRORE_IMPOSSIBILE_OTTENERE_SERVIZIO = "errore-impossibile-ottenere-servizio";
+
+	
 	public static final String SALVATAGGIO_SUCCESSO = "salvataggio-successo";
 
 	//parametri default search container
 	public static final int DEFAULT_CUR = 1;
 	public static final int DEFAULT_DELTA = 10;
-
-	
 
 }

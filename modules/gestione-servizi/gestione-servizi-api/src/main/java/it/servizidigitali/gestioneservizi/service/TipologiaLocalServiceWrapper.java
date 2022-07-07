@@ -14,6 +14,7 @@
 
 package it.servizidigitali.gestioneservizi.service;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -332,6 +333,17 @@ public class TipologiaLocalServiceWrapper
 		return _tipologiaLocalService.getIndexableActionableDynamicQuery();
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.gestioneservizi.model.Tipologia>
+			getListaTipologiaOrdinata(
+				int cur, int delta, String nomeOrdinamento,
+				String direzioneOrdinamento)
+		throws Exception {
+
+		return _tipologiaLocalService.getListaTipologiaOrdinata(
+			cur, delta, nomeOrdinamento, direzioneOrdinamento);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -409,13 +421,6 @@ public class TipologiaLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _tipologiaLocalService.getTipologia(tipologiaId);
-	}
-
-	@Override
-	public it.servizidigitali.gestioneservizi.model.Tipologia getTipologiaById(
-		Long idTipologia) {
-
-		return _tipologiaLocalService.getTipologiaById(idTipologia);
 	}
 
 	/**
@@ -509,6 +514,14 @@ public class TipologiaLocalServiceWrapper
 	@Override
 	public boolean hasServizioTipologias(long servizioId) {
 		return _tipologiaLocalService.hasServizioTipologias(servizioId);
+	}
+
+	@Override
+	public it.servizidigitali.gestioneservizi.model.Tipologia salvaTipologia(
+			it.servizidigitali.gestioneservizi.model.Tipologia tipologia)
+		throws Exception {
+
+		return _tipologiaLocalService.salvaTipologia(tipologia);
 	}
 
 	@Override

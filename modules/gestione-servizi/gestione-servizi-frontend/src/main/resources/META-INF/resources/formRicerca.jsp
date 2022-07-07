@@ -13,7 +13,7 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group form-check">
-					<aui:input type="checkbox" name="soloServiziAttivi" class="form-check-input" label="solo-servizi-attivi"/>
+					<aui:input type="checkbox" name="soloServiziAttiviRicerca" class="form-check-input" label="solo-servizi-attivi"/>
 				</div>
 			</div>
 		</div>
@@ -21,18 +21,19 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-					<aui:input type="text" name="nome" label="nome"/>
+					<aui:input type="text" name="nomeRicerca" label="nome"/>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group">
-					<aui:input type="text" name="codice" label="codice-servizio"></aui:input>
+					<aui:input type="text" name="codiceRicerca" label="codice-servizio"></aui:input>
 				</div>
 			</div>
 		</div>	
 		
 		<aui:button-row cssClass="text-right">
 			<aui:button type="submit" value="cerca" />
+			<aui:button type="button" value="reset" href="${homeURL}"/>
 			<aui:button type="button" value="nuovo" href="${aggiungiModificaUrl}"/>
 		</aui:button-row>
 	</aui:form>

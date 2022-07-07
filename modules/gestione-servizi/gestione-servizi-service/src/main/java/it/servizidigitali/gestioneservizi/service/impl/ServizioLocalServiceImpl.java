@@ -39,31 +39,30 @@ import it.servizidigitali.gestioneservizi.service.base.ServizioLocalServiceBaseI
 	property = "model.class.name=it.servizidigitali.gestioneservizi.model.Servizio",
 	service = AopService.class
 )
-public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl {
+public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl{
 
 	private static final Log _log = LogFactoryUtil.getLog(ServizioLocalServiceImpl.class);
 	
-	public Servizio getServizioById(Long servizioId) {
-		_log.info("getServizioById() :: INIZIO");
+	public Servizio getServizioById(Long servizioId) throws Exception{
+		_log.debug("getServizioById() :: INIZIO");
 
 		Servizio servizio = null;
 		List<Tipologia> listaTipologie = null;
 		
-		try{
-			_log.info("getServizioById() :: ID: "+servizioId);
-			servizio = servizioPersistence.findByPrimaryKey(servizioId);
-			listaTipologie = tipologiaPersistence.getServizioTipologias(servizio.getServizioId());
-			_log.info("listaTipologie size: "+listaTipologie.size());
-			servizio.setListaTipologie(listaTipologie);
-		}catch(Exception e) {
-			_log.error("Impossibile ottenere il servizio con ID "+servizioId, e);
+
+		_log.debug("getServizioById() :: ID: "+servizioId);
+		servizio = servizioPersistence.findByPrimaryKey(servizioId);
+		listaTipologie = tipologiaPersistence.getServizioTipologias(servizio.getServizioId());
+		_log.debug("listaTipologie size: "+listaTipologie.size());
+		if(Validator.isNotNull(listaTipologie) && !listaTipologie.isEmpty()) {
+			servizio.setListaTipologie(listaTipologie);				
 		}
 		
-		_log.info("getServizioById() :: FINE");
+		_log.debug("getServizioById() :: FINE");
 		return servizio;
 	}
 	
-	public Servizio aggiornaServizio(Servizio servizioDaAggiornare) {
+	public Servizio aggiornaServizio(Servizio servizioDaAggiornare) throws Exception{
 		
 		if(Validator.isNull(servizioDaAggiornare)) {
 			_log.error("servizioDaAggiornare e' null");
@@ -76,14 +75,18 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl {
 		}
 		
 		Servizio servizioAggiornato = servizioPersistence.update(servizioDaAggiornare);
-		if(Validator.isNotNull(servizioDaAggiornare.getListaTipologie()) && !servizioDaAggiornare.getListaTipologie().isEmpty()) {
-			List<Tipologia> listaTipologieDaRimuovere = tipologiaPersistence.getServizioTipologias(servizioAggiornato.getServizioId());
-			if(Validator.isNotNull(listaTipologieDaRimuovere) && !listaTipologieDaRimuovere.isEmpty()) {
-				servizioPersistence.removeTipologias(servizioAggiornato.getServizioId(), listaTipologieDaRimuovere);
-			}
-			servizioPersistence.addTipologias(servizioAggiornato.getServizioId(), servizioDaAggiornare.getListaTipologie());
-		}
 		
+		_log.debug("Ottengo la lista delle tipologie con servidioId: " + servizioDaAggiornare.getServizioId());
+		List<Tipologia> listaTipologieDaRimuovere = tipologiaPersistence.getServizioTipologias(servizioAggiornato.getServizioId());
+		if(Validator.isNotNull(listaTipologieDaRimuovere) && !listaTipologieDaRimuovere.isEmpty()) {
+			_log.debug("listaTiplogieDaRimuovere non è null :> Rimuovo le vecchie tipologie associate al servizio");
+			servizioPersistence.removeTipologias(servizioAggiornato.getServizioId(), listaTipologieDaRimuovere);
+		}
+		if(Validator.isNotNull(servizioDaAggiornare.getListaTipologie()) && !servizioDaAggiornare.getListaTipologie().isEmpty()) {
+			_log.debug("Imposto nove tipologie");
+			servizioPersistence.addTipologias(servizioDaAggiornare.getServizioId(), servizioDaAggiornare.getListaTipologie());
+		}
+
 		return servizioAggiornato;
 	}
 	
@@ -97,17 +100,19 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl {
 	 * @param direzioneOrdinamento
 	 * @return
 	 */
-	public List<Servizio> searchServizio(String nome, String codice, Boolean soloServiziAttivi, int cur, int delta, String nomeOrdinamento, String direzioneOrdinamento){
+	public List<Servizio> searchServizio(String nome, String codice, Boolean soloServiziAttivi, int cur, int delta, String nomeOrdinamento, String direzioneOrdinamento) throws Exception{
 
 		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
 		int inizio = posizioni[0];
 		int fine = posizioni[1];
 		
 		if(Validator.isNull(nomeOrdinamento)) {
+			_log.debug("Nessun ordinamento impostato. Uso di default servizioId");
 			nomeOrdinamento = "servizioId";
 		}
 		
 		if(inizio <= 0 || fine <= 0) {
+			_log.debug("Posizione iniziale o finale sono minori o uguali a zero. Imposto inizio e fine al valore ALL_POS");
 			inizio = QueryUtil.ALL_POS;
 			fine = QueryUtil.ALL_POS;
 		}
