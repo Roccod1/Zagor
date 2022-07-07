@@ -33,12 +33,13 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import it.servizidigitali.gestioneservizi.model.Servizio;
+
 import java.io.Serializable;
+
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
-
-import it.servizidigitali.gestioneservizi.model.Servizio;
 
 /**
  * Provides the local service interface for Servizio. Methods of this

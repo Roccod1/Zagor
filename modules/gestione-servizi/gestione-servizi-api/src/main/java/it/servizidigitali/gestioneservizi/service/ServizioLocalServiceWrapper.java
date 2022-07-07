@@ -14,7 +14,6 @@
 
 package it.servizidigitali.gestioneservizi.service;
 
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**

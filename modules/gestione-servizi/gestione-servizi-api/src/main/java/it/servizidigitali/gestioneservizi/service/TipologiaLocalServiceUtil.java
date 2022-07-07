@@ -20,10 +20,11 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
-import java.io.Serializable;
-import java.util.List;
-
 import it.servizidigitali.gestioneservizi.model.Tipologia;
+
+import java.io.Serializable;
+
+import java.util.List;
 
 /**
  * Provides the local service utility for Tipologia. This utility wraps
