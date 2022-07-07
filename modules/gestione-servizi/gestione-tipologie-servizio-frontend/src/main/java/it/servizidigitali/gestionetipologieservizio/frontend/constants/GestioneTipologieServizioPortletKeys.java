@@ -32,5 +32,5 @@ public class GestioneTipologieServizioPortletKeys {
 	
 //	path jsp
 	public static final String JSP_INSERIMENTO_MODIFICA_TIPOLOGIA = "/inserisciModificaTipologiaServizio.jsp";
-
-}
+	public static final String JSP_HOME = "/view.jsp";
+}	
