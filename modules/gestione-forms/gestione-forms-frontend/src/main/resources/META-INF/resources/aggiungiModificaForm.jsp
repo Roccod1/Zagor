@@ -80,5 +80,3 @@
 	
 	</aui:form>
 </div>
-
-<%@ include file="builder.jsp" %>
