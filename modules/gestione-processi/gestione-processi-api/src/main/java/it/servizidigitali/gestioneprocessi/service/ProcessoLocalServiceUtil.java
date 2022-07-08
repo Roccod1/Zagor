@@ -60,6 +60,16 @@ public class ProcessoLocalServiceUtil {
 		return getService().addProcesso(processo);
 	}
 
+	public static List<Processo> cerca(
+		String nome, java.util.Date dataInserimentoDa,
+		java.util.Date dataInserimentoA, int delta, int cur, String orderByCol,
+		String orderByType) {
+
+		return getService().cerca(
+			nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol,
+			orderByType);
+	}
+
 	/**
 	 * @throws PortalException
 	 */

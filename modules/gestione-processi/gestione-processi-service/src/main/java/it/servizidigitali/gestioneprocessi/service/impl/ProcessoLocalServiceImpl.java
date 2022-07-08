@@ -15,7 +15,14 @@
 package it.servizidigitali.gestioneprocessi.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
 
+import java.util.Date;
+import java.util.List;
+
+import it.servizidigitali.gestioneprocessi.model.Processo;
 import it.servizidigitali.gestioneprocessi.service.base.ProcessoLocalServiceBaseImpl;
 
 import org.osgi.service.component.annotations.Component;
@@ -28,4 +35,21 @@ import org.osgi.service.component.annotations.Component;
 	service = AopService.class
 )
 public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
+	
+	public List<Processo> cerca(String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta, int cur, String orderByCol, String orderByType){
+		boolean direzione = false;
+		
+		if(orderByType.equalsIgnoreCase("asc")) {
+			direzione = true;
+		}
+		
+		if(Validator.isNull(orderByCol)) {
+			orderByCol = "processoId";
+		}
+		
+		OrderByComparator<Processo> comparator = OrderByComparatorFactoryUtil.create("Processo", orderByCol, direzione);	
+		List<Processo> listaProcesso = processoFinder.findByFilters(nome, dataInserimentoDa, dataInserimentoA, cur, delta, comparator);
+		
+		return listaProcesso;
+	}
 }
