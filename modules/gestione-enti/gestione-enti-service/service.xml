@@ -1,21 +1,27 @@
 <?xml version="1.0"?>
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
 
-<service-builder dependency-injector="ds" package-path="it.servizidigitali.gestioneenti">
-	<namespace>FOO</namespace>
-	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="true"">-->
-	<entity local-service="true" name="Foo" remote-service="true" uuid="true">
+<service-builder dependency-injector="ds" package-path="it.servizidigitali.gestioneenti" auto-namespace-tables="false">
+	<namespace/>
+	
+	<entity 
+		name="ServizioEnte"
+		table="servizio_ente"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
 
 		<!-- PK fields -->
-
-		<column name="fooId" primary="true" type="long" />
+		<column name="servizioId" primary="true" type="long" />
+		<column name="organizationId" primary="true" type="long" />
 
 		<!-- Group instance -->
-
 		<column name="groupId" type="long" />
 
 		<!-- Audit fields -->
-
 		<column name="companyId" type="long" />
 		<column name="userId" type="long" />
 		<column name="userName" type="String" />
@@ -23,28 +29,30 @@
 		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
-
-		<column name="field1" type="String" />
-		<column name="field2" type="boolean" />
-		<column name="field3" type="int" />
-		<column name="field4" type="Date" />
-		<column name="field5" type="String" />
-
-		<!-- Order -->
-
-		<order by="asc">
-			<order-column name="field1" />
-		</order>
-
+		<column name="uri" type="String" />
+		<column name="uriGuest" type="String" />
+		<column name="uriScheda" type="String" />
+		<column name="autenticazione" type="boolean" />
+		<column name="dataInizioAttivazione" type="Date" />
+		<column name="dataFineAttivazione" type="Date" />
+		<column name="cittadino" type="boolean" />
+		<column name="azienda" type="boolean" />
+		<column name="delega" type="boolean" />
+		<column name="chatbot" type="boolean" />
+		<column name="prenotabile" type="boolean" />
+		<column name="privacyDelega" type="boolean" />
+		<column name="allegatoDelega" type="boolean" />
+		<column name="timbroCertificato" type="boolean" />
+		<column name="iseeInps" type="boolean" />
+		<column name="attivo" type="boolean" />
+		
 		<!-- Finder methods -->
-
-		<finder name="Field2" return-type="Collection">
-			<finder-column name="field2" />
+		<finder name="OrganizationId" return-type="Collection">
+			<finder-column name="organizationId" />
 		</finder>
 
-		<!-- References -->
-
-		<reference entity="AssetEntry" package-path="com.liferay.portlet.asset" />
-		<reference entity="AssetTag" package-path="com.liferay.portlet.asset" />
+		<finder name="ServizioId" return-type="Collection">
+			<finder-column name="servizioId" />
+		</finder>
 	</entity>
 </service-builder>

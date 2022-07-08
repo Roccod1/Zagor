@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="it.servizidigitali.gestioneenti.model.ServizioEnte">
+		<field name="uuid" type="String" />
+		<field name="servizioId" type="long" />
+		<field name="organizationId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="uri" type="String" />
+		<field name="uriGuest" type="String" />
+		<field name="uriScheda" type="String" />
+		<field name="autenticazione" type="boolean" />
+		<field name="dataInizioAttivazione" type="Date" />
+		<field name="dataFineAttivazione" type="Date" />
+		<field name="cittadino" type="boolean" />
+		<field name="azienda" type="boolean" />
+		<field name="delega" type="boolean" />
+		<field name="chatbot" type="boolean" />
+		<field name="prenotabile" type="boolean" />
+		<field name="privacyDelega" type="boolean" />
+		<field name="allegatoDelega" type="boolean" />
+		<field name="timbroCertificato" type="boolean" />
+		<field name="iseeInps" type="boolean" />
+		<field name="attivo" type="boolean" />
+	</model>
+</model-hints>
