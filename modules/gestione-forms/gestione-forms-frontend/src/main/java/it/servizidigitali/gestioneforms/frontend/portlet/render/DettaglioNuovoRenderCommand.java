@@ -13,10 +13,11 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneforms.frontend.constants.GestioneFormsPortletKeys;
 import it.servizidigitali.gestioneforms.model.Form;
-import it.servizidigitali.gestioneforms.service.FormLocalServiceUtil;
+import it.servizidigitali.gestioneforms.service.FormLocalService;
 
 
 /**
@@ -27,28 +28,31 @@ import it.servizidigitali.gestioneforms.service.FormLocalServiceUtil;
 		immediate = true,
 		property = {
 			"javax.portlet.name=" + GestioneFormsPortletKeys.GESTIONEFORMS,
-			"mvc.command.name=/dettaglioNuovo"
+			"mvc.command.name=" + GestioneFormsPortletKeys.DETTAGLIO_NUOVO_RENDER_COMMAND
 		},
 		service = MVCRenderCommand.class
 	)
 public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 	
 	public static final Log _log = LogFactoryUtil.getLog(DettaglioNuovoRenderCommand.class);
+	
+	@Reference
+	private FormLocalService formLocalService;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 		
-		Long idForm = ParamUtil.getLong(renderRequest, "idForm");
+		Long idForm = ParamUtil.getLong(renderRequest, GestioneFormsPortletKeys.ID_FORM);
 		Form form = null;
 		
 		if(idForm>0) {
 			try {
-				form = FormLocalServiceUtil.getForm(idForm);
+				form = formLocalService.getForm(idForm);
 			} catch (PortalException e) {
 				_log.error("Impossibile recuperare il form!" + e.getMessage());
 			}
 			
-			renderRequest.setAttribute("form", form);
+			renderRequest.setAttribute(GestioneFormsPortletKeys.FORM, form);
 		}
 		
 		return GestioneFormsPortletKeys.JSP_AGGIUNGI_MODIFICA_FORM;

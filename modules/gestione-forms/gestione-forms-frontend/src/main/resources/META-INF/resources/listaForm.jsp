@@ -1,11 +1,8 @@
-<liferay-ui:success key="eseguito-correttamente" message="operazione-eseguita-correttamente"/>
-<liferay-ui:error key="errore-salvataggio" message="compilare-tutti-i-campi-obbligatori" />
-
 <liferay-portlet:renderURL varImpl="iteratorURL">
-	<portlet:param name="codice" value="${codice}"/>
-	<portlet:param name="dataInserimentoDa" value="${dataInserimentoDa}"/>
-	<portlet:param name="dataInserimentoA" value="${dataInserimentoA}"/>
-	<portlet:param name="mvcPath" value="/view.jsp"/>
+	<portlet:param name="<%=GestioneFormsPortletKeys.NOME_RICERCA %>" value="${nomeRicerca}"/>
+	<portlet:param name="<%=GestioneFormsPortletKeys.DATA_INSERIMENTO_DA %>" value="${dataInserimentoDa}"/>
+	<portlet:param name="<%=GestioneFormsPortletKeys.DATA_INSERIMENTO_A %>" value="${dataInserimentoA}"/>
+	<portlet:param name="mvcPath" value="<%=GestioneFormsPortletKeys.JSP_VIEW %>"/>
 </liferay-portlet:renderURL>
 
 
@@ -27,38 +24,38 @@
 			
 			
 				
-				<liferay-ui:search-container-column-text property="codice" name="codice" orderable="true" orderableProperty="codice"/>
-				<liferay-ui:search-container-column-text property="descrizione" name="descrizione" orderable="true" orderableProperty="descrizione"/>
+				<liferay-ui:search-container-column-text property="<%=GestioneFormsPortletKeys.CODICE %>" name="<%=GestioneFormsPortletKeys.CODICE %>" orderable="true" orderableProperty="<%=GestioneFormsPortletKeys.CODICE %>"/>
+				<liferay-ui:search-container-column-text property="<%=GestioneFormsPortletKeys.NOME %>" name="<%=GestioneFormsPortletKeys.NOME %>" orderable="true" orderableProperty="<%=GestioneFormsPortletKeys.NOME %>"/>
 				
 				<fmt:formatDate value="${form.createDate}" var="createDate" pattern="dd/MM/yyyy HH:mm:ss"/>
 				
-				<liferay-ui:search-container-column-text value="${createDate}" name="data-creazione" orderable="true" orderableProperty="createDate"/>
+				<liferay-ui:search-container-column-text value="${createDate}" name="<%=GestioneFormsPortletKeys.DATA_CREAZIONE %>" orderable="true" orderableProperty="createDate"/>
 				
 				<c:choose>
 					<c:when test="${form.multiutente eq true}">
-						<liferay-ui:search-container-column-text align="center" name="multiente" value="<i class='icon-ok'></i>"/>
+						<liferay-ui:search-container-column-text align="center" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" value="<i class='icon-ok'></i>"/>
 					</c:when>
 					<c:when test="${form.multiutente eq false}">
-						<liferay-ui:search-container-column-text  align="center" name="multiente" value="<i class='icon-remove'></i>"/>
+						<liferay-ui:search-container-column-text  align="center" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" value="<i class='icon-remove'></i>"/>
 					</c:when>
 				</c:choose>
 				
 				<c:choose>
 					<c:when test="${form.principale eq true}">
-						<liferay-ui:search-container-column-text  align="center" name="principale" value="<i class='icon-ok'></i>"/>
+						<liferay-ui:search-container-column-text  align="center" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>" value="<i class='icon-ok'></i>"/>
 					</c:when>
 					<c:when test="${form.principale eq false}">
-						<liferay-ui:search-container-column-text  align="center" name="principale" value="<i class='icon-remove'></i>"/>
+						<liferay-ui:search-container-column-text  align="center" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>" value="<i class='icon-remove'></i>"/>
 					</c:when>
 				</c:choose>
 				
 				
 				<portlet:renderURL var="dettaglioNuovoURL">
-					<portlet:param name="mvcRenderCommandName" value="/dettaglioNuovo" />
-					<portlet:param name="idForm" value="${form.formId}" />
+					<portlet:param name="mvcRenderCommandName" value="<%=GestioneFormsPortletKeys.DETTAGLIO_NUOVO_RENDER_COMMAND %>" />
+					<portlet:param name="<%=GestioneFormsPortletKeys.ID_FORM %>" value="${form.formId}" />
 				</portlet:renderURL>
 				
-				<liferay-ui:search-container-column-text name="azioni" align="center" value="<i class='icon-edit'></i><i class='fa fa-trash'></i>" href="${dettaglioNuovoURL}"/>
+				<liferay-ui:search-container-column-text name="<%=GestioneFormsPortletKeys.AZIONI %>" align="center" value="<i class='icon-edit'></i>" href="${dettaglioNuovoURL}"/>
 			
 			</liferay-ui:search-container-row>
 		<liferay-ui:search-iterator />

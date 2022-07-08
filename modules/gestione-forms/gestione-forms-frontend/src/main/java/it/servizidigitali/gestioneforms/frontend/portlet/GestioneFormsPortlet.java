@@ -64,10 +64,8 @@ public class GestioneFormsPortlet extends MVCPortlet {
 		int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,GestioneFormsPortletKeys.DEFAULT_DELTA);
 		String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
-		
-		// Recuperare lo stesso i valori del form di ricerca con i name del iteratorURL
-		
-		String codice = ParamUtil.getString(renderRequest, "codice");
+				
+		String nome = ParamUtil.getString(renderRequest, "nomeRicerca");
 		String dataInserimentoDaString = ParamUtil.getString(renderRequest, "dataInserimentoDa");
 		String dataInserimentoAString = ParamUtil.getString(renderRequest, "dataInserimentoA");
 		
@@ -90,10 +88,10 @@ public class GestioneFormsPortlet extends MVCPortlet {
 		
 		
 		
-		listaForm = formLocalService.search(codice, dataInserimentoDa, dataInserimentoA, delta, cur,orderByCol, orderByType);
+		listaForm = formLocalService.search(nome, dataInserimentoDa, dataInserimentoA, delta, cur,orderByCol, orderByType);
 		
 		renderRequest.setAttribute(GestioneFormsPortletKeys.LISTA_FORM, listaForm);	
-		renderRequest.setAttribute("codice", codice);
+		renderRequest.setAttribute("nomeRicerca", nome);
 		renderRequest.setAttribute("dataInserimentoDa", dataInserimentoDaString);
 		renderRequest.setAttribute("dataInserimentoA", dataInserimentoAString);
 		

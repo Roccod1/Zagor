@@ -29,7 +29,7 @@ import it.servizidigitali.gestioneforms.service.FormLocalService;
 @Component(immediate = true, 
 property = { 
 			"javax.portlet.name=" + GestioneFormsPortletKeys.GESTIONEFORMS,
-			"mvc.command.name=/ricerca" 
+			"mvc.command.name=" + GestioneFormsPortletKeys.RICERCA_ACTION_COMMAND
 		}, 
 service = { MVCActionCommand.class }
 )
@@ -43,10 +43,10 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		
 		
-		String codice = ParamUtil.getString(actionRequest, "codice");
+		String nome = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.NOME_RICERCA);
 
-		String dataInserimentoDaString = ParamUtil.getString(actionRequest, "dataInserimentoDa");
-		String dataInserimentoAString = ParamUtil.getString(actionRequest, "dataInserimentoA");
+		String dataInserimentoDaString = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.DATA_INSERIMENTO_DA);
+		String dataInserimentoAString = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.DATA_INSERIMENTO_A);
 		
 		Date dataInserimentoDa = null;
 		Date dataInserimentoA = null;
@@ -64,14 +64,14 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 		String orderByCol = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		String orderByType = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 		
-		List<Form> listaForm = formLocalService.search(codice, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);
+		List<Form> listaForm = formLocalService.search(nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);
 		
-		actionRequest.setAttribute("listaForm", listaForm);
+		actionRequest.setAttribute(GestioneFormsPortletKeys.LISTA_FORM, listaForm);
 		
 		
-		actionRequest.setAttribute("codice", codice);
-		actionRequest.setAttribute("dataInserimentoDa", dataInserimentoDaString);
-		actionRequest.setAttribute("dataInserimentoA", dataInserimentoAString);
+		actionRequest.setAttribute(GestioneFormsPortletKeys.NOME_RICERCA, nome);
+		actionRequest.setAttribute(GestioneFormsPortletKeys.DATA_INSERIMENTO_DA, dataInserimentoDaString);
+		actionRequest.setAttribute(GestioneFormsPortletKeys.DATA_INSERIMENTO_A, dataInserimentoAString);
 		
 	}
 

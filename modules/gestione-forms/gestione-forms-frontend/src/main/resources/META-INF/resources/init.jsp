@@ -7,6 +7,13 @@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %><%@
 taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
+<%@page import="it.servizidigitali.gestioneforms.model.Form"%>
+<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="com.liferay.portal.kernel.util.PortalUtil"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="it.servizidigitali.gestioneforms.frontend.constants.GestioneFormsPortletKeys"%>
+
 <liferay-theme:defineObjects />
 
 <portlet:defineObjects />

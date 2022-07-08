@@ -29,14 +29,12 @@ import it.servizidigitali.gestioneforms.service.FormLocalService;
 @Component(immediate = true, 
 property = { 
 			"javax.portlet.name=" + GestioneFormsPortletKeys.GESTIONEFORMS,
-			"mvc.command.name=/salvaModifica" 
+			"mvc.command.name=" + GestioneFormsPortletKeys.SALVA_AGGIUNGI_ACTION_COMMAND
 		}, 
 service = { MVCActionCommand.class }
 )
 public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 	public static final Log _log = LogFactoryUtil.getLog(SalvaModificaActionCommand.class);
-	
-	
 	
 	@Reference
 	private FormLocalService formLocalService;
@@ -50,20 +48,20 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 		
 		
-		long idForm = ParamUtil.getLong(actionRequest, "idform");
-		String codiceIdentificativo = ParamUtil.getString(actionRequest, "codice-identificativo");
-		String nome = ParamUtil.getString(actionRequest, "descrizione");
-		boolean principale = ParamUtil.getBoolean(actionRequest, "principale");
+		long idForm = ParamUtil.getLong(actionRequest, GestioneFormsPortletKeys.ID_FORM);
+		String codice = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.CODICE);
+		String nome = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.NOME);
+		boolean principale = ParamUtil.getBoolean(actionRequest, GestioneFormsPortletKeys.PRINCIPALE);
 		
 		Form form = null;
 		
 		if(Validator.isNull(nome)) {
-			SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE);
+			SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
 			return;
 		}
 		
-		if(Validator.isNull(codiceIdentificativo)) {
-			SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE);
+		if(Validator.isNull(codice)) {
+			SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
 			return;
 		}
 		
@@ -76,8 +74,8 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 			SessionMessages.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE);
 		}
 		
-		form.setCodice(codiceIdentificativo);
-		form.setDescrizione(nome);
+		form.setCodice(codice);
+		form.setNome(nome);
 		form.setPrincipale(principale);
 		form.setUserId(serviceContext.getThemeDisplay().getUserId());
 		form.setGroupId(serviceContext.getThemeDisplay().getScopeGroupId());

@@ -1,6 +1,6 @@
 <%@ include file="init.jsp" %>
 
-<portlet:actionURL name="/salvaModifica" var="salvaModificaURL" />
+<portlet:actionURL name="<%=GestioneFormsPortletKeys.SALVA_AGGIUNGI_ACTION_COMMAND %>" var="salvaModificaURL" />
 <portlet:renderURL var="homeURL"></portlet:renderURL>
 <div class="page-header">
 				<h2><liferay-ui:message key="form"/></h2>
@@ -16,12 +16,12 @@
 				<div class="form-group">
 					<c:choose>
 						<c:when test="${form.formId > 0}">
-							<aui:input label="codice-identificativo" id="codice-identificativo" name="codice-identificativo" type="text" value="${form.codice}" readonly="true">
+							<aui:input label="codice" name="<%=GestioneFormsPortletKeys.CODICE %>" type="text" value="${form.codice}" readonly="true">
 							<aui:validator name="required"/>
 							</aui:input>	 
 						</c:when>
 						<c:otherwise>
-							<aui:input label="codice-identificativo" id="codice-identificativo" name="codice-identificativo" type="text" value="${form.codice}">
+							<aui:input label="codice" name="<%=GestioneFormsPortletKeys.CODICE %>" type="text" value="${form.codice}">
 							<aui:validator name="required"/>
 							</aui:input>
 						</c:otherwise>
@@ -34,7 +34,7 @@
 
 			<div class="col-6">
 				<div class="form-group ">
-					<aui:input label="descrizione" id="descrizione" name="descrizione" value="${form.descrizione}" type="text">
+					<aui:input label="nome" name="<%=GestioneFormsPortletKeys.NOME %>" value="${form.nome}" type="text">
 					<aui:validator name="required"/>
 					</aui:input>			
 				</div>	
@@ -48,10 +48,10 @@
 				<div class="form-group form-check">	
 					<c:choose>
 						<c:when test="${form.principale eq true }">
-							<aui:input label="principale" type="checkbox" id="principale" name="principale"/>					
+							<aui:input label="principale" type="checkbox" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>"/>					
 						</c:when>
 						<c:otherwise>
-							<aui:input label="principale" type="checkbox" id="principale" name="principale"/>
+							<aui:input label="principale" type="checkbox" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>"/>
 						</c:otherwise>
 					</c:choose>									
 				</div>
@@ -61,10 +61,10 @@
 				<div class="form-group form-check">	
 					<c:choose>
 						<c:when test="${form.multiutente eq true}">
-							<aui:input label="multiente" type="checkbox" id="multiente" name="multiente" checked="true"/>	
+							<aui:input label="multiente" type="checkbox" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" checked="true"/>	
 						</c:when>						
 						<c:otherwise>
-							<aui:input label="multiente" type="checkbox" id="multiente" name="multiente" />	
+							<aui:input label="multiente" type="checkbox" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" />	
 						</c:otherwise>
 					</c:choose>						
 				</div>

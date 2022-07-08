@@ -1,8 +1,8 @@
-<portlet:actionURL name="/ricerca" var="ricercaURL" />
+<portlet:actionURL name="<%=GestioneFormsPortletKeys.RICERCA_ACTION_COMMAND %>" var="ricercaURL" />
 <portlet:renderURL var="homeURL"></portlet:renderURL>
 
 <portlet:renderURL var="dettaglioNuovoURL">
-		<portlet:param name="mvcRenderCommandName" value="/dettaglioNuovo" />
+		<portlet:param name="mvcRenderCommandName" value="<%=GestioneFormsPortletKeys.DETTAGLIO_NUOVO_RENDER_COMMAND %>" />
 		<portlet:param name="idForm" value="0" />
 </portlet:renderURL>
 
@@ -12,21 +12,21 @@
 	
 			<div class="col-6">
 				<div class="form-group">
-					<aui:input label="codice" id="codice" name="codice" type="text"/>	
+					<aui:input label="nome" name="<%=GestioneFormsPortletKeys.NOME_RICERCA %>" type="text"/>	
 				</div>
 			</div>
 			
 
 			<div class="col-3">
 				<div class="form-group ">
-					<aui:input value="${dataInserimentoDa}" label="data-inserimento-da" id="dataInserimentoDa" name="dataInserimentoDa" type="date"/>	
+					<aui:input value="${dataInserimentoDa}" label="data-inserimento-da" name="<%=GestioneFormsPortletKeys.DATA_INSERIMENTO_DA %>" type="date"/>	
 				</div>	
 			</div>
 				
 
 			<div class="col-3">
 				<div class="form-group ">
-					<aui:input label="data-inserimento-a" value="${dataInserimentoA}" id="dataInserimentoA" name="dataInserimentoA" type="date"/>	
+					<aui:input label="data-inserimento-a" value="${dataInserimentoA}" name="<%=GestioneFormsPortletKeys.DATA_INSERIMENTO_A %>" type="date"/>	
 				</div>
 			</div>
 			

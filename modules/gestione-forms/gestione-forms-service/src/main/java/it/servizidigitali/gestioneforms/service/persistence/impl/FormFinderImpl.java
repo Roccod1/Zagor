@@ -28,7 +28,7 @@ public class FormFinderImpl extends FormFinderBaseImpl implements FormFinder{
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Form.class, classLoader);
 		
 		if(Validator.isNotNull(codice)) {
-			dynamicQuery.add(RestrictionsFactoryUtil.like("codice", StringPool.PERCENT + codice + StringPool.PERCENT));
+			dynamicQuery.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + codice + StringPool.PERCENT));
 		}
 		
 		if(Validator.isNotNull(dataInserimentoDa)) {
