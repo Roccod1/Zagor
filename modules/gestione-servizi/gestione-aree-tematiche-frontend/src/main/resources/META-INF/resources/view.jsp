@@ -15,7 +15,6 @@
 <liferay-ui:error key="<%=GestioneAreeTematichePortletKeys.ERRORE_CAMPI_OBBLIGATORI %>" message="compilare-tutti-i-campi-per-procedere"/>
 
 <aui:button-row cssClass="text-right">
-	<aui:button type="submit" value="cerca" />
 	<aui:button type="button" value="nuovo" href="${aggiungiModificaUrl}"/>
 </aui:button-row>
 
