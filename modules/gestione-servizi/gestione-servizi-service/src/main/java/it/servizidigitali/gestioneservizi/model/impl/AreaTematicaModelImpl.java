@@ -79,7 +79,8 @@ public class AreaTematicaModelImpl
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"nome", Types.VARCHAR}, {"descrizione", Types.VARCHAR},
 		{"codice", Types.VARCHAR}, {"sportello", Types.VARCHAR},
-		{"uriVocabolario", Types.VARCHAR}, {"ordine", Types.INTEGER},
+		{"uriVocabolario", Types.VARCHAR},
+		{"denominazioneVocabolario", Types.VARCHAR}, {"ordine", Types.INTEGER},
 		{"visibile", Types.BOOLEAN}, {"attiva", Types.BOOLEAN}
 	};
 
@@ -100,13 +101,14 @@ public class AreaTematicaModelImpl
 		TABLE_COLUMNS_MAP.put("codice", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("sportello", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("uriVocabolario", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("denominazioneVocabolario", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("ordine", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("visibile", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("attiva", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table area_tematica (uuid_ VARCHAR(75) null,areaTematicaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,codice VARCHAR(75) null,sportello VARCHAR(75) null,uriVocabolario VARCHAR(75) null,ordine INTEGER,visibile BOOLEAN,attiva BOOLEAN)";
+		"create table area_tematica (uuid_ VARCHAR(75) null,areaTematicaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,codice VARCHAR(75) null,sportello VARCHAR(75) null,uriVocabolario VARCHAR(75) null,denominazioneVocabolario VARCHAR(75) null,ordine INTEGER,visibile BOOLEAN,attiva BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP = "drop table area_tematica";
 
@@ -350,6 +352,13 @@ public class AreaTematicaModelImpl
 		attributeSetterBiConsumers.put(
 			"uriVocabolario",
 			(BiConsumer<AreaTematica, String>)AreaTematica::setUriVocabolario);
+		attributeGetterFunctions.put(
+			"denominazioneVocabolario",
+			AreaTematica::getDenominazioneVocabolario);
+		attributeSetterBiConsumers.put(
+			"denominazioneVocabolario",
+			(BiConsumer<AreaTematica, String>)
+				AreaTematica::setDenominazioneVocabolario);
 		attributeGetterFunctions.put("ordine", AreaTematica::getOrdine);
 		attributeSetterBiConsumers.put(
 			"ordine",
@@ -646,6 +655,25 @@ public class AreaTematicaModelImpl
 	}
 
 	@Override
+	public String getDenominazioneVocabolario() {
+		if (_denominazioneVocabolario == null) {
+			return "";
+		}
+		else {
+			return _denominazioneVocabolario;
+		}
+	}
+
+	@Override
+	public void setDenominazioneVocabolario(String denominazioneVocabolario) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_denominazioneVocabolario = denominazioneVocabolario;
+	}
+
+	@Override
 	public int getOrdine() {
 		return _ordine;
 	}
@@ -782,6 +810,8 @@ public class AreaTematicaModelImpl
 		areaTematicaImpl.setCodice(getCodice());
 		areaTematicaImpl.setSportello(getSportello());
 		areaTematicaImpl.setUriVocabolario(getUriVocabolario());
+		areaTematicaImpl.setDenominazioneVocabolario(
+			getDenominazioneVocabolario());
 		areaTematicaImpl.setOrdine(getOrdine());
 		areaTematicaImpl.setVisibile(isVisibile());
 		areaTematicaImpl.setAttiva(isAttiva());
@@ -818,6 +848,8 @@ public class AreaTematicaModelImpl
 			this.<String>getColumnOriginalValue("sportello"));
 		areaTematicaImpl.setUriVocabolario(
 			this.<String>getColumnOriginalValue("uriVocabolario"));
+		areaTematicaImpl.setDenominazioneVocabolario(
+			this.<String>getColumnOriginalValue("denominazioneVocabolario"));
 		areaTematicaImpl.setOrdine(
 			this.<Integer>getColumnOriginalValue("ordine"));
 		areaTematicaImpl.setVisibile(
@@ -982,6 +1014,18 @@ public class AreaTematicaModelImpl
 			areaTematicaCacheModel.uriVocabolario = null;
 		}
 
+		areaTematicaCacheModel.denominazioneVocabolario =
+			getDenominazioneVocabolario();
+
+		String denominazioneVocabolario =
+			areaTematicaCacheModel.denominazioneVocabolario;
+
+		if ((denominazioneVocabolario != null) &&
+			(denominazioneVocabolario.length() == 0)) {
+
+			areaTematicaCacheModel.denominazioneVocabolario = null;
+		}
+
 		areaTematicaCacheModel.ordine = getOrdine();
 
 		areaTematicaCacheModel.visibile = isVisibile();
@@ -1092,6 +1136,7 @@ public class AreaTematicaModelImpl
 	private String _codice;
 	private String _sportello;
 	private String _uriVocabolario;
+	private String _denominazioneVocabolario;
 	private int _ordine;
 	private boolean _visibile;
 	private boolean _attiva;
@@ -1138,6 +1183,8 @@ public class AreaTematicaModelImpl
 		_columnOriginalValues.put("codice", _codice);
 		_columnOriginalValues.put("sportello", _sportello);
 		_columnOriginalValues.put("uriVocabolario", _uriVocabolario);
+		_columnOriginalValues.put(
+			"denominazioneVocabolario", _denominazioneVocabolario);
 		_columnOriginalValues.put("ordine", _ordine);
 		_columnOriginalValues.put("visibile", _visibile);
 		_columnOriginalValues.put("attiva", _attiva);
@@ -1190,11 +1237,13 @@ public class AreaTematicaModelImpl
 
 		columnBitmasks.put("uriVocabolario", 4096L);
 
-		columnBitmasks.put("ordine", 8192L);
+		columnBitmasks.put("denominazioneVocabolario", 8192L);
 
-		columnBitmasks.put("visibile", 16384L);
+		columnBitmasks.put("ordine", 16384L);
 
-		columnBitmasks.put("attiva", 32768L);
+		columnBitmasks.put("visibile", 32768L);
+
+		columnBitmasks.put("attiva", 65536L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

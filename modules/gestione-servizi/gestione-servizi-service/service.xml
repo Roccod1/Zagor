@@ -99,6 +99,7 @@
 		<column name="codice" type="String" />
 		<column name="sportello" type="String" />
 		<column name="uriVocabolario" type="String" />
+		<column name="denominazioneVocabolario" type="String" />
 		<column name="ordine" type="int" />
 		<column name="visibile" type="boolean" />
 		<column name="attiva" type="boolean" />

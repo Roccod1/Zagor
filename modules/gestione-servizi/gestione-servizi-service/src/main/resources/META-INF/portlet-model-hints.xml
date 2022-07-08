@@ -15,6 +15,7 @@
 		<field name="codice" type="String" />
 		<field name="sportello" type="String" />
 		<field name="uriVocabolario" type="String" />
+		<field name="denominazioneVocabolario" type="String" />
 		<field name="ordine" type="int" />
 		<field name="visibile" type="boolean" />
 		<field name="attiva" type="boolean" />
