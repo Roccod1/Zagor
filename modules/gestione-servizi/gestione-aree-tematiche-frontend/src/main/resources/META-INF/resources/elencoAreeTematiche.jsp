@@ -12,16 +12,16 @@
 		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.DESCRIZIONE %>" name="descrizione" orderable="true" orderableProperty="<%=GestioneAreeTematichePortletKeys.DESCRIZIONE %>"/>
 		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.ORDINE %>" name="ordine" />
 		
-		<c:set value="${tipologia.visibile eq true ? \"<i class='icon-ok' ></i></a>\" : \"<i class=\'icon-remove\' ></i></a>\"}" var="icona" />
-		<liferay-ui:search-container-column-text name="<%=GestioneAreeTematichePortletKeys.VISIBILE %>" align="center" value="${icona}" orderable="true" orderableProperty="attivo"/>
+		<c:set value="${areaTematica.visibile eq true ? \"<i class='icon-ok' ></i></a>\" : \"<i class=\'icon-remove\' ></i></a>\"}" var="icona" />
+		<liferay-ui:search-container-column-text name="<%=GestioneAreeTematichePortletKeys.VISIBILE %>" align="center" value="${icona}" orderable="true" orderableProperty="visibile"/>
 		
 		<portlet:renderURL var="aggiungiModificaUrl">
-			<portlet:param name="mvcRenderCommandName" value="/aggiungiModifica" />
+			<portlet:param name="mvcRenderCommandName" value="<%=GestioneAreeTematichePortletKeys.AGGIUNGI_MODIFICA_RENDER_COMMAND_PATH %>" />
 			<portlet:param name="<%=GestioneAreeTematichePortletKeys.AREA_TEMATICA_ID %>" value="${areaTematica.areaTematicaId }"/>
 			<portlet:param name="<%=GestioneAreeTematichePortletKeys.INDIRIZZO_PRECEDENTE %>" value="${homeURL}"/>
 		</portlet:renderURL>
 
-		<liferay-ui:search-container-column-text name="azioni" align="center" value="<a href='${aggiungiModificaUrl}'><i class='icon-edit' ></i></a>"/>
+		<liferay-ui:search-container-column-text name="<%=GestioneAreeTematichePortletKeys.AZIONI %>" align="center" value="<a href='${aggiungiModificaUrl}'><i class='icon-edit' ></i></a>"/>
 	</liferay-ui:search-container-row>
 	<liferay-ui:search-iterator />
 </liferay-ui:search-container>

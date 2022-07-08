@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.Portlet;
@@ -61,7 +62,6 @@ public class GestioneServiziPortlet extends MVCPortlet {
 
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
-		List<Servizio> listaServizi = null;	
 		int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, GestioneServiziPortletKeys.DEFAULT_CUR);
 		int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, GestioneServiziPortletKeys.DEFAULT_DELTA);
 		String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
@@ -71,6 +71,7 @@ public class GestioneServiziPortlet extends MVCPortlet {
 		String codice = ParamUtil.getString(renderRequest, GestioneServiziPortletKeys.CODICE_RICERCA);
 		Boolean soloServiziAttivi = ParamUtil.getBoolean(renderRequest, GestioneServiziPortletKeys.SOLO_SERVIZI_ATTIVI_RICERCA);
 		
+		List<Servizio> listaServizi = new ArrayList<Servizio>();	
 		try {
 			listaServizi = servizioLocalService.searchServizio(
 					nome, 

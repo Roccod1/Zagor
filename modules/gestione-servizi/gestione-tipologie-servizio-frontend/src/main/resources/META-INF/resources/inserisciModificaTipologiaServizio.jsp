@@ -42,7 +42,6 @@
 				
 		<aui:button-row cssClass="text-right">
 			<aui:button type="submit" value="salva" />
-			<aui:button type="reset" value="reset" />
 			<aui:button type="cancel" value="annulla" href="${homeURL}"/>
 		</aui:button-row>
 	</aui:form>

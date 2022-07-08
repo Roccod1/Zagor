@@ -11,6 +11,7 @@ public class GestioneAreeTematichePortletKeys {
 //	attributi utility
 	public static final String LISTA_AREE_TEMATICHE = "listaAreeTematiche";
 	public static final String INDIRIZZO_PRECEDENTE = "indirizzoPrecedente";
+	public static final String AZIONI = "azioni";
 	
 //	messaggi sessione
 	public static final String ERRORE_CAMPI_OBBLIGATORI = "validazione-campi-obbligatori-fallita";
@@ -37,5 +38,9 @@ public class GestioneAreeTematichePortletKeys {
 //	path jsp
 	public static final String JSP_INSERIMENTO_MODIFICA_AREA_TEMATICA = "/inserisciModificaAreaTematica.jsp";
 	public static final String JSP_HOME = "/view.jsp";
+	
+//	path command
+	public static final String AGGIUNGI_MODIFICA_RENDER_COMMAND_PATH = "/inserisciModifica";
+	public static final String SALVA_ACTION_COMMAND_PATH = "/salva";
 
 }
