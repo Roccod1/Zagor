@@ -33,8 +33,8 @@
 				</div>
 			</div>
 			<div class="col">
-				<div class="form-group form-check">
-					<aui:input type="text" name="<%=GestioneTipologieServizioPortletKeys.CHATBOT_INLINE_INTENT %>" label="descrizione" value="${tipologia.descrizione}" />
+				<div class="form-group">
+					<aui:input type="text" name="<%=GestioneTipologieServizioPortletKeys.CHATBOT_INLINE_INTENT %>" label="chatbot-inline-intent" value="${tipologia.chatbotInlineIntent}" />
 				</div>
 			</div>
 		</div>

@@ -11,10 +11,7 @@
 		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.NOME %>" name="nome" orderable="true" orderableProperty="<%=GestioneAreeTematichePortletKeys.NOME %>"/>
 		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.DESCRIZIONE %>" name="descrizione" orderable="true" orderableProperty="<%=GestioneAreeTematichePortletKeys.DESCRIZIONE %>"/>
 		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.CODICE %>" name="codice" orderable="true" orderableProperty="<%=GestioneAreeTematichePortletKeys.CODICE %>"/>
-		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.SPORTELLO %>" name="sportello" orderable="true" orderableProperty="<%=GestioneAreeTematichePortletKeys.SPORTELLO %>"/>
-		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.URI_VOCABOLARIO %>" name="uri-vocabolario"/>
-		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.DENOMINAZIONE_VOCABOLARIO %>" name="denominazione-vocabolario" orderable="true" orderableProperty="<%=GestioneAreeTematichePortletKeys.DENOMINAZIONE_VOCABOLARIO %>"/>
-		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.ORDINE %>" name="ordine" />
+		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.ORDINE %>" name="ordine" orderable="true" orderableProperty="<%=GestioneAreeTematichePortletKeys.ORDINE %>"/>
 		
 		<c:set value="${areaTematica.visibile eq true ? \"<i class='icon-ok' ></i></a>\" : \"<i class='icon-remove' ></i></a>\"}" var="iconaVisibile" />
 		<liferay-ui:search-container-column-text name="<%=GestioneAreeTematichePortletKeys.VISIBILE %>" align="center" value="${iconaVisibile}" orderable="true" orderableProperty="<%=GestioneAreeTematichePortletKeys.VISIBILE %>"/>
