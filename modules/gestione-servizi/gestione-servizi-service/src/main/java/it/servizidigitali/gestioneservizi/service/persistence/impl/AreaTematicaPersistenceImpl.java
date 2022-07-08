@@ -48,7 +48,7 @@ import it.servizidigitali.gestioneservizi.model.impl.AreaTematicaImpl;
 import it.servizidigitali.gestioneservizi.model.impl.AreaTematicaModelImpl;
 import it.servizidigitali.gestioneservizi.service.persistence.AreaTematicaPersistence;
 import it.servizidigitali.gestioneservizi.service.persistence.AreaTematicaUtil;
-import it.servizidigitali.gestioneservizi.service.persistence.impl.constants.ServiziDigitaliGestioneServiziPersistenceConstants;
+import it.servizidigitali.gestioneservizi.service.persistence.impl.constants.PersistenceConstants;
 
 import java.io.Serializable;
 
@@ -2881,15 +2881,14 @@ public class AreaTematicaPersistenceImpl
 
 	@Override
 	@Reference(
-		target = ServiziDigitaliGestioneServiziPersistenceConstants.SERVICE_CONFIGURATION_FILTER,
-		unbind = "-"
+		target = PersistenceConstants.SERVICE_CONFIGURATION_FILTER, unbind = "-"
 	)
 	public void setConfiguration(Configuration configuration) {
 	}
 
 	@Override
 	@Reference(
-		target = ServiziDigitaliGestioneServiziPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
+		target = PersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
 		unbind = "-"
 	)
 	public void setDataSource(DataSource dataSource) {
@@ -2898,7 +2897,7 @@ public class AreaTematicaPersistenceImpl
 
 	@Override
 	@Reference(
-		target = ServiziDigitaliGestioneServiziPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
+		target = PersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
 		unbind = "-"
 	)
 	public void setSessionFactory(SessionFactory sessionFactory) {

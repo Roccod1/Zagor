@@ -55,6 +55,7 @@ public class TipologiaWrapper
 		attributes.put("descrizione", getDescrizione());
 		attributes.put("visibile", isVisibile());
 		attributes.put("invioEmailCittadino", isInvioEmailCittadino());
+		attributes.put("chatbotInlineIntent", getChatbotInlineIntent());
 
 		return attributes;
 	}
@@ -133,11 +134,28 @@ public class TipologiaWrapper
 		if (invioEmailCittadino != null) {
 			setInvioEmailCittadino(invioEmailCittadino);
 		}
+
+		String chatbotInlineIntent = (String)attributes.get(
+			"chatbotInlineIntent");
+
+		if (chatbotInlineIntent != null) {
+			setChatbotInlineIntent(chatbotInlineIntent);
+		}
 	}
 
 	@Override
 	public Tipologia cloneWithOriginalValues() {
 		return wrap(model.cloneWithOriginalValues());
+	}
+
+	/**
+	 * Returns the chatbot inline intent of this tipologia.
+	 *
+	 * @return the chatbot inline intent of this tipologia
+	 */
+	@Override
+	public String getChatbotInlineIntent() {
+		return model.getChatbotInlineIntent();
 	}
 
 	/**
@@ -303,6 +321,16 @@ public class TipologiaWrapper
 	@Override
 	public void persist() {
 		model.persist();
+	}
+
+	/**
+	 * Sets the chatbot inline intent of this tipologia.
+	 *
+	 * @param chatbotInlineIntent the chatbot inline intent of this tipologia
+	 */
+	@Override
+	public void setChatbotInlineIntent(String chatbotInlineIntent) {
+		model.setChatbotInlineIntent(chatbotInlineIntent);
 	}
 
 	/**

@@ -327,6 +327,15 @@ public class AreaTematicaLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
+	public static List<AreaTematica> getListaAreeTematicheOrdinata(
+			int cur, int delta, String nomeOrdinamento,
+			String direzioneOrdinamento)
+		throws Exception {
+
+		return getService().getListaAreeTematicheOrdinata(
+			cur, delta, nomeOrdinamento, direzioneOrdinamento);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -343,6 +352,12 @@ public class AreaTematicaLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static AreaTematica salvaAreaTematica(AreaTematica areaTematica)
+		throws Exception {
+
+		return getService().salvaAreaTematica(areaTematica);
 	}
 
 	/**

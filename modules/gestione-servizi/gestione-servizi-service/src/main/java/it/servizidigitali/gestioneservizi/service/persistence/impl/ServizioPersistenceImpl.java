@@ -53,7 +53,7 @@ import it.servizidigitali.gestioneservizi.model.impl.ServizioImpl;
 import it.servizidigitali.gestioneservizi.model.impl.ServizioModelImpl;
 import it.servizidigitali.gestioneservizi.service.persistence.ServizioPersistence;
 import it.servizidigitali.gestioneservizi.service.persistence.ServizioUtil;
-import it.servizidigitali.gestioneservizi.service.persistence.impl.constants.ServiziDigitaliGestioneServiziPersistenceConstants;
+import it.servizidigitali.gestioneservizi.service.persistence.impl.constants.PersistenceConstants;
 
 import java.io.Serializable;
 
@@ -3058,8 +3058,7 @@ public class ServizioPersistenceImpl
 			PropsUtil.get(PropsKeys.VALUE_OBJECT_FINDER_CACHE_LIST_THRESHOLD));
 
 		servizioToTipologiaTableMapper = TableMapperFactory.getTableMapper(
-			"ServiziDigitaliGestioneServizi_servizio_tipologia#servizioId",
-			"ServiziDigitaliGestioneServizi_servizio_tipologia", "companyId",
+			"servizio_tipologia#servizioId", "servizio_tipologia", "companyId",
 			"servizioId", "tipologiaId", this, Tipologia.class);
 
 		_finderPathWithPaginationFindAll = new FinderPath(
@@ -3158,8 +3157,7 @@ public class ServizioPersistenceImpl
 
 		entityCache.removeCache(ServizioImpl.class.getName());
 
-		TableMapperFactory.removeTableMapper(
-			"ServiziDigitaliGestioneServizi_servizio_tipologia#servizioId");
+		TableMapperFactory.removeTableMapper("servizio_tipologia#servizioId");
 	}
 
 	private void _setServizioUtilPersistence(
@@ -3179,15 +3177,14 @@ public class ServizioPersistenceImpl
 
 	@Override
 	@Reference(
-		target = ServiziDigitaliGestioneServiziPersistenceConstants.SERVICE_CONFIGURATION_FILTER,
-		unbind = "-"
+		target = PersistenceConstants.SERVICE_CONFIGURATION_FILTER, unbind = "-"
 	)
 	public void setConfiguration(Configuration configuration) {
 	}
 
 	@Override
 	@Reference(
-		target = ServiziDigitaliGestioneServiziPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
+		target = PersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
 		unbind = "-"
 	)
 	public void setDataSource(DataSource dataSource) {
@@ -3196,7 +3193,7 @@ public class ServizioPersistenceImpl
 
 	@Override
 	@Reference(
-		target = ServiziDigitaliGestioneServiziPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
+		target = PersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
 		unbind = "-"
 	)
 	public void setSessionFactory(SessionFactory sessionFactory) {

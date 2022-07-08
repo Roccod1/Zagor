@@ -82,6 +82,12 @@ public class ServizioLocalServiceUtil {
 		getService().addTipologiaServizios(tipologiaId, servizioIds);
 	}
 
+	public static Servizio aggiornaServizio(Servizio servizioDaAggiornare)
+		throws Exception {
+
+		return getService().aggiornaServizio(servizioDaAggiornare);
+	}
+
 	public static void clearTipologiaServizios(long tipologiaId) {
 		getService().clearTipologiaServizios(tipologiaId);
 	}
@@ -323,6 +329,10 @@ public class ServizioLocalServiceUtil {
 		return getService().getServizio(servizioId);
 	}
 
+	public static Servizio getServizioById(Long servizioId) throws Exception {
+		return getService().getServizioById(servizioId);
+	}
+
 	/**
 	 * Returns the servizio matching the UUID and group.
 	 *
@@ -433,6 +443,26 @@ public class ServizioLocalServiceUtil {
 
 	public static boolean hasTipologiaServizios(long tipologiaId) {
 		return getService().hasTipologiaServizios(tipologiaId);
+	}
+
+	/**
+	 * @param nome
+	 * @param codice
+	 * @param soloServiziAttivi
+	 * @param cur: pagina attuale
+	 * @param delta: numero elementi per pagina
+	 * @param nomeOrdinamento
+	 * @param direzioneOrdinamento
+	 * @return
+	 */
+	public static List<Servizio> searchServizio(
+			String nome, String codice, Boolean soloServiziAttivi, int cur,
+			int delta, String nomeOrdinamento, String direzioneOrdinamento)
+		throws Exception {
+
+		return getService().searchServizio(
+			nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento,
+			direzioneOrdinamento);
 	}
 
 	public static void setTipologiaServizios(

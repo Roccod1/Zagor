@@ -449,6 +449,13 @@ public class ServizioWrapper
 		return model.getGroupId();
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.gestioneservizi.model.Tipologia>
+		getListaTipologie() {
+
+		return model.getListaTipologie();
+	}
+
 	/**
 	 * Returns the modified date of this servizio.
 	 *
@@ -882,6 +889,14 @@ public class ServizioWrapper
 	@Override
 	public void setGroupId(long groupId) {
 		model.setGroupId(groupId);
+	}
+
+	@Override
+	public void setListaTipologie(
+		java.util.List<it.servizidigitali.gestioneservizi.model.Tipologia>
+			listaTipologie) {
+
+		model.setListaTipologie(listaTipologie);
 	}
 
 	/**

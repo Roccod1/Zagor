@@ -81,6 +81,15 @@ public class ServizioLocalServiceWrapper
 	}
 
 	@Override
+	public it.servizidigitali.gestioneservizi.model.Servizio aggiornaServizio(
+			it.servizidigitali.gestioneservizi.model.Servizio
+				servizioDaAggiornare)
+		throws Exception {
+
+		return _servizioLocalService.aggiornaServizio(servizioDaAggiornare);
+	}
+
+	@Override
 	public void clearTipologiaServizios(long tipologiaId) {
 		_servizioLocalService.clearTipologiaServizios(tipologiaId);
 	}
@@ -368,6 +377,14 @@ public class ServizioLocalServiceWrapper
 		return _servizioLocalService.getServizio(servizioId);
 	}
 
+	@Override
+	public it.servizidigitali.gestioneservizi.model.Servizio getServizioById(
+			Long servizioId)
+		throws Exception {
+
+		return _servizioLocalService.getServizioById(servizioId);
+	}
+
 	/**
 	 * Returns the servizio matching the UUID and group.
 	 *
@@ -501,6 +518,28 @@ public class ServizioLocalServiceWrapper
 	@Override
 	public boolean hasTipologiaServizios(long tipologiaId) {
 		return _servizioLocalService.hasTipologiaServizios(tipologiaId);
+	}
+
+	/**
+	 * @param nome
+	 * @param codice
+	 * @param soloServiziAttivi
+	 * @param cur: pagina attuale
+	 * @param delta: numero elementi per pagina
+	 * @param nomeOrdinamento
+	 * @param direzioneOrdinamento
+	 * @return
+	 */
+	@Override
+	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
+			searchServizio(
+				String nome, String codice, Boolean soloServiziAttivi, int cur,
+				int delta, String nomeOrdinamento, String direzioneOrdinamento)
+		throws Exception {
+
+		return _servizioLocalService.searchServizio(
+			nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento,
+			direzioneOrdinamento);
 	}
 
 	@Override

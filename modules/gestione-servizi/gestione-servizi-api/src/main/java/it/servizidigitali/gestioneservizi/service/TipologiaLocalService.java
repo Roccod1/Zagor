@@ -241,6 +241,12 @@ public interface TipologiaLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Tipologia> getListaTipologiaOrdinata(
+			int cur, int delta, String nomeOrdinamento,
+			String direzioneOrdinamento)
+		throws Exception;
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -355,6 +361,8 @@ public interface TipologiaLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public boolean hasServizioTipologias(long servizioId);
+
+	public Tipologia salvaTipologia(Tipologia tipologia) throws Exception;
 
 	public void setServizioTipologias(long servizioId, long[] tipologiaIds);
 
