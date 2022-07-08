@@ -31,21 +31,45 @@
 		<column name="codiceFiscale" type="String" />
 		<column name="partitaIva" type="String" />
 		<column name="email" type="String" />
-		<column name="delegaId" type="Long" />
 		<column name="codiceFiscaleDelegato" type="String" />
 		<column name="stato" type="String" />
 		<column name="numeroProtocollo" type="String" />
 		<column name="dataProtocollo" type="Date" />
 		<column name="oggetto" type="String" />
 		<column name="note" type="String" />
-		<column name="invioGuest" type="boolen" />
+		<column name="invioGuest" type="boolean" />
 		<column name="tokenVisualizzazione" type="String" />
 		<column name="chiaveAssociazioneBackoffice" type="String" />
+		<column name="delegaId" type="Long" />
 		<column name="proceduraId" type="long" />
 		
 		<!-- Finder methods -->
 		<finder name="CodiceFiscale" return-type="Collection">
 			<finder-column name="codiceFiscale" />
+		</finder>
+
+		<finder name="PartitaIva" return-type="Collection">
+			<finder-column name="partitaIva" />
+		</finder>
+
+		<finder name="CodiceFiscaleDelegato" return-type="Collection">
+			<finder-column name="codiceFiscaleDelegato" />
+		</finder>
+
+		<finder name="Stato" return-type="Collection">
+			<finder-column name="stato" />
+		</finder>
+
+		<finder name="InvioGuest" return-type="Collection">
+			<finder-column name="invioGuest" />
+		</finder>
+
+		<finder name="TokenVisualizzazione" return-type="Richiesta">
+			<finder-column name="tokenVisualizzazione" />
+		</finder>
+		
+		<finder name="ProceduraId" return-type="Collection">
+			<finder-column name="proceduraId" />
 		</finder>
 	</entity>
 </service-builder>
