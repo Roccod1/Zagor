@@ -1,4 +1,4 @@
-package it.servizidigitali.common.modellistener;
+package it.servizidigitali.portal.modellistener;
 
 import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.log.Log;
@@ -22,7 +22,7 @@ import javax.naming.NamingException;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import it.servizidigitali.common.util.LDAPManager;
+import it.servizidigitali.portal.util.LDAPManager;
 
 /**
  * Model Listener per gestire gli eventi relativi al model {@link User}.

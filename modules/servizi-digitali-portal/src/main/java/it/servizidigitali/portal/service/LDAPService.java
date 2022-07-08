@@ -1,4 +1,4 @@
-package it.servizidigitali.common.service;
+package it.servizidigitali.portal.service;
 
 /**
  * 

@@ -4,7 +4,7 @@
  *
  * Contributors: Links Management & Technology S.p.A. - initial API and implementation
  *******************************************************************************/
-package it.servizidigitali.common.util;
+package it.servizidigitali.portal.util;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
