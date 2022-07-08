@@ -33,13 +33,13 @@ import it.servizidigitali.gestioneservizi.service.AreaTematicaLocalService;
 	immediate = true,
 	property = {
 		"javax.portlet.name=" + GestioneAreeTematichePortletKeys.GESTIONEAREETEMATICHE,
-		"mvc.command.name=/salva"
+		"mvc.command.name=" + GestioneAreeTematichePortletKeys.SALVA_ACTION_COMMAND_NAME
 	},
 	service = MVCActionCommand.class
 )
-public class AggiungiModificaTipologiaServizioActionCommand extends BaseMVCActionCommand {
+public class AggiungiModificaAreaTematicaActionCommand extends BaseMVCActionCommand {
 
-	private static final Log _log = LogFactoryUtil.getLog(AggiungiModificaTipologiaServizioActionCommand.class);
+	private static final Log _log = LogFactoryUtil.getLog(AggiungiModificaAreaTematicaActionCommand.class);
 	
 	@Reference
 	private AreaTematicaLocalService areaTematicaLocalService;
@@ -53,15 +53,20 @@ public class AggiungiModificaTipologiaServizioActionCommand extends BaseMVCActio
 		Boolean visibile = ParamUtil.getBoolean(actionRequest, GestioneAreeTematichePortletKeys.VISIBILE);
 		String indirizzoPrecedente = ParamUtil.getString(actionRequest, GestioneAreeTematichePortletKeys.INDIRIZZO_PRECEDENTE);
 		Integer ordine = ParamUtil.getInteger(actionRequest, GestioneAreeTematichePortletKeys.ORDINE);
-		
+		String codice = ParamUtil.getString(actionRequest, GestioneAreeTematichePortletKeys.CODICE);
+		String sportello = ParamUtil.getString(actionRequest, GestioneAreeTematichePortletKeys.SPORTELLO);
+		String uriVocabolario = ParamUtil.getString(actionRequest, GestioneAreeTematichePortletKeys.URI_VOCABOLARIO);
+		String denominazioneVocabolario = ParamUtil.getString(actionRequest, GestioneAreeTematichePortletKeys.DENOMINAZIONE_VOCABOLARIO);
+		Boolean attiva = ParamUtil.getBoolean(actionRequest, GestioneAreeTematichePortletKeys.ATTIVA);
+
 		if(Validator.isNull(nome)) {
 			SessionErrors.add(actionRequest, GestioneAreeTematichePortletKeys.ERRORE_CAMPI_OBBLIGATORI);
 			listaErrori.add("nome e' obbligatorio");
 		}
 		
-		if(Validator.isNull(ordine) || ordine == 0) {
+		if(Validator.isNull(ordine) || ordine <= 0) {
 			SessionErrors.add(actionRequest, GestioneAreeTematichePortletKeys.ERRORE_CAMPI_OBBLIGATORI);
-			listaErrori.add("ordine e' obbligatorio");
+			listaErrori.add("ordine e' obbligatorio e maggiore di 0");
 		}
 		
 			
@@ -92,7 +97,12 @@ public class AggiungiModificaTipologiaServizioActionCommand extends BaseMVCActio
 		areaTematica.setNome(nome);		
 		areaTematica.setDescrizione(descrizione);						
 		areaTematica.setVisibile(visibile);
+		areaTematica.setAttiva(attiva);
 		areaTematica.setOrdine(ordine);
+		areaTematica.setCodice(codice);
+		areaTematica.setSportello(sportello);
+		areaTematica.setUriVocabolario(uriVocabolario);
+		areaTematica.setDenominazioneVocabolario(denominazioneVocabolario);
 		
 		try {
 			areaTematicaLocalService.salvaAreaTematica(areaTematica);

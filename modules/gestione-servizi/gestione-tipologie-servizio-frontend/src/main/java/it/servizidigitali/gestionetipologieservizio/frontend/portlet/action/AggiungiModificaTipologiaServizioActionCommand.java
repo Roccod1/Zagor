@@ -33,7 +33,7 @@ import it.servizidigitali.gestionetipologieservizio.frontend.constants.GestioneT
 	immediate = true,
 	property = {
 		"javax.portlet.name=" + GestioneTipologieServizioPortletKeys.GESTIONETIPOLOGIESERVIZIO,
-		"mvc.command.name=/salva"
+		"mvc.command.name=" + GestioneTipologieServizioPortletKeys.SALVA_ACTION_COMMAND_NAME
 	},
 	service = MVCActionCommand.class
 )
@@ -52,6 +52,7 @@ public class AggiungiModificaTipologiaServizioActionCommand extends BaseMVCActio
 		String descrizione = ParamUtil.getString(actionRequest, GestioneTipologieServizioPortletKeys.DESCRIZIONE);
 		Boolean visibile = ParamUtil.getBoolean(actionRequest, GestioneTipologieServizioPortletKeys.VISIBILE);
 		Boolean invioEmailCittadino = ParamUtil.getBoolean(actionRequest, GestioneTipologieServizioPortletKeys.INVIO_EMAIL_CITTADINO);
+		String chatbotInlineIntent = ParamUtil.getString(actionRequest, GestioneTipologieServizioPortletKeys.CHATBOT_INLINE_INTENT);
 		String indirizzoPrecedente = ParamUtil.getString(actionRequest, GestioneTipologieServizioPortletKeys.INDIRIZZO_PRECEDENTE);
 		
 		if(Validator.isNull(nome)) {
@@ -88,6 +89,7 @@ public class AggiungiModificaTipologiaServizioActionCommand extends BaseMVCActio
 		tipologia.setDescrizione(descrizione);						
 		tipologia.setVisibile(visibile);
 		tipologia.setInvioEmailCittadino(invioEmailCittadino);
+		tipologia.setChatbotInlineIntent(chatbotInlineIntent);
 		
 		try {
 			tipologiaLocalService.salvaTipologia(tipologia);

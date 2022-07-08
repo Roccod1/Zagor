@@ -3,7 +3,7 @@
 <portlet:renderURL var="homeURL">
 </portlet:renderURL>
 
-<portlet:actionURL name="<%=GestioneAreeTematichePortletKeys.SALVA_ACTION_COMMAND_PATH %>" var="salvaURL">
+<portlet:actionURL name="<%=GestioneAreeTematichePortletKeys.SALVA_ACTION_COMMAND_NAME %>" var="salvaURL">
 	<portlet:param name="<%=GestioneAreeTematichePortletKeys.INDIRIZZO_PRECEDENTE %>" value="${homeURL}"/>
 </portlet:actionURL>
 
@@ -33,15 +33,46 @@
 				</div>
 			</div>
 			<div class="col">
-				<div class="form-group form-check">
+				<div class="form-group">
 					<aui:input type="number" min="1" name="<%=GestioneAreeTematichePortletKeys.ORDINE %>" label="ordine" value="${areaTematica.ordine}">
 						<aui:validator name="required"/>
 					</aui:input>
 				</div>
 			</div>
 		</div>
+	
+		<div class="row">
+			<div class="col">
+				<div class="form-group">
+					<aui:input type="text" name="<%=GestioneAreeTematichePortletKeys.CODICE %>" label="codice" value="${areaTematica.codice}" />
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group">
+					<aui:input type="text" name="<%=GestioneAreeTematichePortletKeys.SPORTELLO %>" label="sportello" value="${areaTematica.sportello}"/>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col">
+				<div class="form-group">
+					<aui:input type="text" name="<%=GestioneAreeTematichePortletKeys.URI_VOCABOLARIO %>" label="uri-vocabolario" value="${areaTematica.uriVocabolario}" />
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group">
+					<aui:input type="text" name="<%=GestioneAreeTematichePortletKeys.DENOMINAZIONE_VOCABOLARIO %>" label="denominazione-vocabolario" value="${areaTematica.denominazioneVocabolario}"/>
+				</div>
+			</div>
+		</div>
 		
 		<div class="row">
+			<div class="col">
+				<div class="form-group form-check">
+					<aui:input type="checkbox" name="<%=GestioneAreeTematichePortletKeys.ATTIVA %>" label="attiva" value="${areaTematica.attiva}"/>
+				</div>
+			</div>
 			<div class="col">
 				<div class="form-group form-check">
 					<aui:input type="checkbox" name="<%=GestioneAreeTematichePortletKeys.VISIBILE %>" label="visibile" value="${areaTematica.visibile}"/>

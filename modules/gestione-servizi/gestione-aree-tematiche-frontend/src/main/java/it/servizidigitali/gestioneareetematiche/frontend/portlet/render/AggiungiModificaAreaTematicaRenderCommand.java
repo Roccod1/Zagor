@@ -26,7 +26,7 @@ import it.servizidigitali.gestioneservizi.service.AreaTematicaLocalService;
 	immediate = true,
 	property = {
 		"javax.portlet.name=" + GestioneAreeTematichePortletKeys.GESTIONEAREETEMATICHE,
-		"mvc.command.name=" + GestioneAreeTematichePortletKeys.AGGIUNGI_MODIFICA_RENDER_COMMAND_PATH
+		"mvc.command.name=" + GestioneAreeTematichePortletKeys.AGGIUNGI_MODIFICA_RENDER_COMMAND_NAME
 	},
 	service = MVCRenderCommand.class
 )

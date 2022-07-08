@@ -26,7 +26,7 @@ import it.servizidigitali.gestionetipologieservizio.frontend.constants.GestioneT
 	immediate = true,
 	property = {
 		"javax.portlet.name=" + GestioneTipologieServizioPortletKeys.GESTIONETIPOLOGIESERVIZIO,
-		"mvc.command.name=/aggiungiModifica"
+		"mvc.command.name=" + GestioneTipologieServizioPortletKeys.AGGIUNGI_MODIFICA_RENDER_COMMAND_NAME
 	},
 	service = MVCRenderCommand.class
 )

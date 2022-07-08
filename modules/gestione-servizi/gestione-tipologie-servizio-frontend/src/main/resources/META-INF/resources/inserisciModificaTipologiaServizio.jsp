@@ -3,8 +3,8 @@
 <portlet:renderURL var="homeURL">
 </portlet:renderURL>
 
-<portlet:actionURL name="/salva" var="salvaURL">
-	<portlet:param name="indirizzoPrecedente" value="${homeURL}"/>
+<portlet:actionURL name="<%=GestioneTipologieServizioPortletKeys.SALVA_ACTION_COMMAND_NAME %>" var="salvaURL">
+	<portlet:param name="<%=GestioneTipologieServizioPortletKeys.INDIRIZZO_PRECEDENTE %>" value="${homeURL}"/>
 </portlet:actionURL>
 
 
@@ -14,12 +14,12 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-					<aui:input type="text" disabled="false" readOnly="true" name="tipologiaId" value="${tipologia.tipologiaId}" label="identificativo"/>
+					<aui:input type="text" readOnly="true" name="<%=GestioneTipologieServizioPortletKeys.TIPOLOGIA_ID %>" value="${tipologia.tipologiaId}" label="identificativo"/>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group">
-					<aui:input type="text" name="nome" label="nome" value="${tipologia.nome}">
+					<aui:input type="text" name="<%=GestioneTipologieServizioPortletKeys.NOME %>" label="nome" value="${tipologia.nome}">
 						<aui:validator name="required"/>
 					</aui:input>
 				</div>
@@ -29,13 +29,25 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-					<aui:input type="text" name="descrizione" label="descrizione" value="${tipologia.descrizione}" />
+					<aui:input type="text" name="<%=GestioneTipologieServizioPortletKeys.DESCRIZIONE %>" label="descrizione" value="${tipologia.descrizione}" />
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group form-check">
-					<aui:input type="checkbox" name="visibile" label="visibile" value="${tipologia.visibile}"/>
-					<aui:input type="checkbox" name="invioEmailCittadino" label="invio-email-al-cittadino" value="${tipologia.invioEmailCittadino}"/>
+					<aui:input type="text" name="<%=GestioneTipologieServizioPortletKeys.CHATBOT_INLINE_INTENT %>" label="descrizione" value="${tipologia.descrizione}" />
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col">
+				<div class="form-group form-check">
+					<aui:input type="checkbox" name="<%=GestioneTipologieServizioPortletKeys.VISIBILE %>" label="visibile" value="${tipologia.visibile}"/>
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group form-check">
+					<aui:input type="checkbox" name="<%=GestioneTipologieServizioPortletKeys.INVIO_EMAIL_CITTADINO %>" label="invio-email-al-cittadino" value="${tipologia.invioEmailCittadino}"/>
 				</div>
 			</div>
 		</div>

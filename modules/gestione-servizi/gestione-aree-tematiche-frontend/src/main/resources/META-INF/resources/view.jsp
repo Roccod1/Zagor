@@ -3,7 +3,7 @@
 <% List<AreaTematica> listaAreeTematiche = (List<AreaTematica>) renderRequest.getAttribute(GestioneAreeTematichePortletKeys.LISTA_AREE_TEMATICHE); %>
 
 <portlet:renderURL var="aggiungiModificaUrl">
-	<portlet:param name="mvcRenderCommandName" value="<%=GestioneAreeTematichePortletKeys.AGGIUNGI_MODIFICA_RENDER_COMMAND_PATH %>" />
+	<portlet:param name="mvcRenderCommandName" value="<%=GestioneAreeTematichePortletKeys.AGGIUNGI_MODIFICA_RENDER_COMMAND_NAME %>" />
 	<portlet:param name="<%=GestioneAreeTematichePortletKeys.INDIRIZZO_PRECEDENTE %>" value="${homeURL}"/>
 </portlet:renderURL>
 

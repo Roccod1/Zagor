@@ -31,16 +31,17 @@ public class GestioneAreeTematichePortletKeys {
 	public static final String CODICE = "codice";
 	public static final String SPORTELLO = "sportello";
 	public static final String URI_VOCABOLARIO = "uriVocabolario";
+	public static final String DENOMINAZIONE_VOCABOLARIO = "denominazioneVocabolario";
 	public static final String VISIBILE = "visibile";
 	public static final String ORDINE = "ordine";
-	public static final String ATTIVA = "ordine";
+	public static final String ATTIVA = "attiva";
 	
 //	path jsp
 	public static final String JSP_INSERIMENTO_MODIFICA_AREA_TEMATICA = "/inserisciModificaAreaTematica.jsp";
 	public static final String JSP_HOME = "/view.jsp";
 	
 //	path command
-	public static final String AGGIUNGI_MODIFICA_RENDER_COMMAND_PATH = "/inserisciModifica";
-	public static final String SALVA_ACTION_COMMAND_PATH = "/salva";
+	public static final String AGGIUNGI_MODIFICA_RENDER_COMMAND_NAME = "/aggiungiModifica";
+	public static final String SALVA_ACTION_COMMAND_NAME = "/salva";
 
 }
