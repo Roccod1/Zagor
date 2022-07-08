@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="it.servizidigitali.scrivaniaoperatore.model.Richiesta">
+		<field name="uuid" type="String" />
+		<field name="richiestaId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="codiceFiscale" type="String" />
+		<field name="partitaIva" type="String" />
+		<field name="email" type="String" />
+		<field name="codiceFiscaleDelegato" type="String" />
+		<field name="stato" type="String" />
+		<field name="numeroProtocollo" type="String" />
+		<field name="dataProtocollo" type="Date" />
+		<field name="oggetto" type="String" />
+		<field name="note" type="String" />
+		<field name="invioGuest" type="boolean" />
+		<field name="tokenVisualizzazione" type="String" />
+		<field name="chiaveAssociazioneBackoffice" type="String" />
+		<field name="delegaId" type="Long" />
+		<field name="proceduraId" type="long" />
+	</model>
+</model-hints>
