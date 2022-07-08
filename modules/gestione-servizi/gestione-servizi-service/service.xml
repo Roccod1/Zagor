@@ -147,6 +147,7 @@
 		<column name="descrizione" type="String" />
 		<column name="visibile" type="boolean" />
 		<column name="invioEmailCittadino" type="boolean" />
+		<column name="chatbotInlineIntent" type="String" />
 		
 		<!-- Relationship -->
 		<column name="servizi" type="Collection" entity="Servizio" mapping-table="servizio_tipologia"/>

@@ -58,6 +58,10 @@ public class TipologiaTable extends BaseTable<TipologiaTable> {
 		createColumn(
 			"invioEmailCittadino", Boolean.class, Types.BOOLEAN,
 			Column.FLAG_DEFAULT);
+	public final Column<TipologiaTable, String> chatbotInlineIntent =
+		createColumn(
+			"chatbotInlineIntent", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
 
 	private TipologiaTable() {
 		super("tipologia", TipologiaTable::new);

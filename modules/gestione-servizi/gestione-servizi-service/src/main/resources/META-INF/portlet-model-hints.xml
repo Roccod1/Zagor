@@ -65,5 +65,6 @@
 		<field name="descrizione" type="String" />
 		<field name="visibile" type="boolean" />
 		<field name="invioEmailCittadino" type="boolean" />
+		<field name="chatbotInlineIntent" type="String" />
 	</model>
 </model-hints>
