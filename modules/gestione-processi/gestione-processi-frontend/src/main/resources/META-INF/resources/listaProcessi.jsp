@@ -1,7 +1,7 @@
 <liferay-portlet:renderURL varImpl="iteratorURL">
-	<portlet:param name="nome" value="${nome}"/>
-	<portlet:param name="dataInserimentoDa" value="${dataInserimentoDa}"/>
-	<portlet:param name="dataInserimentoA" value="${dataInserimentoA}"/>
+	<portlet:param name="<%=GestioneProcessiPortletKeys.NOME_RICERCA %>" value="${nomeRicerca}"/>
+	<portlet:param name="<%=GestioneProcessiPortletKeys.DATA_INSERIMENTO_DA %>" value="${dataInserimentoDa}"/>
+	<portlet:param name="<%=GestioneProcessiPortletKeys.DATA_INSERIMENTO_A %>" value="${dataInserimentoA}"/>
 	<portlet:param name="mvcPath" value="<%=GestioneProcessiPortletKeys.JSP_HOME %>"/>
 </liferay-portlet:renderURL>
 
@@ -25,7 +25,7 @@
 				<liferay-ui:search-container-column-text property="<%=GestioneProcessiPortletKeys.CODICE %>" name="<%=GestioneProcessiPortletKeys.CODICE %>" orderable="true" orderableProperty="codice"/>
 				<liferay-ui:search-container-column-text property="<%=GestioneProcessiPortletKeys.NOME %>" name="<%=GestioneProcessiPortletKeys.NOME %>" orderable="true" orderableProperty="nome"/>
 				
-				<fmt:formatDate value="${processo.createDate}" var="createDate" pattern="dd/MM/yyyy"/>
+				<fmt:formatDate value="${processo.createDate}" var="createDate" pattern="dd/MM/yyyy HH:mm:ss"/>
 				
 				<liferay-ui:search-container-column-text value="${createDate}" name="<%=GestioneProcessiPortletKeys.DATA_CREAZIONE %>" orderable="true" orderableProperty="createDate"/>
 				
