@@ -10,7 +10,7 @@
 		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.AREA_TEMATICA_ID %>" name="identificativo" orderable="true" orderableProperty="<%=GestioneAreeTematichePortletKeys.AREA_TEMATICA_ID %>"/>
 		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.NOME %>" name="nome" orderable="true" orderableProperty="<%=GestioneAreeTematichePortletKeys.NOME %>"/>
 		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.DESCRIZIONE %>" name="descrizione" orderable="true" orderableProperty="<%=GestioneAreeTematichePortletKeys.DESCRIZIONE %>"/>
-		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.ORDINE %>" name="descrizione" />
+		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.ORDINE %>" name="ordine" />
 		
 		<c:set value="${tipologia.visibile eq true ? \"<i class='icon-ok' ></i></a>\" : \"<i class=\'icon-remove\' ></i></a>\"}" var="icona" />
 		<liferay-ui:search-container-column-text name="<%=GestioneAreeTematichePortletKeys.VISIBILE %>" align="center" value="${icona}" orderable="true" orderableProperty="attivo"/>
