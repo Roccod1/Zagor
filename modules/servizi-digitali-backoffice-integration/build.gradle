@@ -1,40 +1,40 @@
 project.ext {
-        jaxbTargetDir = file("src/generated/java")
-    }
-    
-    configurations {
-        xsd2java
-    }
-    
-    dependencies {
-        xsd2java "com.sun.xml.bind:jaxb-xjc:3.0.2"
-        xsd2java "com.sun.xml.bind:jaxb-impl:3.0.2"
-        xsd2java "com.sun.xml.bind:jaxb-core:3.0.2"
-        xsd2java "jakarta.xml.bind:jakarta.xml.bind-api:3.0.1"
-    }
-    
-    task xsd2java() {
-    
-        doLast {
-            jaxbTargetDir.mkdirs()
-    
-            ant.taskdef(name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.xsd2java.asPath)
-            ant.jaxbTargetDir = jaxbTargetDir
-    
-            ant.xjc(
-                    destdir: '${jaxbTargetDir}',
-                    package: 'it.servizidigitali.backoffice.integration.model.anagrafe.input'
-            )
-            {
-	            schema(dir: "src/main/resources/xsd/anagrafe/input", includes: '*.xsd')
-	            binding(dir: "src/main/resources/xsd", includes: '*.xjb')
-	            arg(value: '-verbose')
-	        }
-        }
-    }
-    
-    compileJava.dependsOn xsd2java
+    jaxbTargetDir = file("src/main/java")
+}
+
+configurations {
+    xsd2java
+}
 
 dependencies {
-	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+    xsd2java "com.sun.xml.bind:jaxb-xjc:3.0.2"
+    xsd2java "com.sun.xml.bind:jaxb-impl:3.0.2"
+    xsd2java "com.sun.xml.bind:jaxb-core:3.0.2"
+    xsd2java "jakarta.xml.bind:jakarta.xml.bind-api:3.0.1"
+    compileOnly group: "com.liferay.portal", name: "release.portal.api"
+	compileOnly group: "jakarta.xml.bind", name: "jakarta.xml.bind-api", version: "3.0.1"
+	compileOnly group: "com.sun.xml.bind", name: "jaxb-impl", version: "3.0.2"
+	compileOnly group: "com.sun.xml.bind", name: "jaxb-xjc", version: "3.0.2"
+	compileOnly group: "com.sun.xml.bind", name: "jaxb-core", version: "3.0.2"
 }
+
+task xsd2java() {
+
+    doLast {
+        jaxbTargetDir.mkdirs()
+
+        ant.taskdef(name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.xsd2java.asPath)
+        ant.jaxbTargetDir = jaxbTargetDir
+
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.anagrafe.output'
+        )
+        {
+            schema(dir: "src/main/resources/xsd/anagrafe/output", includes: '*.xsd')
+            arg(value: '-verbose')
+        }
+    }
+}
+
+compileJava.dependsOn xsd2java
