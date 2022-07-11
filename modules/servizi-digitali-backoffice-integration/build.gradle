@@ -33,6 +33,7 @@ task xsd2java() {
         )
         {
             schema(dir: "src/main/resources/xsd/anagrafe/input", includes: 'Dichiarazione*.xsd')
+            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
             arg(value: '-verbose')
         }
         ant.xjc(
@@ -41,6 +42,7 @@ task xsd2java() {
         )
         {
             schema(dir: "src/main/resources/xsd/anagrafe/output", includes: '*.xsd')
+            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
             arg(value: '-verbose')
         }
         // Tributi
@@ -50,6 +52,7 @@ task xsd2java() {
         )
         {
             schema(dir: "src/main/resources/xsd/tributi/input", includes: 'Dichiarazione*.xsd,richiestaCessazione*.xsd,variazione*.xsd')
+            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
             arg(value: '-verbose')
         }
         ant.xjc(
@@ -58,6 +61,7 @@ task xsd2java() {
         )
         {
             schema(dir: "src/main/resources/xsd/tributi/output", includes: 'PagamentoOsapTemporanea-*.xsd,PagamentoOsapPermanente-*.xsd,PosizioneTributaria*.xsd,PagamentoPubblicita-*.xsd,PagamentoAffissioni-*.xsd,PagamentoServiziCimiteriali-*.xsd,DatiPagamentoServiziContribuente-*.xsd,VisuraTasi-*.xsd,VisuraTassaRifiuti-*.xsd,DichiarazioneTassaImmobili-*.xsd,DichiarazioneTassaRifiuti-*.xsd,CategorieImmobili-*.xsd')
+            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
             arg(value: '-verbose')
         }
         // Sociali
@@ -67,6 +71,7 @@ task xsd2java() {
         )
         {
             schema(dir: "src/main/resources/xsd/sociali/input", includes: '*.xsd')
+            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
             arg(value: '-verbose')
         }
         // Protocollo
@@ -76,6 +81,7 @@ task xsd2java() {
         )
         {
             schema(dir: "src/main/resources/xsd/protocollo", includes: 'NuovoProtocolloProvvisorio-*.xsd,NuovoProtocollo-*.xsd,DettaglioProtocollo-*.xsd,DettaglioAllegato-*.xsd')
+            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
             arg(value: '-verbose')
         }
         // Documenti
@@ -85,6 +91,7 @@ task xsd2java() {
         )
         {
             schema(dir: "src/main/resources/xsd/documenti/output", includes: 'VisuraDocumenti-*.xsd')
+            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
             arg(value: '-verbose')
         }
         // Pratiche
@@ -94,6 +101,7 @@ task xsd2java() {
         )
         {
             schema(dir: "src/main/resources/xsd/pratiche", includes: 'DocumentiContenuti-*.xsd,DownloadDocumento-*.xsd,EliminaDocumento-*.xsd,GetReferenteByPk-*.xsd,GetTipoImmobileByPk-*.xsd,GetTipoPraticaByPk-*.xsd,SavePratica-*.xsd,SearchAllegatiTipoPratica-*.xsd,SearchAllPraticheWeb-*.xsd,SearchCategoriePratiche-*.xsd,SearchPraticaByPk-*.xsd,SearchPraticaWebByPk-*.xsd,SearchPratiche-*.xsd,SearchPraticheWebByUtente-*.xsd,SearchStatoPratiche-*.xsd,SearchTipoImmobile-*.xsd,SearchTipoPraticheFrontend-*.xsd,UploadAllegatiToPratica-*.xsd,UploadFile-*.xsd')
+            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
             arg(value: '-verbose')
         }
         // Rifiuti
@@ -103,6 +111,7 @@ task xsd2java() {
         )
         {
             schema(dir: "src/main/resources/xsd/rifiuti/input", includes: '*-richiesta.xsd,*-risposta.xsd')
+            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
             arg(value: '-verbose')
         }
         ant.xjc(
@@ -111,6 +120,7 @@ task xsd2java() {
         )
         {
             schema(dir: "src/main/resources/xsd/rifiuti/output", includes: '*-richiesta.xsd,*-risposta.xsd')
+            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
             arg(value: '-verbose')
         }
         // Servizi
@@ -120,6 +130,7 @@ task xsd2java() {
         )
         {
             schema(dir: "src/main/resources/xsd/servizi", includes: 'ServiziAttivi-*.xsd,Stradario-*.xsd,StradarioAscot-*.xsd')
+            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
             arg(value: '-verbose')
         }
     }
