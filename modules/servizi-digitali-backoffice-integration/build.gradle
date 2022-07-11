@@ -1,5 +1,5 @@
 project.ext {
-    jaxbTargetDir = file("src/main/java")
+    jaxbTargetDir = file("${buildDir}/generated-sources/java")
 }
 
 configurations {
@@ -26,6 +26,15 @@ task xsd2java() {
         ant.taskdef(name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.xsd2java.asPath)
         ant.jaxbTargetDir = jaxbTargetDir
 
+		// Anagrafe
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.anagrafe.input'
+        )
+        {
+            schema(dir: "src/main/resources/xsd/anagrafe/input", includes: 'Dichiarazione*.xsd')
+            arg(value: '-verbose')
+        }
         ant.xjc(
                 destdir: '${jaxbTargetDir}',
                 package: 'it.servizidigitali.backoffice.integration.xsd.cripal.anagrafe.output'
@@ -34,7 +43,104 @@ task xsd2java() {
             schema(dir: "src/main/resources/xsd/anagrafe/output", includes: '*.xsd')
             arg(value: '-verbose')
         }
+        // Tributi
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.tributi.input'
+        )
+        {
+            schema(dir: "src/main/resources/xsd/tributi/input", includes: 'Dichiarazione*.xsd,richiestaCessazione*.xsd,variazione*.xsd')
+            arg(value: '-verbose')
+        }
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.tributi.output'
+        )
+        {
+            schema(dir: "src/main/resources/xsd/tributi/output", includes: 'PagamentoOsapTemporanea-*.xsd,PagamentoOsapPermanente-*.xsd,PosizioneTributaria*.xsd,PagamentoPubblicita-*.xsd,PagamentoAffissioni-*.xsd,PagamentoServiziCimiteriali-*.xsd,DatiPagamentoServiziContribuente-*.xsd,VisuraTasi-*.xsd,VisuraTassaRifiuti-*.xsd,DichiarazioneTassaImmobili-*.xsd,DichiarazioneTassaRifiuti-*.xsd,CategorieImmobili-*.xsd')
+            arg(value: '-verbose')
+        }
+        // Sociali
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.sociali.input'
+        )
+        {
+            schema(dir: "src/main/resources/xsd/sociali/input", includes: '*.xsd')
+            arg(value: '-verbose')
+        }
+        // Protocollo
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.protocollo'
+        )
+        {
+            schema(dir: "src/main/resources/xsd/protocollo", includes: 'NuovoProtocolloProvvisorio-*.xsd,NuovoProtocollo-*.xsd,DettaglioProtocollo-*.xsd,DettaglioAllegato-*.xsd')
+            arg(value: '-verbose')
+        }
+        // Documenti
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.documenti.output'
+        )
+        {
+            schema(dir: "src/main/resources/xsd/documenti/output", includes: 'VisuraDocumenti-*.xsd')
+            arg(value: '-verbose')
+        }
+        // Pratiche
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.pratiche'
+        )
+        {
+            schema(dir: "src/main/resources/xsd/pratiche", includes: 'DocumentiContenuti-*.xsd,DownloadDocumento-*.xsd,EliminaDocumento-*.xsd,GetReferenteByPk-*.xsd,GetTipoImmobileByPk-*.xsd,GetTipoPraticaByPk-*.xsd,SavePratica-*.xsd,SearchAllegatiTipoPratica-*.xsd,SearchAllPraticheWeb-*.xsd,SearchCategoriePratiche-*.xsd,SearchPraticaByPk-*.xsd,SearchPraticaWebByPk-*.xsd,SearchPratiche-*.xsd,SearchPraticheWebByUtente-*.xsd,SearchStatoPratiche-*.xsd,SearchTipoImmobile-*.xsd,SearchTipoPraticheFrontend-*.xsd,UploadAllegatiToPratica-*.xsd,UploadFile-*.xsd')
+            arg(value: '-verbose')
+        }
+        // Rifiuti
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.rifiuti.input'
+        )
+        {
+            schema(dir: "src/main/resources/xsd/rifiuti/input", includes: '*-richiesta.xsd,*-risposta.xsd')
+            arg(value: '-verbose')
+        }
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.rifiuti.output'
+        )
+        {
+            schema(dir: "src/main/resources/xsd/rifiuti/output", includes: '*-richiesta.xsd,*-risposta.xsd')
+            arg(value: '-verbose')
+        }
+        // Servizi
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.servizi'
+        )
+        {
+            schema(dir: "src/main/resources/xsd/servizi", includes: 'ServiziAttivi-*.xsd,Stradario-*.xsd,StradarioAscot-*.xsd')
+            arg(value: '-verbose')
+        }
     }
 }
 
+if (hasProperty('buildScan')) {
+    buildScan {
+        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+        termsOfServiceAgree = 'no'
+    }
+}
+
+apply plugin: 'eclipse'
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main/java'
+            srcDirs "${jaxbTargetDir}"
+        }
+    }
+ }
+ 
 compileJava.dependsOn xsd2java
