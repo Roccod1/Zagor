@@ -1,9 +1,11 @@
 package it.servizidigitali.gestioneenti.frontend.portlet.action;
 
+import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
@@ -30,10 +32,13 @@ import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
  * @author pindi
  */
 
-@Component(immediate = true, //
-		property = { "javax.portlet.name=" + GestioneEntiPortletKeys.GESTIONEENTI, "mvc.command.name=/salva" }, //
-		service = MVCActionCommand.class//
-) //
+@Component(immediate = true,
+		property = { 
+			"javax.portlet.name=" + GestioneEntiPortletKeys.GESTIONEENTI, 
+			"mvc.command.name=" + GestioneEntiPortletKeys.SALVA_ACTION_COMMAND_NAME 
+		}, 
+		service = MVCActionCommand.class
+)
 public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionCommand {
 
 	private static final Log _log = LogFactoryUtil.getLog(AggiungiModificaEnteServizioActionCommand.class);
@@ -47,32 +52,36 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
-		Long servizioId = ParamUtil.getLong(actionRequest, "servizioId");
-		Long organizationId = ParamUtil.getLong(actionRequest, "organizationId");
-		String uri = ParamUtil.getString(actionRequest, "uri");
-		String uriGuest = ParamUtil.getString(actionRequest, "uriGuest");
-		String uriScheda = ParamUtil.getString(actionRequest, "uriScheda");
-		Boolean autenticazione = ParamUtil.getBoolean(actionRequest, "autenticazione");
-		Boolean attivo = ParamUtil.getBoolean(actionRequest, "attivo");
-		Date dataInizioAttivazione = ParamUtil.getDate(actionRequest, "dataInizioAttivazione", GestioneEntiPortlet.simpleDateFormat, null);
-		Date dataFineAttivazione = ParamUtil.getDate(actionRequest, "dataFineAttivazione", GestioneEntiPortlet.simpleDateFormat, null);
-		Boolean cittadino = ParamUtil.getBoolean(actionRequest, "cittadino");
-		Boolean azienda = ParamUtil.getBoolean(actionRequest, "azienda");
-		Boolean delega = ParamUtil.getBoolean(actionRequest, "delega");
-		Boolean allegatoDelega = ParamUtil.getBoolean(actionRequest, "allegatoDelega");
-		Boolean privacyDelega = ParamUtil.getBoolean(actionRequest, "privacyDelega");
-		Boolean prenotabile = ParamUtil.getBoolean(actionRequest, "prenotabile");
-		Boolean chatBot = ParamUtil.getBoolean(actionRequest, "chatBot");
-
+		Long servizioId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ID);
+		Long servizioEnteId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ENTE_ID);
+		Long organizationId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_ID);
+		String uri = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI);
+		String uriGuest = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI_GUEST);
+		String uriScheda = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_SCHEDA);
+		Boolean autenticazione = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_AUTENTICAZIONE);
+		Boolean attivo = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ATTIVO);
+		Date dataInizioAttivazione = ParamUtil.getDate(actionRequest, GestioneEntiPortletKeys.SERVIZIO_DATA_INIZIO_ATTIVAZIONE, GestioneEntiPortlet.simpleDateFormat, null);
+		Date dataFineAttivazione = ParamUtil.getDate(actionRequest, GestioneEntiPortletKeys.SERVIZIO_DATA_FINE_ATTIVAZIONE, GestioneEntiPortlet.simpleDateFormat, null);
+		Boolean cittadino = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_CITTADINO);
+		Boolean azienda = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_AZIENDA);
+		Boolean delega = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_DELEGA);
+		Boolean allegatoDelega = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ALLEGATO_DELEGA);
+		Boolean privacyDelega = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_PRIVACY_DELEGA);
+		Boolean prenotabile = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_PRENOTABILE);
+		Boolean chatBot = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_CHATBOT);
+		
+		
+		String redirect = actionRequest.getParameter("redirect");
+		
+		
 		ServizioEntePK servizioEntePK = new ServizioEntePK();
 		servizioEntePK.setServizioId(servizioId);
 		servizioEntePK.setOrganizationId(organizationId);
 
 		ServizioEnte servizioEnte = null;
-		if (servizioId > 0) {
+		if (servizioEnteId > 0) {
 			servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);
-		}
-		else {
+		}else {
 			servizioEnte = servizioEnteLocalService.createServizioEnte(servizioEntePK);
 		}
 
@@ -99,8 +108,10 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		try {
 			servizioEnteLocalService.updateServizioEnte(servizioEnte);
 			SessionMessages.add(actionRequest, GestioneEntiPortletKeys.SALVATAGGIO_SUCCESSO);
-			MutableRenderParameters params = actionResponse.getRenderParameters();
-			params.setValue("mvcPath", "/view.jsp");
+//			MutableRenderParameters params = actionResponse.getRenderParameters();
+//			params.setValue("mvcPath", GestioneEntiPortletKeys.JSP_INSERIMENTO_MODIFICA);
+//			params.setValue(GestioneEntiPortletKeys.ORGANIZZAZIONE_ID, organizationId.toString());
+			actionResponse.sendRedirect(redirect);
 		}
 		catch (Exception e) {
 			_log.error("Impossibile salvare/aggiornare il servizio con ID: " + servizioId, e);
