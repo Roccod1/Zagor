@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="it.servizidigitali.common" auto-namespace-tables="false">
+	<namespace/>
+	<entity 
+		name="Comune"
+		table="comune"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="comuneId" primary="true" type="long" />
+
+		<column name="codiceIstatAN" type="String" />
+		<column name="codiceIstat1" type="String" />
+		<column name="codiceIstat103" type="String" />
+		<column name="codicestat107" type="String" />
+		<column name="denominazione" type="String" />
+		<column name="capoluogo" type="boolean" />
+		<column name="zonaAltimetrica" type="String" />
+		<column name="altitudine" type="String" />
+		<column name="comuneLitoraneo" type="boolean" />
+		<column name="comuneMontano" type="String" />
+		<column name="codiceSistemaLocaleLavoro" type="String" />
+		<column name="denominazioneSistemaLocaleLavoro" type="String" />
+		<column name="superficie" type="String" />
+		<column name="popolazioneLegale" type="String" />
+		<column name="popolazioneResidente1" type="String" />
+		<column name="popolazioneResidente2" type="String" />
+		<column name="popolazioneResidente3" type="String" />
+		<column name="codiceComune" type="int" />
+		<column name="codiceCatastale" type="String" />
+		
+		<!-- FK -->
+		<column name="idRegione" type="long" />
+		<column name="idProvincia" type="long" />
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="denominazione" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="CodiceIstatAN" return-type="Comune">
+			<finder-column name="codiceIstatAN" />
+		</finder>
+
+		<finder name="CodiceCatastale" return-type="Comune">
+			<finder-column name="codiceCatastale" />
+		</finder>
+
+		<finder name="CodiceComune" return-type="Comune">
+			<finder-column name="codiceComune" />
+		</finder>
+
+		<finder name="idRegione" return-type="Collection">
+			<finder-column name="idProvincia" />
+		</finder>
+
+		<finder name="IdProvincia" return-type="Collection">
+			<finder-column name="idRegione" />
+		</finder>
+	</entity>
+
+	<entity 
+		name="Provincia"
+		table="provincia"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="provinciaId" primary="true" type="long" />
+
+		<column name="codiceRipartizione" type="int" />
+		<column name="codiceNUTS1" type="String" />
+		<column name="ripartizioneGeograficaM" type="String" />
+		<column name="ripartizioneGeografica" type="String" />
+		<column name="denominazioneRegioneM" type="String" />
+		<column name="denominazioneRegione" type="String" />
+		<column name="denominazioneProvincia" type="String" />
+		<column name="codiceRegione" type="long" />
+		<column name="codiceNUTS2" type="String" />
+		<column name="codiceNUTS3" type="String" />
+		<column name="sigla" type="String" />
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="denominazioneRegione" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="CodiceNUTS1" return-type="Provincia">
+			<finder-column name="codiceNUTS1" />
+		</finder>
+
+		<finder name="CodiceRegione" return-type="Collection">
+			<finder-column name="codiceRegione" />
+		</finder>
+
+		<finder name="Sigla" return-type="Provincia">
+			<finder-column name="sigla" />
+		</finder>
+	</entity>
+
+	<entity 
+		name="StatoEstero"
+		table="stato_estero"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="statoEsteroId" primary="true" type="long" />
+
+		<column name="continente" type="int" />
+		<column name="codiceArea" type="int" />
+		<column name="codiceStato" type="int" />
+		<column name="denominazione" type="String" />
+		<column name="denominazioneEng" type="String" />
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="denominazione" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="CodiceStato" return-type="StatoEstero">
+			<finder-column name="codiceStato" />
+		</finder>
+
+		<finder name="Denominazione" return-type="StatoEstero">
+			<finder-column name="denominazione" case-sensitive="false"/>
+		</finder>
+		
+		<finder name="Continente" return-type="Collection">
+			<finder-column name="continente" />
+		</finder>
+
+		<finder name="CodiceArea" return-type="Collection">
+			<finder-column name="codiceArea" />
+		</finder>
+	</entity>
+
+	<entity 
+		name="ComuneEstero"
+		table="comune_estero"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="comuneEsteroId" primary="true" type="long" />
+
+		<column name="codice" type="int" />
+		<column name="denominazione" type="String" />
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="denominazione" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="Codice" return-type="ComuneEstero">
+			<finder-column name="codice" />
+		</finder>
+
+		<finder name="DenominazioneLike" return-type="Collection">
+			<finder-column name="denominazione" comparator="LIKE" />
+		</finder>
+	</entity>
+</service-builder>
