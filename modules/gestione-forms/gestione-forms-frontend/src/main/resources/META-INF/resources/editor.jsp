@@ -11,9 +11,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.7.1/ace.js" integrity="sha512-FKkEO4RZEQjFmU1hoUYdx6HJLdpHpNzgWspgnQCxx7OOkDVz4kiGJxR97yWc5bzjwcCpJC/CRCiQzuoGYAChhQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/alpaca/1.5.27/bootstrap/alpaca.min.css" integrity="sha512-PehAqXRAv5QxF18trM6o/TGFqwG7s7g0c1+L4bGYLvYX+cMY0v4iwVMfqOTWjfzwoSFX4ruVt2wlalxzusntjw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/alpaca@1.5.27/dist/alpaca/bootstrap/alpaca.min.js"></script>
@@ -21,49 +19,29 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/scripts/init.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/scripts/test.js"></script>
 
-<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.4/beautifier.js" integrity="sha512-2TxlS1gnPpEDnoOu9Z6UuhkfyENUo42SUKpaJw1ixwtIS1wRd72+AYxrMYrH4lAHg50YfRpohrBUr3Wkl/u77A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  -->
-<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.4/beautify-css.js" integrity="sha512-RRHgUVWUkA5uYRO5gjIo24YrHNKDjv4r63pobxW0zA4ytvgkDKAbST81xmy4dtmPuAunSzQlydFBS0p3oPSsug==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
- 
-<!-- <link type="text/css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />  -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.4/beautifier.js" integrity="sha512-2TxlS1gnPpEDnoOu9Z6UuhkfyENUo42SUKpaJw1ixwtIS1wRd72+AYxrMYrH4lAHg50YfRpohrBUr3Wkl/u77A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.4/beautify-css.js" integrity="sha512-RRHgUVWUkA5uYRO5gjIo24YrHNKDjv4r63pobxW0zA4ytvgkDKAbST81xmy4dtmPuAunSzQlydFBS0p3oPSsug==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-
-<!-- <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> -->
-
-
-
-
-
-
-<div class="editor">
-
-	<div class="container-fluid">
-	
-		<div class="page-header">
-			<h2>Spring Code Label Form</h2>
-		</div>
-		
-		<div>		
-					
+<div>
 	                <ul class="nav nav-tabs">
-	                    <li class="nav-item"><a href="#source" data-toggle="tab" class="nav-link">Source</a></li>
-	                    <li class="nav-item"><a href="#designer" data-toggle="tab" class="nav-link active">Designer</a></li>
-	                    <li class="nav-item"><a href="#view" data-toggle="tab" class="nav-link">View</a></li>
-	                    <li class="nav-item"><a href="#code" data-toggle="tab" class="nav-link">Code</a></li>
-	                    <li class="nav-item"><a href="#attachments" data-toggle="tab" class="nav-link">Attachments</a></li>
-	                    <li class="hidden"><a href="#loadsave" data-toggle="tab" class="nav-link">Load / Save</a></li>
+	                    <li><a href="#source" data-toggle="tab" class="nav-item nav-link tab-item tab-item-source">Source</a></li>
+	                    <li><a href="#designer" data-toggle="tab" class="nav-item nav-link active tab-item tab-item-designer">Designer</a></li>
+	                    <li><a href="#view" data-toggle="tab" class="nav-item nav-link tab-item tab-item-view">View</a></li>
+	                    <li><a href="#code" data-toggle="tab" class="nav-item nav-link tab-item tab-item-code">Code</a></li>
+	                    <li><a href="#attachments" data-toggle="tab" class="nav-item nav-link tab-item tab-item-attachments">Attachments</a></li>
+	                    <li class="hidden"><a href="#loadsave" data-toggle="tab" class="nav-item nav-link tab-item tab-item-loadsave">Load / Save</a></li>
 	                </ul>
-	     </div>
-	     
-		<div class="tab-content">
-	     	 <div class="tab-pane" role="tabpanel" id="source">
+	            </div>
+	            <div class="tab-content">
+	                <div class="tab-pane" id="source">
 	                    <div class="row">
 	                        <div class="col-md-6">
 	                            <div>
 	                                <ul class="nav nav-tabs">
-	                                    <li class="nav-item"><a href="#schema" data-toggle="tab" class="nav-link active">Schema</a></li>
-	                                    <li class="nav-item"><a href="#options" data-toggle="tab" class="nav-link">Options</a></li>
-	                                    <li class="nav-item"><a href="#source-view" data-toggle="tab" class="nav-link">View</a></li>
-	                                    <li class="nav-item"><a href="#data" data-toggle="tab" class="nav-link">Data</a></li>
+	                                    <li><a href="#schema" data-toggle="tab" class="nav-item nav-link active tab-source-schema">Schema</a></li>
+	                                    <li><a href="#options" data-toggle="tab" class="nav-item nav-link tab-source-options">Options</a></li>
+	                                    <li><a href="#source-view" data-toggle="tab" class="nav-item nav-link tab-source-view">View</a></li>
+	                                    <li><a href="#data" data-toggle="tab" class="nav-item nav-link tab-source-data">Data</a></li>
 	                                </ul>
 	                            </div>
 	                            <div class="tab-content">
@@ -76,11 +54,26 @@
 	                                <div class="tab-pane" id="data">
 	                                </div>
 	                            </div>
-	                        </div> 
+	                        </div>
+	                        <div class="col-md-6">
+	                            <div>
+	                                <ul class="nav nav-tabs">
+	                                    <li><a href="#preview" class="nav-item nav-link active" data-toggle="tab">Preview</a></li>
+	                                </ul>
+	                            </div>
+	                            <div class="tab-content">
+	                                <div class="tab-pane active" id="preview">
+	                                    <div class="row">
+	                                        <div class="col-md-12">
+	                                            <div id="previewDiv"></div>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
 	                    </div>
 	                </div>
-	                
-	             <div class="tab-pane active" role="tabpanel" id="designer">
+	                <div class="tab-pane active" id="designer">
 	                    <div class="row">
 	                        <div class="col-md-8">
 	                            <div class="row">
@@ -94,10 +87,10 @@
 	                                <div class="col-md-12">
 	                                    <div>
 	                                        <ul class="nav nav-tabs">
-	                                            <li class="nav-item"><a class="nav-link active" href="#types" data-toggle="tab">Types</a></li>
-	                                            <li class="nav-item"><a class="nav-link" href="#basic" data-toggle="tab">Basic</a></li>
-	                                            <li class="nav-item"><a class="nav-link" href="#advanced" data-toggle="tab">Advanced</a></li>
-	                                            <li class="nav-item"><a class="nav-link" href="#layouts" data-toggle="tab">Layouts</a></li>
+	                                            <li><a href="#types" class="nav-item nav-link active" data-toggle="tab">Types</a></li>
+	                                            <li><a href="#basic" class="nav-item nav-link" data-toggle="tab">Basic</a></li>
+	                                            <li><a href="#advanced" class="nav-item nav-link" data-toggle="tab">Advanced</a></li>
+	                                            <li><a href="#layouts" class="nav-item nav-link" data-toggle="tab">Layouts</a></li>
 	                                        </ul>
 	                                    </div>
 	                                    <div class="tab-content" id="alpaca-right-menu">
@@ -110,9 +103,8 @@
 	                            </div>
 	                        </div>
 	                    </div>
-	                </div>     
-	                
-	               <div class="tab-pane" id="view">
+	                </div>
+	                <div class="tab-pane" id="view">
 	                    <div class="row">
 	                        <div class="col-md-12">
 	                            <div id="viewDiv"></div>
@@ -125,8 +117,7 @@
 	                            <div id="codeDiv"></div>
 	                        </div>
 	                    </div>
-	                </div>   
-	                
+	                </div>
 	                <div class="tab-pane" id="loadsave">
 	                    <div class="row">
 	                        <div class="col-md-12">
@@ -139,8 +130,7 @@
 	
 	                        </div>
 	                    </div>
-	                </div>  
-	                
+	                </div>
 	                <div class="tab-pane" id="attachments">
 	                    <div class="row">
 	                        <div class="col-md-12">
@@ -179,7 +169,7 @@
 <!-- 	                            					</tr> -->
 <%-- 												    ${item}<br> --%>
 <%-- 												</c:forEach> --%>
-<!-- 	                            			</tbody> -->
+	                            			</tbody>
 	                            		</table>
 	                            	</div>
 	                            	<br/>
@@ -189,7 +179,7 @@
 	                            	<form class="form-horizontal hidden attachment-form">
 	                            		<input type="hidden" name="attachment-id" id="attachment-id" class="form-control" required="required">
 	                            	
-		                            	<div class="form-group">
+		                            	<div class="control-group">
 										    <label class="control-label" for="attachment-name">
 										    	Denominazione
 										    </label>
@@ -197,7 +187,7 @@
 										   		<input type="text" name="attachment-name" id="attachment-name" class="form-control" required="required">
 										   	</div>
 									    </div>
-									    <div class="form-group">
+									    <div class="control-group">
 									    	<div class="controls">
 									    		<label class="checkbox" for="attachment-mandatory">
 									    			<input type="checkbox" value="true" id="attachment-mandatory" name="attachment-mandatory">
@@ -205,9 +195,9 @@
 									    		</label>
 									    	</div>
 									    </div>
-									    <div class="form-group">
+									    <div class="control-group">
 										    <label class="control-label" for="attachment-filetype">
-										    	Tipi file ammessi
+										    	File Ammessi
 										    </label>
 										    <div class="controls">
 										    	<select id="attachment-filetype" name="attachment-filetype" multiple="multiple" class="form-control" required="required" size="7">
@@ -218,9 +208,9 @@
 										   	</div>
 									    </div>
 
-									    <div class="form-group">
+									    <div class="control-group">
 										    <label class="control-label" for="attachment-codetype">
-										    	<spring:message code="label.file.codici.tipologia.documento"/>
+										    	Tipologia Documento
 										    </label>
 										    <div class="controls">
 										    	<select id="attachment-codetype" name="attachment-codetype" multiple="multiple" class="form-control">
@@ -231,19 +221,19 @@
 										   	</div>
 									    </div>
 									    
-									    <div class="form-group">
-									  		<label class="control-label" for="attachment-file"><spring:message code="label.file"/></label>
+									    <div class="control-group">
+									  		<label class="control-label" for="attachment-file">File</label>
 									  	  	<div class="controls">
 												<input type="hidden" class="allegato" name="fileName">
 												<input type="file" class="file-loading" id="attachment-file" name="file" class="form-control">
 												<div id="kv-error-uploadFileModello" style="display: none;"></div>
 										    	<div id="modello-container" class="alert alert-info hidden">
-										    		File già archiviato
+										    		File archiviato
 									    		</div>
 											</div>
 										</div>
 									    
-									    <div class="form-group">
+									    <div class="control-group">
 										    <div class="controls">
 										    	<button class="btn btn-custom save-attachment" type="submit">
 										    		Salva
@@ -256,9 +246,23 @@
 	                        </div>
 	                    </div>
 	                </div>
-	     </div>
-	
+	            </div>
+	        </div>
+	    </div>
 	</div>
-
+	
+	<div class="modal fade form-builder-modal" role="dialog" style="display: none;">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	                <h4 class="modal-title"></h4>
+	            </div>
+	            <div class="modal-body">
+	            </div>
+	            <div class="modal-footer">
+	            </div>
+	        </div>
+	    </div>
+	</div>
 </div>
-

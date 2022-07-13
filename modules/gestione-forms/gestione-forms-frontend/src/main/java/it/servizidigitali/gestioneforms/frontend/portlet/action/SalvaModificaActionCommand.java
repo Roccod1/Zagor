@@ -52,6 +52,7 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		String codice = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.CODICE);
 		String nome = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.NOME);
 		boolean principale = ParamUtil.getBoolean(actionRequest, GestioneFormsPortletKeys.PRINCIPALE);
+		String modelloForm = ParamUtil.getString(actionRequest, "modelloForm");
 		
 		Form form = null;
 		
@@ -76,6 +77,7 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		
 		form.setCodice(codice);
 		form.setNome(nome);
+		form.setJson(modelloForm);
 		form.setPrincipale(principale);
 		form.setUserId(serviceContext.getThemeDisplay().getUserId());
 		form.setGroupId(serviceContext.getThemeDisplay().getScopeGroupId());

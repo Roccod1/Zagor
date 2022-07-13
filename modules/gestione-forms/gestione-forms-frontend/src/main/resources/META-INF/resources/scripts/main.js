@@ -47,20 +47,20 @@ var setup = function(s, o, v, d)
      * @param value The value to set.
      */
     var setModelloForm = function(value){
-        $("#modelloForm").val(JSON.stringify(value, null, "    "));
+        modelloForm.val(JSON.stringify(value, null, "    "));
     };
     
     //If modelloForm has a value, use it
-    var modelloForm = $("#modelloForm").val();
-    if(modelloForm){
+    var modelloFormVal = modelloForm.val();
+    if(modelloFormVal){
     	try {
-    		modelloForm = JSON.parse(modelloForm);
-    		schema = modelloForm.schema;
-    		options = modelloForm.options;
-    		if(modelloForm.view){
-    			view = modelloForm.view;
+    		modelloFormVal = JSON.parse(modelloFormVal);
+    		schema = modelloFormVal.schema;
+    		options = modelloFormVal.options;
+    		if(modelloFormVal.view){
+    			view = modelloFormVal.view;
     		}
-    		data = modelloForm.data;
+    		data = modelloFormVal.data;
         } catch(e) {
             console.log('Exception parsing modelloForm', e);
         }
