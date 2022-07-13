@@ -19,7 +19,7 @@ import it.servizidigitali.backoffice.integration.xsd.cripal.anagrafe.output.Rich
  * @author pindi
  *
  */
-@Component(name = "anagrafeCRIPALBackofficeIntegrationService", immediate = true, service = AnagrafeBackofficeIntegrationServiceImpl.class)
+@Component(name = "anagrafeCRIPALBackofficeIntegrationService", immediate = true, service = AnagrafeBackofficeIntegrationService.class)
 public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackofficeIntegrationService {
 
 	private static final String RICHIESTA_DATI_ANAGRAFICI_CRIPAL = "richiestaDatiAnagrafici";

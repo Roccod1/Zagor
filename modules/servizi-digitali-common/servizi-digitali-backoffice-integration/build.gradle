@@ -1,5 +1,6 @@
 project.ext {
-    jaxbTargetDir = file("${buildDir}/generated-sources/java")
+    jaxbTargetDir = file("${buildDir}/generated/xsd")
+    wsdl2javaTargetDir = file("${buildDir}/generated/wsdl")
 }
 
 configurations {
@@ -16,6 +17,7 @@ dependencies {
 	compileOnly group: "com.sun.xml.bind", name: "jaxb-impl", version: "3.0.2"
 	compileOnly group: "com.sun.xml.bind", name: "jaxb-xjc", version: "3.0.2"
 	compileOnly group: "com.sun.xml.bind", name: "jaxb-core", version: "3.0.2"
+	compileOnly group: "com.sun.xml.ws", name: "jaxws-ri", version: "3.0.2"
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-api")
 }
 
@@ -144,15 +146,28 @@ if (hasProperty('buildScan')) {
     }
 }
 
-apply plugin: 'eclipse'
+apply plugin: 'no.nils.wsdl2java'
+
+wsdl2java {
+    wsdlsToGenerate = [
+            ['-p', 'it.servizidigitali.backoffice.integration.wsdl', "$projectDir/src/main/resources/wsdl/servizionline.wsdl"]
+
+    ]
+    wsdlDir = file("$projectDir/src/main/resources/wsdl/")
+    cxfVersion = "3.3.2"
+    locale = Locale.ENGLISH
+}
+
+apply plugin: 'eclipse' 
 
 sourceSets {
     main {
         java {
             srcDirs 'src/main/java'
             srcDirs "${jaxbTargetDir}"
+            srcDirs "${wsdl2javaTargetDir}"
         }
     }
  }
- 
+
 compileJava.dependsOn xsd2java
