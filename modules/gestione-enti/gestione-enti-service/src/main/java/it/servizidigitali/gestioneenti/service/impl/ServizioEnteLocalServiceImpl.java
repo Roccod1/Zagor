@@ -96,7 +96,6 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
 		int inizio = posizioni[0];
 		int fine = posizioni[1];
-		
 		if(Validator.isNull(orderByCol)) {
 			_log.debug("Nessun ordinamento impostato. Uso di default organizationId");
 			orderByCol = "organizationId";
@@ -143,5 +142,4 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 		_log.debug("Ricerca Organizzazioni :: FINE");
 		return listaOrganizations;
 	}
-	
 }

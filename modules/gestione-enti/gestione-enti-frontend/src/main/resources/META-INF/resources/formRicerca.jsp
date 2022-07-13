@@ -1,9 +1,4 @@
-<%@ include file="init.jsp" %>
-
-<portlet:renderURL var="aggiungiModificaUrl">
-	<portlet:param name="mvcRenderCommandName" value="<%=GestioneEntiPortletKeys.AGGIUNGI_MODIFICA_RENDER_COMMAND_NAME %>" />
-	<portlet:param name="<%=GestioneEntiPortletKeys.INDIRIZZO_REDIRECT%>" value="${homeURL}"/>
-</portlet:renderURL>
+<%-- <%@ include file="init.jsp" %> --%>
 
 <portlet:actionURL name="<%=GestioneEntiPortletKeys.CERCA_ACTION_COMMAND_NAME %>" var="cercaURL">
 </portlet:actionURL>
@@ -26,7 +21,6 @@
 		<aui:button-row cssClass="text-right">
 			<aui:button type="submit" value="cerca" />
 			<aui:button type="button" value="reset" href="${homeURL}"/>
-			<aui:button type="button" value="nuovo" href="${aggiungiModificaUrl}"/>
 		</aui:button-row>
 	</aui:form>
 </div>

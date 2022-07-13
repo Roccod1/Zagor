@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -53,7 +54,6 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
 		Long servizioId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ID);
-		Long servizioEnteId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ENTE_ID);
 		Long organizationId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_ID);
 		String uri = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI);
 		String uriGuest = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI_GUEST);
@@ -69,9 +69,10 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		Boolean privacyDelega = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_PRIVACY_DELEGA);
 		Boolean prenotabile = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_PRENOTABILE);
 		Boolean chatBot = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_CHATBOT);
-		
-		
-		String redirect = actionRequest.getParameter("redirect");
+		Boolean iseeInps = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ISEE_INPS);
+		Boolean timbroCertificato = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_TIMBRO_CERTIFICATO);
+
+		String redirect = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.INDIRIZZO_REDIRECT);
 		
 		
 		ServizioEntePK servizioEntePK = new ServizioEntePK();
@@ -79,33 +80,43 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		servizioEntePK.setOrganizationId(organizationId);
 
 		ServizioEnte servizioEnte = null;
-		if (servizioEnteId > 0) {
-			servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);
+		if (servizioId > 0 && organizationId > 0) {
+			try {
+				servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);				
+			}catch(Exception e) {
+				_log.error("ServizioEnte con serviziId "+ servizioId + " e organizationId " + organizationId + " inesistente. Creo nuova entity");
+				servizioEnte = servizioEnteLocalService.createServizioEnte(servizioEntePK);
+			}
 		}else {
-			servizioEnte = servizioEnteLocalService.createServizioEnte(servizioEntePK);
+			_log.error("servizioId  e organizationId sono campi obbligatori");
+			SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
+			throw new NullPointerException("servizioId  e organizationId sono campi obbligatori");
 		}
-
-		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
-		ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
-		servizioEnte.setGroupId(themeDisplay.getCompanyGroupId());
-		servizioEnte.setUserId(themeDisplay.getUserId());
-
-		servizioEnte.setUri(uri);
-		servizioEnte.setUriGuest(uriGuest);
-		servizioEnte.setUriScheda(uriScheda);
-		servizioEnte.setAutenticazione(autenticazione);
-		servizioEnte.setAttivo(attivo);
-		servizioEnte.setDataInizioAttivazione(dataInizioAttivazione);
-		servizioEnte.setCittadino(cittadino);
-		servizioEnte.setAzienda(azienda);
-		servizioEnte.setDataFineAttivazione(dataFineAttivazione);
-		servizioEnte.setDelega(delega);
-		servizioEnte.setAllegatoDelega(allegatoDelega);
-		servizioEnte.setPrivacyDelega(privacyDelega);
-		servizioEnte.setPrenotabile(prenotabile);
-		servizioEnte.setChatbot(chatBot);
-
+		
 		try {
+			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
+			ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
+			servizioEnte.setGroupId(themeDisplay.getCompanyGroupId());
+			servizioEnte.setUserId(themeDisplay.getUserId());
+	
+			servizioEnte.setUri(uri);
+			servizioEnte.setUriGuest(uriGuest);
+			servizioEnte.setUriScheda(uriScheda);
+			servizioEnte.setAutenticazione(autenticazione);
+			servizioEnte.setAttivo(attivo);
+			servizioEnte.setDataInizioAttivazione(dataInizioAttivazione);
+			servizioEnte.setCittadino(cittadino);
+			servizioEnte.setAzienda(azienda);
+			servizioEnte.setDataFineAttivazione(dataFineAttivazione);
+			servizioEnte.setDelega(delega);
+			servizioEnte.setAllegatoDelega(allegatoDelega);
+			servizioEnte.setPrivacyDelega(privacyDelega);
+			servizioEnte.setPrenotabile(prenotabile);
+			servizioEnte.setChatbot(chatBot);
+			servizioEnte.setIseeInps(iseeInps);
+			servizioEnte.setTimbroCertificato(timbroCertificato);
+
+		
 			servizioEnteLocalService.updateServizioEnte(servizioEnte);
 			SessionMessages.add(actionRequest, GestioneEntiPortletKeys.SALVATAGGIO_SUCCESSO);
 //			MutableRenderParameters params = actionResponse.getRenderParameters();
@@ -115,7 +126,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		}
 		catch (Exception e) {
 			_log.error("Impossibile salvare/aggiornare il servizio con ID: " + servizioId, e);
-			throw e;
+			SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_SALVATAGGIO);
 		}
 	}
 }

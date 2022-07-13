@@ -51,18 +51,24 @@ public class GestioneEntiPortletKeys {
 	public static final String JSP_RISULTATI_RICERCA = "/risultatiRicerca.jsp";
 	public static final String JSP_HOME = "/view.jsp";
 	public static final String JSP_FORM_RICERCA = "/formRicerca.jsp";
-
-//	utility
-	public static final String SALVATAGGIO_SUCCESSO = "salvataggio-successo";
-	public static final String ERRORE_CAMPI_OBBLIGATORI = "validazione-campi-obbligatori-fallita";
-	public static final String ERRORE_SALVATAGGIO = "salvataggio-errore";
-	public static final String ERRORE_IMPOSSIBILE_OTTENERE_AREA_TEMATICA = "errore-impossibile-ottenere-area-tematica";
-	public static final String INDIRIZZO_REDIRECT = "indirizzoRedirect";
+	public static final String JSP_LISTA_SERVIZI_ENTE = "/listaServiziEnte.jsp";
 	
 //	path command
 	public static final String AGGIUNGI_MODIFICA_RENDER_COMMAND_NAME = "/inserisciModifica";
 	public static final String SALVA_ACTION_COMMAND_NAME = "/salva";
 	public static final String CERCA_ACTION_COMMAND_NAME = "/cerca";
+	public static final String LISTA_SERVIZI_ENTE_RENDER_COMMAND = "/listaServiziEnte";
+
+	//	utility
+	public static final String SALVATAGGIO_SUCCESSO = "salvataggio-successo";
+	public static final String ELIMINAZIONE_SUCCESSO = "eliminazione-successo";
+	public static final String ERRORE_CAMPI_OBBLIGATORI = "validazione-campi-obbligatori-fallita";
+	public static final String ERRORE_SALVATAGGIO = "salvataggio-errore";
+	public static final String ERRORE_IMPOSSIBILE_CARICARE_I_DATI = "errore-impossibile-caricare-i-dati";
+	public static final String ERRORE_ELIMINAZIONE_SERVIZIO = "errore-eliminazione-servizio-associato";
+	public static final String INDIRIZZO_REDIRECT = "indirizzoRedirect";
+	public static final String DELETE_TOGGLE = "toDelete";
+	
 	
 	public static final int DEFAULT_CUR = 1;
 	public static final int DEFAULT_DELTA = 10;

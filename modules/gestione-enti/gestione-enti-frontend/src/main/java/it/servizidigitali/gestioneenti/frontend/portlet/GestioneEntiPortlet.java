@@ -4,8 +4,11 @@ import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.Portlet;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -78,6 +82,13 @@ public class GestioneEntiPortlet extends MVCPortlet {
 	
 		renderRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONI, listaOrganizations);
 
+
+		//nascondo messaggi success e error default
+		PortletConfig portletConfig = (PortletConfig) renderRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		LiferayPortletConfig liferayPortletConfig = (LiferayPortletConfig) portletConfig;
+		SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+		SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
+		
 		super.render(renderRequest, renderResponse);
 	}
 }
