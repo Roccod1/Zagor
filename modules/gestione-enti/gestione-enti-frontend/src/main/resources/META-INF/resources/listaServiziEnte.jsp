@@ -1,5 +1,6 @@
 <%@ include file="init.jsp" %>
 
+
 <%
 	List<ServizioEnte> listaServiziEnte = (List<ServizioEnte>) renderRequest.getAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONE_SERVIZI);
 %>
@@ -28,6 +29,10 @@
 					<c:set value="${servizio.nome}" var="nomeServizio"/>
 				</c:if>
 			</c:forEach>
+		<liferay-ui:search-container-column-text value="${nomeServizio }" name="nome"/>
+
+		<c:set value="${servizioEnte.attivo eq true ? \"<i class='icon-ok'></i>\" : \"<i class='icon-remove'></i>\" }" var="iconaAttivo"/>
+		<liferay-ui:search-container-column-text value="${iconaAttivo}" name="attivo"/>
 			
 		<portlet:renderURL var="modificaUrl">
 			<portlet:param name="mvcRenderCommandName" value="<%=GestioneEntiPortletKeys.AGGIUNGI_MODIFICA_RENDER_COMMAND_NAME %>" />
@@ -41,12 +46,23 @@
 			<portlet:param name="<%=GestioneEntiPortletKeys.SERVIZIO_ID %>" value="${servizioEnte.servizioId}"/>
 			<portlet:param name="<%=GestioneEntiPortletKeys.DELETE_TOGGLE %>" value="true" />
 		</portlet:renderURL>	
-		<liferay-ui:search-container-column-text value="${nomeServizio }" name="nome"/>
-		<liferay-ui:search-container-column-text name="azioni" align="center" value="
-				<a href='${modificaUrl}'><i class='icon-edit'></i></a>
-				<a href='${eliminaServizioEnteUrl}'><i class='icon-trash'></i></a>
-			"/>
+		<liferay-ui:search-container-column-text name='azioni' align='center' value='
+				<a href="${modificaUrl}"><i class="icon-edit"></i></a>
+				<a href="${eliminaServizioEnteUrl}" id="eliminaServizio${servizioEnte.servizioId }"><i class="icon-trash"></i></a>
+			'/>		
 		</liferay-ui:search-container-row>
 		<liferay-ui:search-iterator />
 	</liferay-ui:search-container>
 </div>
+
+
+<script type="text/javascript" >
+
+	$("a[id^='eliminaServizio']").click( function(e){
+		var testoConferma = "<liferay-ui:message key='richiesta-conferma-eliminazione-servizio'/>";
+		if(!confirm(testoConferma)){
+			e.preventDefault();
+		}		
+	});
+
+</script>

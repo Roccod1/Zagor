@@ -38,8 +38,15 @@
 
 						</c:when>
 						
+						<c:when test="${empty listaServizi }">
+							<div class="alert alert-warning" role="alert">
+							  <liferay-ui:message key="nessun-servizio-attivabile"/>
+							</div>
+						</c:when>
+						
 						<c:otherwise>
 							<aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_ID %>" label="id-servizio">
+								<aui:validator name="required"/>
 								<aui:option value="" label="seleziona" disabled="true" selected="true"/>
 								<c:forEach items="${listaServizi }" var="servizio">
 									<aui:option value="${servizio.servizioId }" label="${servizio.nome }"/>
@@ -157,7 +164,8 @@
 		
 		
 		<aui:button-row cssClass="text-right">
-			<aui:button type="submit" value="salva" />
+			<c:set value="${empty listaServizi}" var="disabilitaSeNessunServizioAttivabile" />
+			<aui:button type="submit" value="salva" disabled="${disabilitaSeNessunServizioAttivabile }"/>
 			<aui:button type="cancel" value="annulla" href="${goBacklistaServiziUrl}"/>
 		</aui:button-row>
 	</aui:form>

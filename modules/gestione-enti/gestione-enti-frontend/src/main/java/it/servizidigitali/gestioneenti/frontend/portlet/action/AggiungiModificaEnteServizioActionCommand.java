@@ -84,13 +84,13 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 			try {
 				servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);				
 			}catch(Exception e) {
-				_log.error("ServizioEnte con serviziId "+ servizioId + " e organizationId " + organizationId + " inesistente. Creo nuova entity");
+				_log.debug("ServizioEnte con serviziId "+ servizioId + " e organizationId " + organizationId + " inesistente. Creo nuova entity");
 				servizioEnte = servizioEnteLocalService.createServizioEnte(servizioEntePK);
 			}
 		}else {
 			_log.error("servizioId  e organizationId sono campi obbligatori");
 			SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
-			throw new NullPointerException("servizioId  e organizationId sono campi obbligatori");
+			actionResponse.sendRedirect(redirect);
 		}
 		
 		try {

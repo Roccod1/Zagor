@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -98,11 +99,11 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 		
 		List<Servizio> listaFinita = new ArrayList<Servizio>(listaTuttiServizi);
 		List<ServizioEnte> listaServiziAttivi = servizioEnteLocalService.getServiziEnte(organizationId);
-		for(int i = 0; i < listaFinita.size(); i++){
-			Servizio servizio = listaFinita.get(i);
+		for(Servizio servizio : listaTuttiServizi) {
+//			Servizio servizio = listaFinita.get(0);
 			for(ServizioEnte servizioAttivo : listaServiziAttivi) {
 				if(servizioAttivo.getServizioId() == servizio.getServizioId()) {
-					listaFinita.remove(i);
+					listaFinita.remove(servizio);
 				}
 			}
 		}
