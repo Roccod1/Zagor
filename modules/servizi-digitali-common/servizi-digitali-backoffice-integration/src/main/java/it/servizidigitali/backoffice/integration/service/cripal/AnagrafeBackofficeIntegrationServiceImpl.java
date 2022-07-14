@@ -5,6 +5,8 @@ import com.liferay.portal.kernel.service.OrganizationLocalService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.osapulie.anagrafe.output.types.RichiestaDatiAnagraficiDocument.RichiestaDatiAnagrafici;
+import it.osapulie.anagrafe.output.types.impl.RichiestaDatiAnagraficiDocumentImpl;
 import it.servizidigitali.backoffice.integration.converter.cripal.CRIPALToDatiAnagraficiConverter;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagraficiGenerali;
@@ -13,7 +15,6 @@ import it.servizidigitali.backoffice.integration.model.anagrafe.DatiVariazioniDo
 import it.servizidigitali.backoffice.integration.model.commmon.IntegrationPreferences;
 import it.servizidigitali.backoffice.integration.service.AnagrafeBackofficeIntegrationService;
 import it.servizidigitali.backoffice.integration.service.CacheService;
-import it.servizidigitali.backoffice.integration.xsd.cripal.anagrafe.output.RichiestaDatiAnagrafici;
 
 /**
  * @author pindi
@@ -62,7 +63,7 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackoff
 	 * @return
 	 */
 	private DatiAnagrafici getDatiAnagrafici(String codiceFiscale, String codiceIpa, IntegrationPreferences integrationPreferences) {
-		RichiestaDatiAnagrafici richiesta = new RichiestaDatiAnagrafici();
+		RichiestaDatiAnagrafici richiesta = new RichiestaDatiAnagraficiDocumentImpl.RichiestaDatiAnagraficiImpl(RichiestaDatiAnagrafici.type);
 		richiesta.setCodiceFiscale(codiceFiscale);
 		if (integrationPreferences != null) {
 			richiesta.setCodiceServizio(integrationPreferences.getCodiceServizio());

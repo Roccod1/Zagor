@@ -1,5 +1,1 @@
 // Check GETTING_STARTED.markdown for information regarding usage.
-
-plugins {
-    id("no.nils.wsdl2java") version "0.12"
-}

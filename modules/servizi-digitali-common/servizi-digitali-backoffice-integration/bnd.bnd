@@ -4,5 +4,7 @@ Bundle-Version: 1.0.0
 
 Export-Package: \
 	it.servizidigitali.backoffice.integration
-
--fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning	
+	
+Import-Package: \
+  !javax.xml.rpc*,\
+  *

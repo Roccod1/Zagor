@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://types.input.rifiuti.osapulie.it"
+	targetNamespace="http://types.input.rifiuti.osapulie.it"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	version="1.0">
+	<xs:include schemaLocation="CommonTypes.xsd" />
+	<xs:element name="ritiroRamaglieVerdiRichiesta">
+		<xs:annotation>
+			<xs:documentation>Richiesta ritiro ramaglie verdi</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="idPratica" type="xs:string"/>
+				<xs:element name="richiedente" type="tns:Richiedente" />
+				<xs:element name="ritiro">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="zonaRitiro" type="xs:string" />
+							<xs:element name="tipoRitiro" type="xs:string" />
+							<xs:element name="indirizzoRitiro" type="tns:Indirizzo" />
+							<xs:element name="sottoTipoRitiro" type="xs:string" />
+							<xs:element name="annotazioni" type="xs:string" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="dataRichiesta" type="xs:date" />
+				<xs:element name="documento" type="tns:Documento" minOccurs="1" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+
+
+</xs:schema>

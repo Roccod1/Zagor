@@ -1,143 +1,33 @@
-project.ext {
-    jaxbTargetDir = file("${buildDir}/generated/xsd")
-    wsdl2javaTargetDir = file("${buildDir}/generated/wsdl")
-}
-
-configurations {
-    xsd2java
+repositories {
+    flatDir {
+        dirs 'lib'
+    }
 }
 
 dependencies {
-    xsd2java "com.sun.xml.bind:jaxb-xjc:3.0.2"
-    xsd2java "com.sun.xml.bind:jaxb-impl:3.0.2"
-    xsd2java "com.sun.xml.bind:jaxb-core:3.0.2"
-    xsd2java "jakarta.xml.bind:jakarta.xml.bind-api:3.0.1"
     compileOnly group: "com.liferay.portal", name: "release.portal.api"
-	compileInclude group: "jakarta.xml.bind", name: "jakarta.xml.bind-api", version: "3.0.1"
-	compileOnly group: "com.sun.xml.bind", name: "jaxb-impl", version: "3.0.2"
-	compileOnly group: "com.sun.xml.bind", name: "jaxb-xjc", version: "3.0.2"
-	compileOnly group: "com.sun.xml.bind", name: "jaxb-core", version: "3.0.2"
-	compileOnly group: "com.sun.xml.ws", name: "jaxws-ri", version: "3.0.2"
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-api")
+	compileInclude fileTree(dir: 'lib', include: '*.jar')
+	compileOnly group: 'com.liferay', name: 'org.apache.xmlbeans', version: '2.5.0.LIFERAY-PATCHED-1'
+	compileOnly group: 'com.liferay', name: 'org.apache.axis', version: '1.4.LIFERAY-PATCHED-6'
+	
 }
 
-task xsd2java() {
+buildscript {
+	dependencies {
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.xsd.builder", version: "1.0.11"
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.wsdl.builder", version: "3.0.2"
+	}
 
-    doLast {
-        jaxbTargetDir.mkdirs()
-
-        ant.taskdef(name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.xsd2java.asPath)
-        ant.jaxbTargetDir = jaxbTargetDir
-
-		// Anagrafe
-        ant.xjc(
-                destdir: '${jaxbTargetDir}',
-                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.anagrafe.input'
-        )
-        {
-            schema(dir: "src/main/resources/xsd/anagrafe/input", includes: 'Dichiarazione*.xsd')
-            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
-            arg(value: '-verbose')
-        }
-        ant.xjc(
-                destdir: '${jaxbTargetDir}',
-                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.anagrafe.output'
-        )
-        {
-            schema(dir: "src/main/resources/xsd/anagrafe/output", includes: '*.xsd')
-            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
-            arg(value: '-verbose')
-        }
-        // Tributi
-        ant.xjc(
-                destdir: '${jaxbTargetDir}',
-                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.tributi.input'
-        )
-        {
-            schema(dir: "src/main/resources/xsd/tributi/input", includes: 'Dichiarazione*.xsd,richiestaCessazione*.xsd,variazione*.xsd')
-            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
-            arg(value: '-verbose')
-        }
-        ant.xjc(
-                destdir: '${jaxbTargetDir}',
-                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.tributi.output'
-        )
-        {
-            schema(dir: "src/main/resources/xsd/tributi/output", includes: 'PagamentoOsapTemporanea-*.xsd,PagamentoOsapPermanente-*.xsd,PosizioneTributaria*.xsd,PagamentoPubblicita-*.xsd,PagamentoAffissioni-*.xsd,PagamentoServiziCimiteriali-*.xsd,DatiPagamentoServiziContribuente-*.xsd,VisuraTasi-*.xsd,VisuraTassaRifiuti-*.xsd,DichiarazioneTassaImmobili-*.xsd,DichiarazioneTassaRifiuti-*.xsd,CategorieImmobili-*.xsd')
-            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
-            arg(value: '-verbose')
-        }
-        // Sociali
-        ant.xjc(
-                destdir: '${jaxbTargetDir}',
-                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.sociali.input'
-        )
-        {
-            schema(dir: "src/main/resources/xsd/sociali/input", includes: '*.xsd')
-            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
-            arg(value: '-verbose')
-        }
-        // Protocollo
-        ant.xjc(
-                destdir: '${jaxbTargetDir}',
-                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.protocollo'
-        )
-        {
-            schema(dir: "src/main/resources/xsd/protocollo", includes: 'NuovoProtocolloProvvisorio-*.xsd,NuovoProtocollo-*.xsd,DettaglioProtocollo-*.xsd,DettaglioAllegato-*.xsd')
-            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
-            arg(value: '-verbose')
-        }
-        // Documenti
-        ant.xjc(
-                destdir: '${jaxbTargetDir}',
-                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.documenti.output'
-        )
-        {
-            schema(dir: "src/main/resources/xsd/documenti/output", includes: 'VisuraDocumenti-*.xsd')
-            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
-            arg(value: '-verbose')
-        }
-        // Pratiche
-        ant.xjc(
-                destdir: '${jaxbTargetDir}',
-                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.pratiche'
-        )
-        {
-            schema(dir: "src/main/resources/xsd/pratiche", includes: 'DocumentiContenuti-*.xsd,DownloadDocumento-*.xsd,EliminaDocumento-*.xsd,GetReferenteByPk-*.xsd,GetTipoImmobileByPk-*.xsd,GetTipoPraticaByPk-*.xsd,SavePratica-*.xsd,SearchAllegatiTipoPratica-*.xsd,SearchAllPraticheWeb-*.xsd,SearchCategoriePratiche-*.xsd,SearchPraticaByPk-*.xsd,SearchPraticaWebByPk-*.xsd,SearchPratiche-*.xsd,SearchPraticheWebByUtente-*.xsd,SearchStatoPratiche-*.xsd,SearchTipoImmobile-*.xsd,SearchTipoPraticheFrontend-*.xsd,UploadAllegatiToPratica-*.xsd,UploadFile-*.xsd')
-            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
-            arg(value: '-verbose')
-        }
-        // Rifiuti
-        ant.xjc(
-                destdir: '${jaxbTargetDir}',
-                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.rifiuti.input'
-        )
-        {
-            schema(dir: "src/main/resources/xsd/rifiuti/input", includes: '*-richiesta.xsd,*-risposta.xsd')
-            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
-            arg(value: '-verbose')
-        }
-        ant.xjc(
-                destdir: '${jaxbTargetDir}',
-                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.rifiuti.output'
-        )
-        {
-            schema(dir: "src/main/resources/xsd/rifiuti/output", includes: '*-richiesta.xsd,*-risposta.xsd')
-            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
-            arg(value: '-verbose')
-        }
-        // Servizi
-        ant.xjc(
-                destdir: '${jaxbTargetDir}',
-                package: 'it.servizidigitali.backoffice.integration.xsd.cripal.servizi'
-        )
-        {
-            schema(dir: "src/main/resources/xsd/servizi", includes: 'ServiziAttivi-*.xsd,Stradario-*.xsd,StradarioAscot-*.xsd')
-            binding(dir: "src/main/resources/xsd", includes: 'type-generation.xjb')
-            arg(value: '-verbose')
-        }
-    }
+	repositories {
+		maven {
+			url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+		}
+	}
 }
+
+apply plugin: "com.liferay.xsd.builder" 
+apply plugin: "com.liferay.wsdl.builder"
 
 if (hasProperty('buildScan')) {
     buildScan {
@@ -145,29 +35,3 @@ if (hasProperty('buildScan')) {
         termsOfServiceAgree = 'no'
     }
 }
-
-apply plugin: 'no.nils.wsdl2java'
-
-wsdl2java {
-    wsdlsToGenerate = [
-            ['-p', 'it.servizidigitali.backoffice.integration.wsdl', "$projectDir/src/main/resources/wsdl/servizionline.wsdl"]
-
-    ]
-    wsdlDir = file("$projectDir/src/main/resources/wsdl/")
-    cxfVersion = "3.3.2"
-    locale = Locale.ENGLISH
-}
-
-apply plugin: 'eclipse' 
-
-sourceSets {
-    main {
-        java {
-            srcDirs 'src/main/java'
-            srcDirs "${jaxbTargetDir}"
-            srcDirs "${wsdl2javaTargetDir}"
-        }
-    }
- }
-
-compileJava.dependsOn xsd2java

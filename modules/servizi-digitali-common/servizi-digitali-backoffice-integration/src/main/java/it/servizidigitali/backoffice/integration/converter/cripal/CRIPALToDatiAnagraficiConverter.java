@@ -10,14 +10,15 @@ import java.util.List;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.osapulie.anagrafe.output.types.DatiAnagrafici.ComponentiNucleoFamiliare;
+import it.osapulie.anagrafe.output.types.DatiAnagrafici.ComponentiNucleoFamiliare.PensioniList;
+import it.osapulie.anagrafe.output.types.DatiAnagrafici.ComponentiNucleoFamiliare.TipoDivorzio.Enum;
 import it.servizidigitali.backoffice.integration.enums.RelazioneParentela;
 import it.servizidigitali.backoffice.integration.enums.StatoCivile;
 import it.servizidigitali.backoffice.integration.enums.TipoCessazioneMatrimonio;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici.ComponenteNucleoFamiliare.Pensione;
 import it.servizidigitali.backoffice.integration.util.DateUtils;
-import it.servizidigitali.backoffice.integration.xsd.cripal.anagrafe.output.DatiAnagrafici.ComponentiNucleoFamiliare;
-import it.servizidigitali.backoffice.integration.xsd.cripal.anagrafe.output.DatiAnagrafici.ComponentiNucleoFamiliare.PensioniList;
 import it.servizidigitali.common.model.StatoEstero;
 import it.servizidigitali.common.service.StatoEsteroLocalService;
 
@@ -38,7 +39,7 @@ public class CRIPALToDatiAnagraficiConverter {
 	 * @param datiAnagraficiCripal
 	 * @return
 	 */
-	public DatiAnagrafici convert(it.servizidigitali.backoffice.integration.xsd.cripal.anagrafe.output.DatiAnagrafici datiAnagraficiCripal, String codiceISTATComune) {
+	public DatiAnagrafici convert(it.osapulie.anagrafe.output.types.DatiAnagrafici datiAnagraficiCripal, String codiceISTATComune) {
 
 		DatiAnagrafici datiAnagrafici = null;
 		if (datiAnagraficiCripal != null) {
@@ -57,7 +58,7 @@ public class CRIPALToDatiAnagraficiConverter {
 			datiAnagrafici.setToponimoIndirizzo(datiAnagraficiCripal.getToponimoIndirizzo());
 
 			// Nucleo familiare
-			List<ComponentiNucleoFamiliare> componentiNucleoCripal = datiAnagraficiCripal.getComponentiNucleoFamiliare();
+			ComponentiNucleoFamiliare[] componentiNucleoCripal = datiAnagraficiCripal.getComponentiNucleoFamiliareArray();
 
 			if (componentiNucleoCripal != null) {
 				List<DatiAnagrafici.ComponenteNucleoFamiliare> componentiNucleoFamiliare = new ArrayList<>();
@@ -68,14 +69,13 @@ public class CRIPALToDatiAnagraficiConverter {
 					DatiAnagrafici.ComponenteNucleoFamiliare componenteNucleoFamiliare = new DatiAnagrafici.ComponenteNucleoFamiliare();
 
 					// Atto nascita
-					boolean attoNascitaTrascitto = componenteNucleoFamiliareCripal.getNumeroAttoNascitaTrascritto() != null
-							&& !componenteNucleoFamiliareCripal.getNumeroAttoNascitaTrascritto().equals(0);
+					boolean attoNascitaTrascitto = componenteNucleoFamiliareCripal.getNumeroAttoNascitaTrascritto() != 0;
 					componenteNucleoFamiliare.setAttoNascitaTrascitto(attoNascitaTrascitto);
 					if (!attoNascitaTrascitto) {
 						componenteNucleoFamiliare
-								.setNumeroAttoNascita(componenteNucleoFamiliareCripal.getNumeroAttoNascita() != null ? componenteNucleoFamiliareCripal.getNumeroAttoNascita().toString() : null);
+								.setNumeroAttoNascita(componenteNucleoFamiliareCripal.getNumeroAttoNascita() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getNumeroAttoNascita()) : null);
 						componenteNucleoFamiliare
-								.setAnnoAttoNascita(componenteNucleoFamiliareCripal.getAnnoAttoNascita() != null ? componenteNucleoFamiliareCripal.getAnnoAttoNascita().toString() : null);
+								.setAnnoAttoNascita(componenteNucleoFamiliareCripal.getAnnoAttoNascita() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getAnnoAttoNascita()) : null);
 						componenteNucleoFamiliare.setParteAttoNascita(componenteNucleoFamiliareCripal.getParteNascita());
 						componenteNucleoFamiliare.setSerieAttoNascita(componenteNucleoFamiliareCripal.getSerieNascita());
 						componenteNucleoFamiliare.setUfficioAttoNascita(componenteNucleoFamiliareCripal.getUfficioNascita());
@@ -90,9 +90,9 @@ public class CRIPALToDatiAnagraficiConverter {
 					}
 					else {
 						componenteNucleoFamiliare.setNumeroAttoNascita(
-								componenteNucleoFamiliareCripal.getNumeroAttoNascitaTrascritto() != null ? componenteNucleoFamiliareCripal.getNumeroAttoNascitaTrascritto().toString() : null);
-						componenteNucleoFamiliare
-								.setAnnoAttoNascita(componenteNucleoFamiliareCripal.getAnnoNascitaTrascritto() != null ? componenteNucleoFamiliareCripal.getAnnoNascitaTrascritto().toString() : null);
+								componenteNucleoFamiliareCripal.getNumeroAttoNascitaTrascritto() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getNumeroAttoNascitaTrascritto()) : null);
+						componenteNucleoFamiliare.setAnnoAttoNascita(
+								componenteNucleoFamiliareCripal.getAnnoNascitaTrascritto() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getAnnoNascitaTrascritto()) : null);
 						componenteNucleoFamiliare.setParteAttoNascita(componenteNucleoFamiliareCripal.getParteNascitaTrascritto());
 						componenteNucleoFamiliare.setSerieAttoNascita(componenteNucleoFamiliareCripal.getSerieNascitaTrascritto());
 						componenteNucleoFamiliare.setUfficioAttoNascita(componenteNucleoFamiliareCripal.getUfficioNascita());
@@ -100,18 +100,15 @@ public class CRIPALToDatiAnagraficiConverter {
 						componenteNucleoFamiliare.setCognomeNomeAttoNascita(componenteNucleoFamiliareCripal.getCognomeNomeAttoNascita());
 					}
 					// Atto matrimonio
-					boolean attoMatrimonioTrascitto = componenteNucleoFamiliareCripal.getNumeroAttoMatrimonioTrascritto() != null
-							&& !componenteNucleoFamiliareCripal.getNumeroAttoMatrimonioTrascritto().equals(0);
+					boolean attoMatrimonioTrascitto = componenteNucleoFamiliareCripal.getNumeroAttoMatrimonioTrascritto() != 0;
 					componenteNucleoFamiliare.setAttoMatrimonioTrascitto(attoMatrimonioTrascitto);
 					componenteNucleoFamiliare.setLuogoMatrimonio(componenteNucleoFamiliareCripal.getLuogoMatrimonio());
 					componenteNucleoFamiliare.setDataMatrimonio(DateUtils.getUniversalDateFromCalendar(componenteNucleoFamiliareCripal.getDataMatrimonio()));
 					componenteNucleoFamiliare
-							.setAnnoAttoMatrimonio(componenteNucleoFamiliareCripal.getAnnoMatrimonio() != null ? componenteNucleoFamiliareCripal.getAnnoMatrimonio().toString() : null);
+							.setAnnoAttoMatrimonio(componenteNucleoFamiliareCripal.getAnnoMatrimonio() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getAnnoMatrimonio()) : null);
 					componenteNucleoFamiliare.setCodiceIstatComuneAttoMatrimonio(componenteNucleoFamiliareCripal.getCodiceIstatComuneMatrimonio());
 					componenteNucleoFamiliare
-							.setNumeroAttoMatrimonio(componenteNucleoFamiliareCripal.getNumeroAttoMatrimonio() != null && !componenteNucleoFamiliareCripal.getNumeroAttoMatrimonio().equals(0)
-									? componenteNucleoFamiliareCripal.getNumeroAttoMatrimonio().toString()
-									: null);
+							.setNumeroAttoMatrimonio(componenteNucleoFamiliareCripal.getNumeroAttoMatrimonio() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getNumeroAttoMatrimonio()) : null);
 					componenteNucleoFamiliare.setParteAttoMatrimonio(componenteNucleoFamiliareCripal.getParteMatrimonio());
 					componenteNucleoFamiliare.setSerieAttoMatrimonio(componenteNucleoFamiliareCripal.getSerieMatrimonio());
 					componenteNucleoFamiliare.setUfficioAttoMatrimonio(componenteNucleoFamiliareCripal.getUfficioMatrimonio());
@@ -133,20 +130,19 @@ public class CRIPALToDatiAnagraficiConverter {
 					componenteNucleoFamiliare.setComuneNascitaConiugeAttoMatrimonio(componenteNucleoFamiliareCripal.getComuneNascitaConiugeAttoMatrimonio());
 
 					// Annullamento Matrimonio
-					boolean attoAnnullamentoMatrimonioTrascitto = componenteNucleoFamiliareCripal.getNumeroAttoDivorzioTrascritto() != null
-							&& !componenteNucleoFamiliareCripal.getNumeroAttoDivorzioTrascritto().equals(0);
+					boolean attoAnnullamentoMatrimonioTrascitto = componenteNucleoFamiliareCripal.getNumeroAttoDivorzioTrascritto() != 0;
 					componenteNucleoFamiliare.setAttoAnnullamentoMatrimonioTrascitto(attoAnnullamentoMatrimonioTrascitto);
 					componenteNucleoFamiliare.setDataDecorrenzaAnnullamentoMatrimonio(DateUtils.getUniversalDateFromCalendar(componenteNucleoFamiliareCripal.getDataDecorrenzaDivorzio()));
 					componenteNucleoFamiliare.setNumeroSentenzaAnnullamentoMatrimonio(componenteNucleoFamiliareCripal.getNumeroSentenzaDivorzio());
 
-					String tipoDivorzio = componenteNucleoFamiliareCripal.getTipoDivorzio();
+					Enum tipoDivorzio = componenteNucleoFamiliareCripal.getTipoDivorzio();
 					if (tipoDivorzio != null) {
 						try {
-							componenteNucleoFamiliare.setTipoCessazioneMatrimonio(TipoCessazioneMatrimonio.valueOf(tipoDivorzio));
+							componenteNucleoFamiliare.setTipoCessazioneMatrimonio(TipoCessazioneMatrimonio.valueOf(tipoDivorzio.toString()));
 						}
 						catch (Exception e) {
 							log.warn("convert :: " + e.getMessage());
-							componenteNucleoFamiliare.setTipoCessazioneMatrimonio(EnumerationConverter.convertToTipoCessazioneMatrimonio(tipoDivorzio));
+							componenteNucleoFamiliare.setTipoCessazioneMatrimonio(EnumerationConverter.convertToTipoCessazioneMatrimonio(tipoDivorzio.toString()));
 						}
 					}
 					if (!attoAnnullamentoMatrimonioTrascitto) {
@@ -159,9 +155,7 @@ public class CRIPALToDatiAnagraficiConverter {
 						}
 
 						componenteNucleoFamiliare.setNumeroAttoAnnullamentoMatrimonio(
-								componenteNucleoFamiliareCripal.getNumeroAttoDivorzio() != null && !componenteNucleoFamiliareCripal.getNumeroAttoDivorzio().equals(0)
-										? componenteNucleoFamiliareCripal.getNumeroAttoDivorzio().toString()
-										: null);
+								componenteNucleoFamiliareCripal.getNumeroAttoDivorzio() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getNumeroAttoDivorzio()) : null);
 						componenteNucleoFamiliare.setParteAttoAnnullamentoMatrimonio(componenteNucleoFamiliareCripal.getParteDivorzio());
 						componenteNucleoFamiliare.setSerieAttoAnnullamentoMatrimonio(componenteNucleoFamiliareCripal.getSerieDivorzio());
 						componenteNucleoFamiliare.setVolumeAttoAnnullamentoMatrimonio(componenteNucleoFamiliareCripal.getVolumeDivorzio());
@@ -175,9 +169,7 @@ public class CRIPALToDatiAnagraficiConverter {
 							componenteNucleoFamiliare.setAnnoAttoAnnullamentoMatrimonio(String.valueOf(dataAttoDivorzioTrascritto.get(Calendar.YEAR)));
 						}
 						componenteNucleoFamiliare.setNumeroAttoAnnullamentoMatrimonio(
-								componenteNucleoFamiliareCripal.getNumeroAttoDivorzioTrascritto() != null && !componenteNucleoFamiliareCripal.getNumeroAttoDivorzioTrascritto().equals(0)
-										? componenteNucleoFamiliareCripal.getNumeroAttoDivorzioTrascritto().toString()
-										: null);
+								componenteNucleoFamiliareCripal.getNumeroAttoDivorzioTrascritto() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getNumeroAttoDivorzioTrascritto()) : null);
 						componenteNucleoFamiliare.setParteAttoAnnullamentoMatrimonio(componenteNucleoFamiliareCripal.getParteDivorzioTrascritto());
 						componenteNucleoFamiliare.setSerieAttoAnnullamentoMatrimonio(componenteNucleoFamiliareCripal.getSerieDivorzioTrascritto());
 						componenteNucleoFamiliare.setVolumeAttoAnnullamentoMatrimonio(componenteNucleoFamiliareCripal.getVolumeDivorzioTrascritto());
@@ -188,15 +180,15 @@ public class CRIPALToDatiAnagraficiConverter {
 					// morte trascritto o atto di divorzio trascritto!!!
 
 					// Atto morte
-					boolean attoMorteTrascritto = componenteNucleoFamiliareCripal.getAnnoMorteConiugeTrascritto() != null && !componenteNucleoFamiliareCripal.getAnnoMorteConiugeTrascritto().equals(0);
+					boolean attoMorteTrascritto = componenteNucleoFamiliareCripal.getAnnoMorteConiugeTrascritto() != 0;
 					componenteNucleoFamiliare.setAttoMorteTrascitto(attoMorteTrascritto);
 					if (!attoMorteTrascritto) {
 						componenteNucleoFamiliare
-								.setNumeroAttoMorte(componenteNucleoFamiliareCripal.getNumeroAttoMorte() != null ? componenteNucleoFamiliareCripal.getNumeroAttoMorte().toString() : null);
+								.setNumeroAttoMorte(componenteNucleoFamiliareCripal.getNumeroAttoMorte() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getNumeroAttoMorte()) : null);
 						componenteNucleoFamiliare.setParteAttoMorte(componenteNucleoFamiliareCripal.getParteMorte());
 						componenteNucleoFamiliare.setSerieAttoMorte(componenteNucleoFamiliareCripal.getSerieMorte());
 						componenteNucleoFamiliare.setUfficioAttoMorte(componenteNucleoFamiliareCripal.getUfficioMorte());
-						componenteNucleoFamiliare.setAnnoAttoMorte(componenteNucleoFamiliareCripal.getAnnoMorte() != null ? componenteNucleoFamiliareCripal.getAnnoMorte().toString() : null);
+						componenteNucleoFamiliare.setAnnoAttoMorte(componenteNucleoFamiliareCripal.getAnnoMorte() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getAnnoMorte()) : null);
 						componenteNucleoFamiliare.setCodiceIstatComuneAttoMorte(componenteNucleoFamiliareCripal.getCodiceIstatComuneMorte());
 						componenteNucleoFamiliare.setCognomeNomeAttoMorte(componenteNucleoFamiliareCripal.getCognomeNomeAttoMorte());
 
@@ -211,13 +203,13 @@ public class CRIPALToDatiAnagraficiConverter {
 					else {
 						// TODO coniuge?!?
 						componenteNucleoFamiliare.setNumeroAttoMorte(
-								componenteNucleoFamiliareCripal.getNumeroAttoMorteConiugeTrascritto() != null ? componenteNucleoFamiliareCripal.getNumeroAttoMorteConiugeTrascritto().toString()
+								componenteNucleoFamiliareCripal.getNumeroAttoMorteConiugeTrascritto() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getNumeroAttoMorteConiugeTrascritto())
 										: null);
 						componenteNucleoFamiliare.setParteAttoMorte(componenteNucleoFamiliareCripal.getParteMorteConiugeTrascritto());
 						componenteNucleoFamiliare.setSerieAttoMorte(componenteNucleoFamiliareCripal.getSerieMorteConiugeTrascritto());
 						// componenteNucleoFamiliare.setUfficioAttoMorte(componenteNucleoFamiliareCripal.getConiugeTrascritto());
 						componenteNucleoFamiliare.setAnnoAttoMorte(
-								componenteNucleoFamiliareCripal.getAnnoMorteConiugeTrascritto() != null ? componenteNucleoFamiliareCripal.getAnnoMorteConiugeTrascritto().toString() : null);
+								componenteNucleoFamiliareCripal.getAnnoMorteConiugeTrascritto() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getAnnoMorteConiugeTrascritto()) : null);
 						componenteNucleoFamiliare.setCodiceIstatComuneAttoMorte(componenteNucleoFamiliareCripal.getCodiceIstatComuneMorteConiugeTrascritto());
 						componenteNucleoFamiliare.setCognomeNomeAttoMorte(componenteNucleoFamiliareCripal.getCognomeNomeAttoMorte());
 						componenteNucleoFamiliare.setComuneNascitaAttoMorte(componenteNucleoFamiliareCripal.getComuneNascitaAttoMorte());
@@ -230,7 +222,7 @@ public class CRIPALToDatiAnagraficiConverter {
 					componenteNucleoFamiliare.setParteAttoUnioneCivile(componenteNucleoFamiliareCripal.getParteAttoUnioneCivile());
 					componenteNucleoFamiliare.setSerieAttoUnioneCivile(componenteNucleoFamiliareCripal.getSerieAttoUnioneCivile());
 					componenteNucleoFamiliare
-							.setAnnoAttoUnioneCivile(componenteNucleoFamiliareCripal.getAnnoAttoUnioneCivile() != null ? componenteNucleoFamiliareCripal.getAnnoAttoUnioneCivile().toString() : null);
+							.setAnnoAttoUnioneCivile(componenteNucleoFamiliareCripal.getAnnoAttoUnioneCivile() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getAnnoAttoUnioneCivile()) : null);
 					componenteNucleoFamiliare.setUfficioAttoUnioneCivile(componenteNucleoFamiliareCripal.getUfficioAttoUnioneCivile());
 					componenteNucleoFamiliare.setCodiceIstatComuneAttoUnioneCivile(componenteNucleoFamiliareCripal.getCodiceIstatComuneAttoUnioneCivile());
 					componenteNucleoFamiliare.setDenominazioneComuneAttoUnioneCivile(componenteNucleoFamiliareCripal.getDenominazioneComuneAttoUnioneCivile());
@@ -296,9 +288,7 @@ public class CRIPALToDatiAnagraficiConverter {
 					componenteNucleoFamiliare.setAttoVedovanzaTrascitto(attoVedovanzaTrascitto);
 					componenteNucleoFamiliare.setDataAttoVedovanza(DateUtils.getUniversalDateFromCalendar(componenteNucleoFamiliareCripal.getDataAttoVedovanza()));
 					componenteNucleoFamiliare
-							.setNumeroAttoVedovanza(componenteNucleoFamiliareCripal.getNumeroAttoVedovanza() != null && !componenteNucleoFamiliareCripal.getNumeroAttoVedovanza().equals(0)
-									? componenteNucleoFamiliareCripal.getNumeroAttoVedovanza().toString()
-									: null);
+							.setNumeroAttoVedovanza(componenteNucleoFamiliareCripal.getNumeroAttoVedovanza() != 0 ? String.valueOf(componenteNucleoFamiliareCripal.getNumeroAttoVedovanza()) : null);
 					componenteNucleoFamiliare.setParteAttoVedovanza(componenteNucleoFamiliareCripal.getParteVedovanza());
 					componenteNucleoFamiliare.setSerieAttoVedovanza(componenteNucleoFamiliareCripal.getSerieVedovanza());
 					componenteNucleoFamiliare.setUfficioAttoVedovanza(componenteNucleoFamiliareCripal.getUfficioVedovanza());
@@ -306,7 +296,7 @@ public class CRIPALToDatiAnagraficiConverter {
 
 					componenteNucleoFamiliare.setCap(datiAnagraficiCripal.getCap());
 					componenteNucleoFamiliare.setCellulare(null);
-					componenteNucleoFamiliare.setCittadinanzaItaliana(componenteNucleoFamiliareCripal.isCittadinanzaItaliana());
+					componenteNucleoFamiliare.setCittadinanzaItaliana(componenteNucleoFamiliareCripal.getCittadinanzaItaliana());
 					componenteNucleoFamiliare.setCodiceFiscale(componenteNucleoFamiliareCripal.getCodiceFiscale());
 					componenteNucleoFamiliare.setCodiceIstatComuneNascita(componenteNucleoFamiliareCripal.getCodiceIstatComuneNascita());
 					componenteNucleoFamiliare.setCodiceIstatComuneResidenza(codiceISTATComune);
@@ -340,7 +330,7 @@ public class CRIPALToDatiAnagraficiConverter {
 					componenteNucleoFamiliare.setNumeroCartaIdentita(componenteNucleoFamiliareCripal.getNumeroCartaIdentita());
 					componenteNucleoFamiliare.setNumeroCivico(datiAnagrafici.getNumeroCivico());
 
-					List<PensioniList> pensioniList = componenteNucleoFamiliareCripal.getPensioniList();
+					PensioniList[] pensioniList = componenteNucleoFamiliareCripal.getPensioniListArray();
 					if (pensioniList != null) {
 						List<Pensione> pensioni = new ArrayList<>();
 						for (PensioniList pensioniList2 : pensioniList) {
@@ -369,14 +359,14 @@ public class CRIPALToDatiAnagraficiConverter {
 					componenteNucleoFamiliare.setSesso(componenteNucleoFamiliareCripal.getSesso());
 
 					// Stato civile
-					String statoCivile = componenteNucleoFamiliareCripal.getStatoCivile();
+					it.osapulie.anagrafe.output.types.DatiAnagrafici.ComponentiNucleoFamiliare.StatoCivile.Enum statoCivile = componenteNucleoFamiliareCripal.getStatoCivile();
 					if (statoCivile != null) {
 						try {
-							componenteNucleoFamiliare.setStatoCivile(StatoCivile.valueOf(statoCivile));
+							componenteNucleoFamiliare.setStatoCivile(StatoCivile.valueOf(statoCivile.toString()));
 						}
 						catch (Exception e) {
 							log.warn("convert :: " + e.getMessage());
-							componenteNucleoFamiliare.setStatoCivile(EnumerationConverter.convertToStatoCivile(statoCivile));
+							componenteNucleoFamiliare.setStatoCivile(EnumerationConverter.convertToStatoCivile(statoCivile.toString()));
 						}
 					}
 					componenteNucleoFamiliare.setTelefono(null);
