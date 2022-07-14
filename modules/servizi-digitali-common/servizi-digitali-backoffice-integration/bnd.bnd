@@ -6,5 +6,24 @@ Export-Package: \
 	it.servizidigitali.backoffice.integration
 	
 Import-Package: \
-  !javax.xml.rpc*,\
-  *
+  	!javax.xml.rpc.*,\
+  	!com.ibm.wsdl.*,\
+  	!com.sun.jimi.core.*,\
+  	!com.sun.net.ssl.*,\
+  	!javax.rmi.*,\
+  	!org.apache.bsf.*,\
+  	!org.apache.commons.discovery.*,\
+  	!org.apache.commons.httpclient.*,\
+  	!org.apache.commons.logging.*,\
+  	!org.omg.CORBA*,\
+  	!org.omg.CosNaming*,\
+  	!sun.awt*,\
+  	!sun.security.provider*,\
+  	!repackage,\
+  	!javax.jms,\
+  	!org.apache.avalon.*,\
+  	!org.apache.commons.net.*,\
+  	!org.apache.log.*,\
+  	!org.apache.tools.ant.*,\
+  	!org.exolab.*,\
+  	*
