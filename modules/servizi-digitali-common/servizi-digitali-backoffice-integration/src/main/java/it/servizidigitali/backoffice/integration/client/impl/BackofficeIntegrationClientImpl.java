@@ -20,7 +20,6 @@ import it.servizidigitali.backoffice.integration.exception.BackofficeIntegration
  * @author pindi
  *
  */
-
 @Component(immediate = true, service = BackofficeIntegrationClient.class)
 public class BackofficeIntegrationClientImpl implements BackofficeIntegrationClient {
 

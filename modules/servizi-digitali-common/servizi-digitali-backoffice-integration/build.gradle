@@ -11,6 +11,7 @@ dependencies {
 	compileInclude group: 'com.liferay', name: 'org.apache.xmlbeans', version: '2.5.0.LIFERAY-PATCHED-1'
 	compileInclude group: 'com.liferay', name: 'org.apache.axis', version: '1.4.LIFERAY-PATCHED-6'
 	compileInclude group: 'javax.xml.rpc', name: 'javax.xml.rpc-api', version: '1.1.2'
+	testCompile group: "junit", name: "junit", version: "4.12"
 }
 
 buildscript {
