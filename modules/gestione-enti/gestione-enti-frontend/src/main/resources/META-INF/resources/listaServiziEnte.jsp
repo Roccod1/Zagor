@@ -55,6 +55,14 @@
 	</liferay-ui:search-container>
 </div>
 
+<c:if test="${empty pulsantePaginaPrincipale or pulsantePaginaPrincipale eq true }">
+	<div class="row">
+		<div class="col text-right">
+			<aui:button type="button" href="${homeURL }" value="pagina-principale"/>
+		</div>
+	</div>
+</c:if>
+
 
 <script type="text/javascript" >
 

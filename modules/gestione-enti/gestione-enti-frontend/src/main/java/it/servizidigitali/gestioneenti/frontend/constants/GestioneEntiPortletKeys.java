@@ -68,7 +68,7 @@ public class GestioneEntiPortletKeys {
 	public static final String ERRORE_ELIMINAZIONE_SERVIZIO = "errore-eliminazione-servizio-associato";
 	public static final String INDIRIZZO_REDIRECT = "indirizzoRedirect";
 	public static final String DELETE_TOGGLE = "toDelete";
-	
+	public static final String PULSANTE_PAGINA_PRINCIPALE_TOGGLE = "pulsantePaginaPrincipale";
 	
 	public static final int DEFAULT_CUR = 1;
 	public static final int DEFAULT_DELTA = 10;

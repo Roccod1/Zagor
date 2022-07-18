@@ -4,16 +4,21 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
 
+import javax.portlet.MutableRenderParameters;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -79,6 +84,7 @@ public class ListaServiziEnteRenderCommand implements MVCRenderCommand {
 
 				Organization organization = organizationLocalService.getOrganization(organizationId);
 				renderRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONE, organization);
+				
 				return GestioneEntiPortletKeys.JSP_LISTA_SERVIZI_ENTE;
 			}catch(Exception e) {
 				_log.error("Impossibile recuperare lista servizi e/o organizzazioni", e);
