@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://types.input.sociali.osapulie.it" targetNamespace="http://types.input.sociali.osapulie.it" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:include schemaLocation="CommonTypes.xsd" />
 	
 	<xs:element name="disabiliParcheggioRichiesta">
@@ -8,10 +8,10 @@
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="richiedente" type="tns:Soggetto" />
+				<xs:element name="richiedente" type="Soggetto" />
 				<xs:element name="ruoloRichiedente" type="xs:string" />
-			    <xs:element name="disabile" type="tns:Soggetto" />
-				<xs:element name="delegato" type="tns:Soggetto" />
+			    <xs:element name="disabile" type="Soggetto" />
+				<xs:element name="delegato" type="Soggetto" />
 				<xs:element name="richiesta" type="xs:string" />
 				<xs:element name="numeroPass" type="xs:string" nillable="true"/>
 				<xs:element name="scadenzaPass" type="xs:string" nillable="true"/>

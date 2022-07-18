@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://types.output.rifiuti.osapulie.it" targetNamespace="http://types.output.rifiuti.osapulie.it" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:complexType name="Pattumella">
 		<xs:sequence>
 			<xs:element name="id" type="xs:string" /> <!-- identificativo univoco pattumella -->
@@ -16,7 +16,7 @@
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="nome" type="xs:string" />
-						<xs:element name="colore" type="tns:Codifica" />
+						<xs:element name="colore" type="Codifica" />
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -37,8 +37,8 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:element>
-			<xs:element name="categoria" type="tns:Codifica"/>
-			<xs:element name="indirizzoConsegna" type="tns:Indirizzo"/>
+			<xs:element name="categoria" type="Codifica"/>
+			<xs:element name="indirizzoConsegna" type="Indirizzo"/>
 			<xs:element name="codiceConsegna" type="xs:string" />
 			<xs:element name="dataConsegna" type="xs:dateTime" />
 			<xs:element name="barcode" type="xs:string" minOccurs="0" />
@@ -51,12 +51,12 @@
 			<xs:documentation xml:lang="it">Tipo di dato complesso per un indirizzo completo</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="provincia" type="tns:Codifica">
+			<xs:element name="provincia" type="Codifica">
 				<xs:annotation>
 					<xs:documentation xml:lang="it">Sigla/Descrizione della prinvincia</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="comune" type="tns:Codifica">
+			<xs:element name="comune" type="Codifica">
 				<xs:annotation>
 					<xs:documentation xml:lang="it">Codice ISTAT/Descrizione del comune</xs:documentation>
 				</xs:annotation>
@@ -64,7 +64,7 @@
 			<xs:element name="cap" type="xs:string" minOccurs="0" />
 			<xs:choice>
 				<xs:sequence>
-					<xs:element name="via" type="tns:Codifica">
+					<xs:element name="via" type="Codifica">
 						<xs:annotation>
 							<xs:documentation xml:lang="it">Codice/descrizione della via</xs:documentation>
 						</xs:annotation>
@@ -89,7 +89,7 @@
 				</xs:sequence>
 				<xs:element name="indirizzoCompleto" type="xs:string" />
 			</xs:choice>
-			<xs:element name="geolocalizzazioneRitiro" type="tns:Geolocalizzazione" minOccurs="0" />
+			<xs:element name="geolocalizzazioneRitiro" type="Geolocalizzazione" minOccurs="0" />
 		</xs:sequence>
 	</xs:complexType>
 

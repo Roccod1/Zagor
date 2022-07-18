@@ -15,38 +15,38 @@ public interface AnagrafeBackofficeIntegrationService {
 	/**
 	 *
 	 * @param codiceFiscale
-	 * @param codiceIpa
+	 * @param organizationId
 	 * @param idTransazione
 	 * @param integrationPreferences
 	 * @return
 	 */
-	DatiAnagrafici getDatiAnagrafici(String codiceFiscale, String codiceIpa, String idTransazione, IntegrationPreferences integrationPreferences);
+	DatiAnagrafici getDatiAnagrafici(String codiceFiscale, long organizationId, String idTransazione, IntegrationPreferences integrationPreferences);
 
 	/**
 	 *
 	 * @param codiceFiscale
-	 * @param codiceIpa
+	 * @param organizationId
 	 * @param idTransazione
 	 * @return
 	 */
-	DatiAnagraficiGenerali getDatiAnagraficiGenerali(String codiceFiscale, String codiceIpa, String idTransazione, IntegrationPreferences integrationPreferences);
+	DatiAnagraficiGenerali getDatiAnagraficiGenerali(String codiceFiscale, long organizationId, String idTransazione, IntegrationPreferences integrationPreferences);
 
 	/**
 	 *
 	 * @param codiceFiscale
-	 * @param codiceIpa
+	 * @param organizationId
 	 * @param idTransazione
 	 * @return
 	 */
-	DatiElettorali getDatiElettorali(String codiceFiscale, String codiceIpa, String idTransazione, IntegrationPreferences integrationPreferences);
+	DatiElettorali getDatiElettorali(String codiceFiscale, long organizationId, String idTransazione, IntegrationPreferences integrationPreferences);
 
 	/**
 	 *
 	 * @param codiceFiscale
-	 * @param codiceIpa
+	 * @param organizationId
 	 * @param idTransazione
 	 * @return
 	 */
-	DatiVariazioniDomicilio getDatiVariazioniDomicilio(String codiceFiscale, String codiceIpa, String idTransazione, IntegrationPreferences integrationPreferences);
+	DatiVariazioniDomicilio getDatiVariazioniDomicilio(String codiceFiscale, long organizationId, String idTransazione, IntegrationPreferences integrationPreferences);
 
 }

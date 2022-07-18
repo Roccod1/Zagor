@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://types.input.sociali.osapulie.it" targetNamespace="http://types.input.sociali.osapulie.it" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:include schemaLocation="CommonTypes.xsd" />
 	
 	<xs:element name="richiestaTrasportoRichiesta">
@@ -12,7 +12,7 @@
 				<xs:element name="nomeRichiedente" type="xs:string" />
 				<xs:element name="cognomeRichiedente" type="xs:string" />
 				<xs:element name="tipoRichiedente" type="xs:string" />
-				<xs:element name="disabile" type="tns:Soggetto" nillable="true"/>
+				<xs:element name="disabile" type="Soggetto" nillable="true"/>
 				<xs:element name="sediaARotelle" type="xs:boolean" />
 				<xs:element name="isee" type="xs:string" />
 				<xs:element name="annoIsee" type="xs:string" />

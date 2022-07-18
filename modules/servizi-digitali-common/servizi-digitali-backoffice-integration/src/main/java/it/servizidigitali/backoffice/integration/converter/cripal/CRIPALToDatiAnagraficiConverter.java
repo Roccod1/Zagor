@@ -10,9 +10,6 @@ import java.util.List;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import it.osapulie.anagrafe.output.types.DatiAnagrafici.ComponentiNucleoFamiliare;
-import it.osapulie.anagrafe.output.types.DatiAnagrafici.ComponentiNucleoFamiliare.PensioniList;
-import it.osapulie.anagrafe.output.types.DatiAnagrafici.ComponentiNucleoFamiliare.TipoDivorzio.Enum;
 import it.servizidigitali.backoffice.integration.enums.RelazioneParentela;
 import it.servizidigitali.backoffice.integration.enums.StatoCivile;
 import it.servizidigitali.backoffice.integration.enums.TipoCessazioneMatrimonio;
@@ -21,6 +18,8 @@ import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici.C
 import it.servizidigitali.backoffice.integration.util.DateUtils;
 import it.servizidigitali.common.model.StatoEstero;
 import it.servizidigitali.common.service.StatoEsteroLocalService;
+import noNamespace.DatiAnagrafici.ComponentiNucleoFamiliare;
+import noNamespace.DatiAnagrafici.ComponentiNucleoFamiliare.PensioniList;
 
 /**
  * @author pindi
@@ -37,9 +36,10 @@ public class CRIPALToDatiAnagraficiConverter {
 	/**
 	 *
 	 * @param datiAnagraficiCripal
+	 * @param codiceISTATComune
 	 * @return
 	 */
-	public DatiAnagrafici convert(it.osapulie.anagrafe.output.types.DatiAnagrafici datiAnagraficiCripal, String codiceISTATComune) {
+	public DatiAnagrafici convert(noNamespace.DatiAnagrafici datiAnagraficiCripal, String codiceISTATComune) {
 
 		DatiAnagrafici datiAnagrafici = null;
 		if (datiAnagraficiCripal != null) {
@@ -135,15 +135,20 @@ public class CRIPALToDatiAnagraficiConverter {
 					componenteNucleoFamiliare.setDataDecorrenzaAnnullamentoMatrimonio(DateUtils.getUniversalDateFromCalendar(componenteNucleoFamiliareCripal.getDataDecorrenzaDivorzio()));
 					componenteNucleoFamiliare.setNumeroSentenzaAnnullamentoMatrimonio(componenteNucleoFamiliareCripal.getNumeroSentenzaDivorzio());
 
-					Enum tipoDivorzio = componenteNucleoFamiliareCripal.getTipoDivorzio();
-					if (tipoDivorzio != null) {
-						try {
-							componenteNucleoFamiliare.setTipoCessazioneMatrimonio(TipoCessazioneMatrimonio.valueOf(tipoDivorzio.toString()));
+					try {
+						noNamespace.DatiAnagrafici.ComponentiNucleoFamiliare.TipoDivorzio.Enum tipoDivorzio = componenteNucleoFamiliareCripal.getTipoDivorzio();
+						if (tipoDivorzio != null) {
+							try {
+								componenteNucleoFamiliare.setTipoCessazioneMatrimonio(TipoCessazioneMatrimonio.valueOf(tipoDivorzio.toString()));
+							}
+							catch (Exception e) {
+								log.warn("convert :: " + e.getMessage());
+								componenteNucleoFamiliare.setTipoCessazioneMatrimonio(EnumerationConverter.convertToTipoCessazioneMatrimonio(tipoDivorzio.toString()));
+							}
 						}
-						catch (Exception e) {
-							log.warn("convert :: " + e.getMessage());
-							componenteNucleoFamiliare.setTipoCessazioneMatrimonio(EnumerationConverter.convertToTipoCessazioneMatrimonio(tipoDivorzio.toString()));
-						}
+					}
+					catch (Exception e1) {
+						log.warn("convert :: " + e1.getMessage());
 					}
 					if (!attoAnnullamentoMatrimonioTrascitto) {
 						componenteNucleoFamiliare.setCodiceIstatComuneAttoAnnullamentoMatrimonio(componenteNucleoFamiliareCripal.getCodiceIstatComuneTribunaleDivorzio());
@@ -359,15 +364,20 @@ public class CRIPALToDatiAnagraficiConverter {
 					componenteNucleoFamiliare.setSesso(componenteNucleoFamiliareCripal.getSesso());
 
 					// Stato civile
-					it.osapulie.anagrafe.output.types.DatiAnagrafici.ComponentiNucleoFamiliare.StatoCivile.Enum statoCivile = componenteNucleoFamiliareCripal.getStatoCivile();
-					if (statoCivile != null) {
-						try {
-							componenteNucleoFamiliare.setStatoCivile(StatoCivile.valueOf(statoCivile.toString()));
+					try {
+						noNamespace.DatiAnagrafici.ComponentiNucleoFamiliare.StatoCivile.Enum statoCivile = componenteNucleoFamiliareCripal.getStatoCivile();
+						if (statoCivile != null) {
+							try {
+								componenteNucleoFamiliare.setStatoCivile(StatoCivile.valueOf(statoCivile.toString()));
+							}
+							catch (Exception e) {
+								log.warn("convert :: " + e.getMessage());
+								componenteNucleoFamiliare.setStatoCivile(EnumerationConverter.convertToStatoCivile(statoCivile.toString()));
+							}
 						}
-						catch (Exception e) {
-							log.warn("convert :: " + e.getMessage());
-							componenteNucleoFamiliare.setStatoCivile(EnumerationConverter.convertToStatoCivile(statoCivile.toString()));
-						}
+					}
+					catch (Exception e) {
+						log.warn("convert :: " + e.getMessage());
 					}
 					componenteNucleoFamiliare.setTelefono(null);
 					componenteNucleoFamiliare.setTitoloStudio(componenteNucleoFamiliareCripal.getTitoloStudio());

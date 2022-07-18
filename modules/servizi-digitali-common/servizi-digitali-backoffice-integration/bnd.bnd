@@ -3,7 +3,7 @@ Bundle-SymbolicName: it.servizidigitali.backoffice.integration
 Bundle-Version: 1.0.0
 
 Export-Package: \
-	it.servizidigitali.backoffice.integration
+	it.servizidigitali.backoffice.integration.*
 	
 Import-Package: \
   	!javax.xml.rpc.*,\

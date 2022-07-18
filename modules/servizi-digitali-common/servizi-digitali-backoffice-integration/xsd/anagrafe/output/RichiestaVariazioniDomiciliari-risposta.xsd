@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-	attributeFormDefault="unqualified" xmlns:tns="http://types.output.anagrafe.osapulie.it" targetNamespace="http://types.output.anagrafe.osapulie.it">
-	<xs:element name="variazioniDomiciliari" type="tns:DatiIndirizzo">
+	attributeFormDefault="unqualified">
+	<xs:element name="variazioniDomiciliari" type="DatiIndirizzo">
 		<xs:annotation>
 			<xs:documentation>Nel caso di errore i tags richiesti dovranno essere forniti con valore uguale a null</xs:documentation>
 		</xs:annotation>

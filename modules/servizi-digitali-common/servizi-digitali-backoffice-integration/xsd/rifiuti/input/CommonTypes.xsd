@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	elementFormDefault="qualified" attributeFormDefault="unqualified"
-	xmlns:tns="http://types.input.rifiuti.osapulie.it"
-	targetNamespace="http://types.input.rifiuti.osapulie.it">
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
 
 	<xs:complexType name="Componente">
 		<xs:annotation>
 			<xs:documentation xml:lang="it">Tipo di dato complesso
-				per i dati anagrafici di una persona fisica o organizzazione
-			</xs:documentation>
+				per i dati anagrafici di una persona fisica o organizzazione</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="identificativo" type="xs:string" />
@@ -16,28 +13,24 @@
 				minOccurs="0">
 				<xs:annotation>
 					<xs:documentation xml:lang="it">Identificativo del
-						nucleo familiare di appartenenza
-					</xs:documentation>
+						nucleo familiare di appartenenza</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:choice>
-				<xs:element name="nominativo" type="tns:Nominativo" />
-				<xs:element name="organizzazione"
-					type="tns:Organizzazione" />
+				<xs:element name="nominativo" type="Nominativo" />
+				<xs:element name="organizzazione" type="Organizzazione" />
 			</xs:choice>
 			<xs:element name="codiceFiscale" type="xs:string" />
-			<xs:element name="cittadinanza" type="tns:Codifica"
-				minOccurs="0" />
+			<xs:element name="cittadinanza" type="Codifica" minOccurs="0" />
 			<xs:element name="dataNascita" type="xs:date" />
-			<xs:element name="comuneNascita" type="tns:Codifica">
+			<xs:element name="comuneNascita" type="Codifica">
 				<xs:annotation>
 					<xs:documentation xml:lang="it">Comune di nascita
 						codificato tramite il codice ISTAT o se nato all'estero codifica
-						ISTAT dello stato estero
-					</xs:documentation>
+						ISTAT dello stato estero</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="provinciaNascita" type="tns:Codifica"
+			<xs:element name="provinciaNascita" type="Codifica"
 				minOccurs="0">
 				<xs:annotation>
 					<xs:documentation xml:lang="it">Provincia di nascita
@@ -45,23 +38,23 @@
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="statoEsteroNascita" type="tns:Codifica"
+			<xs:element name="statoEsteroNascita" type="Codifica"
 				minOccurs="0" />
-			<xs:element name="statoCivile" type="tns:Codifica"
+			<xs:element name="statoCivile" type="Codifica"
 				minOccurs="0" />
-			<xs:element name="sesso" type="tns:Codifica">
+			<xs:element name="sesso" type="Codifica">
 				<xs:annotation>
 					<xs:documentation xml:lang="it">M: Mascio, F: Femmina
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="posizioneProfessionale"
-				type="tns:Codifica" minOccurs="0" />
-			<xs:element name="condizioneNonProfessionale"
-				type="tns:Codifica" minOccurs="0" />
-			<xs:element name="titoloStudio" type="tns:Codifica"
+			<xs:element name="posizioneProfessionale" type="Codifica"
 				minOccurs="0" />
-			<xs:element name="relazioneParentela" type="tns:Codifica"
+			<xs:element name="condizioneNonProfessionale"
+				type="Codifica" minOccurs="0" />
+			<xs:element name="titoloStudio" type="Codifica"
+				minOccurs="0" />
+			<xs:element name="relazioneParentela" type="Codifica"
 				minOccurs="0" />
 			<xs:element name="EstremiDocumentoRiconoscimento"
 				minOccurs="0">
@@ -74,10 +67,8 @@
 					<xs:sequence>
 						<xs:element name="tipo" type="xs:string" />
 						<xs:element name="numero" type="xs:string" />
-						<xs:element name="rilasciatoDa" type="xs:string"
-							minOccurs="0" />
-						<xs:element name="dataRilascio" type="xs:date"
-							minOccurs="0" />
+						<xs:element name="rilasciatoDa" type="xs:string" minOccurs="0" />
+						<xs:element name="dataRilascio" type="xs:date" minOccurs="0" />
 						<xs:element name="dataScadenza" type="xs:date" />
 					</xs:sequence>
 				</xs:complexType>
@@ -85,8 +76,7 @@
 			<xs:element name="email" type="xs:string" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation xml:lang="it">Indirizzo di Posta
-						Elettronica del soggetto
-					</xs:documentation>
+						Elettronica del soggetto</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="pec" type="xs:string" minOccurs="0">
@@ -99,50 +89,41 @@
 			<xs:element name="telefono" type="xs:string" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation xml:lang="it">Numero di telefono di
-						contatto del soggetto
-					</xs:documentation>
+						contatto del soggetto</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="cellulare" type="xs:string"
 				minOccurs="0">
 				<xs:annotation>
 					<xs:documentation xml:lang="it">Numero di cellulare di
-						contatto del soggetto
-					</xs:documentation>
+						contatto del soggetto</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="fax" type="xs:string" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation xml:lang="it">Numero di fax di
-						contatto del soggetto
-					</xs:documentation>
+						contatto del soggetto</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-
-
+	
+	
 	<xs:complexType name="Richiedente">
 		<xs:annotation>
-			<xs:documentation xml:lang="it">Tipo di dato complesso
-				per i dati di un richiedente ai fini della dichiarazione
-			</xs:documentation>
+			<xs:documentation xml:lang="it">Tipo di dato complesso per i dati di un richiedente ai fini della dichiarazione</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="tns:Componente">
+			<xs:extension base="Componente">
 				<xs:sequence>
-					<xs:element name="residenza" type="tns:Indirizzo"
-						minOccurs="0">
+					<xs:element name="residenza" type="Indirizzo" minOccurs="0">
 						<xs:annotation>
-							<xs:documentation xml:lang="it">Dati di residenza del
-								soggetto</xs:documentation>
+							<xs:documentation xml:lang="it">Dati di residenza del soggetto</xs:documentation>
 						</xs:annotation>
 					</xs:element>
-					<xs:element name="domicilio" type="tns:Indirizzo"
-						minOccurs="0">
+					<xs:element name="domicilio" type="Indirizzo" minOccurs="0">
 						<xs:annotation>
-							<xs:documentation xml:lang="it">Dati dell'eventuale
-								domicilio (differente dalla residenza anagrafica)
+							<xs:documentation xml:lang="it">Dati dell'eventuale domicilio (differente dalla residenza anagrafica)
 							</xs:documentation>
 						</xs:annotation>
 					</xs:element>
@@ -150,63 +131,53 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-
+	
 	<xs:complexType name="Indirizzo">
 		<xs:annotation>
-			<xs:documentation xml:lang="it">Tipo di dato complesso
-				per un indirizzo completo</xs:documentation>
+			<xs:documentation xml:lang="it">Tipo di dato complesso per un indirizzo completo</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="provincia" type="tns:Codifica">
+			<xs:element name="provincia" type="Codifica">
 				<xs:annotation>
-					<xs:documentation xml:lang="it">Codice ISTAT del comune
-					</xs:documentation>
+					<xs:documentation xml:lang="it">Codice ISTAT del comune</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="comune" type="tns:Codifica">
+			<xs:element name="comune" type="Codifica">
 				<xs:annotation>
-					<xs:documentation xml:lang="it">Codice ISTAT del comune
-					</xs:documentation>
+					<xs:documentation xml:lang="it">Codice ISTAT del comune</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="cap" type="xs:string" minOccurs="0" />
 			<xs:choice>
 				<xs:sequence>
-					<xs:element name="via" type="tns:Codifica">
+					<xs:element name="via" type="Codifica">
 						<xs:annotation>
-							<xs:documentation xml:lang="it">Codice/descrizione
-								della via</xs:documentation>
+							<xs:documentation xml:lang="it">Codice/descrizione della via</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="civico">
 						<xs:annotation>
-							<xs:documentation xml:lang="it">Dati del civico
-							</xs:documentation>
+							<xs:documentation xml:lang="it">Dati del civico</xs:documentation>
 						</xs:annotation>
 						<xs:complexType>
 							<xs:sequence>
-								<xs:element name="codice" type="xs:string"
-									minOccurs="0" />
+								<xs:element name="codice" type="xs:string" minOccurs="0" />
 								<xs:element name="numero" type="xs:string" />
-								<xs:element name="esponente" type="xs:string"
-									minOccurs="0" />
+								<xs:element name="esponente" type="xs:string" minOccurs="0" />
 							</xs:sequence>
 						</xs:complexType>
 					</xs:element>
-					<xs:element name="localita" type="xs:string"
-						minOccurs="0" />
+					<xs:element name="localita" type="xs:string" minOccurs="0" />
 					<xs:element name="corte" type="xs:string" minOccurs="0" />
 					<xs:element name="piano" type="xs:string" minOccurs="0" />
-					<xs:element name="interno" type="xs:string"
-						minOccurs="0" />
+					<xs:element name="interno" type="xs:string" minOccurs="0" />
 					<xs:element name="scala" type="xs:string" minOccurs="0" />
 				</xs:sequence>
 				<xs:element name="indirizzoCompleto" type="xs:string" />
 			</xs:choice>
-			<xs:element name="geolocalizzazioneRitiro"
-				type="tns:Geolocalizzazione" minOccurs="0" />
+			<xs:element name="geolocalizzazioneRitiro" type="Geolocalizzazione" minOccurs="0" />
 		</xs:sequence>
-
+		
 	</xs:complexType>
 
 
@@ -248,12 +219,11 @@
 			<xs:element name="nome" type="xs:string" />
 		</xs:sequence>
 	</xs:complexType>
-
+	
 	<xs:complexType name="Organizzazione">
 		<xs:sequence>
 			<xs:element name="ragioneSociale" type="xs:string" />
-			<xs:element name="partitaIVA" type="xs:string"
-				minOccurs="0" />
+			<xs:element name="partitaIVA" type="xs:string" minOccurs="0" />
 		</xs:sequence>
 	</xs:complexType>
 
