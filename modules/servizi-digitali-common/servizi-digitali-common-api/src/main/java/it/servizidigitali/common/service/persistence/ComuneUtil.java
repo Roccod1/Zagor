@@ -294,6 +294,65 @@ public class ComuneUtil {
 	}
 
 	/**
+	 * Returns the comune where denominazione = &#63; or throws a <code>NoSuchComuneException</code> if it could not be found.
+	 *
+	 * @param denominazione the denominazione
+	 * @return the matching comune
+	 * @throws NoSuchComuneException if a matching comune could not be found
+	 */
+	public static Comune findByDenominazione(String denominazione)
+		throws it.servizidigitali.common.exception.NoSuchComuneException {
+
+		return getPersistence().findByDenominazione(denominazione);
+	}
+
+	/**
+	 * Returns the comune where denominazione = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param denominazione the denominazione
+	 * @return the matching comune, or <code>null</code> if a matching comune could not be found
+	 */
+	public static Comune fetchByDenominazione(String denominazione) {
+		return getPersistence().fetchByDenominazione(denominazione);
+	}
+
+	/**
+	 * Returns the comune where denominazione = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param denominazione the denominazione
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching comune, or <code>null</code> if a matching comune could not be found
+	 */
+	public static Comune fetchByDenominazione(
+		String denominazione, boolean useFinderCache) {
+
+		return getPersistence().fetchByDenominazione(
+			denominazione, useFinderCache);
+	}
+
+	/**
+	 * Removes the comune where denominazione = &#63; from the database.
+	 *
+	 * @param denominazione the denominazione
+	 * @return the comune that was removed
+	 */
+	public static Comune removeByDenominazione(String denominazione)
+		throws it.servizidigitali.common.exception.NoSuchComuneException {
+
+		return getPersistence().removeByDenominazione(denominazione);
+	}
+
+	/**
+	 * Returns the number of comunes where denominazione = &#63;.
+	 *
+	 * @param denominazione the denominazione
+	 * @return the number of matching comunes
+	 */
+	public static int countByDenominazione(String denominazione) {
+		return getPersistence().countByDenominazione(denominazione);
+	}
+
+	/**
 	 * Returns all the comunes where idProvincia = &#63;.
 	 *
 	 * @param idProvincia the id provincia

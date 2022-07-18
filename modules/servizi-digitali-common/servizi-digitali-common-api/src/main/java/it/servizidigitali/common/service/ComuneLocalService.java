@@ -213,6 +213,9 @@ public interface ComuneLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Comune getComune(long comuneId) throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Comune getComuneByDenominazione(String denominazione);
+
 	/**
 	 * Returns a range of all the comunes.
 	 *

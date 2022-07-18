@@ -57,6 +57,10 @@
 			<finder-column name="codiceComune" />
 		</finder>
 
+		<finder name="Denominazione" return-type="Comune">
+			<finder-column name="denominazione" case-sensitive="false"/>
+		</finder>
+
 		<finder name="idRegione" return-type="Collection">
 			<finder-column name="idProvincia" />
 		</finder>

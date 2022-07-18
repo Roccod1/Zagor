@@ -225,6 +225,10 @@ public class ComuneLocalServiceUtil {
 		return getService().getComune(comuneId);
 	}
 
+	public static Comune getComuneByDenominazione(String denominazione) {
+		return getService().getComuneByDenominazione(denominazione);
+	}
+
 	/**
 	 * Returns a range of all the comunes.
 	 *

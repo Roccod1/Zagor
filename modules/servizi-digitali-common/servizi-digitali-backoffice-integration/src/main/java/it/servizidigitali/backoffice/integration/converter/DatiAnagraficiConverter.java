@@ -1,4 +1,4 @@
-package it.servizidigitali.backoffice.integration.converter.cripal;
+package it.servizidigitali.backoffice.integration.converter;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -25,10 +25,10 @@ import noNamespace.DatiAnagrafici.ComponentiNucleoFamiliare.PensioniList;
  * @author pindi
  *
  */
-@Component(immediate = true, service = CRIPALToDatiAnagraficiConverter.class)
-public class CRIPALToDatiAnagraficiConverter {
+@Component(immediate = true, service = DatiAnagraficiConverter.class)
+public class DatiAnagraficiConverter {
 
-	private static final Log log = LogFactoryUtil.getLog(CRIPALToDatiAnagraficiConverter.class.getName());
+	private static final Log log = LogFactoryUtil.getLog(DatiAnagraficiConverter.class.getName());
 
 	@Reference
 	private StatoEsteroLocalService statoEsteroLocalService;

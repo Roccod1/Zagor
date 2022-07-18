@@ -246,6 +246,13 @@ public class ComuneLocalServiceWrapper
 		return _comuneLocalService.getComune(comuneId);
 	}
 
+	@Override
+	public it.servizidigitali.common.model.Comune getComuneByDenominazione(
+		String denominazione) {
+
+		return _comuneLocalService.getComuneByDenominazione(denominazione);
+	}
+
 	/**
 	 * Returns a range of all the comunes.
 	 *

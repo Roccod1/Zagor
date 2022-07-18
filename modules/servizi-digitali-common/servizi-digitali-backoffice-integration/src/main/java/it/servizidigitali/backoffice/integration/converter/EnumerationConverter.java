@@ -4,7 +4,7 @@
  *
  * Contributors: Links Management & Technology S.p.A. - initial API and implementation
  *************************************************************************************/
-package it.servizidigitali.backoffice.integration.converter.cripal;
+package it.servizidigitali.backoffice.integration.converter;
 
 import it.servizidigitali.backoffice.integration.enums.RelazioneParentela;
 import it.servizidigitali.backoffice.integration.enums.StatoCivile;

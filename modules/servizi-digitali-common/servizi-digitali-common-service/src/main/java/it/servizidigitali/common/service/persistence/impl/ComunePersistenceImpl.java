@@ -793,6 +793,248 @@ public class ComunePersistenceImpl
 	private static final String _FINDER_COLUMN_CODICECOMUNE_CODICECOMUNE_2 =
 		"comune.codiceComune = ?";
 
+	private FinderPath _finderPathFetchByDenominazione;
+	private FinderPath _finderPathCountByDenominazione;
+
+	/**
+	 * Returns the comune where denominazione = &#63; or throws a <code>NoSuchComuneException</code> if it could not be found.
+	 *
+	 * @param denominazione the denominazione
+	 * @return the matching comune
+	 * @throws NoSuchComuneException if a matching comune could not be found
+	 */
+	@Override
+	public Comune findByDenominazione(String denominazione)
+		throws NoSuchComuneException {
+
+		Comune comune = fetchByDenominazione(denominazione);
+
+		if (comune == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("denominazione=");
+			sb.append(denominazione);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchComuneException(sb.toString());
+		}
+
+		return comune;
+	}
+
+	/**
+	 * Returns the comune where denominazione = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param denominazione the denominazione
+	 * @return the matching comune, or <code>null</code> if a matching comune could not be found
+	 */
+	@Override
+	public Comune fetchByDenominazione(String denominazione) {
+		return fetchByDenominazione(denominazione, true);
+	}
+
+	/**
+	 * Returns the comune where denominazione = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param denominazione the denominazione
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching comune, or <code>null</code> if a matching comune could not be found
+	 */
+	@Override
+	public Comune fetchByDenominazione(
+		String denominazione, boolean useFinderCache) {
+
+		denominazione = Objects.toString(denominazione, "");
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {denominazione};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByDenominazione, finderArgs);
+		}
+
+		if (result instanceof Comune) {
+			Comune comune = (Comune)result;
+
+			if (!Objects.equals(denominazione, comune.getDenominazione())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_SELECT_COMUNE_WHERE);
+
+			boolean bindDenominazione = false;
+
+			if (denominazione.isEmpty()) {
+				sb.append(_FINDER_COLUMN_DENOMINAZIONE_DENOMINAZIONE_3);
+			}
+			else {
+				bindDenominazione = true;
+
+				sb.append(_FINDER_COLUMN_DENOMINAZIONE_DENOMINAZIONE_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindDenominazione) {
+					queryPos.add(StringUtil.toLowerCase(denominazione));
+				}
+
+				List<Comune> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByDenominazione, finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {denominazione};
+							}
+
+							_log.warn(
+								"ComunePersistenceImpl.fetchByDenominazione(String, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					Comune comune = list.get(0);
+
+					result = comune;
+
+					cacheResult(comune);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (Comune)result;
+		}
+	}
+
+	/**
+	 * Removes the comune where denominazione = &#63; from the database.
+	 *
+	 * @param denominazione the denominazione
+	 * @return the comune that was removed
+	 */
+	@Override
+	public Comune removeByDenominazione(String denominazione)
+		throws NoSuchComuneException {
+
+		Comune comune = findByDenominazione(denominazione);
+
+		return remove(comune);
+	}
+
+	/**
+	 * Returns the number of comunes where denominazione = &#63;.
+	 *
+	 * @param denominazione the denominazione
+	 * @return the number of matching comunes
+	 */
+	@Override
+	public int countByDenominazione(String denominazione) {
+		denominazione = Objects.toString(denominazione, "");
+
+		FinderPath finderPath = _finderPathCountByDenominazione;
+
+		Object[] finderArgs = new Object[] {denominazione};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_COMUNE_WHERE);
+
+			boolean bindDenominazione = false;
+
+			if (denominazione.isEmpty()) {
+				sb.append(_FINDER_COLUMN_DENOMINAZIONE_DENOMINAZIONE_3);
+			}
+			else {
+				bindDenominazione = true;
+
+				sb.append(_FINDER_COLUMN_DENOMINAZIONE_DENOMINAZIONE_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindDenominazione) {
+					queryPos.add(StringUtil.toLowerCase(denominazione));
+				}
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_DENOMINAZIONE_DENOMINAZIONE_2 =
+		"lower(comune.denominazione) = ?";
+
+	private static final String _FINDER_COLUMN_DENOMINAZIONE_DENOMINAZIONE_3 =
+		"(comune.denominazione IS NULL OR comune.denominazione = '')";
+
 	private FinderPath _finderPathWithPaginationFindByidRegione;
 	private FinderPath _finderPathWithoutPaginationFindByidRegione;
 	private FinderPath _finderPathCountByidRegione;
@@ -1804,6 +2046,10 @@ public class ComunePersistenceImpl
 		finderCache.putResult(
 			_finderPathFetchByCodiceComune,
 			new Object[] {comune.getCodiceComune()}, comune);
+
+		finderCache.putResult(
+			_finderPathFetchByDenominazione,
+			new Object[] {comune.getDenominazione()}, comune);
 	}
 
 	private int _valueObjectFinderCacheListThreshold;
@@ -1894,6 +2140,13 @@ public class ComunePersistenceImpl
 			_finderPathCountByCodiceComune, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByCodiceComune, args, comuneModelImpl);
+
+		args = new Object[] {comuneModelImpl.getDenominazione()};
+
+		finderCache.putResult(
+			_finderPathCountByDenominazione, args, Long.valueOf(1));
+		finderCache.putResult(
+			_finderPathFetchByDenominazione, args, comuneModelImpl);
 	}
 
 	/**
@@ -2341,6 +2594,16 @@ public class ComunePersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCodiceComune",
 			new String[] {Integer.class.getName()},
 			new String[] {"codiceComune"}, false);
+
+		_finderPathFetchByDenominazione = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByDenominazione",
+			new String[] {String.class.getName()},
+			new String[] {"denominazione"}, true);
+
+		_finderPathCountByDenominazione = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByDenominazione",
+			new String[] {String.class.getName()},
+			new String[] {"denominazione"}, false);
 
 		_finderPathWithPaginationFindByidRegione = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByidRegione",
