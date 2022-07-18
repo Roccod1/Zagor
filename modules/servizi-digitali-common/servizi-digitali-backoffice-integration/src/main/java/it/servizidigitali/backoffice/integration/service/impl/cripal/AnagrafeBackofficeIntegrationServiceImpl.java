@@ -36,7 +36,7 @@ import noNamespace.VisuraAnagraficaDocument;
  * @author pindi
  *
  */
-@Component(name = "anagrafeBackofficeIntegrationService", immediate = true, service = AnagrafeBackofficeIntegrationServiceImpl.class)
+@Component(name = "anagrafeBackofficeIntegrationService", immediate = true, service = AnagrafeIntegrationService.class)
 public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeIntegrationService {
 
 	private static final String RICHIESTA_DATI_ANAGRAFICI_CRIPAL = "richiestaDatiAnagrafici";
