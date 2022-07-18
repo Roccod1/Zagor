@@ -254,6 +254,10 @@ public class StatoEsteroLocalServiceUtil {
 		return getService().getStatoEstero(statoEsteroId);
 	}
 
+	public static StatoEstero getStatoEsteroByCodiceStato(int codiceStato) {
+		return getService().getStatoEsteroByCodiceStato(codiceStato);
+	}
+
 	public static StatoEstero getStatoEsteroByDenominazione(
 		String denominazione) {
 

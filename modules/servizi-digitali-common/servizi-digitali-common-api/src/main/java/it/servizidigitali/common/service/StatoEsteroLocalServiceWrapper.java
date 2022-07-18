@@ -286,6 +286,14 @@ public class StatoEsteroLocalServiceWrapper
 
 	@Override
 	public it.servizidigitali.common.model.StatoEstero
+		getStatoEsteroByCodiceStato(int codiceStato) {
+
+		return _statoEsteroLocalService.getStatoEsteroByCodiceStato(
+			codiceStato);
+	}
+
+	@Override
+	public it.servizidigitali.common.model.StatoEstero
 		getStatoEsteroByDenominazione(String denominazione) {
 
 		return _statoEsteroLocalService.getStatoEsteroByDenominazione(

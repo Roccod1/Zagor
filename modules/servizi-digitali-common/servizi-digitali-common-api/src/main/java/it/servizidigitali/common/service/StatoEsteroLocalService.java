@@ -234,6 +234,9 @@ public interface StatoEsteroLocalService
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public StatoEstero getStatoEsteroByCodiceStato(int codiceStato);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public StatoEstero getStatoEsteroByDenominazione(String denominazione);
 
 	/**

@@ -247,6 +247,13 @@ public class ComuneLocalServiceWrapper
 	}
 
 	@Override
+	public it.servizidigitali.common.model.Comune getComuneByCodiceISTAT(
+		String codiceIstat) {
+
+		return _comuneLocalService.getComuneByCodiceISTAT(codiceIstat);
+	}
+
+	@Override
 	public it.servizidigitali.common.model.Comune getComuneByDenominazione(
 		String denominazione) {
 

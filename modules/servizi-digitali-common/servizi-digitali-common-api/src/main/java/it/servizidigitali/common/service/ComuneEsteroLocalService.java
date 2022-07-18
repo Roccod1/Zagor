@@ -215,6 +215,9 @@ public interface ComuneEsteroLocalService
 	public ComuneEstero getComuneEstero(long comuneEsteroId)
 		throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public ComuneEstero getComuneEsteroByCodice(int codice);
+
 	/**
 	 * Returns a range of all the comune esteros.
 	 *

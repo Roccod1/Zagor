@@ -43,6 +43,7 @@ import it.servizidigitali.common.model.StatoEstero;
 import it.servizidigitali.common.service.StatoEsteroLocalService;
 import it.servizidigitali.common.service.StatoEsteroLocalServiceUtil;
 import it.servizidigitali.common.service.persistence.ComuneEsteroPersistence;
+import it.servizidigitali.common.service.persistence.ComuneFinder;
 import it.servizidigitali.common.service.persistence.ComunePersistence;
 import it.servizidigitali.common.service.persistence.ProvinciaPersistence;
 import it.servizidigitali.common.service.persistence.StatoEsteroPersistence;
@@ -462,6 +463,9 @@ public abstract class StatoEsteroLocalServiceBaseImpl
 
 	@Reference
 	protected ComunePersistence comunePersistence;
+
+	@Reference
+	protected ComuneFinder comuneFinder;
 
 	@Reference
 	protected ComuneEsteroPersistence comuneEsteroPersistence;

@@ -1,4 +1,4 @@
-package it.servizidigitali.backoffice.integration.converter;
+package it.servizidigitali.backoffice.integration.converter.cripal;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -10,6 +10,7 @@ import java.util.List;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.backoffice.integration.converter.EnumerationConverter;
 import it.servizidigitali.backoffice.integration.enums.RelazioneParentela;
 import it.servizidigitali.backoffice.integration.enums.StatoCivile;
 import it.servizidigitali.backoffice.integration.enums.TipoCessazioneMatrimonio;

@@ -36,4 +36,11 @@ public class ComuneLocalServiceImpl extends ComuneLocalServiceBaseImpl {
 		}
 		return findByDenominazione;
 	}
+
+	@Override
+	public Comune getComuneByCodiceISTAT(String codiceIstat) {
+		Comune comune = comuneFinder.findComuneByCodiceISTAT(codiceIstat);
+		return comune;
+	}
+
 }

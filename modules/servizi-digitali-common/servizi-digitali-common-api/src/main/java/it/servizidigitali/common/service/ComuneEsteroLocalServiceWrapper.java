@@ -256,6 +256,13 @@ public class ComuneEsteroLocalServiceWrapper
 		return _comuneEsteroLocalService.getComuneEstero(comuneEsteroId);
 	}
 
+	@Override
+	public it.servizidigitali.common.model.ComuneEstero getComuneEsteroByCodice(
+		int codice) {
+
+		return _comuneEsteroLocalService.getComuneEsteroByCodice(codice);
+	}
+
 	/**
 	 * Returns a range of all the comune esteros.
 	 *

@@ -10,43 +10,42 @@ import it.servizidigitali.backoffice.integration.model.commmon.IntegrationPrefer
  * @author pindi
  *
  */
-public interface AnagrafeBackofficeIntegrationService {
+public interface AnagrafeIntegrationService {
 
 	/**
 	 *
 	 * @param codiceFiscale
 	 * @param organizationId
-	 * @param idTransazione
 	 * @param integrationPreferences
 	 * @return
 	 */
-	DatiAnagrafici getDatiAnagrafici(String codiceFiscale, long organizationId, String idTransazione, IntegrationPreferences integrationPreferences);
+	DatiAnagrafici getDatiAnagrafici(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences);
 
 	/**
 	 *
 	 * @param codiceFiscale
 	 * @param organizationId
-	 * @param idTransazione
+	 * @param integrationPreferences
 	 * @return
 	 */
-	DatiAnagraficiGenerali getDatiAnagraficiGenerali(String codiceFiscale, long organizationId, String idTransazione, IntegrationPreferences integrationPreferences);
+	DatiAnagraficiGenerali getDatiAnagraficiGenerali(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences);
 
 	/**
 	 *
 	 * @param codiceFiscale
 	 * @param organizationId
-	 * @param idTransazione
+	 * @param integrationPreferences
 	 * @return
 	 */
-	DatiElettorali getDatiElettorali(String codiceFiscale, long organizationId, String idTransazione, IntegrationPreferences integrationPreferences);
+	DatiElettorali getDatiElettorali(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences);
 
 	/**
 	 *
 	 * @param codiceFiscale
 	 * @param organizationId
-	 * @param idTransazione
+	 * @param integrationPreferences
 	 * @return
 	 */
-	DatiVariazioniDomicilio getDatiVariazioniDomicilio(String codiceFiscale, long organizationId, String idTransazione, IntegrationPreferences integrationPreferences);
+	DatiVariazioniDomicilio getDatiVariazioniDomicilio(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences);
 
 }

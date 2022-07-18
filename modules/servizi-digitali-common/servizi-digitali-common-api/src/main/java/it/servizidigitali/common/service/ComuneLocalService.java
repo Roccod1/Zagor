@@ -214,6 +214,9 @@ public interface ComuneLocalService
 	public Comune getComune(long comuneId) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Comune getComuneByCodiceISTAT(String codiceIstat);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Comune getComuneByDenominazione(String denominazione);
 
 	/**

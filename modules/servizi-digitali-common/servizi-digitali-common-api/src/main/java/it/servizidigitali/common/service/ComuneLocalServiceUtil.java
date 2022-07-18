@@ -225,6 +225,10 @@ public class ComuneLocalServiceUtil {
 		return getService().getComune(comuneId);
 	}
 
+	public static Comune getComuneByCodiceISTAT(String codiceIstat) {
+		return getService().getComuneByCodiceISTAT(codiceIstat);
+	}
+
 	public static Comune getComuneByDenominazione(String denominazione) {
 		return getService().getComuneByDenominazione(denominazione);
 	}

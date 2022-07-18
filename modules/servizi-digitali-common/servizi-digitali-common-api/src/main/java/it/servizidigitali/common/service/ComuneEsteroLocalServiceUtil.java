@@ -229,6 +229,10 @@ public class ComuneEsteroLocalServiceUtil {
 		return getService().getComuneEstero(comuneEsteroId);
 	}
 
+	public static ComuneEstero getComuneEsteroByCodice(int codice) {
+		return getService().getComuneEsteroByCodice(codice);
+	}
+
 	/**
 	 * Returns a range of all the comune esteros.
 	 *

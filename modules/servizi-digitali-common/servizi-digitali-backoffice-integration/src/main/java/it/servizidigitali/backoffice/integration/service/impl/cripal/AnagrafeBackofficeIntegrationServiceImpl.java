@@ -1,4 +1,4 @@
-package it.servizidigitali.backoffice.integration.service.impl;
+package it.servizidigitali.backoffice.integration.service.impl.cripal;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -11,16 +11,16 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.backoffice.integration.client.BackofficeIntegrationClient;
-import it.servizidigitali.backoffice.integration.converter.DatiAnagraficiConverter;
-import it.servizidigitali.backoffice.integration.converter.DatiAnagraficiGeneraliConverter;
-import it.servizidigitali.backoffice.integration.converter.DatiElettoraliConverter;
-import it.servizidigitali.backoffice.integration.converter.DatiVariazioniDomicilioConverter;
+import it.servizidigitali.backoffice.integration.converter.cripal.DatiAnagraficiConverter;
+import it.servizidigitali.backoffice.integration.converter.cripal.DatiAnagraficiGeneraliConverter;
+import it.servizidigitali.backoffice.integration.converter.cripal.DatiElettoraliConverter;
+import it.servizidigitali.backoffice.integration.converter.cripal.DatiVariazioniDomicilioConverter;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagraficiGenerali;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiElettorali;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiVariazioniDomicilio;
 import it.servizidigitali.backoffice.integration.model.commmon.IntegrationPreferences;
-import it.servizidigitali.backoffice.integration.service.AnagrafeBackofficeIntegrationService;
+import it.servizidigitali.backoffice.integration.service.AnagrafeIntegrationService;
 import it.servizidigitali.backoffice.integration.service.CacheService;
 import noNamespace.DatiAnagraficiGeneraliDocument;
 import noNamespace.DatiElettoraliDocument;
@@ -36,8 +36,8 @@ import noNamespace.VisuraAnagraficaDocument;
  * @author pindi
  *
  */
-@Component(name = "anagrafeBackofficeIntegrationService", immediate = true, service = AnagrafeBackofficeIntegrationService.class)
-public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackofficeIntegrationService {
+@Component(name = "anagrafeBackofficeIntegrationService", immediate = true, service = AnagrafeIntegrationService.class)
+public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeIntegrationService {
 
 	private static final String RICHIESTA_DATI_ANAGRAFICI_CRIPAL = "richiestaDatiAnagrafici";
 	private static final String RICHIESTA_DATI_ANAGRAFICI_GENERALI = "datiAnagraficiGenerali";
@@ -68,7 +68,7 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackoff
 	private BackofficeIntegrationClient backofficeIntegrationClient;
 
 	@Override
-	public DatiAnagrafici getDatiAnagrafici(String codiceFiscale, long organizationId, String idTransazione, IntegrationPreferences integrationPreferences) {
+	public DatiAnagrafici getDatiAnagrafici(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) {
 
 		DatiAnagrafici datiAnagrafici = null;
 		try {
@@ -76,12 +76,12 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackoff
 			if (usaCache) {
 				datiAnagrafici = cacheService.getFromCache(codiceFiscale, DatiAnagrafici.class);
 				if (datiAnagrafici == null) {
-					datiAnagrafici = getDatiAnagrafici(codiceFiscale, organizationId, integrationPreferences);
+					datiAnagrafici = getDatiAnagraficiPrivate(codiceFiscale, organizationId, integrationPreferences);
 					cacheService.putInCache(codiceFiscale, datiAnagrafici);
 				}
 			}
 			else {
-				datiAnagrafici = getDatiAnagrafici(codiceFiscale, organizationId, integrationPreferences);
+				datiAnagrafici = getDatiAnagraficiPrivate(codiceFiscale, organizationId, integrationPreferences);
 			}
 		}
 		catch (PortalException e) {
@@ -102,7 +102,7 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackoff
 	 * @throws XmlException
 	 * @throws PortalException
 	 */
-	private DatiAnagrafici getDatiAnagrafici(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) throws XmlException, PortalException {
+	private DatiAnagrafici getDatiAnagraficiPrivate(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) throws XmlException, PortalException {
 
 		RichiestaDatiAnagraficiDocument richiestaDocument = RichiestaDatiAnagraficiDocument.Factory.newInstance();
 		RichiestaDatiAnagrafici richiesta = RichiestaDatiAnagrafici.Factory.newInstance();
@@ -125,7 +125,7 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackoff
 	}
 
 	@Override
-	public DatiAnagraficiGenerali getDatiAnagraficiGenerali(String codiceFiscale, long organizationId, String idTransazione, IntegrationPreferences integrationPreferences) {
+	public DatiAnagraficiGenerali getDatiAnagraficiGenerali(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) {
 
 		DatiAnagraficiGenerali datiAnagraficiGenerali = null;
 		try {
@@ -133,12 +133,12 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackoff
 			if (usaCache) {
 				datiAnagraficiGenerali = cacheService.getFromCache(codiceFiscale, DatiAnagraficiGenerali.class);
 				if (datiAnagraficiGenerali == null) {
-					datiAnagraficiGenerali = getDatiAnagraficiGenerali(codiceFiscale, organizationId, integrationPreferences);
+					datiAnagraficiGenerali = getDatiAnagraficiGeneraliPrivate(codiceFiscale, organizationId, integrationPreferences);
 					cacheService.putInCache(codiceFiscale, datiAnagraficiGenerali);
 				}
 			}
 			else {
-				datiAnagraficiGenerali = getDatiAnagraficiGenerali(codiceFiscale, organizationId, integrationPreferences);
+				datiAnagraficiGenerali = getDatiAnagraficiGeneraliPrivate(codiceFiscale, organizationId, integrationPreferences);
 			}
 		}
 		catch (PortalException e) {
@@ -156,7 +156,7 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackoff
 	 * @param integrationPreferences
 	 * @return
 	 */
-	private DatiAnagraficiGenerali getDatiAnagraficiGenerali(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) throws XmlException, PortalException {
+	private DatiAnagraficiGenerali getDatiAnagraficiGeneraliPrivate(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) throws XmlException, PortalException {
 
 		DatiAnagraficiGeneraliDocument richiestaDocument = DatiAnagraficiGeneraliDocument.Factory.newInstance();
 		noNamespace.DatiAnagraficiGeneraliDocument.DatiAnagraficiGenerali richiesta = noNamespace.DatiAnagraficiGeneraliDocument.DatiAnagraficiGenerali.Factory.newInstance();
@@ -175,7 +175,7 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackoff
 	}
 
 	@Override
-	public DatiElettorali getDatiElettorali(String codiceFiscale, long organizationId, String idTransazione, IntegrationPreferences integrationPreferences) {
+	public DatiElettorali getDatiElettorali(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) {
 
 		DatiElettorali datiElettorali = null;
 		try {
@@ -183,12 +183,12 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackoff
 			if (usaCache) {
 				datiElettorali = cacheService.getFromCache(codiceFiscale, DatiElettorali.class);
 				if (datiElettorali == null) {
-					datiElettorali = getDatiElettorali(codiceFiscale, organizationId, integrationPreferences);
+					datiElettorali = getDatiElettoraliPrivate(codiceFiscale, organizationId, integrationPreferences);
 					cacheService.putInCache(codiceFiscale, datiElettorali);
 				}
 			}
 			else {
-				datiElettorali = getDatiElettorali(codiceFiscale, organizationId, integrationPreferences);
+				datiElettorali = getDatiElettoraliPrivate(codiceFiscale, organizationId, integrationPreferences);
 			}
 		}
 		catch (PortalException e) {
@@ -206,7 +206,7 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackoff
 	 * @param integrationPreferences
 	 * @return
 	 */
-	private DatiElettorali getDatiElettorali(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) throws XmlException, PortalException {
+	private DatiElettorali getDatiElettoraliPrivate(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) throws XmlException, PortalException {
 
 		RichiestaDatiElettoraliDocument richiestaDocument = RichiestaDatiElettoraliDocument.Factory.newInstance();
 		noNamespace.RichiestaDatiElettoraliDocument.RichiestaDatiElettorali richiesta = noNamespace.RichiestaDatiElettoraliDocument.RichiestaDatiElettorali.Factory.newInstance();
@@ -225,7 +225,7 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackoff
 	}
 
 	@Override
-	public DatiVariazioniDomicilio getDatiVariazioniDomicilio(String codiceFiscale, long organizationId, String idTransazione, IntegrationPreferences integrationPreferences) {
+	public DatiVariazioniDomicilio getDatiVariazioniDomicilio(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) {
 
 		DatiVariazioniDomicilio datiVariazioniDomicilio = null;
 		try {
@@ -233,12 +233,12 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackoff
 			if (usaCache) {
 				datiVariazioniDomicilio = cacheService.getFromCache(codiceFiscale, DatiVariazioniDomicilio.class);
 				if (datiVariazioniDomicilio == null) {
-					datiVariazioniDomicilio = getDatiVariazioniDomicilio(codiceFiscale, organizationId, integrationPreferences);
+					datiVariazioniDomicilio = getDatiVariazioniDomicilioPrivate(codiceFiscale, organizationId, integrationPreferences);
 					cacheService.putInCache(codiceFiscale, datiVariazioniDomicilio);
 				}
 			}
 			else {
-				datiVariazioniDomicilio = getDatiVariazioniDomicilio(codiceFiscale, organizationId, integrationPreferences);
+				datiVariazioniDomicilio = getDatiVariazioniDomicilioPrivate(codiceFiscale, organizationId, integrationPreferences);
 			}
 		}
 		catch (PortalException e) {
@@ -257,7 +257,7 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeBackoff
 	 * @param integrationPreferences
 	 * @return
 	 */
-	private DatiVariazioniDomicilio getDatiVariazioniDomicilio(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) throws XmlException, PortalException {
+	private DatiVariazioniDomicilio getDatiVariazioniDomicilioPrivate(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) throws XmlException, PortalException {
 
 		RichiestaVariazioniDomiciliariDocument richiestaDocument = RichiestaVariazioniDomiciliariDocument.Factory.newInstance();
 		noNamespace.RichiestaVariazioniDomiciliariDocument.RichiestaVariazioniDomiciliari richiesta = noNamespace.RichiestaVariazioniDomiciliariDocument.RichiestaVariazioniDomiciliari.Factory

@@ -42,4 +42,14 @@ public class StatoEsteroLocalServiceImpl extends StatoEsteroLocalServiceBaseImpl
 		}
 		return statoEstero;
 	}
+
+	public StatoEstero getStatoEsteroByCodiceStato(int codiceStato) {
+		StatoEstero findByCodiceStato = null;
+		try {
+			findByCodiceStato = statoEsteroPersistence.findByCodiceStato(codiceStato);
+		}
+		catch (NoSuchStatoEsteroException e) {
+		}
+		return findByCodiceStato;
+	}
 }
