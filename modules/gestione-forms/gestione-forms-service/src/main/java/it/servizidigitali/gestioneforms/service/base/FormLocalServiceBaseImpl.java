@@ -48,6 +48,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalServiceUtil;
+import it.servizidigitali.gestioneforms.service.persistence.DefinizioneAllegatoPersistence;
 import it.servizidigitali.gestioneforms.service.persistence.FormFinder;
 import it.servizidigitali.gestioneforms.service.persistence.FormPersistence;
 
@@ -576,6 +577,9 @@ public abstract class FormLocalServiceBaseImpl
 			throw new RuntimeException(reflectiveOperationException);
 		}
 	}
+
+	@Reference
+	protected DefinizioneAllegatoPersistence definizioneAllegatoPersistence;
 
 	protected FormLocalService formLocalService;
 

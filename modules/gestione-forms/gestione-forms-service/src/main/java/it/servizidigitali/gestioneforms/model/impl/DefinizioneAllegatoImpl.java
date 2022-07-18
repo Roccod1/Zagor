@@ -14,22 +14,8 @@
 
 package it.servizidigitali.gestioneforms.model.impl;
 
-import java.util.List;
-
-import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
-
 /**
  * @author Brian Wing Shun Chan
  */
-public class FormImpl extends FormBaseImpl {
-	List<DefinizioneAllegato> listaDefinizioneAllegato = null;
-
-	public List<DefinizioneAllegato> getListaDefinizioneAllegato() {
-		return listaDefinizioneAllegato;
-	}
-
-	public void setListaDefinizioneAllegato(List<DefinizioneAllegato> listaDefinizioneAllegato) {
-		this.listaDefinizioneAllegato = listaDefinizioneAllegato;
-	}
-	
+public class DefinizioneAllegatoImpl extends DefinizioneAllegatoBaseImpl {
 }

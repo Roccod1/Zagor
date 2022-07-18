@@ -11,25 +11,28 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+package it.servizidigitali.gestioneforms.exception;
 
-package it.servizidigitali.gestioneforms.model.impl;
-
-import java.util.List;
-
-import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
+import com.liferay.portal.kernel.exception.NoSuchModelException;
 
 /**
  * @author Brian Wing Shun Chan
  */
-public class FormImpl extends FormBaseImpl {
-	List<DefinizioneAllegato> listaDefinizioneAllegato = null;
+public class NoSuchDefinizioneAllegatoException extends NoSuchModelException {
 
-	public List<DefinizioneAllegato> getListaDefinizioneAllegato() {
-		return listaDefinizioneAllegato;
+	public NoSuchDefinizioneAllegatoException() {
 	}
 
-	public void setListaDefinizioneAllegato(List<DefinizioneAllegato> listaDefinizioneAllegato) {
-		this.listaDefinizioneAllegato = listaDefinizioneAllegato;
+	public NoSuchDefinizioneAllegatoException(String msg) {
+		super(msg);
 	}
-	
+
+	public NoSuchDefinizioneAllegatoException(String msg, Throwable throwable) {
+		super(msg, throwable);
+	}
+
+	public NoSuchDefinizioneAllegatoException(Throwable throwable) {
+		super(throwable);
+	}
+
 }

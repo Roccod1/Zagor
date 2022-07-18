@@ -229,6 +229,14 @@ public class FormWrapper
 		return model.getJson();
 	}
 
+	@Override
+	public java.util.List
+		<it.servizidigitali.gestioneforms.model.DefinizioneAllegato>
+			getListaDefinizioneAllegato() {
+
+		return model.getListaDefinizioneAllegato();
+	}
+
 	/**
 	 * Returns the modified date of this form.
 	 *
@@ -422,6 +430,15 @@ public class FormWrapper
 	@Override
 	public void setJson(String json) {
 		model.setJson(json);
+	}
+
+	@Override
+	public void setListaDefinizioneAllegato(
+		java.util.List
+			<it.servizidigitali.gestioneforms.model.DefinizioneAllegato>
+				listaDefinizioneAllegato) {
+
+		model.setListaDefinizioneAllegato(listaDefinizioneAllegato);
 	}
 
 	/**

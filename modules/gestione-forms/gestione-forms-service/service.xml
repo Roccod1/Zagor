@@ -51,5 +51,48 @@
 			<finder-column name="principale" />
 		</finder>
 	</entity>
+	
+	<entity 
+		name="DefinizioneAllegato"
+		table="definizione_allegato"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="definizioneAllegatoId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="denominazione" type="String" />
+		<column name="fileEntryId" type="long" />
+		<column name="filenameModello" type="String" />
+		<column name="tipiFileAmmessi" type="String" />
+		<column name="codiciTipologiaDocumento" type="String" />
+		<column name="obbligatorio" type="boolean" />
+		<column name="eliminato" type="boolean" />
+		
+		<!-- FK -->
+		<column name="organizationId" type="long" />	
+		<column name="formId" type="long" />
+		
+		<!-- Finder methods -->
+		<finder name="formId" return-type="Collection">
+			<finder-column name="formId" />
+		</finder>
+
+	</entity>
 
 </service-builder>

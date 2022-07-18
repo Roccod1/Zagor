@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
@@ -19,7 +20,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneforms.frontend.constants.GestioneFormsPortletKeys;
+import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneforms.model.Form;
+import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 
 /**
@@ -41,19 +44,23 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 	
 	@Reference
     private CounterLocalService counterLocalService;
-
+	
+	@Reference
+    private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
+	
 	@Override
-	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {			
 		
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
-		
-		
+			
 		long idForm = ParamUtil.getLong(actionRequest, GestioneFormsPortletKeys.ID_FORM);
 		String codice = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.CODICE);
 		String nome = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.NOME);
 		boolean principale = ParamUtil.getBoolean(actionRequest, GestioneFormsPortletKeys.PRINCIPALE);
 		String modelloForm = ParamUtil.getString(actionRequest, "modelloForm");
 		
+		long indiceListaDefinizioneAllegati = ParamUtil.getLong(actionRequest, "dimensioneListaDefinizioneAllegato");
+			
 		Form form = null;
 		
 		if(Validator.isNull(nome)) {
@@ -65,7 +72,6 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 			SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
 			return;
 		}
-		
 		
 		if(Validator.isNotNull(idForm) && idForm>0) {
 			form = formLocalService.getForm(idForm);
@@ -84,5 +90,53 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		form.setUserName(serviceContext.getThemeDisplay().getUser().getScreenName());
 		
 		formLocalService.updateForm(form);
+		
+		// Recupero elenco allegati specificato nella creazione del form 
+		
+		for(int i=0;i<indiceListaDefinizioneAllegati;i++) {
+			long definizioneAllegatoId = ParamUtil.getLong(actionRequest, "listaDefinizioneAllegato[" + i + "].definizioneAllegatoId");
+			String denominazione = ParamUtil.getString(actionRequest, "listaDefinizioneAllegato[" + i + "].denominazione");
+			String[] tipiFileAmmessi = ParamUtil.getParameterValues(actionRequest, "listaDefinizioneAllegato[" + i + "].tipiFileAmmessi");
+			String[] codiciTipologiaDocumento = ParamUtil.getParameterValues(actionRequest, "listaDefinizioneAllegato[" + i + "].codiciTipologiaDocumento");
+			boolean obbligatorio = ParamUtil.getBoolean(actionRequest, "listaDefinizioneAllegato[" + i + "].obbligatorio");
+			
+			DefinizioneAllegato allegato = definizioneAllegatoLocalService.createDefinizioneAllegato(0);
+			
+			if(definizioneAllegatoId > 0) {
+				allegato = definizioneAllegatoLocalService.getDefinizioneAllegato(definizioneAllegatoId);
+			}else {
+				allegato.setDefinizioneAllegatoId(counterLocalService.increment());
+			}
+			
+			if(Validator.isNotNull(denominazione)) {
+				allegato.setDenominazione(denominazione);
+			}else {
+				SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+				return;
+			}
+			
+			if(Validator.isNotNull(tipiFileAmmessi)) {
+				allegato.setTipiFileAmmessi(String.join(",", tipiFileAmmessi));
+			}else {
+				SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+				return;
+			}
+			
+			if(Validator.isNotNull(codiciTipologiaDocumento)) {
+				allegato.setCodiciTipologiaDocumento(String.join(",", codiciTipologiaDocumento));
+			}
+			
+			allegato.setObbligatorio(obbligatorio);
+			allegato.setFormId(form.getFormId());
+			definizioneAllegatoLocalService.updateDefinizioneAllegato(allegato);
+		}
+		
+		// Controllo su eventuali rimozioni degli allegati
+		
+		String[] allegatiDaEliminare = ParamUtil.getParameterValues(actionRequest, "listaAllegatiDaEliminare");
+		
+		for(String allegatoId : allegatiDaEliminare) {
+			definizioneAllegatoLocalService.deleteDefinizioneAllegato(Long.valueOf(allegatoId));
+		}
 	}
 }

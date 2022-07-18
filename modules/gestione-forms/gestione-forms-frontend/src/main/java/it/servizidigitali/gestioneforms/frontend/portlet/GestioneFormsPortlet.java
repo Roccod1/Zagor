@@ -42,8 +42,10 @@ import org.osgi.service.component.annotations.Reference;
 		"com.liferay.portlet.footer-portlet-javascript=/scripts/jquery-ui/jquery-ui.js",
 		"com.liferay.portlet.footer-portlet-javascript=/scripts/jquery-validate/jquery.validate.min.js",
 		"com.liferay.portlet.footer-portlet-javascript=/scripts/handlebars/handlebars.min-v4.7.7.js",
-		"com.liferay.portlet.header-portlet-css=/scripts/alpaca/alpaca.min.1.5.27.css",
-		"com.liferay.portlet.footer-portlet-javascript=/scripts/alpaca/alpaca.min.1.5.27.js",
+		"com.liferay.portlet.footer-portlet-javascript=/scripts/fileinput/fileinput.min.js",
+		"com.liferay.portlet.header-portlet-css=/scripts/fileinput/fileinput.min.css",
+		"com.liferay.portlet.header-portlet-css=/scripts/alpaca/alpaca.css",
+		"com.liferay.portlet.footer-portlet-javascript=/scripts/alpaca/alpaca.min.js",
 		"com.liferay.portlet.footer-portlet-javascript=/scripts/ace/ace.js",
 		"com.liferay.portlet.footer-portlet-javascript=/dist/custom-fields.js",
 		"com.liferay.portlet.instanceable=true",
@@ -63,7 +65,7 @@ public class GestioneFormsPortlet extends MVCPortlet {
 	
 	@Reference
 	private FormLocalService formLocalService;
-	
+
 	public void render (RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException{
 		
 		
@@ -80,7 +82,7 @@ public class GestioneFormsPortlet extends MVCPortlet {
 		
 		Date dataInserimentoDa = null;
 		Date dataInserimentoA = null;
-		
+
 		try {
 			
 			if(Validator.isNotNull(dataInserimentoDaString)) {

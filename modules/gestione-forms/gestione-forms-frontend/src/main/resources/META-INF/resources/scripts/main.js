@@ -2589,7 +2589,11 @@ var setup = function(s, o, v, d)
  * Reset the attachment form.
  */
 var resetAttachmentForm = function(){
-	$('.attachment-form')[0].reset();
+	$('#formAggiungiAllegato').find('input:text, input:password, select')
+    .each(function () {
+        $(this).val('');
+    });
+
 	$('#attachment-id').val('');
 	$('[name="fileName"]').val('')
 };
@@ -2600,21 +2604,6 @@ var resetAttachmentForm = function(){
 var showAttachmentForm = function(){
 	$('.add-attachment').addClass('hidden');
 	$('.attachment-form').removeClass('hidden');
-};
-
-/**
- * Add a field to the form.
- * @param field The name of the field to add.
- * @param index The index of the field to add.
- * @param value The value of the field to add.
- */
-var addFieldToForm = function(field, index, value){
-	if(value){
-		$('<input />').attr('type', 'hidden')
-			.attr('name', 'definizioneAllegati[' + index + '].'  + field)
-			.attr('value', value)
-			.appendTo('#form-form');
-	}
 };
 
 /**
@@ -2633,103 +2622,15 @@ $(document).ready(function() {
         setup(s, o, v, d);
     }, 200);
     
-    //The index of the attachment edited
-    var attachmentIndex = -1;
-    
-    //Load attachments tab content
+  //Load attachments tab content
     $('.add-attachment').on('click', function(){
     	resetAttachmentForm();
     	showAttachmentForm();
     	attachmentIndex = -1;
     });
     
-    
-    //On form submit (add/edit)
-    $('.attachment-form').on('submit', function(event){
-    	event.preventDefault();
-    	
-    	//Validate the data
-    	var attachmentId = $('#attachment-id').val();
-    	var attachmentName = $('#attachment-name').val();
-    	var attachmentMandatory = $('#attachment-mandatory').is(':checked');
-    	var attachmentFiletype = $('#attachment-filetype').val();
-    	var attachmentCodetypes = $('#attachment-codetype').val();
-    	var attachmentFile = $('#attachment-file').val();
-    	var attachmentFileName = $('[name="fileName"]').val();
-    	
-    	console.log('attachmentIndex', attachmentIndex);
-    	console.log('attachmentCodetypes', attachmentCodetypes);
-    	
-    	var $trToAdd = $('<tr>')
-	    	.append($('<td>')
-	    		.text(attachmentId)
-	    	)
-	        .append($('<td>')
-	        	.text(attachmentName)
-	        )
-	        .append($('<td>')
-	        	.text(attachmentMandatory)
-	        )
-	        .append($('<td>')
-	        	.text(attachmentFiletype)
-	        )
-	        .append($('<td>')
-	        		.text(attachmentCodetypes)
-	        )
-	        .append($('<td>')
-	        	//.data('attachmentFileName', attachmentFileName)
-	        	.text(attachmentFileName)
-	        )
-	        .append($('<td>')
-	        	.append($('<button>')
-	        			.addClass('btn btn-default delete-attachment')
-	        			.attr('type', 'button')
-	        			.attr('aria-label', 'Elimina')
-	        			.append($('<span>')
-	    					.addClass('glyphicon glyphicon-remove')
-	            			.attr('aria-hidden', 'true')
-	            		)
-	        	)
-	        	.append($('<button>')
-	        			.addClass('btn btn-default edit-attachment')
-	        			.attr('type', 'button')
-	        			.attr('aria-label', 'Modifica')
-	        			.append($('<span>')
-	    					.addClass('glyphicon glyphicon-edit')
-	            			.attr('aria-hidden', 'true')
-	            		)
-	        	)
-	        );
-    	
-    	if(attachmentIndex != -1){
-    		$tr = $('.attachment-tbody tr').eq(attachmentIndex);
-    		var nextAll = $tr.nextAll();
-    		$tr.remove();
-    		
-    		var trs = $('.attachment-tbody tr');
-    		
-    		//Check if there are attachments after the edited one
-        	if(nextAll.length > 0){
-        		var $trs = $('.attachment-tbody tr');
-        		$tr = $trs.eq(attachmentIndex);
-        		$tr.before($trToAdd);
-        	} else {
-        		$('.attachment-tbody')
-    				.append($trToAdd);
-        	}
-    	} else {
-    		$('.attachment-tbody')
-    			.append($trToAdd);
-    	}
-    	
-    	resetAttachmentForm();
-    	hideAttachmentForm();
-    	attachmentIndex = -1;
-    });
-    
-    //Edit attachment event
+  //Edit attachment event
     $('.attachment-tbody').on('click', '.edit-attachment', function(){
-    	console.log('Edit attachment');
     	var $this = $(this);
     	var $tr = $this.closest('tr');
     	attachmentIndex = $('.attachment-tbody tr').index($tr);
@@ -2739,7 +2640,13 @@ $(document).ready(function() {
     	
     	$('#attachment-id').val($tds.eq(0).text());
     	$('#attachment-name').val($tds.eq(1).text());
-    	$('#attachment-mandatory').prop('checked', $tds.eq(2).text());
+    	console.log("Set valore checkbox: " + $tds.eq(2).text());
+    	if($tds.eq(2).text()=="true"){
+    		$('#attachment-mandatory').prop('checked', true);
+    	}else{
+    		$('#attachment-mandatory').prop('checked', false);
+    	}
+    	
     	var fileTypes = $tds.eq(3).text();
     	$('#attachment-filetype').val(fileTypes.split(','));
     	var documentTypes = $tds.eq(4).text();
@@ -2750,36 +2657,5 @@ $(document).ready(function() {
     	
     	showAttachmentForm();
     });
-    
-    //Delete attachment event
-    $('.attachment-tbody').on('click', '.delete-attachment', function(){
-    	var $this = $(this);
-    	$this.parent().parent().remove();
-    });
-    
-    
-    //Form submit
-    $('#form-form').submit(function(){
-    	console.log('on submit :D');
-    	var $form = $(this);
-    	$('.attachment-tbody tr').each(function(index, tr){
-    		var $tr = $(tr);
-    		var $tds = $tr.find('td');
-        	
-        	//Attach attachments to the form
-    		addFieldToForm('id', index, $tds.eq(0).text());
-        	addFieldToForm('denominazione', index, $tds.eq(1).text());
-        	addFieldToForm('tipiFileAmmessi', index, $tds.eq(3).text().split(','));
-        	addFieldToForm('codiciTipologiaDocumento', index, $tds.eq(4).text().split(','));
-        	var fileName = $tds.eq(5).text();
-        	if(fileName.trim() === ''){
-        		fileName = '';
-        	}
-        	addFieldToForm('fileName', index, fileName);
-        	addFieldToForm('obbligatorio', index, $tds.eq(2).text());
-    	});
-    	
-    	return true;
-    });
-    
+        
 });

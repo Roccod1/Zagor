@@ -19,6 +19,7 @@ public class GestioneFormsPortletKeys {
 	public static final String ID_FORM = "idform";
 	
 	public static final String AZIONI = "azioni";
+	public static final String FORMATI_ALLEGATI = "formatiAllegati";
 	
 	public static final String NOME_RICERCA = "nomeRicerca";
 	public static final String DATA_INSERIMENTO_DA = "dataInserimentoDa";
