@@ -24,7 +24,7 @@ import noNamespace.DatiIndirizzo.VariazioniDomicilio;
  * @author Gianluca Pindinelli
  *
  */
-@Component(immediate = true, service = DatiElettoraliConverter.class)
+@Component(immediate = true, service = DatiVariazioniDomicilioConverter.class)
 public class DatiVariazioniDomicilioConverter {
 
 	@Reference

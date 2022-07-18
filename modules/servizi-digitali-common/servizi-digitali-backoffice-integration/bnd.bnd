@@ -26,4 +26,30 @@ Import-Package: \
   	!org.apache.log.*,\
   	!org.apache.tools.ant.*,\
   	!org.exolab.*,\
+  	!com.beust.*,\
+  	!com.ibm.icu.*,\
+  	!com.sun.msv.*,\
+  	!com.sun.tools.*,\
+  	!com.werken.xpath.*,\
+  	!javax.cache.*,\
+  	!junit.*,\
+  	!net.sf.*,\
+  	!org.apache.aries.*,\
+  	!org.apache.axiom.*,\
+  	!org.apache.cxf.ws.mex.*,\
+  	!org.apache.geronimo.*,\
+  	!org.apache.http.*,\
+  	!org.apache.oro.*,\
+  	!org.apache.xml.dtm.*,\
+  	!org.apache.xml.utils.*,\
+  	!org.apache.xpath.*,\
+  	!org.bouncycastle.openssl.*,\
+  	!org.jdom.*,\
+  	!org.joda.*,\
+  	!org.jvnet.*,\
+  	!org.osgi.service.*,\
+  	!org.slf4j.*,\
+  	!org.springframework.*,\
   	*
+  	
+-fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning

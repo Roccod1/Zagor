@@ -18,7 +18,7 @@ import it.servizidigitali.backoffice.integration.service.CacheService;
  * @author pindi
  *
  */
-@Component(name = "AnagrafeANPRIntegrationService", immediate = true, service = AnagrafeIntegrationService.class)
+@Component(name = "AnagrafeANPRIntegrationService", immediate = true, service = AnagrafeANPRIntegrationServiceImpl.class)
 public class AnagrafeANPRIntegrationServiceImpl implements AnagrafeIntegrationService {
 
 	private static final String ID_TRANSAZIONE_DEFAULT = "999999999";
