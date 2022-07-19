@@ -64,6 +64,9 @@ public class ListaServiziEnteRenderCommand implements MVCRenderCommand {
 		Long servizioId = ParamUtil.getLong(renderRequest, GestioneEntiPortletKeys.SERVIZIO_ID);
 		Boolean deleteToggle = ParamUtil.getBoolean(renderRequest, GestioneEntiPortletKeys.DELETE_TOGGLE, false);
 		
+		/*
+		 * gestisco l'eliminazione di un servizio dallo specifico ente
+		 * */
 		if(deleteToggle) {
 			try {
 				eliminaServizioEnte(organizationId, servizioId, renderRequest);
@@ -100,6 +103,10 @@ public class ListaServiziEnteRenderCommand implements MVCRenderCommand {
 	private void eliminaServizioEnte(Long organizationId, Long servizioId, RenderRequest renderRequest) throws Exception{
 		boolean ok = true;
 		
+		/*
+		 * verifico ci siano organizationId e servizioId per costruire la pk
+		 * */
+		
 		if(Validator.isNull(organizationId)) {
 			_log.error("eliminaServizio ::> organizationId e' null");
 			ok = false;
@@ -110,6 +117,9 @@ public class ListaServiziEnteRenderCommand implements MVCRenderCommand {
 			ok = false;
 		}
 		
+		/*
+		 * in assenza di errori procedo a creare la pk e ad eliminare il servizio
+		 * */
 		if(ok) {
 			ServizioEntePK servizioEntePK = new ServizioEntePK(servizioId, organizationId);
 			servizioEnteLocalService.deleteServizioEnte(servizioEntePK);

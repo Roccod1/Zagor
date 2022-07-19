@@ -103,7 +103,13 @@ public class GestioneEntiPortlet extends MVCPortlet {
 			Long siteGroupOrganizationId = themeDisplay.getSiteGroup().getOrganizationId();
 			_log.debug("siteGroupOrganizationId: "+ siteGroupOrganizationId);
 
+			
+			/*
+			 * verifico se il site ha un organizationId. se maggiore di 0 mostro solo i servizi per quell'ente 
+			 * altrimenti la lista di enti presenti
+			 * */ 
 			if(Validator.isNotNull(siteGroupOrganizationId) && siteGroupOrganizationId > 0) {
+				//imposto jsp da renderizzare
 				jspDaRenderizzare = GestioneEntiPortletKeys.JSP_LISTA_SERVIZI_ENTE;
 
 				List<ServizioEnte> serviziEnte = servizioEnteLocalService.getServiziEnte(siteGroupOrganizationId);
@@ -126,7 +132,9 @@ public class GestioneEntiPortlet extends MVCPortlet {
 					}
 				}
 				renderRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONI, listaOrganizations);
-			}			
+			}
+			
+			//la protlet e' stata caricata almeno la prima volta
 			primoCaricamento = false;
 			renderRequest.setAttribute(GestioneEntiPortletKeys.PRIMO_CARICAMENTO, primoCaricamento);
 		} catch (Exception e) {
@@ -139,6 +147,10 @@ public class GestioneEntiPortlet extends MVCPortlet {
 		SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
 		SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
 
+		/* 
+		 * se il site utilizzato e' proprio di un'organizzazione ed e' il primo caricamento
+		 * scelgo la jsp da renderizzare altrimenti richiamo il metodo render della superclasse
+		 * */
 		if(Validator.isNotNull(jspDaRenderizzare) && primoCaricamento) {
 			include(jspDaRenderizzare, renderRequest, renderResponse);			
 		}else {

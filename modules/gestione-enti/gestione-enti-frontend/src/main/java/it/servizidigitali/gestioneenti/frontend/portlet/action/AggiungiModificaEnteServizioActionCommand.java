@@ -74,7 +74,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 
 		String redirect = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.INDIRIZZO_REDIRECT);
 		
-		
+		//creo la pk della entity
 		ServizioEntePK servizioEntePK = new ServizioEntePK();
 		servizioEntePK.setServizioId(servizioId);
 		servizioEntePK.setOrganizationId(organizationId);
@@ -84,6 +84,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 			try {
 				servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);				
 			}catch(Exception e) {
+				//il servizio con servizioId ed organizationId non esiste. provvedo a creare una nuova entity
 				_log.debug("ServizioEnte con serviziId "+ servizioId + " e organizationId " + organizationId + " inesistente. Creo nuova entity");
 				servizioEnte = servizioEnteLocalService.createServizioEnte(servizioEntePK);
 			}
