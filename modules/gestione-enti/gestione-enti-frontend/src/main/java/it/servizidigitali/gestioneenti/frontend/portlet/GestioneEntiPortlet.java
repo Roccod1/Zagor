@@ -17,6 +17,8 @@ import javax.portlet.RenderResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici;
+import it.servizidigitali.backoffice.integration.service.AnagrafeIntegrationService;
 import it.servizidigitali.gestioneenti.frontend.constants.GestioneEntiPortletKeys;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
@@ -49,6 +51,9 @@ public class GestioneEntiPortlet extends MVCPortlet {
 	@Reference
 	private ServizioEnteLocalService servizioEnteLocalService;
 
+	@Reference(target = "(component.name=anagrafeANPRIntegrationService)")
+	private AnagrafeIntegrationService anagrafeIntegrationService;
+
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
 
@@ -57,6 +62,9 @@ public class GestioneEntiPortlet extends MVCPortlet {
 
 		List<ServizioEnte> serviziEnte = servizioEnteLocalService.getServizioEntes(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 		renderRequest.setAttribute(GestioneEntiPortletKeys.SERVIZI_ENTE, serviziEnte);
+
+		DatiAnagrafici datiAnagrafici = anagrafeIntegrationService.getDatiAnagrafici("RSSNTN81A05B519S", 42151, null);
+		System.out.println(datiAnagrafici);
 
 		super.render(renderRequest, renderResponse);
 	}
