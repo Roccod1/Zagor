@@ -90,6 +90,8 @@ public class GestioneEntiPortlet extends MVCPortlet {
 		String codiceIpa = ParamUtil.getString(renderRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_CODICE_IPA_RICERCA);
 		String nome = ParamUtil.getString(renderRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_NOME_RICERCA);
 		
+		Boolean primoCaricamento = ParamUtil.getBoolean(renderRequest, GestioneEntiPortletKeys.PRIMO_CARICAMENTO, true);
+		
 		String jspDaRenderizzare = null;
 		
 		ServiceContext serviceContext = null;
@@ -114,7 +116,6 @@ public class GestioneEntiPortlet extends MVCPortlet {
 				renderRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONE, organization);
 				
 				renderRequest.setAttribute(GestioneEntiPortletKeys.PULSANTE_PAGINA_PRINCIPALE_TOGGLE, false);
-				
 			}else {
 				if (Validator.isNull(listaOrganizations)) {
 					listaOrganizations = servizioEnteLocalService.findOrganizationsByParams(nome, codiceIpa, cur, delta, orderByCol, orderByType);
@@ -126,6 +127,8 @@ public class GestioneEntiPortlet extends MVCPortlet {
 				}
 				renderRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONI, listaOrganizations);
 			}			
+			primoCaricamento = false;
+			renderRequest.setAttribute(GestioneEntiPortletKeys.PRIMO_CARICAMENTO, primoCaricamento);
 		} catch (Exception e) {
 			_log.error("Errore render portlet", e);
 		}
@@ -136,7 +139,7 @@ public class GestioneEntiPortlet extends MVCPortlet {
 		SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
 		SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
 
-		if(Validator.isNotNull(jspDaRenderizzare)) {
+		if(Validator.isNotNull(jspDaRenderizzare) && primoCaricamento) {
 			include(jspDaRenderizzare, renderRequest, renderResponse);			
 		}else {
 			super.render(renderRequest, renderResponse);
