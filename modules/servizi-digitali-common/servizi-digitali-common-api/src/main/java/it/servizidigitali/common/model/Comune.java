@@ -56,4 +56,9 @@ public interface Comune extends ComuneModel, PersistedModel {
 
 		};
 
+	public it.servizidigitali.common.model.Provincia getProvincia();
+
+	public void setProvincia(
+		it.servizidigitali.common.model.Provincia provincia);
+
 }

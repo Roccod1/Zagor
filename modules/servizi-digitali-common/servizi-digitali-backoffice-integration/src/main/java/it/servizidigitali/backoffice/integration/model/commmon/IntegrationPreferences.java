@@ -8,6 +8,15 @@ public class IntegrationPreferences {
 
 	private boolean usaCache = true;
 	private String codiceServizio;
+	private String idTransazione;
+
+	public String getIdTransazione() {
+		return idTransazione;
+	}
+
+	public void setIdTransazione(String idTransazione) {
+		this.idTransazione = idTransazione;
+	}
 
 	/**
 	 * @return the usaCache

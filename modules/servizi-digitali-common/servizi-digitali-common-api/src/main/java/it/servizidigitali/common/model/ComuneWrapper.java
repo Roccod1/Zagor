@@ -425,6 +425,11 @@ public class ComuneWrapper
 		return model.getPrimaryKey();
 	}
 
+	@Override
+	public it.servizidigitali.common.model.Provincia getProvincia() {
+		return model.getProvincia();
+	}
+
 	/**
 	 * Returns the superficie of this comune.
 	 *
@@ -681,6 +686,13 @@ public class ComuneWrapper
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		model.setPrimaryKey(primaryKey);
+	}
+
+	@Override
+	public void setProvincia(
+		it.servizidigitali.common.model.Provincia provincia) {
+
+		model.setProvincia(provincia);
 	}
 
 	/**

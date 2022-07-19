@@ -17,7 +17,9 @@ import com.liferay.portal.aop.AopService;
 import org.osgi.service.component.annotations.Component;
 
 import it.servizidigitali.common.exception.NoSuchComuneException;
+import it.servizidigitali.common.exception.NoSuchProvinciaException;
 import it.servizidigitali.common.model.Comune;
+import it.servizidigitali.common.model.Provincia;
 import it.servizidigitali.common.service.base.ComuneLocalServiceBaseImpl;
 
 /**
@@ -28,19 +30,36 @@ public class ComuneLocalServiceImpl extends ComuneLocalServiceBaseImpl {
 
 	@Override
 	public Comune getComuneByDenominazione(String denominazione) {
-		Comune findByDenominazione = null;
+		Comune comune = null;
 		try {
-			findByDenominazione = comunePersistence.findByDenominazione(denominazione);
+			comune = comunePersistence.findByDenominazione(denominazione);
+			fillComune(comune);
 		}
 		catch (NoSuchComuneException e) {
 		}
-		return findByDenominazione;
+		return comune;
 	}
 
 	@Override
 	public Comune getComuneByCodiceISTAT(String codiceIstat) {
 		Comune comune = comuneFinder.findComuneByCodiceISTAT(codiceIstat);
+		fillComune(comune);
 		return comune;
 	}
 
+	/**
+	 * @param comune
+	 * @throws NoSuchProvinciaException
+	 */
+	private void fillComune(Comune comune) {
+
+		if (comune != null) {
+			try {
+				Provincia provincia = provinciaPersistence.findByPrimaryKey(comune.getIdProvincia());
+				comune.setProvincia(provincia);
+			}
+			catch (NoSuchProvinciaException e) {
+			}
+		}
+	}
 }
