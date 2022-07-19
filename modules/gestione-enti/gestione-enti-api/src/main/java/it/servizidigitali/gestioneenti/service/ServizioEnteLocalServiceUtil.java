@@ -231,6 +231,16 @@ public class ServizioEnteLocalServiceUtil {
 		return getService().fetchServizioEnteByUuidAndGroupId(uuid, groupId);
 	}
 
+	public static List<com.liferay.portal.kernel.model.Organization>
+			findOrganizationsByParams(
+				String nome, String codiceIpa, int cur, int delta,
+				String orderByCol, String orderByType)
+		throws Exception {
+
+		return getService().findOrganizationsByParams(
+			nome, codiceIpa, cur, delta, orderByCol, orderByType);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
