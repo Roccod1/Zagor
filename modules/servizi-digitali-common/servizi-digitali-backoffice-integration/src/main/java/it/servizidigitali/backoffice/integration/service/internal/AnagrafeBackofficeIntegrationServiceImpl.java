@@ -1,4 +1,4 @@
-package it.servizidigitali.backoffice.integration.service.impl.cripal;
+package it.servizidigitali.backoffice.integration.service.internal;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -11,10 +11,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.backoffice.integration.client.BackofficeIntegrationClient;
-import it.servizidigitali.backoffice.integration.converter.cripal.DatiAnagraficiConverter;
-import it.servizidigitali.backoffice.integration.converter.cripal.DatiAnagraficiGeneraliConverter;
-import it.servizidigitali.backoffice.integration.converter.cripal.DatiElettoraliConverter;
-import it.servizidigitali.backoffice.integration.converter.cripal.DatiVariazioniDomicilioConverter;
+import it.servizidigitali.backoffice.integration.converter.internal.DatiAnagraficiConverter;
+import it.servizidigitali.backoffice.integration.converter.internal.DatiAnagraficiGeneraliConverter;
+import it.servizidigitali.backoffice.integration.converter.internal.DatiElettoraliConverter;
+import it.servizidigitali.backoffice.integration.converter.internal.DatiVariazioniDomicilioConverter;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagraficiGenerali;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiElettorali;

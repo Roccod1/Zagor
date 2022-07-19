@@ -1,4 +1,4 @@
-package it.servizidigitali.backoffice.integration.converter.cripal;
+package it.servizidigitali.backoffice.integration.converter.internal;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;

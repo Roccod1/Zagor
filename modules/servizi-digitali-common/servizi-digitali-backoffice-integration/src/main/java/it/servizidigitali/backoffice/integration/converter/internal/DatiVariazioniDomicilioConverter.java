@@ -4,7 +4,7 @@
  *
  * Contributors: Links Management & Technology S.p.A. - initial API and implementation
  *************************************************************************************/
-package it.servizidigitali.backoffice.integration.converter.cripal;
+package it.servizidigitali.backoffice.integration.converter.internal;
 
 import java.util.ArrayList;
 import java.util.List;

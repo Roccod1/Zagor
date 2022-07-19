@@ -1,4 +1,4 @@
-package it.servizidigitali.backoffice.integration.service.impl.anpr;
+package it.servizidigitali.backoffice.integration.service.anpr;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;

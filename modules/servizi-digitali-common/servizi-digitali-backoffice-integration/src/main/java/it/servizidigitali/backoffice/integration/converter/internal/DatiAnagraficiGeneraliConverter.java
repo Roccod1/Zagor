@@ -1,4 +1,4 @@
-package it.servizidigitali.backoffice.integration.converter.cripal;
+package it.servizidigitali.backoffice.integration.converter.internal;
 
 import org.osgi.service.component.annotations.Component;
 
