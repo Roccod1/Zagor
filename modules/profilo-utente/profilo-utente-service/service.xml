@@ -44,7 +44,7 @@
 	<entity 
 		name="CanaleComunicazione"
 		table="canale_comunicazione"
-		uuid="true"
+		uuid="false"
 		local-service="true" 
 		remote-service="false" 
 		data-source="servizidigitaliDataSource" 
@@ -59,10 +59,6 @@
 
 		<!-- Audit fields -->
 		<column name="companyId" type="long" />
-		<column name="userId" type="long" />
-		<column name="userName" type="String" />
-		<column name="createDate" type="Date" />
-		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
 		<column name="nome" type="String" />

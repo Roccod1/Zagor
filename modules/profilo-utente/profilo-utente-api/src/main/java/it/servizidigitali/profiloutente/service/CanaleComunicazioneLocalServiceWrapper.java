@@ -246,21 +246,6 @@ public class CanaleComunicazioneLocalServiceWrapper
 			canaleComunicazioneId);
 	}
 
-	/**
-	 * Returns the canale comunicazione matching the UUID and group.
-	 *
-	 * @param uuid the canale comunicazione's UUID
-	 * @param groupId the primary key of the group
-	 * @return the matching canale comunicazione, or <code>null</code> if a matching canale comunicazione could not be found
-	 */
-	@Override
-	public it.servizidigitali.profiloutente.model.CanaleComunicazione
-		fetchCanaleComunicazioneByUuidAndGroupId(String uuid, long groupId) {
-
-		return _canaleComunicazioneLocalService.
-			fetchCanaleComunicazioneByUuidAndGroupId(uuid, groupId);
-	}
-
 	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
@@ -285,23 +270,6 @@ public class CanaleComunicazioneLocalServiceWrapper
 	}
 
 	/**
-	 * Returns the canale comunicazione matching the UUID and group.
-	 *
-	 * @param uuid the canale comunicazione's UUID
-	 * @param groupId the primary key of the group
-	 * @return the matching canale comunicazione
-	 * @throws PortalException if a matching canale comunicazione could not be found
-	 */
-	@Override
-	public it.servizidigitali.profiloutente.model.CanaleComunicazione
-			getCanaleComunicazioneByUuidAndGroupId(String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _canaleComunicazioneLocalService.
-			getCanaleComunicazioneByUuidAndGroupId(uuid, groupId);
-	}
-
-	/**
 	 * Returns a range of all the canale comunicaziones.
 	 *
 	 * <p>
@@ -321,45 +289,14 @@ public class CanaleComunicazioneLocalServiceWrapper
 			start, end);
 	}
 
-	/**
-	 * Returns all the canale comunicaziones matching the UUID and company.
-	 *
-	 * @param uuid the UUID of the canale comunicaziones
-	 * @param companyId the primary key of the company
-	 * @return the matching canale comunicaziones, or an empty list if no matches were found
-	 */
 	@Override
 	public java.util.List
 		<it.servizidigitali.profiloutente.model.CanaleComunicazione>
-			getCanaleComunicazionesByUuidAndCompanyId(
-				String uuid, long companyId) {
+				getCanaleComunicazionesAttivi(boolean attivo)
+			throws Exception {
 
-		return _canaleComunicazioneLocalService.
-			getCanaleComunicazionesByUuidAndCompanyId(uuid, companyId);
-	}
-
-	/**
-	 * Returns a range of canale comunicaziones matching the UUID and company.
-	 *
-	 * @param uuid the UUID of the canale comunicaziones
-	 * @param companyId the primary key of the company
-	 * @param start the lower bound of the range of canale comunicaziones
-	 * @param end the upper bound of the range of canale comunicaziones (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the range of matching canale comunicaziones, or an empty list if no matches were found
-	 */
-	@Override
-	public java.util.List
-		<it.servizidigitali.profiloutente.model.CanaleComunicazione>
-			getCanaleComunicazionesByUuidAndCompanyId(
-				String uuid, long companyId, int start, int end,
-				com.liferay.portal.kernel.util.OrderByComparator
-					<it.servizidigitali.profiloutente.model.CanaleComunicazione>
-						orderByComparator) {
-
-		return _canaleComunicazioneLocalService.
-			getCanaleComunicazionesByUuidAndCompanyId(
-				uuid, companyId, start, end, orderByComparator);
+		return _canaleComunicazioneLocalService.getCanaleComunicazionesAttivi(
+			attivo);
 	}
 
 	/**
@@ -370,16 +307,6 @@ public class CanaleComunicazioneLocalServiceWrapper
 	@Override
 	public int getCanaleComunicazionesCount() {
 		return _canaleComunicazioneLocalService.getCanaleComunicazionesCount();
-	}
-
-	@Override
-	public com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery
-		getExportActionableDynamicQuery(
-			com.liferay.exportimport.kernel.lar.PortletDataContext
-				portletDataContext) {
-
-		return _canaleComunicazioneLocalService.getExportActionableDynamicQuery(
-			portletDataContext);
 	}
 
 	@Override

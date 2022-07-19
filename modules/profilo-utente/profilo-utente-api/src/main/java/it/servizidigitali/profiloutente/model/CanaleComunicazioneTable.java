@@ -19,8 +19,6 @@ import com.liferay.petra.sql.dsl.base.BaseTable;
 
 import java.sql.Types;
 
-import java.util.Date;
-
 /**
  * The table class for the &quot;canale_comunicazione&quot; database table.
  *
@@ -34,8 +32,6 @@ public class CanaleComunicazioneTable
 	public static final CanaleComunicazioneTable INSTANCE =
 		new CanaleComunicazioneTable();
 
-	public final Column<CanaleComunicazioneTable, String> uuid = createColumn(
-		"uuid_", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<CanaleComunicazioneTable, Long> canaleComunicazioneId =
 		createColumn(
 			"canaleComunicazioneId", Long.class, Types.BIGINT,
@@ -45,17 +41,6 @@ public class CanaleComunicazioneTable
 	public final Column<CanaleComunicazioneTable, Long> companyId =
 		createColumn(
 			"companyId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
-	public final Column<CanaleComunicazioneTable, Long> userId = createColumn(
-		"userId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
-	public final Column<CanaleComunicazioneTable, String> userName =
-		createColumn(
-			"userName", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<CanaleComunicazioneTable, Date> createDate =
-		createColumn(
-			"createDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
-	public final Column<CanaleComunicazioneTable, Date> modifiedDate =
-		createColumn(
-			"modifiedDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
 	public final Column<CanaleComunicazioneTable, String> nome = createColumn(
 		"nome", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<CanaleComunicazioneTable, String> codice = createColumn(

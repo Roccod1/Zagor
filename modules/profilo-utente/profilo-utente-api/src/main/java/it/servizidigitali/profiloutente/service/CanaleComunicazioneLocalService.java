@@ -14,11 +14,9 @@
 
 package it.servizidigitali.profiloutente.service;
 
-import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -208,17 +206,6 @@ public interface CanaleComunicazioneLocalService
 	public CanaleComunicazione fetchCanaleComunicazione(
 		long canaleComunicazioneId);
 
-	/**
-	 * Returns the canale comunicazione matching the UUID and group.
-	 *
-	 * @param uuid the canale comunicazione's UUID
-	 * @param groupId the primary key of the group
-	 * @return the matching canale comunicazione, or <code>null</code> if a matching canale comunicazione could not be found
-	 */
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public CanaleComunicazione fetchCanaleComunicazioneByUuidAndGroupId(
-		String uuid, long groupId);
-
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
@@ -232,19 +219,6 @@ public interface CanaleComunicazioneLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public CanaleComunicazione getCanaleComunicazione(
 			long canaleComunicazioneId)
-		throws PortalException;
-
-	/**
-	 * Returns the canale comunicazione matching the UUID and group.
-	 *
-	 * @param uuid the canale comunicazione's UUID
-	 * @param groupId the primary key of the group
-	 * @return the matching canale comunicazione
-	 * @throws PortalException if a matching canale comunicazione could not be found
-	 */
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public CanaleComunicazione getCanaleComunicazioneByUuidAndGroupId(
-			String uuid, long groupId)
 		throws PortalException;
 
 	/**
@@ -262,31 +236,10 @@ public interface CanaleComunicazioneLocalService
 	public List<CanaleComunicazione> getCanaleComunicaziones(
 		int start, int end);
 
-	/**
-	 * Returns all the canale comunicaziones matching the UUID and company.
-	 *
-	 * @param uuid the UUID of the canale comunicaziones
-	 * @param companyId the primary key of the company
-	 * @return the matching canale comunicaziones, or an empty list if no matches were found
-	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<CanaleComunicazione> getCanaleComunicazionesByUuidAndCompanyId(
-		String uuid, long companyId);
-
-	/**
-	 * Returns a range of canale comunicaziones matching the UUID and company.
-	 *
-	 * @param uuid the UUID of the canale comunicaziones
-	 * @param companyId the primary key of the company
-	 * @param start the lower bound of the range of canale comunicaziones
-	 * @param end the upper bound of the range of canale comunicaziones (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the range of matching canale comunicaziones, or an empty list if no matches were found
-	 */
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<CanaleComunicazione> getCanaleComunicazionesByUuidAndCompanyId(
-		String uuid, long companyId, int start, int end,
-		OrderByComparator<CanaleComunicazione> orderByComparator);
+	public List<CanaleComunicazione> getCanaleComunicazionesAttivi(
+			boolean attivo)
+		throws Exception;
 
 	/**
 	 * Returns the number of canale comunicaziones.
@@ -295,10 +248,6 @@ public interface CanaleComunicazioneLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCanaleComunicazionesCount();
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public ExportActionableDynamicQuery getExportActionableDynamicQuery(
-		PortletDataContext portletDataContext);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();

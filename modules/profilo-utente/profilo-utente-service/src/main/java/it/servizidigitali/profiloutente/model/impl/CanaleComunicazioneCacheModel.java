@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import java.util.Date;
-
 /**
  * The cache model class for representing CanaleComunicazione in entity cache.
  *
@@ -65,24 +63,14 @@ public class CanaleComunicazioneCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(13);
 
-		sb.append("{uuid=");
-		sb.append(uuid);
-		sb.append(", canaleComunicazioneId=");
+		sb.append("{canaleComunicazioneId=");
 		sb.append(canaleComunicazioneId);
 		sb.append(", groupId=");
 		sb.append(groupId);
 		sb.append(", companyId=");
 		sb.append(companyId);
-		sb.append(", userId=");
-		sb.append(userId);
-		sb.append(", userName=");
-		sb.append(userName);
-		sb.append(", createDate=");
-		sb.append(createDate);
-		sb.append(", modifiedDate=");
-		sb.append(modifiedDate);
 		sb.append(", nome=");
 		sb.append(nome);
 		sb.append(", codice=");
@@ -99,38 +87,9 @@ public class CanaleComunicazioneCacheModel
 		CanaleComunicazioneImpl canaleComunicazioneImpl =
 			new CanaleComunicazioneImpl();
 
-		if (uuid == null) {
-			canaleComunicazioneImpl.setUuid("");
-		}
-		else {
-			canaleComunicazioneImpl.setUuid(uuid);
-		}
-
 		canaleComunicazioneImpl.setCanaleComunicazioneId(canaleComunicazioneId);
 		canaleComunicazioneImpl.setGroupId(groupId);
 		canaleComunicazioneImpl.setCompanyId(companyId);
-		canaleComunicazioneImpl.setUserId(userId);
-
-		if (userName == null) {
-			canaleComunicazioneImpl.setUserName("");
-		}
-		else {
-			canaleComunicazioneImpl.setUserName(userName);
-		}
-
-		if (createDate == Long.MIN_VALUE) {
-			canaleComunicazioneImpl.setCreateDate(null);
-		}
-		else {
-			canaleComunicazioneImpl.setCreateDate(new Date(createDate));
-		}
-
-		if (modifiedDate == Long.MIN_VALUE) {
-			canaleComunicazioneImpl.setModifiedDate(null);
-		}
-		else {
-			canaleComunicazioneImpl.setModifiedDate(new Date(modifiedDate));
-		}
 
 		if (nome == null) {
 			canaleComunicazioneImpl.setNome("");
@@ -155,18 +114,11 @@ public class CanaleComunicazioneCacheModel
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
-		uuid = objectInput.readUTF();
-
 		canaleComunicazioneId = objectInput.readLong();
 
 		groupId = objectInput.readLong();
 
 		companyId = objectInput.readLong();
-
-		userId = objectInput.readLong();
-		userName = objectInput.readUTF();
-		createDate = objectInput.readLong();
-		modifiedDate = objectInput.readLong();
 		nome = objectInput.readUTF();
 		codice = objectInput.readUTF();
 
@@ -175,30 +127,11 @@ public class CanaleComunicazioneCacheModel
 
 	@Override
 	public void writeExternal(ObjectOutput objectOutput) throws IOException {
-		if (uuid == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(uuid);
-		}
-
 		objectOutput.writeLong(canaleComunicazioneId);
 
 		objectOutput.writeLong(groupId);
 
 		objectOutput.writeLong(companyId);
-
-		objectOutput.writeLong(userId);
-
-		if (userName == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(userName);
-		}
-
-		objectOutput.writeLong(createDate);
-		objectOutput.writeLong(modifiedDate);
 
 		if (nome == null) {
 			objectOutput.writeUTF("");
@@ -217,14 +150,9 @@ public class CanaleComunicazioneCacheModel
 		objectOutput.writeBoolean(attivo);
 	}
 
-	public String uuid;
 	public long canaleComunicazioneId;
 	public long groupId;
 	public long companyId;
-	public long userId;
-	public String userName;
-	public long createDate;
-	public long modifiedDate;
 	public String nome;
 	public String codice;
 	public boolean attivo;

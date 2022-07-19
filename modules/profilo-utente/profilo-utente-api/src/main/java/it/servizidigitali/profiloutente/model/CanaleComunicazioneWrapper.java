@@ -14,11 +14,9 @@
 
 package it.servizidigitali.profiloutente.model;
 
-import com.liferay.exportimport.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.model.ModelWrapper;
 import com.liferay.portal.kernel.model.wrapper.BaseModelWrapper;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,14 +41,9 @@ public class CanaleComunicazioneWrapper
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
-		attributes.put("uuid", getUuid());
 		attributes.put("canaleComunicazioneId", getCanaleComunicazioneId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
-		attributes.put("userId", getUserId());
-		attributes.put("userName", getUserName());
-		attributes.put("createDate", getCreateDate());
-		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("nome", getNome());
 		attributes.put("codice", getCodice());
 		attributes.put("attivo", isAttivo());
@@ -60,12 +53,6 @@ public class CanaleComunicazioneWrapper
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
-		String uuid = (String)attributes.get("uuid");
-
-		if (uuid != null) {
-			setUuid(uuid);
-		}
-
 		Long canaleComunicazioneId = (Long)attributes.get(
 			"canaleComunicazioneId");
 
@@ -83,30 +70,6 @@ public class CanaleComunicazioneWrapper
 
 		if (companyId != null) {
 			setCompanyId(companyId);
-		}
-
-		Long userId = (Long)attributes.get("userId");
-
-		if (userId != null) {
-			setUserId(userId);
-		}
-
-		String userName = (String)attributes.get("userName");
-
-		if (userName != null) {
-			setUserName(userName);
-		}
-
-		Date createDate = (Date)attributes.get("createDate");
-
-		if (createDate != null) {
-			setCreateDate(createDate);
-		}
-
-		Date modifiedDate = (Date)attributes.get("modifiedDate");
-
-		if (modifiedDate != null) {
-			setModifiedDate(modifiedDate);
 		}
 
 		String nome = (String)attributes.get("nome");
@@ -174,16 +137,6 @@ public class CanaleComunicazioneWrapper
 	}
 
 	/**
-	 * Returns the create date of this canale comunicazione.
-	 *
-	 * @return the create date of this canale comunicazione
-	 */
-	@Override
-	public Date getCreateDate() {
-		return model.getCreateDate();
-	}
-
-	/**
 	 * Returns the group ID of this canale comunicazione.
 	 *
 	 * @return the group ID of this canale comunicazione
@@ -191,16 +144,6 @@ public class CanaleComunicazioneWrapper
 	@Override
 	public long getGroupId() {
 		return model.getGroupId();
-	}
-
-	/**
-	 * Returns the modified date of this canale comunicazione.
-	 *
-	 * @return the modified date of this canale comunicazione
-	 */
-	@Override
-	public Date getModifiedDate() {
-		return model.getModifiedDate();
 	}
 
 	/**
@@ -221,46 +164,6 @@ public class CanaleComunicazioneWrapper
 	@Override
 	public long getPrimaryKey() {
 		return model.getPrimaryKey();
-	}
-
-	/**
-	 * Returns the user ID of this canale comunicazione.
-	 *
-	 * @return the user ID of this canale comunicazione
-	 */
-	@Override
-	public long getUserId() {
-		return model.getUserId();
-	}
-
-	/**
-	 * Returns the user name of this canale comunicazione.
-	 *
-	 * @return the user name of this canale comunicazione
-	 */
-	@Override
-	public String getUserName() {
-		return model.getUserName();
-	}
-
-	/**
-	 * Returns the user uuid of this canale comunicazione.
-	 *
-	 * @return the user uuid of this canale comunicazione
-	 */
-	@Override
-	public String getUserUuid() {
-		return model.getUserUuid();
-	}
-
-	/**
-	 * Returns the uuid of this canale comunicazione.
-	 *
-	 * @return the uuid of this canale comunicazione
-	 */
-	@Override
-	public String getUuid() {
-		return model.getUuid();
 	}
 
 	/**
@@ -319,16 +222,6 @@ public class CanaleComunicazioneWrapper
 	}
 
 	/**
-	 * Sets the create date of this canale comunicazione.
-	 *
-	 * @param createDate the create date of this canale comunicazione
-	 */
-	@Override
-	public void setCreateDate(Date createDate) {
-		model.setCreateDate(createDate);
-	}
-
-	/**
 	 * Sets the group ID of this canale comunicazione.
 	 *
 	 * @param groupId the group ID of this canale comunicazione
@@ -336,16 +229,6 @@ public class CanaleComunicazioneWrapper
 	@Override
 	public void setGroupId(long groupId) {
 		model.setGroupId(groupId);
-	}
-
-	/**
-	 * Sets the modified date of this canale comunicazione.
-	 *
-	 * @param modifiedDate the modified date of this canale comunicazione
-	 */
-	@Override
-	public void setModifiedDate(Date modifiedDate) {
-		model.setModifiedDate(modifiedDate);
 	}
 
 	/**
@@ -366,51 +249,6 @@ public class CanaleComunicazioneWrapper
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		model.setPrimaryKey(primaryKey);
-	}
-
-	/**
-	 * Sets the user ID of this canale comunicazione.
-	 *
-	 * @param userId the user ID of this canale comunicazione
-	 */
-	@Override
-	public void setUserId(long userId) {
-		model.setUserId(userId);
-	}
-
-	/**
-	 * Sets the user name of this canale comunicazione.
-	 *
-	 * @param userName the user name of this canale comunicazione
-	 */
-	@Override
-	public void setUserName(String userName) {
-		model.setUserName(userName);
-	}
-
-	/**
-	 * Sets the user uuid of this canale comunicazione.
-	 *
-	 * @param userUuid the user uuid of this canale comunicazione
-	 */
-	@Override
-	public void setUserUuid(String userUuid) {
-		model.setUserUuid(userUuid);
-	}
-
-	/**
-	 * Sets the uuid of this canale comunicazione.
-	 *
-	 * @param uuid the uuid of this canale comunicazione
-	 */
-	@Override
-	public void setUuid(String uuid) {
-		model.setUuid(uuid);
-	}
-
-	@Override
-	public StagedModelType getStagedModelType() {
-		return model.getStagedModelType();
 	}
 
 	@Override

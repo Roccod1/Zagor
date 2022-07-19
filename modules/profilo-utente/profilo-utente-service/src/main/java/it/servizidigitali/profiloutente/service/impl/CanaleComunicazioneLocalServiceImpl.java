@@ -16,6 +16,9 @@ package it.servizidigitali.profiloutente.service.impl;
 
 import com.liferay.portal.aop.AopService;
 
+import java.util.List;
+
+import it.servizidigitali.profiloutente.model.CanaleComunicazione;
 import it.servizidigitali.profiloutente.service.base.CanaleComunicazioneLocalServiceBaseImpl;
 
 import org.osgi.service.component.annotations.Component;
@@ -27,6 +30,9 @@ import org.osgi.service.component.annotations.Component;
 	property = "model.class.name=it.servizidigitali.profiloutente.model.CanaleComunicazione",
 	service = AopService.class
 )
-public class CanaleComunicazioneLocalServiceImpl
-	extends CanaleComunicazioneLocalServiceBaseImpl {
+public class CanaleComunicazioneLocalServiceImpl extends CanaleComunicazioneLocalServiceBaseImpl {
+	
+	public List<CanaleComunicazione> getCanaleComunicazionesAttivi(boolean attivo) throws Exception {
+		return canaleComunicazionePersistence.findByAttivo(attivo);
+	}
 }

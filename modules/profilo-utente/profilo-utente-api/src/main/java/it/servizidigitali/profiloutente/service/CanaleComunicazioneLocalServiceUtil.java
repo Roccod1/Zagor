@@ -219,20 +219,6 @@ public class CanaleComunicazioneLocalServiceUtil {
 		return getService().fetchCanaleComunicazione(canaleComunicazioneId);
 	}
 
-	/**
-	 * Returns the canale comunicazione matching the UUID and group.
-	 *
-	 * @param uuid the canale comunicazione's UUID
-	 * @param groupId the primary key of the group
-	 * @return the matching canale comunicazione, or <code>null</code> if a matching canale comunicazione could not be found
-	 */
-	public static CanaleComunicazione fetchCanaleComunicazioneByUuidAndGroupId(
-		String uuid, long groupId) {
-
-		return getService().fetchCanaleComunicazioneByUuidAndGroupId(
-			uuid, groupId);
-	}
-
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -254,22 +240,6 @@ public class CanaleComunicazioneLocalServiceUtil {
 	}
 
 	/**
-	 * Returns the canale comunicazione matching the UUID and group.
-	 *
-	 * @param uuid the canale comunicazione's UUID
-	 * @param groupId the primary key of the group
-	 * @return the matching canale comunicazione
-	 * @throws PortalException if a matching canale comunicazione could not be found
-	 */
-	public static CanaleComunicazione getCanaleComunicazioneByUuidAndGroupId(
-			String uuid, long groupId)
-		throws PortalException {
-
-		return getService().getCanaleComunicazioneByUuidAndGroupId(
-			uuid, groupId);
-	}
-
-	/**
 	 * Returns a range of all the canale comunicaziones.
 	 *
 	 * <p>
@@ -286,37 +256,11 @@ public class CanaleComunicazioneLocalServiceUtil {
 		return getService().getCanaleComunicaziones(start, end);
 	}
 
-	/**
-	 * Returns all the canale comunicaziones matching the UUID and company.
-	 *
-	 * @param uuid the UUID of the canale comunicaziones
-	 * @param companyId the primary key of the company
-	 * @return the matching canale comunicaziones, or an empty list if no matches were found
-	 */
-	public static List<CanaleComunicazione>
-		getCanaleComunicazionesByUuidAndCompanyId(String uuid, long companyId) {
+	public static List<CanaleComunicazione> getCanaleComunicazionesAttivi(
+			boolean attivo)
+		throws Exception {
 
-		return getService().getCanaleComunicazionesByUuidAndCompanyId(
-			uuid, companyId);
-	}
-
-	/**
-	 * Returns a range of canale comunicaziones matching the UUID and company.
-	 *
-	 * @param uuid the UUID of the canale comunicaziones
-	 * @param companyId the primary key of the company
-	 * @param start the lower bound of the range of canale comunicaziones
-	 * @param end the upper bound of the range of canale comunicaziones (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the range of matching canale comunicaziones, or an empty list if no matches were found
-	 */
-	public static List<CanaleComunicazione>
-		getCanaleComunicazionesByUuidAndCompanyId(
-			String uuid, long companyId, int start, int end,
-			OrderByComparator<CanaleComunicazione> orderByComparator) {
-
-		return getService().getCanaleComunicazionesByUuidAndCompanyId(
-			uuid, companyId, start, end, orderByComparator);
+		return getService().getCanaleComunicazionesAttivi(attivo);
 	}
 
 	/**
@@ -326,14 +270,6 @@ public class CanaleComunicazioneLocalServiceUtil {
 	 */
 	public static int getCanaleComunicazionesCount() {
 		return getService().getCanaleComunicazionesCount();
-	}
-
-	public static com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery
-		getExportActionableDynamicQuery(
-			com.liferay.exportimport.kernel.lar.PortletDataContext
-				portletDataContext) {
-
-		return getService().getExportActionableDynamicQuery(portletDataContext);
 	}
 
 	public static

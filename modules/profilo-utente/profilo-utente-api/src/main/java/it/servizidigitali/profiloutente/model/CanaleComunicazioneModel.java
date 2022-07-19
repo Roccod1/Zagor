@@ -16,11 +16,7 @@ package it.servizidigitali.profiloutente.model;
 
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.model.BaseModel;
-import com.liferay.portal.kernel.model.GroupedModel;
 import com.liferay.portal.kernel.model.ShardedModel;
-import com.liferay.portal.kernel.model.StagedAuditedModel;
-
-import java.util.Date;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -37,8 +33,7 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public interface CanaleComunicazioneModel
-	extends BaseModel<CanaleComunicazione>, GroupedModel, ShardedModel,
-			StagedAuditedModel {
+	extends BaseModel<CanaleComunicazione>, ShardedModel {
 
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -61,23 +56,6 @@ public interface CanaleComunicazioneModel
 	public void setPrimaryKey(long primaryKey);
 
 	/**
-	 * Returns the uuid of this canale comunicazione.
-	 *
-	 * @return the uuid of this canale comunicazione
-	 */
-	@AutoEscape
-	@Override
-	public String getUuid();
-
-	/**
-	 * Sets the uuid of this canale comunicazione.
-	 *
-	 * @param uuid the uuid of this canale comunicazione
-	 */
-	@Override
-	public void setUuid(String uuid);
-
-	/**
 	 * Returns the canale comunicazione ID of this canale comunicazione.
 	 *
 	 * @return the canale comunicazione ID of this canale comunicazione
@@ -96,7 +74,6 @@ public interface CanaleComunicazioneModel
 	 *
 	 * @return the group ID of this canale comunicazione
 	 */
-	@Override
 	public long getGroupId();
 
 	/**
@@ -104,7 +81,6 @@ public interface CanaleComunicazioneModel
 	 *
 	 * @param groupId the group ID of this canale comunicazione
 	 */
-	@Override
 	public void setGroupId(long groupId);
 
 	/**
@@ -122,87 +98,6 @@ public interface CanaleComunicazioneModel
 	 */
 	@Override
 	public void setCompanyId(long companyId);
-
-	/**
-	 * Returns the user ID of this canale comunicazione.
-	 *
-	 * @return the user ID of this canale comunicazione
-	 */
-	@Override
-	public long getUserId();
-
-	/**
-	 * Sets the user ID of this canale comunicazione.
-	 *
-	 * @param userId the user ID of this canale comunicazione
-	 */
-	@Override
-	public void setUserId(long userId);
-
-	/**
-	 * Returns the user uuid of this canale comunicazione.
-	 *
-	 * @return the user uuid of this canale comunicazione
-	 */
-	@Override
-	public String getUserUuid();
-
-	/**
-	 * Sets the user uuid of this canale comunicazione.
-	 *
-	 * @param userUuid the user uuid of this canale comunicazione
-	 */
-	@Override
-	public void setUserUuid(String userUuid);
-
-	/**
-	 * Returns the user name of this canale comunicazione.
-	 *
-	 * @return the user name of this canale comunicazione
-	 */
-	@AutoEscape
-	@Override
-	public String getUserName();
-
-	/**
-	 * Sets the user name of this canale comunicazione.
-	 *
-	 * @param userName the user name of this canale comunicazione
-	 */
-	@Override
-	public void setUserName(String userName);
-
-	/**
-	 * Returns the create date of this canale comunicazione.
-	 *
-	 * @return the create date of this canale comunicazione
-	 */
-	@Override
-	public Date getCreateDate();
-
-	/**
-	 * Sets the create date of this canale comunicazione.
-	 *
-	 * @param createDate the create date of this canale comunicazione
-	 */
-	@Override
-	public void setCreateDate(Date createDate);
-
-	/**
-	 * Returns the modified date of this canale comunicazione.
-	 *
-	 * @return the modified date of this canale comunicazione
-	 */
-	@Override
-	public Date getModifiedDate();
-
-	/**
-	 * Sets the modified date of this canale comunicazione.
-	 *
-	 * @param modifiedDate the modified date of this canale comunicazione
-	 */
-	@Override
-	public void setModifiedDate(Date modifiedDate);
 
 	/**
 	 * Returns the nome of this canale comunicazione.
