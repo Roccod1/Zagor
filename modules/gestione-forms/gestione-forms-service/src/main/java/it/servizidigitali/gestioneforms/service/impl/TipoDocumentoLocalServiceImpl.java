@@ -16,11 +16,10 @@ package it.servizidigitali.gestioneforms.service.impl;
 
 import com.liferay.portal.aop.AopService;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
-import it.servizidigitali.gestioneforms.service.base.DefinizioneAllegatoLocalServiceBaseImpl;
+import it.servizidigitali.gestioneforms.model.TipoDocumento;
+import it.servizidigitali.gestioneforms.service.base.TipoDocumentoLocalServiceBaseImpl;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -28,18 +27,14 @@ import org.osgi.service.component.annotations.Component;
  * @author Brian Wing Shun Chan
  */
 @Component(
-	property = "model.class.name=it.servizidigitali.gestioneforms.model.DefinizioneAllegato",
+	property = "model.class.name=it.servizidigitali.gestioneforms.model.TipoDocumento",
 	service = AopService.class
 )
-public class DefinizioneAllegatoLocalServiceImpl
-	extends DefinizioneAllegatoLocalServiceBaseImpl {
+public class TipoDocumentoLocalServiceImpl
+	extends TipoDocumentoLocalServiceBaseImpl {
 	
-	public List<DefinizioneAllegato> getListaDefinizioneAllegatoByFormId(long formId){
-		List<DefinizioneAllegato> listaDefinizioneAllegati = new ArrayList<>();
-		if(formId>0) {
-			listaDefinizioneAllegati = definizioneAllegatoPersistence.findByformIdAndEliminato(formId,false);
-		}
-		
-		return listaDefinizioneAllegati;
+	public List<TipoDocumento> getListaTipoDocumentiByStato(String stato){
+		List<TipoDocumento> listaTipoDocumento = tipoDocumentoPersistence.findBystato(stato);
+		return listaTipoDocumento;
 	}
 }

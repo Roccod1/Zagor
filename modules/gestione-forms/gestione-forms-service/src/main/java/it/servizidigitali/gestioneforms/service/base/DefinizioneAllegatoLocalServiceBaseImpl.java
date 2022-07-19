@@ -51,6 +51,7 @@ import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalServiceU
 import it.servizidigitali.gestioneforms.service.persistence.DefinizioneAllegatoPersistence;
 import it.servizidigitali.gestioneforms.service.persistence.FormFinder;
 import it.servizidigitali.gestioneforms.service.persistence.FormPersistence;
+import it.servizidigitali.gestioneforms.service.persistence.TipoDocumentoPersistence;
 
 import java.io.Serializable;
 
@@ -635,6 +636,9 @@ public abstract class DefinizioneAllegatoLocalServiceBaseImpl
 
 	@Reference
 	protected FormFinder formFinder;
+
+	@Reference
+	protected TipoDocumentoPersistence tipoDocumentoPersistence;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService

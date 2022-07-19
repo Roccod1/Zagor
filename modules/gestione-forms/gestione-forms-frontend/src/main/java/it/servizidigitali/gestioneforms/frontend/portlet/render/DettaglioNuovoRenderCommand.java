@@ -21,6 +21,7 @@ import it.servizidigitali.gestioneforms.frontend.constants.GestioneFormsPortletK
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
+import it.servizidigitali.gestioneforms.service.TipoDocumentoLocalService;
 
 
 /**
@@ -44,6 +45,9 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 	
 	@Reference
 	private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
+	
+	@Reference
+	private TipoDocumentoLocalService tipoDocumentoLocalService;
 	
 	private Map<String, String> attachmentFileTypesMap;
 	private String attachmentFileTypes = "PDF,P7M,JPG,PNG,DOC,DOCX,XLS,ZIP";
@@ -78,6 +82,7 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 		}
 		
 		renderRequest.setAttribute(GestioneFormsPortletKeys.FORMATI_ALLEGATI, attachmentFileTypesMap);
+		renderRequest.setAttribute(GestioneFormsPortletKeys.LISTA_TIPO_DOCUMENTO, tipoDocumentoLocalService.getListaTipoDocumentiByStato(GestioneFormsPortletKeys.STATO_ATTIVO));
 		return GestioneFormsPortletKeys.JSP_AGGIUNGI_MODIFICA_FORM;
 	}
 

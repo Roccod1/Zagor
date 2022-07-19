@@ -2632,29 +2632,50 @@ $(document).ready(function() {
   //Edit attachment event
     $('.attachment-tbody').on('click', '.edit-attachment', function(){
     	var $this = $(this);
+    	
     	var $tr = $this.closest('tr');
-    	attachmentIndex = $('.attachment-tbody tr').index($tr);
     	
-    	//Populate the fields with the content of the table
-    	var $tds = $tr.find('td');
+    	// Controllo se l'allegato è stato aggiunto in questa istanza
+    	if($this.attr('id')){
+
+    		var indiceRiga = parseInt($(this).attr('id').replace(/[^\d]/g, ''), 10);
+    		$('#attachment-id').val($('#definizioneAllegato' + indiceRiga).val());
+    		$('#attachment-name').val($('#denominazione' + indiceRiga).val());
+    		
+    		if($('#obbligatorio' + indiceRiga).val()=="true"){
+        		$('#attachment-mandatory').prop('checked', true);
+        	}else{
+        		$('#attachment-mandatory').prop('checked', false);
+        	}
+    		
+    		$('#attachment-filetype').val($('#tipiFileAmmessi' + indiceRiga).val());
+    		$('#attachment-codetype').val($('#codiciTipologiaDocumento' + indiceRiga).val());
+    		$('[name="fileName"]').val($('#filenameModello' + indiceRiga).val());
+    		$("#modello-container").toggleClass('hidden', fileName === '');
     	
-    	$('#attachment-id').val($tds.eq(0).text());
-    	$('#attachment-name').val($tds.eq(1).text());
-    	console.log("Set valore checkbox: " + $tds.eq(2).text());
-    	if($tds.eq(2).text()=="true"){
-    		$('#attachment-mandatory').prop('checked', true);
     	}else{
-    		$('#attachment-mandatory').prop('checked', false);
+   		
+    		//Populate the fields with the content of the table
+        	var $tds = $tr.find('td');
+        	
+        	$('#attachment-id').val($tds.eq(0).text());
+        	$('#attachment-name').val($tds.eq(1).text());
+        	if($tds.eq(2).text()=="true"){
+        		$('#attachment-mandatory').prop('checked', true);
+        	}else{
+        		$('#attachment-mandatory').prop('checked', false);
+        	}
+        	
+        	var fileTypes = $tds.eq(3).text();
+        	$('#attachment-filetype').val(fileTypes.split(','));
+        	var documentTypes = $tds.eq(4).text();
+        	$('#attachment-codetype').val(documentTypes.split(','));
+        	var fileName = $tds.eq(5).text();
+        	$('[name="fileName"]').val(fileName);
+        	$("#modello-container").toggleClass('hidden', fileName === '');
     	}
     	
-    	var fileTypes = $tds.eq(3).text();
-    	$('#attachment-filetype').val(fileTypes.split(','));
-    	var documentTypes = $tds.eq(4).text();
-    	$('#attachment-codetype').val(documentTypes.split(','));
-    	var fileName = $tds.eq(5).text();
-    	$('[name="fileName"]').val(fileName);
-    	$("#modello-container").toggleClass('hidden', fileName === '');
-    	
+    	attachmentIndex = $('.attachment-tbody tr').index($tr);
     	showAttachmentForm();
     });
         

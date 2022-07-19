@@ -1474,69 +1474,77 @@ public class DefinizioneAllegatoPersistenceImpl
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 =
 		"definizioneAllegato.companyId = ?";
 
-	private FinderPath _finderPathWithPaginationFindByformId;
-	private FinderPath _finderPathWithoutPaginationFindByformId;
-	private FinderPath _finderPathCountByformId;
+	private FinderPath _finderPathWithPaginationFindByformIdAndEliminato;
+	private FinderPath _finderPathWithoutPaginationFindByformIdAndEliminato;
+	private FinderPath _finderPathCountByformIdAndEliminato;
 
 	/**
-	 * Returns all the definizione allegatos where formId = &#63;.
+	 * Returns all the definizione allegatos where formId = &#63; and eliminato = &#63;.
 	 *
 	 * @param formId the form ID
+	 * @param eliminato the eliminato
 	 * @return the matching definizione allegatos
 	 */
 	@Override
-	public List<DefinizioneAllegato> findByformId(long formId) {
-		return findByformId(formId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	public List<DefinizioneAllegato> findByformIdAndEliminato(
+		long formId, boolean eliminato) {
+
+		return findByformIdAndEliminato(
+			formId, eliminato, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the definizione allegatos where formId = &#63;.
+	 * Returns a range of all the definizione allegatos where formId = &#63; and eliminato = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DefinizioneAllegatoModelImpl</code>.
 	 * </p>
 	 *
 	 * @param formId the form ID
+	 * @param eliminato the eliminato
 	 * @param start the lower bound of the range of definizione allegatos
 	 * @param end the upper bound of the range of definizione allegatos (not inclusive)
 	 * @return the range of matching definizione allegatos
 	 */
 	@Override
-	public List<DefinizioneAllegato> findByformId(
-		long formId, int start, int end) {
+	public List<DefinizioneAllegato> findByformIdAndEliminato(
+		long formId, boolean eliminato, int start, int end) {
 
-		return findByformId(formId, start, end, null);
+		return findByformIdAndEliminato(formId, eliminato, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the definizione allegatos where formId = &#63;.
+	 * Returns an ordered range of all the definizione allegatos where formId = &#63; and eliminato = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DefinizioneAllegatoModelImpl</code>.
 	 * </p>
 	 *
 	 * @param formId the form ID
+	 * @param eliminato the eliminato
 	 * @param start the lower bound of the range of definizione allegatos
 	 * @param end the upper bound of the range of definizione allegatos (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching definizione allegatos
 	 */
 	@Override
-	public List<DefinizioneAllegato> findByformId(
-		long formId, int start, int end,
+	public List<DefinizioneAllegato> findByformIdAndEliminato(
+		long formId, boolean eliminato, int start, int end,
 		OrderByComparator<DefinizioneAllegato> orderByComparator) {
 
-		return findByformId(formId, start, end, orderByComparator, true);
+		return findByformIdAndEliminato(
+			formId, eliminato, start, end, orderByComparator, true);
 	}
 
 	/**
-	 * Returns an ordered range of all the definizione allegatos where formId = &#63;.
+	 * Returns an ordered range of all the definizione allegatos where formId = &#63; and eliminato = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DefinizioneAllegatoModelImpl</code>.
 	 * </p>
 	 *
 	 * @param formId the form ID
+	 * @param eliminato the eliminato
 	 * @param start the lower bound of the range of definizione allegatos
 	 * @param end the upper bound of the range of definizione allegatos (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -1544,8 +1552,8 @@ public class DefinizioneAllegatoPersistenceImpl
 	 * @return the ordered range of matching definizione allegatos
 	 */
 	@Override
-	public List<DefinizioneAllegato> findByformId(
-		long formId, int start, int end,
+	public List<DefinizioneAllegato> findByformIdAndEliminato(
+		long formId, boolean eliminato, int start, int end,
 		OrderByComparator<DefinizioneAllegato> orderByComparator,
 		boolean useFinderCache) {
 
@@ -1556,13 +1564,16 @@ public class DefinizioneAllegatoPersistenceImpl
 			(orderByComparator == null)) {
 
 			if (useFinderCache) {
-				finderPath = _finderPathWithoutPaginationFindByformId;
-				finderArgs = new Object[] {formId};
+				finderPath =
+					_finderPathWithoutPaginationFindByformIdAndEliminato;
+				finderArgs = new Object[] {formId, eliminato};
 			}
 		}
 		else if (useFinderCache) {
-			finderPath = _finderPathWithPaginationFindByformId;
-			finderArgs = new Object[] {formId, start, end, orderByComparator};
+			finderPath = _finderPathWithPaginationFindByformIdAndEliminato;
+			finderArgs = new Object[] {
+				formId, eliminato, start, end, orderByComparator
+			};
 		}
 
 		List<DefinizioneAllegato> list = null;
@@ -1573,7 +1584,9 @@ public class DefinizioneAllegatoPersistenceImpl
 
 			if ((list != null) && !list.isEmpty()) {
 				for (DefinizioneAllegato definizioneAllegato : list) {
-					if (formId != definizioneAllegato.getFormId()) {
+					if ((formId != definizioneAllegato.getFormId()) ||
+						(eliminato != definizioneAllegato.isEliminato())) {
+
 						list = null;
 
 						break;
@@ -1587,15 +1600,17 @@ public class DefinizioneAllegatoPersistenceImpl
 
 			if (orderByComparator != null) {
 				sb = new StringBundler(
-					3 + (orderByComparator.getOrderByFields().length * 2));
+					4 + (orderByComparator.getOrderByFields().length * 2));
 			}
 			else {
-				sb = new StringBundler(3);
+				sb = new StringBundler(4);
 			}
 
 			sb.append(_SQL_SELECT_DEFINIZIONEALLEGATO_WHERE);
 
-			sb.append(_FINDER_COLUMN_FORMID_FORMID_2);
+			sb.append(_FINDER_COLUMN_FORMIDANDELIMINATO_FORMID_2);
+
+			sb.append(_FINDER_COLUMN_FORMIDANDELIMINATO_ELIMINATO_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(
@@ -1618,6 +1633,8 @@ public class DefinizioneAllegatoPersistenceImpl
 
 				queryPos.add(formId);
 
+				queryPos.add(eliminato);
+
 				list = (List<DefinizioneAllegato>)QueryUtil.list(
 					query, getDialect(), start, end);
 
@@ -1639,32 +1656,37 @@ public class DefinizioneAllegatoPersistenceImpl
 	}
 
 	/**
-	 * Returns the first definizione allegato in the ordered set where formId = &#63;.
+	 * Returns the first definizione allegato in the ordered set where formId = &#63; and eliminato = &#63;.
 	 *
 	 * @param formId the form ID
+	 * @param eliminato the eliminato
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching definizione allegato
 	 * @throws NoSuchDefinizioneAllegatoException if a matching definizione allegato could not be found
 	 */
 	@Override
-	public DefinizioneAllegato findByformId_First(
-			long formId,
+	public DefinizioneAllegato findByformIdAndEliminato_First(
+			long formId, boolean eliminato,
 			OrderByComparator<DefinizioneAllegato> orderByComparator)
 		throws NoSuchDefinizioneAllegatoException {
 
-		DefinizioneAllegato definizioneAllegato = fetchByformId_First(
-			formId, orderByComparator);
+		DefinizioneAllegato definizioneAllegato =
+			fetchByformIdAndEliminato_First(
+				formId, eliminato, orderByComparator);
 
 		if (definizioneAllegato != null) {
 			return definizioneAllegato;
 		}
 
-		StringBundler sb = new StringBundler(4);
+		StringBundler sb = new StringBundler(6);
 
 		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
 
 		sb.append("formId=");
 		sb.append(formId);
+
+		sb.append(", eliminato=");
+		sb.append(eliminato);
 
 		sb.append("}");
 
@@ -1672,18 +1694,20 @@ public class DefinizioneAllegatoPersistenceImpl
 	}
 
 	/**
-	 * Returns the first definizione allegato in the ordered set where formId = &#63;.
+	 * Returns the first definizione allegato in the ordered set where formId = &#63; and eliminato = &#63;.
 	 *
 	 * @param formId the form ID
+	 * @param eliminato the eliminato
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching definizione allegato, or <code>null</code> if a matching definizione allegato could not be found
 	 */
 	@Override
-	public DefinizioneAllegato fetchByformId_First(
-		long formId, OrderByComparator<DefinizioneAllegato> orderByComparator) {
+	public DefinizioneAllegato fetchByformIdAndEliminato_First(
+		long formId, boolean eliminato,
+		OrderByComparator<DefinizioneAllegato> orderByComparator) {
 
-		List<DefinizioneAllegato> list = findByformId(
-			formId, 0, 1, orderByComparator);
+		List<DefinizioneAllegato> list = findByformIdAndEliminato(
+			formId, eliminato, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1693,32 +1717,37 @@ public class DefinizioneAllegatoPersistenceImpl
 	}
 
 	/**
-	 * Returns the last definizione allegato in the ordered set where formId = &#63;.
+	 * Returns the last definizione allegato in the ordered set where formId = &#63; and eliminato = &#63;.
 	 *
 	 * @param formId the form ID
+	 * @param eliminato the eliminato
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching definizione allegato
 	 * @throws NoSuchDefinizioneAllegatoException if a matching definizione allegato could not be found
 	 */
 	@Override
-	public DefinizioneAllegato findByformId_Last(
-			long formId,
+	public DefinizioneAllegato findByformIdAndEliminato_Last(
+			long formId, boolean eliminato,
 			OrderByComparator<DefinizioneAllegato> orderByComparator)
 		throws NoSuchDefinizioneAllegatoException {
 
-		DefinizioneAllegato definizioneAllegato = fetchByformId_Last(
-			formId, orderByComparator);
+		DefinizioneAllegato definizioneAllegato =
+			fetchByformIdAndEliminato_Last(
+				formId, eliminato, orderByComparator);
 
 		if (definizioneAllegato != null) {
 			return definizioneAllegato;
 		}
 
-		StringBundler sb = new StringBundler(4);
+		StringBundler sb = new StringBundler(6);
 
 		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
 
 		sb.append("formId=");
 		sb.append(formId);
+
+		sb.append(", eliminato=");
+		sb.append(eliminato);
 
 		sb.append("}");
 
@@ -1726,24 +1755,26 @@ public class DefinizioneAllegatoPersistenceImpl
 	}
 
 	/**
-	 * Returns the last definizione allegato in the ordered set where formId = &#63;.
+	 * Returns the last definizione allegato in the ordered set where formId = &#63; and eliminato = &#63;.
 	 *
 	 * @param formId the form ID
+	 * @param eliminato the eliminato
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching definizione allegato, or <code>null</code> if a matching definizione allegato could not be found
 	 */
 	@Override
-	public DefinizioneAllegato fetchByformId_Last(
-		long formId, OrderByComparator<DefinizioneAllegato> orderByComparator) {
+	public DefinizioneAllegato fetchByformIdAndEliminato_Last(
+		long formId, boolean eliminato,
+		OrderByComparator<DefinizioneAllegato> orderByComparator) {
 
-		int count = countByformId(formId);
+		int count = countByformIdAndEliminato(formId, eliminato);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<DefinizioneAllegato> list = findByformId(
-			formId, count - 1, count, orderByComparator);
+		List<DefinizioneAllegato> list = findByformIdAndEliminato(
+			formId, eliminato, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1753,17 +1784,18 @@ public class DefinizioneAllegatoPersistenceImpl
 	}
 
 	/**
-	 * Returns the definizione allegatos before and after the current definizione allegato in the ordered set where formId = &#63;.
+	 * Returns the definizione allegatos before and after the current definizione allegato in the ordered set where formId = &#63; and eliminato = &#63;.
 	 *
 	 * @param definizioneAllegatoId the primary key of the current definizione allegato
 	 * @param formId the form ID
+	 * @param eliminato the eliminato
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next definizione allegato
 	 * @throws NoSuchDefinizioneAllegatoException if a definizione allegato with the primary key could not be found
 	 */
 	@Override
-	public DefinizioneAllegato[] findByformId_PrevAndNext(
-			long definizioneAllegatoId, long formId,
+	public DefinizioneAllegato[] findByformIdAndEliminato_PrevAndNext(
+			long definizioneAllegatoId, long formId, boolean eliminato,
 			OrderByComparator<DefinizioneAllegato> orderByComparator)
 		throws NoSuchDefinizioneAllegatoException {
 
@@ -1777,13 +1809,15 @@ public class DefinizioneAllegatoPersistenceImpl
 
 			DefinizioneAllegato[] array = new DefinizioneAllegatoImpl[3];
 
-			array[0] = getByformId_PrevAndNext(
-				session, definizioneAllegato, formId, orderByComparator, true);
+			array[0] = getByformIdAndEliminato_PrevAndNext(
+				session, definizioneAllegato, formId, eliminato,
+				orderByComparator, true);
 
 			array[1] = definizioneAllegato;
 
-			array[2] = getByformId_PrevAndNext(
-				session, definizioneAllegato, formId, orderByComparator, false);
+			array[2] = getByformIdAndEliminato_PrevAndNext(
+				session, definizioneAllegato, formId, eliminato,
+				orderByComparator, false);
 
 			return array;
 		}
@@ -1795,8 +1829,9 @@ public class DefinizioneAllegatoPersistenceImpl
 		}
 	}
 
-	protected DefinizioneAllegato getByformId_PrevAndNext(
+	protected DefinizioneAllegato getByformIdAndEliminato_PrevAndNext(
 		Session session, DefinizioneAllegato definizioneAllegato, long formId,
+		boolean eliminato,
 		OrderByComparator<DefinizioneAllegato> orderByComparator,
 		boolean previous) {
 
@@ -1804,16 +1839,18 @@ public class DefinizioneAllegatoPersistenceImpl
 
 		if (orderByComparator != null) {
 			sb = new StringBundler(
-				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
-			sb = new StringBundler(3);
+			sb = new StringBundler(4);
 		}
 
 		sb.append(_SQL_SELECT_DEFINIZIONEALLEGATO_WHERE);
 
-		sb.append(_FINDER_COLUMN_FORMID_FORMID_2);
+		sb.append(_FINDER_COLUMN_FORMIDANDELIMINATO_FORMID_2);
+
+		sb.append(_FINDER_COLUMN_FORMIDANDELIMINATO_ELIMINATO_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields =
@@ -1886,6 +1923,8 @@ public class DefinizioneAllegatoPersistenceImpl
 
 		queryPos.add(formId);
 
+		queryPos.add(eliminato);
+
 		if (orderByComparator != null) {
 			for (Object orderByConditionValue :
 					orderByComparator.getOrderByConditionValues(
@@ -1906,40 +1945,45 @@ public class DefinizioneAllegatoPersistenceImpl
 	}
 
 	/**
-	 * Removes all the definizione allegatos where formId = &#63; from the database.
+	 * Removes all the definizione allegatos where formId = &#63; and eliminato = &#63; from the database.
 	 *
 	 * @param formId the form ID
+	 * @param eliminato the eliminato
 	 */
 	@Override
-	public void removeByformId(long formId) {
+	public void removeByformIdAndEliminato(long formId, boolean eliminato) {
 		for (DefinizioneAllegato definizioneAllegato :
-				findByformId(
-					formId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+				findByformIdAndEliminato(
+					formId, eliminato, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+					null)) {
 
 			remove(definizioneAllegato);
 		}
 	}
 
 	/**
-	 * Returns the number of definizione allegatos where formId = &#63;.
+	 * Returns the number of definizione allegatos where formId = &#63; and eliminato = &#63;.
 	 *
 	 * @param formId the form ID
+	 * @param eliminato the eliminato
 	 * @return the number of matching definizione allegatos
 	 */
 	@Override
-	public int countByformId(long formId) {
-		FinderPath finderPath = _finderPathCountByformId;
+	public int countByformIdAndEliminato(long formId, boolean eliminato) {
+		FinderPath finderPath = _finderPathCountByformIdAndEliminato;
 
-		Object[] finderArgs = new Object[] {formId};
+		Object[] finderArgs = new Object[] {formId, eliminato};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
 
 		if (count == null) {
-			StringBundler sb = new StringBundler(2);
+			StringBundler sb = new StringBundler(3);
 
 			sb.append(_SQL_COUNT_DEFINIZIONEALLEGATO_WHERE);
 
-			sb.append(_FINDER_COLUMN_FORMID_FORMID_2);
+			sb.append(_FINDER_COLUMN_FORMIDANDELIMINATO_FORMID_2);
+
+			sb.append(_FINDER_COLUMN_FORMIDANDELIMINATO_ELIMINATO_2);
 
 			String sql = sb.toString();
 
@@ -1953,6 +1997,8 @@ public class DefinizioneAllegatoPersistenceImpl
 				QueryPos queryPos = QueryPos.getInstance(query);
 
 				queryPos.add(formId);
+
+				queryPos.add(eliminato);
 
 				count = (Long)query.uniqueResult();
 
@@ -1969,8 +2015,11 @@ public class DefinizioneAllegatoPersistenceImpl
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_FORMID_FORMID_2 =
-		"definizioneAllegato.formId = ?";
+	private static final String _FINDER_COLUMN_FORMIDANDELIMINATO_FORMID_2 =
+		"definizioneAllegato.formId = ? AND ";
+
+	private static final String _FINDER_COLUMN_FORMIDANDELIMINATO_ELIMINATO_2 =
+		"definizioneAllegato.eliminato = ?";
 
 	public DefinizioneAllegatoPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
@@ -2617,22 +2666,26 @@ public class DefinizioneAllegatoPersistenceImpl
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "companyId"}, false);
 
-		_finderPathWithPaginationFindByformId = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByformId",
+		_finderPathWithPaginationFindByformIdAndEliminato = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByformIdAndEliminato",
 			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				Integer.class.getName(), OrderByComparator.class.getName()
+				Long.class.getName(), Boolean.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			},
-			new String[] {"formId"}, true);
+			new String[] {"formId", "eliminato"}, true);
 
-		_finderPathWithoutPaginationFindByformId = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByformId",
-			new String[] {Long.class.getName()}, new String[] {"formId"}, true);
+		_finderPathWithoutPaginationFindByformIdAndEliminato = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByformIdAndEliminato",
+			new String[] {Long.class.getName(), Boolean.class.getName()},
+			new String[] {"formId", "eliminato"}, true);
 
-		_finderPathCountByformId = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByformId",
-			new String[] {Long.class.getName()}, new String[] {"formId"},
-			false);
+		_finderPathCountByformIdAndEliminato = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByformIdAndEliminato",
+			new String[] {Long.class.getName(), Boolean.class.getName()},
+			new String[] {"formId", "eliminato"}, false);
 
 		_setDefinizioneAllegatoUtilPersistence(this);
 	}

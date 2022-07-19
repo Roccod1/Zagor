@@ -6,7 +6,10 @@
 
 
 <portlet:actionURL name="<%=GestioneFormsPortletKeys.SALVA_AGGIUNGI_ACTION_COMMAND %>" var="salvaModificaURL" />
+<portlet:resourceURL id="/uploadAllegato" var="uploadFileUrl">
+</portlet:resourceURL>
 <portlet:renderURL var="homeURL"></portlet:renderURL>
+
 
 
 
@@ -14,7 +17,7 @@
 				<h2><liferay-ui:message key="form"/></h2>
 </div>
 
-<aui:form action="${salvaModificaURL}" id="formPrincipale" name="formPrincipale">
+<aui:form action="${salvaModificaURL}" id="formPrincipale" name="formPrincipale" enctype="multipart/form-data">
 
 	<div class="container mb-4 pl-0 pr-0">
 	
@@ -86,7 +89,8 @@
 		
 		<aui:button-row cssClass="text-right">
 			<aui:button value="annulla" id="annulla" href="${homeURL}"/>
-			<aui:button type="submit" value="salva" id="salva"/>
+			<aui:button value="salva" id="salva"/>
+			<aui:button type="submit" id="submitFormPrincipale" value="Submit" hidden="true" />
 		</aui:button-row>
 	
 	
@@ -241,11 +245,15 @@
 	                            		
 	                            	</div>
 	                            	
-	                            	<aui:input type="hidden" name="dimensioneListaDefinizioneAllegato" />                           	
-	                            	<select id="listaAllegatiDaEliminare" name="<portlet:namespace />listaAllegatiDaEliminare" hidden multiple="multiple"></select>
+	                            	<div id="variabiliutilita">
+	                            		<aui:input type="hidden" name="dimensioneListaDefinizioneAllegato" />                           	
+	                            		<aui:select id="listaAllegatiDaEliminare" name="listaAllegatiDaEliminare" hidden="true" multiple="multiple"></aui:select>
+	                            	</div>
 	                            	
 	                            	
-	                            	<button class="btn btn-custom add-attachment"><liferay-ui:message key="nuovo"/></button>
+	                            	
+	                            	
+	                            	<button id="nuovoAllegato" class="btn btn-custom add-attachment"><liferay-ui:message key="nuovo"/></button>
 	                            	
 	                            	<div id="formAggiungiAllegato" class="form-horizontal hidden attachment-form">
 	                            		<input type="hidden" name="attachment-id" id="attachment-id" class="form-control" required="required">
@@ -285,9 +293,9 @@
 										    </label>
 										    <div class="controls">
 										    	<select id="attachment-codetype" name="attachment-codetype" multiple="multiple" class="form-control">
-<%-- 										    		<c:forEach items="${tipoDocumentoList}" var="tipoDocumento"> --%>
-<%-- 											    		<option value="${tipoDocumento.codice}">${tipoDocumento.nome}</option> --%>
-<%-- 										    		</c:forEach> --%>
+ 										    		<c:forEach items="${listaTipoDocumento}" var="tipoDocumento"> 
+ 											    		<option value="${tipoDocumento.codice}">${tipoDocumento.nome}</option> 
+ 										    		</c:forEach> 
 														<option>Test</option>
 														<option>Test2</option>
 										    	</select>
@@ -295,14 +303,8 @@
 									    </div>
 									    
 									    <div class="control-group">
-									  		<label class="control-label" for="attachment-file"><liferay-ui:message key="file"/></label>
 									  	  	<div class="controls">
-												<input type="hidden" class="allegato" name="fileName">
-												<input type="file" class="file-loading" id="attachment-file" name="file" class="form-control">
-												<div id="kv-error-uploadFileModello" style="display: none;"></div>
-										    	<div id="modello-container" class="alert alert-info hidden">
-										    		<liferay-ui:message key="file-archiviato"/>
-									    		</div>
+												<aui:input type="file" id="attachment-file" name="file" />
 											</div>
 										</div>
 									    
@@ -336,8 +338,6 @@
 	        </div>
 	    </div>
 	</div>
-
-
 
  <script> 
 
@@ -401,38 +401,21 @@
 	//NOMINATIM OPENSTREETMAP
 	var getAddressByCoordsUrl = 'https://nominatim.openstreetmap.org/reverse.php?format=json&zoom=16';
 	var getCoordsByAddressUrl = 'https://nominatim.openstreetmap.org/search.php?format=json&limit=1&bounded=1&q=';
-	
-	/*Gestisci upload file */
-	$("#attachment-file").fileinput({
-		language: "it",
-		showPreview: false,
-		uploadAsync: true,
-		required: true,
-		elErrorContainer: '#kv-error-uploadFileModello',
-		uploadUrl: "${uploadFileUrl}"
-    }).on('fileuploaded', function(event, data, previewId, index) {
-    	var response = data.response;
-    	$("input[name='fileName']").val(response.fileName);
-	}).on('fileclear', function(event) {
-		
-    	/*Resetta il valore di fileName */
-    	$("input[name='fileName']").val('');
-    	$("#modello-container").addClass('hidden');
-	});
- 	
-    
-     
+	 
 	//On form submit (add/edit)
 	$('.save-attachment').on('click', function(event){
     	event.preventDefault();
     	
     	//Validate the data
-    	var attachmentId = '<input type="text" class="nostylereadonly definizioneAllegatoId" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].definizioneAllegatoId" readonly value='+ $('#attachment-id').val() +'>';
-    	var attachmentName = '<input type="text" class="nostylereadonly" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].denominazione" value='+ $('#attachment-name').val() +' readonly>';
-    	var attachmentMandatory = '<input type="text" class="nostylereadonly" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].obbligatorio" value='+ $('#attachment-mandatory').is(':checked') +' onclick="return false;" readonly checked>';
-    	var attachmentFiletype = '<input type="text" class="nostylereadonly" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].tipiFileAmmessi" value='+ $('#attachment-filetype').val() +' readonly>';
-    	var attachmentCodetypes = '<input type="text" class="nostylereadonly" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].codiciTipologiaDocumento" value='+ $('#attachment-codetype').val() +' readonly>';
-    	var attachmentFileName = '<input type="text" class="nostylereadonly" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].filenameModello" value='+ $('[name="fileName"]').val() +' readonly>';
+    	var nomeAllegato = $('#<portlet:namespace />attachment-file').val();
+    	nomeAllegato = nomeAllegato.replace('C:\\fakepath\\', '');
+    		
+    	var attachmentId = '<input type="text" class="nostylereadonly definizioneAllegatoId" id="definizioneAllegatoId'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].definizioneAllegatoId" readonly value='+ $('#attachment-id').val() +'>';
+    	var attachmentName = '<input type="text" class="nostylereadonly" id="denominazione'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].denominazione" value='+ $('#attachment-name').val() +' readonly>';
+    	var attachmentMandatory = '<input type="text" class="nostylereadonly" id="obbligatorio'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].obbligatorio" value='+ $('#attachment-mandatory').is(':checked') +' onclick="return false;" readonly checked>';
+    	var attachmentFiletype = '<input type="text" class="nostylereadonly" id="tipiFileAmmessi'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].tipiFileAmmessi" value='+ $('#attachment-filetype').val() +' readonly>';
+    	var attachmentCodetypes = '<input type="text" class="nostylereadonly" id="codiciTipologiaDocumento'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].codiciTipologiaDocumento" value='+ $('#attachment-codetype').val() +' readonly>';
+    	var attachmentFileName = '<input type="text" class="nostylereadonly" id="filenameModello'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].filenameModello" value='+ nomeAllegato +' readonly>';
     	
     	console.log('attachmentIndex', attachmentIndex);
     	console.log('attachmentCodetypes', attachmentCodetypes);
@@ -462,6 +445,7 @@
 	        			.addClass('btn btn-default delete-attachment')
 	        			.attr('type', 'button')
 	        			.attr('aria-label', 'Elimina')
+	        			.attr('id','eliminaButton'+ index)
 	        			.append($('<span>')
 	    					.addClass('glyphicon glyphicon-remove')
 	            			.attr('aria-hidden', 'true')
@@ -471,6 +455,7 @@
 	        			.addClass('btn btn-default edit-attachment')
 	        			.attr('type', 'button')
 	        			.attr('aria-label', 'Modifica')
+	        			.attr('id','modificaAllegato'+ index)
 	        			.append($('<span>')
 	    					.addClass('glyphicon glyphicon-edit')
 	            			.attr('aria-hidden', 'true')
@@ -499,6 +484,9 @@
     			.append($trToAdd);
     	}
     	
+    	$('#<portlet:namespace />attachment-file').appendTo($('#variabiliutilita'));
+    	$('#<portlet:namespace />attachment-file').attr('hidden','hidden');
+    	
     	resetAttachmentForm();
     	hideAttachmentForm();
     	attachmentIndex = -1;
@@ -509,21 +497,54 @@
     });
 	
 	
-	
 	//Delete attachment event
     
 	$('.attachment-tbody').on('click', '.delete-attachment', function(){
-    	var $this = $(this);
-    	var definizioneAllegatoId = $this.parent().parent().find(".definizioneAllegatoId").html();
     	
-    	$('#listaAllegatiDaEliminare').append('<option value='+ definizioneAllegatoId +' selected="selected"></option>');
-
-    	$this.parent().parent().remove();
+		var $this = $(this);
+		$this.parent().parent().remove();
+    	var definizioneAllegatoId = $this.parent().parent().find(".definizioneAllegatoId").html();
+    	$('#<portlet:namespace />listaAllegatiDaEliminare').append('<option value='+ definizioneAllegatoId +' selected="selected"></option>');
+    	
+    	var indiceRiga = parseInt($(this).attr('id').replace(/[^\d]/g, ''), 10);
+ 		
+    	let i = indiceRiga + 1;
+    	let nuovoIndex = i - 1;
+    	
+    	while(i<index){
+			$('#definizioneAllegatoId' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex +'].definizioneAllegatoId');
+			$('#definizioneAllegatoId' + i).attr('id','definizioneAllegatoId'+ nuovoIndex);
+			
+			$('#denominazione' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex +'].denominazione');
+			$('#denominazione' + i).attr('id','denominazione'+ nuovoIndex);
+			
+			$('#obbligatorio' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex +'].obbligatorio');
+			$('#obbligatorio' + i).attr('id','obbligatorio'+ nuovoIndex);
+			
+			$('#tipiFileAmmessi' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex +'].tipiFileAmmessi');
+			$('#tipiFileAmmessi' + i).attr('id','tipiFileAmmessi'+ nuovoIndex);
+			
+			$('#codiciTipologiaDocumento' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex +'].codiciTipologiaDocumento');
+			$('#codiciTipologiaDocumento' + i).attr('id','codiciTipologiaDocumento'+ nuovoIndex);
+			
+			$('#filenameModello' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex +'].filenameModello');
+			$('#filenameModello' + i).attr('id','filenameModello'+ nuovoIndex);
+  
+    		$('#modificaAllegato' + i).attr('id','modificaAllegato'+ nuovoIndex);
+    		$('#modificaAllegato' + i).attr('id','modificaAllegato'+ nuovoIndex);
+    		
+    		i++;
+    	}
+    	
+    	index--;
+    	
+    	$('#<portlet:namespace />dimensioneListaDefinizioneAllegato').val(nuovoIndex);
+    	console.log("index: " + $('#<portlet:namespace />dimensioneListaDefinizioneAllegato').val());
     });
 	
-	$("#<portlet:namespace />salva").on("click",function(e){
-		e.preventDefault();
-	    $("#formAggiungiAllegato").remove();    
-	    $("#<portlet:namespace />formPrincipale").submit(); 
+	$('#<portlet:namespace />salva').on('click', function(){
+		$('#formAggiungiAllegato').remove();
+		$('#<portlet:namespace />submitFormPrincipale').click();
 	});
+
  </script> 

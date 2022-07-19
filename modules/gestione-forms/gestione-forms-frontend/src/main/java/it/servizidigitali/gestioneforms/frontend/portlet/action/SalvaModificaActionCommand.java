@@ -1,17 +1,31 @@
 package it.servizidigitali.gestioneforms.frontend.portlet.action;
 
 import com.liferay.counter.kernel.service.CounterLocalService;
+import com.liferay.document.library.kernel.model.DLFolder;
+import com.liferay.document.library.kernel.model.DLFolderConstants;
+import com.liferay.document.library.kernel.service.DLAppLocalService;
+import com.liferay.document.library.kernel.service.DLFolderLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 
+import java.io.File;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -48,16 +62,31 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 	@Reference
     private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
 	
+	@Reference
+	private DLAppLocalService DLappLocalService;
+	
+	@Reference
+	private DLFolderLocalService DLfolderLocalService;
+	
+	@Reference
+	private GroupLocalService groupLocalService;
+	
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {			
 		
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
-			
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		
+		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		long idForm = ParamUtil.getLong(actionRequest, GestioneFormsPortletKeys.ID_FORM);
 		String codice = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.CODICE);
 		String nome = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.NOME);
 		boolean principale = ParamUtil.getBoolean(actionRequest, GestioneFormsPortletKeys.PRINCIPALE);
-		String modelloForm = ParamUtil.getString(actionRequest, "modelloForm");
+		String modelloForm = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.MODELLO_FORM);
+		
+		
+		String fileName = uploadRequest.getFileName("file");
 		
 		long indiceListaDefinizioneAllegati = ParamUtil.getLong(actionRequest, "dimensioneListaDefinizioneAllegato");
 			
@@ -133,10 +162,48 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		
 		// Controllo su eventuali rimozioni degli allegati
 		
-		String[] allegatiDaEliminare = ParamUtil.getParameterValues(actionRequest, "listaAllegatiDaEliminare");
+		String[] allegatiDaEliminare = ParamUtil.getParameterValues(actionRequest, GestioneFormsPortletKeys.LISTA_ALLEGATI_DA_ELIMINARE);
 		
 		for(String allegatoId : allegatiDaEliminare) {
-			definizioneAllegatoLocalService.deleteDefinizioneAllegato(Long.valueOf(allegatoId));
+			DefinizioneAllegato allegato = definizioneAllegatoLocalService.getDefinizioneAllegato(Long.valueOf(allegatoId));
+			if(Validator.isNotNull(allegato)) {
+				allegato.setEliminato(true);
+				definizioneAllegatoLocalService.updateDefinizioneAllegato(allegato);
+			}else {
+				_log.error("Impossibile recuperare l'allegato per poter effettuare l'eliminazione!");
+			}
 		}
+		
+		
+		// Upload allegato in document repository
+		
+		File file = uploadRequest.getFile(GestioneFormsPortletKeys.FILE);
+		String mimeType = MimeTypesUtil.getContentType(file);
+		uploadAllegato(file, themeDisplay, fileName, form.getFormId(), mimeType, serviceContext);
+		
+
+	}
+	
+	private FileEntry uploadAllegato(File allegato, ThemeDisplay themeDisplay, String fileName, long formId, String mimeType, ServiceContext serviceContext) throws Exception{
+		
+		long groupId = groupLocalService.getGroup(themeDisplay.getCompanyId(), "Guest").getGroupId();
+
+		FileEntry fileEntry = null;
+		byte[] fileByteArray = FileUtil.getBytes(allegato);
+
+		DLFolder folderConfigurazionePiattaforma = DLfolderLocalService.getFolder(groupId,
+				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+				GestioneFormsPortletKeys.CARTELLA_CONFIGURAZIONE_PIATTAFORMA);
+		
+		DLFolder folderForm = DLfolderLocalService.getFolder(groupId, folderConfigurazionePiattaforma.getFolderId(),
+				GestioneFormsPortletKeys.CARTELLA_FORM);
+		
+		Folder cartellaAllegatiForm = DLappLocalService.addFolder(themeDisplay.getUserId(),
+				folderForm.getRepositoryId(), folderForm.getFolderId(), String.valueOf(formId),
+				String.valueOf(formId), serviceContext);
+		
+		fileEntry = DLappLocalService.addFileEntry(null, themeDisplay.getUserId(), cartellaAllegatiForm.getRepositoryId(), cartellaAllegatiForm.getFolderId(), fileName, mimeType, fileByteArray, null, null, serviceContext);
+
+		return fileEntry;
 	}
 }

@@ -89,8 +89,52 @@
 		<column name="formId" type="long" />
 		
 		<!-- Finder methods -->
-		<finder name="formId" return-type="Collection">
+		<finder name="formIdAndEliminato" return-type="Collection">
 			<finder-column name="formId" />
+			<finder-column name="eliminato" />
+		</finder>
+
+	</entity>
+	
+	<entity 
+		name="TipoDocumento"
+		table="tipo_documento"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="tipoDocumentoId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="codice" type="String" />
+		<column name="nome" type="String" />
+		<column name="descrizione" type="String" />
+		<column name="categoria" type="String" />
+		<column name="estensioniFile" type="String" db-name="estensioni_file"/>
+		<column name="stato" type="String" />
+		<column name="numeroRequired" type="long" db-name="numero_required"/>
+		<column name="dataScadenzaRequired" type="long" db-name="data_scadenza_required"/>
+		
+		<!-- FK -->
+		<column name="organizationId" type="long" />	
+		
+		<!-- Finder methods -->
+		<finder name="stato" return-type="Collection">
+			<finder-column name="stato" />
 		</finder>
 
 	</entity>
