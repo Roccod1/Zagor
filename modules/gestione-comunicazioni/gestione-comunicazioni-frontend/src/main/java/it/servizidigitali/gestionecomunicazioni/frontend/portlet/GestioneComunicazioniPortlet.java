@@ -20,11 +20,11 @@ import org.osgi.service.component.annotations.Component;
 		"javax.portlet.display-name=GestioneComunicazioniFrontend",
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/view.jsp",
-		"javax.portlet.name=" + GestioneComunicazioniFrontendPortletKeys.GESTIONECOMUNICAZIONIFRONTEND,
+		"javax.portlet.name=" + GestioneComunicazioniFrontendPortletKeys.GESTIONECOMUNICAZIONI,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
 	},
 	service = Portlet.class
 )
-public class GestioneComunicazioniFrontendPortlet extends MVCPortlet {
+public class GestioneComunicazioniPortlet extends MVCPortlet {
 }
