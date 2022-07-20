@@ -16,6 +16,8 @@ import org.osgi.service.component.annotations.Component;
 	property = {
 		"com.liferay.portlet.display-category=category.sample",
 		"com.liferay.portlet.header-portlet-css=/css/main.css",
+		"com.liferay.portlet.header-portlet-css=/scripts/alpaca/alpaca.css",
+		"com.liferay.portlet.footer-portlet-javascript=/scripts/alpaca/alpaca.min.js",
 		"com.liferay.portlet.instanceable=true",
 		"javax.portlet.display-name=PresentatoreForms",
 		"javax.portlet.init-param.template-path=/",
