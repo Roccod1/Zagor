@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.servlet.BaseFilter;
 import com.liferay.portal.kernel.util.PortalUtil;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -60,8 +61,14 @@ public class CheckPrivacyFilter extends BaseFilter {
 		String redirectCkeckPrivacyPath = profiloUtenteConfiguration.redirectCkeckPrivacyPath();
 		User user = PortalUtil.getUser(request);
 		if (!PortalUtil.getCurrentURL(request).equals(redirectCkeckPrivacyPath) && user != null && user.isActive() && !isAdministrator(user)) {
-			response.sendRedirect(redirectCkeckPrivacyPath);
-			return;
+
+			Serializable accettaPrivacy = user.getExpandoBridge().getAttribute("accettaPrivacy");
+			boolean accettaPrivacyBoolean = accettaPrivacy != null && Boolean.parseBoolean(accettaPrivacy.toString());
+
+			if (!accettaPrivacyBoolean) {
+				response.sendRedirect(redirectCkeckPrivacyPath);
+				return;
+			}
 		}
 
 		super.processFilter(request, response, filterChain);
