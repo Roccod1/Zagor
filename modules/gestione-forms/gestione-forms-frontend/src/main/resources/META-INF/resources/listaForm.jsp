@@ -33,19 +33,19 @@
 				
 				<c:choose>
 					<c:when test="${form.multiutente eq true}">
-						<liferay-ui:search-container-column-text align="center" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" value="<i class='icon-ok'></i>"/>
+						<liferay-ui:search-container-column-text align="center" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" value="<i class='icon-ok text-success'></i>"/>
 					</c:when>
 					<c:when test="${form.multiutente eq false}">
-						<liferay-ui:search-container-column-text  align="center" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" value="<i class='icon-remove'></i>"/>
+						<liferay-ui:search-container-column-text  align="center" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" value="<i class='icon-remove text-danger'></i>"/>
 					</c:when>
 				</c:choose>
 				
 				<c:choose>
 					<c:when test="${form.principale eq true}">
-						<liferay-ui:search-container-column-text  align="center" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>" value="<i class='icon-ok'></i>"/>
+						<liferay-ui:search-container-column-text  align="center" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>" value="<i class='icon-ok text-success'></i>"/>
 					</c:when>
 					<c:when test="${form.principale eq false}">
-						<liferay-ui:search-container-column-text  align="center" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>" value="<i class='icon-remove'></i>"/>
+						<liferay-ui:search-container-column-text  align="center" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>" value="<i class='icon-remove text-danger'></i>"/>
 					</c:when>
 				</c:choose>
 				

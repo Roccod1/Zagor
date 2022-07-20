@@ -62,6 +62,12 @@ public class DefinizioneAllegatoLocalServiceUtil {
 		return getService().addDefinizioneAllegato(definizioneAllegato);
 	}
 
+	public static DefinizioneAllegato cancellaAllegati(
+		String[] allegatiDaEliminare) {
+
+		return getService().cancellaAllegati(allegatiDaEliminare);
+	}
+
 	/**
 	 * Creates a new definizione allegato with the primary key. Does not add the definizione allegato to the database.
 	 *
@@ -381,6 +387,18 @@ public class DefinizioneAllegatoLocalServiceUtil {
 		DefinizioneAllegato definizioneAllegato) {
 
 		return getService().updateDefinizioneAllegato(definizioneAllegato);
+	}
+
+	public static com.liferay.portal.kernel.repository.model.FileEntry
+			uploadAllegato(
+				java.io.File allegato,
+				com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay,
+				String fileName, long formId, String mimeType,
+				com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws Exception {
+
+		return getService().uploadAllegato(
+			allegato, themeDisplay, fileName, formId, mimeType, serviceContext);
 	}
 
 	public static DefinizioneAllegatoLocalService getService() {

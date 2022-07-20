@@ -24,10 +24,13 @@ import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.PersistedModel;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.BaseLocalService;
 import com.liferay.portal.kernel.service.PersistedModelLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -35,6 +38,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 
+import java.io.File;
 import java.io.Serializable;
 
 import java.util.List;
@@ -78,6 +82,8 @@ public interface DefinizioneAllegatoLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public DefinizioneAllegato addDefinizioneAllegato(
 		DefinizioneAllegato definizioneAllegato);
+
+	public DefinizioneAllegato cancellaAllegati(String[] allegatiDaEliminare);
 
 	/**
 	 * Creates a new definizione allegato with the primary key. Does not add the definizione allegato to the database.
@@ -335,5 +341,10 @@ public interface DefinizioneAllegatoLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public DefinizioneAllegato updateDefinizioneAllegato(
 		DefinizioneAllegato definizioneAllegato);
+
+	public FileEntry uploadAllegato(
+			File allegato, ThemeDisplay themeDisplay, String fileName,
+			long formId, String mimeType, ServiceContext serviceContext)
+		throws Exception;
 
 }

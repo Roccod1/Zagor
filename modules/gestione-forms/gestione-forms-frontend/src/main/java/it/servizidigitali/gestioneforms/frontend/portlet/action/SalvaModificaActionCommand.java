@@ -1,8 +1,6 @@
 package it.servizidigitali.gestioneforms.frontend.portlet.action;
 
 import com.liferay.counter.kernel.service.CounterLocalService;
-import com.liferay.document.library.kernel.model.DLFolder;
-import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.document.library.kernel.service.DLFolderLocalService;
 import com.liferay.portal.kernel.log.Log;
@@ -10,7 +8,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
@@ -18,7 +15,6 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -76,7 +72,7 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		
+		FileEntry fileCaricato = null;
 		
 		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		long idForm = ParamUtil.getLong(actionRequest, GestioneFormsPortletKeys.ID_FORM);
@@ -86,9 +82,9 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		String modelloForm = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.MODELLO_FORM);
 		
 		
-		String fileName = uploadRequest.getFileName("file");
+		String fileName = uploadRequest.getFileName(GestioneFormsPortletKeys.FILE);
 		
-		long indiceListaDefinizioneAllegati = ParamUtil.getLong(actionRequest, "dimensioneListaDefinizioneAllegato");
+		long indiceListaDefinizioneAllegati = ParamUtil.getLong(actionRequest, GestioneFormsPortletKeys.DIMENSIONE_LISTA_ALLEGATI);
 			
 		Form form = null;
 		
@@ -120,7 +116,16 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		
 		formLocalService.updateForm(form);
 		
-		// Recupero elenco allegati specificato nella creazione del form 
+		// Upload allegato in document repository
+		
+		File file = uploadRequest.getFile(GestioneFormsPortletKeys.FILE);
+//		if(Validator.isNotNull(file) && file.isFile()) {
+//			String mimeType = uploadRequest.getContentType();
+//			fileCaricato = definizioneAllegatoLocalService.uploadAllegato(file, themeDisplay, fileName, form.getFormId(), mimeType, serviceContext);
+//		}
+		
+		
+		// Recupero elenco allegati specificati nella creazione del form 
 		
 		for(int i=0;i<indiceListaDefinizioneAllegati;i++) {
 			long definizioneAllegatoId = ParamUtil.getLong(actionRequest, "listaDefinizioneAllegato[" + i + "].definizioneAllegatoId");
@@ -155,55 +160,25 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 				allegato.setCodiciTipologiaDocumento(String.join(",", codiciTipologiaDocumento));
 			}
 			
+			if(Validator.isNotNull(fileCaricato)) {
+				allegato.setFilenameModello(fileCaricato.getFileName());
+			}
+			
 			allegato.setObbligatorio(obbligatorio);
 			allegato.setFormId(form.getFormId());
+			
+			if(Validator.isNotNull(fileCaricato)) {
+				allegato.setFileEntryId(fileCaricato.getFileEntryId());
+			}
+			
 			definizioneAllegatoLocalService.updateDefinizioneAllegato(allegato);
 		}
 		
 		// Controllo su eventuali rimozioni degli allegati
 		
 		String[] allegatiDaEliminare = ParamUtil.getParameterValues(actionRequest, GestioneFormsPortletKeys.LISTA_ALLEGATI_DA_ELIMINARE);
-		
-		for(String allegatoId : allegatiDaEliminare) {
-			DefinizioneAllegato allegato = definizioneAllegatoLocalService.getDefinizioneAllegato(Long.valueOf(allegatoId));
-			if(Validator.isNotNull(allegato)) {
-				allegato.setEliminato(true);
-				definizioneAllegatoLocalService.updateDefinizioneAllegato(allegato);
-			}else {
-				_log.error("Impossibile recuperare l'allegato per poter effettuare l'eliminazione!");
-			}
-		}
-		
-		
-		// Upload allegato in document repository
-		
-		File file = uploadRequest.getFile(GestioneFormsPortletKeys.FILE);
-		String mimeType = MimeTypesUtil.getContentType(file);
-		uploadAllegato(file, themeDisplay, fileName, form.getFormId(), mimeType, serviceContext);
-		
-
+		definizioneAllegatoLocalService.cancellaAllegati(allegatiDaEliminare);
 	}
 	
-	private FileEntry uploadAllegato(File allegato, ThemeDisplay themeDisplay, String fileName, long formId, String mimeType, ServiceContext serviceContext) throws Exception{
-		
-		long groupId = groupLocalService.getGroup(themeDisplay.getCompanyId(), "Guest").getGroupId();
-
-		FileEntry fileEntry = null;
-		byte[] fileByteArray = FileUtil.getBytes(allegato);
-
-		DLFolder folderConfigurazionePiattaforma = DLfolderLocalService.getFolder(groupId,
-				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
-				GestioneFormsPortletKeys.CARTELLA_CONFIGURAZIONE_PIATTAFORMA);
-		
-		DLFolder folderForm = DLfolderLocalService.getFolder(groupId, folderConfigurazionePiattaforma.getFolderId(),
-				GestioneFormsPortletKeys.CARTELLA_FORM);
-		
-		Folder cartellaAllegatiForm = DLappLocalService.addFolder(themeDisplay.getUserId(),
-				folderForm.getRepositoryId(), folderForm.getFolderId(), String.valueOf(formId),
-				String.valueOf(formId), serviceContext);
-		
-		fileEntry = DLappLocalService.addFileEntry(null, themeDisplay.getUserId(), cartellaAllegatiForm.getRepositoryId(), cartellaAllegatiForm.getFolderId(), fileName, mimeType, fileByteArray, null, null, serviceContext);
-
-		return fileEntry;
-	}
+	
 }

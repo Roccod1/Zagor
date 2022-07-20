@@ -6,9 +6,9 @@
 
 
 <portlet:actionURL name="<%=GestioneFormsPortletKeys.SALVA_AGGIUNGI_ACTION_COMMAND %>" var="salvaModificaURL" />
-<portlet:resourceURL id="/uploadAllegato" var="uploadFileUrl">
-</portlet:resourceURL>
 <portlet:renderURL var="homeURL"></portlet:renderURL>
+<portlet:resourceURL id="/uploadFile" var="uploadFileUrl">
+</portlet:resourceURL>
 
 
 
@@ -89,8 +89,8 @@
 		
 		<aui:button-row cssClass="text-right">
 			<aui:button value="annulla" id="annulla" href="${homeURL}"/>
-			<aui:button value="salva" id="salva"/>
-			<aui:button type="submit" id="submitFormPrincipale" value="Submit" hidden="true" />
+			<button id="salva" class="btn btn-primary"><liferay-ui:message key="salva"/></button>
+			<aui:button type="submit" id="submitFormPrincipale" hidden="true" />
 		</aui:button-row>
 	
 	
@@ -247,13 +247,15 @@
 	                            	
 	                            	<div id="variabiliutilita">
 	                            		<aui:input type="hidden" name="dimensioneListaDefinizioneAllegato" />                           	
-	                            		<aui:select id="listaAllegatiDaEliminare" name="listaAllegatiDaEliminare" hidden="true" multiple="multiple"></aui:select>
+	                            		<select id="listaAllegatiDaEliminare" name="<portlet:namespace />listaAllegatiDaEliminare" hidden="true" multiple="multiple"></select>
 	                            	</div>
 	                            	
 	                            	
+	                            	<div id="alertFormDefinizioneAllegato" class="portlet-msg-alert hidden">
+											<liferay-ui:message key="compilare-tutti-i-campi-obbligatori"/>
+									</div>
 	                            	
-	                            	
-	                            	<button id="nuovoAllegato" class="btn btn-custom add-attachment"><liferay-ui:message key="nuovo"/></button>
+	                            	<button id="nuovoAllegato" class="btn btn-light add-attachment"><liferay-ui:message key="nuovo"/></button>
 	                            	
 	                            	<div id="formAggiungiAllegato" class="form-horizontal hidden attachment-form">
 	                            		<input type="hidden" name="attachment-id" id="attachment-id" class="form-control" required="required">
@@ -263,7 +265,7 @@
 										    	<liferay-ui:message key="denominazione"/>
 										    </label>
 										    <div class="controls">
-										   		<input type="text" name="attachment-name" id="attachment-name" class="form-control" required="required">
+										   		<input type="text" class="form-control" name="attachment-name" required="required" id="attachment-name" >
 										   	</div>
 									    </div>
 									    <div class="control-group">
@@ -279,7 +281,7 @@
 										    	<liferay-ui:message key="file-ammessi"/>
 										    </label>
 										    <div class="controls">
-										    	<select id="attachment-filetype" name="attachment-filetype" multiple="multiple" class="form-control" required="required" size="7">
+										    	<select id="attachment-filetype" class="form-control" name="attachment-filetype" multiple="multiple" required="required" size="7">
 										    		<c:forEach items="${formatiAllegati}" var="formatoAllegato">
 										    			<option value="${formatoAllegato.key}">${formatoAllegato.value}</option>
 										    		</c:forEach>
@@ -296,8 +298,6 @@
  										    		<c:forEach items="${listaTipoDocumento}" var="tipoDocumento"> 
  											    		<option value="${tipoDocumento.codice}">${tipoDocumento.nome}</option> 
  										    		</c:forEach> 
-														<option>Test</option>
-														<option>Test2</option>
 										    	</select>
 										   	</div>
 									    </div>
@@ -310,7 +310,7 @@
 									    
 									    <div class="control-group">
 										    <div class="controls">
-										    	<button class="btn btn-custom save-attachment" type="button">
+										    	<button class="btn btn-secondary save-attachment" type="button">
 										    		<liferay-ui:message key="salva"/>
 										    	</button>
 										    </div>
@@ -403,98 +403,182 @@
 	var getCoordsByAddressUrl = 'https://nominatim.openstreetmap.org/search.php?format=json&limit=1&bounded=1&q=';
 	 
 	//On form submit (add/edit)
-	$('.save-attachment').on('click', function(event){
-    	event.preventDefault();
-    	
-    	//Validate the data
-    	var nomeAllegato = $('#<portlet:namespace />attachment-file').val();
-    	nomeAllegato = nomeAllegato.replace('C:\\fakepath\\', '');
-    		
-    	var attachmentId = '<input type="text" class="nostylereadonly definizioneAllegatoId" id="definizioneAllegatoId'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].definizioneAllegatoId" readonly value='+ $('#attachment-id').val() +'>';
-    	var attachmentName = '<input type="text" class="nostylereadonly" id="denominazione'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].denominazione" value='+ $('#attachment-name').val() +' readonly>';
-    	var attachmentMandatory = '<input type="text" class="nostylereadonly" id="obbligatorio'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].obbligatorio" value='+ $('#attachment-mandatory').is(':checked') +' onclick="return false;" readonly checked>';
-    	var attachmentFiletype = '<input type="text" class="nostylereadonly" id="tipiFileAmmessi'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].tipiFileAmmessi" value='+ $('#attachment-filetype').val() +' readonly>';
-    	var attachmentCodetypes = '<input type="text" class="nostylereadonly" id="codiciTipologiaDocumento'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].codiciTipologiaDocumento" value='+ $('#attachment-codetype').val() +' readonly>';
-    	var attachmentFileName = '<input type="text" class="nostylereadonly" id="filenameModello'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].filenameModello" value='+ nomeAllegato +' readonly>';
-    	
-    	console.log('attachmentIndex', attachmentIndex);
-    	console.log('attachmentCodetypes', attachmentCodetypes);
-    	
-    	var $trToAdd = $('<tr>')
-	    	.append($('<td>'+ attachmentId)
-// 	    		.text(attachmentId)
-	    	)
-	        .append($('<td>' + attachmentName)
-// 	        	.text(attachmentName)
-	        )
-	        .append($('<td>' + attachmentMandatory)
-// 	        	.text(attachmentMandatory)
-	        )
-	        .append($('<td>' + attachmentFiletype)
-// 	        	.text(attachmentFiletype)
-	        )
-	        .append($('<td>'+ attachmentCodetypes)
-// 	        		.text(attachmentCodetypes)
-	        )
-	        .append($('<td>' + attachmentFileName)
-	        	//.data('attachmentFileName', attachmentFileName)
-// 	        	.text(attachmentFileName)
-	        )
-	        .append($('<td>')
-	        	.append($('<button>')
-	        			.addClass('btn btn-default delete-attachment')
-	        			.attr('type', 'button')
-	        			.attr('aria-label', 'Elimina')
-	        			.attr('id','eliminaButton'+ index)
-	        			.append($('<span>')
-	    					.addClass('glyphicon glyphicon-remove')
-	            			.attr('aria-hidden', 'true')
-	            		)
-	        	)
-	        	.append($('<button>')
-	        			.addClass('btn btn-default edit-attachment')
-	        			.attr('type', 'button')
-	        			.attr('aria-label', 'Modifica')
-	        			.attr('id','modificaAllegato'+ index)
-	        			.append($('<span>')
-	    					.addClass('glyphicon glyphicon-edit')
-	            			.attr('aria-hidden', 'true')
-	            		)
-	        	)
-	        );
-    	
-    	if(attachmentIndex != -1){
-    		$tr = $('.attachment-tbody tr').eq(attachmentIndex);
-    		var nextAll = $tr.nextAll();
-    		$tr.remove();
-    		
-    		var trs = $('.attachment-tbody tr');
-    		
-    		//Check if there are attachments after the edited one
-        	if(nextAll.length > 0){
-        		var $trs = $('.attachment-tbody tr');
-        		$tr = $trs.eq(attachmentIndex);
-        		$tr.before($trToAdd);
-        	} else {
-        		$('.attachment-tbody')
-    				.append($trToAdd);
-        	}
-    	} else {
-    		$('.attachment-tbody')
-    			.append($trToAdd);
-    	}
-    	
-    	$('#<portlet:namespace />attachment-file').appendTo($('#variabiliutilita'));
-    	$('#<portlet:namespace />attachment-file').attr('hidden','hidden');
-    	
-    	resetAttachmentForm();
-    	hideAttachmentForm();
-    	attachmentIndex = -1;
-    	
-    	index = index + 1;
-    	
-    	$('#<portlet:namespace />dimensioneListaDefinizioneAllegato').val(index);
+	$('.save-attachment').on('click', function(){
+		
+		var validazioneForm = validaFormDefinizioneAllegato();
+		
+		if(validazioneForm){
+			var nomeAllegato = $('#<portlet:namespace />attachment-file').val();
+	    	nomeAllegato = nomeAllegato.replace('C:\\fakepath\\', ' ');
+
+	    	var attachmentId = '<input type="text" class="nostylereadonly definizioneAllegatoId" id="definizioneAllegatoId'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].definizioneAllegatoId" readonly value='+ $('#attachment-id').val() +'>';
+	    	var attachmentName = '<input type="text" class="nostylereadonly" id="denominazione'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].denominazione" value='+ $('#attachment-name').val() +' readonly>';
+	    	var attachmentMandatory = '<input type="text" class="nostylereadonly" id="obbligatorio'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].obbligatorio" value='+ $('#attachment-mandatory').is(':checked') +' onclick="return false;" readonly checked>';
+	    	var attachmentFiletype = '<input type="text" class="nostylereadonly" id="tipiFileAmmessi'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].tipiFileAmmessi" value='+ $('#attachment-filetype').val() +' readonly>';
+	    	var attachmentCodetypes = '<input type="text" class="nostylereadonly" id="codiciTipologiaDocumento'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].codiciTipologiaDocumento" value='+ $('#attachment-codetype').val() +' readonly>';
+	    	var attachmentFileName = '<input type="text" class="nostylereadonly" id="filenameModello'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].filenameModello" value=\'' +  nomeAllegato + '\' size="50"  readonly>';
+
+	    	
+	    	var $trToAdd = $('<tr>')
+		    	.append($('<td>'+ attachmentId))
+		        .append($('<td>' + attachmentName))
+		        .append($('<td>' + attachmentMandatory))
+		        .append($('<td>' + attachmentFiletype))
+		        .append($('<td>'+ attachmentCodetypes))
+		        .append($('<td>' + attachmentFileName))
+		        .append($('<td>')
+		        	.append($('<button>')
+		        			.addClass('btn btn-default delete-attachment')
+		        			.attr('type', 'button')
+		        			.attr('aria-label', 'Elimina')
+		        			.attr('id','eliminaButton'+ index)
+		        			.append($('<span>')
+		    					.addClass('glyphicon glyphicon-remove')
+		            			.attr('aria-hidden', 'true')
+		            		)
+		        	)
+		        	.append($('<button>')
+		        			.addClass('btn btn-default edit-attachment')
+		        			.attr('type', 'button')
+		        			.attr('aria-label', 'Modifica')
+		        			.attr('id','modificaAllegato'+ index)
+		        			.append($('<span>')
+		    					.addClass('glyphicon glyphicon-edit')
+		            			.attr('aria-hidden', 'true')
+		            		)
+		        	)
+		        );
+	    	
+	    	if(attachmentIndex != -1){
+	    		$tr = $('.attachment-tbody tr').eq(attachmentIndex);
+	    		var nextAll = $tr.nextAll();
+	    		$tr.remove();
+	    		
+	    		var trs = $('.attachment-tbody tr');
+	    		
+	    		//Check if there are attachments after the edited one
+	        	if(nextAll.length > 0){
+	        		var $trs = $('.attachment-tbody tr');
+	        		$tr = $trs.eq(attachmentIndex);
+	        		$tr.before($trToAdd);
+	        	} else {
+	        		$('.attachment-tbody')
+	    				.append($trToAdd);
+	        	}
+	    	} else {
+	    		$('.attachment-tbody')
+	    			.append($trToAdd);
+	    	}
+			
+			var formData = new FormData();
+			
+			formData.append('<portlet:namespace />' + 'attachmentId', $('#attachment-id').val());
+			formData.append('<portlet:namespace />' + 'attachmentName', $('#attachment-name').val());
+			formData.append('<portlet:namespace />' + 'attachmentMandatory', $('#attachment-mandatory').is(':checked'));
+			formData.append('<portlet:namespace />' + 'attachmentFileType', $('#attachment-filetype').val());
+			formData.append('<portlet:namespace />' + 'attachmentCodeType', $('#attachment-codetype').val());
+			formData.append('<portlet:namespace />' + 'attachmentFile', $('#<portlet:namespace />attachment-file')[0].files[0]);
+			
+	    	$.ajax({
+	    		url: "${uploadFileUrl}",
+	    		type: 'POST',
+	    		data: formData,
+	    		processData: false,
+	    		contentType: false,
+	    		success: function(data){
+	    			var jsonData = JSON.parse(data);
+	    			
+	    			if(jsonData.status==='success'){
+	    				console.log("file caricato correttamente");
+	    			}else if(jsonData.status==='error'){
+	    				console.log("errore upload file");
+	    			}
+	    		}, error: function(xhr){
+	    			
+	    		}
+	    	});
+			
+			$('#alertFormDefinizioneAllegato').addClass('hidden');
+	    	resetAttachmentForm();
+	    	hideAttachmentForm();
+	    	attachmentIndex = -1;
+	    	
+	    	index = index + 1;
+	    	
+	    	$('#<portlet:namespace />dimensioneListaDefinizioneAllegato').val(index);
+		}
+
     });
+	
+	//Load attachments tab content
+    $('.add-attachment').on('click', function(){
+    	resetAttachmentForm();
+    	showAttachmentForm();
+    	attachmentIndex = -1;
+    });
+    
+  //Edit attachment event
+    $('.attachment-tbody').on('click', '.edit-attachment', function(){
+    	var $this = $(this);
+    	
+    	var $tr = $this.closest('tr');
+    	
+    	// Controllo se l'allegato è stato aggiunto in questa istanza
+    	if($this.attr('id')){
+
+    		var indiceRiga = parseInt($(this).attr('id').replace(/[^\d]/g, ''), 10);
+    		$('#attachment-id').val($('#definizioneAllegato' + indiceRiga).val());
+    		$('#attachment-name').val($('#denominazione' + indiceRiga).val());
+    		
+    		if($('#obbligatorio' + indiceRiga).val()=="true"){
+        		$('#attachment-mandatory').prop('checked', true);
+        	}else{
+        		$('#attachment-mandatory').prop('checked', false);
+        	}
+    		
+    		$('#attachment-filetype').val($('#tipiFileAmmessi' + indiceRiga).val());
+    		$('#attachment-codetype').val($('#codiciTipologiaDocumento' + indiceRiga).val());
+    		$('[name="fileName"]').val($('#filenameModello' + indiceRiga).val());
+
+    	}else{
+   		
+    		//Populate the fields with the content of the table
+        	var $tds = $tr.find('td');
+        	
+        	$('#attachment-id').val($tds.eq(0).text());
+        	$('#attachment-name').val($tds.eq(1).text());
+        	if($tds.eq(2).text()=="true"){
+        		$('#attachment-mandatory').prop('checked', true);
+        	}else{
+        		$('#attachment-mandatory').prop('checked', false);
+        	}
+        	
+        	var fileTypes = $tds.eq(3).text();
+        	$('#attachment-filetype').val(fileTypes.split(','));
+        	var documentTypes = $tds.eq(4).text();
+        	$('#attachment-codetype').val(documentTypes.split(','));
+        	var fileName = $tds.eq(5).text();
+        	$('[name="fileName"]').val(fileName);
+
+    	}
+
+    	attachmentIndex = $('.attachment-tbody tr').index($tr);
+    	showAttachmentForm();
+    });
+	
+	
+	/**
+	 * Reset the attachment form.
+	 */
+	var resetAttachmentForm = function(){
+		$('#formAggiungiAllegato').find('input:text, input:password, select')
+	    .each(function () {
+	        $(this).val('');
+	    });
+
+		$('#attachment-id').val('');
+		$('#<portlet:namespace />attachment-file').val('');
+	};
 	
 	
 	//Delete attachment event
@@ -504,7 +588,7 @@
 		var $this = $(this);
 		$this.parent().parent().remove();
     	var definizioneAllegatoId = $this.parent().parent().find(".definizioneAllegatoId").html();
-    	$('#<portlet:namespace />listaAllegatiDaEliminare').append('<option value='+ definizioneAllegatoId +' selected="selected"></option>');
+    	$('#listaAllegatiDaEliminare').append('<option value='+ definizioneAllegatoId +' selected="selected"></option>');
     	
     	var indiceRiga = parseInt($(this).attr('id').replace(/[^\d]/g, ''), 10);
  		
@@ -542,9 +626,22 @@
     	console.log("index: " + $('#<portlet:namespace />dimensioneListaDefinizioneAllegato').val());
     });
 	
-	$('#<portlet:namespace />salva').on('click', function(){
+	$('#salva').on('click', function(){
 		$('#formAggiungiAllegato').remove();
 		$('#<portlet:namespace />submitFormPrincipale').click();
 	});
+	
+	// Validazione form definizione allegato
+	
+	var validaFormDefinizioneAllegato = function(){
+		var inputDenominazione = $('#attachment-name').val();
+		
+		if(inputDenominazione==""){
+			$('#alertFormDefinizioneAllegato').removeClass('hidden');
+			return false;
+		}
+		
+		return true;
+	};
 
  </script> 

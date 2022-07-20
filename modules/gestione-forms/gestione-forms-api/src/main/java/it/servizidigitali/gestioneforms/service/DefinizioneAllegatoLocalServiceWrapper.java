@@ -57,6 +57,14 @@ public class DefinizioneAllegatoLocalServiceWrapper
 			definizioneAllegato);
 	}
 
+	@Override
+	public it.servizidigitali.gestioneforms.model.DefinizioneAllegato
+		cancellaAllegati(String[] allegatiDaEliminare) {
+
+		return _definizioneAllegatoLocalService.cancellaAllegati(
+			allegatiDaEliminare);
+	}
+
 	/**
 	 * Creates a new definizione allegato with the primary key. Does not add the definizione allegato to the database.
 	 *
@@ -439,6 +447,18 @@ public class DefinizioneAllegatoLocalServiceWrapper
 
 		return _definizioneAllegatoLocalService.updateDefinizioneAllegato(
 			definizioneAllegato);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.repository.model.FileEntry uploadAllegato(
+			java.io.File allegato,
+			com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay,
+			String fileName, long formId, String mimeType,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws Exception {
+
+		return _definizioneAllegatoLocalService.uploadAllegato(
+			allegato, themeDisplay, fileName, formId, mimeType, serviceContext);
 	}
 
 	@Override

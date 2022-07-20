@@ -26,6 +26,7 @@ public class GestioneFormsPortletKeys {
 	
 	public static final String LISTA_TIPO_DOCUMENTO = "listaTipoDocumento";
 	public static final String LISTA_ALLEGATI_DA_ELIMINARE = "listaAllegatiDaEliminare";
+	public static final String DIMENSIONE_LISTA_ALLEGATI = "dimensioneListaDefinizioneAllegato";
 	
 	public static final String FILE = "file";
 	
@@ -67,4 +68,5 @@ public class GestioneFormsPortletKeys {
 	
 	public static final String CARTELLA_CONFIGURAZIONE_PIATTAFORMA = "Configurazione Piattaforma";
 	public static final String CARTELLA_FORM = "Form";
+	public static final String CARTELLA_TEMPLATE = "Template";
 }
