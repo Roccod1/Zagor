@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://types.input.rifiuti.osapulie.it" targetNamespace="http://types.input.rifiuti.osapulie.it" elementFormDefault="qualified"
+	attributeFormDefault="unqualified" version="1.0">
+	<xs:include schemaLocation="CommonTypes.xsd" />
+	<xs:element name="delegaRitiroNuovePattumelleRichiesta">
+		<xs:annotation>
+			<xs:documentation>Richiesta di delega ritiro pattumelle</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence> 
+				<xs:element name="idPratica" type="xs:string"/>
+				<xs:element name="richiedente" type="tns:Richiedente"/>
+				<xs:element name="delegato" type="tns:Delegato"/>
+				<xs:element name="documento" minOccurs="2" maxOccurs="2" type="tns:Documento"/>
+				<xs:element name="dataRichiesta" type="xs:date"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="Delegato">
+		<xs:annotation>
+			<xs:documentation xml:lang="it">Tipo di dato complesso per i dati di un delegato ai fini della richiesta</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="tns:Componente">
+				<xs:sequence>
+					<xs:element name="residenza" type="tns:Indirizzo" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="it">Dati di residenza del soggetto</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="domicilio" type="tns:Indirizzo" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation xml:lang="it">Dati dell'eventuale domicilio (differente dalla residenza anagrafica)
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+
+</xs:schema>

@@ -1,0 +1,55 @@
+Bundle-Name: servizi-digitali-backoffice-integration
+Bundle-SymbolicName: it.servizidigitali.backoffice.integration
+Bundle-Version: 1.0.0
+
+Export-Package: \
+	it.servizidigitali.backoffice.integration.*
+	
+Import-Package: \
+  	!javax.xml.rpc.*,\
+  	!com.ibm.wsdl.*,\
+  	!com.sun.jimi.core.*,\
+  	!com.sun.net.ssl.*,\
+  	!javax.rmi.*,\
+  	!org.apache.bsf.*,\
+  	!org.apache.commons.discovery.*,\
+  	!org.apache.commons.httpclient.*,\
+  	!org.apache.commons.logging.*,\
+  	!org.omg.CORBA*,\
+  	!org.omg.CosNaming*,\
+  	!sun.awt*,\
+  	!sun.security.provider*,\
+  	!repackage,\
+  	!javax.jms,\
+  	!org.apache.avalon.*,\
+  	!org.apache.commons.net.*,\
+  	!org.apache.log.*,\
+  	!org.apache.tools.ant.*,\
+  	!org.exolab.*,\
+  	!com.beust.*,\
+  	!com.ibm.icu.*,\
+  	!com.sun.msv.*,\
+  	!com.sun.tools.*,\
+  	!com.werken.xpath.*,\
+  	!javax.cache.*,\
+  	!junit.*,\
+  	!net.sf.*,\
+  	!org.apache.aries.*,\
+  	!org.apache.axiom.*,\
+  	!org.apache.cxf.ws.mex.*,\
+  	!org.apache.geronimo.*,\
+  	!org.apache.http.*,\
+  	!org.apache.oro.*,\
+  	!org.apache.xml.dtm.*,\
+  	!org.apache.xml.utils.*,\
+  	!org.apache.xpath.*,\
+  	!org.bouncycastle.openssl.*,\
+  	!org.jdom.*,\
+  	!org.joda.*,\
+  	!org.jvnet.*,\
+  	!org.osgi.service.*,\
+  	!org.slf4j.*,\
+  	!org.springframework.*,\
+  	*
+  	
+-fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning

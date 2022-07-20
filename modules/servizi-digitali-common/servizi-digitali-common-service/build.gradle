@@ -1,0 +1,12 @@
+dependencies {
+	compile project(":modules:servizi-digitali-common:servizi-digitali-common-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../servizi-digitali-common-api/src/main/java"
+	databaseNameMaxLength = 64
+}
+
+group = "it.servizidigitali.common"
