@@ -220,6 +220,10 @@ public interface UtenteOrganizzazioneLocalService
 	public UtenteOrganizzazione fetchUtenteOrganizzazioneByUuidAndGroupId(
 		String uuid, long groupId);
 
+	public UtenteOrganizzazione findByUtenteOrganizzazionePreferito(
+			UtenteOrganizzazionePK utenteOrganizzazionePK, boolean preferito)
+		throws Exception;
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
@@ -229,6 +233,11 @@ public interface UtenteOrganizzazioneLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<UtenteOrganizzazione> getOrganizzazioniUtenteConfigurate(
+			Long utenteId)
+		throws Exception;
 
 	/**
 	 * Returns the OSGi service identifier.

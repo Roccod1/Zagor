@@ -319,6 +319,19 @@ public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceWrapper
 			getIndexableActionableDynamicQuery();
 	}
 
+	@Override
+	public java.util.List
+		<it.servizidigitali.profiloutente.model.
+			UtenteOrganizzazioneCanaleComunicazione>
+					getListaCanaleComunicazioneByUtenteOrganization(
+						long utenteId, long organizationId)
+				throws Exception {
+
+		return _utenteOrganizzazioneCanaleComunicazioneLocalService.
+			getListaCanaleComunicazioneByUtenteOrganization(
+				utenteId, organizationId);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -459,6 +472,20 @@ public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceWrapper
 	public int getUtenteOrganizzazioneCanaleComunicazionesCount() {
 		return _utenteOrganizzazioneCanaleComunicazioneLocalService.
 			getUtenteOrganizzazioneCanaleComunicazionesCount();
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.profiloutente.model.
+			UtenteOrganizzazioneCanaleComunicazione>
+					updateMassivoUtenteOrganizzazioneCanaleComunicazione(
+						long utenteId, long organizationId,
+						long[] listaIdCanaliComunicazione)
+				throws Exception {
+
+		return _utenteOrganizzazioneCanaleComunicazioneLocalService.
+			updateMassivoUtenteOrganizzazioneCanaleComunicazione(
+				utenteId, organizationId, listaIdCanaliComunicazione);
 	}
 
 	/**

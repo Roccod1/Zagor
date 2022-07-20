@@ -1,10 +1,8 @@
 <%@ include file="init.jsp" %>
 
 <%
-	List<Organization> listaEnti = (List<Organization>) renderRequest.getAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_ENTI);
-%>
-
-<liferay-portlet:renderURL varImpl="iteratorURL">
+	List<Organization> listaEnti = (List<Organization>) renderRequest.getAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_ORGANIZZAZIONI);
+ay-portlet:renderURL varImpl="iteratorURL">
 	<portlet:param name="mvcPath" value="/view.jsp" />
 </liferay-portlet:renderURL>
 

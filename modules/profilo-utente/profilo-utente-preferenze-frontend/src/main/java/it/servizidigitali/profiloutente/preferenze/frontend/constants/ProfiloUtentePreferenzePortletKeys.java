@@ -10,15 +10,19 @@ public class ProfiloUtentePreferenzePortletKeys {
 //	sezione home
 	public static final String SEZIONE_PREFERENZE = "preferenze";
 	public static final String SEZIONE_PRIVACY= "privacy";
-	public static final String LISTA_ENTI = "listaEnti";
+	public static final String LISTA_ORGANIZZAZIONI = "listaOrganizzazioni";
 	
 //	dettaglio preferenze
-	public static final String ENTE = "ente";
+	public static final String ORGANIZZAZIONE = "organizzazione";
+	public static final String UTENTE_ORGANIZZAZIONE = "utenteOrganizzazione";
+	public static final String ORGANIZATION_ID = "organizationId";
 	public static final String EMAIL = "email";
 	public static final String PEC = "pec";
 	public static final String APP = "app";
 	public static final String DEFAULT = "default";
 	public static final String CANALE_COMUNICAZIONE = "canaleComunicazione";
+	public static final String LISTA_CANALI_COMUNICAZIONE = "listaCanaliComunicazione";
+	public static final String LISTA_UTENTE_ORGANIZZAZIONE_CANALE_COMUNICAZIONE = "listaUtenteOrganizzazioneCanaleComunicazione";
 	
 //	nomi jsp
 	public static final String JSP_PREFERENZE = "/preferenze.jsp";
@@ -30,4 +34,11 @@ public class ProfiloUtentePreferenzePortletKeys {
 	public static final String RENDER_INSERISCI_MODIFICA = "/inserisciModifica";
 	public static final String RENDER_SEZIONE = "/sezione";
 	
+//	utility
+	public static final String INDIRIZZO_REDIRECT = "indirizzoRedirect";
+	
+//	validazioni
+	public static final String ERRORE_GENERICO = "erroreGenerico";
+	public static final String ERRORE_PARAMETRI_MANCANTI = "erroreParametriMancanti";
+	public static final String SUCCESSO_GENERICO = "successoGenerico";
 }

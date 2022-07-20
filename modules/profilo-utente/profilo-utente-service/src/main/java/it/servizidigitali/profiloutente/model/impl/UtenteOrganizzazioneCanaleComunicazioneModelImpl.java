@@ -78,7 +78,7 @@ public class UtenteOrganizzazioneCanaleComunicazioneModelImpl
 		{"canaleComunicazioneId", Types.BIGINT}, {"groupId", Types.BIGINT},
 		{"companyId", Types.BIGINT}, {"userId", Types.BIGINT},
 		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
-		{"modifiedDate", Types.TIMESTAMP}, {"attivo", Types.BOOLEAN}
+		{"modifiedDate", Types.TIMESTAMP}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -95,11 +95,10 @@ public class UtenteOrganizzazioneCanaleComunicazioneModelImpl
 		TABLE_COLUMNS_MAP.put("userName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
-		TABLE_COLUMNS_MAP.put("attivo", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table utente_organizzazione_canalecomunicazione (uuid_ VARCHAR(75) null,utenteId LONG not null,organizationId LONG not null,canaleComunicazioneId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,attivo BOOLEAN,primary key (utenteId, organizationId, canaleComunicazioneId))";
+		"create table utente_organizzazione_canalecomunicazione (uuid_ VARCHAR(75) null,utenteId LONG not null,organizationId LONG not null,canaleComunicazioneId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,primary key (utenteId, organizationId, canaleComunicazioneId))";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table utente_organizzazione_canalecomunicazione";
@@ -379,12 +378,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneModelImpl
 			"modifiedDate",
 			(BiConsumer<UtenteOrganizzazioneCanaleComunicazione, Date>)
 				UtenteOrganizzazioneCanaleComunicazione::setModifiedDate);
-		attributeGetterFunctions.put(
-			"attivo", UtenteOrganizzazioneCanaleComunicazione::getAttivo);
-		attributeSetterBiConsumers.put(
-			"attivo",
-			(BiConsumer<UtenteOrganizzazioneCanaleComunicazione, Boolean>)
-				UtenteOrganizzazioneCanaleComunicazione::setAttivo);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -613,25 +606,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneModelImpl
 	}
 
 	@Override
-	public boolean getAttivo() {
-		return _attivo;
-	}
-
-	@Override
-	public boolean isAttivo() {
-		return _attivo;
-	}
-
-	@Override
-	public void setAttivo(boolean attivo) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_attivo = attivo;
-	}
-
-	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
 			PortalUtil.getClassNameId(
@@ -698,7 +672,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneModelImpl
 			getCreateDate());
 		utenteOrganizzazioneCanaleComunicazioneImpl.setModifiedDate(
 			getModifiedDate());
-		utenteOrganizzazioneCanaleComunicazioneImpl.setAttivo(isAttivo());
 
 		utenteOrganizzazioneCanaleComunicazioneImpl.resetOriginalValues();
 
@@ -731,8 +704,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneModelImpl
 			this.<Date>getColumnOriginalValue("createDate"));
 		utenteOrganizzazioneCanaleComunicazioneImpl.setModifiedDate(
 			this.<Date>getColumnOriginalValue("modifiedDate"));
-		utenteOrganizzazioneCanaleComunicazioneImpl.setAttivo(
-			this.<Boolean>getColumnOriginalValue("attivo"));
 
 		return utenteOrganizzazioneCanaleComunicazioneImpl;
 	}
@@ -871,8 +842,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneModelImpl
 				Long.MIN_VALUE;
 		}
 
-		utenteOrganizzazioneCanaleComunicazioneCacheModel.attivo = isAttivo();
-
 		return utenteOrganizzazioneCanaleComunicazioneCacheModel;
 	}
 
@@ -983,7 +952,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneModelImpl
 	private Date _createDate;
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
-	private boolean _attivo;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1025,7 +993,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneModelImpl
 		_columnOriginalValues.put("userName", _userName);
 		_columnOriginalValues.put("createDate", _createDate);
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
-		_columnOriginalValues.put("attivo", _attivo);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1068,8 +1035,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneModelImpl
 		columnBitmasks.put("createDate", 256L);
 
 		columnBitmasks.put("modifiedDate", 512L);
-
-		columnBitmasks.put("attivo", 1024L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

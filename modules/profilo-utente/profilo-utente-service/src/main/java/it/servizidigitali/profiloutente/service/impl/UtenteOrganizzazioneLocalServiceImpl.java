@@ -15,18 +15,33 @@
 package it.servizidigitali.profiloutente.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
-import it.servizidigitali.profiloutente.service.base.UtenteOrganizzazioneLocalServiceBaseImpl;
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
+import it.servizidigitali.profiloutente.model.UtenteOrganizzazione;
+import it.servizidigitali.profiloutente.service.base.UtenteOrganizzazioneLocalServiceBaseImpl;
+import it.servizidigitali.profiloutente.service.persistence.UtenteOrganizzazionePK;
+
 /**
- * @author Brian Wing Shun Chan
+ * @author filierim
  */
 @Component(
 	property = "model.class.name=it.servizidigitali.profiloutente.model.UtenteOrganizzazione",
 	service = AopService.class
 )
-public class UtenteOrganizzazioneLocalServiceImpl
-	extends UtenteOrganizzazioneLocalServiceBaseImpl {
+public class UtenteOrganizzazioneLocalServiceImpl extends UtenteOrganizzazioneLocalServiceBaseImpl {
+	
+	private static final Log _log = LogFactoryUtil.getLog(UtenteOrganizzazioneLocalServiceImpl.class);
+	
+	public List<UtenteOrganizzazione> getOrganizzazioniUtenteConfigurate(Long utenteId) throws Exception{
+		return utenteOrganizzazionePersistence.findByUtenteId(utenteId);
+	}
+	
+	public UtenteOrganizzazione findByUtenteOrganizzazionePreferito(UtenteOrganizzazionePK utenteOrganizzazionePK, boolean preferito) throws Exception{
+		return utenteOrganizzazionePersistence.findByO_U_P(utenteOrganizzazionePK.getOrganizationId(), utenteOrganizzazionePK.getUtenteId(), preferito);
+	}
 }

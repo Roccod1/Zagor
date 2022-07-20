@@ -65,9 +65,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneTable
 	public final Column<UtenteOrganizzazioneCanaleComunicazioneTable, Date>
 		modifiedDate = createColumn(
 			"modifiedDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
-	public final Column<UtenteOrganizzazioneCanaleComunicazioneTable, Boolean>
-		attivo = createColumn(
-			"attivo", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 
 	private UtenteOrganizzazioneCanaleComunicazioneTable() {
 		super(

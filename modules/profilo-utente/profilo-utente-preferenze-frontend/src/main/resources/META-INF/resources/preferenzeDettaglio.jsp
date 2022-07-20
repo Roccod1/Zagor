@@ -5,20 +5,40 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-					<aui:select name="<%=ProfiloUtentePreferenzePortletKeys.ENTE %>" value="${ente.organizationId }">
+					<aui:select name="<%=ProfiloUtentePreferenzePortletKeys.ORGANIZATION_ID %>" value="${organizzazione.organizationId }" label="organizzazione">
 						<aui:option value="" selected="true" disabled="true" label="seleziona"/>
-						<c:forEach items="${listaEnti }" var="ente">
-							<aui:option value="${ente.organizationId }" label="${ente.name }"/>
+						<c:forEach items="${listaEnti }" var="organizzazione">
+							<aui:option value="${organizzazione.organizationId }" label="${organizzazione.name }"/>
 						</c:forEach>
 					</aui:select>
 				</div>
 			</div>
-			
+		</div>
+
+		<div class="row">
+			<div class="col">		
+				<div class="form-group form-check">
+					<aui:input type="checkbox" name="<%=ProfiloUtentePreferenzePortletKeys.DEFAULT %>" label="default"/> 
+				</div>		
+			</div>
+		</div>
+		
+		<div class="row">
 			<div class="col">
 				<div>
-					<liferay-ui:message key="canale-comunicazione"/>
+					<label>
+						<liferay-ui:message key="canali-di-comunicazione"/>					
+					</label>
 				</div>
 				<div class="form-group form-check">
+					<%
+						List<CanaleComunicazione> listaCanaliComunicazione = (List<CanaleComunicazione>) renderRequest.getAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_CANALI_COMUNICAZIONE);
+						
+						for(CanaleComunicazione canaleComunicazione : listaCanaliComunicazione){
+							
+						}
+					
+					%>
 					<c:forEach items="${listaCanaliComunicazione }" var="canaleComunicazione">
 						<c:set value="<%=ProfiloUtentePreferenzePortletKeys.CANALE_COMUNICAZIONE %>" var="canaleComunicazioneNome"/>
 						<aui:input 
@@ -29,12 +49,6 @@
 							id="${canaleComunicazioneNome}_${canaleComunicazione.canaleComunicazioneId }"
 						/>
 					</c:forEach>
-				</div>
-			</div>
-			
-			<div class="col">
-				<div class="form-group form-check">
-					<aui:input type="checkbox" name="<%=ProfiloUtentePreferenzePortletKeys.DEFAULT %>" label="default"/> 
 				</div>
 			</div>
 		</div>

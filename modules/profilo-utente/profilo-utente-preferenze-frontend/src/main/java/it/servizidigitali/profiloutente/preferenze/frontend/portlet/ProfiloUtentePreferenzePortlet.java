@@ -53,11 +53,11 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 	
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
-		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_ENTI, new ArrayList<Organization>());
+		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_ORGANIZZAZIONI, new ArrayList<Organization>());
 		
 		try {
-			List<Organization> listaEnti = servizioEnte
-		
+//			List<Organization> listaEnti = servizioEnteLocalService.
+//		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

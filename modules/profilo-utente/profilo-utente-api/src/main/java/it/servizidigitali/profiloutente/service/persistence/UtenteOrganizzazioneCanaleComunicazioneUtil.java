@@ -973,6 +973,222 @@ public class UtenteOrganizzazioneCanaleComunicazioneUtil {
 	}
 
 	/**
+	 * Returns all the utente organizzazione canale comunicaziones where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @return the matching utente organizzazione canale comunicaziones
+	 */
+	public static List<UtenteOrganizzazioneCanaleComunicazione>
+		findByUtenteOrganization(long utenteId, long organizationId) {
+
+		return getPersistence().findByUtenteOrganization(
+			utenteId, organizationId);
+	}
+
+	/**
+	 * Returns a range of all the utente organizzazione canale comunicaziones where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneCanaleComunicazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param start the lower bound of the range of utente organizzazione canale comunicaziones
+	 * @param end the upper bound of the range of utente organizzazione canale comunicaziones (not inclusive)
+	 * @return the range of matching utente organizzazione canale comunicaziones
+	 */
+	public static List<UtenteOrganizzazioneCanaleComunicazione>
+		findByUtenteOrganization(
+			long utenteId, long organizationId, int start, int end) {
+
+		return getPersistence().findByUtenteOrganization(
+			utenteId, organizationId, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the utente organizzazione canale comunicaziones where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneCanaleComunicazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param start the lower bound of the range of utente organizzazione canale comunicaziones
+	 * @param end the upper bound of the range of utente organizzazione canale comunicaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching utente organizzazione canale comunicaziones
+	 */
+	public static List<UtenteOrganizzazioneCanaleComunicazione>
+		findByUtenteOrganization(
+			long utenteId, long organizationId, int start, int end,
+			OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+				orderByComparator) {
+
+		return getPersistence().findByUtenteOrganization(
+			utenteId, organizationId, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the utente organizzazione canale comunicaziones where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneCanaleComunicazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param start the lower bound of the range of utente organizzazione canale comunicaziones
+	 * @param end the upper bound of the range of utente organizzazione canale comunicaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching utente organizzazione canale comunicaziones
+	 */
+	public static List<UtenteOrganizzazioneCanaleComunicazione>
+		findByUtenteOrganization(
+			long utenteId, long organizationId, int start, int end,
+			OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+				orderByComparator,
+			boolean useFinderCache) {
+
+		return getPersistence().findByUtenteOrganization(
+			utenteId, organizationId, start, end, orderByComparator,
+			useFinderCache);
+	}
+
+	/**
+	 * Returns the first utente organizzazione canale comunicazione in the ordered set where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione canale comunicazione
+	 * @throws NoSuchUtenteOrganizzazioneCanaleComunicazioneException if a matching utente organizzazione canale comunicazione could not be found
+	 */
+	public static UtenteOrganizzazioneCanaleComunicazione
+			findByUtenteOrganization_First(
+				long utenteId, long organizationId,
+				OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+					orderByComparator)
+		throws it.servizidigitali.profiloutente.exception.
+			NoSuchUtenteOrganizzazioneCanaleComunicazioneException {
+
+		return getPersistence().findByUtenteOrganization_First(
+			utenteId, organizationId, orderByComparator);
+	}
+
+	/**
+	 * Returns the first utente organizzazione canale comunicazione in the ordered set where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione canale comunicazione, or <code>null</code> if a matching utente organizzazione canale comunicazione could not be found
+	 */
+	public static UtenteOrganizzazioneCanaleComunicazione
+		fetchByUtenteOrganization_First(
+			long utenteId, long organizationId,
+			OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+				orderByComparator) {
+
+		return getPersistence().fetchByUtenteOrganization_First(
+			utenteId, organizationId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last utente organizzazione canale comunicazione in the ordered set where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione canale comunicazione
+	 * @throws NoSuchUtenteOrganizzazioneCanaleComunicazioneException if a matching utente organizzazione canale comunicazione could not be found
+	 */
+	public static UtenteOrganizzazioneCanaleComunicazione
+			findByUtenteOrganization_Last(
+				long utenteId, long organizationId,
+				OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+					orderByComparator)
+		throws it.servizidigitali.profiloutente.exception.
+			NoSuchUtenteOrganizzazioneCanaleComunicazioneException {
+
+		return getPersistence().findByUtenteOrganization_Last(
+			utenteId, organizationId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last utente organizzazione canale comunicazione in the ordered set where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione canale comunicazione, or <code>null</code> if a matching utente organizzazione canale comunicazione could not be found
+	 */
+	public static UtenteOrganizzazioneCanaleComunicazione
+		fetchByUtenteOrganization_Last(
+			long utenteId, long organizationId,
+			OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+				orderByComparator) {
+
+		return getPersistence().fetchByUtenteOrganization_Last(
+			utenteId, organizationId, orderByComparator);
+	}
+
+	/**
+	 * Returns the utente organizzazione canale comunicaziones before and after the current utente organizzazione canale comunicazione in the ordered set where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteOrganizzazioneCanaleComunicazionePK the primary key of the current utente organizzazione canale comunicazione
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next utente organizzazione canale comunicazione
+	 * @throws NoSuchUtenteOrganizzazioneCanaleComunicazioneException if a utente organizzazione canale comunicazione with the primary key could not be found
+	 */
+	public static UtenteOrganizzazioneCanaleComunicazione[]
+			findByUtenteOrganization_PrevAndNext(
+				it.servizidigitali.profiloutente.service.persistence.
+					UtenteOrganizzazioneCanaleComunicazionePK
+						utenteOrganizzazioneCanaleComunicazionePK,
+				long utenteId, long organizationId,
+				OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+					orderByComparator)
+		throws it.servizidigitali.profiloutente.exception.
+			NoSuchUtenteOrganizzazioneCanaleComunicazioneException {
+
+		return getPersistence().findByUtenteOrganization_PrevAndNext(
+			utenteOrganizzazioneCanaleComunicazionePK, utenteId, organizationId,
+			orderByComparator);
+	}
+
+	/**
+	 * Removes all the utente organizzazione canale comunicaziones where utenteId = &#63; and organizationId = &#63; from the database.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 */
+	public static void removeByUtenteOrganization(
+		long utenteId, long organizationId) {
+
+		getPersistence().removeByUtenteOrganization(utenteId, organizationId);
+	}
+
+	/**
+	 * Returns the number of utente organizzazione canale comunicaziones where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @return the number of matching utente organizzazione canale comunicaziones
+	 */
+	public static int countByUtenteOrganization(
+		long utenteId, long organizationId) {
+
+		return getPersistence().countByUtenteOrganization(
+			utenteId, organizationId);
+	}
+
+	/**
 	 * Caches the utente organizzazione canale comunicazione in the entity cache if it is enabled.
 	 *
 	 * @param utenteOrganizzazioneCanaleComunicazione the utente organizzazione canale comunicazione

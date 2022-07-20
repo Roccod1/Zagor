@@ -32,6 +32,5 @@
 		<field name="userName" type="String" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="attivo" type="boolean" />
 	</model>
 </model-hints>

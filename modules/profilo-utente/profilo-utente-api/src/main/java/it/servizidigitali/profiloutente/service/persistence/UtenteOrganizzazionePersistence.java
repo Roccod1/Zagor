@@ -688,6 +688,66 @@ public interface UtenteOrganizzazionePersistence
 	public int countByUtenteId(long utenteId);
 
 	/**
+	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or throws a <code>NoSuchUtenteOrganizzazioneException</code> if it could not be found.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 */
+	public UtenteOrganizzazione findByO_U_P(
+			long organizationId, long utenteId, boolean preferito)
+		throws NoSuchUtenteOrganizzazioneException;
+
+	/**
+	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	public UtenteOrganizzazione fetchByO_U_P(
+		long organizationId, long utenteId, boolean preferito);
+
+	/**
+	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	public UtenteOrganizzazione fetchByO_U_P(
+		long organizationId, long utenteId, boolean preferito,
+		boolean useFinderCache);
+
+	/**
+	 * Removes the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; from the database.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the utente organizzazione that was removed
+	 */
+	public UtenteOrganizzazione removeByO_U_P(
+			long organizationId, long utenteId, boolean preferito)
+		throws NoSuchUtenteOrganizzazioneException;
+
+	/**
+	 * Returns the number of utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the number of matching utente organizzaziones
+	 */
+	public int countByO_U_P(
+		long organizationId, long utenteId, boolean preferito);
+
+	/**
 	 * Caches the utente organizzazione in the entity cache if it is enabled.
 	 *
 	 * @param utenteOrganizzazione the utente organizzazione

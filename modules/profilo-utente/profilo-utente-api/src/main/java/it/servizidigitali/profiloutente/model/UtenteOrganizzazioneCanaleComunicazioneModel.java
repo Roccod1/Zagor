@@ -235,27 +235,6 @@ public interface UtenteOrganizzazioneCanaleComunicazioneModel
 	@Override
 	public void setModifiedDate(Date modifiedDate);
 
-	/**
-	 * Returns the attivo of this utente organizzazione canale comunicazione.
-	 *
-	 * @return the attivo of this utente organizzazione canale comunicazione
-	 */
-	public boolean getAttivo();
-
-	/**
-	 * Returns <code>true</code> if this utente organizzazione canale comunicazione is attivo.
-	 *
-	 * @return <code>true</code> if this utente organizzazione canale comunicazione is attivo; <code>false</code> otherwise
-	 */
-	public boolean isAttivo();
-
-	/**
-	 * Sets whether this utente organizzazione canale comunicazione is attivo.
-	 *
-	 * @param attivo the attivo of this utente organizzazione canale comunicazione
-	 */
-	public void setAttivo(boolean attivo);
-
 	@Override
 	public UtenteOrganizzazioneCanaleComunicazione cloneWithOriginalValues();
 

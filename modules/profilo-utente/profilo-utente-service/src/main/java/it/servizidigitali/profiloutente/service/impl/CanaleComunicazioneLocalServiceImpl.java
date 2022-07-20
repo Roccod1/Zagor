@@ -24,7 +24,7 @@ import it.servizidigitali.profiloutente.service.base.CanaleComunicazioneLocalSer
 import org.osgi.service.component.annotations.Component;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author filierim
  */
 @Component(
 	property = "model.class.name=it.servizidigitali.profiloutente.model.CanaleComunicazione",

@@ -57,7 +57,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneWrapper
 		attributes.put("userName", getUserName());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
-		attributes.put("attivo", isAttivo());
 
 		return attributes;
 	}
@@ -124,27 +123,11 @@ public class UtenteOrganizzazioneCanaleComunicazioneWrapper
 		if (modifiedDate != null) {
 			setModifiedDate(modifiedDate);
 		}
-
-		Boolean attivo = (Boolean)attributes.get("attivo");
-
-		if (attivo != null) {
-			setAttivo(attivo);
-		}
 	}
 
 	@Override
 	public UtenteOrganizzazioneCanaleComunicazione cloneWithOriginalValues() {
 		return wrap(model.cloneWithOriginalValues());
-	}
-
-	/**
-	 * Returns the attivo of this utente organizzazione canale comunicazione.
-	 *
-	 * @return the attivo of this utente organizzazione canale comunicazione
-	 */
-	@Override
-	public boolean getAttivo() {
-		return model.getAttivo();
 	}
 
 	/**
@@ -269,29 +252,9 @@ public class UtenteOrganizzazioneCanaleComunicazioneWrapper
 		return model.getUuid();
 	}
 
-	/**
-	 * Returns <code>true</code> if this utente organizzazione canale comunicazione is attivo.
-	 *
-	 * @return <code>true</code> if this utente organizzazione canale comunicazione is attivo; <code>false</code> otherwise
-	 */
-	@Override
-	public boolean isAttivo() {
-		return model.isAttivo();
-	}
-
 	@Override
 	public void persist() {
 		model.persist();
-	}
-
-	/**
-	 * Sets whether this utente organizzazione canale comunicazione is attivo.
-	 *
-	 * @param attivo the attivo of this utente organizzazione canale comunicazione
-	 */
-	@Override
-	public void setAttivo(boolean attivo) {
-		model.setAttivo(attivo);
 	}
 
 	/**

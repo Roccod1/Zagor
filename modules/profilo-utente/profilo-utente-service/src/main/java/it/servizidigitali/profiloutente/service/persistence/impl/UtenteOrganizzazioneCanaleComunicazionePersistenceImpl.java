@@ -2643,6 +2643,598 @@ public class UtenteOrganizzazioneCanaleComunicazionePersistenceImpl
 	private static final String _FINDER_COLUMN_UTENTEID_UTENTEID_2 =
 		"utenteOrganizzazioneCanaleComunicazione.id.utenteId = ?";
 
+	private FinderPath _finderPathWithPaginationFindByUtenteOrganization;
+	private FinderPath _finderPathWithoutPaginationFindByUtenteOrganization;
+	private FinderPath _finderPathCountByUtenteOrganization;
+
+	/**
+	 * Returns all the utente organizzazione canale comunicaziones where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @return the matching utente organizzazione canale comunicaziones
+	 */
+	@Override
+	public List<UtenteOrganizzazioneCanaleComunicazione>
+		findByUtenteOrganization(long utenteId, long organizationId) {
+
+		return findByUtenteOrganization(
+			utenteId, organizationId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+			null);
+	}
+
+	/**
+	 * Returns a range of all the utente organizzazione canale comunicaziones where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneCanaleComunicazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param start the lower bound of the range of utente organizzazione canale comunicaziones
+	 * @param end the upper bound of the range of utente organizzazione canale comunicaziones (not inclusive)
+	 * @return the range of matching utente organizzazione canale comunicaziones
+	 */
+	@Override
+	public List<UtenteOrganizzazioneCanaleComunicazione>
+		findByUtenteOrganization(
+			long utenteId, long organizationId, int start, int end) {
+
+		return findByUtenteOrganization(
+			utenteId, organizationId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the utente organizzazione canale comunicaziones where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneCanaleComunicazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param start the lower bound of the range of utente organizzazione canale comunicaziones
+	 * @param end the upper bound of the range of utente organizzazione canale comunicaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching utente organizzazione canale comunicaziones
+	 */
+	@Override
+	public List<UtenteOrganizzazioneCanaleComunicazione>
+		findByUtenteOrganization(
+			long utenteId, long organizationId, int start, int end,
+			OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+				orderByComparator) {
+
+		return findByUtenteOrganization(
+			utenteId, organizationId, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the utente organizzazione canale comunicaziones where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneCanaleComunicazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param start the lower bound of the range of utente organizzazione canale comunicaziones
+	 * @param end the upper bound of the range of utente organizzazione canale comunicaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching utente organizzazione canale comunicaziones
+	 */
+	@Override
+	public List<UtenteOrganizzazioneCanaleComunicazione>
+		findByUtenteOrganization(
+			long utenteId, long organizationId, int start, int end,
+			OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+				orderByComparator,
+			boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath =
+					_finderPathWithoutPaginationFindByUtenteOrganization;
+				finderArgs = new Object[] {utenteId, organizationId};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByUtenteOrganization;
+			finderArgs = new Object[] {
+				utenteId, organizationId, start, end, orderByComparator
+			};
+		}
+
+		List<UtenteOrganizzazioneCanaleComunicazione> list = null;
+
+		if (useFinderCache) {
+			list =
+				(List<UtenteOrganizzazioneCanaleComunicazione>)
+					finderCache.getResult(finderPath, finderArgs);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (UtenteOrganizzazioneCanaleComunicazione
+						utenteOrganizzazioneCanaleComunicazione : list) {
+
+					if ((utenteId !=
+							utenteOrganizzazioneCanaleComunicazione.
+								getUtenteId()) ||
+						(organizationId !=
+							utenteOrganizzazioneCanaleComunicazione.
+								getOrganizationId())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(4);
+			}
+
+			sb.append(
+				_SQL_SELECT_UTENTEORGANIZZAZIONECANALECOMUNICAZIONE_WHERE);
+
+			sb.append(_FINDER_COLUMN_UTENTEORGANIZATION_UTENTEID_2);
+
+			sb.append(_FINDER_COLUMN_UTENTEORGANIZATION_ORGANIZATIONID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(
+					UtenteOrganizzazioneCanaleComunicazioneModelImpl.
+						ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(utenteId);
+
+				queryPos.add(organizationId);
+
+				list =
+					(List<UtenteOrganizzazioneCanaleComunicazione>)
+						QueryUtil.list(query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first utente organizzazione canale comunicazione in the ordered set where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione canale comunicazione
+	 * @throws NoSuchUtenteOrganizzazioneCanaleComunicazioneException if a matching utente organizzazione canale comunicazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazioneCanaleComunicazione
+			findByUtenteOrganization_First(
+				long utenteId, long organizationId,
+				OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+					orderByComparator)
+		throws NoSuchUtenteOrganizzazioneCanaleComunicazioneException {
+
+		UtenteOrganizzazioneCanaleComunicazione
+			utenteOrganizzazioneCanaleComunicazione =
+				fetchByUtenteOrganization_First(
+					utenteId, organizationId, orderByComparator);
+
+		if (utenteOrganizzazioneCanaleComunicazione != null) {
+			return utenteOrganizzazioneCanaleComunicazione;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("utenteId=");
+		sb.append(utenteId);
+
+		sb.append(", organizationId=");
+		sb.append(organizationId);
+
+		sb.append("}");
+
+		throw new NoSuchUtenteOrganizzazioneCanaleComunicazioneException(
+			sb.toString());
+	}
+
+	/**
+	 * Returns the first utente organizzazione canale comunicazione in the ordered set where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione canale comunicazione, or <code>null</code> if a matching utente organizzazione canale comunicazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazioneCanaleComunicazione
+		fetchByUtenteOrganization_First(
+			long utenteId, long organizationId,
+			OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+				orderByComparator) {
+
+		List<UtenteOrganizzazioneCanaleComunicazione> list =
+			findByUtenteOrganization(
+				utenteId, organizationId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last utente organizzazione canale comunicazione in the ordered set where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione canale comunicazione
+	 * @throws NoSuchUtenteOrganizzazioneCanaleComunicazioneException if a matching utente organizzazione canale comunicazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazioneCanaleComunicazione
+			findByUtenteOrganization_Last(
+				long utenteId, long organizationId,
+				OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+					orderByComparator)
+		throws NoSuchUtenteOrganizzazioneCanaleComunicazioneException {
+
+		UtenteOrganizzazioneCanaleComunicazione
+			utenteOrganizzazioneCanaleComunicazione =
+				fetchByUtenteOrganization_Last(
+					utenteId, organizationId, orderByComparator);
+
+		if (utenteOrganizzazioneCanaleComunicazione != null) {
+			return utenteOrganizzazioneCanaleComunicazione;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("utenteId=");
+		sb.append(utenteId);
+
+		sb.append(", organizationId=");
+		sb.append(organizationId);
+
+		sb.append("}");
+
+		throw new NoSuchUtenteOrganizzazioneCanaleComunicazioneException(
+			sb.toString());
+	}
+
+	/**
+	 * Returns the last utente organizzazione canale comunicazione in the ordered set where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione canale comunicazione, or <code>null</code> if a matching utente organizzazione canale comunicazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazioneCanaleComunicazione
+		fetchByUtenteOrganization_Last(
+			long utenteId, long organizationId,
+			OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+				orderByComparator) {
+
+		int count = countByUtenteOrganization(utenteId, organizationId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<UtenteOrganizzazioneCanaleComunicazione> list =
+			findByUtenteOrganization(
+				utenteId, organizationId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the utente organizzazione canale comunicaziones before and after the current utente organizzazione canale comunicazione in the ordered set where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteOrganizzazioneCanaleComunicazionePK the primary key of the current utente organizzazione canale comunicazione
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next utente organizzazione canale comunicazione
+	 * @throws NoSuchUtenteOrganizzazioneCanaleComunicazioneException if a utente organizzazione canale comunicazione with the primary key could not be found
+	 */
+	@Override
+	public UtenteOrganizzazioneCanaleComunicazione[]
+			findByUtenteOrganization_PrevAndNext(
+				UtenteOrganizzazioneCanaleComunicazionePK
+					utenteOrganizzazioneCanaleComunicazionePK,
+				long utenteId, long organizationId,
+				OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+					orderByComparator)
+		throws NoSuchUtenteOrganizzazioneCanaleComunicazioneException {
+
+		UtenteOrganizzazioneCanaleComunicazione
+			utenteOrganizzazioneCanaleComunicazione = findByPrimaryKey(
+				utenteOrganizzazioneCanaleComunicazionePK);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			UtenteOrganizzazioneCanaleComunicazione[] array =
+				new UtenteOrganizzazioneCanaleComunicazioneImpl[3];
+
+			array[0] = getByUtenteOrganization_PrevAndNext(
+				session, utenteOrganizzazioneCanaleComunicazione, utenteId,
+				organizationId, orderByComparator, true);
+
+			array[1] = utenteOrganizzazioneCanaleComunicazione;
+
+			array[2] = getByUtenteOrganization_PrevAndNext(
+				session, utenteOrganizzazioneCanaleComunicazione, utenteId,
+				organizationId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected UtenteOrganizzazioneCanaleComunicazione
+		getByUtenteOrganization_PrevAndNext(
+			Session session,
+			UtenteOrganizzazioneCanaleComunicazione
+				utenteOrganizzazioneCanaleComunicazione,
+			long utenteId, long organizationId,
+			OrderByComparator<UtenteOrganizzazioneCanaleComunicazione>
+				orderByComparator,
+			boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(4);
+		}
+
+		sb.append(_SQL_SELECT_UTENTEORGANIZZAZIONECANALECOMUNICAZIONE_WHERE);
+
+		sb.append(_FINDER_COLUMN_UTENTEORGANIZATION_UTENTEID_2);
+
+		sb.append(_FINDER_COLUMN_UTENTEORGANIZATION_ORGANIZATIONID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(
+				UtenteOrganizzazioneCanaleComunicazioneModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(utenteId);
+
+		queryPos.add(organizationId);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						utenteOrganizzazioneCanaleComunicazione)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<UtenteOrganizzazioneCanaleComunicazione> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the utente organizzazione canale comunicaziones where utenteId = &#63; and organizationId = &#63; from the database.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 */
+	@Override
+	public void removeByUtenteOrganization(long utenteId, long organizationId) {
+		for (UtenteOrganizzazioneCanaleComunicazione
+				utenteOrganizzazioneCanaleComunicazione :
+					findByUtenteOrganization(
+						utenteId, organizationId, QueryUtil.ALL_POS,
+						QueryUtil.ALL_POS, null)) {
+
+			remove(utenteOrganizzazioneCanaleComunicazione);
+		}
+	}
+
+	/**
+	 * Returns the number of utente organizzazione canale comunicaziones where utenteId = &#63; and organizationId = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param organizationId the organization ID
+	 * @return the number of matching utente organizzazione canale comunicaziones
+	 */
+	@Override
+	public int countByUtenteOrganization(long utenteId, long organizationId) {
+		FinderPath finderPath = _finderPathCountByUtenteOrganization;
+
+		Object[] finderArgs = new Object[] {utenteId, organizationId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_UTENTEORGANIZZAZIONECANALECOMUNICAZIONE_WHERE);
+
+			sb.append(_FINDER_COLUMN_UTENTEORGANIZATION_UTENTEID_2);
+
+			sb.append(_FINDER_COLUMN_UTENTEORGANIZATION_ORGANIZATIONID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(utenteId);
+
+				queryPos.add(organizationId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UTENTEORGANIZATION_UTENTEID_2 =
+		"utenteOrganizzazioneCanaleComunicazione.id.utenteId = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_UTENTEORGANIZATION_ORGANIZATIONID_2 =
+			"utenteOrganizzazioneCanaleComunicazione.id.organizationId = ?";
+
 	public UtenteOrganizzazioneCanaleComunicazionePersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -3410,6 +4002,27 @@ public class UtenteOrganizzazioneCanaleComunicazionePersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUtenteId",
 			new String[] {Long.class.getName()}, new String[] {"utenteId"},
 			false);
+
+		_finderPathWithPaginationFindByUtenteOrganization = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUtenteOrganization",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			},
+			new String[] {"utenteId", "organizationId"}, true);
+
+		_finderPathWithoutPaginationFindByUtenteOrganization = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByUtenteOrganization",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"utenteId", "organizationId"}, true);
+
+		_finderPathCountByUtenteOrganization = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByUtenteOrganization",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"utenteId", "organizationId"}, false);
 
 		_setUtenteOrganizzazioneCanaleComunicazioneUtilPersistence(this);
 	}

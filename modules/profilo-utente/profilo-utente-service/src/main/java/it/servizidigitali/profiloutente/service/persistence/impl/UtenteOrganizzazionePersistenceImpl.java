@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 
@@ -55,6 +56,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -2497,6 +2499,273 @@ public class UtenteOrganizzazionePersistenceImpl
 	private static final String _FINDER_COLUMN_UTENTEID_UTENTEID_2 =
 		"utenteOrganizzazione.id.utenteId = ?";
 
+	private FinderPath _finderPathFetchByO_U_P;
+	private FinderPath _finderPathCountByO_U_P;
+
+	/**
+	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or throws a <code>NoSuchUtenteOrganizzazioneException</code> if it could not be found.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazione findByO_U_P(
+			long organizationId, long utenteId, boolean preferito)
+		throws NoSuchUtenteOrganizzazioneException {
+
+		UtenteOrganizzazione utenteOrganizzazione = fetchByO_U_P(
+			organizationId, utenteId, preferito);
+
+		if (utenteOrganizzazione == null) {
+			StringBundler sb = new StringBundler(8);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("organizationId=");
+			sb.append(organizationId);
+
+			sb.append(", utenteId=");
+			sb.append(utenteId);
+
+			sb.append(", preferito=");
+			sb.append(preferito);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchUtenteOrganizzazioneException(sb.toString());
+		}
+
+		return utenteOrganizzazione;
+	}
+
+	/**
+	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazione fetchByO_U_P(
+		long organizationId, long utenteId, boolean preferito) {
+
+		return fetchByO_U_P(organizationId, utenteId, preferito, true);
+	}
+
+	/**
+	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazione fetchByO_U_P(
+		long organizationId, long utenteId, boolean preferito,
+		boolean useFinderCache) {
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {organizationId, utenteId, preferito};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(_finderPathFetchByO_U_P, finderArgs);
+		}
+
+		if (result instanceof UtenteOrganizzazione) {
+			UtenteOrganizzazione utenteOrganizzazione =
+				(UtenteOrganizzazione)result;
+
+			if ((organizationId != utenteOrganizzazione.getOrganizationId()) ||
+				(utenteId != utenteOrganizzazione.getUtenteId()) ||
+				(preferito != utenteOrganizzazione.isPreferito())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(5);
+
+			sb.append(_SQL_SELECT_UTENTEORGANIZZAZIONE_WHERE);
+
+			sb.append(_FINDER_COLUMN_O_U_P_ORGANIZATIONID_2);
+
+			sb.append(_FINDER_COLUMN_O_U_P_UTENTEID_2);
+
+			sb.append(_FINDER_COLUMN_O_U_P_PREFERITO_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(organizationId);
+
+				queryPos.add(utenteId);
+
+				queryPos.add(preferito);
+
+				List<UtenteOrganizzazione> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByO_U_P, finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {
+									organizationId, utenteId, preferito
+								};
+							}
+
+							_log.warn(
+								"UtenteOrganizzazionePersistenceImpl.fetchByO_U_P(long, long, boolean, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					UtenteOrganizzazione utenteOrganizzazione = list.get(0);
+
+					result = utenteOrganizzazione;
+
+					cacheResult(utenteOrganizzazione);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (UtenteOrganizzazione)result;
+		}
+	}
+
+	/**
+	 * Removes the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; from the database.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the utente organizzazione that was removed
+	 */
+	@Override
+	public UtenteOrganizzazione removeByO_U_P(
+			long organizationId, long utenteId, boolean preferito)
+		throws NoSuchUtenteOrganizzazioneException {
+
+		UtenteOrganizzazione utenteOrganizzazione = findByO_U_P(
+			organizationId, utenteId, preferito);
+
+		return remove(utenteOrganizzazione);
+	}
+
+	/**
+	 * Returns the number of utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the number of matching utente organizzaziones
+	 */
+	@Override
+	public int countByO_U_P(
+		long organizationId, long utenteId, boolean preferito) {
+
+		FinderPath finderPath = _finderPathCountByO_U_P;
+
+		Object[] finderArgs = new Object[] {
+			organizationId, utenteId, preferito
+		};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_COUNT_UTENTEORGANIZZAZIONE_WHERE);
+
+			sb.append(_FINDER_COLUMN_O_U_P_ORGANIZATIONID_2);
+
+			sb.append(_FINDER_COLUMN_O_U_P_UTENTEID_2);
+
+			sb.append(_FINDER_COLUMN_O_U_P_PREFERITO_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(organizationId);
+
+				queryPos.add(utenteId);
+
+				queryPos.add(preferito);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_O_U_P_ORGANIZATIONID_2 =
+		"utenteOrganizzazione.id.organizationId = ? AND ";
+
+	private static final String _FINDER_COLUMN_O_U_P_UTENTEID_2 =
+		"utenteOrganizzazione.id.utenteId = ? AND ";
+
+	private static final String _FINDER_COLUMN_O_U_P_PREFERITO_2 =
+		"utenteOrganizzazione.preferito = ?";
+
 	public UtenteOrganizzazionePersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -2528,6 +2797,15 @@ public class UtenteOrganizzazionePersistenceImpl
 			new Object[] {
 				utenteOrganizzazione.getUuid(),
 				utenteOrganizzazione.getGroupId()
+			},
+			utenteOrganizzazione);
+
+		finderCache.putResult(
+			_finderPathFetchByO_U_P,
+			new Object[] {
+				utenteOrganizzazione.getOrganizationId(),
+				utenteOrganizzazione.getUtenteId(),
+				utenteOrganizzazione.isPreferito()
 			},
 			utenteOrganizzazione);
 	}
@@ -2619,6 +2897,16 @@ public class UtenteOrganizzazionePersistenceImpl
 		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, utenteOrganizzazioneModelImpl);
+
+		args = new Object[] {
+			utenteOrganizzazioneModelImpl.getOrganizationId(),
+			utenteOrganizzazioneModelImpl.getUtenteId(),
+			utenteOrganizzazioneModelImpl.isPreferito()
+		};
+
+		finderCache.putResult(_finderPathCountByO_U_P, args, Long.valueOf(1));
+		finderCache.putResult(
+			_finderPathFetchByO_U_P, args, utenteOrganizzazioneModelImpl);
 	}
 
 	/**
@@ -3196,6 +3484,22 @@ public class UtenteOrganizzazionePersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUtenteId",
 			new String[] {Long.class.getName()}, new String[] {"utenteId"},
 			false);
+
+		_finderPathFetchByO_U_P = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByO_U_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			},
+			new String[] {"organizationId", "utenteId", "preferito"}, true);
+
+		_finderPathCountByO_U_P = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByO_U_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			},
+			new String[] {"organizationId", "utenteId", "preferito"}, false);
 
 		_setUtenteOrganizzazioneUtilPersistence(this);
 	}

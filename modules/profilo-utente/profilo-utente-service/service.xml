@@ -39,6 +39,12 @@
 		<finder name="UtenteId" return-type="Collection">
 			<finder-column name="utenteId" />
 		</finder>
+		
+		<finder name="O_U_P" return-type="UtenteOrganizzazione">
+			<finder-column name="organizationId" />
+			<finder-column name="utenteId" />
+			<finder-column name="preferito" />
+		</finder>
 	</entity>
 	
 	<entity 
@@ -99,9 +105,6 @@
 		<column name="userName" type="String" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
-
-		<!-- Other fields -->
-		<column name="attivo" type="boolean" />
 		
 		<!-- Finder methods -->
 		<finder name="OrganizationId" return-type="Collection">
@@ -110,6 +113,11 @@
 
 		<finder name="UtenteId" return-type="Collection">
 			<finder-column name="utenteId" />
+		</finder>
+		
+		<finder name="UtenteOrganization" return-type="Collection">
+			<finder-column name="utenteId"/>
+			<finder-column name="organizationId" />
 		</finder>
 	</entity>
 </service-builder>

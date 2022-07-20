@@ -241,6 +241,12 @@ public interface UtenteOrganizzazioneCanaleComunicazioneLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<UtenteOrganizzazioneCanaleComunicazione>
+			getListaCanaleComunicazioneByUtenteOrganization(
+				long utenteId, long organizationId)
+		throws Exception;
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -335,6 +341,12 @@ public interface UtenteOrganizzazioneCanaleComunicazioneLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getUtenteOrganizzazioneCanaleComunicazionesCount();
+
+	public List<UtenteOrganizzazioneCanaleComunicazione>
+			updateMassivoUtenteOrganizzazioneCanaleComunicazione(
+				long utenteId, long organizationId,
+				long[] listaIdCanaliComunicazione)
+		throws Exception;
 
 	/**
 	 * Updates the utente organizzazione canale comunicazione in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

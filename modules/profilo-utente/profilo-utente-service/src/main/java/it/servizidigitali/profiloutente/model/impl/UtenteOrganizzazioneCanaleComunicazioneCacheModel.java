@@ -71,7 +71,7 @@ public class UtenteOrganizzazioneCanaleComunicazioneCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(21);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -93,8 +93,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneCacheModel
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
-		sb.append(", attivo=");
-		sb.append(attivo);
 		sb.append("}");
 
 		return sb.toString();
@@ -145,8 +143,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneCacheModel
 				new Date(modifiedDate));
 		}
 
-		utenteOrganizzazioneCanaleComunicazioneImpl.setAttivo(attivo);
-
 		utenteOrganizzazioneCanaleComunicazioneImpl.resetOriginalValues();
 
 		return utenteOrganizzazioneCanaleComunicazioneImpl;
@@ -170,8 +166,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneCacheModel
 		userName = objectInput.readUTF();
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
-
-		attivo = objectInput.readBoolean();
 
 		utenteOrganizzazioneCanaleComunicazionePK =
 			new UtenteOrganizzazioneCanaleComunicazionePK(
@@ -208,8 +202,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneCacheModel
 
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
-
-		objectOutput.writeBoolean(attivo);
 	}
 
 	public String uuid;
@@ -222,7 +214,6 @@ public class UtenteOrganizzazioneCanaleComunicazioneCacheModel
 	public String userName;
 	public long createDate;
 	public long modifiedDate;
-	public boolean attivo;
 	public transient UtenteOrganizzazioneCanaleComunicazionePK
 		utenteOrganizzazioneCanaleComunicazionePK;
 

@@ -274,6 +274,15 @@ public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
+	public static List<UtenteOrganizzazioneCanaleComunicazione>
+			getListaCanaleComunicazioneByUtenteOrganization(
+				long utenteId, long organizationId)
+		throws Exception {
+
+		return getService().getListaCanaleComunicazioneByUtenteOrganization(
+			utenteId, organizationId);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -390,6 +399,17 @@ public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceUtil {
 	 */
 	public static int getUtenteOrganizzazioneCanaleComunicazionesCount() {
 		return getService().getUtenteOrganizzazioneCanaleComunicazionesCount();
+	}
+
+	public static List<UtenteOrganizzazioneCanaleComunicazione>
+			updateMassivoUtenteOrganizzazioneCanaleComunicazione(
+				long utenteId, long organizationId,
+				long[] listaIdCanaliComunicazione)
+		throws Exception {
+
+		return getService().
+			updateMassivoUtenteOrganizzazioneCanaleComunicazione(
+				utenteId, organizationId, listaIdCanaliComunicazione);
 	}
 
 	/**

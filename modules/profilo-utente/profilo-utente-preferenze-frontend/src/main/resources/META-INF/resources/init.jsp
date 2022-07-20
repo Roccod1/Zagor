@@ -14,6 +14,7 @@
 <%@ page import="com.liferay.portal.kernel.util.PortalUtil"%>
 <%@ page import="com.liferay.portal.kernel.util.ListUtil"%>
 <%@ page import="com.liferay.portal.kernel.model.Organization"%>
+<%@ page import="it.servizidigitali.profiloutente.model.CanaleComunicazione"%>
 
 <liferay-theme:defineObjects />
 

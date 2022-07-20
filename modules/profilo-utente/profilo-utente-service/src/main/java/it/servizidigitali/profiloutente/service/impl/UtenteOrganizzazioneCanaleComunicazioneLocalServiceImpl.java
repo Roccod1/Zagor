@@ -15,10 +15,17 @@
 package it.servizidigitali.profiloutente.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
-import it.servizidigitali.profiloutente.service.base.UtenteOrganizzazioneCanaleComunicazioneLocalServiceBaseImpl;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
+
+import it.servizidigitali.profiloutente.model.UtenteOrganizzazioneCanaleComunicazione;
+import it.servizidigitali.profiloutente.service.base.UtenteOrganizzazioneCanaleComunicazioneLocalServiceBaseImpl;
+import it.servizidigitali.profiloutente.service.persistence.UtenteOrganizzazioneCanaleComunicazionePK;
 
 /**
  * @author Brian Wing Shun Chan
@@ -27,6 +34,24 @@ import org.osgi.service.component.annotations.Component;
 	property = "model.class.name=it.servizidigitali.profiloutente.model.UtenteOrganizzazioneCanaleComunicazione",
 	service = AopService.class
 )
-public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceImpl
-	extends UtenteOrganizzazioneCanaleComunicazioneLocalServiceBaseImpl {
+public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceImpl extends UtenteOrganizzazioneCanaleComunicazioneLocalServiceBaseImpl {
+	private static final Log _log = LogFactoryUtil.getLog(UtenteOrganizzazioneCanaleComunicazioneLocalServiceImpl.class);
+
+	public List<UtenteOrganizzazioneCanaleComunicazione> updateMassivoUtenteOrganizzazioneCanaleComunicazione(long utenteId, long organizationId, long listaIdCanaliComunicazione[]) throws Exception{
+		List<UtenteOrganizzazioneCanaleComunicazione> listaEntityAggiornate = new ArrayList<UtenteOrganizzazioneCanaleComunicazione>();
+		utenteOrganizzazioneCanaleComunicazionePersistence.removeByUtenteId(utenteId);
+		for(long canaleComunicazioneId : listaIdCanaliComunicazione) {
+			UtenteOrganizzazioneCanaleComunicazionePK utenteOrganizzazioneCanaleComunicazionePK = new UtenteOrganizzazioneCanaleComunicazionePK(utenteId, organizationId, canaleComunicazioneId);
+			UtenteOrganizzazioneCanaleComunicazione utenteOrganizzazioneCanaleComunicazione = utenteOrganizzazioneCanaleComunicazioneLocalService.createUtenteOrganizzazioneCanaleComunicazione(utenteOrganizzazioneCanaleComunicazionePK);
+			utenteOrganizzazioneCanaleComunicazione.setCanaleComunicazioneId(canaleComunicazioneId);
+			UtenteOrganizzazioneCanaleComunicazione entityAggiornata = utenteOrganizzazioneCanaleComunicazionePersistence.update(utenteOrganizzazioneCanaleComunicazione);
+			listaEntityAggiornate.add(entityAggiornata);
+		}
+		
+		return listaEntityAggiornate;
+	}
+	
+	public List<UtenteOrganizzazioneCanaleComunicazione> getListaCanaleComunicazioneByUtenteOrganization(long utenteId, long organizationId) throws Exception{
+		return utenteOrganizzazioneCanaleComunicazionePersistence.findByUtenteOrganization(utenteId, organizationId);
+	}
 }
