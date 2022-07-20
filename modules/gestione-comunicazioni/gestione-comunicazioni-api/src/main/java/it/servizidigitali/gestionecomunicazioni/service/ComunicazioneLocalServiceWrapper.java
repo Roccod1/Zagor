@@ -56,6 +56,19 @@ public class ComunicazioneLocalServiceWrapper
 		return _comunicazioneLocalService.addComunicazione(comunicazione);
 	}
 
+	@Override
+	public it.servizidigitali.gestionecomunicazioni.model.Comunicazione
+		addComunicazione(
+			long groupId, long companyId, long userId, String titolo,
+			String descrizione, java.util.Date dataInizio,
+			java.util.Date dataFine, long tipologiaId,
+			long destinatarioUserId) {
+
+		return _comunicazioneLocalService.addComunicazione(
+			groupId, companyId, userId, titolo, descrizione, dataInizio,
+			dataFine, tipologiaId, destinatarioUserId);
+	}
+
 	/**
 	 * Creates a new comunicazione with the primary key. Does not add the comunicazione to the database.
 	 *

@@ -15,10 +15,14 @@
 package it.servizidigitali.gestionecomunicazioni.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.model.User;
 
-import it.servizidigitali.gestionecomunicazioni.service.base.ComunicazioneLocalServiceBaseImpl;
+import java.util.Date;
 
 import org.osgi.service.component.annotations.Component;
+
+import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
+import it.servizidigitali.gestionecomunicazioni.service.base.ComunicazioneLocalServiceBaseImpl;
 
 /**
  * @author Brian Wing Shun Chan
@@ -29,4 +33,33 @@ import org.osgi.service.component.annotations.Component;
 )
 public class ComunicazioneLocalServiceImpl
 	extends ComunicazioneLocalServiceBaseImpl {
+		
+	public Comunicazione addComunicazione(
+			long groupId,
+			long companyId, 
+			long userId, 
+			String titolo, 
+			String descrizione,
+			Date dataInizio,
+			Date dataFine, 
+			long tipologiaId,
+			long destinatarioUserId) {
+		User user = userLocalService.fetchUser(userId);
+		User userDestinatario = userLocalService.fetchUser(destinatarioUserId);
+		
+		long id = counterLocalService.increment(Comunicazione.class.getName());
+		Comunicazione model = comunicazionePersistence.create(id);
+		model.setGroupId(groupId);
+		model.setCompanyId(companyId);
+		model.setUserId(userId);
+		model.setUserName(user.getScreenName());
+		model.setTitolo(titolo);
+		model.setDescrizione(descrizione);
+		model.setDataInizio(dataInizio);
+		model.setDataFine(dataFine);
+		model.setTipologiaComunicazioneId(tipologiaId);
+		model.setDestinatarioUserId(destinatarioUserId);
+		//model.setDestinatarioOrganizationId(userDestinatario.getSiteGroups());
+		return comunicazionePersistence.update(model);
+	}
 }

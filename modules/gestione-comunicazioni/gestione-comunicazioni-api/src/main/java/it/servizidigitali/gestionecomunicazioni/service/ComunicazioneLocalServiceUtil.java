@@ -60,6 +60,16 @@ public class ComunicazioneLocalServiceUtil {
 		return getService().addComunicazione(comunicazione);
 	}
 
+	public static Comunicazione addComunicazione(
+		long groupId, long companyId, long userId, String titolo,
+		String descrizione, java.util.Date dataInizio, java.util.Date dataFine,
+		long tipologiaId, long destinatarioUserId) {
+
+		return getService().addComunicazione(
+			groupId, companyId, userId, titolo, descrizione, dataInizio,
+			dataFine, tipologiaId, destinatarioUserId);
+	}
+
 	/**
 	 * Creates a new comunicazione with the primary key. Does not add the comunicazione to the database.
 	 *

@@ -37,6 +37,7 @@ import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -77,6 +78,11 @@ public interface ComunicazioneLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Comunicazione addComunicazione(Comunicazione comunicazione);
+
+	public Comunicazione addComunicazione(
+		long groupId, long companyId, long userId, String titolo,
+		String descrizione, Date dataInizio, Date dataFine, long tipologiaId,
+		long destinatarioUserId);
 
 	/**
 	 * Creates a new comunicazione with the primary key. Does not add the comunicazione to the database.
