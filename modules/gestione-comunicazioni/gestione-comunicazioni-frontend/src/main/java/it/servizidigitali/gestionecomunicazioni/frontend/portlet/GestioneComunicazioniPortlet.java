@@ -1,12 +1,23 @@
 package it.servizidigitali.gestionecomunicazioni.frontend.portlet;
 
-import it.servizidigitali.gestionecomunicazioni.frontend.constants.GestioneComunicazioniFrontendPortletKeys;
-
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.portlet.Portlet;
+import javax.portlet.PortletException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+import it.servizidigitali.gestionecomunicazioni.frontend.constants.GestioneComunicazioniFrontendPortletKeys;
+import it.servizidigitali.gestionecomunicazioni.frontend.dto.TipologiaDTO;
+import it.servizidigitali.gestionecomunicazioni.service.TipologiaComunicazioneLocalService;
 
 /**
  * @author pindi
@@ -27,4 +38,19 @@ import org.osgi.service.component.annotations.Component;
 	service = Portlet.class
 )
 public class GestioneComunicazioniPortlet extends MVCPortlet {
+	
+	@Reference
+	private TipologiaComunicazioneLocalService tipologiaComunicazioneLocalService;
+	
+	@Override
+	public void render(RenderRequest request, RenderResponse response) throws IOException, PortletException {
+		List<TipologiaDTO> tipologie = tipologiaComunicazioneLocalService
+				.getTipologiaComunicaziones(QueryUtil.ALL_POS, QueryUtil.ALL_POS)
+				.stream()
+				.map(TipologiaDTO::new)
+				.collect(Collectors.toList());
+		
+		request.setAttribute("tipologie", tipologie);
+		super.render(request, response);
+	}
 }
