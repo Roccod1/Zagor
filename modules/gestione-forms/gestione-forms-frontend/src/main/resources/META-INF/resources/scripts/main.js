@@ -66,6 +66,21 @@ var setup = function(s, o, v, d)
         }
     }
 
+    for (var key in options.fields) {
+    	if (options.fields[key].type === 'datiAngraficiCustomTwoCol') {
+    			
+    		data[key].nome = "Antonio";
+    		data[key].cognome = "Altieri";
+    		data[key].luogoNascita = "Bari";
+    		data[key].codiceFiscale = "LTRNTN90A21B662C";
+    		data[key].luogoNascita = "Bari";
+    		data[key].dataNascita = "21/01/1990";
+    		data[key].indirizzoResidenza = "Via Giovanni Verga, 12 A, 70021, Bari";
+    	
+    	}
+
+    }
+    
     var editor1 = setupEditor("schema", schema);
     var editor2 = setupEditor("options", options);
     var editor3 = setupEditor("data", data);
