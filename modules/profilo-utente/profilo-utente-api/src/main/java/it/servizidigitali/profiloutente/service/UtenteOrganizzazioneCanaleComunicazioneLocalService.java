@@ -344,7 +344,7 @@ public interface UtenteOrganizzazioneCanaleComunicazioneLocalService
 
 	public List<UtenteOrganizzazioneCanaleComunicazione>
 			updateMassivoUtenteOrganizzazioneCanaleComunicazione(
-				long utenteId, long organizationId,
+				long userId, long groupId, long companyId, long organizationId,
 				long[] listaIdCanaliComunicazione)
 		throws Exception;
 

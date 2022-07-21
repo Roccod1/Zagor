@@ -40,8 +40,13 @@
 			<finder-column name="utenteId" />
 		</finder>
 		
-		<finder name="O_U_P" return-type="UtenteOrganizzazione">
+		<finder name="O_U_P" return-type="Collection">
 			<finder-column name="organizationId" />
+			<finder-column name="utenteId" />
+			<finder-column name="preferito" />
+		</finder>
+		
+		<finder name="U_P" return-type="Collection">
 			<finder-column name="utenteId" />
 			<finder-column name="preferito" />
 		</finder>

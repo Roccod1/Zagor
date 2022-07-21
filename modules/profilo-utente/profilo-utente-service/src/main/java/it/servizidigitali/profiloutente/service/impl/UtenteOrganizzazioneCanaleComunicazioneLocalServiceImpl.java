@@ -37,13 +37,16 @@ import it.servizidigitali.profiloutente.service.persistence.UtenteOrganizzazione
 public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceImpl extends UtenteOrganizzazioneCanaleComunicazioneLocalServiceBaseImpl {
 	private static final Log _log = LogFactoryUtil.getLog(UtenteOrganizzazioneCanaleComunicazioneLocalServiceImpl.class);
 
-	public List<UtenteOrganizzazioneCanaleComunicazione> updateMassivoUtenteOrganizzazioneCanaleComunicazione(long utenteId, long organizationId, long listaIdCanaliComunicazione[]) throws Exception{
+	public List<UtenteOrganizzazioneCanaleComunicazione> updateMassivoUtenteOrganizzazioneCanaleComunicazione(long userId, long groupId, long companyId, long organizationId, long listaIdCanaliComunicazione[]) throws Exception{
 		List<UtenteOrganizzazioneCanaleComunicazione> listaEntityAggiornate = new ArrayList<UtenteOrganizzazioneCanaleComunicazione>();
-		utenteOrganizzazioneCanaleComunicazionePersistence.removeByUtenteId(utenteId);
+		utenteOrganizzazioneCanaleComunicazionePersistence.findByUtenteOrganization(userId, organizationId);
 		for(long canaleComunicazioneId : listaIdCanaliComunicazione) {
 			UtenteOrganizzazioneCanaleComunicazionePK utenteOrganizzazioneCanaleComunicazionePK = new UtenteOrganizzazioneCanaleComunicazionePK(utenteId, organizationId, canaleComunicazioneId);
 			UtenteOrganizzazioneCanaleComunicazione utenteOrganizzazioneCanaleComunicazione = utenteOrganizzazioneCanaleComunicazioneLocalService.createUtenteOrganizzazioneCanaleComunicazione(utenteOrganizzazioneCanaleComunicazionePK);
 			utenteOrganizzazioneCanaleComunicazione.setCanaleComunicazioneId(canaleComunicazioneId);
+			utenteOrganizzazioneCanaleComunicazione.setUserId(userId);
+			utenteOrganizzazioneCanaleComunicazione.setCompanyId(companyId);
+			utenteOrganizzazioneCanaleComunicazione.setGroupId(groupId);
 			UtenteOrganizzazioneCanaleComunicazione entityAggiornata = utenteOrganizzazioneCanaleComunicazionePersistence.update(utenteOrganizzazioneCanaleComunicazione);
 			listaEntityAggiornate.add(entityAggiornata);
 		}

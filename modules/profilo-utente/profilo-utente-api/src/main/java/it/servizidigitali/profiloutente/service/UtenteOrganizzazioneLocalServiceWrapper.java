@@ -269,16 +269,25 @@ public class UtenteOrganizzazioneLocalServiceWrapper
 	}
 
 	@Override
-	public it.servizidigitali.profiloutente.model.UtenteOrganizzazione
-			findByUtenteOrganizzazionePreferito(
-				it.servizidigitali.profiloutente.service.persistence.
-					UtenteOrganizzazionePK utenteOrganizzazionePK,
-				boolean preferito)
-		throws Exception {
+	public java.util.List
+		<it.servizidigitali.profiloutente.model.UtenteOrganizzazione>
+				findByUtenteOrganizzazionePreferito(
+					long userId, long organizationId, boolean preferito)
+			throws Exception {
 
 		return _utenteOrganizzazioneLocalService.
 			findByUtenteOrganizzazionePreferito(
-				utenteOrganizzazionePK, preferito);
+				userId, organizationId, preferito);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.profiloutente.model.UtenteOrganizzazione>
+				findByUtentePreferito(long userId, boolean preferito)
+			throws Exception {
+
+		return _utenteOrganizzazioneLocalService.findByUtentePreferito(
+			userId, preferito);
 	}
 
 	@Override

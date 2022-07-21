@@ -236,14 +236,20 @@ public class UtenteOrganizzazioneLocalServiceUtil {
 			uuid, groupId);
 	}
 
-	public static UtenteOrganizzazione findByUtenteOrganizzazionePreferito(
-			it.servizidigitali.profiloutente.service.persistence.
-				UtenteOrganizzazionePK utenteOrganizzazionePK,
-			boolean preferito)
+	public static List<UtenteOrganizzazione>
+			findByUtenteOrganizzazionePreferito(
+				long userId, long organizationId, boolean preferito)
 		throws Exception {
 
 		return getService().findByUtenteOrganizzazionePreferito(
-			utenteOrganizzazionePK, preferito);
+			userId, organizationId, preferito);
+	}
+
+	public static List<UtenteOrganizzazione> findByUtentePreferito(
+			long userId, boolean preferito)
+		throws Exception {
+
+		return getService().findByUtentePreferito(userId, preferito);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery

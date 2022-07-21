@@ -220,8 +220,12 @@ public interface UtenteOrganizzazioneLocalService
 	public UtenteOrganizzazione fetchUtenteOrganizzazioneByUuidAndGroupId(
 		String uuid, long groupId);
 
-	public UtenteOrganizzazione findByUtenteOrganizzazionePreferito(
-			UtenteOrganizzazionePK utenteOrganizzazionePK, boolean preferito)
+	public List<UtenteOrganizzazione> findByUtenteOrganizzazionePreferito(
+			long userId, long organizationId, boolean preferito)
+		throws Exception;
+
+	public List<UtenteOrganizzazione> findByUtentePreferito(
+			long userId, boolean preferito)
 		throws Exception;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

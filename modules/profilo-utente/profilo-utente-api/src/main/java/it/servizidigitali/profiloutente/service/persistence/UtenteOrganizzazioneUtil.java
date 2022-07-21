@@ -914,70 +914,200 @@ public class UtenteOrganizzazioneUtil {
 	}
 
 	/**
-	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or throws a <code>NoSuchUtenteOrganizzazioneException</code> if it could not be found.
+	 * Returns all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
 	 *
 	 * @param organizationId the organization ID
 	 * @param utenteId the utente ID
 	 * @param preferito the preferito
-	 * @return the matching utente organizzazione
-	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 * @return the matching utente organizzaziones
 	 */
-	public static UtenteOrganizzazione findByO_U_P(
-			long organizationId, long utenteId, boolean preferito)
-		throws it.servizidigitali.profiloutente.exception.
-			NoSuchUtenteOrganizzazioneException {
+	public static List<UtenteOrganizzazione> findByO_U_P(
+		long organizationId, long utenteId, boolean preferito) {
 
 		return getPersistence().findByO_U_P(
 			organizationId, utenteId, preferito);
 	}
 
 	/**
-	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 * Returns a range of all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
 	 *
 	 * @param organizationId the organization ID
 	 * @param utenteId the utente ID
 	 * @param preferito the preferito
-	 * @return the matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @return the range of matching utente organizzaziones
 	 */
-	public static UtenteOrganizzazione fetchByO_U_P(
-		long organizationId, long utenteId, boolean preferito) {
+	public static List<UtenteOrganizzazione> findByO_U_P(
+		long organizationId, long utenteId, boolean preferito, int start,
+		int end) {
 
-		return getPersistence().fetchByO_U_P(
-			organizationId, utenteId, preferito);
+		return getPersistence().findByO_U_P(
+			organizationId, utenteId, preferito, start, end);
 	}
 
 	/**
-	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns an ordered range of all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
 	 *
 	 * @param organizationId the organization ID
 	 * @param utenteId the utente ID
 	 * @param preferito the preferito
-	 * @param useFinderCache whether to use the finder cache
-	 * @return the matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching utente organizzaziones
 	 */
-	public static UtenteOrganizzazione fetchByO_U_P(
-		long organizationId, long utenteId, boolean preferito,
+	public static List<UtenteOrganizzazione> findByO_U_P(
+		long organizationId, long utenteId, boolean preferito, int start,
+		int end, OrderByComparator<UtenteOrganizzazione> orderByComparator) {
+
+		return getPersistence().findByO_U_P(
+			organizationId, utenteId, preferito, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching utente organizzaziones
+	 */
+	public static List<UtenteOrganizzazione> findByO_U_P(
+		long organizationId, long utenteId, boolean preferito, int start,
+		int end, OrderByComparator<UtenteOrganizzazione> orderByComparator,
 		boolean useFinderCache) {
 
-		return getPersistence().fetchByO_U_P(
-			organizationId, utenteId, preferito, useFinderCache);
+		return getPersistence().findByO_U_P(
+			organizationId, utenteId, preferito, start, end, orderByComparator,
+			useFinderCache);
 	}
 
 	/**
-	 * Removes the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; from the database.
+	 * Returns the first utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
 	 *
 	 * @param organizationId the organization ID
 	 * @param utenteId the utente ID
 	 * @param preferito the preferito
-	 * @return the utente organizzazione that was removed
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
 	 */
-	public static UtenteOrganizzazione removeByO_U_P(
-			long organizationId, long utenteId, boolean preferito)
+	public static UtenteOrganizzazione findByO_U_P_First(
+			long organizationId, long utenteId, boolean preferito,
+			OrderByComparator<UtenteOrganizzazione> orderByComparator)
 		throws it.servizidigitali.profiloutente.exception.
 			NoSuchUtenteOrganizzazioneException {
 
-		return getPersistence().removeByO_U_P(
-			organizationId, utenteId, preferito);
+		return getPersistence().findByO_U_P_First(
+			organizationId, utenteId, preferito, orderByComparator);
+	}
+
+	/**
+	 * Returns the first utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	public static UtenteOrganizzazione fetchByO_U_P_First(
+		long organizationId, long utenteId, boolean preferito,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator) {
+
+		return getPersistence().fetchByO_U_P_First(
+			organizationId, utenteId, preferito, orderByComparator);
+	}
+
+	/**
+	 * Returns the last utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 */
+	public static UtenteOrganizzazione findByO_U_P_Last(
+			long organizationId, long utenteId, boolean preferito,
+			OrderByComparator<UtenteOrganizzazione> orderByComparator)
+		throws it.servizidigitali.profiloutente.exception.
+			NoSuchUtenteOrganizzazioneException {
+
+		return getPersistence().findByO_U_P_Last(
+			organizationId, utenteId, preferito, orderByComparator);
+	}
+
+	/**
+	 * Returns the last utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	public static UtenteOrganizzazione fetchByO_U_P_Last(
+		long organizationId, long utenteId, boolean preferito,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator) {
+
+		return getPersistence().fetchByO_U_P_Last(
+			organizationId, utenteId, preferito, orderByComparator);
+	}
+
+	/**
+	 * Returns the utente organizzaziones before and after the current utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteOrganizzazionePK the primary key of the current utente organizzazione
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a utente organizzazione with the primary key could not be found
+	 */
+	public static UtenteOrganizzazione[] findByO_U_P_PrevAndNext(
+			it.servizidigitali.profiloutente.service.persistence.
+				UtenteOrganizzazionePK utenteOrganizzazionePK,
+			long organizationId, long utenteId, boolean preferito,
+			OrderByComparator<UtenteOrganizzazione> orderByComparator)
+		throws it.servizidigitali.profiloutente.exception.
+			NoSuchUtenteOrganizzazioneException {
+
+		return getPersistence().findByO_U_P_PrevAndNext(
+			utenteOrganizzazionePK, organizationId, utenteId, preferito,
+			orderByComparator);
+	}
+
+	/**
+	 * Removes all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63; from the database.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 */
+	public static void removeByO_U_P(
+		long organizationId, long utenteId, boolean preferito) {
+
+		getPersistence().removeByO_U_P(organizationId, utenteId, preferito);
 	}
 
 	/**
@@ -993,6 +1123,197 @@ public class UtenteOrganizzazioneUtil {
 
 		return getPersistence().countByO_U_P(
 			organizationId, utenteId, preferito);
+	}
+
+	/**
+	 * Returns all the utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the matching utente organizzaziones
+	 */
+	public static List<UtenteOrganizzazione> findByU_P(
+		long utenteId, boolean preferito) {
+
+		return getPersistence().findByU_P(utenteId, preferito);
+	}
+
+	/**
+	 * Returns a range of all the utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @return the range of matching utente organizzaziones
+	 */
+	public static List<UtenteOrganizzazione> findByU_P(
+		long utenteId, boolean preferito, int start, int end) {
+
+		return getPersistence().findByU_P(utenteId, preferito, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching utente organizzaziones
+	 */
+	public static List<UtenteOrganizzazione> findByU_P(
+		long utenteId, boolean preferito, int start, int end,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator) {
+
+		return getPersistence().findByU_P(
+			utenteId, preferito, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching utente organizzaziones
+	 */
+	public static List<UtenteOrganizzazione> findByU_P(
+		long utenteId, boolean preferito, int start, int end,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator,
+		boolean useFinderCache) {
+
+		return getPersistence().findByU_P(
+			utenteId, preferito, start, end, orderByComparator, useFinderCache);
+	}
+
+	/**
+	 * Returns the first utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 */
+	public static UtenteOrganizzazione findByU_P_First(
+			long utenteId, boolean preferito,
+			OrderByComparator<UtenteOrganizzazione> orderByComparator)
+		throws it.servizidigitali.profiloutente.exception.
+			NoSuchUtenteOrganizzazioneException {
+
+		return getPersistence().findByU_P_First(
+			utenteId, preferito, orderByComparator);
+	}
+
+	/**
+	 * Returns the first utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	public static UtenteOrganizzazione fetchByU_P_First(
+		long utenteId, boolean preferito,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator) {
+
+		return getPersistence().fetchByU_P_First(
+			utenteId, preferito, orderByComparator);
+	}
+
+	/**
+	 * Returns the last utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 */
+	public static UtenteOrganizzazione findByU_P_Last(
+			long utenteId, boolean preferito,
+			OrderByComparator<UtenteOrganizzazione> orderByComparator)
+		throws it.servizidigitali.profiloutente.exception.
+			NoSuchUtenteOrganizzazioneException {
+
+		return getPersistence().findByU_P_Last(
+			utenteId, preferito, orderByComparator);
+	}
+
+	/**
+	 * Returns the last utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	public static UtenteOrganizzazione fetchByU_P_Last(
+		long utenteId, boolean preferito,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator) {
+
+		return getPersistence().fetchByU_P_Last(
+			utenteId, preferito, orderByComparator);
+	}
+
+	/**
+	 * Returns the utente organizzaziones before and after the current utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteOrganizzazionePK the primary key of the current utente organizzazione
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a utente organizzazione with the primary key could not be found
+	 */
+	public static UtenteOrganizzazione[] findByU_P_PrevAndNext(
+			it.servizidigitali.profiloutente.service.persistence.
+				UtenteOrganizzazionePK utenteOrganizzazionePK,
+			long utenteId, boolean preferito,
+			OrderByComparator<UtenteOrganizzazione> orderByComparator)
+		throws it.servizidigitali.profiloutente.exception.
+			NoSuchUtenteOrganizzazioneException {
+
+		return getPersistence().findByU_P_PrevAndNext(
+			utenteOrganizzazionePK, utenteId, preferito, orderByComparator);
+	}
+
+	/**
+	 * Removes all the utente organizzaziones where utenteId = &#63; and preferito = &#63; from the database.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 */
+	public static void removeByU_P(long utenteId, boolean preferito) {
+		getPersistence().removeByU_P(utenteId, preferito);
+	}
+
+	/**
+	 * Returns the number of utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the number of matching utente organizzaziones
+	 */
+	public static int countByU_P(long utenteId, boolean preferito) {
+		return getPersistence().countByU_P(utenteId, preferito);
 	}
 
 	/**

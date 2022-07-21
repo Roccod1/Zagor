@@ -479,13 +479,14 @@ public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceWrapper
 		<it.servizidigitali.profiloutente.model.
 			UtenteOrganizzazioneCanaleComunicazione>
 					updateMassivoUtenteOrganizzazioneCanaleComunicazione(
-						long utenteId, long organizationId,
-						long[] listaIdCanaliComunicazione)
+						long userId, long groupId, long companyId,
+						long organizationId, long[] listaIdCanaliComunicazione)
 				throws Exception {
 
 		return _utenteOrganizzazioneCanaleComunicazioneLocalService.
 			updateMassivoUtenteOrganizzazioneCanaleComunicazione(
-				utenteId, organizationId, listaIdCanaliComunicazione);
+				userId, groupId, companyId, organizationId,
+				listaIdCanaliComunicazione);
 	}
 
 	/**

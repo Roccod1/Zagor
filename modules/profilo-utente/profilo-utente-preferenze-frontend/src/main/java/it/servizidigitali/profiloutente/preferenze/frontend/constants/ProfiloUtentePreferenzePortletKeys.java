@@ -15,11 +15,12 @@ public class ProfiloUtentePreferenzePortletKeys {
 //	dettaglio preferenze
 	public static final String ORGANIZZAZIONE = "organizzazione";
 	public static final String UTENTE_ORGANIZZAZIONE = "utenteOrganizzazione";
+	public static final String UTENTE_ORGANIZZAZIONE_ID = "utenteOrganizzazioneId";
 	public static final String ORGANIZATION_ID = "organizationId";
 	public static final String EMAIL = "email";
 	public static final String PEC = "pec";
 	public static final String APP = "app";
-	public static final String DEFAULT = "default";
+	public static final String PREFERITO = "preferito";
 	public static final String CANALE_COMUNICAZIONE = "canaleComunicazione";
 	public static final String LISTA_CANALI_COMUNICAZIONE = "listaCanaliComunicazione";
 	public static final String LISTA_UTENTE_ORGANIZZAZIONE_CANALE_COMUNICAZIONE = "listaUtenteOrganizzazioneCanaleComunicazione";
@@ -33,6 +34,7 @@ public class ProfiloUtentePreferenzePortletKeys {
 //	nomi command
 	public static final String RENDER_INSERISCI_MODIFICA = "/inserisciModifica";
 	public static final String RENDER_SEZIONE = "/sezione";
+	public static final String ACTION_SALVA = "/salva";
 	
 //	utility
 	public static final String INDIRIZZO_REDIRECT = "indirizzoRedirect";

@@ -37,7 +37,6 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.SetUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 
@@ -56,7 +55,6 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -2499,107 +2497,147 @@ public class UtenteOrganizzazionePersistenceImpl
 	private static final String _FINDER_COLUMN_UTENTEID_UTENTEID_2 =
 		"utenteOrganizzazione.id.utenteId = ?";
 
-	private FinderPath _finderPathFetchByO_U_P;
+	private FinderPath _finderPathWithPaginationFindByO_U_P;
+	private FinderPath _finderPathWithoutPaginationFindByO_U_P;
 	private FinderPath _finderPathCountByO_U_P;
 
 	/**
-	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or throws a <code>NoSuchUtenteOrganizzazioneException</code> if it could not be found.
+	 * Returns all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
 	 *
 	 * @param organizationId the organization ID
 	 * @param utenteId the utente ID
 	 * @param preferito the preferito
-	 * @return the matching utente organizzazione
-	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 * @return the matching utente organizzaziones
 	 */
 	@Override
-	public UtenteOrganizzazione findByO_U_P(
-			long organizationId, long utenteId, boolean preferito)
-		throws NoSuchUtenteOrganizzazioneException {
-
-		UtenteOrganizzazione utenteOrganizzazione = fetchByO_U_P(
-			organizationId, utenteId, preferito);
-
-		if (utenteOrganizzazione == null) {
-			StringBundler sb = new StringBundler(8);
-
-			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			sb.append("organizationId=");
-			sb.append(organizationId);
-
-			sb.append(", utenteId=");
-			sb.append(utenteId);
-
-			sb.append(", preferito=");
-			sb.append(preferito);
-
-			sb.append("}");
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(sb.toString());
-			}
-
-			throw new NoSuchUtenteOrganizzazioneException(sb.toString());
-		}
-
-		return utenteOrganizzazione;
-	}
-
-	/**
-	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param organizationId the organization ID
-	 * @param utenteId the utente ID
-	 * @param preferito the preferito
-	 * @return the matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
-	 */
-	@Override
-	public UtenteOrganizzazione fetchByO_U_P(
+	public List<UtenteOrganizzazione> findByO_U_P(
 		long organizationId, long utenteId, boolean preferito) {
 
-		return fetchByO_U_P(organizationId, utenteId, preferito, true);
+		return findByO_U_P(
+			organizationId, utenteId, preferito, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns a range of all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
 	 *
 	 * @param organizationId the organization ID
 	 * @param utenteId the utente ID
 	 * @param preferito the preferito
-	 * @param useFinderCache whether to use the finder cache
-	 * @return the matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @return the range of matching utente organizzaziones
 	 */
 	@Override
-	public UtenteOrganizzazione fetchByO_U_P(
-		long organizationId, long utenteId, boolean preferito,
+	public List<UtenteOrganizzazione> findByO_U_P(
+		long organizationId, long utenteId, boolean preferito, int start,
+		int end) {
+
+		return findByO_U_P(
+			organizationId, utenteId, preferito, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching utente organizzaziones
+	 */
+	@Override
+	public List<UtenteOrganizzazione> findByO_U_P(
+		long organizationId, long utenteId, boolean preferito, int start,
+		int end, OrderByComparator<UtenteOrganizzazione> orderByComparator) {
+
+		return findByO_U_P(
+			organizationId, utenteId, preferito, start, end, orderByComparator,
+			true);
+	}
+
+	/**
+	 * Returns an ordered range of all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching utente organizzaziones
+	 */
+	@Override
+	public List<UtenteOrganizzazione> findByO_U_P(
+		long organizationId, long utenteId, boolean preferito, int start,
+		int end, OrderByComparator<UtenteOrganizzazione> orderByComparator,
 		boolean useFinderCache) {
 
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
-		if (useFinderCache) {
-			finderArgs = new Object[] {organizationId, utenteId, preferito};
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByO_U_P;
+				finderArgs = new Object[] {organizationId, utenteId, preferito};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByO_U_P;
+			finderArgs = new Object[] {
+				organizationId, utenteId, preferito, start, end,
+				orderByComparator
+			};
 		}
 
-		Object result = null;
+		List<UtenteOrganizzazione> list = null;
 
 		if (useFinderCache) {
-			result = finderCache.getResult(_finderPathFetchByO_U_P, finderArgs);
-		}
+			list = (List<UtenteOrganizzazione>)finderCache.getResult(
+				finderPath, finderArgs);
 
-		if (result instanceof UtenteOrganizzazione) {
-			UtenteOrganizzazione utenteOrganizzazione =
-				(UtenteOrganizzazione)result;
+			if ((list != null) && !list.isEmpty()) {
+				for (UtenteOrganizzazione utenteOrganizzazione : list) {
+					if ((organizationId !=
+							utenteOrganizzazione.getOrganizationId()) ||
+						(utenteId != utenteOrganizzazione.getUtenteId()) ||
+						(preferito != utenteOrganizzazione.isPreferito())) {
 
-			if ((organizationId != utenteOrganizzazione.getOrganizationId()) ||
-				(utenteId != utenteOrganizzazione.getUtenteId()) ||
-				(preferito != utenteOrganizzazione.isPreferito())) {
+						list = null;
 
-				result = null;
+						break;
+					}
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler sb = new StringBundler(5);
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					5 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(5);
+			}
 
 			sb.append(_SQL_SELECT_UTENTEORGANIZZAZIONE_WHERE);
 
@@ -2608,6 +2646,14 @@ public class UtenteOrganizzazionePersistenceImpl
 			sb.append(_FINDER_COLUMN_O_U_P_UTENTEID_2);
 
 			sb.append(_FINDER_COLUMN_O_U_P_PREFERITO_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(UtenteOrganizzazioneModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = sb.toString();
 
@@ -2626,37 +2672,13 @@ public class UtenteOrganizzazionePersistenceImpl
 
 				queryPos.add(preferito);
 
-				List<UtenteOrganizzazione> list = query.list();
+				list = (List<UtenteOrganizzazione>)QueryUtil.list(
+					query, getDialect(), start, end);
 
-				if (list.isEmpty()) {
-					if (useFinderCache) {
-						finderCache.putResult(
-							_finderPathFetchByO_U_P, finderArgs, list);
-					}
-				}
-				else {
-					if (list.size() > 1) {
-						Collections.sort(list, Collections.reverseOrder());
+				cacheResult(list);
 
-						if (_log.isWarnEnabled()) {
-							if (!useFinderCache) {
-								finderArgs = new Object[] {
-									organizationId, utenteId, preferito
-								};
-							}
-
-							_log.warn(
-								"UtenteOrganizzazionePersistenceImpl.fetchByO_U_P(long, long, boolean, boolean) with parameters (" +
-									StringUtil.merge(finderArgs) +
-										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
-						}
-					}
-
-					UtenteOrganizzazione utenteOrganizzazione = list.get(0);
-
-					result = utenteOrganizzazione;
-
-					cacheResult(utenteOrganizzazione);
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
 				}
 			}
 			catch (Exception exception) {
@@ -2667,31 +2689,331 @@ public class UtenteOrganizzazionePersistenceImpl
 			}
 		}
 
-		if (result instanceof List<?>) {
-			return null;
-		}
-		else {
-			return (UtenteOrganizzazione)result;
-		}
+		return list;
 	}
 
 	/**
-	 * Removes the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; from the database.
+	 * Returns the first utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
 	 *
 	 * @param organizationId the organization ID
 	 * @param utenteId the utente ID
 	 * @param preferito the preferito
-	 * @return the utente organizzazione that was removed
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
 	 */
 	@Override
-	public UtenteOrganizzazione removeByO_U_P(
-			long organizationId, long utenteId, boolean preferito)
+	public UtenteOrganizzazione findByO_U_P_First(
+			long organizationId, long utenteId, boolean preferito,
+			OrderByComparator<UtenteOrganizzazione> orderByComparator)
 		throws NoSuchUtenteOrganizzazioneException {
 
-		UtenteOrganizzazione utenteOrganizzazione = findByO_U_P(
-			organizationId, utenteId, preferito);
+		UtenteOrganizzazione utenteOrganizzazione = fetchByO_U_P_First(
+			organizationId, utenteId, preferito, orderByComparator);
 
-		return remove(utenteOrganizzazione);
+		if (utenteOrganizzazione != null) {
+			return utenteOrganizzazione;
+		}
+
+		StringBundler sb = new StringBundler(8);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("organizationId=");
+		sb.append(organizationId);
+
+		sb.append(", utenteId=");
+		sb.append(utenteId);
+
+		sb.append(", preferito=");
+		sb.append(preferito);
+
+		sb.append("}");
+
+		throw new NoSuchUtenteOrganizzazioneException(sb.toString());
+	}
+
+	/**
+	 * Returns the first utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazione fetchByO_U_P_First(
+		long organizationId, long utenteId, boolean preferito,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator) {
+
+		List<UtenteOrganizzazione> list = findByO_U_P(
+			organizationId, utenteId, preferito, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazione findByO_U_P_Last(
+			long organizationId, long utenteId, boolean preferito,
+			OrderByComparator<UtenteOrganizzazione> orderByComparator)
+		throws NoSuchUtenteOrganizzazioneException {
+
+		UtenteOrganizzazione utenteOrganizzazione = fetchByO_U_P_Last(
+			organizationId, utenteId, preferito, orderByComparator);
+
+		if (utenteOrganizzazione != null) {
+			return utenteOrganizzazione;
+		}
+
+		StringBundler sb = new StringBundler(8);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("organizationId=");
+		sb.append(organizationId);
+
+		sb.append(", utenteId=");
+		sb.append(utenteId);
+
+		sb.append(", preferito=");
+		sb.append(preferito);
+
+		sb.append("}");
+
+		throw new NoSuchUtenteOrganizzazioneException(sb.toString());
+	}
+
+	/**
+	 * Returns the last utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazione fetchByO_U_P_Last(
+		long organizationId, long utenteId, boolean preferito,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator) {
+
+		int count = countByO_U_P(organizationId, utenteId, preferito);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<UtenteOrganizzazione> list = findByO_U_P(
+			organizationId, utenteId, preferito, count - 1, count,
+			orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the utente organizzaziones before and after the current utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteOrganizzazionePK the primary key of the current utente organizzazione
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a utente organizzazione with the primary key could not be found
+	 */
+	@Override
+	public UtenteOrganizzazione[] findByO_U_P_PrevAndNext(
+			UtenteOrganizzazionePK utenteOrganizzazionePK, long organizationId,
+			long utenteId, boolean preferito,
+			OrderByComparator<UtenteOrganizzazione> orderByComparator)
+		throws NoSuchUtenteOrganizzazioneException {
+
+		UtenteOrganizzazione utenteOrganizzazione = findByPrimaryKey(
+			utenteOrganizzazionePK);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			UtenteOrganizzazione[] array = new UtenteOrganizzazioneImpl[3];
+
+			array[0] = getByO_U_P_PrevAndNext(
+				session, utenteOrganizzazione, organizationId, utenteId,
+				preferito, orderByComparator, true);
+
+			array[1] = utenteOrganizzazione;
+
+			array[2] = getByO_U_P_PrevAndNext(
+				session, utenteOrganizzazione, organizationId, utenteId,
+				preferito, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected UtenteOrganizzazione getByO_U_P_PrevAndNext(
+		Session session, UtenteOrganizzazione utenteOrganizzazione,
+		long organizationId, long utenteId, boolean preferito,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator,
+		boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				6 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(5);
+		}
+
+		sb.append(_SQL_SELECT_UTENTEORGANIZZAZIONE_WHERE);
+
+		sb.append(_FINDER_COLUMN_O_U_P_ORGANIZATIONID_2);
+
+		sb.append(_FINDER_COLUMN_O_U_P_UTENTEID_2);
+
+		sb.append(_FINDER_COLUMN_O_U_P_PREFERITO_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(UtenteOrganizzazioneModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(organizationId);
+
+		queryPos.add(utenteId);
+
+		queryPos.add(preferito);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						utenteOrganizzazione)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<UtenteOrganizzazione> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63; from the database.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 */
+	@Override
+	public void removeByO_U_P(
+		long organizationId, long utenteId, boolean preferito) {
+
+		for (UtenteOrganizzazione utenteOrganizzazione :
+				findByO_U_P(
+					organizationId, utenteId, preferito, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null)) {
+
+			remove(utenteOrganizzazione);
+		}
 	}
 
 	/**
@@ -2766,6 +3088,551 @@ public class UtenteOrganizzazionePersistenceImpl
 	private static final String _FINDER_COLUMN_O_U_P_PREFERITO_2 =
 		"utenteOrganizzazione.preferito = ?";
 
+	private FinderPath _finderPathWithPaginationFindByU_P;
+	private FinderPath _finderPathWithoutPaginationFindByU_P;
+	private FinderPath _finderPathCountByU_P;
+
+	/**
+	 * Returns all the utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the matching utente organizzaziones
+	 */
+	@Override
+	public List<UtenteOrganizzazione> findByU_P(
+		long utenteId, boolean preferito) {
+
+		return findByU_P(
+			utenteId, preferito, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @return the range of matching utente organizzaziones
+	 */
+	@Override
+	public List<UtenteOrganizzazione> findByU_P(
+		long utenteId, boolean preferito, int start, int end) {
+
+		return findByU_P(utenteId, preferito, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching utente organizzaziones
+	 */
+	@Override
+	public List<UtenteOrganizzazione> findByU_P(
+		long utenteId, boolean preferito, int start, int end,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator) {
+
+		return findByU_P(
+			utenteId, preferito, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching utente organizzaziones
+	 */
+	@Override
+	public List<UtenteOrganizzazione> findByU_P(
+		long utenteId, boolean preferito, int start, int end,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator,
+		boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByU_P;
+				finderArgs = new Object[] {utenteId, preferito};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByU_P;
+			finderArgs = new Object[] {
+				utenteId, preferito, start, end, orderByComparator
+			};
+		}
+
+		List<UtenteOrganizzazione> list = null;
+
+		if (useFinderCache) {
+			list = (List<UtenteOrganizzazione>)finderCache.getResult(
+				finderPath, finderArgs);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (UtenteOrganizzazione utenteOrganizzazione : list) {
+					if ((utenteId != utenteOrganizzazione.getUtenteId()) ||
+						(preferito != utenteOrganizzazione.isPreferito())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(4);
+			}
+
+			sb.append(_SQL_SELECT_UTENTEORGANIZZAZIONE_WHERE);
+
+			sb.append(_FINDER_COLUMN_U_P_UTENTEID_2);
+
+			sb.append(_FINDER_COLUMN_U_P_PREFERITO_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(UtenteOrganizzazioneModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(utenteId);
+
+				queryPos.add(preferito);
+
+				list = (List<UtenteOrganizzazione>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazione findByU_P_First(
+			long utenteId, boolean preferito,
+			OrderByComparator<UtenteOrganizzazione> orderByComparator)
+		throws NoSuchUtenteOrganizzazioneException {
+
+		UtenteOrganizzazione utenteOrganizzazione = fetchByU_P_First(
+			utenteId, preferito, orderByComparator);
+
+		if (utenteOrganizzazione != null) {
+			return utenteOrganizzazione;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("utenteId=");
+		sb.append(utenteId);
+
+		sb.append(", preferito=");
+		sb.append(preferito);
+
+		sb.append("}");
+
+		throw new NoSuchUtenteOrganizzazioneException(sb.toString());
+	}
+
+	/**
+	 * Returns the first utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazione fetchByU_P_First(
+		long utenteId, boolean preferito,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator) {
+
+		List<UtenteOrganizzazione> list = findByU_P(
+			utenteId, preferito, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazione findByU_P_Last(
+			long utenteId, boolean preferito,
+			OrderByComparator<UtenteOrganizzazione> orderByComparator)
+		throws NoSuchUtenteOrganizzazioneException {
+
+		UtenteOrganizzazione utenteOrganizzazione = fetchByU_P_Last(
+			utenteId, preferito, orderByComparator);
+
+		if (utenteOrganizzazione != null) {
+			return utenteOrganizzazione;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("utenteId=");
+		sb.append(utenteId);
+
+		sb.append(", preferito=");
+		sb.append(preferito);
+
+		sb.append("}");
+
+		throw new NoSuchUtenteOrganizzazioneException(sb.toString());
+	}
+
+	/**
+	 * Returns the last utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	@Override
+	public UtenteOrganizzazione fetchByU_P_Last(
+		long utenteId, boolean preferito,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator) {
+
+		int count = countByU_P(utenteId, preferito);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<UtenteOrganizzazione> list = findByU_P(
+			utenteId, preferito, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the utente organizzaziones before and after the current utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteOrganizzazionePK the primary key of the current utente organizzazione
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a utente organizzazione with the primary key could not be found
+	 */
+	@Override
+	public UtenteOrganizzazione[] findByU_P_PrevAndNext(
+			UtenteOrganizzazionePK utenteOrganizzazionePK, long utenteId,
+			boolean preferito,
+			OrderByComparator<UtenteOrganizzazione> orderByComparator)
+		throws NoSuchUtenteOrganizzazioneException {
+
+		UtenteOrganizzazione utenteOrganizzazione = findByPrimaryKey(
+			utenteOrganizzazionePK);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			UtenteOrganizzazione[] array = new UtenteOrganizzazioneImpl[3];
+
+			array[0] = getByU_P_PrevAndNext(
+				session, utenteOrganizzazione, utenteId, preferito,
+				orderByComparator, true);
+
+			array[1] = utenteOrganizzazione;
+
+			array[2] = getByU_P_PrevAndNext(
+				session, utenteOrganizzazione, utenteId, preferito,
+				orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected UtenteOrganizzazione getByU_P_PrevAndNext(
+		Session session, UtenteOrganizzazione utenteOrganizzazione,
+		long utenteId, boolean preferito,
+		OrderByComparator<UtenteOrganizzazione> orderByComparator,
+		boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(4);
+		}
+
+		sb.append(_SQL_SELECT_UTENTEORGANIZZAZIONE_WHERE);
+
+		sb.append(_FINDER_COLUMN_U_P_UTENTEID_2);
+
+		sb.append(_FINDER_COLUMN_U_P_PREFERITO_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(UtenteOrganizzazioneModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(utenteId);
+
+		queryPos.add(preferito);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						utenteOrganizzazione)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<UtenteOrganizzazione> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the utente organizzaziones where utenteId = &#63; and preferito = &#63; from the database.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 */
+	@Override
+	public void removeByU_P(long utenteId, boolean preferito) {
+		for (UtenteOrganizzazione utenteOrganizzazione :
+				findByU_P(
+					utenteId, preferito, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+					null)) {
+
+			remove(utenteOrganizzazione);
+		}
+	}
+
+	/**
+	 * Returns the number of utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the number of matching utente organizzaziones
+	 */
+	@Override
+	public int countByU_P(long utenteId, boolean preferito) {
+		FinderPath finderPath = _finderPathCountByU_P;
+
+		Object[] finderArgs = new Object[] {utenteId, preferito};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_UTENTEORGANIZZAZIONE_WHERE);
+
+			sb.append(_FINDER_COLUMN_U_P_UTENTEID_2);
+
+			sb.append(_FINDER_COLUMN_U_P_PREFERITO_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(utenteId);
+
+				queryPos.add(preferito);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_U_P_UTENTEID_2 =
+		"utenteOrganizzazione.id.utenteId = ? AND ";
+
+	private static final String _FINDER_COLUMN_U_P_PREFERITO_2 =
+		"utenteOrganizzazione.preferito = ?";
+
 	public UtenteOrganizzazionePersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -2797,15 +3664,6 @@ public class UtenteOrganizzazionePersistenceImpl
 			new Object[] {
 				utenteOrganizzazione.getUuid(),
 				utenteOrganizzazione.getGroupId()
-			},
-			utenteOrganizzazione);
-
-		finderCache.putResult(
-			_finderPathFetchByO_U_P,
-			new Object[] {
-				utenteOrganizzazione.getOrganizationId(),
-				utenteOrganizzazione.getUtenteId(),
-				utenteOrganizzazione.isPreferito()
 			},
 			utenteOrganizzazione);
 	}
@@ -2897,16 +3755,6 @@ public class UtenteOrganizzazionePersistenceImpl
 		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, utenteOrganizzazioneModelImpl);
-
-		args = new Object[] {
-			utenteOrganizzazioneModelImpl.getOrganizationId(),
-			utenteOrganizzazioneModelImpl.getUtenteId(),
-			utenteOrganizzazioneModelImpl.isPreferito()
-		};
-
-		finderCache.putResult(_finderPathCountByO_U_P, args, Long.valueOf(1));
-		finderCache.putResult(
-			_finderPathFetchByO_U_P, args, utenteOrganizzazioneModelImpl);
 	}
 
 	/**
@@ -3485,8 +4333,17 @@ public class UtenteOrganizzazionePersistenceImpl
 			new String[] {Long.class.getName()}, new String[] {"utenteId"},
 			false);
 
-		_finderPathFetchByO_U_P = new FinderPath(
-			FINDER_CLASS_NAME_ENTITY, "fetchByO_U_P",
+		_finderPathWithPaginationFindByO_U_P = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByO_U_P",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {"organizationId", "utenteId", "preferito"}, true);
+
+		_finderPathWithoutPaginationFindByO_U_P = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByO_U_P",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
@@ -3500,6 +4357,25 @@ public class UtenteOrganizzazionePersistenceImpl
 				Boolean.class.getName()
 			},
 			new String[] {"organizationId", "utenteId", "preferito"}, false);
+
+		_finderPathWithPaginationFindByU_P = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByU_P",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			},
+			new String[] {"utenteId", "preferito"}, true);
+
+		_finderPathWithoutPaginationFindByU_P = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByU_P",
+			new String[] {Long.class.getName(), Boolean.class.getName()},
+			new String[] {"utenteId", "preferito"}, true);
+
+		_finderPathCountByU_P = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_P",
+			new String[] {Long.class.getName(), Boolean.class.getName()},
+			new String[] {"utenteId", "preferito"}, false);
 
 		_setUtenteOrganizzazioneUtilPersistence(this);
 	}

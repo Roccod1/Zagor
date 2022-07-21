@@ -7,6 +7,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -38,7 +39,7 @@ import it.servizidigitali.profiloutente.service.persistence.UtenteOrganizzazione
 	immediate = true,
 	property = {
 		"javax.portlet.name=" + ProfiloUtentePreferenzePortletKeys.PROFILOUTENTEPREFERENZE,
-		"mvc.command.name=/salva"
+		"mvc.command.name=" + ProfiloUtentePreferenzePortletKeys.ACTION_SALVA
 	},
 	service = MVCActionCommand.class
 )
@@ -61,29 +62,35 @@ public class AggiungiModificaUtenteOrganizzazioneCanaleComunicazioneActionComman
 //		parametri entity
 		long organizationId = ParamUtil.getLong(actionRequest, ProfiloUtentePreferenzePortletKeys.ORGANIZATION_ID);
 		long listaIdCanaliComunicazione[] = ParamUtil.getLongValues(actionRequest, ProfiloUtentePreferenzePortletKeys.CANALE_COMUNICAZIONE);
-		boolean preferito = ParamUtil.getBoolean(actionRequest, ProfiloUtentePreferenzePortletKeys.DEFAULT);
-		
+		boolean preferito = ParamUtil.getBoolean(actionRequest, ProfiloUtentePreferenzePortletKeys.PREFERITO);
+		long companyId = 0;
+		long userId = 0;
+		long groupId = 0;
 		ServiceContext serviceContext = null;
 		ThemeDisplay themeDisplay = null;
 		UtenteOrganizzazione utenteOrganizzazione = null;
-		UtenteOrganizzazionePK utenteOrganizzazionePK = null;
 		User utenteCorrente = null;
+		UtenteOrganizzazionePK utenteOrganizzazionePK = null;
 		MutableRenderParameters mutableRenderParameters = actionResponse.getRenderParameters();
-		String jspDestinazioneRedirect = ProfiloUtentePreferenzePortletKeys.JSP_PREFERENZE;
+		String jspDestinazioneRedirect = ProfiloUtentePreferenzePortletKeys.JSP_HOME;
 		try {
 			
 			serviceContext = ServiceContextFactory.getInstance(actionRequest);
 			themeDisplay = serviceContext.getThemeDisplay();
-
 			utenteCorrente = themeDisplay.getUser();
+			groupId = themeDisplay.getSiteGroupId();
+			
 			if(Validator.isNull(utenteCorrente)) {
 				_log.error("Impossibile ottere l'utente loggato dal ThemeDisplay");
 				SessionErrors.add(actionRequest, ProfiloUtentePreferenzePortletKeys.ERRORE_PARAMETRI_MANCANTI);
 				jspDestinazioneRedirect = ProfiloUtentePreferenzePortletKeys.JSP_PREFERENZE_DETTAGLIO;
 				throw new Exception();
 			}
-			if(organizationId > 0 && utenteCorrente.getUserId() > 0) {
-				utenteOrganizzazionePK = new UtenteOrganizzazionePK(utenteCorrente.getUserId(), organizationId);
+
+			userId = utenteCorrente.getUserId();
+			
+			if(organizationId > 0 && userId > 0) {
+				utenteOrganizzazionePK = new UtenteOrganizzazionePK(userId, organizationId);
 				utenteOrganizzazione = utenteOrganizzazioneLocalService.fetchUtenteOrganizzazione(utenteOrganizzazionePK);	
 			}
 			
@@ -91,16 +98,27 @@ public class AggiungiModificaUtenteOrganizzazioneCanaleComunicazioneActionComman
 				utenteOrganizzazione = utenteOrganizzazioneLocalService.createUtenteOrganizzazione(utenteOrganizzazionePK);
 			}
 			
-			UtenteOrganizzazione attualePreferito = utenteOrganizzazioneLocalService.findByUtenteOrganizzazionePreferito(utenteOrganizzazionePK, true);
-			
-			if(Validator.isNotNull(attualePreferito)) {
-				attualePreferito.setPreferito(false);
-				utenteOrganizzazioneLocalService.updateUtenteOrganizzazione(attualePreferito);
+
+			if(preferito == Boolean.TRUE) {
+				UtenteOrganizzazione attualePreferito = null;
+				try {
+					attualePreferito = utenteOrganizzazioneLocalService.findByUtentePreferito(userId, true).get(0);				
+				}catch(Exception l) {
+					_log.warn("Nessuna organizzazione preferita attualmente impostata {userId: " + userId + ", organizationId: " + organizationId + "}");
+				}
+				
+				if(Validator.isNotNull(attualePreferito)) {
+					attualePreferito.setPreferito(false);
+					utenteOrganizzazioneLocalService.updateUtenteOrganizzazione(attualePreferito);
+				}
 			}
-			
 			utenteOrganizzazione.setPreferito(preferito);
-			utenteOrganizzazioneLocalService.updateUtenteOrganizzazione(utenteOrganizzazione);
-			utenteOrganizzazioneCanaleComunicazioneLocalService.updateMassivoUtenteOrganizzazioneCanaleComunicazione(utenteOrganizzazionePK.getUtenteId(), utenteOrganizzazionePK.getOrganizationId(), listaIdCanaliComunicazione);
+			utenteOrganizzazione.setCompanyId(companyId);
+			utenteOrganizzazione.setUserId(userId);
+			utenteOrganizzazione.setGroupId(groupId);
+			
+			utenteOrganizzazioneLocalService.updateUtenteOrganizzazione(utenteOrganizzazione);				
+			utenteOrganizzazioneCanaleComunicazioneLocalService.updateMassivoUtenteOrganizzazioneCanaleComunicazione(userId, groupId, companyId, organizationId, listaIdCanaliComunicazione);
 			
 		}catch(Exception e) {
 			_log.error("Impossibile procedere al salvataggio", e);

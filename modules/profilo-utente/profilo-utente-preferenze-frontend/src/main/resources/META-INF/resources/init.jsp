@@ -15,7 +15,12 @@
 <%@ page import="com.liferay.portal.kernel.util.ListUtil"%>
 <%@ page import="com.liferay.portal.kernel.model.Organization"%>
 <%@ page import="it.servizidigitali.profiloutente.model.CanaleComunicazione"%>
+<%@ page import="it.servizidigitali.profiloutente.model.UtenteOrganizzazioneCanaleComunicazione"%>
+
 
 <liferay-theme:defineObjects />
 
 <portlet:defineObjects />
+
+<portlet:renderURL var="homeURL">
+</portlet:renderURL>

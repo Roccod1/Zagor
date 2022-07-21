@@ -688,53 +688,166 @@ public interface UtenteOrganizzazionePersistence
 	public int countByUtenteId(long utenteId);
 
 	/**
-	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or throws a <code>NoSuchUtenteOrganizzazioneException</code> if it could not be found.
+	 * Returns all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
 	 *
 	 * @param organizationId the organization ID
 	 * @param utenteId the utente ID
 	 * @param preferito the preferito
-	 * @return the matching utente organizzazione
-	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 * @return the matching utente organizzaziones
 	 */
-	public UtenteOrganizzazione findByO_U_P(
-			long organizationId, long utenteId, boolean preferito)
-		throws NoSuchUtenteOrganizzazioneException;
-
-	/**
-	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param organizationId the organization ID
-	 * @param utenteId the utente ID
-	 * @param preferito the preferito
-	 * @return the matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
-	 */
-	public UtenteOrganizzazione fetchByO_U_P(
+	public java.util.List<UtenteOrganizzazione> findByO_U_P(
 		long organizationId, long utenteId, boolean preferito);
 
 	/**
-	 * Returns the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns a range of all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
 	 *
 	 * @param organizationId the organization ID
 	 * @param utenteId the utente ID
 	 * @param preferito the preferito
-	 * @param useFinderCache whether to use the finder cache
-	 * @return the matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @return the range of matching utente organizzaziones
 	 */
-	public UtenteOrganizzazione fetchByO_U_P(
-		long organizationId, long utenteId, boolean preferito,
+	public java.util.List<UtenteOrganizzazione> findByO_U_P(
+		long organizationId, long utenteId, boolean preferito, int start,
+		int end);
+
+	/**
+	 * Returns an ordered range of all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching utente organizzaziones
+	 */
+	public java.util.List<UtenteOrganizzazione> findByO_U_P(
+		long organizationId, long utenteId, boolean preferito, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator<UtenteOrganizzazione>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching utente organizzaziones
+	 */
+	public java.util.List<UtenteOrganizzazione> findByO_U_P(
+		long organizationId, long utenteId, boolean preferito, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator<UtenteOrganizzazione>
+			orderByComparator,
 		boolean useFinderCache);
 
 	/**
-	 * Removes the utente organizzazione where organizationId = &#63; and utenteId = &#63; and preferito = &#63; from the database.
+	 * Returns the first utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
 	 *
 	 * @param organizationId the organization ID
 	 * @param utenteId the utente ID
 	 * @param preferito the preferito
-	 * @return the utente organizzazione that was removed
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
 	 */
-	public UtenteOrganizzazione removeByO_U_P(
-			long organizationId, long utenteId, boolean preferito)
+	public UtenteOrganizzazione findByO_U_P_First(
+			long organizationId, long utenteId, boolean preferito,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<UtenteOrganizzazione> orderByComparator)
 		throws NoSuchUtenteOrganizzazioneException;
+
+	/**
+	 * Returns the first utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	public UtenteOrganizzazione fetchByO_U_P_First(
+		long organizationId, long utenteId, boolean preferito,
+		com.liferay.portal.kernel.util.OrderByComparator<UtenteOrganizzazione>
+			orderByComparator);
+
+	/**
+	 * Returns the last utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 */
+	public UtenteOrganizzazione findByO_U_P_Last(
+			long organizationId, long utenteId, boolean preferito,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<UtenteOrganizzazione> orderByComparator)
+		throws NoSuchUtenteOrganizzazioneException;
+
+	/**
+	 * Returns the last utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	public UtenteOrganizzazione fetchByO_U_P_Last(
+		long organizationId, long utenteId, boolean preferito,
+		com.liferay.portal.kernel.util.OrderByComparator<UtenteOrganizzazione>
+			orderByComparator);
+
+	/**
+	 * Returns the utente organizzaziones before and after the current utente organizzazione in the ordered set where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteOrganizzazionePK the primary key of the current utente organizzazione
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a utente organizzazione with the primary key could not be found
+	 */
+	public UtenteOrganizzazione[] findByO_U_P_PrevAndNext(
+			it.servizidigitali.profiloutente.service.persistence.
+				UtenteOrganizzazionePK utenteOrganizzazionePK,
+			long organizationId, long utenteId, boolean preferito,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<UtenteOrganizzazione> orderByComparator)
+		throws NoSuchUtenteOrganizzazioneException;
+
+	/**
+	 * Removes all the utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63; from the database.
+	 *
+	 * @param organizationId the organization ID
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 */
+	public void removeByO_U_P(
+		long organizationId, long utenteId, boolean preferito);
 
 	/**
 	 * Returns the number of utente organizzaziones where organizationId = &#63; and utenteId = &#63; and preferito = &#63;.
@@ -746,6 +859,163 @@ public interface UtenteOrganizzazionePersistence
 	 */
 	public int countByO_U_P(
 		long organizationId, long utenteId, boolean preferito);
+
+	/**
+	 * Returns all the utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the matching utente organizzaziones
+	 */
+	public java.util.List<UtenteOrganizzazione> findByU_P(
+		long utenteId, boolean preferito);
+
+	/**
+	 * Returns a range of all the utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @return the range of matching utente organizzaziones
+	 */
+	public java.util.List<UtenteOrganizzazione> findByU_P(
+		long utenteId, boolean preferito, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching utente organizzaziones
+	 */
+	public java.util.List<UtenteOrganizzazione> findByU_P(
+		long utenteId, boolean preferito, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<UtenteOrganizzazione>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>UtenteOrganizzazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param start the lower bound of the range of utente organizzaziones
+	 * @param end the upper bound of the range of utente organizzaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching utente organizzaziones
+	 */
+	public java.util.List<UtenteOrganizzazione> findByU_P(
+		long utenteId, boolean preferito, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<UtenteOrganizzazione>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 */
+	public UtenteOrganizzazione findByU_P_First(
+			long utenteId, boolean preferito,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<UtenteOrganizzazione> orderByComparator)
+		throws NoSuchUtenteOrganizzazioneException;
+
+	/**
+	 * Returns the first utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	public UtenteOrganizzazione fetchByU_P_First(
+		long utenteId, boolean preferito,
+		com.liferay.portal.kernel.util.OrderByComparator<UtenteOrganizzazione>
+			orderByComparator);
+
+	/**
+	 * Returns the last utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a matching utente organizzazione could not be found
+	 */
+	public UtenteOrganizzazione findByU_P_Last(
+			long utenteId, boolean preferito,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<UtenteOrganizzazione> orderByComparator)
+		throws NoSuchUtenteOrganizzazioneException;
+
+	/**
+	 * Returns the last utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching utente organizzazione, or <code>null</code> if a matching utente organizzazione could not be found
+	 */
+	public UtenteOrganizzazione fetchByU_P_Last(
+		long utenteId, boolean preferito,
+		com.liferay.portal.kernel.util.OrderByComparator<UtenteOrganizzazione>
+			orderByComparator);
+
+	/**
+	 * Returns the utente organizzaziones before and after the current utente organizzazione in the ordered set where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteOrganizzazionePK the primary key of the current utente organizzazione
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next utente organizzazione
+	 * @throws NoSuchUtenteOrganizzazioneException if a utente organizzazione with the primary key could not be found
+	 */
+	public UtenteOrganizzazione[] findByU_P_PrevAndNext(
+			it.servizidigitali.profiloutente.service.persistence.
+				UtenteOrganizzazionePK utenteOrganizzazionePK,
+			long utenteId, boolean preferito,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<UtenteOrganizzazione> orderByComparator)
+		throws NoSuchUtenteOrganizzazioneException;
+
+	/**
+	 * Removes all the utente organizzaziones where utenteId = &#63; and preferito = &#63; from the database.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 */
+	public void removeByU_P(long utenteId, boolean preferito);
+
+	/**
+	 * Returns the number of utente organizzaziones where utenteId = &#63; and preferito = &#63;.
+	 *
+	 * @param utenteId the utente ID
+	 * @param preferito the preferito
+	 * @return the number of matching utente organizzaziones
+	 */
+	public int countByU_P(long utenteId, boolean preferito);
 
 	/**
 	 * Caches the utente organizzazione in the entity cache if it is enabled.

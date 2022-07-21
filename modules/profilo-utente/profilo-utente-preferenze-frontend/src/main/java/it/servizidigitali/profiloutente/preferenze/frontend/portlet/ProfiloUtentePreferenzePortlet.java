@@ -1,9 +1,15 @@
 package it.servizidigitali.profiloutente.preferenze.frontend.portlet;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
@@ -18,10 +24,10 @@ import javax.portlet.RenderResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
-import it.servizidigitali.profiloutente.model.CanaleComunicazione;
+import it.servizidigitali.profiloutente.model.UtenteOrganizzazione;
 import it.servizidigitali.profiloutente.preferenze.frontend.constants.ProfiloUtentePreferenzePortletKeys;
 import it.servizidigitali.profiloutente.service.CanaleComunicazioneLocalService;
+import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneLocalService;
 
 /**
  * @author filierim
@@ -49,20 +55,36 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 	private CanaleComunicazioneLocalService canaleComunicazioneLocalService;
 	
 	@Reference
-	private ServizioEnteLocalService servizioEnteLocalService;
+	private UtenteOrganizzazioneLocalService utenteOrganizzazioneLocalService;
+	
+	@Reference
+	private OrganizationLocalService organizationLocalService;
 	
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
-		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_ORGANIZZAZIONI, new ArrayList<Organization>());
+		
+		ServiceContext serviceContext = null;
+		ThemeDisplay themeDisplay = null;
+		User utenteCorrente = null;
+		
+		List<Organization> listaOrganizzazioni = null;
+		List<UtenteOrganizzazione> listaUtenteOrganizzazione = null;
 		
 		try {
-//			List<Organization> listaEnti = servizioEnteLocalService.
-//		
+			serviceContext = ServiceContextFactory.getInstance(renderRequest);
+			themeDisplay = serviceContext.getThemeDisplay();
+			utenteCorrente = themeDisplay.getUser();
+			listaOrganizzazioni = organizationLocalService.getOrganizations(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			listaUtenteOrganizzazione = utenteOrganizzazioneLocalService.getOrganizzazioniUtenteConfigurate(utenteCorrente.getUserId());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			_log.error("Impossibile recuperare le informazion pe l'utente corrente");
 		}
 		
+		if(Validator.isNull(listaOrganizzazioni)) {
+			listaOrganizzazioni = new ArrayList<Organization>();
+		}
+		
+		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_ORGANIZZAZIONI, listaOrganizzazioni);
 		super.render(renderRequest, renderResponse);
 	}
 }

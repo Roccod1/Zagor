@@ -403,13 +403,14 @@ public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceUtil {
 
 	public static List<UtenteOrganizzazioneCanaleComunicazione>
 			updateMassivoUtenteOrganizzazioneCanaleComunicazione(
-				long utenteId, long organizationId,
+				long userId, long groupId, long companyId, long organizationId,
 				long[] listaIdCanaliComunicazione)
 		throws Exception {
 
 		return getService().
 			updateMassivoUtenteOrganizzazioneCanaleComunicazione(
-				utenteId, organizationId, listaIdCanaliComunicazione);
+				userId, groupId, companyId, organizationId,
+				listaIdCanaliComunicazione);
 	}
 
 	/**

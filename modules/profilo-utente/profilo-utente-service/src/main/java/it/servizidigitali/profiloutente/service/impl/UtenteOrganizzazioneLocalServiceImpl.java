@@ -41,7 +41,10 @@ public class UtenteOrganizzazioneLocalServiceImpl extends UtenteOrganizzazioneLo
 		return utenteOrganizzazionePersistence.findByUtenteId(utenteId);
 	}
 	
-	public UtenteOrganizzazione findByUtenteOrganizzazionePreferito(UtenteOrganizzazionePK utenteOrganizzazionePK, boolean preferito) throws Exception{
-		return utenteOrganizzazionePersistence.findByO_U_P(utenteOrganizzazionePK.getOrganizationId(), utenteOrganizzazionePK.getUtenteId(), preferito);
+	public List<UtenteOrganizzazione> findByUtenteOrganizzazionePreferito(long userId, long organizationId, boolean preferito) throws Exception{
+		return utenteOrganizzazionePersistence.findByO_U_P(organizationId, userId, preferito);
+	}
+	public List<UtenteOrganizzazione> findByUtentePreferito(long userId, boolean preferito) throws Exception{
+		return utenteOrganizzazionePersistence.findByU_P(userId, preferito);
 	}
 }

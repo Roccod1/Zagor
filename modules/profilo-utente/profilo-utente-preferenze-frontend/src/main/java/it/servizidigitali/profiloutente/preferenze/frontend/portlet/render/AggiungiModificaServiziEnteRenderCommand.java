@@ -69,6 +69,7 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 		List<UtenteOrganizzazioneCanaleComunicazione> listaUtenteOrganizzazioneCanaleComunicazione = null;
 		ServiceContext serviceContext = null;
 		ThemeDisplay themeDisplay = null;
+		Organization organization = null;
 		UtenteOrganizzazione utenteOrganizzazione = null;
 		
 		long organizationId = ParamUtil.getLong(renderRequest, ProfiloUtentePreferenzePortletKeys.ORGANIZATION_ID);
@@ -79,19 +80,28 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 			User utenteCorrente = themeDisplay.getUser();
 			
 			listaCanaliComunicazione = canaleComunicazioneLocalService.getCanaleComunicazionesAttivi(true);
-			listaOrganizzazioni = getListaOrganizzazioniFiltrata(organizationLocalService.getOrganizations(QueryUtil.ALL_POS, QueryUtil.ALL_POS), utenteCorrente.getUserId());
 			listaUtenteOrganizzazioneCanaleComunicazione = utenteOrganizzazioneCanaleComunicazioneLocalService.getListaCanaleComunicazioneByUtenteOrganization(utenteCorrente.getUserId(), organizationId);
 			
-			if(organizationId > 0) {
-				UtenteOrganizzazionePK utenteOrganizzazionePK = new UtenteOrganizzazionePK(utenteCorrente.getUserId(), organizationId);
-				utenteOrganizzazione = utenteOrganizzazioneLocalService.fetchUtenteOrganizzazione(utenteOrganizzazionePK);
-				renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.ORGANIZZAZIONE, utenteOrganizzazione);
+			listaOrganizzazioni = organizationLocalService.getOrganizations(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			
+			if(organizationId == 0) {
+				listaOrganizzazioni = getListaOrganizzazioniFiltrata(listaOrganizzazioni, utenteCorrente.getUserId());				
+			}
+			organization = organizationLocalService.getOrganization(organizationId);
+			
+			UtenteOrganizzazionePK utenteOrganizzazionePK = new UtenteOrganizzazionePK(utenteCorrente.getUserId(), organizationId);
+			utenteOrganizzazione = utenteOrganizzazioneLocalService.fetchUtenteOrganizzazione(utenteOrganizzazionePK);
+		
+			if(Validator.isNull(utenteOrganizzazione)) {
+				_log.warn("Nessun UtenteOrganizzazione con PK {utenteId="+utenteCorrente.getUserId()+", organizationId="+organizationId+"}");
 			}
 		}catch(Exception e) {
 			_log.error("Errore nel render della pagina", e);
-			return ProfiloUtentePreferenzePortletKeys.JSP_PREFERENZE;
+			return ProfiloUtentePreferenzePortletKeys.JSP_HOME;
 		}
-		
+
+		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.UTENTE_ORGANIZZAZIONE, utenteOrganizzazione);
+		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.ORGANIZZAZIONE, organization);
 		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_CANALI_COMUNICAZIONE, listaCanaliComunicazione);
 		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_ORGANIZZAZIONI, listaOrganizzazioni);
 		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_UTENTE_ORGANIZZAZIONE_CANALE_COMUNICAZIONE, listaUtenteOrganizzazioneCanaleComunicazione);
