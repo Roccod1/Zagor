@@ -7,21 +7,14 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
 
-import java.io.File;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -71,10 +64,7 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {			
 		
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		FileEntry fileCaricato = null;
 		
-		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		long idForm = ParamUtil.getLong(actionRequest, GestioneFormsPortletKeys.ID_FORM);
 		String codice = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.CODICE);
 		String nome = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.NOME);
@@ -82,7 +72,7 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		String modelloForm = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.MODELLO_FORM);
 		
 		
-		String fileName = uploadRequest.getFileName(GestioneFormsPortletKeys.FILE);
+
 		
 		long indiceListaDefinizioneAllegati = ParamUtil.getLong(actionRequest, GestioneFormsPortletKeys.DIMENSIONE_LISTA_ALLEGATI);
 			
@@ -118,7 +108,6 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		
 		// Upload allegato in document repository
 		
-		File file = uploadRequest.getFile(GestioneFormsPortletKeys.FILE);
 //		if(Validator.isNotNull(file) && file.isFile()) {
 //			String mimeType = uploadRequest.getContentType();
 //			fileCaricato = definizioneAllegatoLocalService.uploadAllegato(file, themeDisplay, fileName, form.getFormId(), mimeType, serviceContext);
@@ -132,6 +121,7 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 			String denominazione = ParamUtil.getString(actionRequest, "listaDefinizioneAllegato[" + i + "].denominazione");
 			String[] tipiFileAmmessi = ParamUtil.getParameterValues(actionRequest, "listaDefinizioneAllegato[" + i + "].tipiFileAmmessi");
 			String[] codiciTipologiaDocumento = ParamUtil.getParameterValues(actionRequest, "listaDefinizioneAllegato[" + i + "].codiciTipologiaDocumento");
+			String idAllegatoTemporaneo = ParamUtil.getString(actionRequest, "listaDefinizioneAllegato["+ i +"].idAllegatoTemporaneo");
 			boolean obbligatorio = ParamUtil.getBoolean(actionRequest, "listaDefinizioneAllegato[" + i + "].obbligatorio");
 			
 			DefinizioneAllegato allegato = definizioneAllegatoLocalService.createDefinizioneAllegato(0);
@@ -160,16 +150,16 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 				allegato.setCodiciTipologiaDocumento(String.join(",", codiciTipologiaDocumento));
 			}
 			
-			if(Validator.isNotNull(fileCaricato)) {
-				allegato.setFilenameModello(fileCaricato.getFileName());
-			}
+//			if(Validator.isNotNull(fileCaricato)) {
+//				allegato.setFilenameModello(fileCaricato.getFileName());
+//			}
 			
 			allegato.setObbligatorio(obbligatorio);
 			allegato.setFormId(form.getFormId());
 			
-			if(Validator.isNotNull(fileCaricato)) {
-				allegato.setFileEntryId(fileCaricato.getFileEntryId());
-			}
+//			if(Validator.isNotNull(fileCaricato)) {
+//				allegato.setFileEntryId(fileCaricato.getFileEntryId());
+//			}
 			
 			definizioneAllegatoLocalService.updateDefinizioneAllegato(allegato);
 		}
