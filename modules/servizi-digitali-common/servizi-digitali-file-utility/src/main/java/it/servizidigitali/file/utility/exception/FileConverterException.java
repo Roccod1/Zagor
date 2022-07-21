@@ -1,4 +1,4 @@
-package it.servizidigitali.file.converter.exception;
+package it.servizidigitali.file.utility.exception;
 
 /**
  * @author pindi

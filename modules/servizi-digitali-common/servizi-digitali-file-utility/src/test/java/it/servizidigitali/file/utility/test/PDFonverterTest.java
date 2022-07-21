@@ -1,4 +1,4 @@
-package it.servizidigitali.file.converter.test;
+package it.servizidigitali.file.utility.test;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import it.servizidigitali.file.converter.pdf.PDFConverter;
+import it.servizidigitali.file.utility.pdf.PDFConverter;
 
 /**
  *
