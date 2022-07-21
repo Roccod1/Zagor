@@ -276,6 +276,21 @@ public interface TipologiaModel
 	 */
 	public void setInvioEmailCittadino(boolean invioEmailCittadino);
 
+	/**
+	 * Returns the chatbot inline intent of this tipologia.
+	 *
+	 * @return the chatbot inline intent of this tipologia
+	 */
+	@AutoEscape
+	public String getChatbotInlineIntent();
+
+	/**
+	 * Sets the chatbot inline intent of this tipologia.
+	 *
+	 * @param chatbotInlineIntent the chatbot inline intent of this tipologia
+	 */
+	public void setChatbotInlineIntent(String chatbotInlineIntent);
+
 	@Override
 	public Tipologia cloneWithOriginalValues();
 

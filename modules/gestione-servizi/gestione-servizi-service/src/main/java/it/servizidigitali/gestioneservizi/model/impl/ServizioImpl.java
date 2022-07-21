@@ -14,8 +14,28 @@
 
 package it.servizidigitali.gestioneservizi.model.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import it.servizidigitali.gestioneservizi.model.Tipologia;
+
 /**
  * @author Brian Wing Shun Chan
  */
 public class ServizioImpl extends ServizioBaseImpl {
+	
+	private List<Tipologia> listaTipologie = null;
+	
+	public ServizioImpl() {
+		this.listaTipologie = new ArrayList<Tipologia>();
+	}
+	
+	public List<Tipologia> getListaTipologie() {
+		return listaTipologie;
+	}
+	public void setListaTipologie(List<Tipologia> listaTipologie) {
+		this.listaTipologie = listaTipologie;
+	}
+	
+	
 }

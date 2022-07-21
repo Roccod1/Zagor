@@ -87,6 +87,9 @@ public interface ServizioLocalService
 
 	public void addTipologiaServizios(long tipologiaId, long[] servizioIds);
 
+	public Servizio aggiornaServizio(Servizio servizioDaAggiornare)
+		throws Exception;
+
 	public void clearTipologiaServizios(long tipologiaId);
 
 	/**
@@ -267,6 +270,9 @@ public interface ServizioLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Servizio getServizio(long servizioId) throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Servizio getServizioById(Long servizioId) throws Exception;
+
 	/**
 	 * Returns the servizio matching the UUID and group.
 	 *
@@ -356,6 +362,26 @@ public interface ServizioLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public boolean hasTipologiaServizios(long tipologiaId);
+
+	public List<Servizio> listaServiziAttivi(
+			Boolean attivo, Integer start, Integer end)
+		throws Exception;
+
+	/**
+	 * @param nome
+	 * @param codice
+	 * @param soloServiziAttivi
+	 * @param cur: pagina attuale
+	 * @param delta: numero elementi per pagina
+	 * @param nomeOrdinamento
+	 * @param direzioneOrdinamento
+	 * @return
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Servizio> searchServizio(
+			String nome, String codice, Boolean soloServiziAttivi, int cur,
+			int delta, String nomeOrdinamento, String direzioneOrdinamento)
+		throws Exception;
 
 	public void setTipologiaServizios(long tipologiaId, long[] servizioIds);
 

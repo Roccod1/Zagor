@@ -56,6 +56,8 @@ public class AreaTematicaWrapper
 		attributes.put("codice", getCodice());
 		attributes.put("sportello", getSportello());
 		attributes.put("uriVocabolario", getUriVocabolario());
+		attributes.put(
+			"denominazioneVocabolario", getDenominazioneVocabolario());
 		attributes.put("ordine", getOrdine());
 		attributes.put("visibile", isVisibile());
 		attributes.put("attiva", isAttiva());
@@ -143,6 +145,13 @@ public class AreaTematicaWrapper
 			setUriVocabolario(uriVocabolario);
 		}
 
+		String denominazioneVocabolario = (String)attributes.get(
+			"denominazioneVocabolario");
+
+		if (denominazioneVocabolario != null) {
+			setDenominazioneVocabolario(denominazioneVocabolario);
+		}
+
 		Integer ordine = (Integer)attributes.get("ordine");
 
 		if (ordine != null) {
@@ -215,6 +224,16 @@ public class AreaTematicaWrapper
 	@Override
 	public Date getCreateDate() {
 		return model.getCreateDate();
+	}
+
+	/**
+	 * Returns the denominazione vocabolario of this area tematica.
+	 *
+	 * @return the denominazione vocabolario of this area tematica
+	 */
+	@Override
+	public String getDenominazioneVocabolario() {
+		return model.getDenominazioneVocabolario();
 	}
 
 	/**
@@ -420,6 +439,16 @@ public class AreaTematicaWrapper
 	@Override
 	public void setCreateDate(Date createDate) {
 		model.setCreateDate(createDate);
+	}
+
+	/**
+	 * Sets the denominazione vocabolario of this area tematica.
+	 *
+	 * @param denominazioneVocabolario the denominazione vocabolario of this area tematica
+	 */
+	@Override
+	public void setDenominazioneVocabolario(String denominazioneVocabolario) {
+		model.setDenominazioneVocabolario(denominazioneVocabolario);
 	}
 
 	/**

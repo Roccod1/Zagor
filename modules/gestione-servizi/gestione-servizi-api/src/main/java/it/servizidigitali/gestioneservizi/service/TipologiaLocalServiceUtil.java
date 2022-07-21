@@ -293,6 +293,15 @@ public class TipologiaLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
+	public static List<Tipologia> getListaTipologiaOrdinata(
+			int cur, int delta, String nomeOrdinamento,
+			String direzioneOrdinamento)
+		throws Exception {
+
+		return getService().getListaTipologiaOrdinata(
+			cur, delta, nomeOrdinamento, direzioneOrdinamento);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -434,6 +443,12 @@ public class TipologiaLocalServiceUtil {
 
 	public static boolean hasServizioTipologias(long servizioId) {
 		return getService().hasServizioTipologias(servizioId);
+	}
+
+	public static Tipologia salvaTipologia(Tipologia tipologia)
+		throws Exception {
+
+		return getService().salvaTipologia(tipologia);
 	}
 
 	public static void setServizioTipologias(
