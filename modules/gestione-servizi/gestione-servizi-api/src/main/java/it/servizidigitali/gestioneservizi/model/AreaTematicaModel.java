@@ -280,6 +280,21 @@ public interface AreaTematicaModel
 	public void setUriVocabolario(String uriVocabolario);
 
 	/**
+	 * Returns the denominazione vocabolario of this area tematica.
+	 *
+	 * @return the denominazione vocabolario of this area tematica
+	 */
+	@AutoEscape
+	public String getDenominazioneVocabolario();
+
+	/**
+	 * Sets the denominazione vocabolario of this area tematica.
+	 *
+	 * @param denominazioneVocabolario the denominazione vocabolario of this area tematica
+	 */
+	public void setDenominazioneVocabolario(String denominazioneVocabolario);
+
+	/**
 	 * Returns the ordine of this area tematica.
 	 *
 	 * @return the ordine of this area tematica

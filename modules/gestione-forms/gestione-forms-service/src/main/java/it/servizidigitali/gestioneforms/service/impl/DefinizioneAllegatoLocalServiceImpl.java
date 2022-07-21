@@ -14,23 +14,15 @@
 
 package it.servizidigitali.gestioneforms.service.impl;
 
-import com.liferay.document.library.kernel.exception.NoSuchFolderException;
-import com.liferay.document.library.kernel.model.DLFolder;
-import com.liferay.document.library.kernel.model.DLFolderConstants;
-import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
-import com.liferay.document.library.kernel.service.DLFolderLocalServiceUtil;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.repository.model.Folder;
-import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
-import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,37 +53,6 @@ public class DefinizioneAllegatoLocalServiceImpl
 		return listaDefinizioneAllegati;
 	}
 	
-	public FileEntry uploadAllegato(File allegato, ThemeDisplay themeDisplay, String fileName, long formId, String mimeType, ServiceContext serviceContext) throws Exception{
-		
-		long groupId = GroupLocalServiceUtil.getGroup(themeDisplay.getCompanyId(), "Guest").getGroupId();
-		Folder cartellaAllegatiForm = null;
-
-		FileEntry fileEntry = null;
-		byte[] fileByteArray = FileUtil.getBytes(allegato);
-
-		DLFolder folderConfigurazionePiattaforma = DLFolderLocalServiceUtil.getFolder(groupId,
-				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
-				"Configurazione Piattaforma");
-		
-		DLFolder folderForm = DLFolderLocalServiceUtil.getFolder(groupId, folderConfigurazionePiattaforma.getFolderId(),
-				"Form");
-		
-		DLFolder folderTemplate = DLFolderLocalServiceUtil.getFolder(groupId, folderForm.getFolderId(),"Template");
-		
-		try {
-			DLFolder cartellaForm = DLFolderLocalServiceUtil.getFolder(groupId, folderTemplate.getFolderId(),String.valueOf(formId));		
-			fileEntry = DLAppLocalServiceUtil.addFileEntry(null, themeDisplay.getUserId(), cartellaForm.getRepositoryId(), cartellaForm.getFolderId(), fileName, mimeType, fileByteArray, null, null, serviceContext);
-		}catch(NoSuchFolderException e) {
-			_log.info("Cartella allegati per form con ID " + formId + " non presente a sistema,creazione");
-			cartellaAllegatiForm = DLAppLocalServiceUtil.addFolder(themeDisplay.getUserId(),
-					folderTemplate.getRepositoryId(), folderTemplate.getFolderId(), String.valueOf(formId),
-					String.valueOf(formId), serviceContext);
-			fileEntry = DLAppLocalServiceUtil.addFileEntry(null, themeDisplay.getUserId(), cartellaAllegatiForm.getRepositoryId(), cartellaAllegatiForm.getFolderId(), fileName, mimeType, fileByteArray, null, null, serviceContext);
-		}
-
-		return fileEntry;
-	}
-	
 	public DefinizioneAllegato cancellaAllegati(String[] allegatiDaEliminare) {
 		DefinizioneAllegato allegato = null;
 		for(String allegatoId : allegatiDaEliminare) {
@@ -105,6 +66,37 @@ public class DefinizioneAllegatoLocalServiceImpl
 		}
 		
 		return allegato;
+	}
+	
+	public long uploadAllegatoTemporaneo(File allegato) throws Exception{
+		File tempFile = null;
+		String tmpDir = System.getProperty("java.io.tmpdir");
+		long idTemporaneo = 0;
+
+		if(Validator.isNotNull(allegato)) {
+			byte[] allegatoCaricato = FileUtil.getBytes(allegato);
+			idTemporaneo = counterLocalService.increment();
+			String percorsoFile = tmpDir + File.separator + "allegato-" + idTemporaneo;
+			
+			tempFile = new File(percorsoFile);
+			FileOutputStream fos = new FileOutputStream(tempFile);
+			fos.write(allegatoCaricato);
+			fos.close();
+		}else {
+			_log.error("DefinizioneAllegatoLocalServiceImpl :: uploadAllegatoTemporaneo :: Impossibile recuperare allegato caricato");
+		}
+		
+		return idTemporaneo;
+	}
+	
+	public FileEntry uploadAllegatoDocumentMediaRepository(String idAllegatoTemporaneo) {
+		FileEntry allegatoCaricato = null;
+		String tmpDir = System.getProperty("java.io.tmpdir");
+		String percorsoFileTemporaneo = tmpDir + File.separator + "allegato-" + idAllegatoTemporaneo;
+		
+		File fileTemporaneo = new File(percorsoFileTemporaneo);
+
+		return allegatoCaricato;
 	}
 
 }

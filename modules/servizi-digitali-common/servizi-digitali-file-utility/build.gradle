@@ -1,0 +1,6 @@
+dependencies {
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+	compileInclude group: 'com.github.jhonnymertz', name: 'java-wkhtmltopdf-wrapper', version: '1.1.13-RELEASE'
+	
+	testCompile group: "junit", name: "junit", version: "4.12"
+}

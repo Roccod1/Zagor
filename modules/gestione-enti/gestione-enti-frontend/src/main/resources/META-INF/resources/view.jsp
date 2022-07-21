@@ -1,5 +1,10 @@
-<%@ include file="/init.jsp" %>
+<%@ include file="init.jsp" %>
 
-<p>
-	<b><liferay-ui:message key="gestioneenti.caption"/></b>
-</p>
+<%
+	List<Organization> organizzazioni = (List<Organization>) renderRequest.getAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONI);
+%>
+
+<h2><liferay-ui:message key="elenco-enti"/></h2>
+
+<%@ include file="formRicerca.jsp" %>
+<%@ include file="risultatiRicerca.jsp" %>

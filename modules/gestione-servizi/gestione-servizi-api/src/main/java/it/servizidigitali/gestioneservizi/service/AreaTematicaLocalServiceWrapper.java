@@ -374,6 +374,17 @@ public class AreaTematicaLocalServiceWrapper
 		return _areaTematicaLocalService.getIndexableActionableDynamicQuery();
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.gestioneservizi.model.AreaTematica>
+			getListaAreeTematicheOrdinata(
+				int cur, int delta, String nomeOrdinamento,
+				String direzioneOrdinamento)
+		throws Exception {
+
+		return _areaTematicaLocalService.getListaAreeTematicheOrdinata(
+			cur, delta, nomeOrdinamento, direzioneOrdinamento);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -393,6 +404,16 @@ public class AreaTematicaLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _areaTematicaLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public it.servizidigitali.gestioneservizi.model.AreaTematica
+			salvaAreaTematica(
+				it.servizidigitali.gestioneservizi.model.AreaTematica
+					areaTematica)
+		throws Exception {
+
+		return _areaTematicaLocalService.salvaAreaTematica(areaTematica);
 	}
 
 	/**

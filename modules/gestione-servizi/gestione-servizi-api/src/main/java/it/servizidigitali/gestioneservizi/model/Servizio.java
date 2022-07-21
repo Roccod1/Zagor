@@ -58,4 +58,11 @@ public interface Servizio extends PersistedModel, ServizioModel {
 
 		};
 
+	public java.util.List<it.servizidigitali.gestioneservizi.model.Tipologia>
+		getListaTipologie();
+
+	public void setListaTipologie(
+		java.util.List<it.servizidigitali.gestioneservizi.model.Tipologia>
+			listaTipologie);
+
 }

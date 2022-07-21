@@ -450,15 +450,19 @@ public class DefinizioneAllegatoLocalServiceWrapper
 	}
 
 	@Override
-	public com.liferay.portal.kernel.repository.model.FileEntry uploadAllegato(
-			java.io.File allegato,
-			com.liferay.portal.kernel.theme.ThemeDisplay themeDisplay,
-			String fileName, long formId, String mimeType,
-			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+	public com.liferay.portal.kernel.repository.model.FileEntry
+		uploadAllegatoDocumentMediaRepository(String idAllegatoTemporaneo) {
+
+		return _definizioneAllegatoLocalService.
+			uploadAllegatoDocumentMediaRepository(idAllegatoTemporaneo);
+	}
+
+	@Override
+	public long uploadAllegatoTemporaneo(java.io.File allegato)
 		throws Exception {
 
-		return _definizioneAllegatoLocalService.uploadAllegato(
-			allegato, themeDisplay, fileName, formId, mimeType, serviceContext);
+		return _definizioneAllegatoLocalService.uploadAllegatoTemporaneo(
+			allegato);
 	}
 
 	@Override
