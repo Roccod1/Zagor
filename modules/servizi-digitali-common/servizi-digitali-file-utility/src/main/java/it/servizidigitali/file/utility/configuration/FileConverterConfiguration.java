@@ -1,4 +1,4 @@
-package it.servizidigitali.file.converter.configuration;
+package it.servizidigitali.file.utility.configuration;
 
 import aQute.bnd.annotation.metatype.Meta;
 
@@ -7,7 +7,7 @@ import aQute.bnd.annotation.metatype.Meta;
  * @author pindi
  *
  */
-@Meta.OCD(id = "it.servizidigitali.file.converter.configuration.FileConverterConfiguration", name = "Configurazioni conversioni file")
+@Meta.OCD(id = "it.servizidigitali.file.utility.configuration.FileConverterConfiguration", name = "Configurazioni conversioni file")
 public interface FileConverterConfiguration {
 
 	@Meta.AD(deflt = "wkhtmltopdf", required = false, description = "Path eseguibile wkhtmltopdf")

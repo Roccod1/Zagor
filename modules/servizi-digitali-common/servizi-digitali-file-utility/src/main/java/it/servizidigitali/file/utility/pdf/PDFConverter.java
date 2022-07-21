@@ -1,4 +1,4 @@
-package it.servizidigitali.file.converter.pdf;
+package it.servizidigitali.file.utility.pdf;
 
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.Pdf;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.WrapperConfig;
@@ -13,14 +13,14 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
 
-import it.servizidigitali.file.converter.configuration.FileConverterConfiguration;
-import it.servizidigitali.file.converter.exception.FileConverterException;
+import it.servizidigitali.file.utility.configuration.FileConverterConfiguration;
+import it.servizidigitali.file.utility.exception.FileConverterException;
 
 /**
  * @author pindi
  *
  */
-@Component(name = "PDFConverter", immediate = true, service = PDFConverter.class, configurationPid = "it.servizidigitali.file.converter.configuration.FileConverterConfiguration")
+@Component(name = "PDFConverter", immediate = true, service = PDFConverter.class, configurationPid = "it.servizidigitali.file.utility.configuration.FileConverterConfiguration")
 public class PDFConverter {
 
 	private static final Log log = LogFactoryUtil.getLog(PDFConverter.class.getName());
