@@ -13,7 +13,7 @@ import it.servizidigitali.camunda.integration.client.exception.CamundaClientExce
 /**
  * @author pindi
  */
-public interface CamundaApi {
+public interface CamundaClient {
 
 	static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
