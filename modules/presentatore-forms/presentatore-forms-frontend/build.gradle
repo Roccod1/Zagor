@@ -3,3 +3,32 @@ dependencies {
 
 	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.0.2"
 }
+
+buildscript {
+    dependencies {
+        classpath group: "com.liferay", name: "com.liferay.gradle.plugins.node", version: "4.6.18"
+    }
+
+    repositories {
+        maven {
+            url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+        }
+    }
+}
+
+apply plugin: "com.liferay.node"
+
+task buildFrontend(type: Copy) {
+
+   dependsOn packageRunBuild
+   println '****STARTING FRONTEND BUILD******'
+
+	from "../../../alpaca/dist"
+	into "src/main/resources/META-INF/resources/dist"
+	include "*.js"
+   
+   println '****END FRONTEND BUILD******'
+   
+}
+
+compileJava.dependsOn(buildFrontend)
