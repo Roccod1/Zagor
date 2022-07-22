@@ -1,8 +1,23 @@
 // Check GETTING_STARTED.markdown for information regarding usage.
 
+import org.apache.tools.ant.taskdefs.condition.Os
+
 allprojects {
     plugins.withId("com.liferay.node") {
         node.nodeVersion = "16.16.0"
         node.global = true
     }
+}
+
+task createSymbolicLink4Linux() {
+	dependsOn downloadNode
+	println '****STARTING createSymbolicLink4Linux******'
+	
+	if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+    	println "Windows env, skip... "
+    } else {
+    	ant.symlink(resource: "${rootProject.buildDir}/node/bin/node", link: "${rootProject.buildDir}/node/node")
+    }
+	
+	println '****END createSymbolicLink4Linux******'
 }
