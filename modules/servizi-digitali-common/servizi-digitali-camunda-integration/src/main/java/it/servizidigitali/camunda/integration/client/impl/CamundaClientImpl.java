@@ -34,13 +34,17 @@ public class CamundaClientImpl implements CamundaClient {
 
 	private volatile CamundaConfiguration camundaConfiguration;
 
-	private String camundaApiBasePath;
+	private String apiBasePath;
+	private String username;
+	private String password;
 
 	@Activate
 	@Modified
 	private void activate(Map<String, Object> props) {
 		camundaConfiguration = ConfigurableUtil.createConfigurable(CamundaConfiguration.class, props);
-		camundaApiBasePath = camundaConfiguration.camundaApiBasePath();
+		apiBasePath = camundaConfiguration.apiBasePath();
+		username = camundaConfiguration.apiUsername();
+		password = camundaConfiguration.apiPassword();
 	}
 
 	@Override
@@ -71,7 +75,9 @@ public class CamundaClientImpl implements CamundaClient {
 	public void insertOrUpdateProcessDefinitions(byte[] byteArray) throws CamundaClientException {
 		try {
 			ApiClient client = new ApiClient();
-			client.setBasePath(camundaApiBasePath);
+			client.setBasePath(apiBasePath);
+			client.setUsername(username);
+			client.setPassword(password);
 			new DeploymentApi(client).createDeployment(null, null, true, true, "AutoDeployment", null, new File(""));
 		}
 		catch (ApiException e) {

@@ -11,6 +11,12 @@ import aQute.bnd.annotation.metatype.Meta;
 public interface CamundaConfiguration {
 
 	@Meta.AD(deflt = "http://servizi-digitali-dev:8082", required = false, description = "Path API Camunda")
-	String camundaApiBasePath();
+	String apiBasePath();
+
+	@Meta.AD(deflt = "admin", required = false, description = "Username accesso API Camunda")
+	String apiUsername();
+
+	@Meta.AD(deflt = "admin", required = false, description = "Password accesso API Camunda")
+	String apiPassword();
 
 }
