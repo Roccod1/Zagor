@@ -17,7 +17,7 @@ public interface CamundaApi {
 
 	static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-	List<ProcessDefinitionDto> getProcessDefinitions();
+	List<ProcessDefinitionDto> getProcessDefinitions() throws CamundaClientException;
 
 	List<VariableInstanceDto> getVariablesByTaskId(String taskId) throws CamundaClientException;
 
@@ -25,7 +25,7 @@ public interface CamundaApi {
 
 	boolean existProcessByBusinessKey(long businessKey);
 
-	void insertOrUpdateProcessDefinitions(byte[] byteArray) throws Exception;
+	void insertOrUpdateProcessDefinitions(byte[] byteArray) throws CamundaClientException;
 
 	long countTasksByCandidateGroupsAndCodiceServizio(String candidateGroups[], String codiceServizio, boolean unassigned) throws CamundaClientException;
 
