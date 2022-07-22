@@ -1,5 +1,6 @@
 package it.servizidigitali.profiloutente.preferenze.frontend.portlet;
 
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -16,16 +17,20 @@ import com.liferay.portal.kernel.util.Validator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.profiloutente.model.UtenteOrganizzazione;
+import it.servizidigitali.profiloutente.portal.configuration.ProfiloUtenteConfiguration;
 import it.servizidigitali.profiloutente.preferenze.frontend.constants.ProfiloUtentePreferenzePortletKeys;
 import it.servizidigitali.profiloutente.service.CanaleComunicazioneLocalService;
 import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneLocalService;
@@ -46,7 +51,8 @@ import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneLocalService
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user"
 	},
-	service = Portlet.class
+	service = Portlet.class,
+	configurationPid = "it.servizidigitali.profiloutente.portal.configuration.ProfiloUtenteConfiguration"
 )
 public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 	
@@ -60,6 +66,14 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 	
 	@Reference
 	private OrganizationLocalService organizationLocalService;
+	
+	private volatile ProfiloUtenteConfiguration profiloUtenteConfiguration;
+
+	@Activate
+	@Modified
+	private void activate(Map<String, Object> props) {
+		profiloUtenteConfiguration = ConfigurableUtil.createConfigurable(ProfiloUtenteConfiguration.class, props);
+	}
 	
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {

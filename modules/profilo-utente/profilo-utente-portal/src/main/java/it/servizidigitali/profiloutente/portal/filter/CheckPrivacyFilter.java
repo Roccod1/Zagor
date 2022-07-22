@@ -52,13 +52,13 @@ public class CheckPrivacyFilter extends BaseFilter {
 
 	@Override
 	public boolean isFilterEnabled() {
-		return profiloUtenteConfiguration.redirectCkeckPrivacyAbilitato();
+		return profiloUtenteConfiguration.ckeckPrivacyRedirectEnabled();
 	}
 
 	@Override
 	protected void processFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws Exception {
 
-		String redirectCkeckPrivacyPath = profiloUtenteConfiguration.redirectCkeckPrivacyPath();
+		String redirectCkeckPrivacyPath = profiloUtenteConfiguration.ckeckPrivacyRedirectPath();
 		User user = PortalUtil.getUser(request);
 		if (!PortalUtil.getCurrentURL(request).equals(redirectCkeckPrivacyPath) && user != null && user.isActive() && !isAdministrator(user)) {
 
