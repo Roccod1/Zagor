@@ -16,7 +16,6 @@ package it.servizidigitali.profiloutente.model;
 
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.model.BaseModel;
-import com.liferay.portal.kernel.model.ShardedModel;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -33,7 +32,7 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public interface CanaleComunicazioneModel
-	extends BaseModel<CanaleComunicazione>, ShardedModel {
+	extends BaseModel<CanaleComunicazione> {
 
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -68,36 +67,6 @@ public interface CanaleComunicazioneModel
 	 * @param canaleComunicazioneId the canale comunicazione ID of this canale comunicazione
 	 */
 	public void setCanaleComunicazioneId(long canaleComunicazioneId);
-
-	/**
-	 * Returns the group ID of this canale comunicazione.
-	 *
-	 * @return the group ID of this canale comunicazione
-	 */
-	public long getGroupId();
-
-	/**
-	 * Sets the group ID of this canale comunicazione.
-	 *
-	 * @param groupId the group ID of this canale comunicazione
-	 */
-	public void setGroupId(long groupId);
-
-	/**
-	 * Returns the company ID of this canale comunicazione.
-	 *
-	 * @return the company ID of this canale comunicazione
-	 */
-	@Override
-	public long getCompanyId();
-
-	/**
-	 * Sets the company ID of this canale comunicazione.
-	 *
-	 * @param companyId the company ID of this canale comunicazione
-	 */
-	@Override
-	public void setCompanyId(long companyId);
 
 	/**
 	 * Returns the nome of this canale comunicazione.

@@ -26,7 +26,6 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.persistence.BasePersistence;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -960,8 +959,6 @@ public class CanaleComunicazionePersistenceImpl
 
 		canaleComunicazione.setNew(true);
 		canaleComunicazione.setPrimaryKey(canaleComunicazioneId);
-
-		canaleComunicazione.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return canaleComunicazione;
 	}

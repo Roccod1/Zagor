@@ -69,8 +69,7 @@ public class CanaleComunicazioneModelImpl
 	public static final String TABLE_NAME = "canale_comunicazione";
 
 	public static final Object[][] TABLE_COLUMNS = {
-		{"canaleComunicazioneId", Types.BIGINT}, {"groupId", Types.BIGINT},
-		{"companyId", Types.BIGINT}, {"nome", Types.VARCHAR},
+		{"canaleComunicazioneId", Types.BIGINT}, {"nome", Types.VARCHAR},
 		{"codice", Types.VARCHAR}, {"attivo", Types.BOOLEAN}
 	};
 
@@ -79,15 +78,13 @@ public class CanaleComunicazioneModelImpl
 
 	static {
 		TABLE_COLUMNS_MAP.put("canaleComunicazioneId", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("groupId", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("companyId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("nome", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("codice", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("attivo", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table canale_comunicazione (canaleComunicazioneId LONG not null primary key,groupId LONG,companyId LONG,nome VARCHAR(75) null,codice VARCHAR(75) null,attivo BOOLEAN)";
+		"create table canale_comunicazione (canaleComunicazioneId LONG not null primary key,nome VARCHAR(75) null,codice VARCHAR(75) null,attivo BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table canale_comunicazione";
@@ -271,18 +268,6 @@ public class CanaleComunicazioneModelImpl
 			"canaleComunicazioneId",
 			(BiConsumer<CanaleComunicazione, Long>)
 				CanaleComunicazione::setCanaleComunicazioneId);
-		attributeGetterFunctions.put(
-			"groupId", CanaleComunicazione::getGroupId);
-		attributeSetterBiConsumers.put(
-			"groupId",
-			(BiConsumer<CanaleComunicazione, Long>)
-				CanaleComunicazione::setGroupId);
-		attributeGetterFunctions.put(
-			"companyId", CanaleComunicazione::getCompanyId);
-		attributeSetterBiConsumers.put(
-			"companyId",
-			(BiConsumer<CanaleComunicazione, Long>)
-				CanaleComunicazione::setCompanyId);
 		attributeGetterFunctions.put("nome", CanaleComunicazione::getNome);
 		attributeSetterBiConsumers.put(
 			"nome",
@@ -317,34 +302,6 @@ public class CanaleComunicazioneModelImpl
 		}
 
 		_canaleComunicazioneId = canaleComunicazioneId;
-	}
-
-	@Override
-	public long getGroupId() {
-		return _groupId;
-	}
-
-	@Override
-	public void setGroupId(long groupId) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_groupId = groupId;
-	}
-
-	@Override
-	public long getCompanyId() {
-		return _companyId;
-	}
-
-	@Override
-	public void setCompanyId(long companyId) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_companyId = companyId;
 	}
 
 	@Override
@@ -450,8 +407,7 @@ public class CanaleComunicazioneModelImpl
 	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(
-			getCompanyId(), CanaleComunicazione.class.getName(),
-			getPrimaryKey());
+			0, CanaleComunicazione.class.getName(), getPrimaryKey());
 	}
 
 	@Override
@@ -483,8 +439,6 @@ public class CanaleComunicazioneModelImpl
 
 		canaleComunicazioneImpl.setCanaleComunicazioneId(
 			getCanaleComunicazioneId());
-		canaleComunicazioneImpl.setGroupId(getGroupId());
-		canaleComunicazioneImpl.setCompanyId(getCompanyId());
 		canaleComunicazioneImpl.setNome(getNome());
 		canaleComunicazioneImpl.setCodice(getCodice());
 		canaleComunicazioneImpl.setAttivo(isAttivo());
@@ -501,10 +455,6 @@ public class CanaleComunicazioneModelImpl
 
 		canaleComunicazioneImpl.setCanaleComunicazioneId(
 			this.<Long>getColumnOriginalValue("canaleComunicazioneId"));
-		canaleComunicazioneImpl.setGroupId(
-			this.<Long>getColumnOriginalValue("groupId"));
-		canaleComunicazioneImpl.setCompanyId(
-			this.<Long>getColumnOriginalValue("companyId"));
 		canaleComunicazioneImpl.setNome(
 			this.<String>getColumnOriginalValue("nome"));
 		canaleComunicazioneImpl.setCodice(
@@ -589,10 +539,6 @@ public class CanaleComunicazioneModelImpl
 
 		canaleComunicazioneCacheModel.canaleComunicazioneId =
 			getCanaleComunicazioneId();
-
-		canaleComunicazioneCacheModel.groupId = getGroupId();
-
-		canaleComunicazioneCacheModel.companyId = getCompanyId();
 
 		canaleComunicazioneCacheModel.nome = getNome();
 
@@ -704,8 +650,6 @@ public class CanaleComunicazioneModelImpl
 	}
 
 	private long _canaleComunicazioneId;
-	private long _groupId;
-	private long _companyId;
 	private String _nome;
 	private String _codice;
 	private boolean _attivo;
@@ -739,8 +683,6 @@ public class CanaleComunicazioneModelImpl
 
 		_columnOriginalValues.put(
 			"canaleComunicazioneId", _canaleComunicazioneId);
-		_columnOriginalValues.put("groupId", _groupId);
-		_columnOriginalValues.put("companyId", _companyId);
 		_columnOriginalValues.put("nome", _nome);
 		_columnOriginalValues.put("codice", _codice);
 		_columnOriginalValues.put("attivo", _attivo);
@@ -759,15 +701,11 @@ public class CanaleComunicazioneModelImpl
 
 		columnBitmasks.put("canaleComunicazioneId", 1L);
 
-		columnBitmasks.put("groupId", 2L);
+		columnBitmasks.put("nome", 2L);
 
-		columnBitmasks.put("companyId", 4L);
+		columnBitmasks.put("codice", 4L);
 
-		columnBitmasks.put("nome", 8L);
-
-		columnBitmasks.put("codice", 16L);
-
-		columnBitmasks.put("attivo", 32L);
+		columnBitmasks.put("attivo", 8L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

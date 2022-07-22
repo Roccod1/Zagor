@@ -63,14 +63,10 @@ public class CanaleComunicazioneCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(9);
 
 		sb.append("{canaleComunicazioneId=");
 		sb.append(canaleComunicazioneId);
-		sb.append(", groupId=");
-		sb.append(groupId);
-		sb.append(", companyId=");
-		sb.append(companyId);
 		sb.append(", nome=");
 		sb.append(nome);
 		sb.append(", codice=");
@@ -88,8 +84,6 @@ public class CanaleComunicazioneCacheModel
 			new CanaleComunicazioneImpl();
 
 		canaleComunicazioneImpl.setCanaleComunicazioneId(canaleComunicazioneId);
-		canaleComunicazioneImpl.setGroupId(groupId);
-		canaleComunicazioneImpl.setCompanyId(companyId);
 
 		if (nome == null) {
 			canaleComunicazioneImpl.setNome("");
@@ -115,10 +109,6 @@ public class CanaleComunicazioneCacheModel
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		canaleComunicazioneId = objectInput.readLong();
-
-		groupId = objectInput.readLong();
-
-		companyId = objectInput.readLong();
 		nome = objectInput.readUTF();
 		codice = objectInput.readUTF();
 
@@ -128,10 +118,6 @@ public class CanaleComunicazioneCacheModel
 	@Override
 	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		objectOutput.writeLong(canaleComunicazioneId);
-
-		objectOutput.writeLong(groupId);
-
-		objectOutput.writeLong(companyId);
 
 		if (nome == null) {
 			objectOutput.writeUTF("");
@@ -151,8 +137,6 @@ public class CanaleComunicazioneCacheModel
 	}
 
 	public long canaleComunicazioneId;
-	public long groupId;
-	public long companyId;
 	public String nome;
 	public String codice;
 	public boolean attivo;

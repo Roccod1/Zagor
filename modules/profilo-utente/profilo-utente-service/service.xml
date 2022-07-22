@@ -65,12 +65,6 @@
 		<!-- PK fields -->
 		<column name="canaleComunicazioneId" primary="true" type="long" />
 
-		<!-- Group instance -->
-		<column name="groupId" type="long" />
-
-		<!-- Audit fields -->
-		<column name="companyId" type="long" />
-
 		<!-- Other fields -->
 		<column name="nome" type="String" />
 		<column name="codice" type="String" />

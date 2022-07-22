@@ -42,8 +42,6 @@ public class CanaleComunicazioneWrapper
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("canaleComunicazioneId", getCanaleComunicazioneId());
-		attributes.put("groupId", getGroupId());
-		attributes.put("companyId", getCompanyId());
 		attributes.put("nome", getNome());
 		attributes.put("codice", getCodice());
 		attributes.put("attivo", isAttivo());
@@ -58,18 +56,6 @@ public class CanaleComunicazioneWrapper
 
 		if (canaleComunicazioneId != null) {
 			setCanaleComunicazioneId(canaleComunicazioneId);
-		}
-
-		Long groupId = (Long)attributes.get("groupId");
-
-		if (groupId != null) {
-			setGroupId(groupId);
-		}
-
-		Long companyId = (Long)attributes.get("companyId");
-
-		if (companyId != null) {
-			setCompanyId(companyId);
 		}
 
 		String nome = (String)attributes.get("nome");
@@ -124,26 +110,6 @@ public class CanaleComunicazioneWrapper
 	@Override
 	public String getCodice() {
 		return model.getCodice();
-	}
-
-	/**
-	 * Returns the company ID of this canale comunicazione.
-	 *
-	 * @return the company ID of this canale comunicazione
-	 */
-	@Override
-	public long getCompanyId() {
-		return model.getCompanyId();
-	}
-
-	/**
-	 * Returns the group ID of this canale comunicazione.
-	 *
-	 * @return the group ID of this canale comunicazione
-	 */
-	@Override
-	public long getGroupId() {
-		return model.getGroupId();
 	}
 
 	/**
@@ -209,26 +175,6 @@ public class CanaleComunicazioneWrapper
 	@Override
 	public void setCodice(String codice) {
 		model.setCodice(codice);
-	}
-
-	/**
-	 * Sets the company ID of this canale comunicazione.
-	 *
-	 * @param companyId the company ID of this canale comunicazione
-	 */
-	@Override
-	public void setCompanyId(long companyId) {
-		model.setCompanyId(companyId);
-	}
-
-	/**
-	 * Sets the group ID of this canale comunicazione.
-	 *
-	 * @param groupId the group ID of this canale comunicazione
-	 */
-	@Override
-	public void setGroupId(long groupId) {
-		model.setGroupId(groupId);
 	}
 
 	/**

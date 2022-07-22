@@ -36,11 +36,6 @@ public class CanaleComunicazioneTable
 		createColumn(
 			"canaleComunicazioneId", Long.class, Types.BIGINT,
 			Column.FLAG_PRIMARY);
-	public final Column<CanaleComunicazioneTable, Long> groupId = createColumn(
-		"groupId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
-	public final Column<CanaleComunicazioneTable, Long> companyId =
-		createColumn(
-			"companyId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<CanaleComunicazioneTable, String> nome = createColumn(
 		"nome", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<CanaleComunicazioneTable, String> codice = createColumn(
