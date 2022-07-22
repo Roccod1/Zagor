@@ -17,6 +17,7 @@ package it.servizidigitali.profiloutente.service.impl;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,17 +39,21 @@ public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceImpl extends Ute
 	private static final Log _log = LogFactoryUtil.getLog(UtenteOrganizzazioneCanaleComunicazioneLocalServiceImpl.class);
 
 	public List<UtenteOrganizzazioneCanaleComunicazione> updateMassivoUtenteOrganizzazioneCanaleComunicazione(long userId, long groupId, long companyId, long organizationId, long listaIdCanaliComunicazione[]) throws Exception{
+		
 		List<UtenteOrganizzazioneCanaleComunicazione> listaEntityAggiornate = new ArrayList<UtenteOrganizzazioneCanaleComunicazione>();
-		utenteOrganizzazioneCanaleComunicazionePersistence.findByUtenteOrganization(userId, organizationId);
-		for(long canaleComunicazioneId : listaIdCanaliComunicazione) {
-			UtenteOrganizzazioneCanaleComunicazionePK utenteOrganizzazioneCanaleComunicazionePK = new UtenteOrganizzazioneCanaleComunicazionePK(userId, organizationId, canaleComunicazioneId);
-			UtenteOrganizzazioneCanaleComunicazione utenteOrganizzazioneCanaleComunicazione = utenteOrganizzazioneCanaleComunicazioneLocalService.createUtenteOrganizzazioneCanaleComunicazione(utenteOrganizzazioneCanaleComunicazionePK);
-			utenteOrganizzazioneCanaleComunicazione.setCanaleComunicazioneId(canaleComunicazioneId);
-			utenteOrganizzazioneCanaleComunicazione.setUserId(userId);
-			utenteOrganizzazioneCanaleComunicazione.setCompanyId(companyId);
-			utenteOrganizzazioneCanaleComunicazione.setGroupId(groupId);
-			UtenteOrganizzazioneCanaleComunicazione entityAggiornata = utenteOrganizzazioneCanaleComunicazionePersistence.update(utenteOrganizzazioneCanaleComunicazione);
-			listaEntityAggiornate.add(entityAggiornata);
+		utenteOrganizzazioneCanaleComunicazionePersistence.removeByUtenteOrganization(userId, organizationId);
+		
+		if(listaIdCanaliComunicazione.length >= 1 && listaIdCanaliComunicazione[0] != 0) {
+			for(long canaleComunicazioneId : listaIdCanaliComunicazione) {
+				UtenteOrganizzazioneCanaleComunicazionePK utenteOrganizzazioneCanaleComunicazionePK = new UtenteOrganizzazioneCanaleComunicazionePK(userId, organizationId, canaleComunicazioneId);
+				UtenteOrganizzazioneCanaleComunicazione utenteOrganizzazioneCanaleComunicazione = utenteOrganizzazioneCanaleComunicazioneLocalService.createUtenteOrganizzazioneCanaleComunicazione(utenteOrganizzazioneCanaleComunicazionePK);
+				utenteOrganizzazioneCanaleComunicazione.setCanaleComunicazioneId(canaleComunicazioneId);
+				utenteOrganizzazioneCanaleComunicazione.setUserId(userId);
+				utenteOrganizzazioneCanaleComunicazione.setCompanyId(companyId);
+				utenteOrganizzazioneCanaleComunicazione.setGroupId(groupId);
+				UtenteOrganizzazioneCanaleComunicazione entityAggiornata = utenteOrganizzazioneCanaleComunicazionePersistence.update(utenteOrganizzazioneCanaleComunicazione);
+				listaEntityAggiornate.add(entityAggiornata);
+			}			
 		}
 		
 		return listaEntityAggiornate;

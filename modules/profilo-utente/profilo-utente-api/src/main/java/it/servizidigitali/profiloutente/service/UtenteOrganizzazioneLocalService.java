@@ -220,16 +220,18 @@ public interface UtenteOrganizzazioneLocalService
 	public UtenteOrganizzazione fetchUtenteOrganizzazioneByUuidAndGroupId(
 		String uuid, long groupId);
 
-	public List<UtenteOrganizzazione> findByUtenteOrganizzazionePreferito(
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public ActionableDynamicQuery getActionableDynamicQuery();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<UtenteOrganizzazione> getByUtenteOrganizzazionePreferito(
 			long userId, long organizationId, boolean preferito)
 		throws Exception;
 
-	public List<UtenteOrganizzazione> findByUtentePreferito(
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<UtenteOrganizzazione> getByUtentePreferito(
 			long userId, boolean preferito)
 		throws Exception;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public ActionableDynamicQuery getActionableDynamicQuery();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ExportActionableDynamicQuery getExportActionableDynamicQuery(

@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -75,10 +76,17 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 			themeDisplay = serviceContext.getThemeDisplay();
 			utenteCorrente = themeDisplay.getUser();
 			listaOrganizzazioni = organizationLocalService.getOrganizations(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-			utenteOrganizzazionePreferita = utenteOrganizzazioneLocalService.findByUtentePreferito(utenteCorrente.getUserId(), true).get(0);
+			
+			List<UtenteOrganizzazione> listaUtenteOrganizzazione = utenteOrganizzazioneLocalService.getByUtentePreferito(utenteCorrente.getUserId(), true);
+			
+			if(Validator.isNotNull(listaUtenteOrganizzazione) && !listaUtenteOrganizzazione.isEmpty()) {
+				utenteOrganizzazionePreferita = listaUtenteOrganizzazione.get(0);
+			}
+			
 			privacyAccettata = (boolean) utenteCorrente.getExpandoBridge().getAttribute(ProfiloUtentePreferenzePortletKeys.UTENTE_EXPANDO_ACCETTA_PRIVACY);
 		} catch (Exception e) {
-			_log.error("Impossibile recuperare le informazion pe l'utente corrente");
+			SessionErrors.add(renderRequest, ProfiloUtentePreferenzePortletKeys.ERRORE_GENERICO);
+			_log.error("Impossibile recuperare le informazion pe l'utente corrente ::" + e.getMessage(), e);
 		}
 		
 		if(Validator.isNull(listaOrganizzazioni)) {

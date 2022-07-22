@@ -236,26 +236,25 @@ public class UtenteOrganizzazioneLocalServiceUtil {
 			uuid, groupId);
 	}
 
-	public static List<UtenteOrganizzazione>
-			findByUtenteOrganizzazionePreferito(
-				long userId, long organizationId, boolean preferito)
-		throws Exception {
-
-		return getService().findByUtenteOrganizzazionePreferito(
-			userId, organizationId, preferito);
-	}
-
-	public static List<UtenteOrganizzazione> findByUtentePreferito(
-			long userId, boolean preferito)
-		throws Exception {
-
-		return getService().findByUtentePreferito(userId, preferito);
-	}
-
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
 		return getService().getActionableDynamicQuery();
+	}
+
+	public static List<UtenteOrganizzazione> getByUtenteOrganizzazionePreferito(
+			long userId, long organizationId, boolean preferito)
+		throws Exception {
+
+		return getService().getByUtenteOrganizzazionePreferito(
+			userId, organizationId, preferito);
+	}
+
+	public static List<UtenteOrganizzazione> getByUtentePreferito(
+			long userId, boolean preferito)
+		throws Exception {
+
+		return getService().getByUtentePreferito(userId, preferito);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery

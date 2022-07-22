@@ -2,15 +2,11 @@ package it.servizidigitali.profiloutente.preferenze.frontend.portlet.action;
 
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.expando.kernel.model.ExpandoColumn;
-import com.liferay.expando.kernel.model.ExpandoRow;
 import com.liferay.expando.kernel.model.ExpandoTable;
 import com.liferay.expando.kernel.model.ExpandoValue;
 import com.liferay.expando.kernel.service.ExpandoColumnLocalServiceUtil;
-import com.liferay.expando.kernel.service.ExpandoRowLocalServiceUtil;
 import com.liferay.expando.kernel.service.ExpandoTableLocalServiceUtil;
 import com.liferay.expando.kernel.service.ExpandoValueLocalServiceUtil;
-import com.liferay.headless.delivery.dto.v1_0.util.CustomFieldsUtil;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
@@ -22,8 +18,6 @@ import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
-
-import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -93,14 +87,6 @@ public class SalvaPrivacyUtenteActionCommand extends BaseMVCActionCommand {
 					expandoColumn.getColumnId(), 
 					utenteCorrenteExpandoBridge.getClassPK());
 			
-//			List<ExpandoValue> expValues = ExpandoValueLocalServiceUtil.getDefaultTableColumnValues(
-//						expandoColumn.getColumnId(),
-//						utenteCorrenteExpandoBridge.getClassName(),
-//						ProfiloUtentePreferenzePortletKeys.UTENTE_EXPANDO_ACCETTA_PRIVACY,
-//						QueryUtil.ALL_POS, QueryUtil.ALL_POS
-//					);
-			
-			
 			if(accettaPrivacy) {
 				expandoValue.setBoolean(Boolean.TRUE);
 			}else {
@@ -110,7 +96,7 @@ public class SalvaPrivacyUtenteActionCommand extends BaseMVCActionCommand {
 			ExpandoValueLocalServiceUtil.updateExpandoValue(expandoValue);
 			
 		}catch(Exception e) {
-			_log.error("Impossibile procedere al salvataggio", e);
+			_log.error("Impossibile procedere al salvataggio :: " + e.getMessage(), e);
 			SessionErrors.add(actionRequest, ProfiloUtentePreferenzePortletKeys.ERRORE_SALVATAGGIO);
 		}
 	}

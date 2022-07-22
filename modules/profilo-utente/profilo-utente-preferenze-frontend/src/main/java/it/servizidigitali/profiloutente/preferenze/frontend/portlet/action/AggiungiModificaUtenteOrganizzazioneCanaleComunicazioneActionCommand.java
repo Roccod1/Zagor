@@ -12,9 +12,6 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.MutableRenderParameters;
@@ -98,7 +95,7 @@ public class AggiungiModificaUtenteOrganizzazioneCanaleComunicazioneActionComman
 			if(preferito == Boolean.TRUE) {
 				UtenteOrganizzazione attualePreferito = null;
 				try {
-					attualePreferito = utenteOrganizzazioneLocalService.findByUtentePreferito(userId, true).get(0);				
+					attualePreferito = utenteOrganizzazioneLocalService.getByUtentePreferito(userId, true).get(0);				
 				}catch(Exception l) {
 					_log.warn("Nessuna organizzazione preferita attualmente impostata {userId: " + userId + ", organizationId: " + organizationId + "}");
 				}
@@ -119,7 +116,7 @@ public class AggiungiModificaUtenteOrganizzazioneCanaleComunicazioneActionComman
 			utenteOrganizzazioneCanaleComunicazioneLocalService.updateMassivoUtenteOrganizzazioneCanaleComunicazione(userId, groupId, companyId, organizationId, listaIdCanaliComunicazione);
 			
 		}catch(Exception e) {
-			_log.error("Impossibile procedere al salvataggio", e);
+			_log.error("Impossibile procedere al salvataggio :: " + e.getMessage(), e);
 			SessionErrors.add(actionRequest, ProfiloUtentePreferenzePortletKeys.ERRORE_SALVATAGGIO);
 			jspDestinazioneRedirect = ProfiloUtentePreferenzePortletKeys.JSP_PREFERENZE_DETTAGLIO;
 		}
