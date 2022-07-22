@@ -4,7 +4,7 @@
   "description": "Gestione forms portlet",
   "license": "MIT",
   "scripts": {
-	"build": "../../../node_modules/grunt/bin/grunt --gruntfile Gruntfile.js "
+	"build": "../../../node_modules/grunt-cli/bin/grunt --gruntfile Gruntfile.js "
   },
   "devDependencies": {
     "grunt": "~1.0.1",
