@@ -339,28 +339,14 @@ public interface ComunicazioneModel
 	 *
 	 * @return the destinatario user ID of this comunicazione
 	 */
-	public long getDestinatarioUserId();
+	public Long getDestinatarioUserId();
 
 	/**
 	 * Sets the destinatario user ID of this comunicazione.
 	 *
 	 * @param destinatarioUserId the destinatario user ID of this comunicazione
 	 */
-	public void setDestinatarioUserId(long destinatarioUserId);
-
-	/**
-	 * Returns the destinatario user uuid of this comunicazione.
-	 *
-	 * @return the destinatario user uuid of this comunicazione
-	 */
-	public String getDestinatarioUserUuid();
-
-	/**
-	 * Sets the destinatario user uuid of this comunicazione.
-	 *
-	 * @param destinatarioUserUuid the destinatario user uuid of this comunicazione
-	 */
-	public void setDestinatarioUserUuid(String destinatarioUserUuid);
+	public void setDestinatarioUserId(Long destinatarioUserId);
 
 	/**
 	 * Returns the destinatario organization ID of this comunicazione.

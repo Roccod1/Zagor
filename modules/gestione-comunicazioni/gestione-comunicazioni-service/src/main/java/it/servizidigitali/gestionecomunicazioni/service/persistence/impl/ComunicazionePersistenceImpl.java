@@ -2501,7 +2501,7 @@ public class ComunicazionePersistenceImpl
 	 */
 	@Override
 	public List<Comunicazione> findByDestinatarioOrganizationId(
-		long destinatarioUserId) {
+		Long destinatarioUserId) {
 
 		return findByDestinatarioOrganizationId(
 			destinatarioUserId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
@@ -2521,7 +2521,7 @@ public class ComunicazionePersistenceImpl
 	 */
 	@Override
 	public List<Comunicazione> findByDestinatarioOrganizationId(
-		long destinatarioUserId, int start, int end) {
+		Long destinatarioUserId, int start, int end) {
 
 		return findByDestinatarioOrganizationId(
 			destinatarioUserId, start, end, null);
@@ -2542,7 +2542,7 @@ public class ComunicazionePersistenceImpl
 	 */
 	@Override
 	public List<Comunicazione> findByDestinatarioOrganizationId(
-		long destinatarioUserId, int start, int end,
+		Long destinatarioUserId, int start, int end,
 		OrderByComparator<Comunicazione> orderByComparator) {
 
 		return findByDestinatarioOrganizationId(
@@ -2565,7 +2565,7 @@ public class ComunicazionePersistenceImpl
 	 */
 	@Override
 	public List<Comunicazione> findByDestinatarioOrganizationId(
-		long destinatarioUserId, int start, int end,
+		Long destinatarioUserId, int start, int end,
 		OrderByComparator<Comunicazione> orderByComparator,
 		boolean useFinderCache) {
 
@@ -2597,8 +2597,9 @@ public class ComunicazionePersistenceImpl
 
 			if ((list != null) && !list.isEmpty()) {
 				for (Comunicazione comunicazione : list) {
-					if (destinatarioUserId !=
-							comunicazione.getDestinatarioUserId()) {
+					if (!Objects.equals(
+							destinatarioUserId,
+							comunicazione.getDestinatarioUserId())) {
 
 						list = null;
 
@@ -2643,7 +2644,7 @@ public class ComunicazionePersistenceImpl
 
 				QueryPos queryPos = QueryPos.getInstance(query);
 
-				queryPos.add(destinatarioUserId);
+				queryPos.add(destinatarioUserId.longValue());
 
 				list = (List<Comunicazione>)QueryUtil.list(
 					query, getDialect(), start, end);
@@ -2675,7 +2676,7 @@ public class ComunicazionePersistenceImpl
 	 */
 	@Override
 	public Comunicazione findByDestinatarioOrganizationId_First(
-			long destinatarioUserId,
+			Long destinatarioUserId,
 			OrderByComparator<Comunicazione> orderByComparator)
 		throws NoSuchComunicazioneException {
 
@@ -2707,7 +2708,7 @@ public class ComunicazionePersistenceImpl
 	 */
 	@Override
 	public Comunicazione fetchByDestinatarioOrganizationId_First(
-		long destinatarioUserId,
+		Long destinatarioUserId,
 		OrderByComparator<Comunicazione> orderByComparator) {
 
 		List<Comunicazione> list = findByDestinatarioOrganizationId(
@@ -2730,7 +2731,7 @@ public class ComunicazionePersistenceImpl
 	 */
 	@Override
 	public Comunicazione findByDestinatarioOrganizationId_Last(
-			long destinatarioUserId,
+			Long destinatarioUserId,
 			OrderByComparator<Comunicazione> orderByComparator)
 		throws NoSuchComunicazioneException {
 
@@ -2762,7 +2763,7 @@ public class ComunicazionePersistenceImpl
 	 */
 	@Override
 	public Comunicazione fetchByDestinatarioOrganizationId_Last(
-		long destinatarioUserId,
+		Long destinatarioUserId,
 		OrderByComparator<Comunicazione> orderByComparator) {
 
 		int count = countByDestinatarioOrganizationId(destinatarioUserId);
@@ -2792,7 +2793,7 @@ public class ComunicazionePersistenceImpl
 	 */
 	@Override
 	public Comunicazione[] findByDestinatarioOrganizationId_PrevAndNext(
-			long comunicazioneId, long destinatarioUserId,
+			long comunicazioneId, Long destinatarioUserId,
 			OrderByComparator<Comunicazione> orderByComparator)
 		throws NoSuchComunicazioneException {
 
@@ -2826,7 +2827,7 @@ public class ComunicazionePersistenceImpl
 	}
 
 	protected Comunicazione getByDestinatarioOrganizationId_PrevAndNext(
-		Session session, Comunicazione comunicazione, long destinatarioUserId,
+		Session session, Comunicazione comunicazione, Long destinatarioUserId,
 		OrderByComparator<Comunicazione> orderByComparator, boolean previous) {
 
 		StringBundler sb = null;
@@ -2914,7 +2915,7 @@ public class ComunicazionePersistenceImpl
 
 		QueryPos queryPos = QueryPos.getInstance(query);
 
-		queryPos.add(destinatarioUserId);
+		queryPos.add(destinatarioUserId.longValue());
 
 		if (orderByComparator != null) {
 			for (Object orderByConditionValue :
@@ -2941,7 +2942,7 @@ public class ComunicazionePersistenceImpl
 	 * @param destinatarioUserId the destinatario user ID
 	 */
 	@Override
-	public void removeByDestinatarioOrganizationId(long destinatarioUserId) {
+	public void removeByDestinatarioOrganizationId(Long destinatarioUserId) {
 		for (Comunicazione comunicazione :
 				findByDestinatarioOrganizationId(
 					destinatarioUserId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
@@ -2958,7 +2959,7 @@ public class ComunicazionePersistenceImpl
 	 * @return the number of matching comunicaziones
 	 */
 	@Override
-	public int countByDestinatarioOrganizationId(long destinatarioUserId) {
+	public int countByDestinatarioOrganizationId(Long destinatarioUserId) {
 		FinderPath finderPath = _finderPathCountByDestinatarioOrganizationId;
 
 		Object[] finderArgs = new Object[] {destinatarioUserId};
@@ -2984,7 +2985,7 @@ public class ComunicazionePersistenceImpl
 
 				QueryPos queryPos = QueryPos.getInstance(query);
 
-				queryPos.add(destinatarioUserId);
+				queryPos.add(destinatarioUserId.longValue());
 
 				count = (Long)query.uniqueResult();
 

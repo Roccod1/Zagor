@@ -914,7 +914,7 @@ public class ComunicazioneUtil {
 	 * @return the matching comunicaziones
 	 */
 	public static List<Comunicazione> findByDestinatarioOrganizationId(
-		long destinatarioUserId) {
+		Long destinatarioUserId) {
 
 		return getPersistence().findByDestinatarioOrganizationId(
 			destinatarioUserId);
@@ -933,7 +933,7 @@ public class ComunicazioneUtil {
 	 * @return the range of matching comunicaziones
 	 */
 	public static List<Comunicazione> findByDestinatarioOrganizationId(
-		long destinatarioUserId, int start, int end) {
+		Long destinatarioUserId, int start, int end) {
 
 		return getPersistence().findByDestinatarioOrganizationId(
 			destinatarioUserId, start, end);
@@ -953,7 +953,7 @@ public class ComunicazioneUtil {
 	 * @return the ordered range of matching comunicaziones
 	 */
 	public static List<Comunicazione> findByDestinatarioOrganizationId(
-		long destinatarioUserId, int start, int end,
+		Long destinatarioUserId, int start, int end,
 		OrderByComparator<Comunicazione> orderByComparator) {
 
 		return getPersistence().findByDestinatarioOrganizationId(
@@ -975,7 +975,7 @@ public class ComunicazioneUtil {
 	 * @return the ordered range of matching comunicaziones
 	 */
 	public static List<Comunicazione> findByDestinatarioOrganizationId(
-		long destinatarioUserId, int start, int end,
+		Long destinatarioUserId, int start, int end,
 		OrderByComparator<Comunicazione> orderByComparator,
 		boolean useFinderCache) {
 
@@ -992,7 +992,7 @@ public class ComunicazioneUtil {
 	 * @throws NoSuchComunicazioneException if a matching comunicazione could not be found
 	 */
 	public static Comunicazione findByDestinatarioOrganizationId_First(
-			long destinatarioUserId,
+			Long destinatarioUserId,
 			OrderByComparator<Comunicazione> orderByComparator)
 		throws it.servizidigitali.gestionecomunicazioni.exception.
 			NoSuchComunicazioneException {
@@ -1009,7 +1009,7 @@ public class ComunicazioneUtil {
 	 * @return the first matching comunicazione, or <code>null</code> if a matching comunicazione could not be found
 	 */
 	public static Comunicazione fetchByDestinatarioOrganizationId_First(
-		long destinatarioUserId,
+		Long destinatarioUserId,
 		OrderByComparator<Comunicazione> orderByComparator) {
 
 		return getPersistence().fetchByDestinatarioOrganizationId_First(
@@ -1025,7 +1025,7 @@ public class ComunicazioneUtil {
 	 * @throws NoSuchComunicazioneException if a matching comunicazione could not be found
 	 */
 	public static Comunicazione findByDestinatarioOrganizationId_Last(
-			long destinatarioUserId,
+			Long destinatarioUserId,
 			OrderByComparator<Comunicazione> orderByComparator)
 		throws it.servizidigitali.gestionecomunicazioni.exception.
 			NoSuchComunicazioneException {
@@ -1042,7 +1042,7 @@ public class ComunicazioneUtil {
 	 * @return the last matching comunicazione, or <code>null</code> if a matching comunicazione could not be found
 	 */
 	public static Comunicazione fetchByDestinatarioOrganizationId_Last(
-		long destinatarioUserId,
+		Long destinatarioUserId,
 		OrderByComparator<Comunicazione> orderByComparator) {
 
 		return getPersistence().fetchByDestinatarioOrganizationId_Last(
@@ -1059,7 +1059,7 @@ public class ComunicazioneUtil {
 	 * @throws NoSuchComunicazioneException if a comunicazione with the primary key could not be found
 	 */
 	public static Comunicazione[] findByDestinatarioOrganizationId_PrevAndNext(
-			long comunicazioneId, long destinatarioUserId,
+			long comunicazioneId, Long destinatarioUserId,
 			OrderByComparator<Comunicazione> orderByComparator)
 		throws it.servizidigitali.gestionecomunicazioni.exception.
 			NoSuchComunicazioneException {
@@ -1074,7 +1074,7 @@ public class ComunicazioneUtil {
 	 * @param destinatarioUserId the destinatario user ID
 	 */
 	public static void removeByDestinatarioOrganizationId(
-		long destinatarioUserId) {
+		Long destinatarioUserId) {
 
 		getPersistence().removeByDestinatarioOrganizationId(destinatarioUserId);
 	}
@@ -1086,7 +1086,7 @@ public class ComunicazioneUtil {
 	 * @return the number of matching comunicaziones
 	 */
 	public static int countByDestinatarioOrganizationId(
-		long destinatarioUserId) {
+		Long destinatarioUserId) {
 
 		return getPersistence().countByDestinatarioOrganizationId(
 			destinatarioUserId);

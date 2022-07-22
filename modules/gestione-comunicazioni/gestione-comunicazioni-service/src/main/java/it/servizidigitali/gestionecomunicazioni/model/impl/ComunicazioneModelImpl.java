@@ -761,12 +761,12 @@ public class ComunicazioneModelImpl
 	}
 
 	@Override
-	public long getDestinatarioUserId() {
+	public Long getDestinatarioUserId() {
 		return _destinatarioUserId;
 	}
 
 	@Override
-	public void setDestinatarioUserId(long destinatarioUserId) {
+	public void setDestinatarioUserId(Long destinatarioUserId) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
@@ -774,29 +774,12 @@ public class ComunicazioneModelImpl
 		_destinatarioUserId = destinatarioUserId;
 	}
 
-	@Override
-	public String getDestinatarioUserUuid() {
-		try {
-			User user = UserLocalServiceUtil.getUserById(
-				getDestinatarioUserId());
-
-			return user.getUuid();
-		}
-		catch (PortalException portalException) {
-			return "";
-		}
-	}
-
-	@Override
-	public void setDestinatarioUserUuid(String destinatarioUserUuid) {
-	}
-
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *             #getColumnOriginalValue(String)}
 	 */
 	@Deprecated
-	public long getOriginalDestinatarioUserId() {
+	public Long getOriginalDestinatarioUserId() {
 		return GetterUtil.getLong(
 			this.<Long>getColumnOriginalValue("destinatarioUserId"));
 	}
@@ -1156,7 +1139,11 @@ public class ComunicazioneModelImpl
 
 		comunicazioneCacheModel.organizationId = getOrganizationId();
 
-		comunicazioneCacheModel.destinatarioUserId = getDestinatarioUserId();
+		Long destinatarioUserId = getDestinatarioUserId();
+
+		if (destinatarioUserId != null) {
+			comunicazioneCacheModel.destinatarioUserId = destinatarioUserId;
+		}
 
 		comunicazioneCacheModel.destinatarioOrganizationId =
 			getDestinatarioOrganizationId();
@@ -1271,7 +1258,7 @@ public class ComunicazioneModelImpl
 	private String _uriServizio;
 	private long _tipologiaComunicazioneId;
 	private long _organizationId;
-	private long _destinatarioUserId;
+	private Long _destinatarioUserId;
 	private long _destinatarioOrganizationId;
 	private long _calendarBookingId;
 

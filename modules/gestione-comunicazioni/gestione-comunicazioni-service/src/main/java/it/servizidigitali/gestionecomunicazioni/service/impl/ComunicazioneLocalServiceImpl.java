@@ -58,8 +58,8 @@ public class ComunicazioneLocalServiceImpl
 		model.setDataInizio(dataInizio);
 		model.setDataFine(dataFine);
 		model.setTipologiaComunicazioneId(tipologiaId);
-		model.setDestinatarioUserId(destinatarioUserId);
-		//model.setDestinatarioOrganizationId(userDestinatario.getSiteGroups());
+		model.setDestinatarioUserId(null);
+		//model.setDestinatarioOrganizationId();;
 		return comunicazionePersistence.update(model);
 	}
 }

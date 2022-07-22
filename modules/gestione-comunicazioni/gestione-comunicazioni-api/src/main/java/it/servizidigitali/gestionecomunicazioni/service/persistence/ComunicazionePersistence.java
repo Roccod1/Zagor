@@ -685,7 +685,7 @@ public interface ComunicazionePersistence
 	 * @return the matching comunicaziones
 	 */
 	public java.util.List<Comunicazione> findByDestinatarioOrganizationId(
-		long destinatarioUserId);
+		Long destinatarioUserId);
 
 	/**
 	 * Returns a range of all the comunicaziones where destinatarioUserId = &#63;.
@@ -700,7 +700,7 @@ public interface ComunicazionePersistence
 	 * @return the range of matching comunicaziones
 	 */
 	public java.util.List<Comunicazione> findByDestinatarioOrganizationId(
-		long destinatarioUserId, int start, int end);
+		Long destinatarioUserId, int start, int end);
 
 	/**
 	 * Returns an ordered range of all the comunicaziones where destinatarioUserId = &#63;.
@@ -716,7 +716,7 @@ public interface ComunicazionePersistence
 	 * @return the ordered range of matching comunicaziones
 	 */
 	public java.util.List<Comunicazione> findByDestinatarioOrganizationId(
-		long destinatarioUserId, int start, int end,
+		Long destinatarioUserId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<Comunicazione>
 			orderByComparator);
 
@@ -735,7 +735,7 @@ public interface ComunicazionePersistence
 	 * @return the ordered range of matching comunicaziones
 	 */
 	public java.util.List<Comunicazione> findByDestinatarioOrganizationId(
-		long destinatarioUserId, int start, int end,
+		Long destinatarioUserId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<Comunicazione>
 			orderByComparator,
 		boolean useFinderCache);
@@ -749,7 +749,7 @@ public interface ComunicazionePersistence
 	 * @throws NoSuchComunicazioneException if a matching comunicazione could not be found
 	 */
 	public Comunicazione findByDestinatarioOrganizationId_First(
-			long destinatarioUserId,
+			Long destinatarioUserId,
 			com.liferay.portal.kernel.util.OrderByComparator<Comunicazione>
 				orderByComparator)
 		throws NoSuchComunicazioneException;
@@ -762,7 +762,7 @@ public interface ComunicazionePersistence
 	 * @return the first matching comunicazione, or <code>null</code> if a matching comunicazione could not be found
 	 */
 	public Comunicazione fetchByDestinatarioOrganizationId_First(
-		long destinatarioUserId,
+		Long destinatarioUserId,
 		com.liferay.portal.kernel.util.OrderByComparator<Comunicazione>
 			orderByComparator);
 
@@ -775,7 +775,7 @@ public interface ComunicazionePersistence
 	 * @throws NoSuchComunicazioneException if a matching comunicazione could not be found
 	 */
 	public Comunicazione findByDestinatarioOrganizationId_Last(
-			long destinatarioUserId,
+			Long destinatarioUserId,
 			com.liferay.portal.kernel.util.OrderByComparator<Comunicazione>
 				orderByComparator)
 		throws NoSuchComunicazioneException;
@@ -788,7 +788,7 @@ public interface ComunicazionePersistence
 	 * @return the last matching comunicazione, or <code>null</code> if a matching comunicazione could not be found
 	 */
 	public Comunicazione fetchByDestinatarioOrganizationId_Last(
-		long destinatarioUserId,
+		Long destinatarioUserId,
 		com.liferay.portal.kernel.util.OrderByComparator<Comunicazione>
 			orderByComparator);
 
@@ -802,7 +802,7 @@ public interface ComunicazionePersistence
 	 * @throws NoSuchComunicazioneException if a comunicazione with the primary key could not be found
 	 */
 	public Comunicazione[] findByDestinatarioOrganizationId_PrevAndNext(
-			long comunicazioneId, long destinatarioUserId,
+			long comunicazioneId, Long destinatarioUserId,
 			com.liferay.portal.kernel.util.OrderByComparator<Comunicazione>
 				orderByComparator)
 		throws NoSuchComunicazioneException;
@@ -812,7 +812,7 @@ public interface ComunicazionePersistence
 	 *
 	 * @param destinatarioUserId the destinatario user ID
 	 */
-	public void removeByDestinatarioOrganizationId(long destinatarioUserId);
+	public void removeByDestinatarioOrganizationId(Long destinatarioUserId);
 
 	/**
 	 * Returns the number of comunicaziones where destinatarioUserId = &#63;.
@@ -820,7 +820,7 @@ public interface ComunicazionePersistence
 	 * @param destinatarioUserId the destinatario user ID
 	 * @return the number of matching comunicaziones
 	 */
-	public int countByDestinatarioOrganizationId(long destinatarioUserId);
+	public int countByDestinatarioOrganizationId(Long destinatarioUserId);
 
 	/**
 	 * Returns all the comunicaziones where destinatarioOrganizationId = &#63;.
