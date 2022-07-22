@@ -71,7 +71,7 @@ public class GestioneComunicazioniPortlet extends MVCPortlet {
 		request.setAttribute("utenti", utenti);
 		request.setAttribute("organizzazioni", organizzazioni);
 		request.setAttribute("tipologie", tipologie);
-		
+
 		super.render(request, response);
 	}
 }
