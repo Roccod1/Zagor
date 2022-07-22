@@ -27,29 +27,11 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      files: ['Gruntfile.js', '../../../target/<%= pkg.name %>/js/custom-fields/**/*.js'],
+      files: ['Gruntfile.js', 'alpaca/customfields/**/*.js'],
       options: {
         // options here to override JSHint defaults
       }
     },
-    /*replace: {
-        dist: {
-          options: {
-            patterns: [
-              {
-                match: 'customFieldDataSource',
-                replacement: process.env.customFieldDataSource
-              }
-            ]
-          },
-          files: [
-            {
-            	src: ['<%= concat.dist.dest %>'],
-            	dest: '<%= concat.dist.dest %>'
-            }
-          ]
-        }
-    },*/
     watch: {
       files: ['<%= jshint.files %>'],
       tasks: ['jshint']
@@ -66,5 +48,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', ['jshint']);
 
-  grunt.registerTask('default', [/*'jshint', */'clean', 'concat', /*'replace',*/ 'uglify']);
+  grunt.registerTask('default', [/*'jshint', */'clean', 'concat', 'uglify']);
 };
