@@ -1,20 +1,47 @@
 package it.servizidigitali.camunda.integration.client.impl;
 
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
+import org.camunda.community.rest.client.api.DeploymentApi;
 import org.camunda.community.rest.client.dto.ProcessDefinitionDto;
 import org.camunda.community.rest.client.dto.TaskDto;
 import org.camunda.community.rest.client.dto.VariableInstanceDto;
+import org.camunda.community.rest.client.invoker.ApiClient;
+import org.camunda.community.rest.client.invoker.ApiException;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
 
 import it.servizidigitali.camunda.integration.client.CamundaClient;
 import it.servizidigitali.camunda.integration.client.exception.CamundaClientException;
+import it.servizidigitali.camunda.integration.configuration.CamundaConfiguration;
 
 /**
  * @author pindi
  *
  */
+@Component(name = "camundaClientImpl", immediate = true, service = CamundaClient.class, configurationPid = "it.servizidigitali.camunda.integration.configuration.CamundaConfiguration")
 public class CamundaClientImpl implements CamundaClient {
+
+	private static final Log log = LogFactoryUtil.getLog(CamundaClientImpl.class.getName());
+
+	private volatile CamundaConfiguration camundaConfiguration;
+
+	private String camundaApiBasePath;
+
+	@Activate
+	@Modified
+	private void activate(Map<String, Object> props) {
+		camundaConfiguration = ConfigurableUtil.createConfigurable(CamundaConfiguration.class, props);
+		camundaApiBasePath = camundaConfiguration.camundaApiBasePath();
+	}
 
 	@Override
 	public List<ProcessDefinitionDto> getProcessDefinitions() throws CamundaClientException {
@@ -42,7 +69,15 @@ public class CamundaClientImpl implements CamundaClient {
 
 	@Override
 	public void insertOrUpdateProcessDefinitions(byte[] byteArray) throws CamundaClientException {
-		// TODO Auto-generated method stub
+		try {
+			ApiClient client = new ApiClient();
+			client.setBasePath(camundaApiBasePath);
+			new DeploymentApi(client).createDeployment(null, null, true, true, "AutoDeployment", null, new File(""));
+		}
+		catch (ApiException e) {
+			log.error("insertOrUpdateProcessDefinitions :: " + e.getMessage(), e);
+			throw new CamundaClientException("insertOrUpdateProcessDefinitions :: " + e.getMessage(), e);
+		}
 
 	}
 
