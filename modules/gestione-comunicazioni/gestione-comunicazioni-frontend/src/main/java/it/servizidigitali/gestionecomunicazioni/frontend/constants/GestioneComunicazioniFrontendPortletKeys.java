@@ -5,6 +5,6 @@ package it.servizidigitali.gestionecomunicazioni.frontend.constants;
  */
 public class GestioneComunicazioniFrontendPortletKeys {
 
-	public static final String GESTIONECOMUNICAZIONI = "GestioneComunicazioniPortlet";
+	public static final String GESTIONECOMUNICAZIONI = "it_servizidigitali_gestionecomunicazioni_frontend_GestioneComunicazioniPortlet";
 
 }
