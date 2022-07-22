@@ -21,6 +21,8 @@
 				<portlet:param name="mvcRenderCommandName" value="<%=ProfiloUtentePreferenzePortletKeys.RENDER_INSERISCI_MODIFICA %>" />
 				<portlet:param name="<%=ProfiloUtentePreferenzePortletKeys.ORGANIZATION_ID %>" value="${ente.organizationId}" />	
 			</portlet:renderURL>
+			
+			<liferay-ui:search-container-column-text name="preferito" align="center" value="${((not empty utenteOrganizzazionePreferita) and (utenteOrganizzazionePreferita.organizationId eq ente.organizationId)) ? \"<i class='icon-ok'></i>\" : \"\" }"/>
 			<liferay-ui:search-container-column-text name="azioni" align="center" value="<a href='${modificaURL}'><i class='icon-edit'></i></a>"/>
 		</liferay-ui:search-container-row>
 		<liferay-ui:search-iterator />

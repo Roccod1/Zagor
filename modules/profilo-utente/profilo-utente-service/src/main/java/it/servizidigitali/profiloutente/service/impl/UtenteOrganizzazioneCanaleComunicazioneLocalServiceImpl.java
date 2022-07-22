@@ -41,7 +41,7 @@ public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceImpl extends Ute
 		List<UtenteOrganizzazioneCanaleComunicazione> listaEntityAggiornate = new ArrayList<UtenteOrganizzazioneCanaleComunicazione>();
 		utenteOrganizzazioneCanaleComunicazionePersistence.findByUtenteOrganization(userId, organizationId);
 		for(long canaleComunicazioneId : listaIdCanaliComunicazione) {
-			UtenteOrganizzazioneCanaleComunicazionePK utenteOrganizzazioneCanaleComunicazionePK = new UtenteOrganizzazioneCanaleComunicazionePK(utenteId, organizationId, canaleComunicazioneId);
+			UtenteOrganizzazioneCanaleComunicazionePK utenteOrganizzazioneCanaleComunicazionePK = new UtenteOrganizzazioneCanaleComunicazionePK(userId, organizationId, canaleComunicazioneId);
 			UtenteOrganizzazioneCanaleComunicazione utenteOrganizzazioneCanaleComunicazione = utenteOrganizzazioneCanaleComunicazioneLocalService.createUtenteOrganizzazioneCanaleComunicazione(utenteOrganizzazioneCanaleComunicazionePK);
 			utenteOrganizzazioneCanaleComunicazione.setCanaleComunicazioneId(canaleComunicazioneId);
 			utenteOrganizzazioneCanaleComunicazione.setUserId(userId);

@@ -7,7 +7,6 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -24,11 +23,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.profiloutente.model.UtenteOrganizzazione;
-import it.servizidigitali.profiloutente.model.UtenteOrganizzazioneCanaleComunicazione;
 import it.servizidigitali.profiloutente.preferenze.frontend.constants.ProfiloUtentePreferenzePortletKeys;
 import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneCanaleComunicazioneLocalService;
 import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneLocalService;
-import it.servizidigitali.profiloutente.service.persistence.UtenteOrganizzazioneCanaleComunicazionePK;
 import it.servizidigitali.profiloutente.service.persistence.UtenteOrganizzazionePK;
 
 /**
@@ -55,14 +52,12 @@ public class AggiungiModificaUtenteOrganizzazioneCanaleComunicazioneActionComman
 	
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-//		parametri utility
-		List<String> listaErrori = new ArrayList<String>();
-		String indirizzoPrecedente = ParamUtil.getString(actionRequest, ProfiloUtentePreferenzePortletKeys.INDIRIZZO_REDIRECT);
-
 //		parametri entity
 		long organizationId = ParamUtil.getLong(actionRequest, ProfiloUtentePreferenzePortletKeys.ORGANIZATION_ID);
 		long listaIdCanaliComunicazione[] = ParamUtil.getLongValues(actionRequest, ProfiloUtentePreferenzePortletKeys.CANALE_COMUNICAZIONE);
 		boolean preferito = ParamUtil.getBoolean(actionRequest, ProfiloUtentePreferenzePortletKeys.PREFERITO);
+		
+//		parametri utility
 		long companyId = 0;
 		long userId = 0;
 		long groupId = 0;
@@ -73,6 +68,7 @@ public class AggiungiModificaUtenteOrganizzazioneCanaleComunicazioneActionComman
 		UtenteOrganizzazionePK utenteOrganizzazionePK = null;
 		MutableRenderParameters mutableRenderParameters = actionResponse.getRenderParameters();
 		String jspDestinazioneRedirect = ProfiloUtentePreferenzePortletKeys.JSP_HOME;
+		
 		try {
 			
 			serviceContext = ServiceContextFactory.getInstance(actionRequest);
@@ -82,8 +78,6 @@ public class AggiungiModificaUtenteOrganizzazioneCanaleComunicazioneActionComman
 			
 			if(Validator.isNull(utenteCorrente)) {
 				_log.error("Impossibile ottere l'utente loggato dal ThemeDisplay");
-				SessionErrors.add(actionRequest, ProfiloUtentePreferenzePortletKeys.ERRORE_PARAMETRI_MANCANTI);
-				jspDestinazioneRedirect = ProfiloUtentePreferenzePortletKeys.JSP_PREFERENZE_DETTAGLIO;
 				throw new Exception();
 			}
 
@@ -98,7 +92,9 @@ public class AggiungiModificaUtenteOrganizzazioneCanaleComunicazioneActionComman
 				utenteOrganizzazione = utenteOrganizzazioneLocalService.createUtenteOrganizzazione(utenteOrganizzazionePK);
 			}
 			
-
+			/*
+			 * se preferito == TRUE recupero l'oggetto precedentemente impostato come predefinito e lo imposto su false
+			 * */
 			if(preferito == Boolean.TRUE) {
 				UtenteOrganizzazione attualePreferito = null;
 				try {
@@ -113,6 +109,8 @@ public class AggiungiModificaUtenteOrganizzazioneCanaleComunicazioneActionComman
 				}
 			}
 			utenteOrganizzazione.setPreferito(preferito);
+			
+//			imposto campi utility
 			utenteOrganizzazione.setCompanyId(companyId);
 			utenteOrganizzazione.setUserId(userId);
 			utenteOrganizzazione.setGroupId(groupId);
@@ -122,9 +120,11 @@ public class AggiungiModificaUtenteOrganizzazioneCanaleComunicazioneActionComman
 			
 		}catch(Exception e) {
 			_log.error("Impossibile procedere al salvataggio", e);
-			SessionErrors.add(actionRequest, ProfiloUtentePreferenzePortletKeys.ERRORE_GENERICO);
+			SessionErrors.add(actionRequest, ProfiloUtentePreferenzePortletKeys.ERRORE_SALVATAGGIO);
 			jspDestinazioneRedirect = ProfiloUtentePreferenzePortletKeys.JSP_PREFERENZE_DETTAGLIO;
 		}
+		
+//		imposto redirect dopo salvataggio 
 		mutableRenderParameters.setValue("mvcPath", jspDestinazioneRedirect);
 		mutableRenderParameters.setValue(ProfiloUtentePreferenzePortletKeys.ORGANIZATION_ID, jspDestinazioneRedirect);
 	}

@@ -9,6 +9,8 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -97,6 +99,7 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 			}
 		}catch(Exception e) {
 			_log.error("Errore nel render della pagina", e);
+			SessionErrors.add(renderRequest, ProfiloUtentePreferenzePortletKeys.ERRORE_GET_DETTAGLIO);
 			return ProfiloUtentePreferenzePortletKeys.JSP_HOME;
 		}
 

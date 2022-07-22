@@ -62,20 +62,21 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 	
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
+		List<Organization> listaOrganizzazioni = null;
+		UtenteOrganizzazione utenteOrganizzazionePreferita = null;
+		boolean privacyAccettata = false;
 		
 		ServiceContext serviceContext = null;
 		ThemeDisplay themeDisplay = null;
 		User utenteCorrente = null;
-		
-		List<Organization> listaOrganizzazioni = null;
-		List<UtenteOrganizzazione> listaUtenteOrganizzazione = null;
-		
+				
 		try {
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
 			themeDisplay = serviceContext.getThemeDisplay();
 			utenteCorrente = themeDisplay.getUser();
 			listaOrganizzazioni = organizationLocalService.getOrganizations(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-			listaUtenteOrganizzazione = utenteOrganizzazioneLocalService.getOrganizzazioniUtenteConfigurate(utenteCorrente.getUserId());
+			utenteOrganizzazionePreferita = utenteOrganizzazioneLocalService.findByUtentePreferito(utenteCorrente.getUserId(), true).get(0);
+			privacyAccettata = (boolean) utenteCorrente.getExpandoBridge().getAttribute(ProfiloUtentePreferenzePortletKeys.UTENTE_EXPANDO_ACCETTA_PRIVACY);
 		} catch (Exception e) {
 			_log.error("Impossibile recuperare le informazion pe l'utente corrente");
 		}
@@ -84,7 +85,9 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 			listaOrganizzazioni = new ArrayList<Organization>();
 		}
 		
+		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.UTENTE_ACCETTA_PRIVACY, privacyAccettata);
 		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_ORGANIZZAZIONI, listaOrganizzazioni);
+		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.UTENTE_ORGANIZZAZIONE_PREFERITA, utenteOrganizzazionePreferita);
 		super.render(renderRequest, renderResponse);
 	}
 }
