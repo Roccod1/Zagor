@@ -1,8 +1,6 @@
 package it.servizidigitali.gestioneforms.frontend.portlet.action;
 
 import com.liferay.counter.kernel.service.CounterLocalService;
-import com.liferay.document.library.kernel.service.DLAppLocalService;
-import com.liferay.document.library.kernel.service.DLFolderLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -52,12 +50,6 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 	
 	@Reference
     private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
-	
-	@Reference
-	private DLAppLocalService DLappLocalService;
-	
-	@Reference
-	private DLFolderLocalService DLfolderLocalService;
 	
 	@Reference
 	private GroupLocalService groupLocalService;

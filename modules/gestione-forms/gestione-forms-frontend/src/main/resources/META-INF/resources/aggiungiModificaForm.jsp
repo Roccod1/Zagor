@@ -7,7 +7,7 @@
 
 <portlet:actionURL name="<%=GestioneFormsPortletKeys.SALVA_AGGIUNGI_ACTION_COMMAND %>" var="salvaModificaURL" />
 <portlet:renderURL var="homeURL"></portlet:renderURL>
-<portlet:resourceURL id="/uploadFile" var="uploadFileUrl">
+<portlet:resourceURL id="<%=GestioneFormsPortletKeys.UPLOAD_ALLEGATO_RESOURCE_COMMAND %>" var="uploadFileUrl">
 </portlet:resourceURL>
 
 
@@ -609,13 +609,7 @@
 		 * Reset the attachment form.
 		 */
 		var resetAttachmentForm = function() {
-// 			$('#formAggiungiAllegato').find(
-// 					'input:text, input:password, select').each(function() {
-// 				$(this).val('');
-// 			});
-
-
-		    $('#attachment-name').val('');
+			$('#attachment-name').val('');
 		    $('#attachment-mandatory').val('');
 		    $('#attachment-filetype').val('');
 		    $('#attachment-codetype').val('');
@@ -627,43 +621,43 @@
 		//Delete attachment event
 
 		$('.attachment-tbody').on('click','.delete-attachment',function() {
-							var $this = $(this);
-							$this.parent().parent().remove();
-							var definizioneAllegatoId = $this.parent().parent().find(".definizioneAllegatoId").html();
-							$('#listaAllegatiDaEliminare').append('<option value='+ definizioneAllegatoId +' selected="selected"></option>');
+			var $this = $(this);
+			$this.parent().parent().remove();
+			var definizioneAllegatoId = $this.parent().parent().find(".definizioneAllegatoId").html();
+			$('#listaAllegatiDaEliminare').append('<option value='+ definizioneAllegatoId +' selected="selected"></option>');
 
-							var indiceRiga = parseInt($(this).attr('id').replace(/[^\d]/g, ''), 10);
+			var indiceRiga = parseInt($(this).attr('id').replace(/[^\d]/g, ''), 10);
 
-							let i = indiceRiga + 1;
-							let nuovoIndex = i - 1;
+			let i = indiceRiga + 1;
+			let nuovoIndex = i - 1;
 
-							while (i < index) {
-								$('#definizioneAllegatoId' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex+ '].definizioneAllegatoId');
-								$('#definizioneAllegatoId' + i).attr('id','definizioneAllegatoId' + nuovoIndex);$('#denominazione' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex+ '].denominazione');
-								$('#denominazione' + i).attr('id','denominazione' + nuovoIndex);
+			while (i < index) {
+				$('#definizioneAllegatoId' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex+ '].definizioneAllegatoId');
+				$('#definizioneAllegatoId' + i).attr('id','definizioneAllegatoId' + nuovoIndex);$('#denominazione' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex+ '].denominazione');
+				$('#denominazione' + i).attr('id','denominazione' + nuovoIndex);
 
-								$('#obbligatorio' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex+ '].obbligatorio');
-								$('#obbligatorio' + i).attr('id','obbligatorio' + nuovoIndex);
+				$('#obbligatorio' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex+ '].obbligatorio');
+				$('#obbligatorio' + i).attr('id','obbligatorio' + nuovoIndex);
 
-								$('#tipiFileAmmessi' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex+ '].tipiFileAmmessi');
-								$('#tipiFileAmmessi' + i).attr('id','tipiFileAmmessi' + nuovoIndex);
+				$('#tipiFileAmmessi' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex+ '].tipiFileAmmessi');
+				$('#tipiFileAmmessi' + i).attr('id','tipiFileAmmessi' + nuovoIndex);
 
-								$('#codiciTipologiaDocumento' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex+ '].codiciTipologiaDocumento');
-								$('#codiciTipologiaDocumento' + i).attr('id','codiciTipologiaDocumento'+ nuovoIndex);
+				$('#codiciTipologiaDocumento' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex+ '].codiciTipologiaDocumento');
+				$('#codiciTipologiaDocumento' + i).attr('id','codiciTipologiaDocumento'+ nuovoIndex);
 
-								$('#filenameModello' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex+ '].filenameModello');
-								$('#filenameModello' + i).attr('id','filenameModello' + nuovoIndex);
+				$('#filenameModello' + i).attr('name','<portlet:namespace />listaDefinizioneAllegato['+ nuovoIndex+ '].filenameModello');
+				$('#filenameModello' + i).attr('id','filenameModello' + nuovoIndex);
 
-								$('#modificaAllegato' + i).attr('id','modificaAllegato' + nuovoIndex);
-								$('#modificaAllegato' + i).attr('id','modificaAllegato' + nuovoIndex);
+				$('#modificaAllegato' + i).attr('id','modificaAllegato' + nuovoIndex);
+				$('#modificaAllegato' + i).attr('id','modificaAllegato' + nuovoIndex);
 
-								i++;
-							}
+				i++;
+			}
 
-							index--;
+			index--;
 
-							$('#<portlet:namespace />dimensioneListaDefinizioneAllegato').val(nuovoIndex);
-						});
+			$('#<portlet:namespace />dimensioneListaDefinizioneAllegato').val(nuovoIndex);
+		});
 
 		$('#salva').on('click', function() {
 			$('#formAggiungiAllegato').remove();

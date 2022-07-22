@@ -53,6 +53,7 @@ public class GestioneFormsPortletKeys {
 	public static final String RICERCA_ACTION_COMMAND = "/ricerca";
 	public static final String SALVA_AGGIUNGI_ACTION_COMMAND = "/salvaModifica";
 	public static final String DETTAGLIO_NUOVO_RENDER_COMMAND = "/dettaglioNuovo";
+	public static final String UPLOAD_ALLEGATO_RESOURCE_COMMAND = "/uploadFile";
 	
 	
 	// JSP

@@ -25,7 +25,7 @@ import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 @Component(immediate = true, 
 property = { 
 			"javax.portlet.name=" + GestioneFormsPortletKeys.GESTIONEFORMS,
-			"mvc.command.name=/uploadFile" 
+			"mvc.command.name=" + GestioneFormsPortletKeys.UPLOAD_ALLEGATO_RESOURCE_COMMAND
 		}, 
 service = { MVCResourceCommand.class }
 )
