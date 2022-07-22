@@ -451,10 +451,16 @@ public class DefinizioneAllegatoLocalServiceWrapper
 
 	@Override
 	public com.liferay.portal.kernel.repository.model.FileEntry
-		uploadAllegatoDocumentMediaRepository(String idAllegatoTemporaneo) {
+			uploadAllegatoDocumentMediaRepository(
+				String idAllegatoTemporaneo, String fileNameModello,
+				long groupId, long formId, long userId,
+				com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws Exception {
 
 		return _definizioneAllegatoLocalService.
-			uploadAllegatoDocumentMediaRepository(idAllegatoTemporaneo);
+			uploadAllegatoDocumentMediaRepository(
+				idAllegatoTemporaneo, fileNameModello, groupId, formId, userId,
+				serviceContext);
 	}
 
 	@Override

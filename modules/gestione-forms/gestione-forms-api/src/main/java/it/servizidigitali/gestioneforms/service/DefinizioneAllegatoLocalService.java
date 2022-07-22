@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.BaseLocalService;
 import com.liferay.portal.kernel.service.PersistedModelLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -341,7 +342,9 @@ public interface DefinizioneAllegatoLocalService
 		DefinizioneAllegato definizioneAllegato);
 
 	public FileEntry uploadAllegatoDocumentMediaRepository(
-		String idAllegatoTemporaneo);
+			String idAllegatoTemporaneo, String fileNameModello, long groupId,
+			long formId, long userId, ServiceContext serviceContext)
+		throws Exception;
 
 	public long uploadAllegatoTemporaneo(File allegato) throws Exception;
 

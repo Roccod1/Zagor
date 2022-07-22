@@ -307,6 +307,10 @@
 												<aui:input type="file" id="attachment-file" name="file" />
 											</div>
 										</div>
+										
+										<div id="alertUplaodAllegato" class="portlet-msg-alert hidden">
+											<liferay-ui:message key="errore-durante-il-caricamento-dell-allegato"/>
+										</div>
 									    
 									    <div class="control-group">
 										    <div class="controls">
@@ -436,13 +440,12 @@
 			    		contentType: false,
 			    		success: function(data){	
 			    			if(data.status==='ok'){
-			    				console.log("entrata in success");
+			    				$('#alertUploadAllegato').addClass('hidden');
 		 	    				idAllegatoTemporaneoValue = data.idTemporaneoAllegato;
 		 		 				$trToAdd = aggiungiRigaTabella(attachmentIdValue,attachmentNameValue,attachmentMandatoryValue,attachmentFiletypeValue,attachmentCodetypesValue,attachmentFileNameValue,idAllegatoTemporaneoValue);
-		 		 				console.log("idAllegatoTemporaneo input: " + idAllegatoTemporaneo);
-			    				console.log("riga aggiunta");
 			    			}else if(data.status==='error'){
-			    				console.log("errore upload file");
+			    				$('#alertUploadAllegato').removeClass('hidden');
+			    				console.log("Errore durante l'upload del file!");
 			    			}
 			    		}, error: function(xhr){
 			    			
@@ -606,10 +609,16 @@
 		 * Reset the attachment form.
 		 */
 		var resetAttachmentForm = function() {
-			$('#formAggiungiAllegato').find(
-					'input:text, input:password, select').each(function() {
-				$(this).val('');
-			});
+// 			$('#formAggiungiAllegato').find(
+// 					'input:text, input:password, select').each(function() {
+// 				$(this).val('');
+// 			});
+
+
+		    $('#attachment-name').val('');
+		    $('#attachment-mandatory').val('');
+		    $('#attachment-filetype').val('');
+		    $('#attachment-codetype').val('');
 
 			$('#attachment-id').val('');
 			$('#<portlet:namespace />attachment-file').val('');
