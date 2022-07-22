@@ -1,0 +1,25 @@
+{
+  "name": "presentatore-forms-portlet",
+  "version": "0.0.0",
+  "description": "The form presenter portlet",
+  "license": "MIT",
+  "scripts": {
+	"build": "../../../node_modules/grunt/bin/grunt --gruntfile Gruntfile.js "
+  },
+  "devDependencies": {
+    "grunt": "~1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-clean": "~1.0.0",
+    "grunt-contrib-concat": "~1.0.0",
+    "grunt-contrib-connect": "~1.0.2",
+    "grunt-contrib-copy": "~1.0.0",
+    "grunt-contrib-jshint": "~1.0.0",
+    "grunt-contrib-less": "^1.0.1",
+    "grunt-contrib-uglify": "~1.0.0",
+    "grunt-contrib-watch": "~1.0.0",
+    "grunt-replace": "^1.0.1",
+    "load-grunt-tasks": "~3.5.0"
+  },
+  "dependencies": {}
+}
