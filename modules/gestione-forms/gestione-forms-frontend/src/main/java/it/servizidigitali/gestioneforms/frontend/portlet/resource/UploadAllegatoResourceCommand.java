@@ -42,7 +42,6 @@ public class UploadAllegatoResourceCommand extends BaseMVCResourceCommand{
 		
 		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(resourceRequest);
 		File file = uploadPortletRequest.getFile("attachmentFile");
-		String status = "";
 		JSONObject json = JSONFactoryUtil.createJSONObject();
 		
 		try {
@@ -50,15 +49,13 @@ public class UploadAllegatoResourceCommand extends BaseMVCResourceCommand{
 				long idTemporaneoAllegato = definizioneAllegatoLocalService.uploadAllegatoTemporaneo(file);
 				
 				if(Validator.isNotNull(idTemporaneoAllegato)) {
-					status = "ok";
-					json.put("idTemporaneoAllegato", idTemporaneoAllegato);
-					json.put("status", status);
+					json.put(GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_ID_TEMPORANEO, idTemporaneoAllegato);
+					json.put(GestioneFormsPortletKeys.STATUS, GestioneFormsPortletKeys.STATUS_OK);
 				}
 			}
 		}catch(Exception e) {
 			_log.error("GestioneForms :: uploadAllegatoResourceCommand :: " + e.getMessage());
-			status = "error";
-			json.put("status", status);
+			json.put(GestioneFormsPortletKeys.STATUS, GestioneFormsPortletKeys.STATUS_ERROR);
 		}
 		
 		resourceResponse.setContentType(ContentTypes.APPLICATION_JSON);

@@ -441,7 +441,7 @@
 			    		success: function(data){	
 			    			if(data.status==='ok'){
 			    				$('#alertUploadAllegato').addClass('hidden');
-		 	    				idAllegatoTemporaneoValue = data.idTemporaneoAllegato;
+		 	    				idAllegatoTemporaneoValue = data.idAllegatoTemporaneo;
 		 		 				$trToAdd = aggiungiRigaTabella(attachmentIdValue,attachmentNameValue,attachmentMandatoryValue,attachmentFiletypeValue,attachmentCodetypesValue,attachmentFileNameValue,idAllegatoTemporaneoValue);
 			    			}else if(data.status==='error'){
 			    				$('#alertUploadAllegato').removeClass('hidden');
@@ -469,12 +469,12 @@
 				attachmentFileNameValue, idAllegatoTemporaneoValue) {
 			
 			var attachmentId = '<input type="text" class="nostylereadonly definizioneAllegatoId" id="definizioneAllegatoId'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].definizioneAllegatoId" readonly value='+ attachmentIdValue +'>';
-	    	var attachmentName = '<input type="text" class="nostylereadonly" id="denominazione'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].denominazione" value='+ attachmentNameValue +' readonly>';
-	    	var attachmentMandatory = '<input type="text" class="nostylereadonly" id="obbligatorio'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].obbligatorio" value='+ attachmentMandatoryValue +' onclick="return false;" readonly checked>';
-	    	var attachmentFiletype = '<input type="text" class="nostylereadonly" id="tipiFileAmmessi'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].tipiFileAmmessi" value='+ attachmentFiletypeValue +' readonly>';
-	    	var attachmentCodetypes = '<input type="text" class="nostylereadonly" id="codiciTipologiaDocumento'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].codiciTipologiaDocumento" value='+ attachmentCodetypesValue +' readonly>';
-	    	var attachmentFileName = '<input type="text" class="nostylereadonly" id="filenameModello'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].filenameModello" value=\'' +  attachmentFileNameValue + '\' size="50"  readonly>';
-			var idAllegatoTemporaneoInput = '<input type="hidden" id="idAllegatoTemporaneo'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].idAllegatoTemporaneo" value="'+ idAllegatoTemporaneoValue +'">';
+	    	var attachmentName = '<input type="text" class="nostylereadonly" id="denominazione'+ index +'" name="<portlet:namespace />denominazione'+ index +'" value='+ attachmentNameValue +' readonly>';
+	    	var attachmentMandatory = '<input type="text" class="nostylereadonly" id="obbligatorio'+ index +'" name="<portlet:namespace />obbligatorio'+ index +'" value='+ attachmentMandatoryValue +' onclick="return false;" readonly checked>';
+	    	var attachmentFiletype = '<input type="text" class="nostylereadonly" id="tipiFileAmmessi'+ index +'" name="<portlet:namespace />tipiFileAmmessi'+ index +'" value='+ attachmentFiletypeValue +' readonly>';
+	    	var attachmentCodetypes = '<input type="text" class="nostylereadonly" id="codiciTipologiaDocumento'+ index +'" name="<portlet:namespace />codiciTipologiaDocumento'+ index +'" value='+ attachmentCodetypesValue +' readonly>';
+	    	var attachmentFileName = '<input type="text" class="nostylereadonly" id="filenameModello'+ index +'" name="<portlet:namespace />filenameModello'+ index +'" value=\'' +  attachmentFileNameValue + '\' size="50"  readonly>';
+			var idAllegatoTemporaneoInput = '<input type="hidden" id="idAllegatoTemporaneo'+ index +'" name="<portlet:namespace />idAllegatoTemporaneo'+ index +'" value="'+ idAllegatoTemporaneoValue +'">';
 			
 			
 	    	var $trToAdd = $('<tr>')

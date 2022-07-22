@@ -30,6 +30,17 @@ public class GestioneFormsPortletKeys {
 	
 	public static final String FILE = "file";
 	
+	public static final String DEFINIZIONE_ALLEGATO_ID = "definizioneAllegatoId";
+	public static final String DEFINIZIONE_ALLEGATO_DENOMINAZIONE = "denominazione";
+	public static final String DEFINIZIONE_ALLEGATO_FILE_AMMESSI = "tipiFileAmmessi";
+	public static final String DEFINIZIONE_ALLEGATO_CODICI_TIPOLOGIA = "codiciTipologiaDocumento";
+	public static final String DEFINIZIONE_ALLEGATO_ID_TEMPORANEO = "idAllegatoTemporaneo";
+	public static final String DEFINIZIONE_ALLEGATO_FILENAME = "filenameModello";
+	public static final String DEFINIZIONE_ALLEGATO_OBBLIGATORIO = "obbligatorio";
+	
+	
+	
+	
 	// FORM RICERCA
 	
 	public static final String NOME_RICERCA = "nomeRicerca";
@@ -69,4 +80,10 @@ public class GestioneFormsPortletKeys {
 	public static final String CARTELLA_CONFIGURAZIONE_PIATTAFORMA = "Configurazione Piattaforma";
 	public static final String CARTELLA_FORM = "Form";
 	public static final String CARTELLA_TEMPLATE = "Template";
+	
+	// JSON
+	
+	public static final String STATUS = "status";
+	public static final String STATUS_OK = "ok";
+	public static final String STATUS_ERROR = "error";
 }

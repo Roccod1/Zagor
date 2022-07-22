@@ -115,13 +115,13 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		// Recupero elenco allegati specificati nella creazione del form 
 		
 		for(int i=0;i<indiceListaDefinizioneAllegati;i++) {
-			long definizioneAllegatoId = ParamUtil.getLong(actionRequest, "listaDefinizioneAllegato[" + i + "].definizioneAllegatoId");
-			String denominazione = ParamUtil.getString(actionRequest, "listaDefinizioneAllegato[" + i + "].denominazione");
-			String[] tipiFileAmmessi = ParamUtil.getParameterValues(actionRequest, "listaDefinizioneAllegato[" + i + "].tipiFileAmmessi");
-			String[] codiciTipologiaDocumento = ParamUtil.getParameterValues(actionRequest, "listaDefinizioneAllegato[" + i + "].codiciTipologiaDocumento");
-			String idAllegatoTemporaneo = ParamUtil.getString(actionRequest, "listaDefinizioneAllegato["+ i +"].idAllegatoTemporaneo");
-			String fileNameModello = ParamUtil.getString(actionRequest, "listaDefinizioneAllegato["+ i +"].filenameModello");
-			boolean obbligatorio = ParamUtil.getBoolean(actionRequest, "listaDefinizioneAllegato[" + i + "].obbligatorio");
+			long definizioneAllegatoId = ParamUtil.getLong(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_ID + i);
+			String denominazione = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_DENOMINAZIONE + i);
+			String[] tipiFileAmmessi = ParamUtil.getParameterValues(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_FILE_AMMESSI + i);
+			String[] codiciTipologiaDocumento = ParamUtil.getParameterValues(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_CODICI_TIPOLOGIA + i);
+			String idAllegatoTemporaneo = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_ID_TEMPORANEO + i);
+			String fileNameModello = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_FILENAME + i);
+			boolean obbligatorio = ParamUtil.getBoolean(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_OBBLIGATORIO + i);
 			
 			FileEntry allegatoCaricato = definizioneAllegatoLocalService.uploadAllegatoDocumentMediaRepository(idAllegatoTemporaneo, fileNameModello, groupIdSitoPrincipale,form.getFormId(),themeDisplay.getUserId(),serviceContext);
 			
