@@ -28,4 +28,4 @@
 <liferay-ui:success key="salvataggio-avvenuto-con-successo" message="salvataggio-avvenuto-con-successo" />
 <liferay-ui:error key="salvataggio-errore" message="errore-salvataggio"/>
 <liferay-ui:error key="impossibile-ottenere-dettaglio-organizzazione" message="impossibile-ottenere-dettaglio-organizzazione"/>
-<liferay-ui:error key="errore-generico" message="errore-generico="/>
+<liferay-ui:error key="errore-generico" message="errore-generico"/>

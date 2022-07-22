@@ -83,7 +83,11 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 				utenteOrganizzazionePreferita = listaUtenteOrganizzazione.get(0);
 			}
 			
-			privacyAccettata = (boolean) utenteCorrente.getExpandoBridge().getAttribute(ProfiloUtentePreferenzePortletKeys.UTENTE_EXPANDO_ACCETTA_PRIVACY);
+			try{
+				privacyAccettata = (boolean) utenteCorrente.getExpandoBridge().getAttribute(ProfiloUtentePreferenzePortletKeys.UTENTE_EXPANDO_ACCETTA_PRIVACY);
+			}catch(NullPointerException npe) {
+				_log.warn("Impossibile recuperare privacyUtente");
+			}
 		} catch (Exception e) {
 			SessionErrors.add(renderRequest, ProfiloUtentePreferenzePortletKeys.ERRORE_GENERICO);
 			_log.error("Impossibile recuperare le informazion pe l'utente corrente ::" + e.getMessage(), e);
