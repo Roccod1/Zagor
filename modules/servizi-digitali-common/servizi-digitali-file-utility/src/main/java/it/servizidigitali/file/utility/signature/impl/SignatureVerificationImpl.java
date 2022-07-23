@@ -32,7 +32,6 @@ public class SignatureVerificationImpl implements SignatureVerification {
 
 	@Override
 	public boolean checkPkcs7Signature(byte[] sigbytes, String outputFile, String certificateFile) throws SignatureVerificationException {
-		// TODO Auto-generated method stub
 		try {
 			boolean checkPkcs7Signature = SignatureManagerFactory.getSignatureManager(sigbytes).checkPkcs7Signature(sigbytes, outputFile, certificateFile);
 			return checkPkcs7Signature;
