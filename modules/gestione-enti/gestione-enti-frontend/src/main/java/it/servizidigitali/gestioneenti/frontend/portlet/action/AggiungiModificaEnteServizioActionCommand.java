@@ -60,8 +60,8 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		String uriScheda = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_SCHEDA);
 		Boolean autenticazione = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_AUTENTICAZIONE);
 		Boolean attivo = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ATTIVO);
-		Date dataInizioAttivazione = ParamUtil.getDate(actionRequest, GestioneEntiPortletKeys.SERVIZIO_DATA_INIZIO_ATTIVAZIONE, GestioneEntiPortlet.simpleDateFormat, null);
-		Date dataFineAttivazione = ParamUtil.getDate(actionRequest, GestioneEntiPortletKeys.SERVIZIO_DATA_FINE_ATTIVAZIONE, GestioneEntiPortlet.simpleDateFormat, null);
+		Date dataInizioAttivazione = ParamUtil.getDate(actionRequest, GestioneEntiPortletKeys.SERVIZIO_DATA_INIZIO_ATTIVAZIONE, GestioneEntiPortlet.SIMPLE_DATE_FORMAT, null);
+		Date dataFineAttivazione = ParamUtil.getDate(actionRequest, GestioneEntiPortletKeys.SERVIZIO_DATA_FINE_ATTIVAZIONE, GestioneEntiPortlet.SIMPLE_DATE_FORMAT, null);
 		Boolean cittadino = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_CITTADINO);
 		Boolean azienda = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_AZIENDA);
 		Boolean delega = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_DELEGA);
@@ -94,6 +94,12 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 			actionResponse.sendRedirect(redirect);
 		}
 		
+		if(dataFineAttivazione.before(dataInizioAttivazione)) {
+			_log.error("dataFineAttivazione e' minore di dataInizioAttivazione");
+			SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE);
+			actionResponse.sendRedirect(redirect);
+		}
+		
 		try {
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 			ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
@@ -120,9 +126,6 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		
 			servizioEnteLocalService.updateServizioEnte(servizioEnte);
 			SessionMessages.add(actionRequest, GestioneEntiPortletKeys.SALVATAGGIO_SUCCESSO);
-//			MutableRenderParameters params = actionResponse.getRenderParameters();
-//			params.setValue("mvcPath", GestioneEntiPortletKeys.JSP_INSERIMENTO_MODIFICA);
-//			params.setValue(GestioneEntiPortletKeys.ORGANIZZAZIONE_ID, organizationId.toString());
 			actionResponse.sendRedirect(redirect);
 		}
 		catch (Exception e) {

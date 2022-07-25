@@ -66,7 +66,8 @@ import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 ) 
 public class GestioneEntiPortlet extends MVCPortlet {
 
-	public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//	2022-07-25T11:02
+	public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 	
 	private static final Log _log = LogFactoryUtil.getLog(GestioneEntiPortlet.class);
 

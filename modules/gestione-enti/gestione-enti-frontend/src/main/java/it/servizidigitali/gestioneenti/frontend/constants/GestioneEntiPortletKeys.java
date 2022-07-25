@@ -66,6 +66,7 @@ public class GestioneEntiPortletKeys {
 	public static final String ERRORE_SALVATAGGIO = "salvataggio-errore";
 	public static final String ERRORE_IMPOSSIBILE_CARICARE_I_DATI = "errore-impossibile-caricare-i-dati";
 	public static final String ERRORE_ELIMINAZIONE_SERVIZIO = "errore-eliminazione-servizio-associato";
+	public static final String ERRORE_PERIODO_DATE_ATTIVAZIONE= "errore-periodo-date";
 	public static final String INDIRIZZO_REDIRECT = "indirizzoRedirect";
 	public static final String DELETE_TOGGLE = "toDelete";
 	public static final String PULSANTE_PAGINA_PRINCIPALE_TOGGLE = "pulsantePaginaPrincipale";

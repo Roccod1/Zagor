@@ -33,3 +33,4 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <liferay-ui:error key="<%=GestioneEntiPortletKeys.ERRORE_SALVATAGGIO %>" message="errore-salvataggio"/>
 <liferay-ui:error key="<%=GestioneEntiPortletKeys.ERRORE_CAMPI_OBBLIGATORI %>" message="compilare-tutti-i-campi-per-procedere"/>
 <liferay-ui:error key="<%=GestioneEntiPortletKeys.ERRORE_ELIMINAZIONE_SERVIZIO %>" message="errore-eliminazione-servizio"/>
+<liferay-ui:error key="<%=GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE %>" message="errore-periodo-date-attivazione"/>

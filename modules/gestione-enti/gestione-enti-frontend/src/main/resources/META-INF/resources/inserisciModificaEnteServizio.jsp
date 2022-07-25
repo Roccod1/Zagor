@@ -80,15 +80,15 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-   					<fmt:formatDate value="${servizioEnte.dataInizioAttivazione}" pattern="yyyy-MM-dd" var="dataInizioAttivazioneFormattato"/>
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_INIZIO_ATTIVAZIONE %>" label="data-inizio-attivazione" type="date" value="${dataInizioAttivazioneFormattato }"/>
+   					<fmt:formatDate value="${servizioEnte.dataInizioAttivazione}" pattern="yyyy-MM-dd'T'hh:mm" var="dataInizioAttivazioneFormattato"/>
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_INIZIO_ATTIVAZIONE %>" label="data-inizio-attivazione" type="datetime-local" value="${dataInizioAttivazioneFormattato }"/>					
 				</div>
 			</div>
 			
 			<div class="col">
 				<div class="form-group">
-   					<fmt:formatDate value="${servizioEnte.dataFineAttivazione}" pattern="yyyy-MM-dd" var="dataFineAttivazioneFormattato"/>
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_FINE_ATTIVAZIONE %>" label="data-fine-attivazione" type="date" value="${dataFineAttivazioneFormattato}"/>
+   					<fmt:formatDate value="${servizioEnte.dataFineAttivazione}" pattern="yyyy-MM-dd'T'hh:mm" var="dataFineAttivazioneFormattato"/>
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_FINE_ATTIVAZIONE %>" label="data-fine-attivazione" type="datetime-local" value="${dataFineAttivazioneFormattato}"/>
 				</div>
 			</div>
 		</div>
@@ -170,3 +170,24 @@
 		</aui:button-row>
 	</aui:form>
 </div>
+
+<script type="text/javascript">
+
+	$(function(){
+		impostaDataMinimaDataFine();
+	});
+	
+	function impostaDataMinimaDataFine(){
+		var dataInizioAttivazione = $("#<portlet:namespace/>dataInizioAttivazione");
+		var dataFineAttivazione = $("#<portlet:namespace/>dataFineAttivazione");
+		var dataInizio = new Date(dataInizioAttivazione.val());
+		dataInizio.setDate(dataInizio.getDate() + 1);
+		dataFineAttivazione.prop('min', dataInizio.toISOString().substr(0, 16));		
+	}
+	
+
+	$("#<portlet:namespace/>dataInizioAttivazione").change(() => {
+		impostaDataMinimaDataFine();
+	});
+
+</script>
