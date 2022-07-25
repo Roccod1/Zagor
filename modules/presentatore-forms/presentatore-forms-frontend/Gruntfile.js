@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    clean: ['dist'],
+    clean: ['dist', 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs'],
     concat: {
       options: {
         separator: ';'
@@ -16,6 +16,63 @@ module.exports = function(grunt) {
         dest: 'alpaca/dist/custom-fields.js'
       }
     },
+    copy: {
+		libs: {
+			files: [
+				{
+					expand: true,
+					cwd: 'alpaca/commonlibs',
+					src: '**/*',
+					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs'
+				},
+				{
+					expand: true,
+					cwd: 'node_modules/select2/dist',
+					src: '**/*',
+					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/select2'
+				},
+				{
+					expand: true,
+					cwd: 'node_modules/fullcalendar/dist',
+					src: '**/*',
+					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/fullcalendar'
+				},
+				{
+					expand: true,
+					cwd: 'node_modules/jquery-ui/',
+					src: [
+						'ui/**/*',
+						'themes/**/*'
+					],
+					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/jquery-ui'
+				},
+				{
+					expand: true,
+					cwd: 'node_modules/jquery-blockui/',
+					src: 'jquery.blockUI.js',
+					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/jquery-blockui'
+				},
+				{
+					expand: true,
+					cwd: 'node_modules/jquery-file-download/src/Scripts',
+					src: 'jquery.fileDownload.js',
+					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/jquery-filedownload'
+				},
+				{
+					expand: true,
+					cwd: 'node_modules/moment/min',
+					src: '**/*',
+					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/moment'					
+				},
+				{
+					expand: true,
+					cwd: 'node_modules/pdfjs-dist/build',
+					src: '**/*',
+					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/pdfjs-dist'					
+				}
+			]
+		}
+	},
     uglify: {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy HH:MM:ss") %> */\n'
@@ -44,9 +101,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-replace');
 
   grunt.registerTask('test', ['jshint']);
 
-  grunt.registerTask('default', [/*'jshint', */'clean', 'concat', 'uglify']);
+  grunt.registerTask('default', [/*'jshint', */'clean', 'concat', 'copy', 'uglify']);
 };
