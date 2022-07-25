@@ -60,7 +60,7 @@ public class CheckPrivacyFilter extends BaseFilter {
 
 		String redirectCkeckPrivacyPath = profiloUtenteConfiguration.ckeckPrivacyRedirectPath();
 		User user = PortalUtil.getUser(request);
-		if (!PortalUtil.getCurrentURL(request).equals(redirectCkeckPrivacyPath) && user != null && user.isActive() && !isAdministrator(user)) {
+		if (!PortalUtil.getCurrentURL(request).contains(redirectCkeckPrivacyPath) && user != null && user.isActive() && !isAdministrator(user)) {
 
 			Serializable accettaPrivacy = user.getExpandoBridge().getAttribute("accettaPrivacy");
 			boolean accettaPrivacyBoolean = accettaPrivacy != null && Boolean.parseBoolean(accettaPrivacy.toString());
