@@ -61,13 +61,15 @@ public class ComunicazioneLocalServiceUtil {
 	}
 
 	public static Comunicazione addComunicazione(
-		long groupId, long companyId, long userId, String titolo,
-		String descrizione, java.util.Date dataInizio, java.util.Date dataFine,
-		long tipologiaId, long destinatarioUserId) {
+		long groupId, long companyId, long userId, long organizationId,
+		String userFullName, String titolo, String descrizione,
+		java.util.Date dataInizio, java.util.Date dataFine, long tipologiaId,
+		Long destinatarioUserId, long destinatarioOrganizationId) {
 
 		return getService().addComunicazione(
-			groupId, companyId, userId, titolo, descrizione, dataInizio,
-			dataFine, tipologiaId, destinatarioUserId);
+			groupId, companyId, userId, organizationId, userFullName, titolo,
+			descrizione, dataInizio, dataFine, tipologiaId, destinatarioUserId,
+			destinatarioOrganizationId);
 	}
 
 	/**

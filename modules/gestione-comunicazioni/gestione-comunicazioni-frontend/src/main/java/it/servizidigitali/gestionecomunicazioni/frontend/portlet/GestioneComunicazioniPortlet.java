@@ -20,7 +20,6 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.gestionecomunicazioni.frontend.constants.GestioneComunicazioniFrontendPortletKeys;
 import it.servizidigitali.gestionecomunicazioni.frontend.dto.OrganizationDTO;
 import it.servizidigitali.gestionecomunicazioni.frontend.dto.TipologiaDTO;
-import it.servizidigitali.gestionecomunicazioni.frontend.dto.UtenteDTO;
 import it.servizidigitali.gestionecomunicazioni.service.TipologiaComunicazioneLocalService;
 
 /**
@@ -62,13 +61,7 @@ public class GestioneComunicazioniPortlet extends MVCPortlet {
 				.stream()
 				.map(OrganizationDTO::new)
 				.collect(Collectors.toList());
-		List<UtenteDTO> utenti = userLocalService
-				.getOrganizationUsers(organizzazioni.get(0).getId())
-				.stream()
-				.map(UtenteDTO::new)
-				.collect(Collectors.toList());
 		
-		request.setAttribute("utenti", utenti);
 		request.setAttribute("organizzazioni", organizzazioni);
 		request.setAttribute("tipologie", tipologie);
 

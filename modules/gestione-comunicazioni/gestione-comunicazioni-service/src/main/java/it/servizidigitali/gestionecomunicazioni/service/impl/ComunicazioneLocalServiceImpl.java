@@ -15,7 +15,6 @@
 package it.servizidigitali.gestionecomunicazioni.service.impl;
 
 import com.liferay.portal.aop.AopService;
-import com.liferay.portal.kernel.model.User;
 
 import java.util.Date;
 
@@ -38,28 +37,29 @@ public class ComunicazioneLocalServiceImpl
 			long groupId,
 			long companyId, 
 			long userId, 
+			long organizationId,
+			String userFullName,
 			String titolo, 
 			String descrizione,
 			Date dataInizio,
 			Date dataFine, 
 			long tipologiaId,
-			long destinatarioUserId) {
-		User user = userLocalService.fetchUser(userId);
-		User userDestinatario = userLocalService.fetchUser(destinatarioUserId);
-		
+			Long destinatarioUserId,
+			long destinatarioOrganizationId) {
 		long id = counterLocalService.increment(Comunicazione.class.getName());
 		Comunicazione model = comunicazionePersistence.create(id);
 		model.setGroupId(groupId);
 		model.setCompanyId(companyId);
 		model.setUserId(userId);
-		model.setUserName(user.getScreenName());
+		model.setUserName(userFullName);
+		model.setOrganizationId(organizationId);
 		model.setTitolo(titolo);
 		model.setDescrizione(descrizione);
 		model.setDataInizio(dataInizio);
 		model.setDataFine(dataFine);
 		model.setTipologiaComunicazioneId(tipologiaId);
-		model.setDestinatarioUserId(null);
-		//model.setDestinatarioOrganizationId();;
+		model.setDestinatarioUserId(destinatarioUserId);
+		model.setDestinatarioOrganizationId(destinatarioOrganizationId);
 		return comunicazionePersistence.update(model);
 	}
 }

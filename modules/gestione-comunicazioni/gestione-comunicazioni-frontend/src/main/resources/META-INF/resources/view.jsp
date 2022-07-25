@@ -3,6 +3,9 @@
 <portlet:actionURL var="inserisciURL" name="/action/inserisci">
 </portlet:actionURL>
 
+<portlet:resourceURL var="ricercaUtentiURL" id="/resource/ricercaUtenti">
+</portlet:resourceURL>
+
 <aui:form action="${inserisciURL}">
 	<aui:input name="titolo" />
 	<aui:select name="tipologia">
@@ -31,12 +34,71 @@
 		</c:forEach>
 	</aui:select>
 	
-	<aui:select name="utente">
-		<c:forEach items="${utenti}" var="utente">
-			<aui:option value="${utente.id}">${utente.nome}</aui:option>
-		</c:forEach>
-	</aui:select>
+	<aui:input name="utenteQuery" label="utente" />
+	<aui:input type="hidden" name="utente" />
 
 	<aui:button type="cancel" value="annulla" />
 	<aui:button type="submit" value="inserisci" />
 </aui:form>
+
+<script>
+	
+	var acLimit = 10;
+	AUI().use('autocomplete-list', 'datasource-io', function(A) {
+		var datasource = new A.DataSource.IO({
+			source: '${ricercaUtentiURL}'
+		});
+		var autoComplete = new A.AutoCompleteList({
+			allowBrowserAutocomplete: false,
+			activateFirstItem: true,
+			inputNode: '#<portlet:namespace/>utenteQuery',
+			on: {
+				query: function(event) {
+					//$("#" + cfg.loading).show();
+				},
+				select: function(event) {
+					var result = event.result.raw;
+					$("#<portlet:namespace/>utente").val(result.id);
+				},
+				results: function(event) {
+					//$("#" + cfg.loading).hide();
+				},
+				clear: function(event) {
+					//$("#" + cfg.output).val('');
+					//$("#" + cfg.loading).hide();
+				}
+			},
+			render: true,
+			source: datasource,
+			minQueryLength: 4,
+			requestTemplate: function(query) {
+				var organizzazione = $("#<portlet:namespace/>organizzazione").val();
+				
+				var template = '&<portlet:namespace/>query=' + query;
+				template += '&<portlet:namespace/>organizzazione=' + organizzazione;
+				template += '&<portlet:namespace/>limit=' + acLimit;
+				
+				return template;
+			},
+			resultListLocator: function (response) {
+				var responseData = JSON.parse(response[0].responseText);
+				var allObj = {
+					id: 0,
+					cf: null,
+					nome: null
+				};
+				responseData.splice(0, 0, allObj);
+				return responseData;
+			},
+			resultTextLocator: function (result) {
+				if (result.id == 0) {
+					return '<liferay-ui:message key="seleziona-tutti" />';
+				} else {
+					return result.cf + ' - ' + result.nome;
+				}
+			},
+			width: 400,
+			maxResults: acLimit
+		});
+	});
+</script>
