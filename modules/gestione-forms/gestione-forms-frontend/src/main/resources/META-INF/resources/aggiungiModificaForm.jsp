@@ -4,7 +4,6 @@
  <script type="text/javascript" src="<%=request.getContextPath()%>/scripts/main.js"></script> 
 
 
-
 <portlet:actionURL name="<%=GestioneFormsPortletKeys.SALVA_AGGIUNGI_ACTION_COMMAND %>" var="salvaModificaURL" />
 <portlet:renderURL var="homeURL"></portlet:renderURL>
 <portlet:resourceURL id="<%=GestioneFormsPortletKeys.UPLOAD_ALLEGATO_RESOURCE_COMMAND %>" var="uploadFileUrl">
