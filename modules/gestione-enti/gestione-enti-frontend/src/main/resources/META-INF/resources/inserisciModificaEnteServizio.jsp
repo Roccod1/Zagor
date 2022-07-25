@@ -181,7 +181,6 @@
 		var dataInizioAttivazione = $("#<portlet:namespace/>dataInizioAttivazione");
 		var dataFineAttivazione = $("#<portlet:namespace/>dataFineAttivazione");
 		var dataInizio = new Date(dataInizioAttivazione.val());
-		dataInizio.setHours(0,0,0,0);
 		dataFineAttivazione.prop('min', dataInizio.toISOString().substr(0, 16));		
 	}
 	

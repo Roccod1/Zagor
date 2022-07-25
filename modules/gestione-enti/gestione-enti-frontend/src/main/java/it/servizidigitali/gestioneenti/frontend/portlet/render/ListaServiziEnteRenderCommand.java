@@ -63,6 +63,7 @@ public class ListaServiziEnteRenderCommand implements MVCRenderCommand {
 		Long organizationId = ParamUtil.getLong(renderRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_ID);
 		Long servizioId = ParamUtil.getLong(renderRequest, GestioneEntiPortletKeys.SERVIZIO_ID);
 		Boolean deleteToggle = ParamUtil.getBoolean(renderRequest, GestioneEntiPortletKeys.DELETE_TOGGLE, false);
+		SessionErrors.clear(renderRequest);
 		
 		/*
 		 * gestisco l'eliminazione di un servizio dallo specifico ente

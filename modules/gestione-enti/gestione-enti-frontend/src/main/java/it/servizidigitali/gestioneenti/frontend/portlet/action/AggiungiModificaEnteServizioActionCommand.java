@@ -1,6 +1,7 @@
 package it.servizidigitali.gestioneenti.frontend.portlet.action;
 
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -28,6 +29,7 @@ import it.servizidigitali.gestioneenti.frontend.portlet.GestioneEntiPortlet;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
+import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 
 /**
  * @author pindi
@@ -50,6 +52,9 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 	@Reference
 	private ServizioEnteLocalService servizioEnteLocalService;
 
+	@Reference
+	private ServizioLocalService servizioLocalService;
+	
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
@@ -73,10 +78,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		Boolean timbroCertificato = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_TIMBRO_CERTIFICATO);
 
 		String redirect = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.INDIRIZZO_REDIRECT);
-		
-		MutableRenderParameters mutableRenderParameter = actionResponse.getRenderParameters();
-		String jspDestinazione = GestioneEntiPortletKeys.JSP_LISTA_SERVIZI_ENTE;
-		
+				
 		//creo la pk della entity
 		ServizioEntePK servizioEntePK = new ServizioEntePK();
 		servizioEntePK.setServizioId(servizioId);
@@ -128,11 +130,14 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 
 			servizioEnteLocalService.updateServizioEnte(servizioEnte);
 			SessionMessages.add(actionRequest, GestioneEntiPortletKeys.SALVATAGGIO_SUCCESSO);
+			actionResponse.sendRedirect(redirect);
 		}
 		catch (Exception e) {
 			_log.error("Impossibile salvare/aggiornare il servizio con ID: " + servizioId + " > " + e.getMessage(),e);
 			SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_SALVATAGGIO);
+			actionRequest.setAttribute(GestioneEntiPortletKeys.SERVIZIO_ENTE, servizioEnte);
+			actionRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONE, organizationLocalService.fetchOrganization(organizationId));
+			actionRequest.setAttribute(GestioneEntiPortletKeys.LISTA_SERVIZI, servizioLocalService.getServizios(QueryUtil.ALL_POS, QueryUtil.ALL_POS));
 		}
-		actionResponse.sendRedirect(redirect);
 	}
 }
