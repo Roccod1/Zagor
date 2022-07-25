@@ -1,12 +1,15 @@
 package it.servizidigitali.profiloutente.preferenze.frontend.portlet;
 
+import com.liferay.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
@@ -84,13 +87,16 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 		ServiceContext serviceContext = null;
 		ThemeDisplay themeDisplay = null;
 		User utenteCorrente = null;
-				
+		Group globalGroup = null;
+		
 		try {
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
 			themeDisplay = serviceContext.getThemeDisplay();
 			utenteCorrente = themeDisplay.getUser();
 			listaOrganizzazioni = organizationLocalService.getOrganizations(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 			
+			globalGroup = GroupLocalServiceUtil.getCompanyGroup(themeDisplay.getCompanyId());
+
 			List<UtenteOrganizzazione> listaUtenteOrganizzazione = utenteOrganizzazioneLocalService.getByUtentePreferito(utenteCorrente.getUserId(), true);
 			
 			if(Validator.isNotNull(listaUtenteOrganizzazione) && !listaUtenteOrganizzazione.isEmpty()) {
@@ -111,6 +117,9 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 			listaOrganizzazioni = new ArrayList<Organization>();
 		}
 		
+		
+		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.PRIVACY_ARTICLE_ID, profiloUtenteConfiguration.checkPrivacyArticleId());
+		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.PRIVACY_ARTICLE_GROUP_ID, globalGroup.getGroupId());
 		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.UTENTE_ACCETTA_PRIVACY, privacyAccettata);
 		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_ORGANIZZAZIONI, listaOrganizzazioni);
 		renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.UTENTE_ORGANIZZAZIONE_PREFERITA, utenteOrganizzazionePreferita);

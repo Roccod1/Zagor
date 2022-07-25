@@ -27,6 +27,9 @@ public class ProfiloUtentePreferenzePortletKeys {
 	public static final String LISTA_CANALI_COMUNICAZIONE = "listaCanaliComunicazione";
 	public static final String LISTA_UTENTE_ORGANIZZAZIONE_CANALE_COMUNICAZIONE = "listaUtenteOrganizzazioneCanaleComunicazione";
 	public static final String UTENTE_EXPANDO_ACCETTA_PRIVACY = "accettaPrivacy";
+	public static final String PRIVACY_ARTICLE_ID = "privacyArticleId";
+	public static final String PRIVACY_ARTICLE_GROUP_ID = "privacyArticleGroupId";
+
 //	nomi jsp
 	public static final String JSP_PREFERENZE = "/preferenze.jsp";
 	public static final String JSP_PRIVACY = "/privacy.jsp"; 
