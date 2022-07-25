@@ -80,14 +80,14 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-   					<fmt:formatDate value="${servizioEnte.dataInizioAttivazione}" pattern="yyyy-MM-dd'T'hh:mm" var="dataInizioAttivazioneFormattato"/>
+   					<fmt:formatDate value="${servizioEnte.dataInizioAttivazione}" pattern="yyyy-MM-dd'T'HH:mm" var="dataInizioAttivazioneFormattato"/>
 			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_INIZIO_ATTIVAZIONE %>" label="data-inizio-attivazione" type="datetime-local" value="${dataInizioAttivazioneFormattato }"/>					
 				</div>
 			</div>
 			
 			<div class="col">
 				<div class="form-group">
-   					<fmt:formatDate value="${servizioEnte.dataFineAttivazione}" pattern="yyyy-MM-dd'T'hh:mm" var="dataFineAttivazioneFormattato"/>
+   					<fmt:formatDate value="${servizioEnte.dataFineAttivazione}" pattern="yyyy-MM-dd'T'HH:mm" var="dataFineAttivazioneFormattato"/>
 			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_FINE_ATTIVAZIONE %>" label="data-fine-attivazione" type="datetime-local" value="${dataFineAttivazioneFormattato}"/>
 				</div>
 			</div>
@@ -181,7 +181,7 @@
 		var dataInizioAttivazione = $("#<portlet:namespace/>dataInizioAttivazione");
 		var dataFineAttivazione = $("#<portlet:namespace/>dataFineAttivazione");
 		var dataInizio = new Date(dataInizioAttivazione.val());
-		dataInizio.setDate(dataInizio.getDate() + 1);
+		dataInizio.setHours(0,0,0,0);
 		dataFineAttivazione.prop('min', dataInizio.toISOString().substr(0, 16));		
 	}
 	

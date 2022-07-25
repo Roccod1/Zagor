@@ -74,33 +74,36 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 
 		String redirect = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.INDIRIZZO_REDIRECT);
 		
+		MutableRenderParameters mutableRenderParameter = actionResponse.getRenderParameters();
+		String jspDestinazione = GestioneEntiPortletKeys.JSP_LISTA_SERVIZI_ENTE;
+		
 		//creo la pk della entity
 		ServizioEntePK servizioEntePK = new ServizioEntePK();
 		servizioEntePK.setServizioId(servizioId);
 		servizioEntePK.setOrganizationId(organizationId);
 
 		ServizioEnte servizioEnte = null;
-		if (servizioId > 0 && organizationId > 0) {
-			try {
-				servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);				
-			}catch(Exception e) {
-				//il servizio con servizioId ed organizationId non esiste. provvedo a creare una nuova entity
-				_log.debug("ServizioEnte con serviziId "+ servizioId + " e organizationId " + organizationId + " inesistente. Creo nuova entity");
-				servizioEnte = servizioEnteLocalService.createServizioEnte(servizioEntePK);
-			}
-		}else {
-			_log.error("servizioId  e organizationId sono campi obbligatori");
-			SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
-			actionResponse.sendRedirect(redirect);
-		}
-		
-		if(dataFineAttivazione.before(dataInizioAttivazione)) {
-			_log.error("dataFineAttivazione e' minore di dataInizioAttivazione");
-			SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE);
-			actionResponse.sendRedirect(redirect);
-		}
-		
 		try {
+			if (servizioId > 0 && organizationId > 0) {
+				try {
+					servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);				
+				}catch(Exception e) {
+					//il servizio con servizioId ed organizationId non esiste. provvedo a creare una nuova entity
+					_log.debug("ServizioEnte con serviziId "+ servizioId + " e organizationId " + organizationId + " inesistente. Creo nuova entity");
+					servizioEnte = servizioEnteLocalService.createServizioEnte(servizioEntePK);
+				}
+			}else {
+				_log.error("servizioId  e organizationId sono campi obbligatori");
+				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
+				throw new Exception(GestioneEntiPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
+			}
+			
+			if(dataFineAttivazione.before(dataInizioAttivazione)) {
+				_log.error("dataFineAttivazione e' minore di dataInizioAttivazione");
+				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE);
+				throw new Exception(GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE);
+			}
+		
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 			ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
 			servizioEnte.setGroupId(themeDisplay.getCompanyGroupId());
@@ -123,14 +126,13 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 			servizioEnte.setIseeInps(iseeInps);
 			servizioEnte.setTimbroCertificato(timbroCertificato);
 
-		
 			servizioEnteLocalService.updateServizioEnte(servizioEnte);
 			SessionMessages.add(actionRequest, GestioneEntiPortletKeys.SALVATAGGIO_SUCCESSO);
-			actionResponse.sendRedirect(redirect);
 		}
 		catch (Exception e) {
-			_log.error("Impossibile salvare/aggiornare il servizio con ID: " + servizioId, e);
+			_log.error("Impossibile salvare/aggiornare il servizio con ID: " + servizioId + " > " + e.getMessage(),e);
 			SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_SALVATAGGIO);
 		}
+		actionResponse.sendRedirect(redirect);
 	}
 }
