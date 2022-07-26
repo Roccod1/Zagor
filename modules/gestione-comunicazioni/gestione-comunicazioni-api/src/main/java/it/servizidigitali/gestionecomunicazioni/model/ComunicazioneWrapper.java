@@ -305,8 +305,18 @@ public class ComunicazioneWrapper
 	 * @return the destinatario user ID of this comunicazione
 	 */
 	@Override
-	public Long getDestinatarioUserId() {
+	public long getDestinatarioUserId() {
 		return model.getDestinatarioUserId();
+	}
+
+	/**
+	 * Returns the destinatario user uuid of this comunicazione.
+	 *
+	 * @return the destinatario user uuid of this comunicazione
+	 */
+	@Override
+	public String getDestinatarioUserUuid() {
+		return model.getDestinatarioUserUuid();
 	}
 
 	/**
@@ -530,8 +540,18 @@ public class ComunicazioneWrapper
 	 * @param destinatarioUserId the destinatario user ID of this comunicazione
 	 */
 	@Override
-	public void setDestinatarioUserId(Long destinatarioUserId) {
+	public void setDestinatarioUserId(long destinatarioUserId) {
 		model.setDestinatarioUserId(destinatarioUserId);
+	}
+
+	/**
+	 * Sets the destinatario user uuid of this comunicazione.
+	 *
+	 * @param destinatarioUserUuid the destinatario user uuid of this comunicazione
+	 */
+	@Override
+	public void setDestinatarioUserUuid(String destinatarioUserUuid) {
+		model.setDestinatarioUserUuid(destinatarioUserUuid);
 	}
 
 	/**

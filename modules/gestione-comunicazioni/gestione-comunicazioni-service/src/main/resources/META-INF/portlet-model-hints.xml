@@ -19,7 +19,7 @@
 		<field name="uriServizio" type="String" />
 		<field name="tipologiaComunicazioneId" type="long" />
 		<field name="organizationId" type="long" />
-		<field name="destinatarioUserId" type="Long" />
+		<field name="destinatarioUserId" type="long" />
 		<field name="destinatarioOrganizationId" type="long" />
 		<field name="calendarBookingId" type="long" />
 	</model>

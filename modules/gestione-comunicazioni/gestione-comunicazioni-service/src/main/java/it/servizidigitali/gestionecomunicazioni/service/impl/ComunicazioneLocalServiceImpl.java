@@ -75,7 +75,7 @@ public class ComunicazioneLocalServiceImpl
 		model.setDataFine(dataFine);
 		model.setTipologiaComunicazioneId(tipologiaId);
 		model.setDestinatarioUserId(destinatarioUserId);
-		model.setDestinatarioOrganizationId(destinatarioOrganizationId == 0 ? null : destinatarioOrganizationId);
+		model.setDestinatarioOrganizationId(destinatarioOrganizationId);
 		return comunicazionePersistence.update(model);
 	}
 }

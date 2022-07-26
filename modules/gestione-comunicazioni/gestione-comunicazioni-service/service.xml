@@ -38,7 +38,7 @@
 		
 		<column name="tipologiaComunicazioneId" type="long" />
 		<column name="organizationId" type="long" />
-		<column name="destinatarioUserId" type="Long" />
+		<column name="destinatarioUserId" type="long" />
 		<column name="destinatarioOrganizationId" type="long" />
 		<column name="calendarBookingId" type="long" />
 		
