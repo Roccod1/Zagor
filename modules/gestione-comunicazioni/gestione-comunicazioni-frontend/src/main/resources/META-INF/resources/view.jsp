@@ -34,6 +34,7 @@
 	</aui:select>
 	
 	<aui:select name="organizzazione" label="organizzazione-obbl">
+		<aui:option value="0"><liferay-ui:message key="seleziona-una-organizzazione" /></aui:option>
 		<c:forEach items="${organizzazioni}" var="organizzazione">
 			<aui:option value="${organizzazione.id}">${organizzazione.nome}</aui:option>
 		</c:forEach>
