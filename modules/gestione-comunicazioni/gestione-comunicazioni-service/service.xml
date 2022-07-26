@@ -77,4 +77,10 @@
 		<!-- Other fields -->
 		<column name="nome" type="String" />
 	</entity>
+	
+	<exceptions>
+		<exception>ComunicazioneTitolo</exception>
+		<exception>ComunicazioneDescrizione</exception>
+		<exception>ComunicazioneOrganizzazione</exception>
+	</exceptions>
 </service-builder>

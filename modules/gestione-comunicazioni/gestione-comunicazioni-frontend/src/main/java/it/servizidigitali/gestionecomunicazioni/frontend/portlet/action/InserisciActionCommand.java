@@ -1,7 +1,5 @@
 package it.servizidigitali.gestionecomunicazioni.frontend.portlet.action;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
@@ -21,6 +19,9 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneDescrizioneException;
+import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneOrganizzazioneException;
+import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneTitoloException;
 import it.servizidigitali.gestionecomunicazioni.frontend.constants.GestioneComunicazioniFrontendPortletKeys;
 import it.servizidigitali.gestionecomunicazioni.service.ComunicazioneLocalService;
 
@@ -43,7 +44,7 @@ public class InserisciActionCommand extends BaseMVCActionCommand {
 	
 	@Override
 	protected void doProcessAction(ActionRequest request, ActionResponse response) throws Exception {
-		String titolo = ParamUtil.getString(request, "titolo");
+		String titolo = ParamUtil.getString(request, "titolo").trim();
 		long tipologia = ParamUtil.getLong(request, "tipologia");
 		String descrizione = ParamUtil.getString(request, "descrizione");
 		String dataInizio = ParamUtil.getString(request, "dataInizio");
@@ -70,6 +71,12 @@ public class InserisciActionCommand extends BaseMVCActionCommand {
 					utente,
 					organizzazione
 			);
+		} catch (ComunicazioneTitoloException e) {
+			SessionErrors.add(request, "errore-titolo");
+		} catch (ComunicazioneDescrizioneException e) {
+			SessionErrors.add(request, "errore-descrizione");
+		} catch (ComunicazioneOrganizzazioneException e) {
+			SessionErrors.add(request, "errore-organizzazione");
 		} catch (Exception e) {
 			SessionErrors.add(request, "errore-generico");
 		}
@@ -87,5 +94,4 @@ public class InserisciActionCommand extends BaseMVCActionCommand {
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(InserisciActionCommand.class);
 }

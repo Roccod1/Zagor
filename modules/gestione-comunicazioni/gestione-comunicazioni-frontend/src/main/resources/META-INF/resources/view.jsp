@@ -6,8 +6,13 @@
 <portlet:resourceURL var="ricercaUtentiURL" id="/resource/ricercaUtenti">
 </portlet:resourceURL>
 
+<liferay-ui:error key="errore-generico" message="errore-generico" />
+<liferay-ui:error key="errore-titolo" message="errore-titolo" />
+<liferay-ui:error key="errore-descrizione" message="errore-descrizione" />
+<liferay-ui:error key="errore-organizzazione" message="errore-organizzazione" />
+
 <aui:form action="${inserisciURL}">
-	<aui:input name="titolo" />
+	<aui:input name="titolo" label="titolo-obbl"/>
 	<aui:select name="tipologia">
 		<c:forEach items="${tipologie}" var="tipologia">
 			<aui:option value="${tipologia.id}">${tipologia.nome}</aui:option>
@@ -15,7 +20,7 @@
 	</aui:select>
 	
 	<liferay-editor:editor name="descrizione"
-	                       placeholder="descrizione"
+	                       placeholder="descrizione-obbl"
 	                       editorName="ckeditor" />
 	
 	<label><liferay-ui:message key="data-inizio" /></label>
@@ -28,7 +33,7 @@
 		<aui:option value="-"><liferay-ui:message key="nessuna" /></aui:option>
 	</aui:select>
 	
-	<aui:select name="organizzazione">
+	<aui:select name="organizzazione" label="organizzazione-obbl">
 		<c:forEach items="${organizzazioni}" var="organizzazione">
 			<aui:option value="${organizzazione.id}">${organizzazione.nome}</aui:option>
 		</c:forEach>

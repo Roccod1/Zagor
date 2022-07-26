@@ -80,10 +80,11 @@ public interface ComunicazioneLocalService
 	public Comunicazione addComunicazione(Comunicazione comunicazione);
 
 	public Comunicazione addComunicazione(
-		long groupId, long companyId, long userId, long organizationId,
-		String userFullName, String titolo, String descrizione, Date dataInizio,
-		Date dataFine, long tipologiaId, Long destinatarioUserId,
-		long destinatarioOrganizationId);
+			long groupId, long companyId, long userId, long organizationId,
+			String userFullName, String titolo, String descrizione,
+			Date dataInizio, Date dataFine, long tipologiaId,
+			Long destinatarioUserId, long destinatarioOrganizationId)
+		throws PortalException;
 
 	/**
 	 * Creates a new comunicazione with the primary key. Does not add the comunicazione to the database.
