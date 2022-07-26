@@ -101,10 +101,12 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 				throw new Exception(GestioneEntiPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
 			}
 			
-			if(dataFineAttivazione.before(dataInizioAttivazione)) {
-				_log.error("dataFineAttivazione e' minore di dataInizioAttivazione");
-				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE);
-				throw new Exception(GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE);
+			if(Validator.isNotNull(dataFineAttivazione)) {
+				if(Validator.isNotNull(dataInizioAttivazione) && dataFineAttivazione.before(dataInizioAttivazione)) {					
+					_log.error("dataFineAttivazione e' minore di dataInizioAttivazione");
+					SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE);
+					throw new Exception(GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE);
+				}
 			}
 			
 			if(!Validator.isBlank(uri) && uri.trim().length() > 255) {
