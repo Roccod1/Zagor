@@ -1,8 +1,6 @@
 package it.servizidigitali.gestioneenti.frontend.portlet;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
@@ -16,24 +14,15 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portlet.RenderRequestFactory;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import javax.portlet.MutablePortletParameters;
-import javax.portlet.MutableRenderParameters;
 import javax.portlet.Portlet;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
-import javax.portlet.PortletParameters;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletSession;
-import javax.portlet.RenderParameters;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -41,9 +30,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneenti.frontend.constants.GestioneEntiPortletKeys;
-import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
-import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 
 /**
