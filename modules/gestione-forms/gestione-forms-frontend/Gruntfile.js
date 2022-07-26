@@ -33,12 +33,9 @@ module.exports = function(grunt) {
 				},
 				{
 					expand: true,
-					cwd: 'node_modules/jquery-ui/',
-					src: [
-						'ui/**/*',
-						'themes/**/*'
-					],
-					dest: 'modules/gestione-forms/gestione-forms-frontend/src/main/resources/META-INF/resources/libs/jquery-ui'
+					cwd: 'node_modules/jquery-ui-dist/',
+					src: 'jquery-ui.min.js',
+					dest: 'modules/gestione-forms/gestione-forms-frontend/src/main/resources/META-INF/resources/libs/jquery-ui-dist'
 				},
 				{
 					expand: true,
@@ -69,6 +66,12 @@ module.exports = function(grunt) {
 					cwd: 'node_modules/datatables.net-rowreorder/js',
 					src: '**/*',
 					dest: 'modules/gestione-forms/gestione-forms-frontend/src/main/resources/META-INF/resources/libs/datatables.net'
+				},
+				{
+					expand: true,
+					cwd: 'node_modules/handlebars/dist',
+					src: '**/*',
+					dest: 'modules/gestione-forms/gestione-forms-frontend/src/main/resources/META-INF/resources/libs/handlebars'
 				},
 				{
 					expand: true,

@@ -561,7 +561,7 @@
     	if($this.attr('id')){
 
     		var indiceRiga = parseInt($(this).attr('id').replace(/[^\d]/g, ''), 10);
-    		$('#attachment-id').val($('#definizioneAllegato' + indiceRiga).val());
+    		$('#attachment-id').val($('#definizioneAllegatoId' + indiceRiga).val());
     		$('#attachment-name').val($('#denominazione' + indiceRiga).val());
     		
     		if($('#obbligatorio' + indiceRiga).val()=="true"){
