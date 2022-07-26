@@ -1,24 +1,18 @@
 package it.servizidigitali.gestioneenti.frontend.portlet.render;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
-import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
 
-import javax.portlet.MutableRenderParameters;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -63,7 +57,11 @@ public class ListaServiziEnteRenderCommand implements MVCRenderCommand {
 		Long organizationId = ParamUtil.getLong(renderRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_ID);
 		Long servizioId = ParamUtil.getLong(renderRequest, GestioneEntiPortletKeys.SERVIZIO_ID);
 		Boolean deleteToggle = ParamUtil.getBoolean(renderRequest, GestioneEntiPortletKeys.DELETE_TOGGLE, false);
+		SessionErrors.clear(renderRequest);
 		
+		/*
+		 * gestisco l'eliminazione di un servizio dallo specifico ente
+		 * */
 		if(deleteToggle) {
 			try {
 				eliminaServizioEnte(organizationId, servizioId, renderRequest);
@@ -100,6 +98,10 @@ public class ListaServiziEnteRenderCommand implements MVCRenderCommand {
 	private void eliminaServizioEnte(Long organizationId, Long servizioId, RenderRequest renderRequest) throws Exception{
 		boolean ok = true;
 		
+		/*
+		 * verifico ci siano organizationId e servizioId per costruire la pk
+		 * */
+		
 		if(Validator.isNull(organizationId)) {
 			_log.error("eliminaServizio ::> organizationId e' null");
 			ok = false;
@@ -110,6 +112,9 @@ public class ListaServiziEnteRenderCommand implements MVCRenderCommand {
 			ok = false;
 		}
 		
+		/*
+		 * in assenza di errori procedo a creare la pk e ad eliminare il servizio
+		 * */
 		if(ok) {
 			ServizioEntePK servizioEntePK = new ServizioEntePK(servizioId, organizationId);
 			servizioEnteLocalService.deleteServizioEnte(servizioEntePK);
