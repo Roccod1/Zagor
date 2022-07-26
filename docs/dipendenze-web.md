@@ -20,7 +20,9 @@ Gli step necessari per l'installazione, su un modulo portlet, di dipendenze web 
 - Importare i file js e css dalle properties della portlet
 
 
-<sup>1</sup>  <img src="docs/imgs/gradle-task-npminstall.png">
+<sup>1</sup>
+
+![Npm Install](docs/imgs/gradle-task-npminstall.png)
 
 ## Dipendenze non disponibili su npmjs
 
