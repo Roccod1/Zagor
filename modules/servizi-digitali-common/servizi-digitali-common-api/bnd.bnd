@@ -1,0 +1,10 @@
+Bundle-Name: servizi-digitali-common-api
+Bundle-SymbolicName: it.servizidigitali.common.service.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	it.servizidigitali.common.exception,\
+	it.servizidigitali.common.model,\
+	it.servizidigitali.common.service,\
+	it.servizidigitali.common.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../servizi-digitali-common-service/service.xml

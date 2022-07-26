@@ -445,6 +445,13 @@ public class ServizioLocalServiceUtil {
 		return getService().hasTipologiaServizios(tipologiaId);
 	}
 
+	public static List<Servizio> listaServiziAttivi(
+			Boolean attivo, Integer start, Integer end)
+		throws Exception {
+
+		return getService().listaServiziAttivi(attivo, start, end);
+	}
+
 	/**
 	 * @param nome
 	 * @param codice

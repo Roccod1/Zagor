@@ -1,0 +1,10 @@
+Bundle-Name: servizi-digitali-file-utility
+Bundle-SymbolicName: it.servizidigitali.file.utility
+Bundle-Version: 1.0.0
+
+Export-Package: \
+	it.servizidigitali.file.utility.*
+	
+Import-Package: \
+  	!org.slf4j.*,\
+  	*

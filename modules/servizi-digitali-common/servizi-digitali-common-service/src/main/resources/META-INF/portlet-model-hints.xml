@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="it.servizidigitali.common.model.Comune">
+		<field name="comuneId" type="long" />
+		<field name="codiceIstatAN" type="String" />
+		<field name="codiceIstat1" type="String" />
+		<field name="codiceIstat103" type="String" />
+		<field name="codicestat107" type="String" />
+		<field name="denominazione" type="String" />
+		<field name="capoluogo" type="boolean" />
+		<field name="zonaAltimetrica" type="String" />
+		<field name="altitudine" type="String" />
+		<field name="comuneLitoraneo" type="boolean" />
+		<field name="comuneMontano" type="String" />
+		<field name="codiceSistemaLocaleLavoro" type="String" />
+		<field name="denominazioneSistemaLocaleLavoro" type="String" />
+		<field name="superficie" type="String" />
+		<field name="popolazioneLegale" type="String" />
+		<field name="popolazioneResidente1" type="String" />
+		<field name="popolazioneResidente2" type="String" />
+		<field name="popolazioneResidente3" type="String" />
+		<field name="codiceComune" type="int" />
+		<field name="codiceCatastale" type="String" />
+		<field name="idRegione" type="long" />
+		<field name="idProvincia" type="long" />
+	</model>
+	<model name="it.servizidigitali.common.model.ComuneEstero">
+		<field name="comuneEsteroId" type="long" />
+		<field name="codice" type="int" />
+		<field name="denominazione" type="String" />
+	</model>
+	<model name="it.servizidigitali.common.model.Provincia">
+		<field name="provinciaId" type="long" />
+		<field name="codiceRipartizione" type="int" />
+		<field name="codiceNUTS1" type="String" />
+		<field name="ripartizioneGeograficaM" type="String" />
+		<field name="ripartizioneGeografica" type="String" />
+		<field name="denominazioneRegioneM" type="String" />
+		<field name="denominazioneRegione" type="String" />
+		<field name="denominazioneProvincia" type="String" />
+		<field name="codiceRegione" type="long" />
+		<field name="codiceNUTS2" type="String" />
+		<field name="codiceNUTS3" type="String" />
+		<field name="sigla" type="String" />
+	</model>
+	<model name="it.servizidigitali.common.model.StatoEstero">
+		<field name="statoEsteroId" type="long" />
+		<field name="continente" type="int" />
+		<field name="codiceArea" type="int" />
+		<field name="codiceStato" type="int" />
+		<field name="denominazione" type="String" />
+		<field name="denominazioneEng" type="String" />
+	</model>
+</model-hints>

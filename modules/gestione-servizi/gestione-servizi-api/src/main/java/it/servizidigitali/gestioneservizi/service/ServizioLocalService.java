@@ -363,6 +363,10 @@ public interface ServizioLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public boolean hasTipologiaServizios(long tipologiaId);
 
+	public List<Servizio> listaServiziAttivi(
+			Boolean attivo, Integer start, Integer end)
+		throws Exception;
+
 	/**
 	 * @param nome
 	 * @param codice

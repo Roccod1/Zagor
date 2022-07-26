@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="it.servizidigitali.gestionecomunicazioni.model.Comunicazione">
+		<field name="uuid" type="String" />
+		<field name="comunicazioneId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="titolo" type="String" />
+		<field name="descrizione" type="String" />
+		<field name="dataInvio" type="Date" />
+		<field name="dataInizio" type="Date" />
+		<field name="dataFine" type="Date" />
+		<field name="codiceServizio" type="String" />
+		<field name="uriServizio" type="String" />
+		<field name="tipologiaComunicazioneId" type="long" />
+		<field name="organizationId" type="long" />
+		<field name="destinatarioUserId" type="long" />
+		<field name="destinatarioOrganizationId" type="long" />
+		<field name="calendarBookingId" type="long" />
+	</model>
+	<model name="it.servizidigitali.gestionecomunicazioni.model.TipologiaComunicazione">
+		<field name="tipologiaComunicazioneId" type="long" />
+		<field name="nome" type="String" />
+	</model>
+</model-hints>
