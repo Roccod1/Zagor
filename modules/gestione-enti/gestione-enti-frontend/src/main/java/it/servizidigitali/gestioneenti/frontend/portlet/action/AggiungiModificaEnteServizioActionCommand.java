@@ -14,6 +14,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Date;
 
@@ -104,6 +105,24 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 				_log.error("dataFineAttivazione e' minore di dataInizioAttivazione");
 				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE);
 				throw new Exception(GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE);
+			}
+			
+			if(!Validator.isBlank(uri) && uri.trim().length() > 255) {
+				_log.error("La lunghezza dell'uri e' superiore a 255 caratteri");
+				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI);
+				throw new Exception();
+			}
+			
+			if(!Validator.isBlank(uriGuest) && uriGuest.trim().length() > 255) {
+				_log.error("La lunghezza dell'uriGuest e' superiore a 255 caratteri");
+				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_GUEST);
+				throw new Exception();
+			}
+			
+			if(!Validator.isBlank(uriScheda) && uriScheda.trim().length() > 255) {
+				_log.error("La lunghezza dell'uriScheda e' superiore a 255 caratteri");
+				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_SCHEDA);
+				throw new Exception();
 			}
 		
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);

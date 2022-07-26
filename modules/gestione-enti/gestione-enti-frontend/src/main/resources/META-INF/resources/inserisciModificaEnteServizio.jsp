@@ -59,20 +59,26 @@
 
 			<div class="col">
 				<div class="form-group">
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_URI %>" label="uri-privata" type="text" value="${servizioEnte.uri}"/>
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_URI %>" label="uri-privata" type="text" value="${servizioEnte.uri}">
+			        	<aui:validator name="maxLength">255</aui:validator>
+			        </aui:input>
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_URI_GUEST %>" label="uri-pubblica" type="text" value="${servizioEnte.uriGuest}"/>				
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_URI_GUEST %>" label="uri-pubblica" type="text" value="${servizioEnte.uriGuest}">
+			        	<aui:validator name="maxLength">255</aui:validator>
+			        </aui:input>				
 				</div>
 			</div>
 			
 			<div class="col">
 				<div class="form-group">
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_SCHEDA %>" label="uri-scheda" type="text" value="${servizioEnte.uriScheda}"/>
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_SCHEDA %>" label="uri-scheda" type="text" value="${servizioEnte.uriScheda}">
+			        	<aui:validator name="maxLength">255</aui:validator>
+			        </aui:input>
 				</div>
 			</div>
 		</div>
