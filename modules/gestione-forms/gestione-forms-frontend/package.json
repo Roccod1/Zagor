@@ -26,7 +26,6 @@
 	"jquery-ui": "1.12.1",
 	"leaflet": "1.8.0",
 	"jquery-validation": "1.19.0",
-	"alpaca": "1.5.27",
 	"typeahead.js": "0.10.5",
 	"datatables.net-rowreorder": "1.1.0",
 	"ckeditor4": "4.19.1",

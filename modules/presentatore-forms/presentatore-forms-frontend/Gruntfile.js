@@ -69,12 +69,6 @@ module.exports = function(grunt) {
 					cwd: 'node_modules/pdfjs-dist/build',
 					src: '**/*',
 					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/pdfjs-dist'					
-				},
-				{
-					expand: true,
-					cwd: 'node_modules/alpaca/dist/alpaca',
-					src: '**/*',
-					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/alpaca'
 				}
 			]
 		}

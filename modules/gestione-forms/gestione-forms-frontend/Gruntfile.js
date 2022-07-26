@@ -54,12 +54,6 @@ module.exports = function(grunt) {
 				},
 				{
 					expand: true,
-					cwd: 'node_modules/alpaca/dist/alpaca',
-					src: '**/*',
-					dest: 'modules/gestione-forms/gestione-forms-frontend/src/main/resources/META-INF/resources/libs/alpaca'
-				},
-				{
-					expand: true,
 					cwd: 'node_modules/typeahead.js/dist',
 					src: '**/*',
 					dest: 'modules/gestione-forms/gestione-forms-frontend/src/main/resources/META-INF/resources/libs/typeahead.js'

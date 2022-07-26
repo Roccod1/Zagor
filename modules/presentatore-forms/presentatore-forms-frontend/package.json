@@ -28,7 +28,6 @@
 	"jquery-blockui": "2.7.0",
 	"jquery-file-download": "1.4.6",
 	"moment": "2.20.1",
-	"pdfjs-dist": "2.14.305",
-	"alpaca": "1.5.27"
+	"pdfjs-dist": "2.14.305"
   }
 }
