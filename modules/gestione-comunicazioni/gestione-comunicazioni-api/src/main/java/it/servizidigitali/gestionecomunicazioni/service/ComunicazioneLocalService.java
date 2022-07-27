@@ -81,9 +81,9 @@ public interface ComunicazioneLocalService
 
 	public Comunicazione addComunicazione(
 			long groupId, long companyId, long userId, long organizationId,
-			String userFullName, String titolo, String descrizione,
-			Date dataInizio, Date dataFine, long tipologiaId,
-			Long destinatarioUserId, long destinatarioOrganizationId)
+			String userName, String titolo, String descrizione, Date dataInizio,
+			Date dataFine, long tipologiaId, Long destinatarioUserId,
+			long destinatarioOrganizationId)
 		throws PortalException;
 
 	/**

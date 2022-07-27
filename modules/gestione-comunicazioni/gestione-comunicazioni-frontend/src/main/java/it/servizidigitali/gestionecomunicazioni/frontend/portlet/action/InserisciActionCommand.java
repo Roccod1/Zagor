@@ -62,7 +62,7 @@ public class InserisciActionCommand extends BaseMVCActionCommand {
 					ctx.getCompanyId(),
 					ctx.getUserId(),
 					ctx.getScopeGroup().getOrganizationId(),
-					user.getFullName(),
+					user.getScreenName(),
 					titolo,
 					descrizione,
 					getLocalDateTime(dataInizio),

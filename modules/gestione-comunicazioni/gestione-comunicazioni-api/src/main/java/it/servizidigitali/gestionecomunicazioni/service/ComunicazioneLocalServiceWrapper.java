@@ -60,14 +60,14 @@ public class ComunicazioneLocalServiceWrapper
 	public it.servizidigitali.gestionecomunicazioni.model.Comunicazione
 			addComunicazione(
 				long groupId, long companyId, long userId, long organizationId,
-				String userFullName, String titolo, String descrizione,
+				String userName, String titolo, String descrizione,
 				java.util.Date dataInizio, java.util.Date dataFine,
 				long tipologiaId, Long destinatarioUserId,
 				long destinatarioOrganizationId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _comunicazioneLocalService.addComunicazione(
-			groupId, companyId, userId, organizationId, userFullName, titolo,
+			groupId, companyId, userId, organizationId, userName, titolo,
 			descrizione, dataInizio, dataFine, tipologiaId, destinatarioUserId,
 			destinatarioOrganizationId);
 	}

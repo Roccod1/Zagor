@@ -42,7 +42,7 @@ public class ComunicazioneLocalServiceImpl
 			long companyId, 
 			long userId, 
 			long organizationId,
-			String userFullName,
+			String userName,
 			String titolo, 
 			String descrizione,
 			Date dataInizio,
@@ -67,7 +67,7 @@ public class ComunicazioneLocalServiceImpl
 		model.setGroupId(groupId);
 		model.setCompanyId(companyId);
 		model.setUserId(userId);
-		model.setUserName(userFullName);
+		model.setUserName(userName);
 		model.setOrganizationId(organizationId);
 		model.setTitolo(titolo.trim());
 		model.setDescrizione(descrizione);
