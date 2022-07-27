@@ -92,6 +92,9 @@ public interface ServizioLocalService
 
 	public void clearTipologiaServizios(long tipologiaId);
 
+	public int countSearchServizio(
+		String nome, String codice, Boolean soloServiziAttivi);
+
 	/**
 	 * @throws PortalException
 	 */

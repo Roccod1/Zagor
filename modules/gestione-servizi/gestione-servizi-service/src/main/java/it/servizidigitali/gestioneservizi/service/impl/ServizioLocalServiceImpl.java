@@ -127,6 +127,10 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl{
 		return listaServizi;
 	}
 	
+	public int countSearchServizio(String nome, String codice, Boolean soloServiziAttivi) {
+		return servizioFinder.countServizioByFilter(nome, codice, soloServiziAttivi);
+	}
+	
 	public List<Servizio> listaServiziAttivi(Boolean attivo, Integer start, Integer end) throws Exception{
 		return servizioPersistence.findByAttivo(attivo, start, end);
 	}

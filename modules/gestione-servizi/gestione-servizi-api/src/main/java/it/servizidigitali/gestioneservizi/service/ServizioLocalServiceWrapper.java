@@ -94,6 +94,14 @@ public class ServizioLocalServiceWrapper
 		_servizioLocalService.clearTipologiaServizios(tipologiaId);
 	}
 
+	@Override
+	public int countSearchServizio(
+		String nome, String codice, Boolean soloServiziAttivi) {
+
+		return _servizioLocalService.countSearchServizio(
+			nome, codice, soloServiziAttivi);
+	}
+
 	/**
 	 * @throws PortalException
 	 */

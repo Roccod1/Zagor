@@ -92,6 +92,13 @@ public class ServizioLocalServiceUtil {
 		getService().clearTipologiaServizios(tipologiaId);
 	}
 
+	public static int countSearchServizio(
+		String nome, String codice, Boolean soloServiziAttivi) {
+
+		return getService().countSearchServizio(
+			nome, codice, soloServiziAttivi);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
