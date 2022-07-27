@@ -16,6 +16,9 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
@@ -104,6 +107,8 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		
 		formLocalService.updateForm(form);
 		
+		List<DefinizioneAllegato> listaAllegatiForm = new ArrayList<>();
+		
 		// Recupero elenco allegati specificati nella creazione del form 
 		
 		for(int i=0;i<indiceListaDefinizioneAllegati;i++) {
@@ -153,7 +158,11 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 			}
 			
 			definizioneAllegatoLocalService.updateDefinizioneAllegato(allegato);
+			listaAllegatiForm.add(allegato);
 		}
+		
+		form.setListaDefinizioneAllegato(listaAllegatiForm);
+		formLocalService.updateForm(form);
 		
 		// Controllo su eventuali rimozioni degli allegati
 		
