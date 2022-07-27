@@ -24,6 +24,7 @@ import org.osgi.service.component.annotations.Component;
 import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneDescrizioneException;
 import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneOrganizzazioneException;
 import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneTitoloException;
+import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneDataFineException;
 import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
 import it.servizidigitali.gestionecomunicazioni.service.base.ComunicazioneLocalServiceBaseImpl;
 
@@ -60,6 +61,12 @@ public class ComunicazioneLocalServiceImpl
 		
 		if (destinatarioOrganizationId == 0) {
 			throw new ComunicazioneOrganizzazioneException();
+		}
+		
+		if (dataInizio != null && dataFine != null) {
+			if (dataFine.before(dataInizio)) {
+				throw new ComunicazioneDataFineException();
+			}
 		}
 		
 		long id = counterLocalService.increment(Comunicazione.class.getName());

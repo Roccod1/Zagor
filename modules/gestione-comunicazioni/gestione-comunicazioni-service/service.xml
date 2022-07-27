@@ -82,5 +82,6 @@
 		<exception>ComunicazioneTitolo</exception>
 		<exception>ComunicazioneDescrizione</exception>
 		<exception>ComunicazioneOrganizzazione</exception>
+		<exception>ComunicazioneDataFine</exception>
 	</exceptions>
 </service-builder>

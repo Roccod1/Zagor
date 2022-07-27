@@ -10,6 +10,7 @@
 <liferay-ui:error key="errore-titolo" message="errore-titolo" />
 <liferay-ui:error key="errore-descrizione" message="errore-descrizione" />
 <liferay-ui:error key="errore-organizzazione" message="errore-organizzazione" />
+<liferay-ui:error key="errore-data-fine" message="errore-data-fine" />
 
 <aui:form action="${inserisciURL}">
 	<aui:input name="titolo" label="titolo-obbl"/>
@@ -24,10 +25,14 @@
 	                       editorName="ckeditor" />
 	
 	<label><liferay-ui:message key="data-inizio" /></label>
-	<input type="datetime-local" name="<portlet:namespace/>dataInizio">
+	<input type="datetime-local"
+		   id="<portlet:namespace/>dataInizio"
+		   name="<portlet:namespace/>dataInizio">
 	
 	<label><liferay-ui:message key="data-fine" /></label>
-	<input type="datetime-local" name="<portlet:namespace/>dataFine">
+	<input type="datetime-local" 
+		   id="<portlet:namespace/>dataFine"
+	       name="<portlet:namespace/>dataFine">
 	
 	<aui:select name="procedura">
 		<aui:option value="-"><liferay-ui:message key="nessuna" /></aui:option>
@@ -48,6 +53,28 @@
 </aui:form>
 
 <script>
+	
+	var pickerInizio = $("#<portlet:namespace/>dataInizio");
+	var pickerFine = $("#<portlet:namespace/>dataFine");
+	
+	pickerInizio.on('change', function(e) {
+		var newValue = e.target.value;
+		
+		if (newValue == '') {
+			pickerFine.removeAttr('min');
+		} else {
+			pickerFine.attr('min', newValue);
+		}
+	});
+	pickerFine.on('change', function(e) {
+		var newValue = e.target.value;
+	
+		if (newValue == '') {
+			pickerInizio.removeAttr('max');
+		} else {
+			pickerInizio.attr('max', newValue);
+		}
+	});
 	
 	$("#<portlet:namespace/>organizzazione").on('change', function(e) {
 		$("#<portlet:namespace/>utenteQuery").val('<liferay-ui:message key="seleziona-tutti" />');

@@ -22,6 +22,7 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneDescrizioneException;
 import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneOrganizzazioneException;
 import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneTitoloException;
+import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneDataFineException;
 import it.servizidigitali.gestionecomunicazioni.frontend.constants.GestioneComunicazioniFrontendPortletKeys;
 import it.servizidigitali.gestionecomunicazioni.service.ComunicazioneLocalService;
 
@@ -77,6 +78,8 @@ public class InserisciActionCommand extends BaseMVCActionCommand {
 			SessionErrors.add(request, "errore-descrizione");
 		} catch (ComunicazioneOrganizzazioneException e) {
 			SessionErrors.add(request, "errore-organizzazione");
+		} catch (ComunicazioneDataFineException e) {
+			SessionErrors.add(request, "errore-data-fine");
 		} catch (Exception e) {
 			SessionErrors.add(request, "errore-generico");
 		}
