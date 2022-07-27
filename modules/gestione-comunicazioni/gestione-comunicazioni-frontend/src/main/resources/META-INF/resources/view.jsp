@@ -49,6 +49,11 @@
 
 <script>
 	
+	$("#<portlet:namespace/>organizzazione").on('change', function(e) {
+		$("#<portlet:namespace/>utenteQuery").val('<liferay-ui:message key="seleziona-tutti" />');
+		$("#<portlet:namespace/>utente").val("");
+	});
+	
 	var acLimit = 10;
 	AUI().use('autocomplete-list', 'datasource-io', function(A) {
 		var datasource = new A.DataSource.IO({
