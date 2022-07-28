@@ -92,10 +92,20 @@ public class DefaultUserResolver implements UserResolver {
 		subjectNameFormat = _getNameIdFormat(
 			userResolverSAMLContext, samlSpIdpConnection.getNameIdFormat());
 
-		return _importUser(
+		User user = _importUser(
 			companyId, samlSpIdpConnection,
 			userResolverSAMLContext.resolveSubjectNameIdentifier(),
 			subjectNameFormat, userResolverSAMLContext, serviceContext);
+		
+		//Associazione organizzazione sito corrente (se presente)
+		if (user != null) {
+			long currentOrganizationId = serviceContext.getScopeGroup().getOrganizationId();
+			if (currentOrganizationId != 0) {
+				_userLocalService.addOrganizationUser(currentOrganizationId, user.getUserId());
+			}
+		}
+		
+		return user;
 	}
 
 	private User _addUser(
