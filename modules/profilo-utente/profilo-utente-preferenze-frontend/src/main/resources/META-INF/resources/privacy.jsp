@@ -15,7 +15,7 @@
 					<aui:input type="checkbox"
 						name="<%=ProfiloUtentePreferenzePortletKeys.UTENTE_ACCETTA_PRIVACY %>"
 						label="conferma-presa-visione-privacy"
-						value="${utenteAccettaPrivacy }"
+						checked="${utenteAccettaPrivacy }"
 						/>
 				</div>
 			</div>
