@@ -4,12 +4,8 @@ import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.BaseModelListener;
-import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.ModelListener;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.security.ldap.authenticator.configuration.LDAPAuthConfiguration;
 import com.liferay.portal.security.ldap.configuration.ConfigurationProvider;
 import com.liferay.portal.security.ldap.configuration.LDAPServerConfiguration;
@@ -26,7 +22,7 @@ import it.servizidigitali.portal.util.LDAPManager;
 
 /**
  * Model Listener per gestire gli eventi relativi al model {@link User}.
- * 
+ *
  * @author pindi
  */
 @Component(//
@@ -53,8 +49,7 @@ public class ServiziDigitaliUserModelListener extends BaseModelListener<User> {
 	public void onAfterRemove(User model) throws ModelListenerException {
 
 		try {
-			Company company = CompanyLocalServiceUtil.getCompanyByMx(PropsUtil.get(PropsKeys.COMPANY_DEFAULT_WEB_ID));
-			long companyId = company.getCompanyId();
+			long companyId = model.getCompanyId();
 
 			boolean ldapEnabled = ldapAuthConfigurationProvider.getConfiguration(companyId).enabled();
 			if (!ldapEnabled) {
