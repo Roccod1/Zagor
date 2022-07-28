@@ -1,13 +1,5 @@
 package it.servizidigitali.profiloutente.preferenze.frontend.portlet.action;
 
-import com.liferay.expando.kernel.model.ExpandoBridge;
-import com.liferay.expando.kernel.model.ExpandoColumn;
-import com.liferay.expando.kernel.model.ExpandoTable;
-import com.liferay.expando.kernel.model.ExpandoValue;
-import com.liferay.expando.kernel.service.ExpandoColumnLocalServiceUtil;
-import com.liferay.expando.kernel.service.ExpandoTableLocalService;
-import com.liferay.expando.kernel.service.ExpandoTableLocalServiceUtil;
-import com.liferay.expando.kernel.service.ExpandoValueLocalServiceUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
@@ -71,30 +63,7 @@ public class SalvaPrivacyUtenteActionCommand extends BaseMVCActionCommand {
 			
 			User utenteCorrente = userLocalService.getUserById(utenteCorrenteId);
 			
-			//imposto valore custom field
-			ExpandoBridge utenteCorrenteExpandoBridge = utenteCorrente.getExpandoBridge();
-			
-			ExpandoTable expandoTable = ExpandoTableLocalServiceUtil.getTable(
-					utenteCorrenteExpandoBridge.getCompanyId(),
-					utenteCorrenteExpandoBridge.getClassName(),
-					"CUSTOM_FIELDS");
-						
-			ExpandoColumn expandoColumn = ExpandoColumnLocalServiceUtil.getColumn(
-					expandoTable.getTableId(),
-					ProfiloUtentePreferenzePortletKeys.UTENTE_EXPANDO_ACCETTA_PRIVACY);
-			
-			ExpandoValue expandoValue = ExpandoValueLocalServiceUtil.getValue(
-					expandoTable.getTableId(), 
-					expandoColumn.getColumnId(), 
-					utenteCorrenteExpandoBridge.getClassPK());
-			
-			if(accettaPrivacy) {
-				expandoValue.setBoolean(Boolean.TRUE);
-			}else {
-				expandoValue.setBoolean(Boolean.FALSE);
-			}
-			
-			ExpandoValueLocalServiceUtil.updateExpandoValue(expandoValue);
+			utenteCorrente.getExpandoBridge().setAttribute(ProfiloUtentePreferenzePortletKeys.UTENTE_EXPANDO_ACCETTA_PRIVACY, accettaPrivacy);
 			
 		}catch(Exception e) {
 			_log.error("Impossibile procedere al salvataggio :: " + e.getMessage(), e);
