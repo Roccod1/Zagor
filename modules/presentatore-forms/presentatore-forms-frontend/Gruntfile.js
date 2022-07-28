@@ -39,12 +39,15 @@ module.exports = function(grunt) {
 				},
 				{
 					expand: true,
-					cwd: 'node_modules/jquery-ui/',
-					src: [
-						'ui/**/*',
-						'themes/**/*'
-					],
-					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/jquery-ui'
+					cwd: 'node_modules/jquery-ui-dist/',
+					src: 'jquery-ui.min.js',
+					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/jquery-ui-dist'
+				},
+				{
+					expand: true,
+					cwd: 'node_modules/handlebars/dist',
+					src: '**/*',
+					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/handlebars'
 				},
 				{
 					expand: true,

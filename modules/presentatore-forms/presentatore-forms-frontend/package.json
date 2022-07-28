@@ -24,10 +24,11 @@
   "dependencies": {
 	"select2" : "4.0.3",
 	"fullcalendar": "3.8.2",
-	"jquery-ui": "1.12.1",
+	"jquery-ui-dist": "1.12.1",
 	"jquery-blockui": "2.7.0",
 	"jquery-file-download": "1.4.6",
 	"moment": "2.20.1",
+	"handlebars": "4.7.7",
 	"pdfjs-dist": "2.14.305"
   }
 }
