@@ -33,13 +33,8 @@ import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
  * @author pindi
  */
 
-@Component(immediate = true,
-		property = { 
-			"javax.portlet.name=" + GestioneEntiPortletKeys.GESTIONEENTI, 
-			"mvc.command.name=" + GestioneEntiPortletKeys.SALVA_ACTION_COMMAND_NAME 
-		}, 
-		service = MVCActionCommand.class
-)
+@Component(immediate = true, property = { "javax.portlet.name=" + GestioneEntiPortletKeys.GESTIONEENTI,
+		"mvc.command.name=" + GestioneEntiPortletKeys.SALVA_ACTION_COMMAND_NAME }, service = MVCActionCommand.class)
 public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionCommand {
 
 	private static final Log _log = LogFactoryUtil.getLog(AggiungiModificaEnteServizioActionCommand.class);
@@ -52,7 +47,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 
 	@Reference
 	private ServizioLocalService servizioLocalService;
-	
+
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
@@ -76,8 +71,8 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		Boolean timbroCertificato = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_TIMBRO_CERTIFICATO);
 
 		String redirect = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.INDIRIZZO_REDIRECT);
-				
-		//creo la pk della entity
+
+		// creo la pk della entity
 		ServizioEntePK servizioEntePK = new ServizioEntePK();
 		servizioEntePK.setServizioId(servizioId);
 		servizioEntePK.setOrganizationId(organizationId);
@@ -86,49 +81,53 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		try {
 			if (servizioId > 0 && organizationId > 0) {
 				try {
-					servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);				
-				}catch(Exception e) {
-					//il servizio con servizioId ed organizationId non esiste. provvedo a creare una nuova entity
-					_log.debug("ServizioEnte con serviziId "+ servizioId + " e organizationId " + organizationId + " inesistente. Creo nuova entity");
+					servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);
+				}
+				catch (Exception e) {
+					// il servizio con servizioId ed organizationId non esiste. provvedo a creare
+					// una nuova entity
+					_log.debug("ServizioEnte con serviziId " + servizioId + " e organizationId " + organizationId + " inesistente. Creo nuova entity");
 					servizioEnte = servizioEnteLocalService.createServizioEnte(servizioEntePK);
 				}
-			}else {
+			}
+			else {
 				_log.error("servizioId  e organizationId sono campi obbligatori");
 				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
 				throw new Exception(GestioneEntiPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
 			}
-			
-			if(Validator.isNotNull(dataFineAttivazione)) {
-				if(Validator.isNotNull(dataInizioAttivazione) && dataFineAttivazione.before(dataInizioAttivazione)) {					
+
+			if (Validator.isNotNull(dataFineAttivazione)) {
+				if (Validator.isNotNull(dataInizioAttivazione) && dataFineAttivazione.before(dataInizioAttivazione)) {
 					_log.error("dataFineAttivazione e' minore di dataInizioAttivazione");
 					SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE);
 					throw new Exception(GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE);
 				}
 			}
-			
-			if(!Validator.isBlank(uri) && uri.trim().length() > 255) {
+
+			if (!Validator.isBlank(uri) && uri.trim().length() > 255) {
 				_log.error("La lunghezza dell'uri e' superiore a 255 caratteri");
 				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI);
 				throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI);
 			}
-			
-			if(!Validator.isBlank(uriGuest) && uriGuest.trim().length() > 255) {
+
+			if (!Validator.isBlank(uriGuest) && uriGuest.trim().length() > 255) {
 				_log.error("La lunghezza dell'uriGuest e' superiore a 255 caratteri");
 				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_GUEST);
 				throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_GUEST);
 			}
-			
-			if(!Validator.isBlank(uriScheda) && uriScheda.trim().length() > 255) {
+
+			if (!Validator.isBlank(uriScheda) && uriScheda.trim().length() > 255) {
 				_log.error("La lunghezza dell'uriScheda e' superiore a 255 caratteri");
 				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_SCHEDA);
 				throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_SCHEDA);
 			}
-		
+
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 			ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
 			servizioEnte.setGroupId(themeDisplay.getCompanyGroupId());
 			servizioEnte.setUserId(themeDisplay.getUserId());
-	
+			servizioEnte.setUserName(themeDisplay.getUser().getFullName());
+
 			servizioEnte.setUri(uri);
 			servizioEnte.setUriGuest(uriGuest);
 			servizioEnte.setUriScheda(uriScheda);
@@ -151,7 +150,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 			actionResponse.sendRedirect(redirect);
 		}
 		catch (Exception e) {
-			_log.error("Impossibile salvare/aggiornare il servizio con ID: " + servizioId + " > " + e.getMessage(),e);
+			_log.error("Impossibile salvare/aggiornare il servizio con ID: " + servizioId + " > " + e.getMessage(), e);
 			SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_SALVATAGGIO);
 			actionRequest.setAttribute(GestioneEntiPortletKeys.SERVIZIO_ENTE, servizioEnte);
 			actionRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONE, organizationLocalService.fetchOrganization(organizationId));
