@@ -14,8 +14,30 @@
 
 package it.servizidigitali.gestionecomunicazioni.model.impl;
 
+import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
+
+import it.servizidigitali.gestionecomunicazioni.model.LetturaComunicazione;
+import it.servizidigitali.gestionecomunicazioni.model.TipologiaComunicazione;
+import it.servizidigitali.gestionecomunicazioni.service.LetturaComunicazioneLocalServiceUtil;
+import it.servizidigitali.gestionecomunicazioni.service.TipologiaComunicazioneLocalServiceUtil;
+import it.servizidigitali.gestionecomunicazioni.service.persistence.LetturaComunicazionePK;
+
 /**
  * @author Brian Wing Shun Chan
  */
 public class ComunicazioneImpl extends ComunicazioneBaseImpl {
+	
+	public TipologiaComunicazione getTipologia() {
+		return TipologiaComunicazioneLocalServiceUtil.fetchTipologiaComunicazione(getTipologiaComunicazioneId());
+	}
+	
+	public LetturaComunicazione getLettura() {
+		LetturaComunicazionePK id = new LetturaComunicazionePK(getComunicazioneId(), getUserId());
+		return LetturaComunicazioneLocalServiceUtil.fetchLetturaComunicazione(id);
+	}
+	
+	public Organization getDestinatarioOrganizzazione() {
+		return OrganizationLocalServiceUtil.fetchOrganization(getDestinatarioOrganizationId());
+	}
 }

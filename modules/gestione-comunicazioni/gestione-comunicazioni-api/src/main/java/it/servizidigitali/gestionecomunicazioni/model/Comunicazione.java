@@ -58,4 +58,13 @@ public interface Comunicazione extends ComunicazioneModel, PersistedModel {
 
 		};
 
+	public it.servizidigitali.gestionecomunicazioni.model.TipologiaComunicazione
+		getTipologia();
+
+	public it.servizidigitali.gestionecomunicazioni.model.LetturaComunicazione
+		getLettura();
+
+	public com.liferay.portal.kernel.model.Organization
+		getDestinatarioOrganizzazione();
+
 }
