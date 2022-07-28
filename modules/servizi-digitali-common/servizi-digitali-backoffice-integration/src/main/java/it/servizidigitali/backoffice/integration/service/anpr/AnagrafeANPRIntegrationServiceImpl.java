@@ -18,6 +18,7 @@ import it.servizidigitali.backoffice.integration.converter.anpr.DatiAnagraficiAN
 import it.servizidigitali.backoffice.integration.converter.anpr.DatiAnagraficiGeneraliANPRConverter;
 import it.servizidigitali.backoffice.integration.converter.anpr.DatiElettoraliANPRConverter;
 import it.servizidigitali.backoffice.integration.converter.anpr.DatiVariazioniDomicilioANPRConverter;
+import it.servizidigitali.backoffice.integration.exception.BackofficeIntegrationClientException;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagraficiGenerali;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiElettorali;
@@ -209,21 +210,27 @@ public class AnagrafeANPRIntegrationServiceImpl implements AnagrafeIntegrationSe
 
 		Risposta3002 risposta = null;
 		// Tentativi caricamento dati
-		int counter = 1;
-		ANPRWSClient anprwsClient = anprService.getANPRWSClient();
+		try {
+			int counter = 1;
+			ANPRWSClient anprwsClient = anprService.getANPRWSClient();
 
-		while (counter <= anprConfiguration.numeroTentativiInvio()) {
-			try {
-				risposta = anprwsClient.sendRequest(codiceFiscale, idTransazione);
-				if (risposta == null) {
-					throw new ANPRClientException("Risposta is null or empty");
+			while (counter <= anprConfiguration.numeroTentativiInvio()) {
+				try {
+					risposta = anprwsClient.sendRequest(codiceFiscale, idTransazione);
+					if (risposta == null) {
+						throw new ANPRClientException("Risposta is null or empty");
+					}
+					counter++;
 				}
-				counter++;
+				catch (Exception e) {
+					log.error("esegui :: tentativo num. " + counter + " per caricamento dati da ANPR fallito : " + e.getMessage(), e);
+					counter++;
+				}
 			}
-			catch (Exception e) {
-				log.error("esegui :: tentativo num. " + counter + " per caricamento dati da ANPR fallito : " + e.getMessage(), e);
-				counter++;
-			}
+		}
+		catch (Exception e) {
+			log.error("esegui :: " + e.getMessage(), e);
+			throw new BackofficeIntegrationClientException(e);
 		}
 		return risposta;
 	}
