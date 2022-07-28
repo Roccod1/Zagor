@@ -39,12 +39,9 @@ module.exports = function(grunt) {
 				},
 				{
 					expand: true,
-					cwd: 'node_modules/jquery-ui/',
-					src: [
-						'ui/**/*',
-						'themes/**/*'
-					],
-					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/jquery-ui'
+					cwd: 'node_modules/jquery-ui-dist/',
+					src: 'jquery-ui.min.js',
+					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/jquery-ui-dist'
 				},
 				{
 					expand: true,
@@ -69,7 +66,20 @@ module.exports = function(grunt) {
 					cwd: 'node_modules/pdfjs-dist/build',
 					src: '**/*',
 					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/pdfjs-dist'					
-				}
+				},
+				{
+					expand: true,
+					cwd: 'node_modules/handlebars/dist',
+					src: '**/*',
+					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/handlebars'
+				},
+				{
+					expand: true,
+					cwd: 'node_modules/presentatore-forms-portlet/node_modules/tempusdominus-bootstrap-4/build',
+					src: '**/*',
+					dest: 'modules/presentatore-forms/presentatore-forms-frontend/src/main/resources/META-INF/resources/libs/tempusdominus-bootstrap-4'
+				}		
+				
 			]
 		}
 	},
