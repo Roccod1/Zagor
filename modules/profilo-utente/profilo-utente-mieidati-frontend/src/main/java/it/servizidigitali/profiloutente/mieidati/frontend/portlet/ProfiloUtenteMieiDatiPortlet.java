@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.Portlet;
@@ -62,7 +63,7 @@ public class ProfiloUtenteMieiDatiPortlet extends MVCPortlet {
 		
 		User utenteCorrente = null;
 		DatiAnagrafici datiAnagrafici = null;
-		List<DatiAnagrafici.ComponenteNucleoFamiliare> listaComponentiNucleoFamiliare = null;
+		List<DatiAnagrafici.ComponenteNucleoFamiliare> listaComponentiNucleoFamiliare = new ArrayList<DatiAnagrafici.ComponenteNucleoFamiliare>();
 		try {
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
 			themeDisplay = serviceContext.getThemeDisplay();

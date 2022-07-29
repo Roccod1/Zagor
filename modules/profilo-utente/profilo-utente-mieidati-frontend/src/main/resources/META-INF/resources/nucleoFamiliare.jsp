@@ -1,7 +1,7 @@
 <%@ include file="init.jsp" %>
 
 <%
-	List<DatiAnagrafici> listaComponentiNucleoFamiliare = (List<DatiAnagrafici>) renderRequest.getAttribute(ProfiloUtenteMieiDatiPortletKeys.COMPONENTI_NUCLEO_FAMILIARE);
+	List<DatiAnagrafici.ComponenteNucleoFamiliare> listaComponentiNucleoFamiliare = (List<DatiAnagrafici.ComponenteNucleoFamiliare>) renderRequest.getAttribute(ProfiloUtenteMieiDatiPortletKeys.COMPONENTI_NUCLEO_FAMILIARE);
 %>
 
 <c:set value="<%=SessionErrors.contains(renderRequest, ProfiloUtenteMieiDatiPortletKeys.ERRORE_BACKOFFICE) %>" var="backofficeError" />
