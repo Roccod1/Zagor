@@ -77,6 +77,24 @@
 		<!-- Other fields -->
 		<column name="nome" type="String" />
 	</entity>
+
+	<entity 
+		name="LetturaComunicazione"
+		table="lettura_comunicazione"
+		uuid="false"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="comunicazioneId" primary="true" type="long" />
+		<column name="userId" primary="true" type="long" />
+
+		<!-- Other fields -->
+		<column name="dataLettura" type="Date" />
+	</entity>
 	
 	<exceptions>
 		<exception>ComunicazioneTitolo</exception>
