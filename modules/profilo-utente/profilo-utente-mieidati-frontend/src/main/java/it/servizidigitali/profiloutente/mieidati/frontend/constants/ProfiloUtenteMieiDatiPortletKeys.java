@@ -38,10 +38,14 @@ public class ProfiloUtenteMieiDatiPortletKeys {
 	public static final String DETTAGLIO_COMPONENTE_NUCLEO_FAMILIARE_COMUNE_NASCITA = "comuneNascita";
 	public static final String DETTAGLIO_COMPONENTE_NUCLEO_FAMILIARE_COMUNE_RESIDENZA = "comuneResidenza";
 	public static final String TAB_ATTIVA = "tabAttiva";
+	public static final String ORGANIZATION = "organization";
+	public static final String ANPR = "anpr";
+	public static final String NOME_FONTE = "nomeFonte";
 	
 //	campi expando utente
 	public static final String EXPANDO_USER_PEC = "pec";
 	public static final String EXPANDO_USER_EMAIL_AGGIUNTIVA = "emailAggiuntiva";
+	public static final String EXPANDO_ORGANIZATION_ANPR = "anpr";
 	
 //	errori
 	public static final String ERRORE_BACKOFFICE = "erroreBackoffice";

@@ -1,3 +1,5 @@
+<%@page import="com.liferay.expando.kernel.util.ExpandoBridgeUtil"%>
+<%@page import="com.liferay.portal.kernel.model.Organization"%>
 <%@ include file="init.jsp" %>
 
 <%
@@ -9,7 +11,7 @@
 <c:choose>
 	<c:when test="${backofficeError eq true }">
 		<div class="alert alert-danger" role="alert">
-		  <liferay-ui:message key="errore-backoffice"/>
+		  <liferay-ui:message key="errore-backoffice" arguments="${nomeFonte}"/>
 		</div>
 	</c:when>
 	
@@ -39,6 +41,16 @@
 				</liferay-ui:search-container-row>
 				<liferay-ui:search-iterator />
 			</liferay-ui:search-container>
+			
+			<c:if test="<%=!listaComponentiNucleoFamiliare.isEmpty() %>">
+				<div class="mt-4">
+					<small>
+						<i>
+							<liferay-ui:message key="fonte-dati" arguments="${nomeFonte}"/>
+						</i>
+					</small>				
+				</div>
+			</c:if>
 		</div>
 	</c:otherwise>
 </c:choose>

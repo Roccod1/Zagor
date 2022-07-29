@@ -1,14 +1,18 @@
 package it.servizidigitali.profiloutente.mieidati.frontend.portlet;
 
+import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,6 +57,9 @@ public class ProfiloUtenteMieiDatiPortlet extends MVCPortlet {
 	@Reference
 	private AnagrafeIntegrationFactoryService anagrafeIntegrationFactoryService;
 	
+	@Reference
+	private OrganizationLocalService organizationLocalService;
+	
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
 		//pulisco gli errori precedenti 
@@ -63,19 +70,30 @@ public class ProfiloUtenteMieiDatiPortlet extends MVCPortlet {
 		
 		User utenteCorrente = null;
 		DatiAnagrafici datiAnagrafici = null;
+		Organization organization = null;
+		boolean anpr = false;
+		String ente = "ANPR - Anagrafe Nazionale della Popolazione Residente";
+		
 		List<DatiAnagrafici.ComponenteNucleoFamiliare> listaComponentiNucleoFamiliare = new ArrayList<DatiAnagrafici.ComponenteNucleoFamiliare>();
 		try {
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
 			themeDisplay = serviceContext.getThemeDisplay();
 			utenteCorrente = themeDisplay.getUser();
-
             User user = themeDisplay.getUser();
             // recupero il siteGroupOrganizationId dal siteGroup
             Long siteGroupOrganizationId = themeDisplay.getSiteGroup().getOrganizationId();
 
- 
-
             AnagrafeIntegrationService anagrafeIntegrationService = anagrafeIntegrationFactoryService.getAnagrafeIntegrationService(siteGroupOrganizationId);
+
+            organization = organizationLocalService.fetchOrganization(siteGroupOrganizationId);
+            if(Validator.isNotNull(organization)) {
+            	ExpandoBridge expandoOrganization = organization.getExpandoBridge();
+            	anpr = (boolean) expandoOrganization.getAttribute(ProfiloUtenteMieiDatiPortletKeys.EXPANDO_ORGANIZATION_ANPR);
+            	
+            	if(!anpr) {
+            		ente = "Ente " + organization.getName();
+            	}
+            }
 
             datiAnagrafici = anagrafeIntegrationService.getDatiAnagrafici(user.getScreenName(), siteGroupOrganizationId, null);
             if (datiAnagrafici != null && datiAnagrafici.getComponentiNucleoFamiliare() != null) {
@@ -91,6 +109,7 @@ public class ProfiloUtenteMieiDatiPortlet extends MVCPortlet {
             _log.error("render :: " + e.getMessage(), e);
         }
 		
+		renderRequest.setAttribute(ProfiloUtenteMieiDatiPortletKeys.NOME_FONTE, ente);
 		renderRequest.setAttribute(ProfiloUtenteMieiDatiPortletKeys.TAB_ATTIVA, tabAttiva);
 		renderRequest.setAttribute(ProfiloUtenteMieiDatiPortletKeys.COMPONENTI_NUCLEO_FAMILIARE, listaComponentiNucleoFamiliare);
 		renderRequest.setAttribute(ProfiloUtenteMieiDatiPortletKeys.UTENTE, utenteCorrente);
