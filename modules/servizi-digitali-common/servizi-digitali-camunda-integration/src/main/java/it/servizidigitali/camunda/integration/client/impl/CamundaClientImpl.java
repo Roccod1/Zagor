@@ -491,7 +491,7 @@ public class CamundaClientImpl implements CamundaClient {
 	private TaskQueryDto getTaskQueryDto(String tenantId, String[] candidateGroups, String codiceServizio, Boolean unassigned, List<VariableInstanceDto> variables, String sortName, String sortOrder, String sortType, String assignee) {
 		TaskQueryDto q = new TaskQueryDto();
 
-		if(unassigned) {
+		if(Validator.isNotNull(unassigned) && unassigned) {
 			q.setUnassigned(Boolean.TRUE);
 		}
 
