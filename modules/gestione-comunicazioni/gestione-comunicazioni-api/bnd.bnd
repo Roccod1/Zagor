@@ -1,0 +1,10 @@
+Bundle-Name: gestione-comunicazioni-api
+Bundle-SymbolicName: it.servizidigitali.gestionecomunicazioni.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	it.servizidigitali.gestionecomunicazioni.exception,\
+	it.servizidigitali.gestionecomunicazioni.model,\
+	it.servizidigitali.gestionecomunicazioni.service,\
+	it.servizidigitali.gestionecomunicazioni.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../gestione-comunicazioni-service/service.xml

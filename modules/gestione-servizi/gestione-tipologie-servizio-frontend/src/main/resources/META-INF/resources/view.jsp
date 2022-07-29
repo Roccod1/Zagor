@@ -4,8 +4,8 @@
 </portlet:renderURL>
 
 <portlet:renderURL var="aggiungiModificaUrl">
-	<portlet:param name="mvcRenderCommandName" value="/aggiungiModifica" />
-	<portlet:param name="indirizzoPrecedente" value="${homeURL}"/>
+	<portlet:param name="mvcRenderCommandName" value="<%=GestioneTipologieServizioPortletKeys.AGGIUNGI_MODIFICA_RENDER_COMMAND_NAME %>" />
+	<portlet:param name="<%=GestioneTipologieServizioPortletKeys.INDIRIZZO_PRECEDENTE %>" value="${homeURL}"/>
 </portlet:renderURL>
 
 <% List<Tipologia> listaTipologie = (List<Tipologia>) renderRequest.getAttribute(GestioneTipologieServizioPortletKeys.LISTA_TIPOLOGIE); %>

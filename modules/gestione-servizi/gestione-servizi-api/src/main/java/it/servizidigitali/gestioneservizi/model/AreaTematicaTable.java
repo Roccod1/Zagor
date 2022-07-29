@@ -59,6 +59,10 @@ public class AreaTematicaTable extends BaseTable<AreaTematicaTable> {
 	public final Column<AreaTematicaTable, String> uriVocabolario =
 		createColumn(
 			"uriVocabolario", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<AreaTematicaTable, String> denominazioneVocabolario =
+		createColumn(
+			"denominazioneVocabolario", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
 	public final Column<AreaTematicaTable, Integer> ordine = createColumn(
 		"ordine", Integer.class, Types.INTEGER, Column.FLAG_DEFAULT);
 	public final Column<AreaTematicaTable, Boolean> visibile = createColumn(

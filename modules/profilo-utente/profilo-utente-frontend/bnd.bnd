@@ -1,4 +1,0 @@
-Bundle-Name: profilo-utente-frontend
-Bundle-SymbolicName: it.servizidigitali.profiloutente.frontend
-Bundle-Version: 1.0.0
-Export-Package: it.servizidigitali.profiloutente.frontend.constants

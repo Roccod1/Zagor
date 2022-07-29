@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.model.Organization;
 public class ServizioEnteImpl extends ServizioEnteBaseImpl {
 
 	private Organization organization;
-
+	
 	public Organization getOrganization() {
 		return organization;
 	}

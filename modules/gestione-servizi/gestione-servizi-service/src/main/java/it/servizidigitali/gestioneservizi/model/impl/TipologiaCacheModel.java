@@ -62,7 +62,7 @@ public class TipologiaCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -88,6 +88,8 @@ public class TipologiaCacheModel
 		sb.append(visibile);
 		sb.append(", invioEmailCittadino=");
 		sb.append(invioEmailCittadino);
+		sb.append(", chatbotInlineIntent=");
+		sb.append(chatbotInlineIntent);
 		sb.append("}");
 
 		return sb.toString();
@@ -147,6 +149,13 @@ public class TipologiaCacheModel
 		tipologiaImpl.setVisibile(visibile);
 		tipologiaImpl.setInvioEmailCittadino(invioEmailCittadino);
 
+		if (chatbotInlineIntent == null) {
+			tipologiaImpl.setChatbotInlineIntent("");
+		}
+		else {
+			tipologiaImpl.setChatbotInlineIntent(chatbotInlineIntent);
+		}
+
 		tipologiaImpl.resetOriginalValues();
 
 		return tipologiaImpl;
@@ -172,6 +181,7 @@ public class TipologiaCacheModel
 		visibile = objectInput.readBoolean();
 
 		invioEmailCittadino = objectInput.readBoolean();
+		chatbotInlineIntent = objectInput.readUTF();
 	}
 
 	@Override
@@ -218,6 +228,13 @@ public class TipologiaCacheModel
 		objectOutput.writeBoolean(visibile);
 
 		objectOutput.writeBoolean(invioEmailCittadino);
+
+		if (chatbotInlineIntent == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(chatbotInlineIntent);
+		}
 	}
 
 	public String uuid;
@@ -232,5 +249,6 @@ public class TipologiaCacheModel
 	public String descrizione;
 	public boolean visibile;
 	public boolean invioEmailCittadino;
+	public String chatbotInlineIntent;
 
 }

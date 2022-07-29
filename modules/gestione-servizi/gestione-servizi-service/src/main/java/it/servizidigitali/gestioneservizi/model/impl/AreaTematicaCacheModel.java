@@ -63,7 +63,7 @@ public class AreaTematicaCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -91,6 +91,8 @@ public class AreaTematicaCacheModel
 		sb.append(sportello);
 		sb.append(", uriVocabolario=");
 		sb.append(uriVocabolario);
+		sb.append(", denominazioneVocabolario=");
+		sb.append(denominazioneVocabolario);
 		sb.append(", ordine=");
 		sb.append(ordine);
 		sb.append(", visibile=");
@@ -174,6 +176,14 @@ public class AreaTematicaCacheModel
 			areaTematicaImpl.setUriVocabolario(uriVocabolario);
 		}
 
+		if (denominazioneVocabolario == null) {
+			areaTematicaImpl.setDenominazioneVocabolario("");
+		}
+		else {
+			areaTematicaImpl.setDenominazioneVocabolario(
+				denominazioneVocabolario);
+		}
+
 		areaTematicaImpl.setOrdine(ordine);
 		areaTematicaImpl.setVisibile(visibile);
 		areaTematicaImpl.setAttiva(attiva);
@@ -202,6 +212,7 @@ public class AreaTematicaCacheModel
 		codice = objectInput.readUTF();
 		sportello = objectInput.readUTF();
 		uriVocabolario = objectInput.readUTF();
+		denominazioneVocabolario = objectInput.readUTF();
 
 		ordine = objectInput.readInt();
 
@@ -272,6 +283,13 @@ public class AreaTematicaCacheModel
 			objectOutput.writeUTF(uriVocabolario);
 		}
 
+		if (denominazioneVocabolario == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(denominazioneVocabolario);
+		}
+
 		objectOutput.writeInt(ordine);
 
 		objectOutput.writeBoolean(visibile);
@@ -292,6 +310,7 @@ public class AreaTematicaCacheModel
 	public String codice;
 	public String sportello;
 	public String uriVocabolario;
+	public String denominazioneVocabolario;
 	public int ordine;
 	public boolean visibile;
 	public boolean attiva;

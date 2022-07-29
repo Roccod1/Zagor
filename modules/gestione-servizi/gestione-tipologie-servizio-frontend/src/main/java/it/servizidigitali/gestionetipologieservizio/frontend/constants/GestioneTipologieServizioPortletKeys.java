@@ -29,8 +29,13 @@ public class GestioneTipologieServizioPortletKeys {
 	public static final String DESCRIZIONE = "descrizione";
 	public static final String VISIBILE = "visibile";
 	public static final String INVIO_EMAIL_CITTADINO = "invioEmailCittadino";
-	
+	public static final String CHATBOT_INLINE_INTENT = "chatbotInlineIntent";
+
 //	path jsp
 	public static final String JSP_INSERIMENTO_MODIFICA_TIPOLOGIA = "/inserisciModificaTipologiaServizio.jsp";
 	public static final String JSP_HOME = "/view.jsp";
+	
+//	path command
+	public static final String AGGIUNGI_MODIFICA_RENDER_COMMAND_NAME = "/aggiungiModifica";
+	public static final String SALVA_ACTION_COMMAND_NAME = "/salva";
 }	

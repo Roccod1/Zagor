@@ -78,7 +78,8 @@ public class TipologiaModelImpl
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"nome", Types.VARCHAR}, {"descrizione", Types.VARCHAR},
-		{"visibile", Types.BOOLEAN}, {"invioEmailCittadino", Types.BOOLEAN}
+		{"visibile", Types.BOOLEAN}, {"invioEmailCittadino", Types.BOOLEAN},
+		{"chatbotInlineIntent", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -97,10 +98,11 @@ public class TipologiaModelImpl
 		TABLE_COLUMNS_MAP.put("descrizione", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("visibile", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("invioEmailCittadino", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("chatbotInlineIntent", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table tipologia (uuid_ VARCHAR(75) null,tipologiaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,visibile BOOLEAN,invioEmailCittadino BOOLEAN)";
+		"create table tipologia (uuid_ VARCHAR(75) null,tipologiaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,visibile BOOLEAN,invioEmailCittadino BOOLEAN,chatbotInlineIntent VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP = "drop table tipologia";
 
@@ -336,6 +338,11 @@ public class TipologiaModelImpl
 		attributeSetterBiConsumers.put(
 			"invioEmailCittadino",
 			(BiConsumer<Tipologia, Boolean>)Tipologia::setInvioEmailCittadino);
+		attributeGetterFunctions.put(
+			"chatbotInlineIntent", Tipologia::getChatbotInlineIntent);
+		attributeSetterBiConsumers.put(
+			"chatbotInlineIntent",
+			(BiConsumer<Tipologia, String>)Tipologia::setChatbotInlineIntent);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -602,6 +609,25 @@ public class TipologiaModelImpl
 	}
 
 	@Override
+	public String getChatbotInlineIntent() {
+		if (_chatbotInlineIntent == null) {
+			return "";
+		}
+		else {
+			return _chatbotInlineIntent;
+		}
+	}
+
+	@Override
+	public void setChatbotInlineIntent(String chatbotInlineIntent) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_chatbotInlineIntent = chatbotInlineIntent;
+	}
+
+	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
 			PortalUtil.getClassNameId(Tipologia.class.getName()));
@@ -675,6 +701,7 @@ public class TipologiaModelImpl
 		tipologiaImpl.setDescrizione(getDescrizione());
 		tipologiaImpl.setVisibile(isVisibile());
 		tipologiaImpl.setInvioEmailCittadino(isInvioEmailCittadino());
+		tipologiaImpl.setChatbotInlineIntent(getChatbotInlineIntent());
 
 		tipologiaImpl.resetOriginalValues();
 
@@ -705,6 +732,8 @@ public class TipologiaModelImpl
 			this.<Boolean>getColumnOriginalValue("visibile"));
 		tipologiaImpl.setInvioEmailCittadino(
 			this.<Boolean>getColumnOriginalValue("invioEmailCittadino"));
+		tipologiaImpl.setChatbotInlineIntent(
+			this.<String>getColumnOriginalValue("chatbotInlineIntent"));
 
 		return tipologiaImpl;
 	}
@@ -842,6 +871,16 @@ public class TipologiaModelImpl
 
 		tipologiaCacheModel.invioEmailCittadino = isInvioEmailCittadino();
 
+		tipologiaCacheModel.chatbotInlineIntent = getChatbotInlineIntent();
+
+		String chatbotInlineIntent = tipologiaCacheModel.chatbotInlineIntent;
+
+		if ((chatbotInlineIntent != null) &&
+			(chatbotInlineIntent.length() == 0)) {
+
+			tipologiaCacheModel.chatbotInlineIntent = null;
+		}
+
 		return tipologiaCacheModel;
 	}
 
@@ -945,6 +984,7 @@ public class TipologiaModelImpl
 	private String _descrizione;
 	private boolean _visibile;
 	private boolean _invioEmailCittadino;
+	private String _chatbotInlineIntent;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -987,6 +1027,7 @@ public class TipologiaModelImpl
 		_columnOriginalValues.put("descrizione", _descrizione);
 		_columnOriginalValues.put("visibile", _visibile);
 		_columnOriginalValues.put("invioEmailCittadino", _invioEmailCittadino);
+		_columnOriginalValues.put("chatbotInlineIntent", _chatbotInlineIntent);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1033,6 +1074,8 @@ public class TipologiaModelImpl
 		columnBitmasks.put("visibile", 1024L);
 
 		columnBitmasks.put("invioEmailCittadino", 2048L);
+
+		columnBitmasks.put("chatbotInlineIntent", 4096L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

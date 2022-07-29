@@ -296,6 +296,12 @@ public interface AreaTematicaLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<AreaTematica> getListaAreeTematicheOrdinata(
+			int cur, int delta, String nomeOrdinamento,
+			String direzioneOrdinamento)
+		throws Exception;
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -310,6 +316,9 @@ public interface AreaTematicaLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
+
+	public AreaTematica salvaAreaTematica(AreaTematica areaTematica)
+		throws Exception;
 
 	/**
 	 * Updates the area tematica in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

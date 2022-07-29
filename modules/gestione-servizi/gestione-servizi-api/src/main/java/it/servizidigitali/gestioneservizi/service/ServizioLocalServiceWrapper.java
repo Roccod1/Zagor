@@ -520,6 +520,14 @@ public class ServizioLocalServiceWrapper
 		return _servizioLocalService.hasTipologiaServizios(tipologiaId);
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
+			listaServiziAttivi(Boolean attivo, Integer start, Integer end)
+		throws Exception {
+
+		return _servizioLocalService.listaServiziAttivi(attivo, start, end);
+	}
+
 	/**
 	 * @param nome
 	 * @param codice

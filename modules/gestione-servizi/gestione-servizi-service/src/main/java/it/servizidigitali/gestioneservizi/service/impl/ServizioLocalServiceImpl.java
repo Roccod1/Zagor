@@ -127,4 +127,8 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl{
 		return listaServizi;
 	}
 	
+	public List<Servizio> listaServiziAttivi(Boolean attivo, Integer start, Integer end) throws Exception{
+		return servizioPersistence.findByAttivo(attivo, start, end);
+	}
+	
 }

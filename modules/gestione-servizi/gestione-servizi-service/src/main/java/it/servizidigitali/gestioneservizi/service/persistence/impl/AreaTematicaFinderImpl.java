@@ -11,7 +11,9 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
+import it.servizidigitali.gestioneservizi.model.AreaTematica;
 import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.persistence.AreaTematicaFinder;
 import it.servizidigitali.gestioneservizi.service.persistence.ServizioFinder;
 
@@ -23,5 +25,13 @@ import it.servizidigitali.gestioneservizi.service.persistence.ServizioFinder;
 @Component(service = AreaTematicaFinder.class)
 public class AreaTematicaFinderImpl extends AreaTematicaFinderBaseImpl implements AreaTematicaFinder{
 	
-	
+	public List<AreaTematica> getListaAreeTematicheOrdinata(int inizio, int fine, OrderByComparator<AreaTematica> ordine){
+			
+		ClassLoader classLoader = getClass().getClassLoader();
+		DynamicQuery query = DynamicQueryFactoryUtil.forClass(AreaTematica.class, classLoader);
+
+		List<AreaTematica> listaAreeTematicheOrdinata = areaTematicaPersistence.findWithDynamicQuery(query, inizio, fine, ordine);
+
+		return listaAreeTematicheOrdinata;
+	}
 }
