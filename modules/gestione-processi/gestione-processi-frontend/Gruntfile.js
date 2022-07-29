@@ -2,64 +2,60 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    clean: ['dist', 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/libs'],
-    concat: {
+    clean: ['modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/libs'],
+    browserify: {
       options: {
-        separator: ';'
+        browserifyOptions: {
+          debug: true,
+          list: true,
+          // make sure we do not include browser shims unnecessarily
+          insertGlobalVars: {
+            process: function () {
+              return 'undefined';
+            },
+            Buffer: function () {
+              return 'undefined';
+            }
+          }
+        },
+        transform: [ 'brfs' ]
       },
-      dist: {
-        src: [
-              'alpaca/customfields/**/*.js',
-              '!alpaca/customfields/**/_*.js',
-              '!alpaca/customfields/**/_*.txt',
-        ],
-        dest: 'alpaca/dist/custom-fields.js'
-      }
-    },
-    copy: {
-		libs: {
-			files: [
-				{
-					expand: true,
-					cwd: 'node_modules/bpmn-js/lib',
-					src: '**/*',
-					dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/libs/bpmn-js'
-				},
-				{
-					expand: true,
-					cwd: 'node_modules/bpmn-js-properties-panel/lib',
-					src: '**/*',
-					dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/libs/bpmn-js-properties-panel'
-				},
-				{
-					expand: true,
-					cwd: 'node_modules/bpmn-moddle/lib',
-					src: '**/*',
-					dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/libs/bpmn-moddle'
-				},
-				{
-					expand: true,
-					cwd: 'node_modules/diagram-js/lib',
-					src: '**/*',
-					dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/libs/diagram-js'
-				}
-			]
-		}
-	},
-    uglify: {
-      options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy HH:MM:ss") %> */\n'
-      },
-      dist: {
+      app: {
         files: {
-          'alpaca/dist/custom-fields.min.js': ['<%= concat.dist.dest %>']
+          'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist/index.js': [ 
+			'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/app/**/*.js' 
+			]
         }
       }
     },
-    jshint: {
-      files: ['Gruntfile.js', 'alpaca/customfields/**/*.js'],
-      options: {
-        // options here to override JSHint defaults
+    copy: {
+      diagram_js: {
+        files: [
+          {
+            src: 'node_modules/diagram-js/assets',
+            dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist/css/diagram-js.css'
+          }
+        ]
+      },
+      bpmn_js: {
+        files: [
+          {
+            expand: true,
+            cwd: 'node_modules/bpmn-js/assets',
+            src: ['**/*.*', '!**/*.js'],
+            dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist/vendor'
+          }
+        ]
+      },
+      app: {
+        files: [
+          {
+            expand: true,
+            cwd: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/app/',
+            src: ['**/*.*', '!**/*.js'],
+            dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist'
+          }
+        ]
       }
     },
     watch: {
@@ -76,8 +72,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-replace');
+  grunt.loadNpmTasks('grunt-browserify');
 
   grunt.registerTask('test', ['jshint']);
 
-  grunt.registerTask('default', [/*'jshint', */'clean', 'concat', 'copy', 'uglify']);
+  grunt.registerTask('default', [/*'jshint', */'clean', 'copy', 'browserify:app']);
 };
