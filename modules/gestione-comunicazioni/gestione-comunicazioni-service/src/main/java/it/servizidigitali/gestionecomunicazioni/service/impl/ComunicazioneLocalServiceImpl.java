@@ -15,9 +15,11 @@
 package it.servizidigitali.gestionecomunicazioni.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 
 import java.util.Date;
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -84,5 +86,17 @@ public class ComunicazioneLocalServiceImpl
 		model.setDestinatarioUserId(destinatarioUserId);
 		model.setDestinatarioOrganizationId(destinatarioOrganizationId);
 		return comunicazionePersistence.update(model);
+	}
+	
+	public List<Comunicazione> findByFilters(Long organizzazione, String username, Long tipologia, int cur, int delta) {
+		int[] limit = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int start = limit[0];
+		int end = limit[1];
+		
+		return comunicazioneFinder.findByFilters(organizzazione, username, tipologia, start, end);
+	}
+	
+	public int countByFilters(Long organizzazione, String username, Long tipologia) {
+		return comunicazioneFinder.countByFilters(organizzazione, username, tipologia);
 	}
 }

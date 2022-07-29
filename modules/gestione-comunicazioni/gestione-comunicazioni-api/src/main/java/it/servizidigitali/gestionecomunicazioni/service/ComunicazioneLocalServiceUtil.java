@@ -74,6 +74,12 @@ public class ComunicazioneLocalServiceUtil {
 			destinatarioOrganizationId);
 	}
 
+	public static int countByFilters(
+		Long organizzazione, String username, Long tipologia) {
+
+		return getService().countByFilters(organizzazione, username, tipologia);
+	}
+
 	/**
 	 * Creates a new comunicazione with the primary key. Does not add the comunicazione to the database.
 	 *
@@ -237,6 +243,14 @@ public class ComunicazioneLocalServiceUtil {
 		String uuid, long groupId) {
 
 		return getService().fetchComunicazioneByUuidAndGroupId(uuid, groupId);
+	}
+
+	public static List<Comunicazione> findByFilters(
+		Long organizzazione, String username, Long tipologia, int cur,
+		int delta) {
+
+		return getService().findByFilters(
+			organizzazione, username, tipologia, cur, delta);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery

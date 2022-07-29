@@ -48,6 +48,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
 import it.servizidigitali.gestionecomunicazioni.service.ComunicazioneLocalService;
 import it.servizidigitali.gestionecomunicazioni.service.ComunicazioneLocalServiceUtil;
+import it.servizidigitali.gestionecomunicazioni.service.persistence.ComunicazioneFinder;
 import it.servizidigitali.gestionecomunicazioni.service.persistence.ComunicazionePersistence;
 import it.servizidigitali.gestionecomunicazioni.service.persistence.LetturaComunicazionePersistence;
 import it.servizidigitali.gestionecomunicazioni.service.persistence.TipologiaComunicazionePersistence;
@@ -599,6 +600,9 @@ public abstract class ComunicazioneLocalServiceBaseImpl
 
 	@Reference
 	protected ComunicazionePersistence comunicazionePersistence;
+
+	@Reference
+	protected ComunicazioneFinder comunicazioneFinder;
 
 	@Reference
 	protected LetturaComunicazionePersistence letturaComunicazionePersistence;

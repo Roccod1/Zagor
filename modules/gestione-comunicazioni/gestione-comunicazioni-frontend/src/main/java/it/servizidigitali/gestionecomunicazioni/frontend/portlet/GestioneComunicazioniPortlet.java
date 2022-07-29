@@ -2,7 +2,6 @@ package it.servizidigitali.gestionecomunicazioni.frontend.portlet;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
-import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -73,17 +72,17 @@ public class GestioneComunicazioniPortlet extends MVCPortlet {
 				.map(OrganizationDTO::new)
 				.collect(Collectors.toList());
 		
-		int[] limit = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
-		int start = limit[0];
-		int end = limit[1];
+		Long organizzazione = queryOrganizzazione == 0 ? null : queryOrganizzazione;
+		String username = queryUsername.isBlank() ? null : queryUsername.trim();
+		Long tipologia = queryTipologia == 0 ? null : queryTipologia;
 		
 		List<ComunicazioneDTO> comunicazioni = comunicazioneLocalService
-				.getComunicaziones(start, end)
+				.findByFilters(organizzazione, username, tipologia, cur, delta)
 				.stream()
 				.map(ComunicazioneDTO::new)
 				.collect(Collectors.toList());
 		
-		int comunicazioniCount = comunicazioneLocalService.getComunicazionesCount();
+		int comunicazioniCount = comunicazioneLocalService.countByFilters(organizzazione, username, tipologia);
 		
 		request.setAttribute("comunicazioni", comunicazioni);
 		request.setAttribute("comunicazioniCount", comunicazioniCount);

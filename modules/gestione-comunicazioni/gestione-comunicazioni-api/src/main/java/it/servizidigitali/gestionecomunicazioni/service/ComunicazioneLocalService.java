@@ -86,6 +86,9 @@ public interface ComunicazioneLocalService
 			long destinatarioOrganizationId)
 		throws PortalException;
 
+	public int countByFilters(
+		Long organizzazione, String username, Long tipologia);
+
 	/**
 	 * Creates a new comunicazione with the primary key. Does not add the comunicazione to the database.
 	 *
@@ -221,6 +224,10 @@ public interface ComunicazioneLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Comunicazione fetchComunicazioneByUuidAndGroupId(
 		String uuid, long groupId);
+
+	public List<Comunicazione> findByFilters(
+		Long organizzazione, String username, Long tipologia, int cur,
+		int delta);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();

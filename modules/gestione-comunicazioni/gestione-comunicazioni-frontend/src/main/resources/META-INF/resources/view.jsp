@@ -44,6 +44,7 @@
 
 <liferay-ui:search-container total="${comunicazioniCount}"
 						     iteratorURL="${iteratorURL}"
+						     emptyResultsMessage="nessuna-comunicazione"
                              delta="10">
 	<liferay-ui:search-container-results results="${comunicazioni}" />
 	

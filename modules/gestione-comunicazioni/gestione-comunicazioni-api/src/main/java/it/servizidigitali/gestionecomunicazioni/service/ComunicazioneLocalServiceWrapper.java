@@ -72,6 +72,14 @@ public class ComunicazioneLocalServiceWrapper
 			destinatarioOrganizationId);
 	}
 
+	@Override
+	public int countByFilters(
+		Long organizzazione, String username, Long tipologia) {
+
+		return _comunicazioneLocalService.countByFilters(
+			organizzazione, username, tipologia);
+	}
+
 	/**
 	 * Creates a new comunicazione with the primary key. Does not add the comunicazione to the database.
 	 *
@@ -268,6 +276,17 @@ public class ComunicazioneLocalServiceWrapper
 
 		return _comunicazioneLocalService.fetchComunicazioneByUuidAndGroupId(
 			uuid, groupId);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.gestionecomunicazioni.model.Comunicazione>
+			findByFilters(
+				Long organizzazione, String username, Long tipologia, int cur,
+				int delta) {
+
+		return _comunicazioneLocalService.findByFilters(
+			organizzazione, username, tipologia, cur, delta);
 	}
 
 	@Override
