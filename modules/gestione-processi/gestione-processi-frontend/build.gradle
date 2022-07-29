@@ -22,10 +22,6 @@ task buildFrontend(type: Copy) {
 
    dependsOn packageRunBuild
    println '****STARTING FRONTEND BUILD******'
-
-	from "../../../alpaca/dist"
-	into "src/main/resources/META-INF/resources/dist"
-	include "*.js"
    
    println '****END FRONTEND BUILD******'
    
