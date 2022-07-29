@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.camunda.community.rest.client.dto.ProcessDefinitionDto;
+import org.camunda.community.rest.client.dto.ProcessInstanceDto;
 import org.camunda.community.rest.client.dto.TaskDto;
 import org.camunda.community.rest.client.dto.VariableInstanceDto;
 
@@ -45,7 +46,7 @@ public interface CamundaClient {
 
 	long countTasksByAssigneeAndCodiceServizio(String tenantId, String assignee, String codiceServizio, List<VariableInstanceDto> variables) throws CamundaClientException;
 
-	ProcessDefinitionDto getProcessInstance(String id) throws CamundaClientException;
+	ProcessInstanceDto getProcessInstance(String id) throws CamundaClientException;
 
 	boolean claim(String userId, String taskId) throws CamundaClientException;
 
@@ -58,7 +59,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	ProcessDefinitionDto[] getProcessInstanceByBusinessKey(String tenantId, long businessKey) throws CamundaClientException;
+	ProcessInstanceDto[] getProcessInstanceByBusinessKey(String tenantId, long businessKey) throws CamundaClientException;
 
 	/**
 	 *

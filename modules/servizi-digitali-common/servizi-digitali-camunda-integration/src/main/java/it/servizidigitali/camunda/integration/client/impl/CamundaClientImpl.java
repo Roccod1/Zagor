@@ -350,12 +350,12 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public ProcessDefinitionDto getProcessInstance(String id) throws CamundaClientException {
-		ProcessDefinitionApi api = new ProcessDefinitionApi(getApiClient());
+	public ProcessInstanceDto getProcessInstance(String id) throws CamundaClientException {
+		ProcessInstanceApi api = new ProcessInstanceApi(getApiClient());
 
 		try {
 
-			return api.getProcessDefinition(id);
+			return api.getProcessInstance(id);
 
 		}catch (Exception e) {
 			log.error("getProcessInstance", e);
@@ -421,7 +421,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public ProcessDefinitionDto[] getProcessInstanceByBusinessKey(String tenantId, long businessKey) throws CamundaClientException {
+	public ProcessInstanceDto[] getProcessInstanceByBusinessKey(String tenantId, long businessKey) throws CamundaClientException {
 		ProcessInstanceApi api = new ProcessInstanceApi(getApiClient());
 
 		try {
@@ -435,7 +435,7 @@ public class CamundaClientImpl implements CamundaClient {
 			
 			List<ProcessInstanceDto> res = api.queryProcessInstances(null, null, q);
 
-			return res.toArray(new ProcessDefinitionDto[0]);
+			return res.toArray(new ProcessInstanceDto[0]);
 
 		}catch (Exception e) {
 			log.error("getProcessInstanceByBusinessKey", e);
