@@ -72,7 +72,6 @@ public class ProfiloUtenteMieiDatiPortlet extends MVCPortlet {
 		DatiAnagrafici datiAnagrafici = null;
 		Organization organization = null;
 		boolean anpr = false;
-		String ente = "ANPR - Anagrafe Nazionale della Popolazione Residente";
 		
 		List<DatiAnagrafici.ComponenteNucleoFamiliare> listaComponentiNucleoFamiliare = new ArrayList<DatiAnagrafici.ComponenteNucleoFamiliare>();
 		try {
@@ -91,7 +90,7 @@ public class ProfiloUtenteMieiDatiPortlet extends MVCPortlet {
             	anpr = (boolean) expandoOrganization.getAttribute(ProfiloUtenteMieiDatiPortletKeys.EXPANDO_ORGANIZATION_ANPR);
             	
             	if(!anpr) {
-            		ente = "Ente " + organization.getName();
+            		renderRequest.setAttribute(ProfiloUtenteMieiDatiPortletKeys.NOME_FONTE, organization.getName());
             	}
             }
 
@@ -109,7 +108,6 @@ public class ProfiloUtenteMieiDatiPortlet extends MVCPortlet {
             _log.error("render :: " + e.getMessage(), e);
         }
 		
-		renderRequest.setAttribute(ProfiloUtenteMieiDatiPortletKeys.NOME_FONTE, ente);
 		renderRequest.setAttribute(ProfiloUtenteMieiDatiPortletKeys.TAB_ATTIVA, tabAttiva);
 		renderRequest.setAttribute(ProfiloUtenteMieiDatiPortletKeys.COMPONENTI_NUCLEO_FAMILIARE, listaComponentiNucleoFamiliare);
 		renderRequest.setAttribute(ProfiloUtenteMieiDatiPortletKeys.UTENTE, utenteCorrente);

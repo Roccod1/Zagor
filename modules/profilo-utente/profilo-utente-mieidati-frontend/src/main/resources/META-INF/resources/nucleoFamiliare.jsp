@@ -11,7 +11,14 @@
 <c:choose>
 	<c:when test="${backofficeError eq true }">
 		<div class="alert alert-danger" role="alert">
-		  <liferay-ui:message key="errore-backoffice" arguments="${nomeFonte}"/>
+			<c:choose>
+				<c:when test="${not empty nomeFonte }">
+					<liferay-ui:message key="errore-backoffice" arguments="${nomeFonte}"/>					
+				</c:when>
+				<c:otherwise>
+					<liferay-ui:message key="errore-backoffice-anpr"/>					
+				</c:otherwise>
+			</c:choose>
 		</div>
 	</c:when>
 	
@@ -46,7 +53,14 @@
 				<div class="mt-4">
 					<small>
 						<i>
+							<c:choose>
+								<c:when test="${not empty nomeFonte }">
 							<liferay-ui:message key="fonte-dati" arguments="${nomeFonte}"/>
+								</c:when>
+								<c:otherwise>
+							<liferay-ui:message key="fonte-dati-anpr"/>
+								</c:otherwise>
+							</c:choose>
 						</i>
 					</small>				
 				</div>
