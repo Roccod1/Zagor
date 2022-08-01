@@ -42,7 +42,7 @@ public class ModificaEmailUtenteActionCommand extends BaseMVCActionCommand {
 		ThemeDisplay themeDisplay = null;		
 		User utenteCorrente = null;
 		try {
-			_log.info("Email: " + emailSecondaria);
+			_log.debug("Email: " + emailSecondaria);
 
 			serviceContext = ServiceContextFactory.getInstance(actionRequest);
 			themeDisplay = serviceContext.getThemeDisplay();
