@@ -27,7 +27,9 @@ public class ComunicazioneDTO {
 		}
 		
 		Organization organizzazione = comunicazione.getDestinatarioOrganizzazione();
-		ente = organizzazione.getName();
+		if (organizzazione != null) {
+			ente = organizzazione.getName();
+		}
 	}
 	
 	public Date getDataInvio() {
