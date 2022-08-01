@@ -283,6 +283,13 @@ public class ProcessoLocalServiceUtil {
 		return getService().getProcesso(processoId);
 	}
 
+	public static Processo getProcessoByCodice(String codice)
+		throws it.servizidigitali.gestioneprocessi.exception.
+			NoSuchProcessoException {
+
+		return getService().getProcessoByCodice(codice);
+	}
+
 	/**
 	 * Returns the processo matching the UUID and group.
 	 *
@@ -365,6 +372,17 @@ public class ProcessoLocalServiceUtil {
 	 */
 	public static Processo updateProcesso(Processo processo) {
 		return getService().updateProcesso(processo);
+	}
+
+	public static com.liferay.portal.kernel.repository.model.FileEntry
+			uploadDocumentLibrary(
+				String file, String nomeFile, String nomeCartella,
+				com.liferay.portal.kernel.model.Group group, long userId,
+				com.liferay.portal.kernel.service.ServiceContext serviceCtx)
+		throws PortalException {
+
+		return getService().uploadDocumentLibrary(
+			file, nomeFile, nomeCartella, group, userId, serviceCtx);
 	}
 
 	public static ProcessoLocalService getService() {

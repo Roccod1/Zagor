@@ -23,16 +23,20 @@ import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.PersistedModel;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.BaseLocalService;
 import com.liferay.portal.kernel.service.PersistedModelLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import it.servizidigitali.gestioneprocessi.exception.NoSuchProcessoException;
 import it.servizidigitali.gestioneprocessi.model.Processo;
 
 import java.io.Serializable;
@@ -252,6 +256,10 @@ public interface ProcessoLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Processo getProcesso(long processoId) throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Processo getProcessoByCodice(String codice)
+		throws NoSuchProcessoException;
+
 	/**
 	 * Returns the processo matching the UUID and group.
 	 *
@@ -324,5 +332,10 @@ public interface ProcessoLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Processo updateProcesso(Processo processo);
+
+	public FileEntry uploadDocumentLibrary(
+			String file, String nomeFile, String nomeCartella, Group group,
+			long userId, ServiceContext serviceCtx)
+		throws PortalException;
 
 }

@@ -320,6 +320,15 @@ public class ProcessoLocalServiceWrapper
 		return _processoLocalService.getProcesso(processoId);
 	}
 
+	@Override
+	public it.servizidigitali.gestioneprocessi.model.Processo
+			getProcessoByCodice(String codice)
+		throws it.servizidigitali.gestioneprocessi.exception.
+			NoSuchProcessoException {
+
+		return _processoLocalService.getProcessoByCodice(codice);
+	}
+
 	/**
 	 * Returns the processo matching the UUID and group.
 	 *
@@ -416,6 +425,18 @@ public class ProcessoLocalServiceWrapper
 		it.servizidigitali.gestioneprocessi.model.Processo processo) {
 
 		return _processoLocalService.updateProcesso(processo);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.repository.model.FileEntry
+			uploadDocumentLibrary(
+				String file, String nomeFile, String nomeCartella,
+				com.liferay.portal.kernel.model.Group group, long userId,
+				com.liferay.portal.kernel.service.ServiceContext serviceCtx)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _processoLocalService.uploadDocumentLibrary(
+			file, nomeFile, nomeCartella, group, userId, serviceCtx);
 	}
 
 	@Override
