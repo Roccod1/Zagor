@@ -19,7 +19,7 @@ import it.servizidigitali.backoffice.integration.service.MemoryCache;
 import it.servizidigitali.backoffice.integration.service.MemoryCache.CacheEntry;
 
 /**
- * @author Gianluca Pindinelli
+ * @author pindi
  *
  */
 @Component(name = "memoryCacheService", immediate = true, service = CacheService.class)
