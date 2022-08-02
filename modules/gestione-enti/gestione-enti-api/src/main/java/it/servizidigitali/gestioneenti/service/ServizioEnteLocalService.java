@@ -231,6 +231,11 @@ public interface ServizioEnteLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Object> getListaServiziByCompanyOrganizationAttivo(
+			long companyId, long organizationId, boolean attivo)
+		throws Exception;
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *

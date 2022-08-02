@@ -14,8 +14,13 @@
 
 package it.servizidigitali.gestioneservizi.service.impl;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -27,6 +32,7 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
+import it.servizidigitali.gestioneservizi.model.AreaTematica;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.base.ServizioLocalServiceBaseImpl;
@@ -46,13 +52,19 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl{
 	public Servizio getServizioById(Long servizioId) throws Exception{
 		_log.debug("getServizioById() :: INIZIO");
 
-		Servizio servizio = null;
-		List<Tipologia> listaTipologie = null;
-		
 
 		_log.debug("getServizioById() :: ID: "+servizioId);
-		servizio = servizioPersistence.findByPrimaryKey(servizioId);
-		listaTipologie = tipologiaPersistence.getServizioTipologias(servizio.getServizioId());
+		Servizio servizio = servizioPersistence.findByPrimaryKey(servizioId);
+		List<Tipologia> listaTipologie = tipologiaPersistence.getServizioTipologias(servizio.getServizioId());
+		
+		if(Validator.isNotNull(servizio.getAreaTematicaId())) {
+			AreaTematica areaTematica = areaTematicaPersistence.fetchByPrimaryKey(servizio.getAreaTematicaId());
+			if(Validator.isNotNull(areaTematica)) {
+				servizio.setAreaTematica(areaTematica);
+			}else {
+				_log.warn("Area tematica inesistente con ID: " + servizio.getAreaTematicaId());
+			}
+		}
 		_log.debug("listaTipologie size: "+listaTipologie.size());
 		if(Validator.isNotNull(listaTipologie) && !listaTipologie.isEmpty()) {
 			servizio.setListaTipologie(listaTipologie);				
@@ -135,4 +147,70 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl{
 		return servizioPersistence.findByAttivo(attivo, start, end);
 	}
 	
+	public List<Servizio> getServiziUtilizzabili(List<Object> listaServiziEnte, String nome, long areaTematicaId, long tipologiaId, int cur, int delta, String orderByCol, String orderByType){
+		
+//		preparo i parametri per ordinamento e paginazione
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+		boolean direzione = true;
+
+		if(Validator.isNull(orderByCol)) {
+			_log.debug("Nessun ordinamento impostato. Uso di default servizioId");
+			orderByCol = "servizioId";
+		}
+		
+		if(inizio <= 0 || fine <= 0) {
+			_log.debug("Posizione iniziale o finale sono minori o uguali a zero. Imposto inizio e fine al valore ALL_POS");
+			inizio = QueryUtil.ALL_POS;
+			fine = QueryUtil.ALL_POS;
+		}
+		
+		
+		if(!Validator.isBlank(orderByType)) {
+			if("desc".equals(orderByType.toLowerCase())) {
+				direzione = false;
+			}
+		}
+		
+		OrderByComparator<Servizio> ordine = OrderByComparatorFactoryUtil.create("Servizio", orderByCol, direzione);
+				
+		ClassLoader classLoader = getClassLoader();
+		DynamicQuery servizioDynamicQuery = DynamicQueryFactoryUtil.forClass(Servizio.class, classLoader);	
+		
+//		imposto "join" di servizio su servizioEnte in modo che servizioEnte.servizioId = servizio.servizioId
+		servizioDynamicQuery.add(PropertyFactoryUtil.forName("servizioId").in(listaServiziEnte));
+
+		if(!Validator.isBlank(nome)) {
+			servizioDynamicQuery.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));	
+		}
+		
+		if(areaTematicaId > 0) {
+			servizioDynamicQuery.add(RestrictionsFactoryUtil.eq("areaTematicaId", areaTematicaId));
+		}
+		
+		if(tipologiaId > 0) {
+			servizioDynamicQuery.add(RestrictionsFactoryUtil.eq("tipologiaId", tipologiaId));
+		}
+		List<Servizio> listaServizi = servizioPersistence.findWithDynamicQuery(servizioDynamicQuery, inizio, fine, ordine);
+		
+		setAreaTematicaListaServizi(listaServizi);
+		
+//		richiedo lista servizi paginata e ordinata
+		return servizioPersistence.findWithDynamicQuery(servizioDynamicQuery, inizio, fine, ordine);
+	}
+	private void setAreaTematicaListaServizi(List<Servizio> listaServizi){
+		for(Servizio servizio : listaServizi) {
+			setAreaTematica(servizio);
+		}
+	}
+	
+	private void setAreaTematica(Servizio servizio) {
+		if(servizio.getAreaTematicaId() > 0) {
+			AreaTematica areaTematica = areaTematicaPersistence.fetchByPrimaryKey(servizio.getAreaTematicaId());
+			if(Validator.isNotNull(areaTematica)) {
+				servizio.setAreaTematica(areaTematica);
+			}
+		}
+	}
 }

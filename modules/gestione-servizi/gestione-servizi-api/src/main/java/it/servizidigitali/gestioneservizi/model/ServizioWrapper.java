@@ -279,6 +279,13 @@ public class ServizioWrapper
 		return model.getAllegatoDelega();
 	}
 
+	@Override
+	public it.servizidigitali.gestioneservizi.model.AreaTematica
+		getAreaTematica() {
+
+		return model.getAreaTematica();
+	}
+
 	/**
 	 * Returns the area tematica ID of this servizio.
 	 *
@@ -719,6 +726,13 @@ public class ServizioWrapper
 	@Override
 	public void setAllegatoDelega(boolean allegatoDelega) {
 		model.setAllegatoDelega(allegatoDelega);
+	}
+
+	@Override
+	public void setAreaTematica(
+		it.servizidigitali.gestioneservizi.model.AreaTematica areaTematica) {
+
+		model.setAreaTematica(areaTematica);
 	}
 
 	/**

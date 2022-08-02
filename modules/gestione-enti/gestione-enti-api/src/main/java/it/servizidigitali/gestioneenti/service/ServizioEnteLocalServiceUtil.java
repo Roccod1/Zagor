@@ -262,6 +262,14 @@ public class ServizioEnteLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
+	public static List<Object> getListaServiziByCompanyOrganizationAttivo(
+			long companyId, long organizationId, boolean attivo)
+		throws Exception {
+
+		return getService().getListaServiziByCompanyOrganizationAttivo(
+			companyId, organizationId, attivo);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *

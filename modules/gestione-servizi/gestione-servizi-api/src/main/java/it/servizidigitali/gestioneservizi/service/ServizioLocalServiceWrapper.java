@@ -474,6 +474,18 @@ public class ServizioLocalServiceWrapper
 		return _servizioLocalService.getServiziosCount();
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
+		getServiziUtilizzabili(
+			java.util.List<Object> listaServiziEnte, String nome,
+			long areaTematicaId, long tipologiaId, int cur, int delta,
+			String orderByCol, String orderByType) {
+
+		return _servizioLocalService.getServiziUtilizzabili(
+			listaServiziEnte, nome, areaTematicaId, tipologiaId, cur, delta,
+			orderByCol, orderByType);
+	}
+
 	/**
 	 * Returns the tipologiaIds of the tipologias associated with the servizio.
 	 *
