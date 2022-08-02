@@ -1,13 +1,18 @@
 <%@ include file="init.jsp" %>
 
  <!-- required modeler styles -->
-    <link rel="stylesheet" href="https://unpkg.com/bpmn-js@9.3.1/dist/assets/bpmn-js.css">
-    <link rel="stylesheet" href="https://unpkg.com/bpmn-js@9.3.1/dist/assets/diagram-js.css">
-    <link rel="stylesheet" href="https://unpkg.com/bpmn-js@9.3.1/dist/assets/bpmn-font/css/bpmn.css">
+<!--     <link rel="stylesheet" href="https://unpkg.com/bpmn-js@9.3.1/dist/assets/diagram-js.css"> -->
+<!--     <link rel="stylesheet" href="https://unpkg.com/bpmn-js@9.3.1/dist/assets/bpmn-js.css"> -->
+<!--     <link rel="stylesheet" href="https://unpkg.com/bpmn-js@9.3.1/dist/assets/bpmn-font/css/bpmn.css"> -->
+    
+    
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/dist/css/diagram-js.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/dist/vendor/bpmn-font/css/bpmn.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/dist/vendor/bpmn-font/css/bpmn-embedded.css">
 
     <!-- modeler distro -->
-    <script src="https://unpkg.com/bpmn-js@9.3.1/dist/bpmn-modeler.development.js"></script>
-    <script src="https://unpkg.com/bpmn-js/dist/bpmn-viewer.development.js"></script>
+<!--     <script src="https://unpkg.com/bpmn-js@9.3.1/dist/bpmn-modeler.development.js"></script> -->
+<!--     <script src="https://unpkg.com/bpmn-js/dist/bpmn-viewer.development.js"></script> -->
     
 
 <portlet:actionURL name="<%=GestioneProcessiPortletKeys.SALVA_CREA_ACTION_COMMAND %>" var="salvaModificaURL" />

@@ -1,2 +1,26 @@
-.gestione-processi-frontend {
+#js-properties-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 460px;
+  z-index: 10;
+  overflow: auto;
+
+  &:empty {
+    display: none;
+  }
+  > .djs-properties-panel {
+    padding-bottom: 70px;
+    min-height: 100%;
+  }
+}
+
+a.bjs-powered-by {
+  display: none;
+}
+
+
+#bjs-container {
+	height: 500px;
 }

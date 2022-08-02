@@ -1,5 +1,7 @@
 'use strict';
 
+console.log('BPMNS Lib loaded');
+
 var fs = require('fs');
 
 var $ = require('jquery'),
@@ -113,9 +115,13 @@ if (!window.FileList || !window.FileReader) {
 
 // bootstrap diagram functions
 
-$(document).on('ready', function() {
+/*$(document).on('ready', function() {*/
+Liferay.on('endNavigate', function() {
+	console.log('Ready called');
+
 
   $('#js-create-diagram').click(function(e) {
+	console.log('CReate called');
     e.stopPropagation();
     e.preventDefault();
 

@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    clean: ['modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/libs'],
+    clean: ['modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist'],
     browserify: {
       options: {
         browserifyOptions: {
@@ -32,8 +32,10 @@ module.exports = function(grunt) {
       diagram_js: {
         files: [
           {
-            src: 'node_modules/diagram-js/assets',
-            dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist/css/diagram-js.css'
+			expand: true,
+            cwd: 'node_modules/diagram-js/assets',
+            src: 'diagram-js.css',
+            dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist/css'
           }
         ]
       },
