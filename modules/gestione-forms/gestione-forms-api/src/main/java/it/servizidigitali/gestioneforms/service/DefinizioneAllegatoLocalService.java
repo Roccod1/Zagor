@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Indexable;
@@ -342,7 +343,7 @@ public interface DefinizioneAllegatoLocalService
 		DefinizioneAllegato definizioneAllegato);
 
 	public FileEntry uploadAllegatoDocumentMediaRepository(
-			String idAllegatoTemporaneo, String fileNameModello, long groupId,
+			String idAllegatoTemporaneo, String fileNameModello, Group group,
 			long formId, long userId, ServiceContext serviceContext)
 		throws Exception;
 
