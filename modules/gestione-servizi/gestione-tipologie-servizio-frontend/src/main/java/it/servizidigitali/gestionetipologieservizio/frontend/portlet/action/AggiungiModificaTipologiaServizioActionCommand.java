@@ -81,9 +81,10 @@ public class AggiungiModificaTipologiaServizioActionCommand extends BaseMVCActio
 		}
 		
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
-		ThemeDisplay tema = serviceContext.getThemeDisplay();
-		tipologia.setGroupId(tema.getCompanyGroupId());
-		tipologia.setUserId(tema.getUserId());
+		ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
+		tipologia.setGroupId(themeDisplay.getCompanyGroupId());
+		tipologia.setUserId(themeDisplay.getUserId());
+		tipologia.setUserName(themeDisplay.getUser().getFullName());
 		
 		tipologia.setNome(nome);		
 		tipologia.setDescrizione(descrizione);						
