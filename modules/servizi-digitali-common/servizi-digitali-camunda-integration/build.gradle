@@ -1,5 +1,4 @@
 dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.portal.api"
-
-	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.0.3"
+	compileInclude group: 'org.camunda.community', name: 'camunda-engine-rest-client-openapi-java', version: '7.17.4'
 }

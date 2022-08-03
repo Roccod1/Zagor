@@ -1,3 +1,11 @@
 Bundle-Name: servizi-digitali-camunda-integration
-Bundle-SymbolicName: servizi.digitali.camunda.integration
+Bundle-SymbolicName: it.servizidigitali.camunda.integration
 Bundle-Version: 1.0.0
+
+Export-Package: \
+	it.servizidigitali.camunda.integration.client
+	
+Import-Package: \
+  	!android.net.http.*
+  	
+-fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning
