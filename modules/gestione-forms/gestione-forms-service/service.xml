@@ -1,21 +1,25 @@
 <?xml version="1.0"?>
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
 
-<service-builder dependency-injector="ds" package-path="it.servizidigitali.gestioneforms">
-	<namespace>FOO</namespace>
-	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="true"">-->
-	<entity local-service="true" name="Foo" remote-service="true" uuid="true">
+<service-builder dependency-injector="ds" package-path="it.servizidigitali.gestioneforms" auto-namespace-tables="false">
+	<namespace/>
+	<entity 
+		name="Form"
+		table="form"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
 
 		<!-- PK fields -->
-
-		<column name="fooId" primary="true" type="long" />
+		<column name="formId" primary="true" type="long" />
 
 		<!-- Group instance -->
-
 		<column name="groupId" type="long" />
 
 		<!-- Audit fields -->
-
 		<column name="companyId" type="long" />
 		<column name="userId" type="long" />
 		<column name="userName" type="String" />
@@ -23,28 +27,116 @@
 		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
-
-		<column name="field1" type="String" />
-		<column name="field2" type="boolean" />
-		<column name="field3" type="int" />
-		<column name="field4" type="Date" />
-		<column name="field5" type="String" />
-
+		<column name="nome" type="String" />
+		<column name="descrizione" type="String" />
+		<column name="codice" type="String" />
+		<column name="json" type="String" />
+		<column name="principale" type="boolean" />
+		<column name="multiutente" type="boolean" />
+		
+		<!-- FK -->
+		<column name="organizationId" type="long" />
+		
 		<!-- Order -->
-
 		<order by="asc">
-			<order-column name="field1" />
+			<order-column name="nome" />
 		</order>
 
 		<!-- Finder methods -->
-
-		<finder name="Field2" return-type="Collection">
-			<finder-column name="field2" />
+		<finder name="Codice" return-type="Form">
+			<finder-column name="codice" />
 		</finder>
 
-		<!-- References -->
-
-		<reference entity="AssetEntry" package-path="com.liferay.portlet.asset" />
-		<reference entity="AssetTag" package-path="com.liferay.portlet.asset" />
+		<finder name="Principale" return-type="Collection">
+			<finder-column name="principale" />
+		</finder>
 	</entity>
+	
+	<entity 
+		name="DefinizioneAllegato"
+		table="definizione_allegato"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="definizioneAllegatoId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="denominazione" type="String" />
+		<column name="fileEntryId" type="long" />
+		<column name="filenameModello" type="String" />
+		<column name="tipiFileAmmessi" type="String" />
+		<column name="codiciTipologiaDocumento" type="String" />
+		<column name="obbligatorio" type="boolean" />
+		<column name="eliminato" type="boolean" />
+		
+		<!-- FK -->
+		<column name="organizationId" type="long" />	
+		<column name="formId" type="long" />
+		
+		<!-- Finder methods -->
+		<finder name="formIdAndEliminato" return-type="Collection">
+			<finder-column name="formId" />
+			<finder-column name="eliminato" />
+		</finder>
+
+	</entity>
+	
+	<entity 
+		name="TipoDocumento"
+		table="tipo_documento"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="tipoDocumentoId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="codice" type="String" />
+		<column name="nome" type="String" />
+		<column name="descrizione" type="String" />
+		<column name="categoria" type="String" />
+		<column name="estensioniFile" type="String" db-name="estensioni_file"/>
+		<column name="stato" type="String" />
+		<column name="numeroRequired" type="long" db-name="numero_required"/>
+		<column name="dataScadenzaRequired" type="long" db-name="data_scadenza_required"/>
+		
+		<!-- FK -->
+		<column name="organizationId" type="long" />	
+		
+		<!-- Finder methods -->
+		<finder name="stato" return-type="Collection">
+			<finder-column name="stato" />
+		</finder>
+
+	</entity>
+
 </service-builder>
