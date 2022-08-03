@@ -64,7 +64,7 @@ public class ServizioEnteCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(51);
+		StringBundler sb = new StringBundler(53);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -92,6 +92,8 @@ public class ServizioEnteCacheModel
 		sb.append(uriScheda);
 		sb.append(", autenticazione=");
 		sb.append(autenticazione);
+		sb.append(", livelloAutenticazione=");
+		sb.append(livelloAutenticazione);
 		sb.append(", dataInizioAttivazione=");
 		sb.append(dataInizioAttivazione);
 		sb.append(", dataFineAttivazione=");
@@ -181,6 +183,7 @@ public class ServizioEnteCacheModel
 		}
 
 		servizioEnteImpl.setAutenticazione(autenticazione);
+		servizioEnteImpl.setLivelloAutenticazione(livelloAutenticazione);
 
 		if (dataInizioAttivazione == Long.MIN_VALUE) {
 			servizioEnteImpl.setDataInizioAttivazione(null);
@@ -235,6 +238,8 @@ public class ServizioEnteCacheModel
 		uriScheda = objectInput.readUTF();
 
 		autenticazione = objectInput.readBoolean();
+
+		livelloAutenticazione = objectInput.readInt();
 		dataInizioAttivazione = objectInput.readLong();
 		dataFineAttivazione = objectInput.readLong();
 
@@ -312,6 +317,8 @@ public class ServizioEnteCacheModel
 		}
 
 		objectOutput.writeBoolean(autenticazione);
+
+		objectOutput.writeInt(livelloAutenticazione);
 		objectOutput.writeLong(dataInizioAttivazione);
 		objectOutput.writeLong(dataFineAttivazione);
 
@@ -349,6 +356,7 @@ public class ServizioEnteCacheModel
 	public String uriGuest;
 	public String uriScheda;
 	public boolean autenticazione;
+	public int livelloAutenticazione;
 	public long dataInizioAttivazione;
 	public long dataFineAttivazione;
 	public boolean cittadino;

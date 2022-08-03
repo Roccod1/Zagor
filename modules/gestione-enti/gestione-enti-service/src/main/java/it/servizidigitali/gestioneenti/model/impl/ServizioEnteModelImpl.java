@@ -78,6 +78,7 @@ public class ServizioEnteModelImpl
 		{"modifiedDate", Types.TIMESTAMP}, {"uri", Types.VARCHAR},
 		{"uriGuest", Types.VARCHAR}, {"uriScheda", Types.VARCHAR},
 		{"autenticazione", Types.BOOLEAN},
+		{"livelloAutenticazione", Types.INTEGER},
 		{"dataInizioAttivazione", Types.TIMESTAMP},
 		{"dataFineAttivazione", Types.TIMESTAMP}, {"cittadino", Types.BOOLEAN},
 		{"azienda", Types.BOOLEAN}, {"delega", Types.BOOLEAN},
@@ -104,6 +105,7 @@ public class ServizioEnteModelImpl
 		TABLE_COLUMNS_MAP.put("uriGuest", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("uriScheda", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("autenticazione", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("livelloAutenticazione", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("dataInizioAttivazione", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("dataFineAttivazione", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("cittadino", Types.BOOLEAN);
@@ -119,7 +121,7 @@ public class ServizioEnteModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table servizio_ente (uuid_ VARCHAR(75) null,servizioId LONG not null,organizationId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,uri VARCHAR(75) null,uriGuest VARCHAR(75) null,uriScheda VARCHAR(75) null,autenticazione BOOLEAN,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,prenotabile BOOLEAN,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,iseeInps BOOLEAN,attivo BOOLEAN,primary key (servizioId, organizationId))";
+		"create table servizio_ente (uuid_ VARCHAR(75) null,servizioId LONG not null,organizationId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,uri VARCHAR(75) null,uriGuest VARCHAR(75) null,uriScheda VARCHAR(75) null,autenticazione BOOLEAN,livelloAutenticazione INTEGER,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,prenotabile BOOLEAN,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,iseeInps BOOLEAN,attivo BOOLEAN,primary key (servizioId, organizationId))";
 
 	public static final String TABLE_SQL_DROP = "drop table servizio_ente";
 
@@ -356,6 +358,12 @@ public class ServizioEnteModelImpl
 		attributeSetterBiConsumers.put(
 			"autenticazione",
 			(BiConsumer<ServizioEnte, Boolean>)ServizioEnte::setAutenticazione);
+		attributeGetterFunctions.put(
+			"livelloAutenticazione", ServizioEnte::getLivelloAutenticazione);
+		attributeSetterBiConsumers.put(
+			"livelloAutenticazione",
+			(BiConsumer<ServizioEnte, Integer>)
+				ServizioEnte::setLivelloAutenticazione);
 		attributeGetterFunctions.put(
 			"dataInizioAttivazione", ServizioEnte::getDataInizioAttivazione);
 		attributeSetterBiConsumers.put(
@@ -703,6 +711,20 @@ public class ServizioEnteModelImpl
 	}
 
 	@Override
+	public int getLivelloAutenticazione() {
+		return _livelloAutenticazione;
+	}
+
+	@Override
+	public void setLivelloAutenticazione(int livelloAutenticazione) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_livelloAutenticazione = livelloAutenticazione;
+	}
+
+	@Override
 	public Date getDataInizioAttivazione() {
 		return _dataInizioAttivazione;
 	}
@@ -982,6 +1004,7 @@ public class ServizioEnteModelImpl
 		servizioEnteImpl.setUriGuest(getUriGuest());
 		servizioEnteImpl.setUriScheda(getUriScheda());
 		servizioEnteImpl.setAutenticazione(isAutenticazione());
+		servizioEnteImpl.setLivelloAutenticazione(getLivelloAutenticazione());
 		servizioEnteImpl.setDataInizioAttivazione(getDataInizioAttivazione());
 		servizioEnteImpl.setDataFineAttivazione(getDataFineAttivazione());
 		servizioEnteImpl.setCittadino(isCittadino());
@@ -1027,6 +1050,8 @@ public class ServizioEnteModelImpl
 			this.<String>getColumnOriginalValue("uriScheda"));
 		servizioEnteImpl.setAutenticazione(
 			this.<Boolean>getColumnOriginalValue("autenticazione"));
+		servizioEnteImpl.setLivelloAutenticazione(
+			this.<Integer>getColumnOriginalValue("livelloAutenticazione"));
 		servizioEnteImpl.setDataInizioAttivazione(
 			this.<Date>getColumnOriginalValue("dataInizioAttivazione"));
 		servizioEnteImpl.setDataFineAttivazione(
@@ -1193,6 +1218,9 @@ public class ServizioEnteModelImpl
 
 		servizioEnteCacheModel.autenticazione = isAutenticazione();
 
+		servizioEnteCacheModel.livelloAutenticazione =
+			getLivelloAutenticazione();
+
 		Date dataInizioAttivazione = getDataInizioAttivazione();
 
 		if (dataInizioAttivazione != null) {
@@ -1337,6 +1365,7 @@ public class ServizioEnteModelImpl
 	private String _uriGuest;
 	private String _uriScheda;
 	private boolean _autenticazione;
+	private int _livelloAutenticazione;
 	private Date _dataInizioAttivazione;
 	private Date _dataFineAttivazione;
 	private boolean _cittadino;
@@ -1392,6 +1421,8 @@ public class ServizioEnteModelImpl
 		_columnOriginalValues.put("uriGuest", _uriGuest);
 		_columnOriginalValues.put("uriScheda", _uriScheda);
 		_columnOriginalValues.put("autenticazione", _autenticazione);
+		_columnOriginalValues.put(
+			"livelloAutenticazione", _livelloAutenticazione);
 		_columnOriginalValues.put(
 			"dataInizioAttivazione", _dataInizioAttivazione);
 		_columnOriginalValues.put("dataFineAttivazione", _dataFineAttivazione);
@@ -1454,29 +1485,31 @@ public class ServizioEnteModelImpl
 
 		columnBitmasks.put("autenticazione", 4096L);
 
-		columnBitmasks.put("dataInizioAttivazione", 8192L);
+		columnBitmasks.put("livelloAutenticazione", 8192L);
 
-		columnBitmasks.put("dataFineAttivazione", 16384L);
+		columnBitmasks.put("dataInizioAttivazione", 16384L);
 
-		columnBitmasks.put("cittadino", 32768L);
+		columnBitmasks.put("dataFineAttivazione", 32768L);
 
-		columnBitmasks.put("azienda", 65536L);
+		columnBitmasks.put("cittadino", 65536L);
 
-		columnBitmasks.put("delega", 131072L);
+		columnBitmasks.put("azienda", 131072L);
 
-		columnBitmasks.put("chatbot", 262144L);
+		columnBitmasks.put("delega", 262144L);
 
-		columnBitmasks.put("prenotabile", 524288L);
+		columnBitmasks.put("chatbot", 524288L);
 
-		columnBitmasks.put("privacyDelega", 1048576L);
+		columnBitmasks.put("prenotabile", 1048576L);
 
-		columnBitmasks.put("allegatoDelega", 2097152L);
+		columnBitmasks.put("privacyDelega", 2097152L);
 
-		columnBitmasks.put("timbroCertificato", 4194304L);
+		columnBitmasks.put("allegatoDelega", 4194304L);
 
-		columnBitmasks.put("iseeInps", 8388608L);
+		columnBitmasks.put("timbroCertificato", 8388608L);
 
-		columnBitmasks.put("attivo", 16777216L);
+		columnBitmasks.put("iseeInps", 16777216L);
+
+		columnBitmasks.put("attivo", 33554432L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

@@ -62,6 +62,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		String uriGuest = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI_GUEST);
 		String uriScheda = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_SCHEDA);
 		Boolean autenticazione = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_AUTENTICAZIONE);
+		Integer livelloAutenticazione = ParamUtil.getInteger(actionRequest, GestioneEntiPortletKeys.SERVIZIO_LIVELLO_AUTENTICAZIONE);
 		Boolean attivo = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ATTIVO);
 		Date dataInizioAttivazione = ParamUtil.getDate(actionRequest, GestioneEntiPortletKeys.SERVIZIO_DATA_INIZIO_ATTIVAZIONE, GestioneEntiPortlet.SIMPLE_DATE_FORMAT, null);
 		Date dataFineAttivazione = ParamUtil.getDate(actionRequest, GestioneEntiPortletKeys.SERVIZIO_DATA_FINE_ATTIVAZIONE, GestioneEntiPortlet.SIMPLE_DATE_FORMAT, null);
@@ -133,6 +134,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 			servizioEnte.setUriGuest(uriGuest);
 			servizioEnte.setUriScheda(uriScheda);
 			servizioEnte.setAutenticazione(autenticazione);
+			servizioEnte.setLivelloAutenticazione(livelloAutenticazione);
 			servizioEnte.setAttivo(attivo);
 			servizioEnte.setDataInizioAttivazione(dataInizioAttivazione);
 			servizioEnte.setCittadino(cittadino);

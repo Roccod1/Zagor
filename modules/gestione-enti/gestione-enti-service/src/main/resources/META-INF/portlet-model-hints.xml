@@ -15,6 +15,7 @@
 		<field name="uriGuest" type="String" />
 		<field name="uriScheda" type="String" />
 		<field name="autenticazione" type="boolean" />
+		<field name="livelloAutenticazione" type="int" />
 		<field name="dataInizioAttivazione" type="Date" />
 		<field name="dataFineAttivazione" type="Date" />
 		<field name="cittadino" type="boolean" />

@@ -101,6 +101,24 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group form-check">
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_AUTENTICAZIONE %>" label="autenticazione" type="checkbox" checked="${servizioEnte.autenticazione}"/>
+				</div>
+			</div>
+			
+			<div class="col">
+				<div class="form-group">
+					<aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_LIVELLO_AUTENTICAZIONE %>" label="livello-autenticazione" value="${servizioEnte.livelloAutenticazione}">
+						<aui:option value="1">1</aui:option>
+						<aui:option value="2">2</aui:option>
+						<aui:option value="3">3</aui:option>
+					</aui:select>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col">
+				<div class="form-group form-check">
 			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_CITTADINO %>" label="cittadino" type="checkbox" checked="${servizioEnte.cittadino}"/>
 				</div>
 			</div>
