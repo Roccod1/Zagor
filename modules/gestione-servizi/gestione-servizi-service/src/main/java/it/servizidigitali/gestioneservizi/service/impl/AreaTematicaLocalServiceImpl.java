@@ -66,7 +66,7 @@ public class AreaTematicaLocalServiceImpl extends AreaTematicaLocalServiceBaseIm
 		int fine = posizioni[1];
 		
 		if(Validator.isNull(nomeOrdinamento)) {
-			nomeOrdinamento = "areaTematicaId";
+			nomeOrdinamento = "ordine";
 		}
 		
 		if(inizio <= 0 || fine <= 0) {
