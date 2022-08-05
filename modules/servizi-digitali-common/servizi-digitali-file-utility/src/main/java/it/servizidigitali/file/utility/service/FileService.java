@@ -1,9 +1,10 @@
 package it.servizidigitali.file.utility.service;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 import it.servizidigitali.file.utility.exception.FileServiceException;
+import it.servizidigitali.file.utility.model.File;
 
 /**
  * @author pindi
@@ -13,95 +14,42 @@ public interface FileService {
 
 	/**
 	 *
+	 * @param nomeFile
+	 * @param titolo
+	 * @param descrizione
+	 * @param codiceServizio
+	 * @param inputStream
+	 * @param mimeType
+	 * @param userId
+	 * @param groupId
+	 * @return
+	 * @throws FileServiceException
+	 */
+	long saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, InputStream inputStream, String mimeType, long userId, long groupId) throws FileServiceException;
+
+	/**
+	 *
 	 * @param fileName
-	 * @param bytes
-	 * @param userId
+	 * @param folderId
 	 * @param groupId
-	 * @param companyId
 	 * @return
 	 * @throws FileServiceException
 	 */
-	String savePrivateFile(String fileName, byte[] bytes, long userId, long groupId, long companyId) throws FileServiceException;
+	InputStream getRequestFileContent(String fileName, long folderId, long groupId) throws FileServiceException;
 
 	/**
 	 *
-	 * @param fileName
-	 * @param bytes
-	 * @param parentFolder
-	 * @param userId
+	 * @param fileEntryId
+	 * @throws FileServiceException
+	 */
+	void deleteRequestFile(long fileEntryId) throws FileServiceException;
+
+	/**
+	 *
+	 * @param folderId
 	 * @param groupId
-	 * @param companyId
 	 * @return
 	 * @throws FileServiceException
 	 */
-	String savePrivateFile(String fileName, byte[] bytes, String parentFolder, long userId, long groupId, long companyId) throws FileServiceException;
-
-	/**
-	 *
-	 * @param fileId
-	 * @param userId
-	 * @param groupId
-	 * @param companyId
-	 * @return
-	 * @throws FileServiceException
-	 */
-	byte[] getPrivateFileContent(String fileId, long userId, long groupId, long companyId) throws FileServiceException;
-
-	/**
-	 *
-	 * @param fileId
-	 * @param userId
-	 * @param groupId
-	 * @param companyId
-	 * @throws FileServiceException
-	 */
-	void deletePrivateFile(String fileId, long userId, long groupId, long companyId) throws FileServiceException;
-
-	/**
-	 *
-	 * @param fileId
-	 * @param parentFolder
-	 * @param bytes
-	 * @param userId
-	 * @param groupId
-	 * @param companyId
-	 * @return
-	 * @throws FileServiceException
-	 */
-	String saveRequestFile(String fileId, String parentFolder, byte[] bytes, long userId, long groupId, long companyId) throws FileServiceException;
-
-	/**
-	 *
-	 * @param fileId
-	 * @param parentFolder
-	 * @param userId
-	 * @param groupId
-	 * @param companyId
-	 * @return
-	 * @throws FileServiceException
-	 */
-	byte[] getRequestFileContent(String fileId, String parentFolder, long userId, long groupId, long companyId) throws FileServiceException;
-
-	/**
-	 *
-	 * @param fileId
-	 * @param parentFolder
-	 * @param userId
-	 * @param groupId
-	 * @param companyId
-	 * @throws FileServiceException
-	 */
-	void deleteRequestFile(String fileId, String parentFolder, long userId, long groupId, long companyId) throws FileServiceException;
-
-	/**
-	 *
-	 * @param parentFolder
-	 * @param username
-	 * @param userId
-	 * @param groupId
-	 * @param companyId
-	 * @return
-	 * @throws FileServiceException
-	 */
-	List<File> getFolderFiles(String parentFolder, String username, long userId, long groupId, long companyId) throws FileServiceException;
+	List<File> getFolderFiles(long folderId, long groupId) throws FileServiceException;
 }
