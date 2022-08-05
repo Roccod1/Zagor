@@ -29,13 +29,13 @@ public interface FileService {
 
 	/**
 	 *
-	 * @param fileName
+	 * @param nomeFile
 	 * @param folderId
 	 * @param groupId
 	 * @return
 	 * @throws FileServiceException
 	 */
-	InputStream getRequestFileContent(String fileName, long folderId, long groupId) throws FileServiceException;
+	InputStream getRequestFileContent(String nomeFile, long folderId, long groupId) throws FileServiceException;
 
 	/**
 	 *

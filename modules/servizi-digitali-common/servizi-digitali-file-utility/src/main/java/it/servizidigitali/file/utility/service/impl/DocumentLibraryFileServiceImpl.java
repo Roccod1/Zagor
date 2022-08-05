@@ -61,7 +61,7 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 				codiceFiscaleFolder = dlAppService.getFolder(defaultRepoId, richiesteServizioFolder.getFolderId(), user.getScreenName().toUpperCase());
 			}
 			catch (NoSuchFolderException e) {
-				log.warn("saveRequestFile :: folder CF non esistente, creaazione." + e.getMessage());
+				log.warn("saveRequestFile :: folder CF non esistente: " + e.getMessage() + ". Creazione folder: " + user.getScreenName().toUpperCase());
 				codiceFiscaleFolder = dlAppService.addFolder(defaultRepoId, richiesteServizioFolder.getFolderId(), user.getScreenName().toUpperCase(), null, serviceContext);
 			}
 
@@ -72,7 +72,7 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 					codiceServizioFolder = dlAppService.getFolder(defaultRepoId, codiceFiscaleFolder.getFolderId(), codiceServizio.toUpperCase());
 				}
 				catch (NoSuchFolderException e) {
-					log.warn("saveRequestFile :: folder codice servizio non esistente, creazione." + e.getMessage());
+					log.warn("saveRequestFile :: folder codice servizio non esistente: " + e.getMessage() + ". Creazione folder: " + codiceServizio.toUpperCase());
 					codiceServizioFolder = dlAppService.addFolder(defaultRepoId, codiceFiscaleFolder.getFolderId(), codiceServizio.toUpperCase(), null, serviceContext);
 				}
 
@@ -85,20 +85,20 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 		}
 		catch (Exception e) {
 			log.error("saveRequestFile :: " + e.getMessage(), e);
-			throw new FileServiceException(e);
+			throw new FileServiceException("saveRequestFile :: errore durante il salvataggio del file '" + nomeFile + "' : " + e.getMessage(), e);
 		}
 		return 0;
 	}
 
 	@Override
-	public InputStream getRequestFileContent(String fileName, long folderId, long groupId) throws FileServiceException {
+	public InputStream getRequestFileContent(String nomeFile, long folderId, long groupId) throws FileServiceException {
 		try {
-			FileEntry fileEntry = dlAppService.getFileEntry(groupId, folderId, fileName);
+			FileEntry fileEntry = dlAppService.getFileEntry(groupId, folderId, nomeFile);
 			return fileEntry.getContentStream();
 		}
 		catch (PortalException e) {
 			log.error("getRequestFileContent :: " + e.getMessage(), e);
-			throw new FileServiceException(e);
+			throw new FileServiceException("getRequestFileContent :: errore durante il caricamento del file '" + nomeFile + "' : " + e.getMessage(), e);
 		}
 	}
 
@@ -134,7 +134,7 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 		}
 		catch (PortalException e) {
 			log.error("getFolderFiles :: " + e.getMessage(), e);
-			throw new FileServiceException(e);
+			throw new FileServiceException("getFolderFiles :: errore durante il caricamento dei file della folder '" + folderId + "' : " + e.getMessage(), e);
 		}
 		return null;
 	}
