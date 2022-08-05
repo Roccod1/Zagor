@@ -11,6 +11,8 @@ public class GestioneProcessiPortletKeys {
 	public static final String CODICE = "codice";
 	public static final String NOME = "nome";
 	
+	
+	
 	public static final String NOME_RICERCA = "nomeRicerca";
 	
 	public static final String AZIONI = "azioni";
@@ -22,11 +24,13 @@ public class GestioneProcessiPortletKeys {
 	public static final String LISTA_PROCESSI = "listaProcessi";
 	public static final String JSP_AGGIUNGI_MODIFICA_PROCESSO = "/aggiungiModificaProcesso.jsp";
 	public static final String ATTRIBUTO_PROCESSO = "processo";
+	public static final String MODELLOXML ="modelloXml";
 	
 	public static final String SESSION_MESSAGE_ERRORE_SALVATAGGIO = "errore-salvataggio";
 	public static final String SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE = "eseguito-correttamente";
 	public static final String SESSION_MESSAGE_ERRORE_ATTIVA_DISATTIVA_PROCESSO = "errore-attiva-disattiva-servizio";
 	public static final String SESSION_MESSAGE_ERRORE_PROCESSO_CODICE_ESISTENTE = "errore-processo-codice-esistente";
+	public static final String SESSION_MESSAGE_ERRORE_RECUPERO_PROCESSO_REPOSITORY = "errore-recupero-processo-repository";
 	
 	public static final int DEFAULT_CUR = 1;
 	public static final int DEFAULT_DELTA = 10;

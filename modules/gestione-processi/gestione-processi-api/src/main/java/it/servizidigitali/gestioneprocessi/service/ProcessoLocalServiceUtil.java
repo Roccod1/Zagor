@@ -360,6 +360,12 @@ public class ProcessoLocalServiceUtil {
 		return getService().getProcessosCount();
 	}
 
+	public static String recuperaProcessoXml(long fileEntryId)
+		throws Exception {
+
+		return getService().recuperaProcessoXml(fileEntryId);
+	}
+
 	/**
 	 * Updates the processo in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

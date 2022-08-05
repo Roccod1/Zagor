@@ -57,7 +57,7 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 		long idProcesso = ParamUtil.getLong(actionRequest, GestioneProcessiPortletKeys.ID_PROCESSO);
 		String codice = ParamUtil.getString(actionRequest, GestioneProcessiPortletKeys.CODICE);
 		String nome = ParamUtil.getString(actionRequest, GestioneProcessiPortletKeys.NOME);
-		String modelloXml = "";
+		String modelloXml = ParamUtil.getString(actionRequest, "modelloXml");;
 		FileEntry fileCaricato = null;
 		
 		Processo processo = null;

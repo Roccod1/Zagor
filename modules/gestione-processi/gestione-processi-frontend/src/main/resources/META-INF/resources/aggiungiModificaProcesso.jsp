@@ -1,22 +1,26 @@
 <%@ include file="init.jsp" %>
 
- <!-- required modeler styles -->
-<!--     <link rel="stylesheet" href="https://unpkg.com/bpmn-js@9.3.1/dist/assets/diagram-js.css"> -->
-<!--     <link rel="stylesheet" href="https://unpkg.com/bpmn-js@9.3.1/dist/assets/bpmn-js.css"> -->
-<!--     <link rel="stylesheet" href="https://unpkg.com/bpmn-js@9.3.1/dist/assets/bpmn-font/css/bpmn.css"> -->
+<link
+      rel="stylesheet"
+      href="https://unpkg.com/bpmn-js@5.1.2/dist/assets/diagram-js.css"
+  	/>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/bpmn-js@5.1.2/dist/assets/bpmn-font/css/bpmn.css"
+    />
     
-    
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/dist/css/diagram-js.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/dist/vendor/bpmn-font/css/bpmn.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/dist/vendor/bpmn-font/css/bpmn-embedded.css">
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js-properties-panel/dist/assets/properties-panel.css">
 
     <!-- modeler distro -->
-<!--     <script src="https://unpkg.com/bpmn-js@9.3.1/dist/bpmn-modeler.development.js"></script> -->
-<!--     <script src="https://unpkg.com/bpmn-js/dist/bpmn-viewer.development.js"></script> -->
+    <script src="https://unpkg.com/bpmn-js@5.1.2/dist/bpmn-modeler.development.js"></script>
+    
     
 
 <portlet:actionURL name="<%=GestioneProcessiPortletKeys.SALVA_CREA_ACTION_COMMAND %>" var="salvaModificaURL" />
 <portlet:renderURL var="homeURL"></portlet:renderURL>
+
+<liferay-ui:success key="<%=GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_RECUPERO_PROCESSO_REPOSITORY %>" message="impossibile-recuperare-processo-da-sistema"/>
+
 
 <div class="page-header">
 				<h2><liferay-ui:message key="processo"/></h2>
@@ -44,6 +48,8 @@
 					</aui:input>			
 				</div>	
 			</div>
+			
+			<aui:input type="hidden" id="modelloXml" value="${modelloXml}" name="modelloXml"/>
 				
 		</div>
 		
@@ -55,43 +61,22 @@
 	</aui:form>
 </div>
 
-<div class="content" id="js-drop-zone">
-		<div class="message intro">
-		  	<div class="note">
-		    	Carica un diagramma BPMN dal tuo desktop o <a id="js-create-diagram" href="">crea un nuovo diagramma</a> per iniziare.
-		    	
-			</div>
-		</div>
-	
-		<div class="message error">
-			<div class="note">
-		    	<p>Ooops, non &egrave; possibile visualizzare il diagramma BPMN 2.0</p>
-		    	<div class="details">
-					<span>Causa del problema</span>
-		      		<pre></pre>
-		    	</div>
-		  	</div>
-		</div>
-	
-	    <div class="canvas" id="js-canvas"></div>
-	    <div id="js-properties-panel"></div>
-	</div>
+<div id="canvas"></div>
+<div id="js-properties-panel"></div>
 
-	<ul class="buttons hidden">
-		<li>
-		  	Download
-		</li>
-		<li>
-		  	<a id="js-download-diagram" href title="download BPMN diagram">
-		    	Diagramma BPMN
-		  	</a>
-		</li>
-		<li>
-		  	<a id="js-download-svg" href title="download as SVG image">
-		    	SVG image
-		  	</a>
-		</li>
-	</ul>
+<script>
 
-  <script type="text/javascript" src="<%=request.getContextPath()%>/dist/index.js">
+var inputText = $('#<portlet:namespace />modelloXml');
+
+</script>
+
+<script type="text/javascript" src="<%=request.getContextPath()%>/dist/index.js">
   </script>
+
+
+
+ 
+
+ 
+  
+  

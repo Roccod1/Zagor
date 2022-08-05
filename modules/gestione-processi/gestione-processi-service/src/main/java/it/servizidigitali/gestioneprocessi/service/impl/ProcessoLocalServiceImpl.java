@@ -32,6 +32,8 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 
@@ -73,6 +75,25 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 	public Processo getProcessoByCodice(String codice) throws NoSuchProcessoException {
 		Processo processo = processoPersistence.findByCodice(codice);
 		return processo;
+	}
+	
+	
+	public String recuperaProcessoXml(long fileEntryId) throws Exception {
+		FileEntry processoXml = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
+		String processoXmlString = null;
+		
+		if(Validator.isNotNull(processoXml)) {
+			InputStream inputStream = processoXml.getContentStream();
+			
+			if(Validator.isNotNull(inputStream)) {
+				processoXmlString = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+			}
+			
+		}else {
+			_log.error("Errore durante il recupero dell'xml dal document library!");
+		}
+		
+		return processoXmlString;
 	}
 	
 	

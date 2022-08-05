@@ -320,6 +320,8 @@ public interface ProcessoLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getProcessosCount();
 
+	public String recuperaProcessoXml(long fileEntryId) throws Exception;
+
 	/**
 	 * Updates the processo in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

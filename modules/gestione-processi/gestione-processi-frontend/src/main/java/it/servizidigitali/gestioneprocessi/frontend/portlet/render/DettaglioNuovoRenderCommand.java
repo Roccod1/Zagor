@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import it.servizidigitali.gestioneprocessi.frontend.constants.GestioneProcessiPortletKeys;
@@ -41,15 +42,24 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 		long idProcesso = ParamUtil.getLong(renderRequest, GestioneProcessiPortletKeys.ID_PROCESSO);
 		Processo processo = null;
-		
+		String modelloXml = "";
 		if(idProcesso>0) {
 			try {
 				processo = processoLocalService.getProcesso(idProcesso);
+				
+				try {
+					modelloXml = processoLocalService.recuperaProcessoXml(processo.getFileEntryId());
+				} catch (Exception e) {
+					_log.error("Errore durante il recupero dell'xml dal sistema!");
+					SessionErrors.add(renderRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_RECUPERO_PROCESSO_REPOSITORY);
+				}
+				
 			} catch (PortalException e) {
 				_log.error("Impossibile recuperare il processo!" + e.getMessage());
 			}
 			
 			renderRequest.setAttribute(GestioneProcessiPortletKeys.ATTRIBUTO_PROCESSO, processo);
+			renderRequest.setAttribute(GestioneProcessiPortletKeys.MODELLOXML, modelloXml);
 		}
 		
 		return GestioneProcessiPortletKeys.JSP_AGGIUNGI_MODIFICA_PROCESSO;
