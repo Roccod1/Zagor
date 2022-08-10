@@ -1,4 +1,11 @@
-<%@ include file="/init.jsp" %>
+<%@ include file="./init.jsp" %>
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.SUBMIT_FORM_RESOURCE_COMMAND %>" var="submitFormUrl">
+</portlet:resourceURL>
+
+<portlet:renderURL var="scegliAllegatiUrl">
+		<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND %>" />
+</portlet:renderURL>
 
 <p>
 	<b><liferay-ui:message key="presentatoreforms.caption"/></b>
@@ -72,9 +79,15 @@ function mainScript() {
 	
 	var datiAnagrafici = "";
 	var invioFormIscrizioneUrl = '';
-	var submitFormUrl = '';
+	var submitFormUrl = '${submitFormUrl}';
 	
-	<!--submitFormUrl+= '&caricaBozza=${caricaBozza}&idRichiestaServizio=${idRichiestaServizio}';-->
+	<%--
+	if(submitFormUrl.indexOf("idServizio") == -1){
+		submitFormUrl += '&idServizio=${idServizio}';
+	}
+	
+	submitFormUrl+= '&caricaBozza=${caricaBozza}&idRichiestaServizio=${idRichiestaServizio}';
+	--%>
 	
 	var idRichiestaServizio = '';
 	
@@ -85,7 +98,7 @@ function mainScript() {
 	
 	var delegaPresente = ${delega != null};
 
-	var proseguiButtonTitle;
+	var proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 	var showButtons = true;
 	var enableSubmitFormButton = false;
 	var step3Url;
@@ -100,15 +113,15 @@ function mainScript() {
 	
 	switch(configurazioneTipoServizioStep2) {
 	case '${DICHIARAZIONE}':
-		proseguiButtonTitle = '<spring:message code="button.salva.bozza.prosegui" />';
+		proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 		step3Url = '${scegliAllegatiUrl}';
   		break;
 	case '${PAGAMENTO}':
-		proseguiButtonTitle = '<spring:message code="button.salva.bozza.prosegui" />';
+		proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 		step3Url = 'TODO';
   		break;
 	case '${CERTIFICATO}':
-		proseguiButtonTitle = '<spring:message code="button.salva.bozza.prosegui" />';
+		proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 		enableSubmitFormButton = true;
 		step3Url = '${scegliModalitaPagamentoUrl}';
 		step3DaPagareUrl = '${scegliModalitaPagamentoUrl}';
@@ -121,17 +134,17 @@ function mainScript() {
 		showServiceEvaluationPage = true;
   		break;
 	case '${AUTODICHIARAZIONE}':
-		proseguiButtonTitle = '<spring:message code="button.salva.bozza.prosegui" />';
+		proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 		step3Url = '${scegliAllegatiUrl}';
   		break;
 	case '${CONCORSO}':
-		proseguiButtonTitle = '<spring:message code="button.salva.bozza.prosegui" />';
+		proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 		step3Url = '${scegliAllegatiUrl}';
   		break;
 	default:
-		proseguiButtonTitle = '<spring:message code="button.salva.bozza.prosegui" />';
+		proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 }
-	proseguiButtonTitle = '<spring:message code="button.salva.bozza.prosegui" />';
+	proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 	step3Url = '${scegliAllegatiUrl}';
 
 	
@@ -156,14 +169,14 @@ function mainScript() {
 		 	   "toggleSubmitValidState": false,
 		   	    "buttons":{
 		   	    	"indietro":{
-			            "title": '<spring:message code="label.annulla" />',
+			            "title": '<liferay-ui:message key="label.annulla"/>',
 			            "id": "indietroButton",
 			            "click": function() {
 			            	window.location.href = '';
 			            }
 		   	     	},
 		   	        "salvaBozzaSubmit":{
-		   	            "title": 'Salva Bozza',
+		   	            "title": '<liferay-ui:message key="button.salva.bozza"/>',
 		   	            "id": "salvaBozzaFormButton",
 		   	            "click": function(e) {
 		   	            	var userData = this.getValue();
@@ -456,7 +469,7 @@ function mainScript() {
 	}
 	if (showServiceEvaluationPage && true) {
 		var showServiceEvaluationButton =  {
-            "title": '<spring:message code="button.valutaServizio" />',
+            "title": '<liferay-ui:message key="button.valutaServizio" />',
             "id": "showServiceEvaluationButton",
             "click": function(e) {
             	e.preventDefault();
