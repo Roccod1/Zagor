@@ -63,6 +63,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 	
 	@Reference
 	private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
+	
 	public void render (RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException{
 		_log.info("render presentatore forms");
 		try {

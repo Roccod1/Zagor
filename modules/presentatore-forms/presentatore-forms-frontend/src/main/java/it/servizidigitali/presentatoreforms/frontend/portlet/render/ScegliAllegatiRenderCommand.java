@@ -7,7 +7,9 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.portlet.PortletException;
@@ -18,6 +20,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
+import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AllegatoUtil;
+import it.servizidigitali.presentatoreforms.frontend.util.model.DatiAllegato;
+import it.servizidigitali.presentatoreforms.frontend.util.model.DatiFileAllegato;
+import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
@@ -56,35 +62,52 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 		
 		_log.info("render scegliAllegati");
-		/* Inizializzazione valori dei formati accettati per gli allegati
 		
-		attachmentFileTypesMap = new HashMap<>();
-		if (attachmentFileTypes != null) {
-			String[] attachmentFileTypesSplit = attachmentFileTypes.split(",");
-			if (attachmentFileTypesSplit != null) {
-				for (String string : attachmentFileTypesSplit) {
-					attachmentFileTypesMap.put(string.toLowerCase(), string.toUpperCase());
-				}
-			}
-		}			
-		
-		Long idForm = ParamUtil.getLong(renderRequest, "idFormMock");
+		Long idFormMock = 49940L;
 		Form form = null;
-		
-		if(idForm>0) {
-			try {
-				form = formLocalService.getForm(idForm);
-				form.setListaDefinizioneAllegato(definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idForm));
-			} catch (PortalException e) {
-				_log.error("Impossibile recuperare il form!" + e.getMessage());
-			}
-			
-			// renderRequest.setAttribute(PresentatoreFormsPortletKeys.FORM, form);
+		try {
+		form = formLocalService.getForm(idFormMock);
+		} catch (Exception e) {
+			_log.error("errore nel recupero del form: " + idFormMock + " :: ERORR MESSAGE: " + e.getMessage());
 		}
 		
-		//renderRequest.setAttribute(PresentatoreFormsPortletKeys.FORMATI_ALLEGATI, attachmentFileTypesMap);
-		//renderRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_TIPO_DOCUMENTO, tipoDocumentoLocalService.getListaTipoDocumentiByStato(PresentatoreFormsPortletKeys.STATO_ATTIVO));
-		*/
+		List<DefinizioneAllegato> definizioneAllegati = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idFormMock);
+		
+		List<DatiAllegato> allegati = AllegatoUtil.mergeDefinizioneAndData(definizioneAllegati, new ArrayList<DatiFileAllegato>());
+		
+		
+		//FIXME Valori mock
+		renderRequest.setAttribute("idServizio",1);
+		renderRequest.setAttribute("idRichiesta",1);
+		renderRequest.setAttribute("richiestaStatus", true);
+		renderRequest.setAttribute("bozzaStatus", true);
+		renderRequest.setAttribute("titoloPortletServizio",form.getNome());
+		renderRequest.setAttribute("!invioIstanza",true);
+		renderRequest.setAttribute("firmaDocumentoAbilitata",true);
+		renderRequest.setAttribute("salvaUrl","/");
+		renderRequest.setAttribute("scegliAllegatiDescription","42656");
+		renderRequest.setAttribute("downloadIstanzaUrl","/");
+		renderRequest.setAttribute("uploadFileMaxSize",3145728);
+		renderRequest.setAttribute("uploadFileMaxSizeLabel",Long.toString(3145728 / 1000000) + " MB");
+		renderRequest.setAttribute("nomeFileFirmato","file_firm");
+		
+		// TODO
+		renderRequest.setAttribute("pdfFirmato", null);
+		//
+		
+		renderRequest.setAttribute("downloadFilePrincipaleUrl","/");
+		renderRequest.setAttribute("allegati", allegati);
+		renderRequest.setAttribute("downloadFileUrl","/");
+		renderRequest.setAttribute("downloadModelloUrl","/");
+		renderRequest.setAttribute("downloadDocumentoPersonaleUrl", "/");
+		renderRequest.setAttribute("homeScrivaniaUrl","/");
+		renderRequest.setAttribute("firmaDocumentoAbilitata", true);
+		renderRequest.setAttribute("invioIstanza",true);
+		renderRequest.setAttribute("evaluationServiceEnable",false);
+		renderRequest.setAttribute("pathScrivaniaVirtuale","/");
+		renderRequest.setAttribute("isDebugEnabled",true);
+		renderRequest.setAttribute("uploadFileUrl","/");
+		
 		return PresentatoreFormsPortletKeys.JSP_SCEGLI_ALLEGATI;
 	}
 
