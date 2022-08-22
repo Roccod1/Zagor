@@ -41,6 +41,7 @@ public class EmailSender extends CommunicationEngineChannelSender {
 	private void activate(Map<String, Object> props) {
 		communicationConfiguration = ConfigurableUtil.createConfigurable(CommunicationConfiguration.class, props);
 		url = communicationConfiguration.communicationEngineBasePath();
+		sendEnabled = communicationConfiguration.communicationEngineSendEnabled();
 	}
 
 	@Override
