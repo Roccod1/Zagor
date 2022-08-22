@@ -17,7 +17,7 @@ import it.servizidigitali.communication.configuration.CommunicationConfiguration
 import it.servizidigitali.communication.exception.CommunicationException;
 import it.servizidigitali.communication.model.Allegato;
 import it.servizidigitali.communication.model.Comunicazione;
-import it.servizidigitali.communication.model.DatiComune;
+import it.servizidigitali.communication.model.DatiEnte;
 import it.servizidigitali.communication.model.Utente;
 import it.servizidigitali.communication.model.ce.Attachment;
 import it.servizidigitali.communication.model.ce.Contact;
@@ -53,10 +53,10 @@ public class EmailPecSender extends CommunicationEngineChannelSender {
 			message.setSubject(comunicazione.getOggetto());
 			message.setText(comunicazione.getTesto());
 			String from = null;
-			DatiComune datiComune = comunicazione.getDatiComune();
-			if (datiComune != null) {
-				message.setExternalId(datiComune.getTenantId());
-				from = datiComune.getMailFrom();
+			DatiEnte datiEnte = comunicazione.getDatiComune();
+			if (datiEnte != null) {
+				message.setExternalId(datiEnte.getTenantId());
+				from = datiEnte.getMailFrom();
 			}
 			message.setImportant(false);
 			message.setOneShot(comunicazione.isInvioMultiplo());
@@ -105,24 +105,24 @@ public class EmailPecSender extends CommunicationEngineChannelSender {
 		}
 	}
 
-	private PecAccount getPecAccount(DatiComune datiComune) {
+	private PecAccount getPecAccount(DatiEnte datiEnte) {
 		PecAccount pecAccount = null;
-		if (datiComune != null) {
+		if (datiEnte != null) {
 			pecAccount = new PecAccount();
-			pecAccount.setHost(datiComune.getPecHost());
-			pecAccount.setPort(datiComune.getPecPort());
-			pecAccount.setProtocol(datiComune.getPecProtocol());
+			pecAccount.setHost(datiEnte.getPecHost());
+			pecAccount.setPort(datiEnte.getPecPort());
+			pecAccount.setProtocol(datiEnte.getPecProtocol());
 			pecAccount.setType(CHANNEL);
-			pecAccount.setUsername(datiComune.getPecUsername());
-			pecAccount.setPassword(datiComune.getPecPassword());
-			pecAccount.setSocketFactoryPort(datiComune.getPecSmtpSocketFactoryPort());
-			pecAccount.setAuth(datiComune.getPecSmtpAuth() != null ? String.valueOf(datiComune.getPecSmtpAuth()) : "");
-			pecAccount.setStarttls(datiComune.getPecSmtpStarttlsEnable());
-			pecAccount.setDebug(datiComune.getPecSmtpDebug());
-			pecAccount.setStarttlsRequired(datiComune.getPecSmtpStarttlsRequired());
-			pecAccount.setSocketFactoryFallback(datiComune.getPecSmtpSocketFactoryFallback());
-			pecAccount.setFrom(datiComune.getPecFrom());
-			pecAccount.setSslProtocols(datiComune.getPecSmtpSslProtocols());
+			pecAccount.setUsername(datiEnte.getPecUsername());
+			pecAccount.setPassword(datiEnte.getPecPassword());
+			pecAccount.setSocketFactoryPort(datiEnte.getPecSmtpSocketFactoryPort());
+			pecAccount.setAuth(datiEnte.getPecSmtpAuth() != null ? String.valueOf(datiEnte.getPecSmtpAuth()) : "");
+			pecAccount.setStarttls(datiEnte.getPecSmtpStarttlsEnable());
+			pecAccount.setDebug(datiEnte.getPecSmtpDebug());
+			pecAccount.setStarttlsRequired(datiEnte.getPecSmtpStarttlsRequired());
+			pecAccount.setSocketFactoryFallback(datiEnte.getPecSmtpSocketFactoryFallback());
+			pecAccount.setFrom(datiEnte.getPecFrom());
+			pecAccount.setSslProtocols(datiEnte.getPecSmtpSslProtocols());
 		}
 		return pecAccount;
 	}

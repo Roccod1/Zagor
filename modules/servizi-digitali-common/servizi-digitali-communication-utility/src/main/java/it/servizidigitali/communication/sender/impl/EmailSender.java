@@ -17,7 +17,7 @@ import it.servizidigitali.communication.configuration.CommunicationConfiguration
 import it.servizidigitali.communication.exception.CommunicationException;
 import it.servizidigitali.communication.model.Allegato;
 import it.servizidigitali.communication.model.Comunicazione;
-import it.servizidigitali.communication.model.DatiComune;
+import it.servizidigitali.communication.model.DatiEnte;
 import it.servizidigitali.communication.model.Utente;
 import it.servizidigitali.communication.model.ce.Attachment;
 import it.servizidigitali.communication.model.ce.Contact;
@@ -53,10 +53,10 @@ public class EmailSender extends CommunicationEngineChannelSender {
 			message.setSubject(comunicazione.getOggetto());
 			message.setText(comunicazione.getTesto());
 			String from = null;
-			DatiComune datiComune = comunicazione.getDatiComune();
-			if (datiComune != null) {
-				message.setExternalId(datiComune.getTenantId());
-				from = datiComune.getMailFrom();
+			DatiEnte datiEnte = comunicazione.getDatiComune();
+			if (datiEnte != null) {
+				message.setExternalId(datiEnte.getTenantId());
+				from = datiEnte.getMailFrom();
 			}
 			message.setImportant(false);
 			message.setOneShot(comunicazione.isInvioMultiplo());
@@ -97,7 +97,7 @@ public class EmailSender extends CommunicationEngineChannelSender {
 			}
 
 			message.setTo(contactsTo);
-			message.setAccount(getEmailAccount(datiComune));
+			message.setAccount(getEmailAccount(datiEnte));
 			return message;
 		}
 		catch (Exception e) {
@@ -105,24 +105,24 @@ public class EmailSender extends CommunicationEngineChannelSender {
 		}
 	}
 
-	private EmailAccount getEmailAccount(DatiComune datiComune) {
+	private EmailAccount getEmailAccount(DatiEnte datiEnte) {
 		EmailAccount emailAccount = null;
-		if (datiComune != null) {
+		if (datiEnte != null) {
 			emailAccount = new EmailAccount();
-			emailAccount.setHost(datiComune.getMailHost());
-			emailAccount.setPort(datiComune.getMailPort());
-			emailAccount.setProtocol(datiComune.getMailProtocol());
+			emailAccount.setHost(datiEnte.getMailHost());
+			emailAccount.setPort(datiEnte.getMailPort());
+			emailAccount.setProtocol(datiEnte.getMailProtocol());
 			emailAccount.setType(CHANNEL);
-			emailAccount.setUsername(datiComune.getMailUsername());
-			emailAccount.setPassword(datiComune.getMailPassword());
-			emailAccount.setSocketFactoryPort(datiComune.getMailSmtpSocketFactoryPort());
-			emailAccount.setAuth(datiComune.getMailSmtpAuth() != null ? String.valueOf(datiComune.getMailSmtpAuth()) : "");
-			emailAccount.setStarttls(datiComune.getMailSmtpStarttlsEnable());
-			emailAccount.setDebug(datiComune.getMailSmtpDebug());
-			emailAccount.setStarttlsRequired(datiComune.getMailSmtpStarttlsRequired());
-			emailAccount.setSocketFactoryFallback(datiComune.getMailSmtpSocketFactoryFallback());
-			emailAccount.setFrom(datiComune.getMailFrom());
-			emailAccount.setSslProtocols(datiComune.getMailSmtpSslProtocols());
+			emailAccount.setUsername(datiEnte.getMailUsername());
+			emailAccount.setPassword(datiEnte.getMailPassword());
+			emailAccount.setSocketFactoryPort(datiEnte.getMailSmtpSocketFactoryPort());
+			emailAccount.setAuth(datiEnte.getMailSmtpAuth() != null ? String.valueOf(datiEnte.getMailSmtpAuth()) : "");
+			emailAccount.setStarttls(datiEnte.getMailSmtpStarttlsEnable());
+			emailAccount.setDebug(datiEnte.getMailSmtpDebug());
+			emailAccount.setStarttlsRequired(datiEnte.getMailSmtpStarttlsRequired());
+			emailAccount.setSocketFactoryFallback(datiEnte.getMailSmtpSocketFactoryFallback());
+			emailAccount.setFrom(datiEnte.getMailFrom());
+			emailAccount.setSslProtocols(datiEnte.getMailSmtpSslProtocols());
 		}
 		return emailAccount;
 	}

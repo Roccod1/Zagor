@@ -6,7 +6,7 @@ import java.io.Serializable;
  *
  * @author pindi
  */
-public class DatiComune implements Serializable {
+public class DatiEnte implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
