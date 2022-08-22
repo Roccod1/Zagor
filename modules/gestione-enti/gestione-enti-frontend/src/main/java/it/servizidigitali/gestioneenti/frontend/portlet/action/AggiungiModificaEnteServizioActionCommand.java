@@ -60,7 +60,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		Long organizationId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_ID);
 		String uri = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI);
 		String uriGuest = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI_GUEST);
-		String uriScheda = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_SCHEDA);
+		long catalogoServizioArticleId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_CATALOGO_SERVIZI_ARTICLE_ID);
 		Boolean autenticazione = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_AUTENTICAZIONE);
 		Boolean attivo = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ATTIVO);
 		Date dataInizioAttivazione = ParamUtil.getDate(actionRequest, GestioneEntiPortletKeys.SERVIZIO_DATA_INIZIO_ATTIVAZIONE, GestioneEntiPortlet.SIMPLE_DATE_FORMAT, null);
@@ -117,12 +117,6 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_GUEST);
 				throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_GUEST);
 			}
-			
-			if(!Validator.isBlank(uriScheda) && uriScheda.trim().length() > 255) {
-				_log.error("La lunghezza dell'uriScheda e' superiore a 255 caratteri");
-				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_SCHEDA);
-				throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_SCHEDA);
-			}
 		
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 			ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
@@ -131,7 +125,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 	
 			servizioEnte.setUri(uri);
 			servizioEnte.setUriGuest(uriGuest);
-			servizioEnte.setUriScheda(uriScheda);
+			servizioEnte.setCatalogoServizioArticleId(catalogoServizioArticleId);
 			servizioEnte.setAutenticazione(autenticazione);
 			servizioEnte.setAttivo(attivo);
 			servizioEnte.setDataInizioAttivazione(dataInizioAttivazione);

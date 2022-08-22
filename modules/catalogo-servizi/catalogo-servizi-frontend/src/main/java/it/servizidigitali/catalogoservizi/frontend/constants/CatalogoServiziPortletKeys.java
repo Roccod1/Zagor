@@ -20,5 +20,6 @@ public class CatalogoServiziPortletKeys {
 	public static final String ERRORE_IMPOSSIBILE_CARICARE_I_DATI = "erroreCaricamentoDati";
 	
 	public static final String SERVIZIO = "servizio";
+	public static final String SERVIZIO_ENTE = "servizioEnte";
 
 }

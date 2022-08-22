@@ -31,7 +31,7 @@
 		<!-- Other fields -->
 		<column name="uri" type="String" />
 		<column name="uriGuest" type="String" />
-		<column name="uriScheda" type="String" />
+		<column name="catalogoServizioArticleId" type="long" />
 		<column name="autenticazione" type="boolean" />
 		<column name="dataInizioAttivazione" type="Date" />
 		<column name="dataFineAttivazione" type="Date" />

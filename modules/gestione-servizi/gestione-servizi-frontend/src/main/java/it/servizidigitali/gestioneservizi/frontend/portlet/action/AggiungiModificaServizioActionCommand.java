@@ -134,7 +134,7 @@ public class AggiungiModificaServizioActionCommand extends BaseMVCActionCommand 
 		servizio.setDescrizioneEstesa(descrizioneEstesa);						
 		servizio.setUri(uri);						
 		servizio.setUriGuest(uriGuest);						
-		servizio.setUriScheda(uriScheda);						
+//		servizio.setUriScheda(uriScheda);						
 		servizio.setAutenticazione(autenticazione);						
 		servizio.setAttivo(attivo);						
 		servizio.setDataInizioAttivazione(dataInizioAttivazione);						

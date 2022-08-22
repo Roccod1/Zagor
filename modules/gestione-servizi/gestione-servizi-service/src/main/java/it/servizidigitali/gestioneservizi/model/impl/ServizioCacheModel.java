@@ -92,8 +92,8 @@ public class ServizioCacheModel
 		sb.append(uri);
 		sb.append(", uriGuest=");
 		sb.append(uriGuest);
-		sb.append(", uriScheda=");
-		sb.append(uriScheda);
+		sb.append(", catalogoServizioArticleId=");
+		sb.append(catalogoServizioArticleId);
 		sb.append(", autenticazione=");
 		sb.append(autenticazione);
 		sb.append(", dataInizioAttivazione=");
@@ -208,13 +208,7 @@ public class ServizioCacheModel
 			servizioImpl.setUriGuest(uriGuest);
 		}
 
-		if (uriScheda == null) {
-			servizioImpl.setUriScheda("");
-		}
-		else {
-			servizioImpl.setUriScheda(uriScheda);
-		}
-
+		servizioImpl.setCatalogoServizioArticleId(catalogoServizioArticleId);
 		servizioImpl.setAutenticazione(autenticazione);
 
 		if (dataInizioAttivazione == Long.MIN_VALUE) {
@@ -277,7 +271,8 @@ public class ServizioCacheModel
 		codice = objectInput.readUTF();
 		uri = objectInput.readUTF();
 		uriGuest = objectInput.readUTF();
-		uriScheda = objectInput.readUTF();
+
+		catalogoServizioArticleId = objectInput.readLong();
 
 		autenticazione = objectInput.readBoolean();
 		dataInizioAttivazione = objectInput.readLong();
@@ -376,12 +371,7 @@ public class ServizioCacheModel
 			objectOutput.writeUTF(uriGuest);
 		}
 
-		if (uriScheda == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(uriScheda);
-		}
+		objectOutput.writeLong(catalogoServizioArticleId);
 
 		objectOutput.writeBoolean(autenticazione);
 		objectOutput.writeLong(dataInizioAttivazione);
@@ -431,7 +421,7 @@ public class ServizioCacheModel
 	public String codice;
 	public String uri;
 	public String uriGuest;
-	public String uriScheda;
+	public long catalogoServizioArticleId;
 	public boolean autenticazione;
 	public long dataInizioAttivazione;
 	public long dataFineAttivazione;

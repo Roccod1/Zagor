@@ -54,7 +54,8 @@ public class ServizioEnteWrapper
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("uri", getUri());
 		attributes.put("uriGuest", getUriGuest());
-		attributes.put("uriScheda", getUriScheda());
+		attributes.put(
+			"catalogoServizioArticleId", getCatalogoServizioArticleId());
 		attributes.put("autenticazione", isAutenticazione());
 		attributes.put("dataInizioAttivazione", getDataInizioAttivazione());
 		attributes.put("dataFineAttivazione", getDataFineAttivazione());
@@ -140,10 +141,11 @@ public class ServizioEnteWrapper
 			setUriGuest(uriGuest);
 		}
 
-		String uriScheda = (String)attributes.get("uriScheda");
+		Long catalogoServizioArticleId = (Long)attributes.get(
+			"catalogoServizioArticleId");
 
-		if (uriScheda != null) {
-			setUriScheda(uriScheda);
+		if (catalogoServizioArticleId != null) {
+			setCatalogoServizioArticleId(catalogoServizioArticleId);
 		}
 
 		Boolean autenticazione = (Boolean)attributes.get("autenticazione");
@@ -270,6 +272,16 @@ public class ServizioEnteWrapper
 	@Override
 	public boolean getAzienda() {
 		return model.getAzienda();
+	}
+
+	/**
+	 * Returns the catalogo servizio article ID of this servizio ente.
+	 *
+	 * @return the catalogo servizio article ID of this servizio ente
+	 */
+	@Override
+	public long getCatalogoServizioArticleId() {
+		return model.getCatalogoServizioArticleId();
 	}
 
 	/**
@@ -475,16 +487,6 @@ public class ServizioEnteWrapper
 	}
 
 	/**
-	 * Returns the uri scheda of this servizio ente.
-	 *
-	 * @return the uri scheda of this servizio ente
-	 */
-	@Override
-	public String getUriScheda() {
-		return model.getUriScheda();
-	}
-
-	/**
 	 * Returns the user ID of this servizio ente.
 	 *
 	 * @return the user ID of this servizio ente
@@ -677,6 +679,16 @@ public class ServizioEnteWrapper
 	@Override
 	public void setAzienda(boolean azienda) {
 		model.setAzienda(azienda);
+	}
+
+	/**
+	 * Sets the catalogo servizio article ID of this servizio ente.
+	 *
+	 * @param catalogoServizioArticleId the catalogo servizio article ID of this servizio ente
+	 */
+	@Override
+	public void setCatalogoServizioArticleId(long catalogoServizioArticleId) {
+		model.setCatalogoServizioArticleId(catalogoServizioArticleId);
 	}
 
 	/**
@@ -882,16 +894,6 @@ public class ServizioEnteWrapper
 	@Override
 	public void setUriGuest(String uriGuest) {
 		model.setUriGuest(uriGuest);
-	}
-
-	/**
-	 * Sets the uri scheda of this servizio ente.
-	 *
-	 * @param uriScheda the uri scheda of this servizio ente
-	 */
-	@Override
-	public void setUriScheda(String uriScheda) {
-		model.setUriScheda(uriScheda);
 	}
 
 	/**

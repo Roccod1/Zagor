@@ -57,7 +57,8 @@ public class ServizioWrapper
 		attributes.put("codice", getCodice());
 		attributes.put("uri", getUri());
 		attributes.put("uriGuest", getUriGuest());
-		attributes.put("uriScheda", getUriScheda());
+		attributes.put(
+			"catalogoServizioArticleId", getCatalogoServizioArticleId());
 		attributes.put("autenticazione", isAutenticazione());
 		attributes.put("dataInizioAttivazione", getDataInizioAttivazione());
 		attributes.put("dataFineAttivazione", getDataFineAttivazione());
@@ -163,10 +164,11 @@ public class ServizioWrapper
 			setUriGuest(uriGuest);
 		}
 
-		String uriScheda = (String)attributes.get("uriScheda");
+		Long catalogoServizioArticleId = (Long)attributes.get(
+			"catalogoServizioArticleId");
 
-		if (uriScheda != null) {
-			setUriScheda(uriScheda);
+		if (catalogoServizioArticleId != null) {
+			setCatalogoServizioArticleId(catalogoServizioArticleId);
 		}
 
 		Boolean autenticazione = (Boolean)attributes.get("autenticazione");
@@ -324,6 +326,16 @@ public class ServizioWrapper
 	@Override
 	public boolean getAzienda() {
 		return model.getAzienda();
+	}
+
+	/**
+	 * Returns the catalogo servizio article ID of this servizio.
+	 *
+	 * @return the catalogo servizio article ID of this servizio
+	 */
+	@Override
+	public long getCatalogoServizioArticleId() {
+		return model.getCatalogoServizioArticleId();
 	}
 
 	/**
@@ -554,16 +566,6 @@ public class ServizioWrapper
 	}
 
 	/**
-	 * Returns the uri scheda of this servizio.
-	 *
-	 * @return the uri scheda of this servizio
-	 */
-	@Override
-	public String getUriScheda() {
-		return model.getUriScheda();
-	}
-
-	/**
 	 * Returns the user ID of this servizio.
 	 *
 	 * @return the user ID of this servizio
@@ -773,6 +775,16 @@ public class ServizioWrapper
 	@Override
 	public void setAzienda(boolean azienda) {
 		model.setAzienda(azienda);
+	}
+
+	/**
+	 * Sets the catalogo servizio article ID of this servizio.
+	 *
+	 * @param catalogoServizioArticleId the catalogo servizio article ID of this servizio
+	 */
+	@Override
+	public void setCatalogoServizioArticleId(long catalogoServizioArticleId) {
+		model.setCatalogoServizioArticleId(catalogoServizioArticleId);
 	}
 
 	/**
@@ -1001,16 +1013,6 @@ public class ServizioWrapper
 	@Override
 	public void setUriGuest(String uriGuest) {
 		model.setUriGuest(uriGuest);
-	}
-
-	/**
-	 * Sets the uri scheda of this servizio.
-	 *
-	 * @param uriScheda the uri scheda of this servizio
-	 */
-	@Override
-	public void setUriScheda(String uriScheda) {
-		model.setUriScheda(uriScheda);
 	}
 
 	/**

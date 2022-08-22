@@ -60,8 +60,10 @@ public class ServizioTable extends BaseTable<ServizioTable> {
 		"uri", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<ServizioTable, String> uriGuest = createColumn(
 		"uriGuest", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<ServizioTable, String> uriScheda = createColumn(
-		"uriScheda", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<ServizioTable, Long> catalogoServizioArticleId =
+		createColumn(
+			"catalogoServizioArticleId", Long.class, Types.BIGINT,
+			Column.FLAG_DEFAULT);
 	public final Column<ServizioTable, Boolean> autenticazione = createColumn(
 		"autenticazione", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<ServizioTable, Date> dataInizioAttivazione =

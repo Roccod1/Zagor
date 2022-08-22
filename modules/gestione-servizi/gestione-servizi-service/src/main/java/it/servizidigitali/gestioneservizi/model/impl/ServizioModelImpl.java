@@ -80,7 +80,8 @@ public class ServizioModelImpl
 		{"nome", Types.VARCHAR}, {"descrizione", Types.VARCHAR},
 		{"descrizioneEstesa", Types.VARCHAR}, {"codice", Types.VARCHAR},
 		{"uri", Types.VARCHAR}, {"uriGuest", Types.VARCHAR},
-		{"uriScheda", Types.VARCHAR}, {"autenticazione", Types.BOOLEAN},
+		{"catalogoServizioArticleId", Types.BIGINT},
+		{"autenticazione", Types.BOOLEAN},
 		{"dataInizioAttivazione", Types.TIMESTAMP},
 		{"dataFineAttivazione", Types.TIMESTAMP}, {"cittadino", Types.BOOLEAN},
 		{"azienda", Types.BOOLEAN}, {"delega", Types.BOOLEAN},
@@ -110,7 +111,7 @@ public class ServizioModelImpl
 		TABLE_COLUMNS_MAP.put("codice", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("uri", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("uriGuest", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("uriScheda", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("catalogoServizioArticleId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("autenticazione", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("dataInizioAttivazione", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("dataFineAttivazione", Types.TIMESTAMP);
@@ -129,7 +130,7 @@ public class ServizioModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table servizio (uuid_ VARCHAR(75) null,servizioId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,descrizioneEstesa VARCHAR(75) null,codice VARCHAR(75) null,uri VARCHAR(75) null,uriGuest VARCHAR(75) null,uriScheda VARCHAR(75) null,autenticazione BOOLEAN,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,gestioneBackoffice BOOLEAN,prenotabile BOOLEAN,codicePrestazioneINPS VARCHAR(75) null,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,attivo BOOLEAN,areaTematicaId LONG)";
+		"create table servizio (uuid_ VARCHAR(75) null,servizioId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,descrizioneEstesa VARCHAR(75) null,codice VARCHAR(75) null,uri VARCHAR(75) null,uriGuest VARCHAR(75) null,catalogoServizioArticleId LONG,autenticazione BOOLEAN,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,gestioneBackoffice BOOLEAN,prenotabile BOOLEAN,codicePrestazioneINPS VARCHAR(75) null,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,attivo BOOLEAN,areaTematicaId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table servizio";
 
@@ -374,9 +375,12 @@ public class ServizioModelImpl
 		attributeGetterFunctions.put("uriGuest", Servizio::getUriGuest);
 		attributeSetterBiConsumers.put(
 			"uriGuest", (BiConsumer<Servizio, String>)Servizio::setUriGuest);
-		attributeGetterFunctions.put("uriScheda", Servizio::getUriScheda);
+		attributeGetterFunctions.put(
+			"catalogoServizioArticleId",
+			Servizio::getCatalogoServizioArticleId);
 		attributeSetterBiConsumers.put(
-			"uriScheda", (BiConsumer<Servizio, String>)Servizio::setUriScheda);
+			"catalogoServizioArticleId",
+			(BiConsumer<Servizio, Long>)Servizio::setCatalogoServizioArticleId);
 		attributeGetterFunctions.put(
 			"autenticazione", Servizio::getAutenticazione);
 		attributeSetterBiConsumers.put(
@@ -744,22 +748,17 @@ public class ServizioModelImpl
 	}
 
 	@Override
-	public String getUriScheda() {
-		if (_uriScheda == null) {
-			return "";
-		}
-		else {
-			return _uriScheda;
-		}
+	public long getCatalogoServizioArticleId() {
+		return _catalogoServizioArticleId;
 	}
 
 	@Override
-	public void setUriScheda(String uriScheda) {
+	public void setCatalogoServizioArticleId(long catalogoServizioArticleId) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
 
-		_uriScheda = uriScheda;
+		_catalogoServizioArticleId = catalogoServizioArticleId;
 	}
 
 	@Override
@@ -1118,7 +1117,8 @@ public class ServizioModelImpl
 		servizioImpl.setCodice(getCodice());
 		servizioImpl.setUri(getUri());
 		servizioImpl.setUriGuest(getUriGuest());
-		servizioImpl.setUriScheda(getUriScheda());
+		servizioImpl.setCatalogoServizioArticleId(
+			getCatalogoServizioArticleId());
 		servizioImpl.setAutenticazione(isAutenticazione());
 		servizioImpl.setDataInizioAttivazione(getDataInizioAttivazione());
 		servizioImpl.setDataFineAttivazione(getDataFineAttivazione());
@@ -1166,8 +1166,8 @@ public class ServizioModelImpl
 		servizioImpl.setUri(this.<String>getColumnOriginalValue("uri"));
 		servizioImpl.setUriGuest(
 			this.<String>getColumnOriginalValue("uriGuest"));
-		servizioImpl.setUriScheda(
-			this.<String>getColumnOriginalValue("uriScheda"));
+		servizioImpl.setCatalogoServizioArticleId(
+			this.<Long>getColumnOriginalValue("catalogoServizioArticleId"));
 		servizioImpl.setAutenticazione(
 			this.<Boolean>getColumnOriginalValue("autenticazione"));
 		servizioImpl.setDataInizioAttivazione(
@@ -1361,13 +1361,8 @@ public class ServizioModelImpl
 			servizioCacheModel.uriGuest = null;
 		}
 
-		servizioCacheModel.uriScheda = getUriScheda();
-
-		String uriScheda = servizioCacheModel.uriScheda;
-
-		if ((uriScheda != null) && (uriScheda.length() == 0)) {
-			servizioCacheModel.uriScheda = null;
-		}
+		servizioCacheModel.catalogoServizioArticleId =
+			getCatalogoServizioArticleId();
 
 		servizioCacheModel.autenticazione = isAutenticazione();
 
@@ -1528,7 +1523,7 @@ public class ServizioModelImpl
 	private String _codice;
 	private String _uri;
 	private String _uriGuest;
-	private String _uriScheda;
+	private long _catalogoServizioArticleId;
 	private boolean _autenticazione;
 	private Date _dataInizioAttivazione;
 	private Date _dataFineAttivazione;
@@ -1588,7 +1583,8 @@ public class ServizioModelImpl
 		_columnOriginalValues.put("codice", _codice);
 		_columnOriginalValues.put("uri", _uri);
 		_columnOriginalValues.put("uriGuest", _uriGuest);
-		_columnOriginalValues.put("uriScheda", _uriScheda);
+		_columnOriginalValues.put(
+			"catalogoServizioArticleId", _catalogoServizioArticleId);
 		_columnOriginalValues.put("autenticazione", _autenticazione);
 		_columnOriginalValues.put(
 			"dataInizioAttivazione", _dataInizioAttivazione);
@@ -1657,7 +1653,7 @@ public class ServizioModelImpl
 
 		columnBitmasks.put("uriGuest", 8192L);
 
-		columnBitmasks.put("uriScheda", 16384L);
+		columnBitmasks.put("catalogoServizioArticleId", 16384L);
 
 		columnBitmasks.put("autenticazione", 32768L);
 

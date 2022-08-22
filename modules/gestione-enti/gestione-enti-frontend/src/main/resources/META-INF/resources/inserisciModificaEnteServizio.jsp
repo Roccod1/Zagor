@@ -76,9 +76,12 @@
 			
 			<div class="col">
 				<div class="form-group">
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_SCHEDA %>" label="uri-scheda" type="text" value="${servizioEnte.uriScheda}">
-			        	<aui:validator name="maxLength">255</aui:validator>
-			        </aui:input>
+			        <aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_CATALOGO_SERVIZI_ARTICLE_ID %>" label="id-article-catalogo-servizi" value="${servizioEnte.catalogoServizioArticleId}">
+			        	<aui:option value="" label="seleziona" selected="true"/>
+			        	<c:forEach items="${listaArticleCatalogoServizi}" var="article">
+			        		<aui:option value="${article.articleId }">${article.articleId } - ${article.title }</aui:option>
+			        	</c:forEach>
+			        </aui:select>
 				</div>
 			</div>
 		</div>

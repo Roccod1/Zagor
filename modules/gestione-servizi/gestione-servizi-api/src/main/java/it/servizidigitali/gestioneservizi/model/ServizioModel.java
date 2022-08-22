@@ -295,19 +295,18 @@ public interface ServizioModel
 	public void setUriGuest(String uriGuest);
 
 	/**
-	 * Returns the uri scheda of this servizio.
+	 * Returns the catalogo servizio article ID of this servizio.
 	 *
-	 * @return the uri scheda of this servizio
+	 * @return the catalogo servizio article ID of this servizio
 	 */
-	@AutoEscape
-	public String getUriScheda();
+	public long getCatalogoServizioArticleId();
 
 	/**
-	 * Sets the uri scheda of this servizio.
+	 * Sets the catalogo servizio article ID of this servizio.
 	 *
-	 * @param uriScheda the uri scheda of this servizio
+	 * @param catalogoServizioArticleId the catalogo servizio article ID of this servizio
 	 */
-	public void setUriScheda(String uriScheda);
+	public void setCatalogoServizioArticleId(long catalogoServizioArticleId);
 
 	/**
 	 * Returns the autenticazione of this servizio.

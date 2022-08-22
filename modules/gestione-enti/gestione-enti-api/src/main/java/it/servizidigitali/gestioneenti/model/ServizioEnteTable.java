@@ -54,8 +54,10 @@ public class ServizioEnteTable extends BaseTable<ServizioEnteTable> {
 		"uri", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<ServizioEnteTable, String> uriGuest = createColumn(
 		"uriGuest", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<ServizioEnteTable, String> uriScheda = createColumn(
-		"uriScheda", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<ServizioEnteTable, Long> catalogoServizioArticleId =
+		createColumn(
+			"catalogoServizioArticleId", Long.class, Types.BIGINT,
+			Column.FLAG_DEFAULT);
 	public final Column<ServizioEnteTable, Boolean> autenticazione =
 		createColumn(
 			"autenticazione", Boolean.class, Types.BOOLEAN,

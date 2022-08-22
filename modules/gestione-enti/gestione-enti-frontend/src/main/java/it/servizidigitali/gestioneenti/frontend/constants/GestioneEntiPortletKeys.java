@@ -30,8 +30,8 @@ public class GestioneEntiPortletKeys {
 //	entity Servizio
 	public static final String SERVIZIO_ID = "servizioId";
 	public static final String SERVIZIO_URI = "uri";
-	public static final String SERVIZIO_URI_GUEST= "uriGuest";
-	public static final String SERVIZIO_SCHEDA = "uriScheda";
+	public static final String SERVIZIO_URI_GUEST = "uriGuest";
+	public static final String SERVIZIO_CATALOGO_SERVIZI_ARTICLE_ID = "catalogoServizioArticleId";
 	public static final String SERVIZIO_AUTENTICAZIONE = "autenticazione";
 	public static final String SERVIZIO_DATA_INIZIO_ATTIVAZIONE = "dataInizioAttivazione";
 	public static final String SERVIZIO_DATA_FINE_ATTIVAZIONE = "dataFineAttivazione";
@@ -78,4 +78,6 @@ public class GestioneEntiPortletKeys {
 	public static final int DEFAULT_CUR = 1;
 	public static final int DEFAULT_DELTA = 10;
 
+	public static final String STRUCTURE_NAME_CATALOGO_SERVIZI = "Catalogo Servizi";
+	public static final String LISTA_ARTICLE_CATALOGO_SERVIZI = "listaArticleCatalogoServizi";
 }
