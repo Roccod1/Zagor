@@ -49,7 +49,15 @@
 	<liferay-ui:search-container-results results="${comunicazioni}" />
 	
 	<liferay-ui:search-container-row className="it.servizidigitali.gestionecomunicazioni.frontend.dto.ComunicazioneDTO" modelVar="comunicazione">
-		<fmt:formatDate value="${comunicazione.dataInvio}" pattern="dd/MM/yyyy" var="comunicazioneDataInvio" />
+		<c:choose>
+			<c:when test="${comunicazione.dataInvio != null}">
+				<fmt:formatDate value="${comunicazione.dataInvio}" pattern="dd/MM/yyyy" var="comunicazioneDataInvio" />
+			</c:when>
+			<c:otherwise>
+				<c:set var="comunicazioneDataInvio" value="-"/>
+			</c:otherwise>
+		</c:choose>
+		
 		<liferay-ui:search-container-column-text name="dataInvio" value="${comunicazioneDataInvio}" />
 		<liferay-ui:search-container-column-text name="titolo" value="${comunicazione.titolo}" />
 		<liferay-ui:search-container-column-text name="tipologia" value="${comunicazione.tipologia}" />
