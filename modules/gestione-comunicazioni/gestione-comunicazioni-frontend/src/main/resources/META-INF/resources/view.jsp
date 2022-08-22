@@ -32,20 +32,25 @@
 	
 	<div class="row">
 		<div class="col-4">
-			<aui:select name="queryStatoLettura" label="stato">
+			<aui:select name="queryStatoLettura" label="stato" value="${queryStatoLettura}">
+				<aui:option value="0"><liferay-ui:message key="tutti" /></aui:option>
+				<aui:option value="1"><liferay-ui:message key="letto" /></aui:option>
+				<aui:option value="2"><liferay-ui:message key="non-letto" /></aui:option>
 			</aui:select>
 		</div>	
 		<div class="col-4">
-			<label><liferay-ui:message key="data-inizio" /></label>
+			<label><liferay-ui:message key="data-invio-da" /></label>
 			<input type="datetime-local"
 		           id="<portlet:namespace/>queryDataInvioDa"
-		           name="<portlet:namespace/>queryDataInvioDa">
+		           name="<portlet:namespace/>queryDataInvioDa"
+		           value="${queryDataInvioDa}">
 		</div>
 		<div class="col-4">
-			<label><liferay-ui:message key="data-inizio" /></label>
+			<label><liferay-ui:message key="data-invio-a" /></label>
 			<input type="datetime-local"
 		           id="<portlet:namespace/>queryDataInvioA"
-		           name="<portlet:namespace/>queryDataInvioA">
+		           name="<portlet:namespace/>queryDataInvioA"
+		           value="${queryDataInvioA}">
 		</div>
 	</div>
 	
@@ -60,6 +65,9 @@
 	<portlet:param name="queryOrganizzazione" value="${queryOrganizzazione}" />
 	<portlet:param name="queryUsername" value="${queryUsername}" />
 	<portlet:param name="queryTipologia" value="${queryTipologia}" />
+	<portlet:param name="queryStatoLettura" value="${queryStatoLettura}" />
+	<portlet:param name="queryDataInvioDa" value="${queryDataInvioDa}" />
+	<portlet:param name="queryDataInvioA" value="${queryDataInvioA}" />
 </liferay-portlet:renderURL>
 
 <liferay-ui:search-container total="${comunicazioniCount}"

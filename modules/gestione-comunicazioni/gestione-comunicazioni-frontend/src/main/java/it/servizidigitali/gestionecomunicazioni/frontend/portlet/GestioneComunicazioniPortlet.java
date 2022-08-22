@@ -10,6 +10,8 @@ import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,7 @@ import it.servizidigitali.gestionecomunicazioni.frontend.constants.GestioneComun
 import it.servizidigitali.gestionecomunicazioni.frontend.dto.ComunicazioneDTO;
 import it.servizidigitali.gestionecomunicazioni.frontend.dto.OrganizationDTO;
 import it.servizidigitali.gestionecomunicazioni.frontend.dto.TipologiaDTO;
+import it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters;
 import it.servizidigitali.gestionecomunicazioni.service.ComunicazioneLocalService;
 import it.servizidigitali.gestionecomunicazioni.service.TipologiaComunicazioneLocalService;
 
@@ -47,6 +50,8 @@ import it.servizidigitali.gestionecomunicazioni.service.TipologiaComunicazioneLo
 	service = Portlet.class
 )
 public class GestioneComunicazioniPortlet extends MVCPortlet {
+
+	private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 	
 	@Reference
 	private ComunicazioneLocalService comunicazioneLocalService;
@@ -63,6 +68,9 @@ public class GestioneComunicazioniPortlet extends MVCPortlet {
 		long queryOrganizzazione = ParamUtil.getLong(request, "queryOrganizzazione");
 		String queryUsername = ParamUtil.getString(request, "queryUsername");
 		long queryTipologia = ParamUtil.getLong(request, "queryTipologia");
+		long queryStatoLettura = ParamUtil.getLong(request, "queryStatoLettura");
+		String queryDataInvioDa = ParamUtil.getString(request, "queryDataInvioDa");
+		String queryDataInvioA = ParamUtil.getString(request, "queryDataInvioA");
 		
 		ServiceContext ctx;
 		try {
@@ -89,17 +97,27 @@ public class GestioneComunicazioniPortlet extends MVCPortlet {
 				.map(OrganizationDTO::new)
 				.collect(Collectors.toList());
 		
-		Long organizzazione = queryOrganizzazione == 0 ? null : queryOrganizzazione;
-		String username = queryUsername.isBlank() ? null : queryUsername.trim();
-		Long tipologia = queryTipologia == 0 ? null : queryTipologia;
+		ComunicazioneFilters filters = new ComunicazioneFilters();
+		filters.setOrganizzazione(queryOrganizzazione == 0 ? null : queryOrganizzazione);
+		filters.setUsername(queryUsername.isBlank() ? null : queryUsername.trim());
+		filters.setTipologia(queryTipologia == 0 ? null : queryTipologia);
+		filters.setUserId(ctx.getUserId());
+		filters.setStato(mapStato(queryStatoLettura));
+		try {
+			filters.setDataInvioDa(!queryDataInvioDa.isBlank() ? FORMATTER.parse(queryDataInvioDa) : null);
+			filters.setDataInvioA(!queryDataInvioA.isBlank() ? FORMATTER.parse(queryDataInvioA) : null);
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+		
 		
 		List<ComunicazioneDTO> comunicazioni = comunicazioneLocalService
-				.findByFilters(organizzazione, username, tipologia, cur, delta)
+				.findByFilters(filters, cur, delta)
 				.stream()
 				.map(x -> new ComunicazioneDTO(x, ctx.getUserId()))
 				.collect(Collectors.toList());
 		
-		int comunicazioniCount = comunicazioneLocalService.countByFilters(organizzazione, username, tipologia);
+		int comunicazioniCount = comunicazioneLocalService.countByFilters(filters);
 		
 		request.setAttribute("comunicazioni", comunicazioni);
 		request.setAttribute("comunicazioniCount", comunicazioniCount);
@@ -108,8 +126,24 @@ public class GestioneComunicazioniPortlet extends MVCPortlet {
 		request.setAttribute("queryOrganizzazione", queryOrganizzazione);
 		request.setAttribute("queryUsername", queryUsername);
 		request.setAttribute("queryTipologia", queryTipologia);
+		request.setAttribute("queryStatoLettura", queryStatoLettura);
+		request.setAttribute("queryDataInvioDa", queryDataInvioDa);
+		request.setAttribute("queryDataInvioA", queryDataInvioA);
 		request.setAttribute("inOrganization", organizationId != 0);
 		
 		super.render(request, response);
+	}
+
+	private Boolean mapStato(long queryStatoLettura) {
+		switch ((int) queryStatoLettura) {
+		case 0:
+			return null;
+		case 1:
+			return true;
+		case 2:
+			return false;
+		default:
+			throw new RuntimeException("queryStatoLettura");
+		}
 	}
 }

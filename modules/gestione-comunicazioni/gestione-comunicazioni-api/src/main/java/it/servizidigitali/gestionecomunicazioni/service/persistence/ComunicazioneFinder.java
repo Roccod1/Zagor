@@ -26,10 +26,12 @@ public interface ComunicazioneFinder {
 	public java.util.List
 		<it.servizidigitali.gestionecomunicazioni.model.Comunicazione>
 			findByFilters(
-				Long organizzazione, String username, Long tipologia, int start,
-				int end);
+				it.servizidigitali.gestionecomunicazioni.model.
+					ComunicazioneFilters filters,
+				int start, int end);
 
 	public int countByFilters(
-		Long organizzazione, String username, Long tipologia);
+		it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters
+			filters);
 
 }

@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
+import it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters;
 
 import java.io.Serializable;
 
@@ -86,8 +87,7 @@ public interface ComunicazioneLocalService
 			long destinatarioOrganizationId)
 		throws PortalException;
 
-	public int countByFilters(
-		Long organizzazione, String username, Long tipologia);
+	public int countByFilters(ComunicazioneFilters filters);
 
 	/**
 	 * Creates a new comunicazione with the primary key. Does not add the comunicazione to the database.
@@ -226,8 +226,7 @@ public interface ComunicazioneLocalService
 		String uuid, long groupId);
 
 	public List<Comunicazione> findByFilters(
-		Long organizzazione, String username, Long tipologia, int cur,
-		int delta);
+		ComunicazioneFilters filters, int cur, int delta);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();

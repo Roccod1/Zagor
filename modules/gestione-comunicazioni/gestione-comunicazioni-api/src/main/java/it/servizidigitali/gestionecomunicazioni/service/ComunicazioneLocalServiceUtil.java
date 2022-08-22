@@ -75,9 +75,10 @@ public class ComunicazioneLocalServiceUtil {
 	}
 
 	public static int countByFilters(
-		Long organizzazione, String username, Long tipologia) {
+		it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters
+			filters) {
 
-		return getService().countByFilters(organizzazione, username, tipologia);
+		return getService().countByFilters(filters);
 	}
 
 	/**
@@ -246,11 +247,11 @@ public class ComunicazioneLocalServiceUtil {
 	}
 
 	public static List<Comunicazione> findByFilters(
-		Long organizzazione, String username, Long tipologia, int cur,
-		int delta) {
+		it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters
+			filters,
+		int cur, int delta) {
 
-		return getService().findByFilters(
-			organizzazione, username, tipologia, cur, delta);
+		return getService().findByFilters(filters, cur, delta);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery

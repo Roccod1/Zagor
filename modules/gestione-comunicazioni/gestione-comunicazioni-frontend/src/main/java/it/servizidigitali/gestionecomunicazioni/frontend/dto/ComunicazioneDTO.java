@@ -5,6 +5,7 @@ import com.liferay.portal.kernel.model.Organization;
 import java.util.Date;
 
 import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
+import it.servizidigitali.gestionecomunicazioni.model.LetturaComunicazione;
 
 public class ComunicazioneDTO {
 	private Date dataInvio;
@@ -20,7 +21,8 @@ public class ComunicazioneDTO {
 		descrizione = comunicazione.getDescrizione();
 		tipologia = comunicazione.getTipologia().getNome();
 		
-		if (comunicazione.getLettura(userId) != null) {
+		LetturaComunicazione lettura = comunicazione.getLettura(userId);
+		if (lettura != null && lettura.getDataLettura() != null) {
 			stato = "letto";
 		} else {
 			stato = "non-letto";

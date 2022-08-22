@@ -74,10 +74,10 @@ public class ComunicazioneLocalServiceWrapper
 
 	@Override
 	public int countByFilters(
-		Long organizzazione, String username, Long tipologia) {
+		it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters
+			filters) {
 
-		return _comunicazioneLocalService.countByFilters(
-			organizzazione, username, tipologia);
+		return _comunicazioneLocalService.countByFilters(filters);
 	}
 
 	/**
@@ -282,11 +282,11 @@ public class ComunicazioneLocalServiceWrapper
 	public java.util.List
 		<it.servizidigitali.gestionecomunicazioni.model.Comunicazione>
 			findByFilters(
-				Long organizzazione, String username, Long tipologia, int cur,
-				int delta) {
+				it.servizidigitali.gestionecomunicazioni.model.
+					ComunicazioneFilters filters,
+				int cur, int delta) {
 
-		return _comunicazioneLocalService.findByFilters(
-			organizzazione, username, tipologia, cur, delta);
+		return _comunicazioneLocalService.findByFilters(filters, cur, delta);
 	}
 
 	@Override

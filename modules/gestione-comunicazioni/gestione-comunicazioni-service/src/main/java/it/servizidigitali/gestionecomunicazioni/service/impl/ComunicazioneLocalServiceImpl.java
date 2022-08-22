@@ -28,6 +28,7 @@ import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneOrganizza
 import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneTitoloException;
 import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneDataFineException;
 import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
+import it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters;
 import it.servizidigitali.gestionecomunicazioni.service.base.ComunicazioneLocalServiceBaseImpl;
 
 /**
@@ -88,15 +89,15 @@ public class ComunicazioneLocalServiceImpl
 		return comunicazionePersistence.update(model);
 	}
 	
-	public List<Comunicazione> findByFilters(Long organizzazione, String username, Long tipologia, int cur, int delta) {
+	public List<Comunicazione> findByFilters(ComunicazioneFilters filters, int cur, int delta) {
 		int[] limit = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
 		int start = limit[0];
 		int end = limit[1];
 		
-		return comunicazioneFinder.findByFilters(organizzazione, username, tipologia, start, end);
+		return comunicazioneFinder.findByFilters(filters, start, end);
 	}
 	
-	public int countByFilters(Long organizzazione, String username, Long tipologia) {
-		return comunicazioneFinder.countByFilters(organizzazione, username, tipologia);
+	public int countByFilters(ComunicazioneFilters filters) {
+		return comunicazioneFinder.countByFilters(filters);
 	}
 }
