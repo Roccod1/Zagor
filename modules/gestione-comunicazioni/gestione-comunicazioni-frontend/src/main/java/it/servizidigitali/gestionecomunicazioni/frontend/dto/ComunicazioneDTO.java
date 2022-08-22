@@ -14,16 +14,16 @@ public class ComunicazioneDTO {
 	private String stato;
 	private String ente;
 	
-	public ComunicazioneDTO(Comunicazione comunicazione) {
+	public ComunicazioneDTO(Comunicazione comunicazione, long userId) {
 		dataInvio = comunicazione.getDataInvio();
 		titolo = comunicazione.getTitolo();
 		descrizione = comunicazione.getDescrizione();
 		tipologia = comunicazione.getTipologia().getNome();
 		
-		if (comunicazione.getLettura() != null) {
-			stato = "Letto";
+		if (comunicazione.getLettura(userId) != null) {
+			stato = "letto";
 		} else {
-			stato = "Non Letto";
+			stato = "non-letto";
 		}
 		
 		Organization organizzazione = comunicazione.getDestinatarioOrganizzazione();

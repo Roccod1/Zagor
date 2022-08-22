@@ -32,8 +32,8 @@ public class ComunicazioneImpl extends ComunicazioneBaseImpl {
 		return TipologiaComunicazioneLocalServiceUtil.fetchTipologiaComunicazione(getTipologiaComunicazioneId());
 	}
 	
-	public LetturaComunicazione getLettura() {
-		LetturaComunicazionePK id = new LetturaComunicazionePK(getComunicazioneId(), getUserId());
+	public LetturaComunicazione getLettura(long userId) {
+		LetturaComunicazionePK id = new LetturaComunicazionePK(getComunicazioneId(), userId);
 		return LetturaComunicazioneLocalServiceUtil.fetchLetturaComunicazione(id);
 	}
 	

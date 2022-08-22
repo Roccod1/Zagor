@@ -96,7 +96,7 @@ public class GestioneComunicazioniPortlet extends MVCPortlet {
 		List<ComunicazioneDTO> comunicazioni = comunicazioneLocalService
 				.findByFilters(organizzazione, username, tipologia, cur, delta)
 				.stream()
-				.map(ComunicazioneDTO::new)
+				.map(x -> new ComunicazioneDTO(x, ctx.getUserId()))
 				.collect(Collectors.toList());
 		
 		int comunicazioniCount = comunicazioneLocalService.countByFilters(organizzazione, username, tipologia);

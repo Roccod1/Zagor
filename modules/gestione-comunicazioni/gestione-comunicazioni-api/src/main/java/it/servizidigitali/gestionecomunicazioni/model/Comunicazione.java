@@ -62,7 +62,7 @@ public interface Comunicazione extends ComunicazioneModel, PersistedModel {
 		getTipologia();
 
 	public it.servizidigitali.gestionecomunicazioni.model.LetturaComunicazione
-		getLettura();
+		getLettura(long userId);
 
 	public com.liferay.portal.kernel.model.Organization
 		getDestinatarioOrganizzazione();

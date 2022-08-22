@@ -338,9 +338,9 @@ public class ComunicazioneWrapper
 
 	@Override
 	public it.servizidigitali.gestionecomunicazioni.model.LetturaComunicazione
-		getLettura() {
+		getLettura(long userId) {
 
-		return model.getLettura();
+		return model.getLettura(userId);
 	}
 
 	/**

@@ -61,7 +61,7 @@
 		<liferay-ui:search-container-column-text name="dataInvio" value="${comunicazioneDataInvio}" />
 		<liferay-ui:search-container-column-text name="titolo" value="${comunicazione.titolo}" />
 		<liferay-ui:search-container-column-text name="tipologia" value="${comunicazione.tipologia}" />
-		<liferay-ui:search-container-column-text name="stato" value="${comunicazione.stato}" />
+		<liferay-ui:search-container-column-text name="stato" value="${comunicazione.stato}" translate="true" />
 		<liferay-ui:search-container-column-text name="ente" value="${comunicazione.ente}" />
 		<liferay-ui:search-container-column-jsp name="azioni" path="/azioni.jsp" />
 	</liferay-ui:search-container-row>
