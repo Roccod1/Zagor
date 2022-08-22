@@ -30,11 +30,12 @@
 		</div>
 	</div>
 	
-	<a href="${cercaURL}" class="btn btn-secondary"><liferay-ui:message key="annulla" /></a>
-	<aui:button type="submit" value="cerca" />
+	<div class="d-flex justify-content-end">
+		<a href="${cercaURL}" class="btn btn-secondary mr-1"><liferay-ui:message key="annulla" /></a>
+		<aui:button cssClass="mr-1" type="submit" value="cerca" />
+		<a href="${nuovaURL}" class="btn btn-primary"><liferay-ui:message key="invia-comunicazione" /></a>
+	</div>
 </aui:form>
-
-<a href="${nuovaURL}" class="btn btn-primary"><liferay-ui:message key="invia-comunicazione" /></a>
 
 <liferay-portlet:renderURL varImpl="iteratorURL">
 	<portlet:param name="queryOrganizzazione" value="${queryOrganizzazione}" />
