@@ -52,7 +52,6 @@
 		<fmt:formatDate value="${comunicazione.dataInvio}" pattern="dd/MM/yyyy" var="comunicazioneDataInvio" />
 		<liferay-ui:search-container-column-text name="dataInvio" value="${comunicazioneDataInvio}" />
 		<liferay-ui:search-container-column-text name="titolo" value="${comunicazione.titolo}" />
-		<liferay-ui:search-container-column-text name="descrizione" value="${comunicazione.descrizione}" />
 		<liferay-ui:search-container-column-text name="tipologia" value="${comunicazione.tipologia}" />
 		<liferay-ui:search-container-column-text name="stato" value="${comunicazione.stato}" />
 		<liferay-ui:search-container-column-text name="ente" value="${comunicazione.ente}" />
