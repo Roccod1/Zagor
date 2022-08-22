@@ -9,14 +9,16 @@
 
 <aui:form action="${cercaURL}">
 	<div class="row">
-		<div class="col-4">
-			<aui:select name="queryOrganizzazione" label="ente" value="${queryOrganizzazione}">
-				<aui:option value="0"><liferay-ui:message key="tutte" /></aui:option>
-				<c:forEach items="${organizzazioni}" var="organizzazione">
-					<aui:option value="${organizzazione.id}">${organizzazione.nome}</aui:option>
-				</c:forEach>
-			</aui:select>
-		</div>
+		<c:if test="${!inOrganization}">
+			<div class="col-4">
+				<aui:select name="queryOrganizzazione" label="ente" value="${queryOrganizzazione}">
+					<aui:option value="0"><liferay-ui:message key="tutte" /></aui:option>
+					<c:forEach items="${organizzazioni}" var="organizzazione">
+						<aui:option value="${organizzazione.id}">${organizzazione.nome}</aui:option>
+					</c:forEach>
+				</aui:select>
+			</div>
+		</c:if>
 		<div class="col-4">
 			<aui:input name="queryUsername" label="username" value="${queryUsername}" />
 		</div>

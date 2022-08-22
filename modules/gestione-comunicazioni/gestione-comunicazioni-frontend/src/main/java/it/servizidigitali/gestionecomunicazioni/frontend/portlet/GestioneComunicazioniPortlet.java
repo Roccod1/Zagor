@@ -98,7 +98,11 @@ public class GestioneComunicazioniPortlet extends MVCPortlet {
 				.collect(Collectors.toList());
 		
 		ComunicazioneFilters filters = new ComunicazioneFilters();
-		filters.setOrganizzazione(queryOrganizzazione == 0 ? null : queryOrganizzazione);
+		if (organizationId == 0) {
+			filters.setOrganizzazione(queryOrganizzazione == 0 ? null : queryOrganizzazione);
+		} else {
+			filters.setOrganizzazione(organizationId);
+		}
 		filters.setUsername(queryUsername.isBlank() ? null : queryUsername.trim());
 		filters.setTipologia(queryTipologia == 0 ? null : queryTipologia);
 		filters.setUserId(ctx.getUserId());
