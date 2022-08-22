@@ -15,6 +15,7 @@ import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.MutableRenderParameters;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -53,6 +54,8 @@ public class InserisciActionCommand extends BaseMVCActionCommand {
 		//String procedura = ParamUtil.getString(request, "procedura");
 		long organizzazione = ParamUtil.getLong(request, "organizzazione");
 		long utente = ParamUtil.getLong(request, "utente");
+
+		MutableRenderParameters params = response.getRenderParameters();
 		
 		try {
 			ServiceContext ctx = ServiceContextFactory.getInstance(request);
@@ -73,14 +76,19 @@ public class InserisciActionCommand extends BaseMVCActionCommand {
 					organizzazione
 			);
 		} catch (ComunicazioneTitoloException e) {
+			params.setValue("mvcRenderCommandName", "/render/nuova");
 			SessionErrors.add(request, "errore-titolo");
 		} catch (ComunicazioneDescrizioneException e) {
+			params.setValue("mvcRenderCommandName", "/render/nuova");
 			SessionErrors.add(request, "errore-descrizione");
 		} catch (ComunicazioneOrganizzazioneException e) {
-			SessionErrors.add(request, "errore-organizzazione");
+			params.setValue("mvcRenderCommandName", "/render/nuova");
+			SessionErrors.add(request, "errore-ente");
 		} catch (ComunicazioneDataFineException e) {
+			params.setValue("mvcRenderCommandName", "/render/nuova");
 			SessionErrors.add(request, "errore-data-fine");
 		} catch (Exception e) {
+			params.setValue("mvcRenderCommandName", "/render/nuova");
 			SessionErrors.add(request, "errore-generico");
 		}
 	}

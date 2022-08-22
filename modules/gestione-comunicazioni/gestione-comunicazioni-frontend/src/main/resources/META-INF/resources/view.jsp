@@ -10,7 +10,7 @@
 <aui:form action="${cercaURL}">
 	<div class="row">
 		<div class="col-4">
-			<aui:select name="queryOrganizzazione" label="organizzazione" value="${queryOrganizzazione}">
+			<aui:select name="queryOrganizzazione" label="ente" value="${queryOrganizzazione}">
 				<aui:option value="0"><liferay-ui:message key="tutte" /></aui:option>
 				<c:forEach items="${organizzazioni}" var="organizzazione">
 					<aui:option value="${organizzazione.id}">${organizzazione.nome}</aui:option>

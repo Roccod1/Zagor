@@ -2,8 +2,11 @@ package it.servizidigitali.gestionecomunicazioni.frontend.portlet;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.io.IOException;
@@ -61,6 +64,20 @@ public class GestioneComunicazioniPortlet extends MVCPortlet {
 		String queryUsername = ParamUtil.getString(request, "queryUsername");
 		long queryTipologia = ParamUtil.getLong(request, "queryTipologia");
 		
+		ServiceContext ctx;
+		try {
+			ctx = ServiceContextFactory.getInstance(request);
+		} catch (PortalException e) {
+			throw new PortletException(e);
+		}
+		
+		long organizationId;
+		try {
+			organizationId = ctx.getScopeGroup().getOrganizationId();
+		} catch (PortalException e) {
+			throw new PortletException(e);
+		}
+		
 		List<TipologiaDTO> tipologie = tipologiaComunicazioneLocalService
 				.getTipologiaComunicaziones(QueryUtil.ALL_POS, QueryUtil.ALL_POS)
 				.stream()
@@ -91,6 +108,7 @@ public class GestioneComunicazioniPortlet extends MVCPortlet {
 		request.setAttribute("queryOrganizzazione", queryOrganizzazione);
 		request.setAttribute("queryUsername", queryUsername);
 		request.setAttribute("queryTipologia", queryTipologia);
+		request.setAttribute("inOrganization", organizationId != 0);
 		
 		super.render(request, response);
 	}

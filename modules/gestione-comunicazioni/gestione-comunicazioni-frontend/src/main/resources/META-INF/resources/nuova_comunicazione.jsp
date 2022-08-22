@@ -12,7 +12,7 @@
 <liferay-ui:error key="errore-generico" message="errore-generico" />
 <liferay-ui:error key="errore-titolo" message="errore-titolo" />
 <liferay-ui:error key="errore-descrizione" message="errore-descrizione" />
-<liferay-ui:error key="errore-organizzazione" message="errore-organizzazione" />
+<liferay-ui:error key="errore-ente" message="errore-ente" />
 <liferay-ui:error key="errore-data-fine" message="errore-data-fine" />
 
 <aui:form action="${inserisciURL}">
@@ -41,8 +41,8 @@
 		<aui:option value="-"><liferay-ui:message key="nessuna" /></aui:option>
 	</aui:select>
 	
-	<aui:select name="organizzazione" label="organizzazione-obbl">
-		<aui:option value="0"><liferay-ui:message key="seleziona-una-organizzazione" /></aui:option>
+	<aui:select name="organizzazione" label="ente-obbl">
+		<aui:option value="0"><liferay-ui:message key="seleziona-un-ente" /></aui:option>
 		<c:forEach items="${organizzazioni}" var="organizzazione">
 			<aui:option value="${organizzazione.id}">${organizzazione.nome}</aui:option>
 		</c:forEach>
