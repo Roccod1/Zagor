@@ -30,10 +30,29 @@
 		</div>
 	</div>
 	
+	<div class="row">
+		<div class="col-4">
+			<aui:select name="queryStatoLettura" label="stato">
+			</aui:select>
+		</div>	
+		<div class="col-4">
+			<label><liferay-ui:message key="data-inizio" /></label>
+			<input type="datetime-local"
+		           id="<portlet:namespace/>queryDataInvioDa"
+		           name="<portlet:namespace/>queryDataInvioDa">
+		</div>
+		<div class="col-4">
+			<label><liferay-ui:message key="data-inizio" /></label>
+			<input type="datetime-local"
+		           id="<portlet:namespace/>queryDataInvioA"
+		           name="<portlet:namespace/>queryDataInvioA">
+		</div>
+	</div>
+	
 	<div class="d-flex justify-content-end">
-		<a href="${cercaURL}" class="btn btn-secondary mr-1"><liferay-ui:message key="annulla" /></a>
 		<aui:button cssClass="mr-1" type="submit" value="cerca" />
-		<a href="${nuovaURL}" class="btn btn-primary"><liferay-ui:message key="invia-comunicazione" /></a>
+		<a href="${cercaURL}" class="btn btn-secondary mr-1"><liferay-ui:message key="reset" /></a>
+		<a href="${nuovaURL}" class="btn btn-secondary"><liferay-ui:message key="invia-comunicazione" /></a>
 	</div>
 </aui:form>
 
