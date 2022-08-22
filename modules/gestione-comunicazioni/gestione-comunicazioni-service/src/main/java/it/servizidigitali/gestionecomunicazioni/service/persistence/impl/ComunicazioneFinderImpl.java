@@ -35,7 +35,7 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Comunicazione.class, classLoader);
 		
 		if (organizzazione != null) {
-			dynamicQuery.add(RestrictionsFactoryUtil.eq("organizationId", organizzazione));
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("destinatarioOrganizationId", organizzazione));
 		}
 		
 		if (tipologia != null) {
