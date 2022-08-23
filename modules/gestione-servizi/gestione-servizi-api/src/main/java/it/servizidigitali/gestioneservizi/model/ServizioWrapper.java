@@ -55,10 +55,6 @@ public class ServizioWrapper
 		attributes.put("descrizione", getDescrizione());
 		attributes.put("descrizioneEstesa", getDescrizioneEstesa());
 		attributes.put("codice", getCodice());
-		attributes.put("uri", getUri());
-		attributes.put("uriGuest", getUriGuest());
-		attributes.put(
-			"catalogoServizioArticleId", getCatalogoServizioArticleId());
 		attributes.put("autenticazione", isAutenticazione());
 		attributes.put("dataInizioAttivazione", getDataInizioAttivazione());
 		attributes.put("dataFineAttivazione", getDataFineAttivazione());
@@ -150,25 +146,6 @@ public class ServizioWrapper
 
 		if (codice != null) {
 			setCodice(codice);
-		}
-
-		String uri = (String)attributes.get("uri");
-
-		if (uri != null) {
-			setUri(uri);
-		}
-
-		String uriGuest = (String)attributes.get("uriGuest");
-
-		if (uriGuest != null) {
-			setUriGuest(uriGuest);
-		}
-
-		Long catalogoServizioArticleId = (Long)attributes.get(
-			"catalogoServizioArticleId");
-
-		if (catalogoServizioArticleId != null) {
-			setCatalogoServizioArticleId(catalogoServizioArticleId);
 		}
 
 		Boolean autenticazione = (Boolean)attributes.get("autenticazione");
@@ -326,16 +303,6 @@ public class ServizioWrapper
 	@Override
 	public boolean getAzienda() {
 		return model.getAzienda();
-	}
-
-	/**
-	 * Returns the catalogo servizio article ID of this servizio.
-	 *
-	 * @return the catalogo servizio article ID of this servizio
-	 */
-	@Override
-	public long getCatalogoServizioArticleId() {
-		return model.getCatalogoServizioArticleId();
 	}
 
 	/**
@@ -543,26 +510,6 @@ public class ServizioWrapper
 	@Override
 	public boolean getTimbroCertificato() {
 		return model.getTimbroCertificato();
-	}
-
-	/**
-	 * Returns the uri of this servizio.
-	 *
-	 * @return the uri of this servizio
-	 */
-	@Override
-	public String getUri() {
-		return model.getUri();
-	}
-
-	/**
-	 * Returns the uri guest of this servizio.
-	 *
-	 * @return the uri guest of this servizio
-	 */
-	@Override
-	public String getUriGuest() {
-		return model.getUriGuest();
 	}
 
 	/**
@@ -778,16 +725,6 @@ public class ServizioWrapper
 	}
 
 	/**
-	 * Sets the catalogo servizio article ID of this servizio.
-	 *
-	 * @param catalogoServizioArticleId the catalogo servizio article ID of this servizio
-	 */
-	@Override
-	public void setCatalogoServizioArticleId(long catalogoServizioArticleId) {
-		model.setCatalogoServizioArticleId(catalogoServizioArticleId);
-	}
-
-	/**
 	 * Sets whether this servizio is chatbot.
 	 *
 	 * @param chatbot the chatbot of this servizio
@@ -993,26 +930,6 @@ public class ServizioWrapper
 	@Override
 	public void setTimbroCertificato(boolean timbroCertificato) {
 		model.setTimbroCertificato(timbroCertificato);
-	}
-
-	/**
-	 * Sets the uri of this servizio.
-	 *
-	 * @param uri the uri of this servizio
-	 */
-	@Override
-	public void setUri(String uri) {
-		model.setUri(uri);
-	}
-
-	/**
-	 * Sets the uri guest of this servizio.
-	 *
-	 * @param uriGuest the uri guest of this servizio
-	 */
-	@Override
-	public void setUriGuest(String uriGuest) {
-		model.setUriGuest(uriGuest);
 	}
 
 	/**

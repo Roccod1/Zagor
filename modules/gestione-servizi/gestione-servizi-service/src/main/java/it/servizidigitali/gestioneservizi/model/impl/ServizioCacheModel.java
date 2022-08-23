@@ -62,7 +62,7 @@ public class ServizioCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(61);
+		StringBundler sb = new StringBundler(55);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -88,12 +88,6 @@ public class ServizioCacheModel
 		sb.append(descrizioneEstesa);
 		sb.append(", codice=");
 		sb.append(codice);
-		sb.append(", uri=");
-		sb.append(uri);
-		sb.append(", uriGuest=");
-		sb.append(uriGuest);
-		sb.append(", catalogoServizioArticleId=");
-		sb.append(catalogoServizioArticleId);
 		sb.append(", autenticazione=");
 		sb.append(autenticazione);
 		sb.append(", dataInizioAttivazione=");
@@ -194,21 +188,6 @@ public class ServizioCacheModel
 			servizioImpl.setCodice(codice);
 		}
 
-		if (uri == null) {
-			servizioImpl.setUri("");
-		}
-		else {
-			servizioImpl.setUri(uri);
-		}
-
-		if (uriGuest == null) {
-			servizioImpl.setUriGuest("");
-		}
-		else {
-			servizioImpl.setUriGuest(uriGuest);
-		}
-
-		servizioImpl.setCatalogoServizioArticleId(catalogoServizioArticleId);
 		servizioImpl.setAutenticazione(autenticazione);
 
 		if (dataInizioAttivazione == Long.MIN_VALUE) {
@@ -269,10 +248,6 @@ public class ServizioCacheModel
 		descrizione = objectInput.readUTF();
 		descrizioneEstesa = objectInput.readUTF();
 		codice = objectInput.readUTF();
-		uri = objectInput.readUTF();
-		uriGuest = objectInput.readUTF();
-
-		catalogoServizioArticleId = objectInput.readLong();
 
 		autenticazione = objectInput.readBoolean();
 		dataInizioAttivazione = objectInput.readLong();
@@ -357,22 +332,6 @@ public class ServizioCacheModel
 			objectOutput.writeUTF(codice);
 		}
 
-		if (uri == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(uri);
-		}
-
-		if (uriGuest == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(uriGuest);
-		}
-
-		objectOutput.writeLong(catalogoServizioArticleId);
-
 		objectOutput.writeBoolean(autenticazione);
 		objectOutput.writeLong(dataInizioAttivazione);
 		objectOutput.writeLong(dataFineAttivazione);
@@ -419,9 +378,6 @@ public class ServizioCacheModel
 	public String descrizione;
 	public String descrizioneEstesa;
 	public String codice;
-	public String uri;
-	public String uriGuest;
-	public long catalogoServizioArticleId;
 	public boolean autenticazione;
 	public long dataInizioAttivazione;
 	public long dataFineAttivazione;
