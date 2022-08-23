@@ -74,11 +74,11 @@ public class ComunicazioneLocalServiceUtil {
 			destinatarioOrganizationId);
 	}
 
-	public static int countByFilters(
+	public static int countComunicazioni(
 		it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters
 			filters) {
 
-		return getService().countByFilters(filters);
+		return getService().countComunicazioni(filters);
 	}
 
 	/**
@@ -246,14 +246,6 @@ public class ComunicazioneLocalServiceUtil {
 		return getService().fetchComunicazioneByUuidAndGroupId(uuid, groupId);
 	}
 
-	public static List<Comunicazione> findByFilters(
-		it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters
-			filters,
-		int cur, int delta) {
-
-		return getService().findByFilters(filters, cur, delta);
-	}
-
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -375,6 +367,21 @@ public class ComunicazioneLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static List<Comunicazione> searchComunicazioni(
+		it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters
+			filters) {
+
+		return getService().searchComunicazioni(filters);
+	}
+
+	public static List<Comunicazione> searchComunicazioni(
+		it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters
+			filters,
+		int cur, int delta) {
+
+		return getService().searchComunicazioni(filters, cur, delta);
 	}
 
 	/**

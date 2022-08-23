@@ -87,7 +87,7 @@ public interface ComunicazioneLocalService
 			long destinatarioOrganizationId)
 		throws PortalException;
 
-	public int countByFilters(ComunicazioneFilters filters);
+	public int countComunicazioni(ComunicazioneFilters filters);
 
 	/**
 	 * Creates a new comunicazione with the primary key. Does not add the comunicazione to the database.
@@ -225,9 +225,6 @@ public interface ComunicazioneLocalService
 	public Comunicazione fetchComunicazioneByUuidAndGroupId(
 		String uuid, long groupId);
 
-	public List<Comunicazione> findByFilters(
-		ComunicazioneFilters filters, int cur, int delta);
-
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
@@ -324,6 +321,14 @@ public interface ComunicazioneLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Comunicazione> searchComunicazioni(
+		ComunicazioneFilters filters);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Comunicazione> searchComunicazioni(
+		ComunicazioneFilters filters, int cur, int delta);
 
 	/**
 	 * Updates the comunicazione in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

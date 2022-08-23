@@ -73,11 +73,11 @@ public class ComunicazioneLocalServiceWrapper
 	}
 
 	@Override
-	public int countByFilters(
+	public int countComunicazioni(
 		it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters
 			filters) {
 
-		return _comunicazioneLocalService.countByFilters(filters);
+		return _comunicazioneLocalService.countComunicazioni(filters);
 	}
 
 	/**
@@ -279,17 +279,6 @@ public class ComunicazioneLocalServiceWrapper
 	}
 
 	@Override
-	public java.util.List
-		<it.servizidigitali.gestionecomunicazioni.model.Comunicazione>
-			findByFilters(
-				it.servizidigitali.gestionecomunicazioni.model.
-					ComunicazioneFilters filters,
-				int cur, int delta) {
-
-		return _comunicazioneLocalService.findByFilters(filters, cur, delta);
-	}
-
-	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -432,6 +421,28 @@ public class ComunicazioneLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _comunicazioneLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.gestionecomunicazioni.model.Comunicazione>
+			searchComunicazioni(
+				it.servizidigitali.gestionecomunicazioni.model.
+					ComunicazioneFilters filters) {
+
+		return _comunicazioneLocalService.searchComunicazioni(filters);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.gestionecomunicazioni.model.Comunicazione>
+			searchComunicazioni(
+				it.servizidigitali.gestionecomunicazioni.model.
+					ComunicazioneFilters filters,
+				int cur, int delta) {
+
+		return _comunicazioneLocalService.searchComunicazioni(
+			filters, cur, delta);
 	}
 
 	/**
