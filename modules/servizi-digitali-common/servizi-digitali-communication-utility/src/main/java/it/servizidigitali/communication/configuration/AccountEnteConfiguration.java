@@ -13,13 +13,13 @@ import aQute.bnd.annotation.metatype.Meta;
 @Meta.OCD(id = "it.servizidigitali.communication.configuration.AccountEnteConfiguration", name = "Configurazione account email/PEC Ente")
 public interface AccountEnteConfiguration {
 
+	@Meta.AD(required = false)
+	String tenantId();
+
 	@Meta.AD(deflt = "false", required = false, description = "Abilita/disabilita le configurazioni email seguenti")
 	boolean accountEmailEnabled();
 
-	@Meta.AD(required = false, description = "Tenant ID")
-	String tenantId();
-
-	@Meta.AD(deflt = "SMTP", required = false)
+	@Meta.AD(deflt = "smtp", required = false)
 	String emailProtocol();
 
 	@Meta.AD(required = false)
@@ -61,7 +61,7 @@ public interface AccountEnteConfiguration {
 	@Meta.AD(deflt = "false", required = false, description = "Abilita/disabilita le configurazioni PEC seguenti")
 	boolean accountPecEnabled();
 
-	@Meta.AD(deflt = "SMTPS", required = false)
+	@Meta.AD(deflt = "smtp", required = false)
 	String pecProtocol();
 
 	@Meta.AD(required = false)

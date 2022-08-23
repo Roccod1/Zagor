@@ -1,6 +1,7 @@
 package it.servizidigitali.communication.sender.impl;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import javax.xml.bind.DatatypeConverter;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.communication.configuration.AccountEnteConfiguration;
 import it.servizidigitali.communication.configuration.CommunicationConfiguration;
@@ -38,6 +40,8 @@ public class EmailPecSender extends CommunicationEngineChannelSender {
 	private volatile CommunicationConfiguration communicationConfiguration;
 	private volatile AccountEnteConfiguration accountEnteConfiguration;
 
+	private ConfigurationProvider configurationProvider;
+
 	@Activate
 	@Modified
 	private void activate(Map<String, Object> props) {
@@ -47,19 +51,34 @@ public class EmailPecSender extends CommunicationEngineChannelSender {
 		sendEnabled = communicationConfiguration.communicationEngineSendEnabled();
 	}
 
+	@Reference
+	protected void setConfigurationProvider(ConfigurationProvider configurationProvider) {
+		this.configurationProvider = configurationProvider;
+	}
+
 	@Override
 	public Message getMessage(Comunicazione comunicazione) throws CommunicationException {
 
 		try {
+
+			long groupId = comunicazione.getGroupId();
+			if (groupId != 0) {
+				accountEnteConfiguration = configurationProvider.getGroupConfiguration(AccountEnteConfiguration.class, groupId);
+			}
+
 			Message message = new Message();
 			message.setChannel(CHANNEL);
 			message.setHtml(true);
 			message.setSubject(comunicazione.getOggetto());
 			message.setText(comunicazione.getTesto());
+			String tenantId = accountEnteConfiguration.tenantId();
+			if (Validator.isNotNull(tenantId)) {
+				message.setExternalId(tenantId);
+			}
+
 			String from = null;
 			boolean accountEnabled = accountEnteConfiguration.accountPecEnabled();
 			if (accountEnabled) {
-				message.setExternalId(accountEnteConfiguration.tenantId());
 				from = accountEnteConfiguration.pecFrom();
 			}
 			message.setImportant(false);
@@ -94,8 +113,8 @@ public class EmailPecSender extends CommunicationEngineChannelSender {
 			List<Utente> utenti = comunicazione.getUtenti();
 			for (Utente utente : utenti) {
 				Contact contact = new Contact();
-				contact.setEmail(utente.getMail());
-				contact.setName(utente.getMail());
+				contact.setEmail(utente.getPec());
+				contact.setName(utente.getPec());
 				contact.setType(CHANNEL);
 				contactsTo.add(contact);
 			}
