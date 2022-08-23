@@ -10,4 +10,4 @@
 	<portlet:param name="id" value="<%= String.valueOf(comunicazione.getId()) %>" />
 </portlet:renderURL>
 
-<a href="${dettaglioURL}" class="btn btn-primary">?</a>
+<a href="${dettaglioURL}" class="btn btn-primary"><clay:icon symbol="search" /></a>
