@@ -10,19 +10,19 @@
 				<c:set var="comunicazioneDataInvio" value="-" />
 			</c:otherwise>
 		</c:choose>
-		<aui:input name="dataInvio" value="${comunicazioneDataInvio}" />
+		<aui:input name="dataInvio" value="${comunicazioneDataInvio}" readonly="true" />
 	</div>
 	<div class="col-4">
-		<aui:input name="titolo" value="${comunicazione.titolo}" />
+		<aui:input name="titolo" value="${comunicazione.titolo}" readonly="true" />
 	</div>
 </div>
 
 <div class="row">
 	<div class="col-4">
-		<aui:input name="tipologia" value="${comunicazione.tipologia}" />
+		<aui:input name="tipologia" value="${comunicazione.tipologia}"  readonly="true" />
 	</div>
 	<div class="col-4">
-		<aui:input name="stato" value="${stato}" />
+		<aui:input name="stato" value="${stato}"  readonly="true" />
 	</div>
 </div>
 
@@ -36,7 +36,7 @@
 				<c:set var="comunicazioneDataInizio" value="-" />
 			</c:otherwise>
 		</c:choose>
-		<aui:input name="dataInizio" value="${comunicazioneDataInizio}" />
+		<aui:input name="dataInizio" value="${comunicazioneDataInizio}"  readonly="true" />
 	</div>
 	<div class="col-4">
 		<c:choose>
@@ -47,7 +47,7 @@
 				<c:set var="comunicazioneDataFine" value="-" />
 			</c:otherwise>
 		</c:choose>
-		<aui:input name="dataFine" value="${comunicazioneDataFine}" />
+		<aui:input name="dataFine" value="${comunicazioneDataFine}"  readonly="true" />
 	</div>
 </div>
 
