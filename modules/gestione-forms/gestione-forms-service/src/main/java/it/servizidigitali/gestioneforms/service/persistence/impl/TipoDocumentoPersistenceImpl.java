@@ -1998,9 +1998,6 @@ public class TipoDocumentoPersistenceImpl
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
 		dbColumnNames.put("uuid", "uuid_");
-		dbColumnNames.put("estensioniFile", "estensioni_file");
-		dbColumnNames.put("numeroRequired", "numero_required");
-		dbColumnNames.put("dataScadenzaRequired", "data_scadenza_required");
 
 		setDBColumnNames(dbColumnNames);
 
@@ -2725,9 +2722,7 @@ public class TipoDocumentoPersistenceImpl
 		TipoDocumentoPersistenceImpl.class);
 
 	private static final Set<String> _badColumnNames = SetUtil.fromArray(
-		new String[] {
-			"uuid", "estensioniFile", "numeroRequired", "dataScadenzaRequired"
-		});
+		new String[] {"uuid"});
 
 	@Override
 	protected FinderCache getFinderCache() {
