@@ -3,7 +3,7 @@
 <div class="row">
 	<div class="col-4">
 		<c:choose>
-			<c:when test="${comunicazione.dataInvio}">
+			<c:when test="${comunicazione.dataInvio != null}">
 				<fmt:formatDate value="${comunicazione.dataInvio}" pattern="dd/MM/yyyy" var="comunicazioneDataInvio" />
 			</c:when>
 			<c:otherwise>
@@ -29,7 +29,7 @@
 <div class="row">
 	<div class="col-4">
 		<c:choose>
-			<c:when test="${comunicazione.dataInizio}">
+			<c:when test="${comunicazione.dataInizio != null}">
 				<fmt:formatDate value="${comunicazione.dataInizio}" pattern="dd/MM/yyyy" var="comunicazioneDataInizio" />
 			</c:when>
 			<c:otherwise>
@@ -40,7 +40,7 @@
 	</div>
 	<div class="col-4">
 		<c:choose>
-			<c:when test="${comunicazione.dataFine}">
+			<c:when test="${comunicazione.dataFine != null}">
 				<fmt:formatDate value="${comunicazione.dataFine}" pattern="dd/MM/yyyy" var="comunicazioneDataFine" />
 			</c:when>
 			<c:otherwise>
