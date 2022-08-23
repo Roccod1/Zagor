@@ -17,7 +17,9 @@ import com.liferay.portal.kernel.scheduler.TriggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Activate;
@@ -26,6 +28,9 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.communication.enumeration.Canale;
+import it.servizidigitali.communication.model.Comunicazione;
+import it.servizidigitali.communication.model.Utente;
 import it.servizidigitali.communication.sender.CommunicationSender;
 import it.servizidigitali.gestionecomunicazioni.configuration.InvioComunicazioniSchedulerConfiguration;
 import it.servizidigitali.gestionecomunicazioni.service.ComunicazioneLocalService;
@@ -36,7 +41,7 @@ import it.servizidigitali.gestionecomunicazioni.service.ComunicazioneLocalServic
  */
 @Component(immediate = true, //
 		service = InvioComunicazioniScheduler.class, //
-		configurationPid = "it.servizidigitali.backoffice.integration.configuration.scheduler.UserCacheSchedulerConfiguration"//
+		configurationPid = "it.servizidigitali.gestionecomunicazioni.configuration.InvioComunicazioniSchedulerConfiguration"//
 )
 public class InvioComunicazioniScheduler extends BaseMessageListener {
 
@@ -59,8 +64,17 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 	protected void doReceive(Message message) throws Exception {
 
 		_log.debug("Scheduled task executed...");
+		// TODO caricare comunicazioni non ancora inviate
 
-		// TODO implementare
+		// TODO creare oggetto comunicazione per invio + invio. ATTENZIONE: l'invio deve essere
+		// effettuato sulla base delle preferenze dell'utente
+
+		List<Utente> utenti = new ArrayList<Utente>();
+		Utente utente = new Utente();
+		utente.setEmail("gianluca.pindinelli@linksmt.it");
+		utenti.add(utente);
+		Comunicazione comunicazione = new Comunicazione("Test", "Da scheduler", utenti, null, true, null, 0, 67813);
+		communicationSender.send(comunicazione, Canale.EMAIL);
 	}
 
 	public LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
