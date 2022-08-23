@@ -1,15 +1,24 @@
 package it.servizidigitali.gestionecomunicazioni.service.persistence.impl;
 
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.dao.orm.Criterion;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.UserLocalService;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
 import it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters;
@@ -19,6 +28,9 @@ import it.servizidigitali.gestionecomunicazioni.service.persistence.Comunicazion
 @Component(immediate = true, service = ComunicazioneFinder.class)
 public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl implements ComunicazioneFinder {
 
+	@Reference
+	private UserLocalService userLocalService;
+	
 	@SuppressWarnings("unchecked")
 	public List<Comunicazione> findByFilters(ComunicazioneFilters filters, int start, int end) {
 		Session session = null;
@@ -58,6 +70,14 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 	}
 
 	private SQLQuery generaQuery(Session session, ComunicazioneFilters filters, boolean countQuery, int start, int end) {
+		long[] ids;
+		if (filters.getUsername() != null) {
+			ids = searchUsers(filters.getUsername().toLowerCase());		
+		} else {
+			ids = null;
+		}
+		
+		
 		String sql;
 		if (countQuery) {
 			sql = "select count(*) ";
@@ -80,7 +100,7 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 			sql += "and c.tipologiaComunicazioneId = ? ";
 		}
 		if (filters.getUsername() != null) {
-			sql += "and lower(c.userName) like ? ";
+			sql += "and c.destinatarioUserId in " + generateGroup(ids.length) + " ";
 		}
 		if (filters.getDataInvioDa() != null) {
 			sql += "and c.dataInvio >= ? ";
@@ -106,9 +126,8 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 		if (filters.getTipologia() != null) {
 			queryPos.add(filters.getTipologia());
 		}
-		if (filters.getUsername() != null) {
-			String pattern = StringPool.PERCENT + filters.getUsername().toLowerCase() + StringPool.PERCENT;
-			queryPos.add(pattern);
+		if (filters.getUsername() != null) {	
+			queryPos.add(ids);
 		}
 		if (filters.getDataInvioDa() != null) {
 			queryPos.add(filters.getDataInvioDa());
@@ -120,9 +139,43 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 			queryPos.add(start);
 			queryPos.add(end - start);
 		}
+		
 		return sqlQuery;
 	}
 	
+	private String generateGroup(int length) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("(");
+		for (int i = 0; i < length; i++) {
+			if (i == 0) {
+				buffer.append("?");
+			} else {
+				buffer.append(", ?");
+			}
+		}
+		buffer.append(")");
+		return buffer.toString();
+	}
+
+	private long[] searchUsers(String query) {
+		String pattern = StringPool.PERCENT + query + StringPool.PERCENT;
+		
+		DynamicQuery dq = DynamicQueryFactoryUtil.forClass(User.class, getClass().getClassLoader());
+		Criterion cfClause = RestrictionsFactoryUtil.ilike("screenName", pattern);
+		Criterion fnClause = RestrictionsFactoryUtil.ilike("firstName", pattern);
+		Criterion lnClause = RestrictionsFactoryUtil.ilike("lastName", pattern);
+		Criterion nameClause = RestrictionsFactoryUtil.or(fnClause, lnClause);
+		
+		dq.add(RestrictionsFactoryUtil.or(nameClause, cfClause));
+		dq.setProjection(ProjectionFactoryUtil.property("userId"));
+		
+		List<Long> ids = new ArrayList<>();
+		ids.addAll(userLocalService.<Long>dynamicQuery(dq));
+		ids.add(0L);
+		
+		return ids.stream().mapToLong(x -> x).toArray();
+	}
+
 	private Comunicazione mapComunicazione(Object[] x) {
 		ComunicazioneImpl model = new ComunicazioneImpl();
 		model.setComunicazioneId(Long.valueOf(x[0].toString()));
