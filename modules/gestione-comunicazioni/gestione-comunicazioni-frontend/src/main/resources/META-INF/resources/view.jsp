@@ -81,7 +81,7 @@
 	<liferay-ui:search-container-row className="it.servizidigitali.gestionecomunicazioni.frontend.dto.ComunicazioneDTO" modelVar="comunicazione">
 		<c:choose>
 			<c:when test="${comunicazione.dataInvio != null}">
-				<fmt:formatDate value="${comunicazione.dataInvio}" pattern="dd/MM/yyyy" var="comunicazioneDataInvio" />
+				<fmt:formatDate value="${comunicazione.dataInvio}" pattern="dd/MM/yyyy HH:mm" var="comunicazioneDataInvio" />
 			</c:when>
 			<c:otherwise>
 				<c:set var="comunicazioneDataInvio" value="-"/>
