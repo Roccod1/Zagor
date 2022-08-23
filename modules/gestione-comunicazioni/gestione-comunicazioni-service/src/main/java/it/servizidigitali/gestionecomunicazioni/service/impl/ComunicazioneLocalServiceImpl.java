@@ -15,10 +15,21 @@
 package it.servizidigitali.gestionecomunicazioni.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 
-import it.servizidigitali.gestionecomunicazioni.service.base.ComunicazioneLocalServiceBaseImpl;
+import java.util.Date;
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
+
+import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneDescrizioneException;
+import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneOrganizzazioneException;
+import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneTitoloException;
+import it.servizidigitali.gestionecomunicazioni.exception.ComunicazioneDataFineException;
+import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
+import it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters;
+import it.servizidigitali.gestionecomunicazioni.service.base.ComunicazioneLocalServiceBaseImpl;
 
 /**
  * @author Brian Wing Shun Chan
@@ -29,4 +40,64 @@ import org.osgi.service.component.annotations.Component;
 )
 public class ComunicazioneLocalServiceImpl
 	extends ComunicazioneLocalServiceBaseImpl {
+		
+	public Comunicazione addComunicazione(
+			long groupId,
+			long companyId, 
+			long userId, 
+			long organizationId,
+			String userName,
+			String titolo, 
+			String descrizione,
+			Date dataInizio,
+			Date dataFine, 
+			long tipologiaId,
+			Long destinatarioUserId,
+			long destinatarioOrganizationId) throws PortalException {
+		if (titolo == null || titolo.isBlank()) {
+			throw new ComunicazioneTitoloException();
+		}
+		
+		if (descrizione == null || descrizione.isEmpty()) {
+			throw new ComunicazioneDescrizioneException();
+		}
+		
+		if (destinatarioOrganizationId == 0) {
+			throw new ComunicazioneOrganizzazioneException();
+		}
+		
+		if (dataInizio != null && dataFine != null) {
+			if (dataFine.before(dataInizio)) {
+				throw new ComunicazioneDataFineException();
+			}
+		}
+		
+		long id = counterLocalService.increment(Comunicazione.class.getName());
+		Comunicazione model = comunicazionePersistence.create(id);
+		model.setGroupId(groupId);
+		model.setCompanyId(companyId);
+		model.setUserId(userId);
+		model.setUserName(userName);
+		model.setOrganizationId(organizationId);
+		model.setTitolo(titolo.trim());
+		model.setDescrizione(descrizione);
+		model.setDataInizio(dataInizio);
+		model.setDataFine(dataFine);
+		model.setTipologiaComunicazioneId(tipologiaId);
+		model.setDestinatarioUserId(destinatarioUserId);
+		model.setDestinatarioOrganizationId(destinatarioOrganizationId);
+		return comunicazionePersistence.update(model);
+	}
+	
+	public List<Comunicazione> findByFilters(ComunicazioneFilters filters, int cur, int delta) {
+		int[] limit = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int start = limit[0];
+		int end = limit[1];
+		
+		return comunicazioneFinder.findByFilters(filters, start, end);
+	}
+	
+	public int countByFilters(ComunicazioneFilters filters) {
+		return comunicazioneFinder.countByFilters(filters);
+	}
 }

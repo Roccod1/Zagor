@@ -34,9 +34,11 @@ import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
+import it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -77,6 +79,15 @@ public interface ComunicazioneLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Comunicazione addComunicazione(Comunicazione comunicazione);
+
+	public Comunicazione addComunicazione(
+			long groupId, long companyId, long userId, long organizationId,
+			String userName, String titolo, String descrizione, Date dataInizio,
+			Date dataFine, long tipologiaId, Long destinatarioUserId,
+			long destinatarioOrganizationId)
+		throws PortalException;
+
+	public int countByFilters(ComunicazioneFilters filters);
 
 	/**
 	 * Creates a new comunicazione with the primary key. Does not add the comunicazione to the database.
@@ -213,6 +224,9 @@ public interface ComunicazioneLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Comunicazione fetchComunicazioneByUuidAndGroupId(
 		String uuid, long groupId);
+
+	public List<Comunicazione> findByFilters(
+		ComunicazioneFilters filters, int cur, int delta);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
