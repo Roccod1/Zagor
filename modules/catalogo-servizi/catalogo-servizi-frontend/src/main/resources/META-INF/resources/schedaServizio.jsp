@@ -10,8 +10,6 @@
 			
 			<c:choose>
 				<c:when test="${not empty servizioEnte.catalogoServizioArticleId and servizioEnte.catalogoServizioArticleId gt 0 }">
-				articleId: ${servizioEnte.catalogoServizioArticleId }
-				groupId: ${themeDisplay.siteGroupId }
 					<liferay-journal:journal-article articleId="${servizioEnte.catalogoServizioArticleId }" groupId="${themeDisplay.siteGroupId }" /> 				
 				</c:when>
 				<c:otherwise>
