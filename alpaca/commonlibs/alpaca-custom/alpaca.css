@@ -922,3 +922,8 @@ legend.alpaca-container-label
     background-color:whitesmoke;
     display: flow-root;
 }
+
+/* custom */
+.bootstrap-datetimepicker-widget.dropdown-menu {
+	overflow: inherit;
+}

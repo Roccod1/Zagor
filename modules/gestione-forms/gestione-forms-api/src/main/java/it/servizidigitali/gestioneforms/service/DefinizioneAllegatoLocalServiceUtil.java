@@ -392,12 +392,13 @@ public class DefinizioneAllegatoLocalServiceUtil {
 	public static com.liferay.portal.kernel.repository.model.FileEntry
 			uploadAllegatoDocumentMediaRepository(
 				String idAllegatoTemporaneo, String fileNameModello,
-				long groupId, long formId, long userId,
+				com.liferay.portal.kernel.model.Group group, long formId,
+				long userId,
 				com.liferay.portal.kernel.service.ServiceContext serviceContext)
 		throws Exception {
 
 		return getService().uploadAllegatoDocumentMediaRepository(
-			idAllegatoTemporaneo, fileNameModello, groupId, formId, userId,
+			idAllegatoTemporaneo, fileNameModello, group, formId, userId,
 			serviceContext);
 	}
 

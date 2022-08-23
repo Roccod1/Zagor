@@ -59,20 +59,26 @@
 
 			<div class="col">
 				<div class="form-group">
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_URI %>" label="uri-privata" type="text" value="${servizioEnte.uri}"/>
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_URI %>" label="uri-privata" type="text" value="${servizioEnte.uri}">
+			        	<aui:validator name="maxLength">255</aui:validator>
+			        </aui:input>
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_URI_GUEST %>" label="uri-pubblica" type="text" value="${servizioEnte.uriGuest}"/>				
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_URI_GUEST %>" label="uri-pubblica" type="text" value="${servizioEnte.uriGuest}">
+			        	<aui:validator name="maxLength">255</aui:validator>
+			        </aui:input>				
 				</div>
 			</div>
 			
 			<div class="col">
 				<div class="form-group">
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_SCHEDA %>" label="uri-scheda" type="text" value="${servizioEnte.uriScheda}"/>
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_SCHEDA %>" label="uri-scheda" type="text" value="${servizioEnte.uriScheda}">
+			        	<aui:validator name="maxLength">255</aui:validator>
+			        </aui:input>
 				</div>
 			</div>
 		</div>
@@ -80,15 +86,15 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-   					<fmt:formatDate value="${servizioEnte.dataInizioAttivazione}" pattern="yyyy-MM-dd" var="dataInizioAttivazioneFormattato"/>
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_INIZIO_ATTIVAZIONE %>" label="data-inizio-attivazione" type="date" value="${dataInizioAttivazioneFormattato }"/>
+   					<fmt:formatDate value="${servizioEnte.dataInizioAttivazione}" pattern="yyyy-MM-dd'T'HH:mm" var="dataInizioAttivazioneFormattato"/>
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_INIZIO_ATTIVAZIONE %>" label="data-inizio-attivazione" type="datetime-local" value="${dataInizioAttivazioneFormattato }"/>					
 				</div>
 			</div>
 			
 			<div class="col">
 				<div class="form-group">
-   					<fmt:formatDate value="${servizioEnte.dataFineAttivazione}" pattern="yyyy-MM-dd" var="dataFineAttivazioneFormattato"/>
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_FINE_ATTIVAZIONE %>" label="data-fine-attivazione" type="date" value="${dataFineAttivazioneFormattato}"/>
+   					<fmt:formatDate value="${servizioEnte.dataFineAttivazione}" pattern="yyyy-MM-dd'T'HH:mm" var="dataFineAttivazioneFormattato"/>
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_FINE_ATTIVAZIONE %>" label="data-fine-attivazione" type="datetime-local" value="${dataFineAttivazioneFormattato}"/>
 				</div>
 			</div>
 		</div>
@@ -170,3 +176,23 @@
 		</aui:button-row>
 	</aui:form>
 </div>
+
+<script type="text/javascript">
+
+	$(function(){
+		impostaDataMinimaDataFine();
+	});
+	
+	function impostaDataMinimaDataFine(){
+		var dataInizioAttivazione = $("#<portlet:namespace/>dataInizioAttivazione");
+		var dataFineAttivazione = $("#<portlet:namespace/>dataFineAttivazione");
+		var dataInizio = new Date(dataInizioAttivazione.val());
+		dataFineAttivazione.prop('min', dataInizio.toISOString().substr(0, 16));		
+	}
+	
+
+	$("#<portlet:namespace/>dataInizioAttivazione").change(() => {
+		impostaDataMinimaDataFine();
+	});
+
+</script>

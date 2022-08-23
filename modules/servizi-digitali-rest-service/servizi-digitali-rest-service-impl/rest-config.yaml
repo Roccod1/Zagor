@@ -1,0 +1,9 @@
+apiDir: "../servizi-digitali-rest-service-api/src/main/java"
+apiPackagePath: "it.servizidigitali.restservice"
+application:
+    baseURI: "/servizi-digitali-rest-service"
+    className: "ServiziDigitaliRestServiceApplication"
+    name: "ServiziDigitaliRestService"
+author: "pindi"
+clientDir: "../servizi-digitali-rest-service-client/src/main/java"
+testDir: "../servizi-digitali-rest-service-test/src/testIntegration/java"

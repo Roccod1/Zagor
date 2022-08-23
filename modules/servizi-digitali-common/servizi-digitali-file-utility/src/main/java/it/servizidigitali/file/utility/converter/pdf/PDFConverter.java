@@ -1,4 +1,4 @@
-package it.servizidigitali.file.utility.pdf;
+package it.servizidigitali.file.utility.converter.pdf;
 
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.Pdf;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.WrapperConfig;

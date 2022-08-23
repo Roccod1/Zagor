@@ -60,9 +60,6 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
-		long groupIdSitoPrincipale = groupLocalService.getGroup(themeDisplay.getCompanyId(), "Guest").getGroupId();
-
-		
 		long idForm = ParamUtil.getLong(actionRequest, GestioneFormsPortletKeys.ID_FORM);
 		String codice = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.CODICE);
 		String nome = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.NOME);
@@ -115,7 +112,7 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 			String fileNameModello = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_FILENAME + i);
 			boolean obbligatorio = ParamUtil.getBoolean(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_OBBLIGATORIO + i);
 			
-			FileEntry allegatoCaricato = definizioneAllegatoLocalService.uploadAllegatoDocumentMediaRepository(idAllegatoTemporaneo, fileNameModello, groupIdSitoPrincipale,form.getFormId(),themeDisplay.getUserId(),serviceContext);
+			FileEntry allegatoCaricato = definizioneAllegatoLocalService.uploadAllegatoDocumentMediaRepository(idAllegatoTemporaneo, fileNameModello, themeDisplay.getScopeGroup(),form.getFormId(),themeDisplay.getUserId(),serviceContext);
 			
 			DefinizioneAllegato allegato = definizioneAllegatoLocalService.createDefinizioneAllegato(0);
 			

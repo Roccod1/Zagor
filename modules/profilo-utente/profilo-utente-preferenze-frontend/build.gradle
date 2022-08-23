@@ -1,5 +1,9 @@
 dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.portal.api"
-
+	compileOnly project(":modules:profilo-utente:profilo-utente-api")
+	compileOnly project(":modules:gestione-enti:gestione-enti-api")
+	compileOnly project(":modules:profilo-utente:profilo-utente-api")
+	compileOnly project(":modules:profilo-utente:profilo-utente-portal")
+	
 	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.0.3"
 }

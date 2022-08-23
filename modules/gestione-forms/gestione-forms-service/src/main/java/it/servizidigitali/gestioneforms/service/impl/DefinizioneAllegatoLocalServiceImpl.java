@@ -22,6 +22,7 @@ import com.liferay.document.library.kernel.service.DLFolderLocalServiceUtil;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -97,40 +98,80 @@ public class DefinizioneAllegatoLocalServiceImpl
 		return idTemporaneo;
 	}
 	
-	public FileEntry uploadAllegatoDocumentMediaRepository(String idAllegatoTemporaneo, String fileNameModello, long groupId, long formId, long userId, ServiceContext serviceContext) throws Exception{
+	public FileEntry uploadAllegatoDocumentMediaRepository(String idAllegatoTemporaneo, String fileNameModello, Group group, long formId, long userId, ServiceContext serviceContext) throws Exception{
 		FileEntry allegatoCaricato = null;
 		String tmpDir = System.getProperty("java.io.tmpdir");
 		String percorsoFileTemporaneo = tmpDir + File.separator + "allegato-" + idAllegatoTemporaneo;
 		Folder cartellaAllegatiForm = null;
 		
+		long repositoryId = group.getGroupId();
+		long folderTemplateId = 0;
+		long folderTemplateRepositoryId = 0;
+		
 		byte[] byteArrayAllegatoCaricato = null;
+		DLFolder folderConfigurazionePiattaforma = null;
+		DLFolder folderForm = null;
+		DLFolder folderTemplate = null;
+		
+		Folder folderTemplateNuova = null;
 		
 		File fileTemporaneo = new File(percorsoFileTemporaneo);
 		
 		if(Validator.isNotNull(fileTemporaneo)) {
 			byteArrayAllegatoCaricato = FileUtil.getBytes(fileTemporaneo);
 			
-			DLFolder folderConfigurazionePiattaforma = DLFolderLocalServiceUtil.getFolder(groupId,
-					DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
-					"Configurazione Piattaforma");
 			
-			DLFolder folderForm = DLFolderLocalServiceUtil.getFolder(groupId, folderConfigurazionePiattaforma.getFolderId(),
-					"Form");
-			
-			DLFolder folderTemplate = DLFolderLocalServiceUtil.getFolder(groupId, folderForm.getFolderId(),"Template");
+			/* Controllo se esistono le cartelle di configurazione degli allegati
+			 * ed eventualmente si procede alla creazione
+			 */
 			
 			try {
-				DLFolder cartellaForm = DLFolderLocalServiceUtil.getFolder(groupId, folderTemplate.getFolderId(),String.valueOf(formId));		
+				folderConfigurazionePiattaforma = DLFolderLocalServiceUtil.getFolder(group.getGroupId(),
+						DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+						"Configurazione Piattaforma");
+				
+				folderForm = DLFolderLocalServiceUtil.getFolder(group.getGroupId(), folderConfigurazionePiattaforma.getFolderId(),
+						"Form");
+				
+				folderTemplate = DLFolderLocalServiceUtil.getFolder(group.getGroupId(), folderForm.getFolderId(),"Template");
+				
+			}catch(NoSuchFolderException e) {
+				_log.info("Cartella di configurazione form non presente, creazione!");
+				
+				Folder folderConfigurazionePiattaformaNuova = DLAppLocalServiceUtil.addFolder(userId,
+						repositoryId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Piattaforma",
+						"Configurazione Piattaforma", serviceContext);
+				
+				Folder folderFormNuova = DLAppLocalServiceUtil.addFolder(userId,
+						repositoryId, folderConfigurazionePiattaformaNuova.getFolderId(), "Form",
+						"Form", serviceContext);
+				
+				folderTemplateNuova = DLAppLocalServiceUtil.addFolder(userId,
+						repositoryId, folderFormNuova.getFolderId(), "Template",
+						"Template", serviceContext);
+			}
+			
+			if(Validator.isNull(folderTemplate)) {
+				folderTemplateId = folderTemplateNuova.getFolderId();
+				folderTemplateRepositoryId = folderTemplateNuova.getRepositoryId();
+			}else {
+				folderTemplateId = folderTemplate.getFolderId();
+				folderTemplateRepositoryId = folderTemplate.getRepositoryId();
+			}
+			
+			try {
+				DLFolder cartellaForm = DLFolderLocalServiceUtil.getFolder(group.getGroupId(), folderTemplateId, String.valueOf(formId));		
 				allegatoCaricato = DLAppLocalServiceUtil.addFileEntry(null, userId, cartellaForm.getRepositoryId(), cartellaForm.getFolderId(), fileNameModello, MimeTypesUtil.getContentType(fileTemporaneo), byteArrayAllegatoCaricato, null, null, serviceContext);
 				fileTemporaneo.delete();
 			}catch(NoSuchFolderException e) {
 				_log.info("Cartella allegati per form con ID " + formId + " non presente a sistema,creazione");
 				cartellaAllegatiForm = DLAppLocalServiceUtil.addFolder(userId,
-						folderTemplate.getRepositoryId(), folderTemplate.getFolderId(), String.valueOf(formId),
+						folderTemplateRepositoryId, folderTemplateId, String.valueOf(formId),
 						String.valueOf(formId), serviceContext);
 				allegatoCaricato = DLAppLocalServiceUtil.addFileEntry(null, userId, cartellaAllegatiForm.getRepositoryId(), cartellaAllegatiForm.getFolderId(), fileNameModello, MimeTypesUtil.getContentType(fileTemporaneo), byteArrayAllegatoCaricato, null, null, serviceContext);
 				fileTemporaneo.delete();
 			}
+			
 		}
 		
 		

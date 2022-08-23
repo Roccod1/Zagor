@@ -1,7 +1,5 @@
 package it.servizidigitali.gestioneenti.frontend.portlet.render;
 
-import com.liferay.petra.sql.dsl.expression.Predicate;
-import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -9,7 +7,6 @@ import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -71,6 +68,11 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 					Organization organization = organizationLocalService.getOrganization(organizationId);
 					renderRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONE, organization);
 	
+					/*
+					 * se servizioId non e' null si tratta di modifica servizio esistente quindi imposto la lista
+					 * completa per poter visualizzare il nome del servizio associato a servizioEnte
+					 * altrimenti filtro la lista rimuovendo i servizi gia' attivi per l'ente
+					 * */
 					if(Validator.isNotNull(servizioId)) {
 						ServizioEntePK servizioEntePK = new ServizioEntePK(servizioId, organizationId);
 						ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);
@@ -99,8 +101,9 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 		
 		List<Servizio> listaFinita = new ArrayList<Servizio>(listaTuttiServizi);
 		List<ServizioEnte> listaServiziAttivi = servizioEnteLocalService.getServiziEnte(organizationId);
+		
+		//rimuovo dalla lista servizi quelli gia' attivi per lo specifico ente
 		for(Servizio servizio : listaTuttiServizi) {
-//			Servizio servizio = listaFinita.get(0);
 			for(ServizioEnte servizioAttivo : listaServiziAttivi) {
 				if(servizioAttivo.getServizioId() == servizio.getServizioId()) {
 					listaFinita.remove(servizio);

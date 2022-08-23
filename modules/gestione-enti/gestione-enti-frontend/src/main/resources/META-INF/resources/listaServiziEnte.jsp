@@ -10,7 +10,6 @@
 	<portlet:param name="<%=GestioneEntiPortletKeys.ORGANIZZAZIONE_ID %>" value="${organizzazione.organizationId}"/>
 </portlet:renderURL>
 <div class="container pl-0 pr-0 mb-4 mt-4">
-
 	<div class="row d-flex align-items-center">
 		<div class="col">
 			<h4>${organizzazione.name }</h4>

@@ -1,8 +1,6 @@
 package it.servizidigitali.gestioneenti.frontend.portlet;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
@@ -16,22 +14,15 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portlet.RenderRequestFactory;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import javax.portlet.MutablePortletParameters;
-import javax.portlet.MutableRenderParameters;
 import javax.portlet.Portlet;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
-import javax.portlet.PortletParameters;
-import javax.portlet.PortletRequest;
-import javax.portlet.RenderParameters;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -39,9 +30,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneenti.frontend.constants.GestioneEntiPortletKeys;
-import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
-import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 
 /**
@@ -64,7 +53,8 @@ import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 ) 
 public class GestioneEntiPortlet extends MVCPortlet {
 
-	public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//	2022-07-25T11:02
+	public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 	
 	private static final Log _log = LogFactoryUtil.getLog(GestioneEntiPortlet.class);
 
@@ -90,42 +80,39 @@ public class GestioneEntiPortlet extends MVCPortlet {
 		String codiceIpa = ParamUtil.getString(renderRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_CODICE_IPA_RICERCA);
 		String nome = ParamUtil.getString(renderRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_NOME_RICERCA);
 		
-		String jspDaRenderizzare = null;
-		
 		ServiceContext serviceContext = null;
 		try {
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
 			ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
 			
-			//recupero l'siteGroupOrganizationId dal siteGroup
+			//recupero il siteGroupOrganizationId dal siteGroup
 			Long siteGroupOrganizationId = themeDisplay.getSiteGroup().getOrganizationId();
 			_log.debug("siteGroupOrganizationId: "+ siteGroupOrganizationId);
 
-			if(Validator.isNotNull(siteGroupOrganizationId) && siteGroupOrganizationId > 0) {
-				jspDaRenderizzare = GestioneEntiPortletKeys.JSP_LISTA_SERVIZI_ENTE;
-
-				List<ServizioEnte> serviziEnte = servizioEnteLocalService.getServiziEnte(siteGroupOrganizationId);
-				renderRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONE_SERVIZI, serviziEnte);
-				
-				List<Servizio> listaServizi = servizioLocalService.getServizios(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-				renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_SERVIZI, listaServizi);							
-
-				Organization organization = organizationLocalService.getOrganization(siteGroupOrganizationId);
-				renderRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONE, organization);
-				
-				renderRequest.setAttribute(GestioneEntiPortletKeys.PULSANTE_PAGINA_PRINCIPALE_TOGGLE, false);
-				
-			}else {
-				if (Validator.isNull(listaOrganizations)) {
+			
+			/*
+			 * verifico se il site ha un organizationId. se maggiore di 0 mostro solo i servizi per quell'ente 
+			 * altrimenti la lista di enti presenti
+			 * */
+			if (Validator.isNull(listaOrganizations)) {
+				if(Validator.isNotNull(siteGroupOrganizationId) && siteGroupOrganizationId > 0) {
+					/*
+					 * l'organizationId e' magiore di 0 => si tratta di un sito specifico, recupero l'organization e disabilito la ricerca
+					 * */
+					Organization organization = organizationLocalService.getOrganization(siteGroupOrganizationId);
+					listaOrganizations = new ArrayList<Organization>();
+					listaOrganizations.add(organization);
+					renderRequest.setAttribute(GestioneEntiPortletKeys.DISABILITA_RICERCA, true);
+				}else {
 					listaOrganizations = servizioEnteLocalService.findOrganizationsByParams(nome, codiceIpa, cur, delta, orderByCol, orderByType);
-				
-					if(Validator.isNull(listaOrganizations)) {
-						_log.warn("Lista organizzazioni e' vuota o null");
-						listaOrganizations = new ArrayList<Organization>();							
-					}
 				}
-				renderRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONI, listaOrganizations);
-			}			
+				if(Validator.isNull(listaOrganizations)) {
+					_log.warn("Lista organizzazioni e' vuota o null");
+					listaOrganizations = new ArrayList<Organization>();							
+				}
+			}	
+			
+			renderRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONI, listaOrganizations);
 		} catch (Exception e) {
 			_log.error("Errore render portlet", e);
 		}
@@ -136,10 +123,6 @@ public class GestioneEntiPortlet extends MVCPortlet {
 		SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
 		SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
 
-		if(Validator.isNotNull(jspDaRenderizzare)) {
-			include(jspDaRenderizzare, renderRequest, renderResponse);			
-		}else {
-			super.render(renderRequest, renderResponse);
-		}
+		super.render(renderRequest, renderResponse);
 	}
 }
