@@ -33,6 +33,7 @@ public class GestioneEntiPortletKeys {
 	public static final String SERVIZIO_URI_GUEST = "uriGuest";
 	public static final String SERVIZIO_CATALOGO_SERVIZI_ARTICLE_ID = "catalogoServizioArticleId";
 	public static final String SERVIZIO_AUTENTICAZIONE = "autenticazione";
+	public static final String SERVIZIO_LIVELLO_AUTENTICAZIONE = "livelloAutenticazione";
 	public static final String SERVIZIO_DATA_INIZIO_ATTIVAZIONE = "dataInizioAttivazione";
 	public static final String SERVIZIO_DATA_FINE_ATTIVAZIONE = "dataFineAttivazione";
 	public static final String SERVIZIO_CITTADINO = "cittadino";

@@ -62,6 +62,10 @@ public class ServizioEnteTable extends BaseTable<ServizioEnteTable> {
 		createColumn(
 			"autenticazione", Boolean.class, Types.BOOLEAN,
 			Column.FLAG_DEFAULT);
+	public final Column<ServizioEnteTable, Integer> livelloAutenticazione =
+		createColumn(
+			"livelloAutenticazione", Integer.class, Types.INTEGER,
+			Column.FLAG_DEFAULT);
 	public final Column<ServizioEnteTable, Date> dataInizioAttivazione =
 		createColumn(
 			"dataInizioAttivazione", Date.class, Types.TIMESTAMP,

@@ -57,6 +57,7 @@ public class ServizioEnteWrapper
 		attributes.put(
 			"catalogoServizioArticleId", getCatalogoServizioArticleId());
 		attributes.put("autenticazione", isAutenticazione());
+		attributes.put("livelloAutenticazione", getLivelloAutenticazione());
 		attributes.put("dataInizioAttivazione", getDataInizioAttivazione());
 		attributes.put("dataFineAttivazione", getDataFineAttivazione());
 		attributes.put("cittadino", isCittadino());
@@ -152,6 +153,13 @@ public class ServizioEnteWrapper
 
 		if (autenticazione != null) {
 			setAutenticazione(autenticazione);
+		}
+
+		Integer livelloAutenticazione = (Integer)attributes.get(
+			"livelloAutenticazione");
+
+		if (livelloAutenticazione != null) {
+			setLivelloAutenticazione(livelloAutenticazione);
 		}
 
 		Date dataInizioAttivazione = (Date)attributes.get(
@@ -382,6 +390,16 @@ public class ServizioEnteWrapper
 	@Override
 	public boolean getIseeInps() {
 		return model.getIseeInps();
+	}
+
+	/**
+	 * Returns the livello autenticazione of this servizio ente.
+	 *
+	 * @return the livello autenticazione of this servizio ente
+	 */
+	@Override
+	public int getLivelloAutenticazione() {
+		return model.getLivelloAutenticazione();
 	}
 
 	/**
@@ -789,6 +807,16 @@ public class ServizioEnteWrapper
 	@Override
 	public void setIseeInps(boolean iseeInps) {
 		model.setIseeInps(iseeInps);
+	}
+
+	/**
+	 * Sets the livello autenticazione of this servizio ente.
+	 *
+	 * @param livelloAutenticazione the livello autenticazione of this servizio ente
+	 */
+	@Override
+	public void setLivelloAutenticazione(int livelloAutenticazione) {
+		model.setLivelloAutenticazione(livelloAutenticazione);
 	}
 
 	/**

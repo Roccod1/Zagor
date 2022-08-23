@@ -286,6 +286,20 @@ public interface ServizioEnteModel
 	public void setAutenticazione(boolean autenticazione);
 
 	/**
+	 * Returns the livello autenticazione of this servizio ente.
+	 *
+	 * @return the livello autenticazione of this servizio ente
+	 */
+	public int getLivelloAutenticazione();
+
+	/**
+	 * Sets the livello autenticazione of this servizio ente.
+	 *
+	 * @param livelloAutenticazione the livello autenticazione of this servizio ente
+	 */
+	public void setLivelloAutenticazione(int livelloAutenticazione);
+
+	/**
 	 * Returns the data inizio attivazione of this servizio ente.
 	 *
 	 * @return the data inizio attivazione of this servizio ente
