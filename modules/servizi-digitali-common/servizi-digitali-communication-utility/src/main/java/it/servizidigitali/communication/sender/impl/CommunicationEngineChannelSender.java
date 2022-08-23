@@ -30,7 +30,7 @@ public abstract class CommunicationEngineChannelSender {
 	protected String url;
 	protected boolean sendEnabled;
 
-	public Result sendMessage(Message message) {
+	public Result sendMessage(Message message) throws CommunicationException {
 
 		if (!sendEnabled) {
 			throw new CommunicationException("Invio tramite Communication Engine disabilitato.");
@@ -73,7 +73,7 @@ public abstract class CommunicationEngineChannelSender {
 		return result;
 	}
 
-	public Result sendNowMessage(Message message) {
+	public Result sendNowMessage(Message message) throws CommunicationException {
 
 		if (!sendEnabled) {
 			throw new CommunicationException("Invio tramite Communication Engine disabilitato.");
@@ -116,5 +116,5 @@ public abstract class CommunicationEngineChannelSender {
 	 * @param comunicazione
 	 * @return
 	 */
-	protected abstract Message getMessage(Comunicazione comunicazione);
+	protected abstract Message getMessage(Comunicazione comunicazione) throws CommunicationException;
 }

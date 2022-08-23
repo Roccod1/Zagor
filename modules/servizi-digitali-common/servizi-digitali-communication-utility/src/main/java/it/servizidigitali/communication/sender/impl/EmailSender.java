@@ -13,11 +13,11 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
 
+import it.servizidigitali.communication.configuration.AccountEnteConfiguration;
 import it.servizidigitali.communication.configuration.CommunicationConfiguration;
 import it.servizidigitali.communication.exception.CommunicationException;
 import it.servizidigitali.communication.model.Allegato;
 import it.servizidigitali.communication.model.Comunicazione;
-import it.servizidigitali.communication.model.DatiEnte;
 import it.servizidigitali.communication.model.Utente;
 import it.servizidigitali.communication.model.ce.Attachment;
 import it.servizidigitali.communication.model.ce.Contact;
@@ -29,23 +29,26 @@ import it.servizidigitali.communication.model.ce.Message;
  * @author pindi
  *
  */
-@Component(immediate = true, property = {}, service = EmailSender.class, configurationPid = "it.servizidigitali.communication.configuration.CommunicationConfiguration")
+@Component(immediate = true, property = {}, service = EmailSender.class, configurationPid = { "it.servizidigitali.communication.configuration.CommunicationConfiguration",
+		"it.servizidigitali.communication.configuration.AccountEnteConfiguration" })
 public class EmailSender extends CommunicationEngineChannelSender {
 
 	private static final String CHANNEL = "email";
 
 	private volatile CommunicationConfiguration communicationConfiguration;
+	private volatile AccountEnteConfiguration accountEnteConfiguration;
 
 	@Activate
 	@Modified
 	private void activate(Map<String, Object> props) {
 		communicationConfiguration = ConfigurableUtil.createConfigurable(CommunicationConfiguration.class, props);
+		accountEnteConfiguration = ConfigurableUtil.createConfigurable(AccountEnteConfiguration.class, props);
 		url = communicationConfiguration.communicationEngineBasePath();
 		sendEnabled = communicationConfiguration.communicationEngineSendEnabled();
 	}
 
 	@Override
-	public Message getMessage(Comunicazione comunicazione) {
+	public Message getMessage(Comunicazione comunicazione) throws CommunicationException {
 
 		try {
 			Message message = new Message();
@@ -54,10 +57,10 @@ public class EmailSender extends CommunicationEngineChannelSender {
 			message.setSubject(comunicazione.getOggetto());
 			message.setText(comunicazione.getTesto());
 			String from = null;
-			DatiEnte datiEnte = comunicazione.getDatiComune();
-			if (datiEnte != null) {
-				message.setExternalId(datiEnte.getTenantId());
-				from = datiEnte.getMailFrom();
+			boolean accountEnabled = accountEnteConfiguration.accountEmailEnabled();
+			if (accountEnabled) {
+				message.setExternalId(accountEnteConfiguration.tenantId());
+				from = accountEnteConfiguration.emailFrom();
 			}
 			message.setImportant(false);
 			message.setOneShot(comunicazione.isInvioMultiplo());
@@ -98,7 +101,7 @@ public class EmailSender extends CommunicationEngineChannelSender {
 			}
 
 			message.setTo(contactsTo);
-			message.setAccount(getEmailAccount(datiEnte));
+			message.setAccount(getEmailAccount());
 			return message;
 		}
 		catch (Exception e) {
@@ -106,24 +109,24 @@ public class EmailSender extends CommunicationEngineChannelSender {
 		}
 	}
 
-	private EmailAccount getEmailAccount(DatiEnte datiEnte) {
+	private EmailAccount getEmailAccount() {
 		EmailAccount emailAccount = null;
-		if (datiEnte != null) {
+		if (accountEnteConfiguration.accountEmailEnabled()) {
 			emailAccount = new EmailAccount();
-			emailAccount.setHost(datiEnte.getMailHost());
-			emailAccount.setPort(datiEnte.getMailPort());
-			emailAccount.setProtocol(datiEnte.getMailProtocol());
+			emailAccount.setHost(accountEnteConfiguration.emailHost());
+			emailAccount.setPort(accountEnteConfiguration.emailPort());
+			emailAccount.setProtocol(accountEnteConfiguration.emailProtocol());
 			emailAccount.setType(CHANNEL);
-			emailAccount.setUsername(datiEnte.getMailUsername());
-			emailAccount.setPassword(datiEnte.getMailPassword());
-			emailAccount.setSocketFactoryPort(datiEnte.getMailSmtpSocketFactoryPort());
-			emailAccount.setAuth(datiEnte.getMailSmtpAuth() != null ? String.valueOf(datiEnte.getMailSmtpAuth()) : "");
-			emailAccount.setStarttls(datiEnte.getMailSmtpStarttlsEnable());
-			emailAccount.setDebug(datiEnte.getMailSmtpDebug());
-			emailAccount.setStarttlsRequired(datiEnte.getMailSmtpStarttlsRequired());
-			emailAccount.setSocketFactoryFallback(datiEnte.getMailSmtpSocketFactoryFallback());
-			emailAccount.setFrom(datiEnte.getMailFrom());
-			emailAccount.setSslProtocols(datiEnte.getMailSmtpSslProtocols());
+			emailAccount.setUsername(accountEnteConfiguration.emailUsername());
+			emailAccount.setPassword(accountEnteConfiguration.emailPassword());
+			emailAccount.setSocketFactoryPort(accountEnteConfiguration.emailSmtpSocketFactoryPort());
+			emailAccount.setAuth(String.valueOf(accountEnteConfiguration.emailSmtpAuth()));
+			emailAccount.setStarttls(accountEnteConfiguration.emailSmtpStarttlsEnable());
+			emailAccount.setDebug(accountEnteConfiguration.emailSmtpDebug());
+			emailAccount.setStarttlsRequired(accountEnteConfiguration.emailSmtpStarttlsRequired());
+			emailAccount.setSocketFactoryFallback(accountEnteConfiguration.emailSmtpSocketFactoryFallback());
+			emailAccount.setFrom(accountEnteConfiguration.emailFrom());
+			emailAccount.setSslProtocols(accountEnteConfiguration.emailSmtpSslProtocols());
 		}
 		return emailAccount;
 	}

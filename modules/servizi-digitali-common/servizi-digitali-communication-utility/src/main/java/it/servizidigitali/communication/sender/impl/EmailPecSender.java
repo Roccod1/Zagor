@@ -13,11 +13,11 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
 
+import it.servizidigitali.communication.configuration.AccountEnteConfiguration;
 import it.servizidigitali.communication.configuration.CommunicationConfiguration;
 import it.servizidigitali.communication.exception.CommunicationException;
 import it.servizidigitali.communication.model.Allegato;
 import it.servizidigitali.communication.model.Comunicazione;
-import it.servizidigitali.communication.model.DatiEnte;
 import it.servizidigitali.communication.model.Utente;
 import it.servizidigitali.communication.model.ce.Attachment;
 import it.servizidigitali.communication.model.ce.Contact;
@@ -29,22 +29,26 @@ import it.servizidigitali.communication.model.ce.PecAccount;
  * @author pindi
  *
  */
-@Component(immediate = true, property = {}, service = EmailPecSender.class, configurationPid = "it.servizidigitali.communication.configuration.CommunicationConfiguration")
+@Component(immediate = true, property = {}, service = EmailPecSender.class, configurationPid = { "it.servizidigitali.communication.configuration.CommunicationConfiguration",
+		"it.servizidigitali.communication.configuration.AccountEnteConfiguration" })
 public class EmailPecSender extends CommunicationEngineChannelSender {
 
 	private static final String CHANNEL = "pec";
 
 	private volatile CommunicationConfiguration communicationConfiguration;
+	private volatile AccountEnteConfiguration accountEnteConfiguration;
 
 	@Activate
 	@Modified
 	private void activate(Map<String, Object> props) {
 		communicationConfiguration = ConfigurableUtil.createConfigurable(CommunicationConfiguration.class, props);
+		accountEnteConfiguration = ConfigurableUtil.createConfigurable(AccountEnteConfiguration.class, props);
 		url = communicationConfiguration.communicationEngineBasePath();
+		sendEnabled = communicationConfiguration.communicationEngineSendEnabled();
 	}
 
 	@Override
-	public Message getMessage(Comunicazione comunicazione) {
+	public Message getMessage(Comunicazione comunicazione) throws CommunicationException {
 
 		try {
 			Message message = new Message();
@@ -53,10 +57,10 @@ public class EmailPecSender extends CommunicationEngineChannelSender {
 			message.setSubject(comunicazione.getOggetto());
 			message.setText(comunicazione.getTesto());
 			String from = null;
-			DatiEnte datiEnte = comunicazione.getDatiComune();
-			if (datiEnte != null) {
-				message.setExternalId(datiEnte.getTenantId());
-				from = datiEnte.getMailFrom();
+			boolean accountEnabled = accountEnteConfiguration.accountPecEnabled();
+			if (accountEnabled) {
+				message.setExternalId(accountEnteConfiguration.tenantId());
+				from = accountEnteConfiguration.pecFrom();
 			}
 			message.setImportant(false);
 			message.setOneShot(comunicazione.isInvioMultiplo());
@@ -97,7 +101,7 @@ public class EmailPecSender extends CommunicationEngineChannelSender {
 			}
 
 			message.setTo(contactsTo);
-			message.setAccount(getPecAccount(comunicazione.getDatiComune()));
+			message.setAccount(getPecAccount());
 			return message;
 		}
 		catch (Exception e) {
@@ -105,24 +109,24 @@ public class EmailPecSender extends CommunicationEngineChannelSender {
 		}
 	}
 
-	private PecAccount getPecAccount(DatiEnte datiEnte) {
+	private PecAccount getPecAccount() {
 		PecAccount pecAccount = null;
-		if (datiEnte != null) {
+		if (accountEnteConfiguration.accountPecEnabled()) {
 			pecAccount = new PecAccount();
-			pecAccount.setHost(datiEnte.getPecHost());
-			pecAccount.setPort(datiEnte.getPecPort());
-			pecAccount.setProtocol(datiEnte.getPecProtocol());
+			pecAccount.setHost(accountEnteConfiguration.pecHost());
+			pecAccount.setPort(accountEnteConfiguration.pecPort());
+			pecAccount.setProtocol(accountEnteConfiguration.pecProtocol());
 			pecAccount.setType(CHANNEL);
-			pecAccount.setUsername(datiEnte.getPecUsername());
-			pecAccount.setPassword(datiEnte.getPecPassword());
-			pecAccount.setSocketFactoryPort(datiEnte.getPecSmtpSocketFactoryPort());
-			pecAccount.setAuth(datiEnte.getPecSmtpAuth() != null ? String.valueOf(datiEnte.getPecSmtpAuth()) : "");
-			pecAccount.setStarttls(datiEnte.getPecSmtpStarttlsEnable());
-			pecAccount.setDebug(datiEnte.getPecSmtpDebug());
-			pecAccount.setStarttlsRequired(datiEnte.getPecSmtpStarttlsRequired());
-			pecAccount.setSocketFactoryFallback(datiEnte.getPecSmtpSocketFactoryFallback());
-			pecAccount.setFrom(datiEnte.getPecFrom());
-			pecAccount.setSslProtocols(datiEnte.getPecSmtpSslProtocols());
+			pecAccount.setUsername(accountEnteConfiguration.pecUsername());
+			pecAccount.setPassword(accountEnteConfiguration.pecPassword());
+			pecAccount.setSocketFactoryPort(accountEnteConfiguration.pecSmtpSocketFactoryPort());
+			pecAccount.setAuth(String.valueOf(accountEnteConfiguration.pecSmtpAuth()));
+			pecAccount.setStarttls(accountEnteConfiguration.pecSmtpStarttlsEnable());
+			pecAccount.setDebug(accountEnteConfiguration.pecSmtpDebug());
+			pecAccount.setStarttlsRequired(accountEnteConfiguration.pecSmtpStarttlsRequired());
+			pecAccount.setSocketFactoryFallback(accountEnteConfiguration.pecSmtpSocketFactoryFallback());
+			pecAccount.setFrom(accountEnteConfiguration.pecFrom());
+			pecAccount.setSslProtocols(accountEnteConfiguration.pecSmtpSslProtocols());
 		}
 		return pecAccount;
 	}

@@ -4,7 +4,7 @@ package it.servizidigitali.communication.exception;
  * @author Gianluca Pindinelli
  *
  */
-public class CommunicationException extends RuntimeException {
+public class CommunicationException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 

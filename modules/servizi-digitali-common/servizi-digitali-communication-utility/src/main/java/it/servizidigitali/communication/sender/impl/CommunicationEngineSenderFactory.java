@@ -4,7 +4,6 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.communication.enumeration.Canale;
-import it.servizidigitali.communication.exception.CommunicationException;
 
 /**
  *
@@ -37,13 +36,13 @@ public class CommunicationEngineSenderFactory {
 				return null;
 
 			case CKAN:
-				throw new CommunicationException("Not yet implemented");
+				throw new UnsupportedOperationException("Not yet implemented");
 
 			case FACEBOOK:
-				throw new CommunicationException("Not yet implemented");
+				throw new UnsupportedOperationException("Not yet implemented");
 
 			case TWITTER:
-				throw new CommunicationException("Not yet implemented");
+				throw new UnsupportedOperationException("Not yet implemented");
 
 			default:
 				return null;

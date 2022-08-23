@@ -16,16 +16,14 @@ public class Comunicazione implements Serializable {
 	private String testo;
 	private List<Allegato> allegati;
 	private List<Utente> utenti;
-	private DatiEnte datiEnte;
 	private String disclaimer;
 	private boolean invioMultiplo = true;
 
-	public Comunicazione(String oggetto, String testo, List<Utente> utenti, List<Allegato> allegati, boolean invioMultiplo, String disclaimer, DatiEnte datiEnte) {
+	public Comunicazione(String oggetto, String testo, List<Utente> utenti, List<Allegato> allegati, boolean invioMultiplo, String disclaimer) {
 		this.oggetto = oggetto;
 		this.testo = testo;
 		this.allegati = allegati;
 		this.utenti = utenti;
-		this.datiEnte = datiEnte;
 		this.disclaimer = disclaimer;
 		this.invioMultiplo = invioMultiplo;
 	}
@@ -84,20 +82,6 @@ public class Comunicazione implements Serializable {
 	 */
 	public void setUtenti(List<Utente> utenti) {
 		this.utenti = utenti;
-	}
-
-	/**
-	 * @return the datiEnte
-	 */
-	public DatiEnte getDatiComune() {
-		return datiEnte;
-	}
-
-	/**
-	 * @param datiEnte the datiEnte to set
-	 */
-	public void setDatiComune(DatiEnte datiEnte) {
-		this.datiEnte = datiEnte;
 	}
 
 	/**

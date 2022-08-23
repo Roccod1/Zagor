@@ -13,7 +13,7 @@ public interface CommunicationSender {
 
 	/**
 	 * Invio comunicazione
-	 * 
+	 *
 	 * @param comunicazione
 	 * @param canale
 	 * @return
