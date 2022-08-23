@@ -415,6 +415,18 @@ public class ProcessoLocalServiceWrapper
 		return _processoLocalService.recuperaProcessoXml(fileEntryId);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.repository.model.FileEntry
+			updateDocumentLibrary(
+				String file, String nomeFile, String nomeCartella, long userId,
+				com.liferay.portal.kernel.service.ServiceContext serviceCtx,
+				long fileEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _processoLocalService.updateDocumentLibrary(
+			file, nomeFile, nomeCartella, userId, serviceCtx, fileEntryId);
+	}
+
 	/**
 	 * Updates the processo in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

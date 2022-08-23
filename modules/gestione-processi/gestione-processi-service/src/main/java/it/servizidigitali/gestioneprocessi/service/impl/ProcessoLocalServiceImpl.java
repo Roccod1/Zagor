@@ -96,11 +96,22 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 		return processoXmlString;
 	}
 	
-	
+	public FileEntry updateDocumentLibrary(String file, String nomeFile, String nomeCartella, long userId, ServiceContext serviceCtx, long fileEntryId) throws PortalException {
+		FileEntry fileAggiornato = null;
+		byte[] fileByteArray = file.getBytes();
+		
+		if(fileEntryId>0) {
+			fileAggiornato = DLAppLocalServiceUtil.updateFileEntry(userId, fileEntryId, nomeFile, ContentTypes.TEXT_XML, null, null, null, null, null, fileByteArray, null, null, serviceCtx);
+		}
+		return fileAggiornato;
+	}
+
 	public FileEntry uploadDocumentLibrary(String file, String nomeFile, String nomeCartella, Group group, long userId, ServiceContext serviceCtx) throws PortalException {
 		FileEntry fileCaricato = null;
 		long repositoryId = group.getGroupId();
 		byte[] fileByteArray = file.getBytes();
+		
+		nomeFile = nomeFile + "-" + "";
 		
 		if(Validator.isNotNull(file)) {
 			

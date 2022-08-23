@@ -322,6 +322,11 @@ public interface ProcessoLocalService
 
 	public String recuperaProcessoXml(long fileEntryId) throws Exception;
 
+	public FileEntry updateDocumentLibrary(
+			String file, String nomeFile, String nomeCartella, long userId,
+			ServiceContext serviceCtx, long fileEntryId)
+		throws PortalException;
+
 	/**
 	 * Updates the processo in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

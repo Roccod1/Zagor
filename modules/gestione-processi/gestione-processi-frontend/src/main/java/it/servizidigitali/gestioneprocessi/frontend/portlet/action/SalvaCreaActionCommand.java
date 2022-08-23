@@ -9,7 +9,6 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -57,17 +56,14 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 		long idProcesso = ParamUtil.getLong(actionRequest, GestioneProcessiPortletKeys.ID_PROCESSO);
 		String codice = ParamUtil.getString(actionRequest, GestioneProcessiPortletKeys.CODICE);
 		String nome = ParamUtil.getString(actionRequest, GestioneProcessiPortletKeys.NOME);
-		String modelloXml = ParamUtil.getString(actionRequest, "modelloXml");;
+		String modelloXml = ParamUtil.getString(actionRequest, GestioneProcessiPortletKeys.MODELLOXML);
 		FileEntry fileCaricato = null;
 		
 		Processo processo = null;
 		
-		try {
-			processo = processoLocalService.getProcessoByCodice(codice);
-			_log.error("Processo già esistente con codice: " + codice);
-			SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_PROCESSO_CODICE_ESISTENTE);
-			return;
-		}catch(NoSuchProcessoException e) {
+		if(idProcesso>0) {
+			
+			processo = processoLocalService.getProcesso(idProcesso);
 			
 			if(Validator.isNull(codice)) {
 				SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
@@ -79,16 +75,8 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 				return;
 			}
 			
-			if(Validator.isNotNull(idProcesso) && idProcesso>0) {
-				processo = processoLocalService.getProcesso(idProcesso);
-				SessionMessages.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE);
-			}else {
-				processo = processoLocalService.createProcesso(counterLocalService.increment());
-				SessionMessages.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE);
-			}
-			
 			if(Validator.isNotNull(modelloXml)) {
-				fileCaricato = processoLocalService.uploadDocumentLibrary(modelloXml, nome, nome, themeDisplay.getScopeGroup(), themeDisplay.getUserId(), serviceContext);
+				fileCaricato = processoLocalService.updateDocumentLibrary(modelloXml, nome, nome, themeDisplay.getUserId(), serviceContext,processo.getFileEntryId());
 				processo.setFileEntryId(fileCaricato.getFileEntryId());
 			}
 			
@@ -98,10 +86,42 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 			processo.setUserId(serviceContext.getThemeDisplay().getUserId());
 			processo.setGroupId(serviceContext.getThemeDisplay().getScopeGroupId());
 			processo.setUserName(serviceContext.getThemeDisplay().getUser().getScreenName());
-					
-			processoLocalService.updateProcesso(processo);
+		}else {
+			try {
+				processo = processoLocalService.getProcessoByCodice(codice);
+				_log.error("Processo già esistente con codice: " + codice);
+				SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_PROCESSO_CODICE_ESISTENTE);
+				return;
+			}catch(NoSuchProcessoException e) {
+				
+				processo = processoLocalService.createProcesso(counterLocalService.increment());
+				
+				if(Validator.isNull(codice)) {
+					SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+					return;
+				}
+				
+				if(Validator.isNull(nome)) {
+					SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+					return;
+				}
+				
+				if(Validator.isNotNull(modelloXml)) {
+					fileCaricato = processoLocalService.uploadDocumentLibrary(modelloXml, nome, nome, themeDisplay.getScopeGroup(), themeDisplay.getUserId(), serviceContext);
+					processo.setFileEntryId(fileCaricato.getFileEntryId());
+				}
+				
+				processo.setCodice(codice);
+				processo.setNome(nome);
+				processo.setAttivo(true);
+				processo.setUserId(serviceContext.getThemeDisplay().getUserId());
+				processo.setGroupId(serviceContext.getThemeDisplay().getScopeGroupId());
+				processo.setUserName(serviceContext.getThemeDisplay().getUser().getScreenName());
+						
+			}	
 		}
 		
+		processoLocalService.updateProcesso(processo);
 		
 	}
 

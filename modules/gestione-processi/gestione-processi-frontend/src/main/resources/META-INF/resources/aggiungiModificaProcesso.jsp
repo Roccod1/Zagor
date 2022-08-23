@@ -34,9 +34,18 @@
 	
 			<div class="col-6">
 				<div class="form-group">
-					<aui:input label="codice" id="codice" name="<%=GestioneProcessiPortletKeys.CODICE %>" type="text" value="${processo.codice}">
-					<aui:validator name="required"/>
-					</aui:input>
+					<c:choose>
+						<c:when test="${processo.processoId > 0}">
+							<aui:input label="codice" name="<%=GestioneProcessiPortletKeys.CODICE %>" type="text" value="${processo.codice}" readonly="true">
+							<aui:validator name="required"/>
+							</aui:input>	 
+						</c:when>
+						<c:otherwise>
+							<aui:input label="codice" name="<%=GestioneProcessiPortletKeys.CODICE %>" type="text" value="${processo.codice}">
+							<aui:validator name="required"/>
+							</aui:input>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 			
@@ -62,7 +71,7 @@
 </div>
 
 <div id="canvas"></div>
-<div id="js-properties-panel"></div>
+<div id="properties"></div>
 
 <script>
 
