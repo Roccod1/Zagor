@@ -88,7 +88,7 @@
 			</c:otherwise>
 		</c:choose>
 		
-		<liferay-ui:search-container-column-text name="dataInvio" value="${comunicazioneDataInvio}" />
+		<liferay-ui:search-container-column-text name="data-invio" value="${comunicazioneDataInvio}" />
 		<liferay-ui:search-container-column-text name="titolo" value="${comunicazione.titolo}" />
 		<liferay-ui:search-container-column-text name="tipologia" value="${comunicazione.tipologia}" />
 		<liferay-ui:search-container-column-text name="stato" value="${comunicazione.stato}" translate="true" />

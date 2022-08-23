@@ -9,6 +9,10 @@
 <%@ taglib uri="http://liferay.com/tld/editor" prefix="liferay-editor" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<%@page import="it.servizidigitali.gestionecomunicazioni.frontend.dto.ComunicazioneDTO"%>
+<%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
+<%@page import="com.liferay.portal.kernel.util.WebKeys"%>
+
 <liferay-theme:defineObjects />
 
 <portlet:defineObjects />
