@@ -1,43 +1,66 @@
-<aui:form action="#">
+<portlet:renderURL var="searchURL">
+</portlet:renderURL>
+
+<portlet:renderURL var="resetURL">
+	<portlet:param name="queryTab" value="${queryTab}" />
+</portlet:renderURL>
+
+<aui:form action="${searchURL}">
+	<aui:input type="hidden" name="queryTab" value="${queryTab}" />
 	<div class="row">
 		<div class="col-6">
-			<aui:input name="queryNome" label="nome-cognome-richiedente" />
+			<aui:input name="queryNome" label="nome-cognome-richiedente" value="${queryNome}" />
 		</div>
 		<div class="col-6">
-			<aui:input name="queryCf" label="codice-fiscale-richiedente" />
+			<aui:input name="queryCf" label="codice-fiscale-richiedente" value="${queryCf}" />
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-6">
-			<aui:input name="queryRichiestaId" label="id-richiesta" />
+			<aui:input name="queryRichiestaId" label="id-richiesta" value="${queryRichiestaId}" />
 		</div>
 		<div class="col-6">
-			<aui:input name="queryNumProt" label="numero-protocollo" />
+			<aui:input name="queryNumProt" label="numero-protocollo" value="${queryNumProt}" />
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-3">
-			<aui:input name="queryDataRichDa" label="data-richiesta-da" />
+			<aui:input name="queryDataRichDa" label="data-richiesta-da" value="${queryDataRichDa}" />
 		</div>
 		<div class="col-3">
-			<aui:input name="queryDataRichA" label="data-richiesta-a" />
+			<aui:input name="queryDataRichA" label="data-richiesta-a" value="${queryDataRichA}" />
 		</div>
 		<div class="col-3">
-			<aui:select name="queryAut" label="tipo-autenticazione">
+			<aui:select name="queryAut" label="tipo-autenticazione" value="${queryAut}">
+				<aui:option value="0">Val 1</aui:option>
+				<aui:option value="1">Val 2</aui:option>
+				<aui:option value="2">Val 3</aui:option>
 			</aui:select>
 		</div>
 		<div class="col-3">
-			<aui:select name="queryStato" label="stato-richiesta">
+			<aui:select name="queryStato" label="stato-richiesta" value="${queryStato}">
+				<aui:option value="0">Val 1</aui:option>
+				<aui:option value="1">Val 2</aui:option>
+				<aui:option value="2">Val 3</aui:option>
 			</aui:select>
 		</div>
 	</div>
 	<div class="d-flex justify-content-end">
-		<a href="#" class="btn btn-secondary mr-1"><liferay-ui:message key="annulla" /></a>
+		<a href="${resetURL}" class="btn btn-secondary mr-1"><liferay-ui:message key="annulla" /></a>
 		<aui:button type="submit" value="cerca" />
 	</div>
 </aui:form>
 
 <liferay-portlet:renderURL varImpl="iteratorURL">
+	<portlet:param name="queryTab" value="${queryTab}" />
+	<portlet:param name="queryNome" value="${queryNome}" />
+	<portlet:param name="queryCf" value="${queryCf}" />
+	<portlet:param name="queryRichiestaId" value="${queryRichiestaId}" />
+	<portlet:param name="queryNumProt" value="${queryNumProt}" />
+	<portlet:param name="queryDataRichDa" value="${queryDataRichDa}" />
+	<portlet:param name="queryDataRichA" value="${queryDataRichA}" />
+	<portlet:param name="queryAut" value="${queryAut}" />
+	<portlet:param name="queryStato" value="${queryStato}" />
 </liferay-portlet:renderURL>
 
 <liferay-ui:search-container total="${totale}"
