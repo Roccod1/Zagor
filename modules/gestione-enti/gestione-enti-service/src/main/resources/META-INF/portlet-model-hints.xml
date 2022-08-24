@@ -11,8 +11,9 @@
 		<field name="userName" type="String" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="uri" type="String" />
-		<field name="uriGuest" type="String" />
+		<field name="uri" type="long" />
+		<field name="uriGuest" type="long" />
+		<field name="uriEsterna" type="String" />
 		<field name="catalogoServizioArticleId" type="long" />
 		<field name="autenticazione" type="boolean" />
 		<field name="livelloAutenticazione" type="int" />

@@ -225,30 +225,43 @@ public interface ServizioEnteModel
 	 *
 	 * @return the uri of this servizio ente
 	 */
-	@AutoEscape
-	public String getUri();
+	public long getUri();
 
 	/**
 	 * Sets the uri of this servizio ente.
 	 *
 	 * @param uri the uri of this servizio ente
 	 */
-	public void setUri(String uri);
+	public void setUri(long uri);
 
 	/**
 	 * Returns the uri guest of this servizio ente.
 	 *
 	 * @return the uri guest of this servizio ente
 	 */
-	@AutoEscape
-	public String getUriGuest();
+	public long getUriGuest();
 
 	/**
 	 * Sets the uri guest of this servizio ente.
 	 *
 	 * @param uriGuest the uri guest of this servizio ente
 	 */
-	public void setUriGuest(String uriGuest);
+	public void setUriGuest(long uriGuest);
+
+	/**
+	 * Returns the uri esterna of this servizio ente.
+	 *
+	 * @return the uri esterna of this servizio ente
+	 */
+	@AutoEscape
+	public String getUriEsterna();
+
+	/**
+	 * Sets the uri esterna of this servizio ente.
+	 *
+	 * @param uriEsterna the uri esterna of this servizio ente
+	 */
+	public void setUriEsterna(String uriEsterna);
 
 	/**
 	 * Returns the catalogo servizio article ID of this servizio ente.

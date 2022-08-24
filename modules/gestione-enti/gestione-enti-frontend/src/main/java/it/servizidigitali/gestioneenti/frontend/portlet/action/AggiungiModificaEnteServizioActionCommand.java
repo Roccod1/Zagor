@@ -58,8 +58,8 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 
 		Long servizioId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ID);
 		Long organizationId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_ID);
-		String uri = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI);
-		String uriGuest = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI_GUEST);
+		long uri = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI);
+		long uriGuest = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI_GUEST);
 		long catalogoServizioArticleId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_CATALOGO_SERVIZI_ARTICLE_ID);
 		Boolean autenticazione = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_AUTENTICAZIONE);
 		Integer livelloAutenticazione = ParamUtil.getInteger(actionRequest, GestioneEntiPortletKeys.SERVIZIO_LIVELLO_AUTENTICAZIONE);
@@ -75,7 +75,8 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		Boolean chatBot = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_CHATBOT);
 		Boolean iseeInps = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ISEE_INPS);
 		Boolean timbroCertificato = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_TIMBRO_CERTIFICATO);
-
+		String uriEsterna = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI_ESTERNA);
+		
 		String redirect = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.INDIRIZZO_REDIRECT);
 				
 		//creo la pk della entity
@@ -107,17 +108,18 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 				}
 			}
 			
-			if(!Validator.isBlank(uri) && uri.trim().length() > 255) {
-				_log.error("La lunghezza dell'uri e' superiore a 255 caratteri");
-				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI);
-				throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI);
+			if(Validator.isNotNull(uriEsterna)) {
+				if(!Validator.isUrl(uriEsterna)) {
+					SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_ESTERNA);
+					throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_ESTERNA);
+				}else {
+					if(uriEsterna.trim().length() > 255) {
+						SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI);
+						throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI);
+					}					
+				}				
 			}
 			
-			if(!Validator.isBlank(uriGuest) && uriGuest.trim().length() > 255) {
-				_log.error("La lunghezza dell'uriGuest e' superiore a 255 caratteri");
-				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_GUEST);
-				throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_GUEST);
-			}
 		
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 			ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();

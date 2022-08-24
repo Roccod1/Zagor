@@ -64,7 +64,7 @@ public class ServizioEnteCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(53);
+		StringBundler sb = new StringBundler(55);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -88,6 +88,8 @@ public class ServizioEnteCacheModel
 		sb.append(uri);
 		sb.append(", uriGuest=");
 		sb.append(uriGuest);
+		sb.append(", uriEsterna=");
+		sb.append(uriEsterna);
 		sb.append(", catalogoServizioArticleId=");
 		sb.append(catalogoServizioArticleId);
 		sb.append(", autenticazione=");
@@ -161,18 +163,14 @@ public class ServizioEnteCacheModel
 			servizioEnteImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
-		if (uri == null) {
-			servizioEnteImpl.setUri("");
-		}
-		else {
-			servizioEnteImpl.setUri(uri);
-		}
+		servizioEnteImpl.setUri(uri);
+		servizioEnteImpl.setUriGuest(uriGuest);
 
-		if (uriGuest == null) {
-			servizioEnteImpl.setUriGuest("");
+		if (uriEsterna == null) {
+			servizioEnteImpl.setUriEsterna("");
 		}
 		else {
-			servizioEnteImpl.setUriGuest(uriGuest);
+			servizioEnteImpl.setUriEsterna(uriEsterna);
 		}
 
 		servizioEnteImpl.setCatalogoServizioArticleId(
@@ -228,8 +226,11 @@ public class ServizioEnteCacheModel
 		userName = objectInput.readUTF();
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
-		uri = objectInput.readUTF();
-		uriGuest = objectInput.readUTF();
+
+		uri = objectInput.readLong();
+
+		uriGuest = objectInput.readLong();
+		uriEsterna = objectInput.readUTF();
 
 		catalogoServizioArticleId = objectInput.readLong();
 
@@ -291,18 +292,15 @@ public class ServizioEnteCacheModel
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
 
-		if (uri == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(uri);
-		}
+		objectOutput.writeLong(uri);
 
-		if (uriGuest == null) {
+		objectOutput.writeLong(uriGuest);
+
+		if (uriEsterna == null) {
 			objectOutput.writeUTF("");
 		}
 		else {
-			objectOutput.writeUTF(uriGuest);
+			objectOutput.writeUTF(uriEsterna);
 		}
 
 		objectOutput.writeLong(catalogoServizioArticleId);
@@ -343,8 +341,9 @@ public class ServizioEnteCacheModel
 	public String userName;
 	public long createDate;
 	public long modifiedDate;
-	public String uri;
-	public String uriGuest;
+	public long uri;
+	public long uriGuest;
+	public String uriEsterna;
 	public long catalogoServizioArticleId;
 	public boolean autenticazione;
 	public int livelloAutenticazione;

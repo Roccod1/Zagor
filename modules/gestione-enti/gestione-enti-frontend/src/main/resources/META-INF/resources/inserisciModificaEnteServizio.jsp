@@ -40,7 +40,7 @@
 						
 						<c:when test="${empty listaServizi }">
 							<div class="alert alert-warning" role="alert">
-							  <liferay-ui:message key="nessun-servizio-attivabile"/>
+							  <liferay-ui:message key="nessun-uri-disponibile"/>
 							</div>
 						</c:when>
 						
@@ -59,29 +59,66 @@
 
 			<div class="col">
 				<div class="form-group">
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_URI %>" label="uri-privata" type="text" value="${servizioEnte.uri}">
-			        	<aui:validator name="maxLength">255</aui:validator>
-			        </aui:input>
+					<c:choose>
+						<c:when test="${empty listaUriPrivata }">
+							<div class="alert alert-warning" role="alert">
+							  <liferay-ui:message key="nessun-uri-disponibile"/>
+							</div>
+						</c:when>
+						
+						<c:otherwise>
+					        <aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_URI %>" label="uri-privata" type="text" value="${servizioEnte.uri}">
+					        	<aui:option value="" label="seleziona" selected="selected"/>
+					        	<c:forEach items="${listaUriPrivata }" var="uriPrivata">
+					        		<aui:option value="${uriPrivata.layoutId}">${uriPrivata.name}</aui:option>
+					        	</c:forEach>
+					        </aui:select>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_URI_GUEST %>" label="uri-pubblica" type="text" value="${servizioEnte.uriGuest}">
-			        	<aui:validator name="maxLength">255</aui:validator>
-			        </aui:input>				
+					<c:choose>
+						<c:when test="${empty listaUriPubblica }">
+							<div class="alert alert-warning" role="alert">
+							  <liferay-ui:message key="nessun-servizio-attivabile"/>
+							</div>
+						</c:when>
+						
+						<c:otherwise>
+					        <aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_URI_GUEST %>" label="uri-pubblica" type="text" value="${servizioEnte.uriGuest}">
+					        	<aui:option value="" label="seleziona" selected="selected"/>
+					        	<c:forEach items="${listaUriPubblica }" var="uriPubblica">
+					        		<aui:option value="${uriPubblica.layoutId}">${uriPubblica.name}</aui:option>
+					        	</c:forEach>
+				       	 	</aui:select>
+				       	 </c:otherwise>
+					</c:choose>		
 				</div>
 			</div>
 			
 			<div class="col">
 				<div class="form-group">
-			        <aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_CATALOGO_SERVIZI_ARTICLE_ID %>" label="id-article-catalogo-servizi" value="${servizioEnte.catalogoServizioArticleId}">
-			        	<aui:option value="" label="seleziona" selected="true"/>
-			        	<c:forEach items="${listaArticleCatalogoServizi}" var="article">
-			        		<aui:option value="${article.articleId }">${article.articleId } - ${article.title }</aui:option>
-			        	</c:forEach>
-			        </aui:select>
+				
+					<c:choose>
+						<c:when test="${empty listaArticleCatalogoServizi }">
+							<div class="alert alert-warning" role="alert">
+							  <liferay-ui:message key="nessun-article-id-assegnabile"/>
+							</div>
+						</c:when>
+						
+						<c:otherwise>
+							<aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_CATALOGO_SERVIZI_ARTICLE_ID %>" label="id-article-catalogo-servizi" value="${servizioEnte.catalogoServizioArticleId}">
+					        	<aui:option value="" label="seleziona" selected="true"/>
+					        	<c:forEach items="${listaArticleCatalogoServizi}" var="article">
+					        		<aui:option value="${article.articleId }">${article.articleId } - ${article.title }</aui:option>
+					        	</c:forEach>
+					        </aui:select>
+				       	 </c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 		</div>
@@ -101,6 +138,28 @@
 				</div>
 			</div>
 		</div>
+		
+		<div class="row">
+			<div class="col">
+				<div class="form-group">
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_URI_ESTERNA%>" label="uri-esterna" type="text" value="${servizioEnte.uriEsterna }">
+			        	<aui:validator name="url"/>
+			        	<aui:validator name="maxLength">255</aui:validator>
+			        </aui:input>
+				</div>
+			</div>
+			
+			<div class="col">
+				<div class="form-group">
+					<aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_LIVELLO_AUTENTICAZIONE %>" label="livello-autenticazione" value="${servizioEnte.livelloAutenticazione}">
+						<aui:option value="1">1</aui:option>
+						<aui:option value="2">2</aui:option>
+						<aui:option value="3">3</aui:option>
+					</aui:select>
+				</div>
+			</div>
+		</div>
+		
 		<div class="row">
 			<div class="col">
 				<div class="form-group form-check">

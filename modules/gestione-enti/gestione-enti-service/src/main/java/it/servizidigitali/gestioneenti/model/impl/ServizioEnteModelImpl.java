@@ -75,8 +75,8 @@ public class ServizioEnteModelImpl
 		{"organizationId", Types.BIGINT}, {"groupId", Types.BIGINT},
 		{"companyId", Types.BIGINT}, {"userId", Types.BIGINT},
 		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
-		{"modifiedDate", Types.TIMESTAMP}, {"uri", Types.VARCHAR},
-		{"uriGuest", Types.VARCHAR},
+		{"modifiedDate", Types.TIMESTAMP}, {"uri", Types.BIGINT},
+		{"uriGuest", Types.BIGINT}, {"uriEsterna", Types.VARCHAR},
 		{"catalogoServizioArticleId", Types.BIGINT},
 		{"autenticazione", Types.BOOLEAN},
 		{"livelloAutenticazione", Types.INTEGER},
@@ -102,8 +102,9 @@ public class ServizioEnteModelImpl
 		TABLE_COLUMNS_MAP.put("userName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
-		TABLE_COLUMNS_MAP.put("uri", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("uriGuest", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("uri", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("uriGuest", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("uriEsterna", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("catalogoServizioArticleId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("autenticazione", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("livelloAutenticazione", Types.INTEGER);
@@ -122,7 +123,7 @@ public class ServizioEnteModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table servizio_ente (uuid_ VARCHAR(75) null,servizioId LONG not null,organizationId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,uri VARCHAR(75) null,uriGuest VARCHAR(75) null,catalogoServizioArticleId LONG,autenticazione BOOLEAN,livelloAutenticazione INTEGER,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,prenotabile BOOLEAN,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,iseeInps BOOLEAN,attivo BOOLEAN,primary key (servizioId, organizationId))";
+		"create table servizio_ente (uuid_ VARCHAR(75) null,servizioId LONG not null,organizationId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,uri LONG,uriGuest LONG,uriEsterna VARCHAR(75) null,catalogoServizioArticleId LONG,autenticazione BOOLEAN,livelloAutenticazione INTEGER,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,prenotabile BOOLEAN,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,iseeInps BOOLEAN,attivo BOOLEAN,primary key (servizioId, organizationId))";
 
 	public static final String TABLE_SQL_DROP = "drop table servizio_ente";
 
@@ -345,11 +346,15 @@ public class ServizioEnteModelImpl
 			(BiConsumer<ServizioEnte, Date>)ServizioEnte::setModifiedDate);
 		attributeGetterFunctions.put("uri", ServizioEnte::getUri);
 		attributeSetterBiConsumers.put(
-			"uri", (BiConsumer<ServizioEnte, String>)ServizioEnte::setUri);
+			"uri", (BiConsumer<ServizioEnte, Long>)ServizioEnte::setUri);
 		attributeGetterFunctions.put("uriGuest", ServizioEnte::getUriGuest);
 		attributeSetterBiConsumers.put(
 			"uriGuest",
-			(BiConsumer<ServizioEnte, String>)ServizioEnte::setUriGuest);
+			(BiConsumer<ServizioEnte, Long>)ServizioEnte::setUriGuest);
+		attributeGetterFunctions.put("uriEsterna", ServizioEnte::getUriEsterna);
+		attributeSetterBiConsumers.put(
+			"uriEsterna",
+			(BiConsumer<ServizioEnte, String>)ServizioEnte::setUriEsterna);
 		attributeGetterFunctions.put(
 			"catalogoServizioArticleId",
 			ServizioEnte::getCatalogoServizioArticleId);
@@ -639,17 +644,12 @@ public class ServizioEnteModelImpl
 	}
 
 	@Override
-	public String getUri() {
-		if (_uri == null) {
-			return "";
-		}
-		else {
-			return _uri;
-		}
+	public long getUri() {
+		return _uri;
 	}
 
 	@Override
-	public void setUri(String uri) {
+	public void setUri(long uri) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
@@ -658,22 +658,36 @@ public class ServizioEnteModelImpl
 	}
 
 	@Override
-	public String getUriGuest() {
-		if (_uriGuest == null) {
-			return "";
-		}
-		else {
-			return _uriGuest;
-		}
+	public long getUriGuest() {
+		return _uriGuest;
 	}
 
 	@Override
-	public void setUriGuest(String uriGuest) {
+	public void setUriGuest(long uriGuest) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
 
 		_uriGuest = uriGuest;
+	}
+
+	@Override
+	public String getUriEsterna() {
+		if (_uriEsterna == null) {
+			return "";
+		}
+		else {
+			return _uriEsterna;
+		}
+	}
+
+	@Override
+	public void setUriEsterna(String uriEsterna) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_uriEsterna = uriEsterna;
 	}
 
 	@Override
@@ -1001,6 +1015,7 @@ public class ServizioEnteModelImpl
 		servizioEnteImpl.setModifiedDate(getModifiedDate());
 		servizioEnteImpl.setUri(getUri());
 		servizioEnteImpl.setUriGuest(getUriGuest());
+		servizioEnteImpl.setUriEsterna(getUriEsterna());
 		servizioEnteImpl.setCatalogoServizioArticleId(
 			getCatalogoServizioArticleId());
 		servizioEnteImpl.setAutenticazione(isAutenticazione());
@@ -1043,9 +1058,11 @@ public class ServizioEnteModelImpl
 			this.<Date>getColumnOriginalValue("createDate"));
 		servizioEnteImpl.setModifiedDate(
 			this.<Date>getColumnOriginalValue("modifiedDate"));
-		servizioEnteImpl.setUri(this.<String>getColumnOriginalValue("uri"));
+		servizioEnteImpl.setUri(this.<Long>getColumnOriginalValue("uri"));
 		servizioEnteImpl.setUriGuest(
-			this.<String>getColumnOriginalValue("uriGuest"));
+			this.<Long>getColumnOriginalValue("uriGuest"));
+		servizioEnteImpl.setUriEsterna(
+			this.<String>getColumnOriginalValue("uriEsterna"));
 		servizioEnteImpl.setCatalogoServizioArticleId(
 			this.<Long>getColumnOriginalValue("catalogoServizioArticleId"));
 		servizioEnteImpl.setAutenticazione(
@@ -1194,18 +1211,14 @@ public class ServizioEnteModelImpl
 
 		servizioEnteCacheModel.uri = getUri();
 
-		String uri = servizioEnteCacheModel.uri;
-
-		if ((uri != null) && (uri.length() == 0)) {
-			servizioEnteCacheModel.uri = null;
-		}
-
 		servizioEnteCacheModel.uriGuest = getUriGuest();
 
-		String uriGuest = servizioEnteCacheModel.uriGuest;
+		servizioEnteCacheModel.uriEsterna = getUriEsterna();
 
-		if ((uriGuest != null) && (uriGuest.length() == 0)) {
-			servizioEnteCacheModel.uriGuest = null;
+		String uriEsterna = servizioEnteCacheModel.uriEsterna;
+
+		if ((uriEsterna != null) && (uriEsterna.length() == 0)) {
+			servizioEnteCacheModel.uriEsterna = null;
 		}
 
 		servizioEnteCacheModel.catalogoServizioArticleId =
@@ -1356,8 +1369,9 @@ public class ServizioEnteModelImpl
 	private Date _createDate;
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
-	private String _uri;
-	private String _uriGuest;
+	private long _uri;
+	private long _uriGuest;
+	private String _uriEsterna;
 	private long _catalogoServizioArticleId;
 	private boolean _autenticazione;
 	private int _livelloAutenticazione;
@@ -1414,6 +1428,7 @@ public class ServizioEnteModelImpl
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
 		_columnOriginalValues.put("uri", _uri);
 		_columnOriginalValues.put("uriGuest", _uriGuest);
+		_columnOriginalValues.put("uriEsterna", _uriEsterna);
 		_columnOriginalValues.put(
 			"catalogoServizioArticleId", _catalogoServizioArticleId);
 		_columnOriginalValues.put("autenticazione", _autenticazione);
@@ -1477,35 +1492,37 @@ public class ServizioEnteModelImpl
 
 		columnBitmasks.put("uriGuest", 1024L);
 
-		columnBitmasks.put("catalogoServizioArticleId", 2048L);
+		columnBitmasks.put("uriEsterna", 2048L);
 
-		columnBitmasks.put("autenticazione", 4096L);
+		columnBitmasks.put("catalogoServizioArticleId", 4096L);
 
-		columnBitmasks.put("livelloAutenticazione", 8192L);
+		columnBitmasks.put("autenticazione", 8192L);
 
-		columnBitmasks.put("dataInizioAttivazione", 16384L);
+		columnBitmasks.put("livelloAutenticazione", 16384L);
 
-		columnBitmasks.put("dataFineAttivazione", 32768L);
+		columnBitmasks.put("dataInizioAttivazione", 32768L);
 
-		columnBitmasks.put("cittadino", 65536L);
+		columnBitmasks.put("dataFineAttivazione", 65536L);
 
-		columnBitmasks.put("azienda", 131072L);
+		columnBitmasks.put("cittadino", 131072L);
 
-		columnBitmasks.put("delega", 262144L);
+		columnBitmasks.put("azienda", 262144L);
 
-		columnBitmasks.put("chatbot", 524288L);
+		columnBitmasks.put("delega", 524288L);
 
-		columnBitmasks.put("prenotabile", 1048576L);
+		columnBitmasks.put("chatbot", 1048576L);
 
-		columnBitmasks.put("privacyDelega", 2097152L);
+		columnBitmasks.put("prenotabile", 2097152L);
 
-		columnBitmasks.put("allegatoDelega", 4194304L);
+		columnBitmasks.put("privacyDelega", 4194304L);
 
-		columnBitmasks.put("timbroCertificato", 8388608L);
+		columnBitmasks.put("allegatoDelega", 8388608L);
 
-		columnBitmasks.put("iseeInps", 16777216L);
+		columnBitmasks.put("timbroCertificato", 16777216L);
 
-		columnBitmasks.put("attivo", 33554432L);
+		columnBitmasks.put("iseeInps", 33554432L);
+
+		columnBitmasks.put("attivo", 67108864L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

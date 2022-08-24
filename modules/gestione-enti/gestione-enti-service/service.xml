@@ -29,8 +29,9 @@
 		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
-		<column name="uri" type="String" />
-		<column name="uriGuest" type="String" />
+		<column name="uri" type="long" />
+		<column name="uriGuest" type="long" />
+		<column name="uriEsterna" type="String" />
 		<column name="catalogoServizioArticleId" type="long" />
 		<column name="autenticazione" type="boolean" />
 		<column name="livelloAutenticazione" type="int" />

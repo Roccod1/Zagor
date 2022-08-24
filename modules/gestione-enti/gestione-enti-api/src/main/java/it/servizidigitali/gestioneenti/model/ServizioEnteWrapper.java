@@ -54,6 +54,7 @@ public class ServizioEnteWrapper
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("uri", getUri());
 		attributes.put("uriGuest", getUriGuest());
+		attributes.put("uriEsterna", getUriEsterna());
 		attributes.put(
 			"catalogoServizioArticleId", getCatalogoServizioArticleId());
 		attributes.put("autenticazione", isAutenticazione());
@@ -130,16 +131,22 @@ public class ServizioEnteWrapper
 			setModifiedDate(modifiedDate);
 		}
 
-		String uri = (String)attributes.get("uri");
+		Long uri = (Long)attributes.get("uri");
 
 		if (uri != null) {
 			setUri(uri);
 		}
 
-		String uriGuest = (String)attributes.get("uriGuest");
+		Long uriGuest = (Long)attributes.get("uriGuest");
 
 		if (uriGuest != null) {
 			setUriGuest(uriGuest);
+		}
+
+		String uriEsterna = (String)attributes.get("uriEsterna");
+
+		if (uriEsterna != null) {
+			setUriEsterna(uriEsterna);
 		}
 
 		Long catalogoServizioArticleId = (Long)attributes.get(
@@ -490,8 +497,18 @@ public class ServizioEnteWrapper
 	 * @return the uri of this servizio ente
 	 */
 	@Override
-	public String getUri() {
+	public long getUri() {
 		return model.getUri();
+	}
+
+	/**
+	 * Returns the uri esterna of this servizio ente.
+	 *
+	 * @return the uri esterna of this servizio ente
+	 */
+	@Override
+	public String getUriEsterna() {
+		return model.getUriEsterna();
 	}
 
 	/**
@@ -500,7 +517,7 @@ public class ServizioEnteWrapper
 	 * @return the uri guest of this servizio ente
 	 */
 	@Override
-	public String getUriGuest() {
+	public long getUriGuest() {
 		return model.getUriGuest();
 	}
 
@@ -910,8 +927,18 @@ public class ServizioEnteWrapper
 	 * @param uri the uri of this servizio ente
 	 */
 	@Override
-	public void setUri(String uri) {
+	public void setUri(long uri) {
 		model.setUri(uri);
+	}
+
+	/**
+	 * Sets the uri esterna of this servizio ente.
+	 *
+	 * @param uriEsterna the uri esterna of this servizio ente
+	 */
+	@Override
+	public void setUriEsterna(String uriEsterna) {
+		model.setUriEsterna(uriEsterna);
 	}
 
 	/**
@@ -920,7 +947,7 @@ public class ServizioEnteWrapper
 	 * @param uriGuest the uri guest of this servizio ente
 	 */
 	@Override
-	public void setUriGuest(String uriGuest) {
+	public void setUriGuest(long uriGuest) {
 		model.setUriGuest(uriGuest);
 	}
 

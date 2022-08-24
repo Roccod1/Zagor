@@ -35,5 +35,5 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <liferay-ui:error key="<%=GestioneEntiPortletKeys.ERRORE_ELIMINAZIONE_SERVIZIO %>" message="errore-eliminazione-servizio"/>
 <liferay-ui:error key="<%=GestioneEntiPortletKeys.ERRORE_PERIODO_DATE_ATTIVAZIONE %>" message="errore-periodo-date-attivazione"/>
 
-<liferay-ui:error key="<%=GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI %>" message="lunghezza-massima-255" focusField="<%=GestioneEntiPortletKeys.SERVIZIO_URI %>"/>
-<liferay-ui:error key="<%=GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_GUEST %>" message="lunghezza-massima-255" focusField="<%=GestioneEntiPortletKeys.SERVIZIO_URI_GUEST %>"/>
+<liferay-ui:error key="<%=GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI %>" message="lunghezza-massima-255" focusField="<%=GestioneEntiPortletKeys.SERVIZIO_URI_ESTERNA %>"/>
+<liferay-ui:error key="<%=GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_ESTERNA %>" message="uri-non-valida" focusField="<%=GestioneEntiPortletKeys.SERVIZIO_URI_ESTERNA %>"/>
