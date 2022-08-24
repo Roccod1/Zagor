@@ -21,5 +21,6 @@ public class CatalogoServiziPortletKeys {
 	
 	public static final String SERVIZIO = "servizio";
 	public static final String SERVIZIO_ENTE = "servizioEnte";
+	public static final String SERVIZIO_URL = "servizioUrl";
 
 }

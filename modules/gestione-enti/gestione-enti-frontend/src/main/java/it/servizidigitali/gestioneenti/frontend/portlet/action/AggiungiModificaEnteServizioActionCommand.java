@@ -143,6 +143,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 			servizioEnte.setChatbot(chatBot);
 			servizioEnte.setIseeInps(iseeInps);
 			servizioEnte.setTimbroCertificato(timbroCertificato);
+			servizioEnte.setUriEsterna(uriEsterna);
 
 			servizioEnteLocalService.updateServizioEnte(servizioEnte);
 			SessionMessages.add(actionRequest, GestioneEntiPortletKeys.SALVATAGGIO_SUCCESSO);

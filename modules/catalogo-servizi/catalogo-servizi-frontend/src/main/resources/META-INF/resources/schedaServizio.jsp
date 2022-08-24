@@ -19,7 +19,7 @@
 				</c:otherwise>
 			</c:choose>
 			
-			<a class="mt-3" href="#" title="Vai al servizio"> 
+			<a class="mt-3" href="${servizioUrl}" title="Vai al servizio"> 
 				<strong>Vai</strong>
 				<span class="fa fa-angle-double-right fa-lg marginleft5" aria-hidden="true"></span>
 			</a>
