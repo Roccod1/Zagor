@@ -72,6 +72,7 @@ public class AggiungiModificaUtenteOrganizzazioneCanaleComunicazioneActionComman
 			themeDisplay = serviceContext.getThemeDisplay();
 			utenteCorrente = themeDisplay.getUser();
 			groupId = themeDisplay.getSiteGroupId();
+			companyId = themeDisplay.getCompanyId();
 			
 			if(Validator.isNull(utenteCorrente)) {
 				_log.error("Impossibile ottere l'utente loggato dal ThemeDisplay");
@@ -111,6 +112,7 @@ public class AggiungiModificaUtenteOrganizzazioneCanaleComunicazioneActionComman
 			utenteOrganizzazione.setCompanyId(companyId);
 			utenteOrganizzazione.setUserId(userId);
 			utenteOrganizzazione.setGroupId(groupId);
+			utenteOrganizzazione.setUserName(utenteCorrente.getFullName());
 			
 			utenteOrganizzazioneLocalService.updateUtenteOrganizzazione(utenteOrganizzazione);				
 			utenteOrganizzazioneCanaleComunicazioneLocalService.updateMassivoUtenteOrganizzazioneCanaleComunicazione(userId, groupId, companyId, organizationId, listaIdCanaliComunicazione);
