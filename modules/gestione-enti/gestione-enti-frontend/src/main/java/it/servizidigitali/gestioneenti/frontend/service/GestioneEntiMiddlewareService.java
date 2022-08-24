@@ -94,7 +94,7 @@ public class GestioneEntiMiddlewareService {
 				//rimuovo dalla lista servizi quelli gia' attivi per lo specifico ente
 				for(Layout layout : listaPagine) {
 					for(ServizioEnte servizioEnte : listaServiziEnte) {
-						if((layout.getLayoutId() == servizioEnte.getUri()) || (layout.getLayoutId() == servizioEnte.getUriGuest())) {
+						if((layout.getLayoutId() == servizioEnte.getPublicLayoutId()) || (layout.getLayoutId() == servizioEnte.getPrivateLayoutId())) {
 							if(servizioEnte.getServizioId() != servizioId) {
 								listaPagineFinita.remove(layout);
 							}

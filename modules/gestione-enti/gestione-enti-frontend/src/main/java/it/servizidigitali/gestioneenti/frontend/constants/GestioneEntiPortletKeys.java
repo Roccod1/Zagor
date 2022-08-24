@@ -29,8 +29,8 @@ public class GestioneEntiPortletKeys {
 
 //	entity Servizio
 	public static final String SERVIZIO_ID = "servizioId";
-	public static final String SERVIZIO_URI = "uri";
-	public static final String SERVIZIO_URI_GUEST = "uriGuest";
+	public static final String SERVIZIO_PRIVATE_LAYOUT_ID = "privateLayoutId";
+	public static final String SERVIZIO_PUBLIC_LAYOUT_ID = "publicLayoutId";
 	public static final String SERVIZIO_URI_ESTERNA = "uriEsterna";
 	public static final String SERVIZIO_CATALOGO_SERVIZI_ARTICLE_ID = "catalogoServizioArticleId";
 	public static final String SERVIZIO_AUTENTICAZIONE = "autenticazione";

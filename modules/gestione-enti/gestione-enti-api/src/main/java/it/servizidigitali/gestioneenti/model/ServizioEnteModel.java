@@ -221,32 +221,32 @@ public interface ServizioEnteModel
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
-	 * Returns the uri of this servizio ente.
+	 * Returns the private layout ID of this servizio ente.
 	 *
-	 * @return the uri of this servizio ente
+	 * @return the private layout ID of this servizio ente
 	 */
-	public long getUri();
+	public long getPrivateLayoutId();
 
 	/**
-	 * Sets the uri of this servizio ente.
+	 * Sets the private layout ID of this servizio ente.
 	 *
-	 * @param uri the uri of this servizio ente
+	 * @param privateLayoutId the private layout ID of this servizio ente
 	 */
-	public void setUri(long uri);
+	public void setPrivateLayoutId(long privateLayoutId);
 
 	/**
-	 * Returns the uri guest of this servizio ente.
+	 * Returns the public layout ID of this servizio ente.
 	 *
-	 * @return the uri guest of this servizio ente
+	 * @return the public layout ID of this servizio ente
 	 */
-	public long getUriGuest();
+	public long getPublicLayoutId();
 
 	/**
-	 * Sets the uri guest of this servizio ente.
+	 * Sets the public layout ID of this servizio ente.
 	 *
-	 * @param uriGuest the uri guest of this servizio ente
+	 * @param publicLayoutId the public layout ID of this servizio ente
 	 */
-	public void setUriGuest(long uriGuest);
+	public void setPublicLayoutId(long publicLayoutId);
 
 	/**
 	 * Returns the uri esterna of this servizio ente.

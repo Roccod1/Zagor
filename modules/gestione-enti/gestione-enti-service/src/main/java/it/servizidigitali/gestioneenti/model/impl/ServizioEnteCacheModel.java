@@ -84,10 +84,10 @@ public class ServizioEnteCacheModel
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
-		sb.append(", uri=");
-		sb.append(uri);
-		sb.append(", uriGuest=");
-		sb.append(uriGuest);
+		sb.append(", privateLayoutId=");
+		sb.append(privateLayoutId);
+		sb.append(", publicLayoutId=");
+		sb.append(publicLayoutId);
 		sb.append(", uriEsterna=");
 		sb.append(uriEsterna);
 		sb.append(", catalogoServizioArticleId=");
@@ -163,8 +163,8 @@ public class ServizioEnteCacheModel
 			servizioEnteImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
-		servizioEnteImpl.setUri(uri);
-		servizioEnteImpl.setUriGuest(uriGuest);
+		servizioEnteImpl.setPrivateLayoutId(privateLayoutId);
+		servizioEnteImpl.setPublicLayoutId(publicLayoutId);
 
 		if (uriEsterna == null) {
 			servizioEnteImpl.setUriEsterna("");
@@ -227,9 +227,9 @@ public class ServizioEnteCacheModel
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
 
-		uri = objectInput.readLong();
+		privateLayoutId = objectInput.readLong();
 
-		uriGuest = objectInput.readLong();
+		publicLayoutId = objectInput.readLong();
 		uriEsterna = objectInput.readUTF();
 
 		catalogoServizioArticleId = objectInput.readLong();
@@ -292,9 +292,9 @@ public class ServizioEnteCacheModel
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
 
-		objectOutput.writeLong(uri);
+		objectOutput.writeLong(privateLayoutId);
 
-		objectOutput.writeLong(uriGuest);
+		objectOutput.writeLong(publicLayoutId);
 
 		if (uriEsterna == null) {
 			objectOutput.writeUTF("");
@@ -341,8 +341,8 @@ public class ServizioEnteCacheModel
 	public String userName;
 	public long createDate;
 	public long modifiedDate;
-	public long uri;
-	public long uriGuest;
+	public long privateLayoutId;
+	public long publicLayoutId;
 	public String uriEsterna;
 	public long catalogoServizioArticleId;
 	public boolean autenticazione;

@@ -58,8 +58,8 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 
 		Long servizioId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ID);
 		Long organizationId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_ID);
-		long uri = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI);
-		long uriGuest = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI_GUEST);
+		long uri = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_PRIVATE_LAYOUT_ID);
+		long uriGuest = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_PUBLIC_LAYOUT_ID);
 		long catalogoServizioArticleId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_CATALOGO_SERVIZI_ARTICLE_ID);
 		Boolean autenticazione = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_AUTENTICAZIONE);
 		Integer livelloAutenticazione = ParamUtil.getInteger(actionRequest, GestioneEntiPortletKeys.SERVIZIO_LIVELLO_AUTENTICAZIONE);
@@ -126,8 +126,8 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 			servizioEnte.setGroupId(themeDisplay.getCompanyGroupId());
 			servizioEnte.setUserId(themeDisplay.getUserId());
 	
-			servizioEnte.setUri(uri);
-			servizioEnte.setUriGuest(uriGuest);
+			servizioEnte.setPrivateLayoutId(uri);
+			servizioEnte.setPublicLayoutId(uriGuest);
 			servizioEnte.setCatalogoServizioArticleId(catalogoServizioArticleId);
 			servizioEnte.setAutenticazione(autenticazione);
 			servizioEnte.setLivelloAutenticazione(livelloAutenticazione);

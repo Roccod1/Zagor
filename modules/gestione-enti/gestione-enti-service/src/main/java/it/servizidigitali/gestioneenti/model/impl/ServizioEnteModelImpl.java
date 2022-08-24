@@ -75,8 +75,8 @@ public class ServizioEnteModelImpl
 		{"organizationId", Types.BIGINT}, {"groupId", Types.BIGINT},
 		{"companyId", Types.BIGINT}, {"userId", Types.BIGINT},
 		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
-		{"modifiedDate", Types.TIMESTAMP}, {"uri", Types.BIGINT},
-		{"uriGuest", Types.BIGINT}, {"uriEsterna", Types.VARCHAR},
+		{"modifiedDate", Types.TIMESTAMP}, {"privateLayoutId", Types.BIGINT},
+		{"publicLayoutId", Types.BIGINT}, {"uriEsterna", Types.VARCHAR},
 		{"catalogoServizioArticleId", Types.BIGINT},
 		{"autenticazione", Types.BOOLEAN},
 		{"livelloAutenticazione", Types.INTEGER},
@@ -102,8 +102,8 @@ public class ServizioEnteModelImpl
 		TABLE_COLUMNS_MAP.put("userName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
-		TABLE_COLUMNS_MAP.put("uri", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("uriGuest", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("privateLayoutId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("publicLayoutId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("uriEsterna", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("catalogoServizioArticleId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("autenticazione", Types.BOOLEAN);
@@ -123,7 +123,7 @@ public class ServizioEnteModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table servizio_ente (uuid_ VARCHAR(75) null,servizioId LONG not null,organizationId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,uri LONG,uriGuest LONG,uriEsterna VARCHAR(75) null,catalogoServizioArticleId LONG,autenticazione BOOLEAN,livelloAutenticazione INTEGER,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,prenotabile BOOLEAN,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,iseeInps BOOLEAN,attivo BOOLEAN,primary key (servizioId, organizationId))";
+		"create table servizio_ente (uuid_ VARCHAR(75) null,servizioId LONG not null,organizationId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,privateLayoutId LONG,publicLayoutId LONG,uriEsterna VARCHAR(75) null,catalogoServizioArticleId LONG,autenticazione BOOLEAN,livelloAutenticazione INTEGER,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,prenotabile BOOLEAN,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,iseeInps BOOLEAN,attivo BOOLEAN,primary key (servizioId, organizationId))";
 
 	public static final String TABLE_SQL_DROP = "drop table servizio_ente";
 
@@ -344,13 +344,16 @@ public class ServizioEnteModelImpl
 		attributeSetterBiConsumers.put(
 			"modifiedDate",
 			(BiConsumer<ServizioEnte, Date>)ServizioEnte::setModifiedDate);
-		attributeGetterFunctions.put("uri", ServizioEnte::getUri);
+		attributeGetterFunctions.put(
+			"privateLayoutId", ServizioEnte::getPrivateLayoutId);
 		attributeSetterBiConsumers.put(
-			"uri", (BiConsumer<ServizioEnte, Long>)ServizioEnte::setUri);
-		attributeGetterFunctions.put("uriGuest", ServizioEnte::getUriGuest);
+			"privateLayoutId",
+			(BiConsumer<ServizioEnte, Long>)ServizioEnte::setPrivateLayoutId);
+		attributeGetterFunctions.put(
+			"publicLayoutId", ServizioEnte::getPublicLayoutId);
 		attributeSetterBiConsumers.put(
-			"uriGuest",
-			(BiConsumer<ServizioEnte, Long>)ServizioEnte::setUriGuest);
+			"publicLayoutId",
+			(BiConsumer<ServizioEnte, Long>)ServizioEnte::setPublicLayoutId);
 		attributeGetterFunctions.put("uriEsterna", ServizioEnte::getUriEsterna);
 		attributeSetterBiConsumers.put(
 			"uriEsterna",
@@ -644,31 +647,31 @@ public class ServizioEnteModelImpl
 	}
 
 	@Override
-	public long getUri() {
-		return _uri;
+	public long getPrivateLayoutId() {
+		return _privateLayoutId;
 	}
 
 	@Override
-	public void setUri(long uri) {
+	public void setPrivateLayoutId(long privateLayoutId) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
 
-		_uri = uri;
+		_privateLayoutId = privateLayoutId;
 	}
 
 	@Override
-	public long getUriGuest() {
-		return _uriGuest;
+	public long getPublicLayoutId() {
+		return _publicLayoutId;
 	}
 
 	@Override
-	public void setUriGuest(long uriGuest) {
+	public void setPublicLayoutId(long publicLayoutId) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
 
-		_uriGuest = uriGuest;
+		_publicLayoutId = publicLayoutId;
 	}
 
 	@Override
@@ -1013,8 +1016,8 @@ public class ServizioEnteModelImpl
 		servizioEnteImpl.setUserName(getUserName());
 		servizioEnteImpl.setCreateDate(getCreateDate());
 		servizioEnteImpl.setModifiedDate(getModifiedDate());
-		servizioEnteImpl.setUri(getUri());
-		servizioEnteImpl.setUriGuest(getUriGuest());
+		servizioEnteImpl.setPrivateLayoutId(getPrivateLayoutId());
+		servizioEnteImpl.setPublicLayoutId(getPublicLayoutId());
 		servizioEnteImpl.setUriEsterna(getUriEsterna());
 		servizioEnteImpl.setCatalogoServizioArticleId(
 			getCatalogoServizioArticleId());
@@ -1058,9 +1061,10 @@ public class ServizioEnteModelImpl
 			this.<Date>getColumnOriginalValue("createDate"));
 		servizioEnteImpl.setModifiedDate(
 			this.<Date>getColumnOriginalValue("modifiedDate"));
-		servizioEnteImpl.setUri(this.<Long>getColumnOriginalValue("uri"));
-		servizioEnteImpl.setUriGuest(
-			this.<Long>getColumnOriginalValue("uriGuest"));
+		servizioEnteImpl.setPrivateLayoutId(
+			this.<Long>getColumnOriginalValue("privateLayoutId"));
+		servizioEnteImpl.setPublicLayoutId(
+			this.<Long>getColumnOriginalValue("publicLayoutId"));
 		servizioEnteImpl.setUriEsterna(
 			this.<String>getColumnOriginalValue("uriEsterna"));
 		servizioEnteImpl.setCatalogoServizioArticleId(
@@ -1209,9 +1213,9 @@ public class ServizioEnteModelImpl
 			servizioEnteCacheModel.modifiedDate = Long.MIN_VALUE;
 		}
 
-		servizioEnteCacheModel.uri = getUri();
+		servizioEnteCacheModel.privateLayoutId = getPrivateLayoutId();
 
-		servizioEnteCacheModel.uriGuest = getUriGuest();
+		servizioEnteCacheModel.publicLayoutId = getPublicLayoutId();
 
 		servizioEnteCacheModel.uriEsterna = getUriEsterna();
 
@@ -1369,8 +1373,8 @@ public class ServizioEnteModelImpl
 	private Date _createDate;
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
-	private long _uri;
-	private long _uriGuest;
+	private long _privateLayoutId;
+	private long _publicLayoutId;
 	private String _uriEsterna;
 	private long _catalogoServizioArticleId;
 	private boolean _autenticazione;
@@ -1426,8 +1430,8 @@ public class ServizioEnteModelImpl
 		_columnOriginalValues.put("userName", _userName);
 		_columnOriginalValues.put("createDate", _createDate);
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
-		_columnOriginalValues.put("uri", _uri);
-		_columnOriginalValues.put("uriGuest", _uriGuest);
+		_columnOriginalValues.put("privateLayoutId", _privateLayoutId);
+		_columnOriginalValues.put("publicLayoutId", _publicLayoutId);
 		_columnOriginalValues.put("uriEsterna", _uriEsterna);
 		_columnOriginalValues.put(
 			"catalogoServizioArticleId", _catalogoServizioArticleId);
@@ -1488,9 +1492,9 @@ public class ServizioEnteModelImpl
 
 		columnBitmasks.put("modifiedDate", 256L);
 
-		columnBitmasks.put("uri", 512L);
+		columnBitmasks.put("privateLayoutId", 512L);
 
-		columnBitmasks.put("uriGuest", 1024L);
+		columnBitmasks.put("publicLayoutId", 1024L);
 
 		columnBitmasks.put("uriEsterna", 2048L);
 

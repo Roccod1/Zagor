@@ -29,8 +29,8 @@
 		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
-		<column name="uri" type="long" />
-		<column name="uriGuest" type="long" />
+		<column name="privateLayoutId" type="long" />
+		<column name="publicLayoutId" type="long" />
 		<column name="uriEsterna" type="String" />
 		<column name="catalogoServizioArticleId" type="long" />
 		<column name="autenticazione" type="boolean" />

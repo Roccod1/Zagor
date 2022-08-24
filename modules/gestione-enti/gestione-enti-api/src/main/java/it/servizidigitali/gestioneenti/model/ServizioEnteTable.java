@@ -50,10 +50,10 @@ public class ServizioEnteTable extends BaseTable<ServizioEnteTable> {
 		"createDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
 	public final Column<ServizioEnteTable, Date> modifiedDate = createColumn(
 		"modifiedDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
-	public final Column<ServizioEnteTable, Long> uri = createColumn(
-		"uri", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
-	public final Column<ServizioEnteTable, Long> uriGuest = createColumn(
-		"uriGuest", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<ServizioEnteTable, Long> privateLayoutId = createColumn(
+		"privateLayoutId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<ServizioEnteTable, Long> publicLayoutId = createColumn(
+		"publicLayoutId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<ServizioEnteTable, String> uriEsterna = createColumn(
 		"uriEsterna", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<ServizioEnteTable, Long> catalogoServizioArticleId =

@@ -52,8 +52,8 @@ public class ServizioEnteWrapper
 		attributes.put("userName", getUserName());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
-		attributes.put("uri", getUri());
-		attributes.put("uriGuest", getUriGuest());
+		attributes.put("privateLayoutId", getPrivateLayoutId());
+		attributes.put("publicLayoutId", getPublicLayoutId());
 		attributes.put("uriEsterna", getUriEsterna());
 		attributes.put(
 			"catalogoServizioArticleId", getCatalogoServizioArticleId());
@@ -131,16 +131,16 @@ public class ServizioEnteWrapper
 			setModifiedDate(modifiedDate);
 		}
 
-		Long uri = (Long)attributes.get("uri");
+		Long privateLayoutId = (Long)attributes.get("privateLayoutId");
 
-		if (uri != null) {
-			setUri(uri);
+		if (privateLayoutId != null) {
+			setPrivateLayoutId(privateLayoutId);
 		}
 
-		Long uriGuest = (Long)attributes.get("uriGuest");
+		Long publicLayoutId = (Long)attributes.get("publicLayoutId");
 
-		if (uriGuest != null) {
-			setUriGuest(uriGuest);
+		if (publicLayoutId != null) {
+			setPublicLayoutId(publicLayoutId);
 		}
 
 		String uriEsterna = (String)attributes.get("uriEsterna");
@@ -472,6 +472,26 @@ public class ServizioEnteWrapper
 	}
 
 	/**
+	 * Returns the private layout ID of this servizio ente.
+	 *
+	 * @return the private layout ID of this servizio ente
+	 */
+	@Override
+	public long getPrivateLayoutId() {
+		return model.getPrivateLayoutId();
+	}
+
+	/**
+	 * Returns the public layout ID of this servizio ente.
+	 *
+	 * @return the public layout ID of this servizio ente
+	 */
+	@Override
+	public long getPublicLayoutId() {
+		return model.getPublicLayoutId();
+	}
+
+	/**
 	 * Returns the servizio ID of this servizio ente.
 	 *
 	 * @return the servizio ID of this servizio ente
@@ -492,16 +512,6 @@ public class ServizioEnteWrapper
 	}
 
 	/**
-	 * Returns the uri of this servizio ente.
-	 *
-	 * @return the uri of this servizio ente
-	 */
-	@Override
-	public long getUri() {
-		return model.getUri();
-	}
-
-	/**
 	 * Returns the uri esterna of this servizio ente.
 	 *
 	 * @return the uri esterna of this servizio ente
@@ -509,16 +519,6 @@ public class ServizioEnteWrapper
 	@Override
 	public String getUriEsterna() {
 		return model.getUriEsterna();
-	}
-
-	/**
-	 * Returns the uri guest of this servizio ente.
-	 *
-	 * @return the uri guest of this servizio ente
-	 */
-	@Override
-	public long getUriGuest() {
-		return model.getUriGuest();
 	}
 
 	/**
@@ -902,6 +902,26 @@ public class ServizioEnteWrapper
 	}
 
 	/**
+	 * Sets the private layout ID of this servizio ente.
+	 *
+	 * @param privateLayoutId the private layout ID of this servizio ente
+	 */
+	@Override
+	public void setPrivateLayoutId(long privateLayoutId) {
+		model.setPrivateLayoutId(privateLayoutId);
+	}
+
+	/**
+	 * Sets the public layout ID of this servizio ente.
+	 *
+	 * @param publicLayoutId the public layout ID of this servizio ente
+	 */
+	@Override
+	public void setPublicLayoutId(long publicLayoutId) {
+		model.setPublicLayoutId(publicLayoutId);
+	}
+
+	/**
 	 * Sets the servizio ID of this servizio ente.
 	 *
 	 * @param servizioId the servizio ID of this servizio ente
@@ -922,16 +942,6 @@ public class ServizioEnteWrapper
 	}
 
 	/**
-	 * Sets the uri of this servizio ente.
-	 *
-	 * @param uri the uri of this servizio ente
-	 */
-	@Override
-	public void setUri(long uri) {
-		model.setUri(uri);
-	}
-
-	/**
 	 * Sets the uri esterna of this servizio ente.
 	 *
 	 * @param uriEsterna the uri esterna of this servizio ente
@@ -939,16 +949,6 @@ public class ServizioEnteWrapper
 	@Override
 	public void setUriEsterna(String uriEsterna) {
 		model.setUriEsterna(uriEsterna);
-	}
-
-	/**
-	 * Sets the uri guest of this servizio ente.
-	 *
-	 * @param uriGuest the uri guest of this servizio ente
-	 */
-	@Override
-	public void setUriGuest(long uriGuest) {
-		model.setUriGuest(uriGuest);
 	}
 
 	/**

@@ -62,12 +62,12 @@
 					<c:choose>
 						<c:when test="${empty listaUriPrivata }">
 							<div class="alert alert-warning" role="alert">
-							  <liferay-ui:message key="nessun-uri-disponibile"/>
+							  <liferay-ui:message key="nessun-uri-privata-disponibile"/>
 							</div>
 						</c:when>
 						
 						<c:otherwise>
-					        <aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_URI %>" label="uri-privata" type="text" value="${servizioEnte.uri}">
+					        <aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_PRIVATE_LAYOUT_ID %>" label="uri-privata" type="text" value="${servizioEnte.privateLayoutId}">
 					        	<aui:option value="" label="seleziona" selected="selected"/>
 					        	<c:forEach items="${listaUriPrivata }" var="uriPrivata">
 					        		<aui:option value="${uriPrivata.layoutId}">${uriPrivata.name}</aui:option>
@@ -84,12 +84,12 @@
 					<c:choose>
 						<c:when test="${empty listaUriPubblica }">
 							<div class="alert alert-warning" role="alert">
-							  <liferay-ui:message key="nessun-servizio-attivabile"/>
+							  <liferay-ui:message key="nessun-uri-pubblica-disponibile"/>
 							</div>
 						</c:when>
 						
 						<c:otherwise>
-					        <aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_URI_GUEST %>" label="uri-pubblica" type="text" value="${servizioEnte.uriGuest}">
+					        <aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_PUBLIC_LAYOUT_ID %>" label="uri-pubblica" type="text" value="${servizioEnte.publicLayoutId}">
 					        	<aui:option value="" label="seleziona" selected="selected"/>
 					        	<c:forEach items="${listaUriPubblica }" var="uriPubblica">
 					        		<aui:option value="${uriPubblica.layoutId}">${uriPubblica.name}</aui:option>
