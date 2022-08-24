@@ -30,6 +30,7 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.communication.enumeration.Canale;
 import it.servizidigitali.communication.model.Comunicazione;
+import it.servizidigitali.communication.model.EsitoComunicazione;
 import it.servizidigitali.communication.model.Utente;
 import it.servizidigitali.communication.sender.CommunicationSender;
 import it.servizidigitali.gestionecomunicazioni.configuration.InvioComunicazioniSchedulerConfiguration;
@@ -65,7 +66,9 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 
 		_log.debug("Scheduled task executed...");
 		// TODO caricare comunicazioni non ancora inviate
-
+		List<it.servizidigitali.gestionecomunicazioni.model.Comunicazione> comunicazioni = comunicazioneLocalService.getNonInviate();
+		
+		
 		// TODO creare oggetto comunicazione per invio + invio. ATTENZIONE: l'invio deve essere
 		// effettuato sulla base delle preferenze dell'utente
 
@@ -73,8 +76,12 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 		Utente utente = new Utente();
 		utente.setEmail("gianluca.pindinelli@linksmt.it");
 		utenti.add(utente);
+		
 		Comunicazione comunicazione = new Comunicazione("Test", "Da scheduler", utenti, null, true, null, 0, 67813);
-		communicationSender.send(comunicazione, Canale.EMAIL);
+		EsitoComunicazione esito = communicationSender.send(comunicazione, Canale.EMAIL);
+		String messageId = esito.getMessageId();
+		
+		//TODO salva messageId
 	}
 
 	public LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {

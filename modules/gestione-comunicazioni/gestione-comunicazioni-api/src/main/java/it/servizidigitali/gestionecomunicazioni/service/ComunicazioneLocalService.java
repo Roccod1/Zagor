@@ -307,6 +307,9 @@ public interface ComunicazioneLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Comunicazione> getNonInviate();
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
