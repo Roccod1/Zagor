@@ -35,6 +35,8 @@ import it.servizidigitali.communication.model.Utente;
 import it.servizidigitali.communication.sender.CommunicationSender;
 import it.servizidigitali.gestionecomunicazioni.configuration.InvioComunicazioniSchedulerConfiguration;
 import it.servizidigitali.gestionecomunicazioni.service.ComunicazioneLocalService;
+import it.servizidigitali.profiloutente.model.UtenteOrganizzazioneCanaleComunicazione;
+import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneCanaleComunicazioneLocalService;
 
 /**
  * @author pindi
@@ -61,27 +63,34 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 	@Reference
 	private CommunicationSender communicationSender;
 
+	@Reference
+	private UtenteOrganizzazioneCanaleComunicazioneLocalService utenteOrganizzazioneCanaleComunicazioneLocalService;
+
 	@Override
 	protected void doReceive(Message message) throws Exception {
 
 		_log.debug("Scheduled task executed...");
 		// TODO caricare comunicazioni non ancora inviate
 		List<it.servizidigitali.gestionecomunicazioni.model.Comunicazione> comunicazioni = comunicazioneLocalService.getNonInviate();
-		
-		
+
 		// TODO creare oggetto comunicazione per invio + invio. ATTENZIONE: l'invio deve essere
 		// effettuato sulla base delle preferenze dell'utente
 
+		// TODO leggere da comunicazione
+		long utenteId = 0;
+		long groupId = 0;
+		List<UtenteOrganizzazioneCanaleComunicazione> listaCanaleComunicazioneByUtenteOrganization = utenteOrganizzazioneCanaleComunicazioneLocalService
+				.getListaCanaleComunicazioneByUtenteOrganization(utenteId, groupId);
 		List<Utente> utenti = new ArrayList<Utente>();
 		Utente utente = new Utente();
 		utente.setEmail("gianluca.pindinelli@linksmt.it");
 		utenti.add(utente);
-		
-		Comunicazione comunicazione = new Comunicazione("Test", "Da scheduler", utenti, null, true, null, 0, 67813);
-		EsitoComunicazione esito = communicationSender.send(comunicazione, Canale.EMAIL);
+		// TODO leggere companyId e groupId da comunicazione
+		Comunicazione comunicazione = new Comunicazione("Test", "Da scheduler", utenti, null, true, null, 0, 0);
+		EsitoComunicazione esito = communicationSender.sendNow(comunicazione, Canale.EMAIL);
 		String messageId = esito.getMessageId();
-		
-		//TODO salva messageId
+
+		// TODO salva messageId
 	}
 
 	public LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
