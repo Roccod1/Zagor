@@ -32,7 +32,7 @@
 		<column name="nome" type="String" />
 		<column name="stato" type="String" />
 		<column name="multiente" type="boolean" />
-		<column name="fileEntryId" type="long" />
+		<column name="deploymentId" type="String" />
 		<column name="attivo" type="boolean" />
 		
 		<!-- Finder methods -->

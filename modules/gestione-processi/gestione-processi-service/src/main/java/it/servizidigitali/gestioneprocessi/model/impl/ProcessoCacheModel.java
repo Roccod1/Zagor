@@ -88,8 +88,8 @@ public class ProcessoCacheModel
 		sb.append(stato);
 		sb.append(", multiente=");
 		sb.append(multiente);
-		sb.append(", fileEntryId=");
-		sb.append(fileEntryId);
+		sb.append(", deploymentId=");
+		sb.append(deploymentId);
 		sb.append(", attivo=");
 		sb.append(attivo);
 		sb.append("}");
@@ -156,7 +156,14 @@ public class ProcessoCacheModel
 		}
 
 		processoImpl.setMultiente(multiente);
-		processoImpl.setFileEntryId(fileEntryId);
+
+		if (deploymentId == null) {
+			processoImpl.setDeploymentId("");
+		}
+		else {
+			processoImpl.setDeploymentId(deploymentId);
+		}
+
 		processoImpl.setAttivo(attivo);
 
 		processoImpl.resetOriginalValues();
@@ -183,8 +190,7 @@ public class ProcessoCacheModel
 		stato = objectInput.readUTF();
 
 		multiente = objectInput.readBoolean();
-
-		fileEntryId = objectInput.readLong();
+		deploymentId = objectInput.readUTF();
 
 		attivo = objectInput.readBoolean();
 	}
@@ -239,7 +245,12 @@ public class ProcessoCacheModel
 
 		objectOutput.writeBoolean(multiente);
 
-		objectOutput.writeLong(fileEntryId);
+		if (deploymentId == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(deploymentId);
+		}
 
 		objectOutput.writeBoolean(attivo);
 	}
@@ -256,7 +267,7 @@ public class ProcessoCacheModel
 	public String nome;
 	public String stato;
 	public boolean multiente;
-	public long fileEntryId;
+	public String deploymentId;
 	public boolean attivo;
 
 }

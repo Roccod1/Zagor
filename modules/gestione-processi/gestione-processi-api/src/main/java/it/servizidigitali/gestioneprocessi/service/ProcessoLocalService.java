@@ -33,10 +33,12 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import it.servizidigitali.gestioneprocessi.exception.NoSuchProcessoException;
 import it.servizidigitali.gestioneprocessi.model.Processo;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -77,6 +79,10 @@ public interface ProcessoLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Processo addProcesso(Processo processo);
+
+	public List<Processo> cerca(
+		String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta,
+		int cur, String orderByCol, String orderByType);
 
 	/**
 	 * @throws PortalException
@@ -246,6 +252,10 @@ public interface ProcessoLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Processo getProcesso(long processoId) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Processo getProcessoByCodice(String codice)
+		throws NoSuchProcessoException;
 
 	/**
 	 * Returns the processo matching the UUID and group.

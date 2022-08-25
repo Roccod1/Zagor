@@ -60,6 +60,16 @@ public class ProcessoLocalServiceUtil {
 		return getService().addProcesso(processo);
 	}
 
+	public static List<Processo> cerca(
+		String nome, java.util.Date dataInserimentoDa,
+		java.util.Date dataInserimentoA, int delta, int cur, String orderByCol,
+		String orderByType) {
+
+		return getService().cerca(
+			nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol,
+			orderByType);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -271,6 +281,13 @@ public class ProcessoLocalServiceUtil {
 	 */
 	public static Processo getProcesso(long processoId) throws PortalException {
 		return getService().getProcesso(processoId);
+	}
+
+	public static Processo getProcessoByCodice(String codice)
+		throws it.servizidigitali.gestioneprocessi.exception.
+			NoSuchProcessoException {
+
+		return getService().getProcessoByCodice(codice);
 	}
 
 	/**
