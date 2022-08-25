@@ -70,8 +70,17 @@
 	</aui:form>
 </div>
 
-<div id="canvas"></div>
-<div id="properties"></div>
+<div class="row">
+
+	<div class="col-8">
+		<div id="canvas"></div>
+	</div>
+	
+	<div class="col-4">
+		<div id="js-properties-panel"></div>
+	</div>
+
+</div>
 
 <script>
 
