@@ -59,8 +59,8 @@
 			<div class="col-6">			
 				<div class="form-group form-check">	
 					<c:choose>
-						<c:when test="${form.principale eq true }">
-							<aui:input label="principale" type="checkbox" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>"/>					
+						<c:when test="${form.principale == true}">
+							<aui:input label="principale" type="checkbox" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>" checked="true"/>					
 						</c:when>
 						<c:otherwise>
 							<aui:input label="principale" type="checkbox" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>"/>
