@@ -29,10 +29,12 @@ public class GestioneEntiPortletKeys {
 
 //	entity Servizio
 	public static final String SERVIZIO_ID = "servizioId";
-	public static final String SERVIZIO_URI = "uri";
-	public static final String SERVIZIO_URI_GUEST= "uriGuest";
-	public static final String SERVIZIO_SCHEDA = "uriScheda";
+	public static final String SERVIZIO_PRIVATE_LAYOUT_ID = "privateLayoutId";
+	public static final String SERVIZIO_PUBLIC_LAYOUT_ID = "publicLayoutId";
+	public static final String SERVIZIO_URI_ESTERNA = "uriEsterna";
+	public static final String SERVIZIO_CATALOGO_SERVIZI_ARTICLE_ID = "catalogoServizioArticleId";
 	public static final String SERVIZIO_AUTENTICAZIONE = "autenticazione";
+	public static final String SERVIZIO_LIVELLO_AUTENTICAZIONE = "livelloAutenticazione";
 	public static final String SERVIZIO_DATA_INIZIO_ATTIVAZIONE = "dataInizioAttivazione";
 	public static final String SERVIZIO_DATA_FINE_ATTIVAZIONE = "dataFineAttivazione";
 	public static final String SERVIZIO_CITTADINO = "cittadino";
@@ -68,8 +70,8 @@ public class GestioneEntiPortletKeys {
 	public static final String ERRORE_ELIMINAZIONE_SERVIZIO = "errore-eliminazione-servizio-associato";
 	public static final String ERRORE_PERIODO_DATE_ATTIVAZIONE= "errore-periodo-date";
 	public static final String ERRORE_VALIDAZIONE_URI = "errore-validazione-uri";
-	public static final String ERRORE_VALIDAZIONE_URI_GUEST = "errore-validazione-uri-guest";
-	public static final String ERRORE_VALIDAZIONE_URI_SCHEDA = "errore-validazione-uri-scheda";
+//	public static final String ERRORE_VALIDAZIONE_URI_GUEST = "errore-validazione-uri-guest";
+	public static final String ERRORE_VALIDAZIONE_URI_ESTERNA = "errore-validazione-uri-esterna";
 	public static final String INDIRIZZO_REDIRECT = "indirizzoRedirect";
 	public static final String DELETE_TOGGLE = "toDelete";
 	public static final String PULSANTE_PAGINA_PRINCIPALE_TOGGLE = "pulsantePaginaPrincipale";
@@ -78,4 +80,11 @@ public class GestioneEntiPortletKeys {
 	public static final int DEFAULT_CUR = 1;
 	public static final int DEFAULT_DELTA = 10;
 
+	public static final String STRUCTURE_NAME_CATALOGO_SERVIZI = "Catalogo Servizi";
+	public static final String LISTA_ARTICLE_CATALOGO_SERVIZI = "listaArticleCatalogoServizi";
+	
+	public static final String LISTA_URI_PRIVATE = "listaUriPrivata";
+	public static final String LISTA_URI_PUBBLICHE = "listaUriPubblica";
+	
+	public static final String SERVIZI_FRIENDLY_URL = "/servizi";
 }

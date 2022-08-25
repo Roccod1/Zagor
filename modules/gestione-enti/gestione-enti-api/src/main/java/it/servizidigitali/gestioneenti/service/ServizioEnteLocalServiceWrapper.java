@@ -290,6 +290,16 @@ public class ServizioEnteLocalServiceWrapper
 		return _servizioEnteLocalService.getIndexableActionableDynamicQuery();
 	}
 
+	@Override
+	public java.util.List<Object> getListaServiziByCompanyOrganizationAttivo(
+			long companyId, long organizationId, boolean attivo)
+		throws Exception {
+
+		return _servizioEnteLocalService.
+			getListaServiziByCompanyOrganizationAttivo(
+				companyId, organizationId, attivo);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *

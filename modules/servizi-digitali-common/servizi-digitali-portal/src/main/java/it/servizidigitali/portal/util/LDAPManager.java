@@ -1,9 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2011, 2012 Link Management & Technology S.p.A. via R. Scotellaro, 55 - 73100 -
- * Lecce - http://www.linksmt.it All rights reserved.
- *
- * Contributors: Links Management & Technology S.p.A. - initial API and implementation
- *******************************************************************************/
 package it.servizidigitali.portal.util;
 
 import com.liferay.portal.kernel.log.Log;
@@ -41,7 +35,7 @@ import javax.naming.directory.SearchResult;
 /**
  * Classe Manager per le operazioni su LDAP.
  *
- * @author Gianluca Pindinelli
+ * @author pindi
  *
  */
 public class LDAPManager {
@@ -793,7 +787,7 @@ public class LDAPManager {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param username
 	 * @param password
 	 * @param orclOwnerGuid
@@ -821,7 +815,7 @@ public class LDAPManager {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param username
 	 * @param password
 	 * @param orclOwnerGuid
@@ -923,7 +917,7 @@ public class LDAPManager {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param username
 	 * @param password
 	 * @param orclOwnerGuid
@@ -1018,7 +1012,7 @@ public class LDAPManager {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param username
 	 * @param orclOwnerGuid
 	 * @param mainLDAPRadDN

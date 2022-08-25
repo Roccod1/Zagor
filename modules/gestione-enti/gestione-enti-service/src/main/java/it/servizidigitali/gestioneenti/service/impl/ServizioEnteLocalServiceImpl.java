@@ -39,6 +39,7 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.base.ServizioEnteLocalServiceBaseImpl;
+import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
 
 /**
  * @author filierim
@@ -141,5 +142,25 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 		
 		_log.debug("Ricerca Organizzazioni :: FINE");
 		return listaOrganizations;
+	}
+	
+	public List<Object> getListaServiziByCompanyOrganizationAttivo(long companyId, long organizationId, boolean attivo) throws Exception{
+		
+		ClassLoader classLoader = getClassLoader();
+		DynamicQuery servizioEnteDynamicQuery = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, classLoader);
+
+		servizioEnteDynamicQuery.add(RestrictionsFactoryUtil.eq("attivo", attivo));
+		
+		if(companyId > 0) {
+			servizioEnteDynamicQuery.add(RestrictionsFactoryUtil.eq("companyId", companyId));
+		}
+		
+		if(organizationId > 0) {
+			servizioEnteDynamicQuery.add(RestrictionsFactoryUtil.eq("primaryKey.organizationId", organizationId));
+		}
+		//		imposto projection per ottenere solo gli id delle entity
+		servizioEnteDynamicQuery.setProjection(ProjectionFactoryUtil.property("primaryKey.servizioId"));
+		
+		return servizioEntePersistence.findWithDynamicQuery(servizioEnteDynamicQuery);
 	}
 }

@@ -17,6 +17,7 @@ package it.servizidigitali.profiloutente.service.impl;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceImpl extends Ute
 
 	public List<UtenteOrganizzazioneCanaleComunicazione> updateMassivoUtenteOrganizzazioneCanaleComunicazione(long userId, long groupId, long companyId, long organizationId, long listaIdCanaliComunicazione[]) throws Exception{
 		
+		User user = userLocalService.getUser(userId);
+		
 		List<UtenteOrganizzazioneCanaleComunicazione> listaEntityAggiornate = new ArrayList<UtenteOrganizzazioneCanaleComunicazione>();
 		utenteOrganizzazioneCanaleComunicazionePersistence.removeByUtenteOrganization(userId, organizationId);
 		
@@ -51,6 +54,7 @@ public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceImpl extends Ute
 				utenteOrganizzazioneCanaleComunicazione.setUserId(userId);
 				utenteOrganizzazioneCanaleComunicazione.setCompanyId(companyId);
 				utenteOrganizzazioneCanaleComunicazione.setGroupId(groupId);
+				utenteOrganizzazioneCanaleComunicazione.setUserName(user.getFullName());
 				UtenteOrganizzazioneCanaleComunicazione entityAggiornata = utenteOrganizzazioneCanaleComunicazionePersistence.update(utenteOrganizzazioneCanaleComunicazione);
 				listaEntityAggiornate.add(entityAggiornata);
 			}			

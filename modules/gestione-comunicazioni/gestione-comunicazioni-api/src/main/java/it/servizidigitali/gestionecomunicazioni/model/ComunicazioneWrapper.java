@@ -299,6 +299,13 @@ public class ComunicazioneWrapper
 		return model.getDestinatarioOrganizationId();
 	}
 
+	@Override
+	public com.liferay.portal.kernel.model.Organization
+		getDestinatarioOrganizzazione() {
+
+		return model.getDestinatarioOrganizzazione();
+	}
+
 	/**
 	 * Returns the destinatario user ID of this comunicazione.
 	 *
@@ -329,6 +336,13 @@ public class ComunicazioneWrapper
 		return model.getGroupId();
 	}
 
+	@Override
+	public it.servizidigitali.gestionecomunicazioni.model.LetturaComunicazione
+		getLettura(long userId) {
+
+		return model.getLettura(userId);
+	}
+
 	/**
 	 * Returns the modified date of this comunicazione.
 	 *
@@ -357,6 +371,13 @@ public class ComunicazioneWrapper
 	@Override
 	public long getPrimaryKey() {
 		return model.getPrimaryKey();
+	}
+
+	@Override
+	public it.servizidigitali.gestionecomunicazioni.model.TipologiaComunicazione
+		getTipologia() {
+
+		return model.getTipologia();
 	}
 
 	/**

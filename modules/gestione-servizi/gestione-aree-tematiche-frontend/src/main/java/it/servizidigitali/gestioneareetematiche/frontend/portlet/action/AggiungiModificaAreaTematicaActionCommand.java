@@ -90,9 +90,10 @@ public class AggiungiModificaAreaTematicaActionCommand extends BaseMVCActionComm
 		}
 		
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
-		ThemeDisplay tema = serviceContext.getThemeDisplay();
-		areaTematica.setGroupId(tema.getCompanyGroupId());
-		areaTematica.setUserId(tema.getUserId());
+		ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
+		areaTematica.setGroupId(themeDisplay.getCompanyGroupId());
+		areaTematica.setUserId(themeDisplay.getUserId());
+		areaTematica.setUserName(themeDisplay.getUser().getFullName());
 		
 		areaTematica.setNome(nome);		
 		areaTematica.setDescrizione(descrizione);						

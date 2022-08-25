@@ -65,4 +65,10 @@ public interface Servizio extends PersistedModel, ServizioModel {
 		java.util.List<it.servizidigitali.gestioneservizi.model.Tipologia>
 			listaTipologie);
 
+	public it.servizidigitali.gestioneservizi.model.AreaTematica
+		getAreaTematica();
+
+	public void setAreaTematica(
+		it.servizidigitali.gestioneservizi.model.AreaTematica areaTematica);
+
 }

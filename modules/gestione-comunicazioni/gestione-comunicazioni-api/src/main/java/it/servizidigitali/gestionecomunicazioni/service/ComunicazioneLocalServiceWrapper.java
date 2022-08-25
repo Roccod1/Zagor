@@ -56,6 +56,30 @@ public class ComunicazioneLocalServiceWrapper
 		return _comunicazioneLocalService.addComunicazione(comunicazione);
 	}
 
+	@Override
+	public it.servizidigitali.gestionecomunicazioni.model.Comunicazione
+			addComunicazione(
+				long groupId, long companyId, long userId, long organizationId,
+				String userName, String titolo, String descrizione,
+				java.util.Date dataInizio, java.util.Date dataFine,
+				long tipologiaId, Long destinatarioUserId,
+				long destinatarioOrganizationId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _comunicazioneLocalService.addComunicazione(
+			groupId, companyId, userId, organizationId, userName, titolo,
+			descrizione, dataInizio, dataFine, tipologiaId, destinatarioUserId,
+			destinatarioOrganizationId);
+	}
+
+	@Override
+	public int countComunicazioni(
+		it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters
+			filters) {
+
+		return _comunicazioneLocalService.countComunicazioni(filters);
+	}
+
 	/**
 	 * Creates a new comunicazione with the primary key. Does not add the comunicazione to the database.
 	 *
@@ -397,6 +421,28 @@ public class ComunicazioneLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _comunicazioneLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.gestionecomunicazioni.model.Comunicazione>
+			searchComunicazioni(
+				it.servizidigitali.gestionecomunicazioni.model.
+					ComunicazioneFilters filters) {
+
+		return _comunicazioneLocalService.searchComunicazioni(filters);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.gestionecomunicazioni.model.Comunicazione>
+			searchComunicazioni(
+				it.servizidigitali.gestionecomunicazioni.model.
+					ComunicazioneFilters filters,
+				int cur, int delta) {
+
+		return _comunicazioneLocalService.searchComunicazioni(
+			filters, cur, delta);
 	}
 
 	/**

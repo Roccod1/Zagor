@@ -30,4 +30,7 @@ public interface ServizioFinder {
 			com.liferay.portal.kernel.util.OrderByComparator
 				<it.servizidigitali.gestioneservizi.model.Servizio> ordine);
 
+	public int countServizioByFilter(
+		String nome, String codice, Boolean soloServiziAttivi);
+
 }

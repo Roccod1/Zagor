@@ -64,7 +64,7 @@ public class ServizioEnteCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(51);
+		StringBundler sb = new StringBundler(55);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -84,14 +84,18 @@ public class ServizioEnteCacheModel
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
-		sb.append(", uri=");
-		sb.append(uri);
-		sb.append(", uriGuest=");
-		sb.append(uriGuest);
-		sb.append(", uriScheda=");
-		sb.append(uriScheda);
+		sb.append(", privateLayoutId=");
+		sb.append(privateLayoutId);
+		sb.append(", publicLayoutId=");
+		sb.append(publicLayoutId);
+		sb.append(", uriEsterna=");
+		sb.append(uriEsterna);
+		sb.append(", catalogoServizioArticleId=");
+		sb.append(catalogoServizioArticleId);
 		sb.append(", autenticazione=");
 		sb.append(autenticazione);
+		sb.append(", livelloAutenticazione=");
+		sb.append(livelloAutenticazione);
 		sb.append(", dataInizioAttivazione=");
 		sb.append(dataInizioAttivazione);
 		sb.append(", dataFineAttivazione=");
@@ -159,28 +163,20 @@ public class ServizioEnteCacheModel
 			servizioEnteImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
-		if (uri == null) {
-			servizioEnteImpl.setUri("");
+		servizioEnteImpl.setPrivateLayoutId(privateLayoutId);
+		servizioEnteImpl.setPublicLayoutId(publicLayoutId);
+
+		if (uriEsterna == null) {
+			servizioEnteImpl.setUriEsterna("");
 		}
 		else {
-			servizioEnteImpl.setUri(uri);
+			servizioEnteImpl.setUriEsterna(uriEsterna);
 		}
 
-		if (uriGuest == null) {
-			servizioEnteImpl.setUriGuest("");
-		}
-		else {
-			servizioEnteImpl.setUriGuest(uriGuest);
-		}
-
-		if (uriScheda == null) {
-			servizioEnteImpl.setUriScheda("");
-		}
-		else {
-			servizioEnteImpl.setUriScheda(uriScheda);
-		}
-
+		servizioEnteImpl.setCatalogoServizioArticleId(
+			catalogoServizioArticleId);
 		servizioEnteImpl.setAutenticazione(autenticazione);
+		servizioEnteImpl.setLivelloAutenticazione(livelloAutenticazione);
 
 		if (dataInizioAttivazione == Long.MIN_VALUE) {
 			servizioEnteImpl.setDataInizioAttivazione(null);
@@ -230,11 +226,17 @@ public class ServizioEnteCacheModel
 		userName = objectInput.readUTF();
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
-		uri = objectInput.readUTF();
-		uriGuest = objectInput.readUTF();
-		uriScheda = objectInput.readUTF();
+
+		privateLayoutId = objectInput.readLong();
+
+		publicLayoutId = objectInput.readLong();
+		uriEsterna = objectInput.readUTF();
+
+		catalogoServizioArticleId = objectInput.readLong();
 
 		autenticazione = objectInput.readBoolean();
+
+		livelloAutenticazione = objectInput.readInt();
 		dataInizioAttivazione = objectInput.readLong();
 		dataFineAttivazione = objectInput.readLong();
 
@@ -290,28 +292,22 @@ public class ServizioEnteCacheModel
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
 
-		if (uri == null) {
+		objectOutput.writeLong(privateLayoutId);
+
+		objectOutput.writeLong(publicLayoutId);
+
+		if (uriEsterna == null) {
 			objectOutput.writeUTF("");
 		}
 		else {
-			objectOutput.writeUTF(uri);
+			objectOutput.writeUTF(uriEsterna);
 		}
 
-		if (uriGuest == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(uriGuest);
-		}
-
-		if (uriScheda == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(uriScheda);
-		}
+		objectOutput.writeLong(catalogoServizioArticleId);
 
 		objectOutput.writeBoolean(autenticazione);
+
+		objectOutput.writeInt(livelloAutenticazione);
 		objectOutput.writeLong(dataInizioAttivazione);
 		objectOutput.writeLong(dataFineAttivazione);
 
@@ -345,10 +341,12 @@ public class ServizioEnteCacheModel
 	public String userName;
 	public long createDate;
 	public long modifiedDate;
-	public String uri;
-	public String uriGuest;
-	public String uriScheda;
+	public long privateLayoutId;
+	public long publicLayoutId;
+	public String uriEsterna;
+	public long catalogoServizioArticleId;
 	public boolean autenticazione;
+	public int livelloAutenticazione;
 	public long dataInizioAttivazione;
 	public long dataFineAttivazione;
 	public boolean cittadino;

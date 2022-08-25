@@ -29,10 +29,12 @@
 		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
-		<column name="uri" type="String" />
-		<column name="uriGuest" type="String" />
-		<column name="uriScheda" type="String" />
+		<column name="privateLayoutId" type="long" />
+		<column name="publicLayoutId" type="long" />
+		<column name="uriEsterna" type="String" />
+		<column name="catalogoServizioArticleId" type="long" />
 		<column name="autenticazione" type="boolean" />
+		<column name="livelloAutenticazione" type="int" />
 		<column name="dataInizioAttivazione" type="Date" />
 		<column name="dataFineAttivazione" type="Date" />
 		<column name="cittadino" type="boolean" />

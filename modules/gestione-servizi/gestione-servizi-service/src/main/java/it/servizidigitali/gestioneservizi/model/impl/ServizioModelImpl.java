@@ -79,8 +79,7 @@ public class ServizioModelImpl
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"nome", Types.VARCHAR}, {"descrizione", Types.VARCHAR},
 		{"descrizioneEstesa", Types.VARCHAR}, {"codice", Types.VARCHAR},
-		{"uri", Types.VARCHAR}, {"uriGuest", Types.VARCHAR},
-		{"uriScheda", Types.VARCHAR}, {"autenticazione", Types.BOOLEAN},
+		{"autenticazione", Types.BOOLEAN},
 		{"dataInizioAttivazione", Types.TIMESTAMP},
 		{"dataFineAttivazione", Types.TIMESTAMP}, {"cittadino", Types.BOOLEAN},
 		{"azienda", Types.BOOLEAN}, {"delega", Types.BOOLEAN},
@@ -108,9 +107,6 @@ public class ServizioModelImpl
 		TABLE_COLUMNS_MAP.put("descrizione", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("descrizioneEstesa", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("codice", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("uri", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("uriGuest", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("uriScheda", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("autenticazione", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("dataInizioAttivazione", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("dataFineAttivazione", Types.TIMESTAMP);
@@ -129,7 +125,7 @@ public class ServizioModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table servizio (uuid_ VARCHAR(75) null,servizioId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,descrizioneEstesa VARCHAR(75) null,codice VARCHAR(75) null,uri VARCHAR(75) null,uriGuest VARCHAR(75) null,uriScheda VARCHAR(75) null,autenticazione BOOLEAN,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,gestioneBackoffice BOOLEAN,prenotabile BOOLEAN,codicePrestazioneINPS VARCHAR(75) null,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,attivo BOOLEAN,areaTematicaId LONG)";
+		"create table servizio (uuid_ VARCHAR(75) null,servizioId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,descrizioneEstesa VARCHAR(75) null,codice VARCHAR(75) null,autenticazione BOOLEAN,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,gestioneBackoffice BOOLEAN,prenotabile BOOLEAN,codicePrestazioneINPS VARCHAR(75) null,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,attivo BOOLEAN,areaTematicaId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table servizio";
 
@@ -368,15 +364,6 @@ public class ServizioModelImpl
 		attributeGetterFunctions.put("codice", Servizio::getCodice);
 		attributeSetterBiConsumers.put(
 			"codice", (BiConsumer<Servizio, String>)Servizio::setCodice);
-		attributeGetterFunctions.put("uri", Servizio::getUri);
-		attributeSetterBiConsumers.put(
-			"uri", (BiConsumer<Servizio, String>)Servizio::setUri);
-		attributeGetterFunctions.put("uriGuest", Servizio::getUriGuest);
-		attributeSetterBiConsumers.put(
-			"uriGuest", (BiConsumer<Servizio, String>)Servizio::setUriGuest);
-		attributeGetterFunctions.put("uriScheda", Servizio::getUriScheda);
-		attributeSetterBiConsumers.put(
-			"uriScheda", (BiConsumer<Servizio, String>)Servizio::setUriScheda);
 		attributeGetterFunctions.put(
 			"autenticazione", Servizio::getAutenticazione);
 		attributeSetterBiConsumers.put(
@@ -703,63 +690,6 @@ public class ServizioModelImpl
 	@Deprecated
 	public String getOriginalCodice() {
 		return getColumnOriginalValue("codice");
-	}
-
-	@Override
-	public String getUri() {
-		if (_uri == null) {
-			return "";
-		}
-		else {
-			return _uri;
-		}
-	}
-
-	@Override
-	public void setUri(String uri) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_uri = uri;
-	}
-
-	@Override
-	public String getUriGuest() {
-		if (_uriGuest == null) {
-			return "";
-		}
-		else {
-			return _uriGuest;
-		}
-	}
-
-	@Override
-	public void setUriGuest(String uriGuest) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_uriGuest = uriGuest;
-	}
-
-	@Override
-	public String getUriScheda() {
-		if (_uriScheda == null) {
-			return "";
-		}
-		else {
-			return _uriScheda;
-		}
-	}
-
-	@Override
-	public void setUriScheda(String uriScheda) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_uriScheda = uriScheda;
 	}
 
 	@Override
@@ -1116,9 +1046,6 @@ public class ServizioModelImpl
 		servizioImpl.setDescrizione(getDescrizione());
 		servizioImpl.setDescrizioneEstesa(getDescrizioneEstesa());
 		servizioImpl.setCodice(getCodice());
-		servizioImpl.setUri(getUri());
-		servizioImpl.setUriGuest(getUriGuest());
-		servizioImpl.setUriScheda(getUriScheda());
 		servizioImpl.setAutenticazione(isAutenticazione());
 		servizioImpl.setDataInizioAttivazione(getDataInizioAttivazione());
 		servizioImpl.setDataFineAttivazione(getDataFineAttivazione());
@@ -1163,11 +1090,6 @@ public class ServizioModelImpl
 		servizioImpl.setDescrizioneEstesa(
 			this.<String>getColumnOriginalValue("descrizioneEstesa"));
 		servizioImpl.setCodice(this.<String>getColumnOriginalValue("codice"));
-		servizioImpl.setUri(this.<String>getColumnOriginalValue("uri"));
-		servizioImpl.setUriGuest(
-			this.<String>getColumnOriginalValue("uriGuest"));
-		servizioImpl.setUriScheda(
-			this.<String>getColumnOriginalValue("uriScheda"));
 		servizioImpl.setAutenticazione(
 			this.<Boolean>getColumnOriginalValue("autenticazione"));
 		servizioImpl.setDataInizioAttivazione(
@@ -1345,30 +1267,6 @@ public class ServizioModelImpl
 			servizioCacheModel.codice = null;
 		}
 
-		servizioCacheModel.uri = getUri();
-
-		String uri = servizioCacheModel.uri;
-
-		if ((uri != null) && (uri.length() == 0)) {
-			servizioCacheModel.uri = null;
-		}
-
-		servizioCacheModel.uriGuest = getUriGuest();
-
-		String uriGuest = servizioCacheModel.uriGuest;
-
-		if ((uriGuest != null) && (uriGuest.length() == 0)) {
-			servizioCacheModel.uriGuest = null;
-		}
-
-		servizioCacheModel.uriScheda = getUriScheda();
-
-		String uriScheda = servizioCacheModel.uriScheda;
-
-		if ((uriScheda != null) && (uriScheda.length() == 0)) {
-			servizioCacheModel.uriScheda = null;
-		}
-
 		servizioCacheModel.autenticazione = isAutenticazione();
 
 		Date dataInizioAttivazione = getDataInizioAttivazione();
@@ -1526,9 +1424,6 @@ public class ServizioModelImpl
 	private String _descrizione;
 	private String _descrizioneEstesa;
 	private String _codice;
-	private String _uri;
-	private String _uriGuest;
-	private String _uriScheda;
 	private boolean _autenticazione;
 	private Date _dataInizioAttivazione;
 	private Date _dataFineAttivazione;
@@ -1586,9 +1481,6 @@ public class ServizioModelImpl
 		_columnOriginalValues.put("descrizione", _descrizione);
 		_columnOriginalValues.put("descrizioneEstesa", _descrizioneEstesa);
 		_columnOriginalValues.put("codice", _codice);
-		_columnOriginalValues.put("uri", _uri);
-		_columnOriginalValues.put("uriGuest", _uriGuest);
-		_columnOriginalValues.put("uriScheda", _uriScheda);
 		_columnOriginalValues.put("autenticazione", _autenticazione);
 		_columnOriginalValues.put(
 			"dataInizioAttivazione", _dataInizioAttivazione);
@@ -1653,41 +1545,35 @@ public class ServizioModelImpl
 
 		columnBitmasks.put("codice", 2048L);
 
-		columnBitmasks.put("uri", 4096L);
+		columnBitmasks.put("autenticazione", 4096L);
 
-		columnBitmasks.put("uriGuest", 8192L);
+		columnBitmasks.put("dataInizioAttivazione", 8192L);
 
-		columnBitmasks.put("uriScheda", 16384L);
+		columnBitmasks.put("dataFineAttivazione", 16384L);
 
-		columnBitmasks.put("autenticazione", 32768L);
+		columnBitmasks.put("cittadino", 32768L);
 
-		columnBitmasks.put("dataInizioAttivazione", 65536L);
+		columnBitmasks.put("azienda", 65536L);
 
-		columnBitmasks.put("dataFineAttivazione", 131072L);
+		columnBitmasks.put("delega", 131072L);
 
-		columnBitmasks.put("cittadino", 262144L);
+		columnBitmasks.put("chatbot", 262144L);
 
-		columnBitmasks.put("azienda", 524288L);
+		columnBitmasks.put("gestioneBackoffice", 524288L);
 
-		columnBitmasks.put("delega", 1048576L);
+		columnBitmasks.put("prenotabile", 1048576L);
 
-		columnBitmasks.put("chatbot", 2097152L);
+		columnBitmasks.put("codicePrestazioneINPS", 2097152L);
 
-		columnBitmasks.put("gestioneBackoffice", 4194304L);
+		columnBitmasks.put("privacyDelega", 4194304L);
 
-		columnBitmasks.put("prenotabile", 8388608L);
+		columnBitmasks.put("allegatoDelega", 8388608L);
 
-		columnBitmasks.put("codicePrestazioneINPS", 16777216L);
+		columnBitmasks.put("timbroCertificato", 16777216L);
 
-		columnBitmasks.put("privacyDelega", 33554432L);
+		columnBitmasks.put("attivo", 33554432L);
 
-		columnBitmasks.put("allegatoDelega", 67108864L);
-
-		columnBitmasks.put("timbroCertificato", 134217728L);
-
-		columnBitmasks.put("attivo", 268435456L);
-
-		columnBitmasks.put("areaTematicaId", 536870912L);
+		columnBitmasks.put("areaTematicaId", 67108864L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}
