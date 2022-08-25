@@ -1,5 +1,6 @@
 package it.servizidigitali.camunda.integration.client;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map.Entry;
@@ -26,13 +27,13 @@ public interface CamundaClient {
 
 	boolean existProcessByBusinessKey(String tenantId, long businessKey);
 
-	void insertOrUpdateProcessDefinitions(String tenantId, String processDefinitionName, byte[] byteArray) throws CamundaClientException;
+	String insertOrUpdateProcessDefinitions(String tenantId, String processDefinitionName, byte[] byteArray) throws CamundaClientException;
 
 	long countTasksByCandidateGroupsAndCodiceServizio(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned) throws CamundaClientException;
 
 	long countTasksByCandidateGroupsAndCodiceServizio(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned, List<VariableInstanceDto> variables)
 			throws CamundaClientException;
-
+	
 	List<TaskDto> getTasksByCandidateGroupsAndCodiceServizio(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned) throws CamundaClientException;
 
 	List<TaskDto> getTasksByCandidateGroupsAndCodiceServizio(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned, List<VariableInstanceDto> variables,
@@ -80,4 +81,6 @@ public interface CamundaClient {
 	 * @throws CamundaClientException
 	 */
 	long countTasksByCodiceIpaComuneAndCodiceServizio(String tenantId, String codiceIpa, String codiceServizio, boolean unassigned) throws CamundaClientException;
+
+	File getDeploymentFile(String id) throws CamundaClientException;
 }

@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,6 +24,7 @@ import org.camunda.community.rest.client.api.TaskApi;
 import org.camunda.community.rest.client.api.VariableInstanceApi;
 import org.camunda.community.rest.client.dto.CompleteTaskDto;
 import org.camunda.community.rest.client.dto.CountResultDto;
+import org.camunda.community.rest.client.dto.DeploymentResourceDto;
 import org.camunda.community.rest.client.dto.DeploymentWithDefinitionsDto;
 import org.camunda.community.rest.client.dto.PatchVariablesDto;
 import org.camunda.community.rest.client.dto.ProcessDefinitionDto;
@@ -107,7 +109,7 @@ public class CamundaClientImpl implements CamundaClient {
 		}
 		catch (Exception e) {
 			log.error("getProcessDefinitions", e);
-			throw new CamundaClientException("insertOrUpdateProcessDefinitions :: " + e.getMessage(), e);
+			throw new CamundaClientException("getProcessDefinitions :: " + e.getMessage(), e);
 		}
 	}
 
@@ -194,13 +196,19 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public void insertOrUpdateProcessDefinitions(String tenantId, String fileName, byte[] byteArray) throws CamundaClientException {
+	public String insertOrUpdateProcessDefinitions(String tenantId, String fileName, byte[] byteArray) throws CamundaClientException {
 
 		File file = null;
 		File tempFolder = null;
+		String deploymentId = "";
+		DeploymentWithDefinitionsDto output = null;
+
+		
 		try {
 
 			ApiClient client = getApiClient();
+			
+			String time = "_" + new Date().getTime();
 
 			String suffix = ".bpmn";
 
@@ -208,12 +216,16 @@ public class CamundaClientImpl implements CamundaClient {
 
 			tempFolder = tempDirWithPrefix.toFile();
 
-			Path path = Paths.get(tempDirWithPrefix.toString(), fileName + suffix);
+			Path path = Paths.get(tempDirWithPrefix.toString(), fileName + time + suffix);
 
 			Path filePath = Files.write(path, byteArray);
 
 			file = filePath.toFile();
-			DeploymentWithDefinitionsDto output = new DeploymentApi(client).createDeployment(tenantId, null, false, false, "AutoDeployment", null, file);
+			
+			output = new DeploymentApi(client).createDeployment(tenantId, null, false, false, "AutoDeployment", null, file);
+			
+			deploymentId = output.getId();
+			
 			log.debug("Created " + output.getId());
 
 		}
@@ -229,6 +241,8 @@ public class CamundaClientImpl implements CamundaClient {
 				tempFolder.delete();
 			}
 		}
+		
+		return deploymentId;
 	}
 
 	@Override
@@ -582,6 +596,33 @@ public class CamundaClientImpl implements CamundaClient {
 		}
 
 		return q;
+	}
+
+	@Override
+	public File getDeploymentFile(String id) throws CamundaClientException {
+		
+		File output = null;
+		
+		
+		try {
+
+			ApiClient client = getApiClient();
+			
+			List<DeploymentResourceDto> listResource = new DeploymentApi(client).getDeploymentResources(id);
+			
+			if(!listResource.isEmpty()) {
+				output = new DeploymentApi(client).getDeploymentResourceData(id, listResource.get(0).getId());
+			}else {
+				log.error("getDeploymentFile :: Impossibile recuperare la resource del deployment con ID : " + id);
+			}
+
+		}
+		catch (Exception e) {
+			log.error("getDeploymentFile", e);
+			throw new CamundaClientException("getDeploymentFile :: " + e.getMessage(), e);
+		}
+		
+		return output;
 	}
 
 }
