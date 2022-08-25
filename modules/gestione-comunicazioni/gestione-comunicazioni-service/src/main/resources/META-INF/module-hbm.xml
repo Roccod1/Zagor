@@ -3,6 +3,7 @@
 
 <hibernate-mapping auto-import="false" default-lazy="false">
 	<import class="it.servizidigitali.gestionecomunicazioni.model.Comunicazione" />
+	<import class="it.servizidigitali.gestionecomunicazioni.model.LetturaComunicazione" />
 	<import class="it.servizidigitali.gestionecomunicazioni.model.TipologiaComunicazione" />
 	<class name="it.servizidigitali.gestionecomunicazioni.model.impl.ComunicazioneImpl" table="comunicazione">
 		<id access="com.liferay.portal.dao.orm.hibernate.LiferayPropertyAccessor" name="comunicazioneId" type="long">
@@ -27,6 +28,13 @@
 		<property access="com.liferay.portal.dao.orm.hibernate.LiferayPropertyAccessor" name="destinatarioUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.LiferayPropertyAccessor" name="destinatarioOrganizationId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property access="com.liferay.portal.dao.orm.hibernate.LiferayPropertyAccessor" name="calendarBookingId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+	<class name="it.servizidigitali.gestionecomunicazioni.model.impl.LetturaComunicazioneImpl" table="lettura_comunicazione">
+		<composite-id class="it.servizidigitali.gestionecomunicazioni.service.persistence.LetturaComunicazionePK" name="primaryKey">
+			<key-property access="com.liferay.portal.dao.orm.hibernate.LiferayPropertyAccessor" name="comunicazioneId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property access="com.liferay.portal.dao.orm.hibernate.LiferayPropertyAccessor" name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
+		<property access="com.liferay.portal.dao.orm.hibernate.LiferayPropertyAccessor" name="dataLettura" type="org.hibernate.type.TimestampType" />
 	</class>
 	<class name="it.servizidigitali.gestionecomunicazioni.model.impl.TipologiaComunicazioneImpl" table="tipologia_comunicazione">
 		<id access="com.liferay.portal.dao.orm.hibernate.LiferayPropertyAccessor" name="tipologiaComunicazioneId" type="long">

@@ -65,27 +65,6 @@
 		
 		<div class="row">
 			<div class="col">
-				<div class="form-group">
-					<aui:input type="text" name="uri" label="uri-privata" value="${servizio.uri}"/>
-				</div>
-			</div>
-			<div class="col">
-				<div class="form-group">
-					<aui:input type="text" name="uriGuest" label="uri-pubblica" value="${servizio.uriGuest}"/>
-				</div>
-			</div>
-		</div>
-		
-		<div class="row">
-			<div class="col">
-				<div class="form-group">
-					<aui:input type="text" name="uriScheda" label="uri-scheda" value="${servizio.uriScheda}"/>
-				</div>
-			</div>
-		</div>
-		
-		<div class="row">
-			<div class="col">
 				<div class="form-group form-check">
 					<aui:input type="checkbox" name="autenticazione" label="autenticazione" value="${servizio.autenticazione}"/>
 				</div>

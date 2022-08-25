@@ -265,51 +265,6 @@ public interface ServizioModel
 	public void setCodice(String codice);
 
 	/**
-	 * Returns the uri of this servizio.
-	 *
-	 * @return the uri of this servizio
-	 */
-	@AutoEscape
-	public String getUri();
-
-	/**
-	 * Sets the uri of this servizio.
-	 *
-	 * @param uri the uri of this servizio
-	 */
-	public void setUri(String uri);
-
-	/**
-	 * Returns the uri guest of this servizio.
-	 *
-	 * @return the uri guest of this servizio
-	 */
-	@AutoEscape
-	public String getUriGuest();
-
-	/**
-	 * Sets the uri guest of this servizio.
-	 *
-	 * @param uriGuest the uri guest of this servizio
-	 */
-	public void setUriGuest(String uriGuest);
-
-	/**
-	 * Returns the uri scheda of this servizio.
-	 *
-	 * @return the uri scheda of this servizio
-	 */
-	@AutoEscape
-	public String getUriScheda();
-
-	/**
-	 * Sets the uri scheda of this servizio.
-	 *
-	 * @param uriScheda the uri scheda of this servizio
-	 */
-	public void setUriScheda(String uriScheda);
-
-	/**
 	 * Returns the autenticazione of this servizio.
 	 *
 	 * @return the autenticazione of this servizio

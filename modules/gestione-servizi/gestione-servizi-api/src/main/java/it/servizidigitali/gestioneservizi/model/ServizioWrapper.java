@@ -55,9 +55,6 @@ public class ServizioWrapper
 		attributes.put("descrizione", getDescrizione());
 		attributes.put("descrizioneEstesa", getDescrizioneEstesa());
 		attributes.put("codice", getCodice());
-		attributes.put("uri", getUri());
-		attributes.put("uriGuest", getUriGuest());
-		attributes.put("uriScheda", getUriScheda());
 		attributes.put("autenticazione", isAutenticazione());
 		attributes.put("dataInizioAttivazione", getDataInizioAttivazione());
 		attributes.put("dataFineAttivazione", getDataFineAttivazione());
@@ -149,24 +146,6 @@ public class ServizioWrapper
 
 		if (codice != null) {
 			setCodice(codice);
-		}
-
-		String uri = (String)attributes.get("uri");
-
-		if (uri != null) {
-			setUri(uri);
-		}
-
-		String uriGuest = (String)attributes.get("uriGuest");
-
-		if (uriGuest != null) {
-			setUriGuest(uriGuest);
-		}
-
-		String uriScheda = (String)attributes.get("uriScheda");
-
-		if (uriScheda != null) {
-			setUriScheda(uriScheda);
 		}
 
 		Boolean autenticazione = (Boolean)attributes.get("autenticazione");
@@ -277,6 +256,13 @@ public class ServizioWrapper
 	@Override
 	public boolean getAllegatoDelega() {
 		return model.getAllegatoDelega();
+	}
+
+	@Override
+	public it.servizidigitali.gestioneservizi.model.AreaTematica
+		getAreaTematica() {
+
+		return model.getAreaTematica();
 	}
 
 	/**
@@ -527,36 +513,6 @@ public class ServizioWrapper
 	}
 
 	/**
-	 * Returns the uri of this servizio.
-	 *
-	 * @return the uri of this servizio
-	 */
-	@Override
-	public String getUri() {
-		return model.getUri();
-	}
-
-	/**
-	 * Returns the uri guest of this servizio.
-	 *
-	 * @return the uri guest of this servizio
-	 */
-	@Override
-	public String getUriGuest() {
-		return model.getUriGuest();
-	}
-
-	/**
-	 * Returns the uri scheda of this servizio.
-	 *
-	 * @return the uri scheda of this servizio
-	 */
-	@Override
-	public String getUriScheda() {
-		return model.getUriScheda();
-	}
-
-	/**
 	 * Returns the user ID of this servizio.
 	 *
 	 * @return the user ID of this servizio
@@ -719,6 +675,13 @@ public class ServizioWrapper
 	@Override
 	public void setAllegatoDelega(boolean allegatoDelega) {
 		model.setAllegatoDelega(allegatoDelega);
+	}
+
+	@Override
+	public void setAreaTematica(
+		it.servizidigitali.gestioneservizi.model.AreaTematica areaTematica) {
+
+		model.setAreaTematica(areaTematica);
 	}
 
 	/**
@@ -967,36 +930,6 @@ public class ServizioWrapper
 	@Override
 	public void setTimbroCertificato(boolean timbroCertificato) {
 		model.setTimbroCertificato(timbroCertificato);
-	}
-
-	/**
-	 * Sets the uri of this servizio.
-	 *
-	 * @param uri the uri of this servizio
-	 */
-	@Override
-	public void setUri(String uri) {
-		model.setUri(uri);
-	}
-
-	/**
-	 * Sets the uri guest of this servizio.
-	 *
-	 * @param uriGuest the uri guest of this servizio
-	 */
-	@Override
-	public void setUriGuest(String uriGuest) {
-		model.setUriGuest(uriGuest);
-	}
-
-	/**
-	 * Sets the uri scheda of this servizio.
-	 *
-	 * @param uriScheda the uri scheda of this servizio
-	 */
-	@Override
-	public void setUriScheda(String uriScheda) {
-		model.setUriScheda(uriScheda);
 	}
 
 	/**

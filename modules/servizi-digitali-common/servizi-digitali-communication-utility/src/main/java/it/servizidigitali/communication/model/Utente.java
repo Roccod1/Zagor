@@ -15,8 +15,8 @@ public class Utente implements Serializable {
 	private String cognome;
 	private String nome;
 	private String codiceFiscale;
-	private String mail;
-	private String mailPec;
+	private String email;
+	private String pec;
 	private boolean autenticazioneForte;
 	private Integer livelloAutenticazione;
 	private Date dataAutenticazioneForte;
@@ -69,31 +69,31 @@ public class Utente implements Serializable {
 	}
 
 	/**
-	 * @return the mail
+	 * @return the email
 	 */
-	public String getMail() {
-		return mail;
+	public String getEmail() {
+		return email;
 	}
 
 	/**
-	 * @param mail the mail to set
+	 * @param email the email to set
 	 */
-	public void setMail(String mail) {
-		this.mail = mail;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	/**
-	 * @return the mailPec
+	 * @return the pec
 	 */
-	public String getMailPec() {
-		return mailPec;
+	public String getPec() {
+		return pec;
 	}
 
 	/**
-	 * @param mailPec the mailPec to set
+	 * @param pec the pec to set
 	 */
-	public void setMailPec(String mailPec) {
-		this.mailPec = mailPec;
+	public void setPec(String pec) {
+		this.pec = pec;
 	}
 
 	/**
@@ -181,20 +181,6 @@ public class Utente implements Serializable {
 	}
 
 	/**
-	 * @return the attivo
-	 */
-	public boolean isAttivo() {
-		return attivo;
-	}
-
-	/**
-	 * @param attivo the attivo to set
-	 */
-	public void setAttivo(boolean attivo) {
-		this.attivo = attivo;
-	}
-
-	/**
 	 * @return the gruppi
 	 */
 	public List<Gruppo> getGruppi() {
@@ -206,6 +192,20 @@ public class Utente implements Serializable {
 	 */
 	public void setGruppi(List<Gruppo> gruppi) {
 		this.gruppi = gruppi;
+	}
+
+	/**
+	 * @return the attivo
+	 */
+	public boolean isAttivo() {
+		return attivo;
+	}
+
+	/**
+	 * @param attivo the attivo to set
+	 */
+	public void setAttivo(boolean attivo) {
+		this.attivo = attivo;
 	}
 
 }

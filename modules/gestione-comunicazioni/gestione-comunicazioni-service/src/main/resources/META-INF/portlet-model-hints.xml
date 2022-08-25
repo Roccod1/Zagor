@@ -23,6 +23,11 @@
 		<field name="destinatarioOrganizationId" type="long" />
 		<field name="calendarBookingId" type="long" />
 	</model>
+	<model name="it.servizidigitali.gestionecomunicazioni.model.LetturaComunicazione">
+		<field name="comunicazioneId" type="long" />
+		<field name="userId" type="long" />
+		<field name="dataLettura" type="Date" />
+	</model>
 	<model name="it.servizidigitali.gestionecomunicazioni.model.TipologiaComunicazione">
 		<field name="tipologiaComunicazioneId" type="long" />
 		<field name="nome" type="String" />

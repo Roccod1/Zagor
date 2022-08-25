@@ -19,6 +19,9 @@ public class Comunicazione implements Serializable {
 	private String disclaimer;
 	private boolean invioMultiplo = true;
 
+	private long companyId;
+	private long groupId;
+
 	public Comunicazione(String oggetto, String testo, List<Utente> utenti, List<Allegato> allegati, boolean invioMultiplo, String disclaimer) {
 		this.oggetto = oggetto;
 		this.testo = testo;
@@ -26,6 +29,17 @@ public class Comunicazione implements Serializable {
 		this.utenti = utenti;
 		this.disclaimer = disclaimer;
 		this.invioMultiplo = invioMultiplo;
+	}
+
+	public Comunicazione(String oggetto, String testo, List<Utente> utenti, List<Allegato> allegati, boolean invioMultiplo, String disclaimer, long companyId, long groupId) {
+		this.oggetto = oggetto;
+		this.testo = testo;
+		this.allegati = allegati;
+		this.utenti = utenti;
+		this.disclaimer = disclaimer;
+		this.invioMultiplo = invioMultiplo;
+		this.companyId = companyId;
+		this.groupId = groupId;
 	}
 
 	/**
@@ -110,6 +124,34 @@ public class Comunicazione implements Serializable {
 	 */
 	public void setInvioMultiplo(boolean invioMultiplo) {
 		this.invioMultiplo = invioMultiplo;
+	}
+
+	/**
+	 * @return the companyId
+	 */
+	public long getCompanyId() {
+		return companyId;
+	}
+
+	/**
+	 * @param companyId the companyId to set
+	 */
+	public void setCompanyId(long companyId) {
+		this.companyId = companyId;
+	}
+
+	/**
+	 * @return the groupId
+	 */
+	public long getGroupId() {
+		return groupId;
+	}
+
+	/**
+	 * @param groupId the groupId to set
+	 */
+	public void setGroupId(long groupId) {
+		this.groupId = groupId;
 	}
 
 }

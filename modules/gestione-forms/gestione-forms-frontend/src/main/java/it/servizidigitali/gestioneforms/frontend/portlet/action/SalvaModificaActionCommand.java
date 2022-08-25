@@ -97,7 +97,7 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		form.setPrincipale(principale);
 		form.setUserId(serviceContext.getThemeDisplay().getUserId());
 		form.setGroupId(serviceContext.getThemeDisplay().getScopeGroupId());
-		form.setUserName(serviceContext.getThemeDisplay().getUser().getScreenName());
+		form.setUserName(serviceContext.getThemeDisplay().getUser().getFullName());
 		
 		formLocalService.updateForm(form);
 		

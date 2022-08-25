@@ -44,4 +44,25 @@ public class ServizioFinderImpl extends ServizioFinderBaseImpl implements Serviz
 		
 		return listaServiziFiltered;
 	}
+	
+	public int countServizioByFilter(String nome, String codice, Boolean soloServiziAttivi) {
+		ClassLoader classLoader = getClass().getClassLoader();
+		
+		DynamicQuery query = DynamicQueryFactoryUtil.forClass(Servizio.class, classLoader);
+
+		if(Validator.isNotNull(nome)) {
+			query.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));			
+		}
+		
+		if(Validator.isNotNull(codice)){
+			query.add(RestrictionsFactoryUtil.like("codice", StringPool.PERCENT + codice + StringPool.PERCENT));
+		}
+		
+		if(soloServiziAttivi) {
+			query.add(RestrictionsFactoryUtil.eq("attivo", true));
+		}
+		
+		return (int) servizioPersistence.countWithDynamicQuery(query);
+	}
+	
 }
