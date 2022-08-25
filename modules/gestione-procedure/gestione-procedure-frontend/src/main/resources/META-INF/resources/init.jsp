@@ -7,6 +7,14 @@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %><%@
 taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
+<%@page import="java.util.List"%>
+<%@page import="javax.portlet.RenderRequest"%>
+<%@page import="com.liferay.portal.kernel.util.PortalUtil"%>
+<%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
+<%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="it.servizidigitali.gestioneprocedure.frontend.constants.GestioneProcedurePortletKeys"%>
+<%@page import="it.servizidigitali.gestioneprocedure.model.Procedura"%>
+
 <liferay-theme:defineObjects />
 
 <portlet:defineObjects />

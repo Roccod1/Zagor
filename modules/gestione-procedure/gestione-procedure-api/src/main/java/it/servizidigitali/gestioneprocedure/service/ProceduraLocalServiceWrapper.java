@@ -53,6 +53,18 @@ public class ProceduraLocalServiceWrapper
 		return _proceduraLocalService.addProcedura(procedura);
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
+		cerca(
+			String nome, String stato, java.util.Date dataInserimentoDa,
+			java.util.Date dataInserimentoA, int delta, int cur,
+			String orderByCol, String orderByType) {
+
+		return _proceduraLocalService.cerca(
+			nome, stato, dataInserimentoDa, dataInserimentoA, delta, cur,
+			orderByCol, orderByType);
+	}
+
 	/**
 	 * @throws PortalException
 	 */

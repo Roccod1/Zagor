@@ -1,0 +1,210 @@
+<%@ include file="init.jsp" %>
+
+<div class="page-header">
+	<h2><liferay-ui:message key="procedura"/></h2>
+</div>
+
+
+<div class="row">
+
+	<div class="col-12">
+	
+		<aui:form id="nuovaProceduraForm" action="" name="formConfiguraProcedura">
+			<form:hidden path="id"/>
+			<fieldset>
+				<legend>Dati Identificativi</legend>
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<aui:input label="nome" name="<%=GestioneProcedurePortletKeys.NOME %>" type="text" value=""/> 
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<aui:input label="pec" name="<%=GestioneProcedurePortletKeys.PEC %>" type="text" value=""/> 
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12">
+						<div class="form-group">
+								<aui:input label="attiva-procedura" name="<%=GestioneProcedurePortletKeys.ATTIVA_PROCEDURA %>" type="checkbox"/>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+				<legend><liferay-ui:message key="configurazione-procedura"/></legend>
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+								<aui:select label="servizio" name="<%=GestioneProcedurePortletKeys.SERVIZIO %>">
+										<aui:option value="" selected="true">Servizio</aui:option>
+								</aui:select>
+						</div>
+					</div>
+					
+					<div class="col-6">
+							<div class="form-group">
+								<aui:select label="processo-bpmn" name="<%=GestioneProcedurePortletKeys.PROCESSO_BPMN %>" >
+									<aui:option value="">Lista processi BPMN</aui:option>
+								</aui:select>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+				
+					
+<!-- 						<div class="col-6"> -->
+<!-- 							<div class="form-group"> -->
+<!-- 									<form:select id="identificativoProcesso" path="identificativoProcesso" class="col-12" > -->
+<!-- 										<option value=""></option> -->
+<%-- 										<c:choose> --%>
+<%-- 											<c:when test="${formConfiguraProcedura.parametriConfigurazioneProcedura.usaBpmn == true}"> --%>
+<%-- 												<form:options items="${formConfiguraProcedura.parametriConfigurazioneProcedura.listProcessiBpmn}" itemLabel="denominazione" itemValue="codiceIdentificativo" /> --%>
+<%-- 											</c:when> --%>
+<%-- 											<c:otherwise> --%>
+<%-- 												<c:forEach items="${formConfiguraProcedura.parametriConfigurazioneProcedura.listProcessiBpmn}" var="processo"> --%>
+<%-- 													<c:if test="${processo.noBackoffice}"> --%>
+<%-- 														<option value="${processo.codiceIdentificativo}">${processo.denominazione}</option> --%>
+<%-- 													</c:if> --%>
+<%-- 												</c:forEach> --%>
+<%-- 											</c:otherwise> --%>
+<%-- 										</c:choose> --%>
+<!-- 									</form:select> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+					</div>
+				
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+								<aui:select label="identificativo-form-principale" name="<%=GestioneProcedurePortletKeys.IDENTIFICATIVO_FORM_PRINCIPALE %>">
+									<aui:option value="" selected="true"></aui:option>
+									<aui:option value="">Lista Form</aui:option>
+								</aui:select>
+						</div>
+					</div>
+				
+					<div class="col-6">
+						<div class="form-group">
+								<aui:select label="identificativi-form-integrativi" name="<%=GestioneProcedurePortletKeys.IDENTIFICATIVI_FORM_INTEGRATIVI %>">
+									<aui:option value="" selected="true"></aui:option>
+									<aui:option value="">Lista Form Integrativi</aui:option>
+								</aui:select>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset>
+				<legend><liferay-ui:message key="configurazione-pagina-servizio"/></legend>
+				
+				<div>
+					<h3><liferay-ui:message key="step1"/></h3>
+					<div class="row">
+						<div class="col-6">
+							<div class="form-group">
+								<aui:input label="step1" type="checkbox" name="<%=GestioneProcedurePortletKeys.CONFIGURAZIONE_STEP1_ATTIVO %>"/>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<aui:select label="filtro-componenti-nucleo-familiare" name="<%=GestioneProcedurePortletKeys.FILTRO_COMPONENTI_NUCLEO_FAMILIARE %>">
+									<aui:option value="">Lista componenti nucleo familiare</aui:option>
+								</aui:select>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div>
+					<h3><liferay-ui:message key="step2"/></h3>
+					<div class="row">
+						<div class="col-6">
+							<div class="form-group">
+								<aui:select label="tipologia-servizio" name="<%=GestioneProcedurePortletKeys.TIPOLOGIA_SERVIZIO %>">
+									<aui:option value="">Tipologia Servizio</aui:option>
+								</aui:select>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<aui:select label="tipi-integrazioni-con-backoffice" name="<%=GestioneProcedurePortletKeys.TIPI_INTEGRAZIONI_BACKOFFICE %>" multiple="multiple">
+									<aui:option value="">Tipi integrazioni con backoffice</aui:option>
+								</aui:select>
+							</div>
+						</div>
+					</div>	
+				</div>
+				
+				<div>
+					<h3><liferay-ui:message key="tipo-integrazione-caricamento-nucleo-familiare"/></h3>
+					<div class="row">
+						<div class="col-6">
+							<div class="form-group">
+								<aui:select label="caricamento-da" name="<%=GestioneProcedurePortletKeys.CARICAMENTO_DA %>">
+									<aui:option>Caricamento da</aui:option>
+								</aui:select>
+							</div>
+						</div>
+					</div>
+
+					<h3><liferay-ui:message key="tipo-di-generazione-template-pdf"/></h3>
+					<div class="row">
+						<div class="col-6">
+							<div class="form-group">
+								<aui:select label="generazione-template" name="<%=GestioneProcedurePortletKeys.TIPI_GENERAZIONE_TEMPLATE %>" onchange="handleAttachments(this)" class="col-12" id="select-template">
+									<aui:option value="S1"><liferay-ui:message key="generazione-automatica-template"/></aui:option>
+									<aui:option value="S2"><liferay-ui:message key="jasper-report"/></aui:option>
+								</aui:select>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group" id="container-allegati-template">
+						<div class="row">
+							<div class="col-12 text-left">
+				       			 <button id="btn-add-attachment" type="button" class="btn btn-primary">
+				       			 	<i class="fa fa-plus-circle"></i><liferay-ui:message key="aggiungi-allegato"/>
+				       			 </button>
+							</div>
+						</div>
+						
+<!-- 						<div class="row"> -->
+<!-- 							<div class="col-12"> -->
+<!-- 								<div id="container-btn-upload"> -->
+<%-- 									<c:forEach varStatus="loop"	items="${formConfiguraProcedura.datiReportTemplates}" var="datiReportTemplate"> --%>
+<%-- 										<div id="div-allegato-${loop.index}"> --%>
+<%-- 										<form:hidden path="datiReportTemplates[${loop.index}].id"/> --%>
+<%-- 										<form:hidden path="datiReportTemplates[${loop.index}].attivoString"/> --%>
+<%-- 											<br> <form:input id="allegato-${loop.index}" type="file" nomefile="${datiReportTemplate.nomeFile}" --%>
+<%-- 												path="datiReportTemplates[${loop.index}].multipartFile"/> --%>
+<%-- 											<div id="kv-error-${loop.index}" style="display: none;"></div> --%>
+<!-- 											<div> -->
+<%-- 												<form:hidden path="datiReportTemplates[${loop.index}].padreString" /> --%>
+<%-- 												<input type="checkbox" name="isPadre" ${"padre".equalsIgnoreCase(datiReportTemplate.padreString) ? 'checked' : ''} onchange="handleChecks(this)"/>  --%>
+<!-- 												<span style="padding-left: 8px; vertical-align: sub;">Principale</span> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<%-- 									</c:forEach> --%>
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+					</div>
+				</div>
+			</fieldset>
+			<aui:button-row cssClass="text-right">
+				<aui:button value="annulla" id="annulla" href="${homeURL}"/>
+				<aui:button type="submit" value="salva" id="salva"/>
+			</aui:button-row>
+		</aui:form>
+	
+	</div>
+
+
+
+</div>

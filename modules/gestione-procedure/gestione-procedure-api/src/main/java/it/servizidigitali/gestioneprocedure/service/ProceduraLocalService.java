@@ -37,6 +37,7 @@ import it.servizidigitali.gestioneprocedure.model.Procedura;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -77,6 +78,11 @@ public interface ProceduraLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Procedura addProcedura(Procedura procedura);
+
+	public List<Procedura> cerca(
+		String nome, String stato, Date dataInserimentoDa,
+		Date dataInserimentoA, int delta, int cur, String orderByCol,
+		String orderByType);
 
 	/**
 	 * @throws PortalException
