@@ -84,7 +84,10 @@ public abstract class CommunicationEngineChannelSender {
 		Result result = new Result();
 
 		try {
-			WebClient client = WebClient.create(url);
+			List<Object> providers = new ArrayList<Object>();
+			JacksonJaxbJsonProvider jacksonJsonProvider = new JacksonJaxbJsonProvider();
+			providers.add(jacksonJsonProvider);
+			WebClient client = WebClient.create(url, providers);
 			client.path("/sendNow");
 			client.type(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE);
 
