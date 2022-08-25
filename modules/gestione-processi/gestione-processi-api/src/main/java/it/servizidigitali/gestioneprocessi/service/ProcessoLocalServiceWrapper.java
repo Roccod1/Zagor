@@ -410,23 +410,6 @@ public class ProcessoLocalServiceWrapper
 		return _processoLocalService.getProcessosCount();
 	}
 
-	@Override
-	public String recuperaProcessoXml(long fileEntryId) throws Exception {
-		return _processoLocalService.recuperaProcessoXml(fileEntryId);
-	}
-
-	@Override
-	public com.liferay.portal.kernel.repository.model.FileEntry
-			updateDocumentLibrary(
-				String file, String nomeFile, String nomeCartella, long userId,
-				com.liferay.portal.kernel.service.ServiceContext serviceCtx,
-				long fileEntryId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _processoLocalService.updateDocumentLibrary(
-			file, nomeFile, nomeCartella, userId, serviceCtx, fileEntryId);
-	}
-
 	/**
 	 * Updates the processo in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
@@ -442,18 +425,6 @@ public class ProcessoLocalServiceWrapper
 		it.servizidigitali.gestioneprocessi.model.Processo processo) {
 
 		return _processoLocalService.updateProcesso(processo);
-	}
-
-	@Override
-	public com.liferay.portal.kernel.repository.model.FileEntry
-			uploadDocumentLibrary(
-				String file, String nomeFile, String nomeCartella,
-				com.liferay.portal.kernel.model.Group group, long userId,
-				com.liferay.portal.kernel.service.ServiceContext serviceCtx)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _processoLocalService.uploadDocumentLibrary(
-			file, nomeFile, nomeCartella, group, userId, serviceCtx);
 	}
 
 	@Override

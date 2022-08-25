@@ -5,7 +5,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -20,6 +19,7 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.camunda.integration.client.CamundaClient;
 import it.servizidigitali.gestioneprocessi.exception.NoSuchProcessoException;
 import it.servizidigitali.gestioneprocessi.frontend.constants.GestioneProcessiPortletKeys;
 import it.servizidigitali.gestioneprocessi.model.Processo;
@@ -47,6 +47,9 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 	@Reference
 	private CounterLocalService counterLocalService;
 	
+	@Reference
+	private CamundaClient camundaClient;
+	
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		
@@ -57,7 +60,6 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 		String codice = ParamUtil.getString(actionRequest, GestioneProcessiPortletKeys.CODICE);
 		String nome = ParamUtil.getString(actionRequest, GestioneProcessiPortletKeys.NOME);
 		String modelloXml = ParamUtil.getString(actionRequest, GestioneProcessiPortletKeys.MODELLOXML);
-		FileEntry fileCaricato = null;
 		
 		Processo processo = null;
 		
@@ -76,8 +78,11 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 			}
 			
 			if(Validator.isNotNull(modelloXml)) {
-				fileCaricato = processoLocalService.updateDocumentLibrary(modelloXml, nome, nome, themeDisplay.getUserId(), serviceContext,processo.getFileEntryId());
-				processo.setFileEntryId(fileCaricato.getFileEntryId());
+				String deploymentId = camundaClient.insertOrUpdateProcessDefinitions(String.valueOf(themeDisplay.getScopeGroupId()), codice, modelloXml.getBytes());
+				
+				if(Validator.isNotNull(deploymentId)) {
+					processo.setDeploymentId(deploymentId);
+				}
 			}
 			
 			processo.setCodice(codice);
@@ -107,8 +112,11 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 				}
 				
 				if(Validator.isNotNull(modelloXml)) {
-					fileCaricato = processoLocalService.uploadDocumentLibrary(modelloXml, nome, nome, themeDisplay.getScopeGroup(), themeDisplay.getUserId(), serviceContext);
-					processo.setFileEntryId(fileCaricato.getFileEntryId());
+					String deploymentId = camundaClient.insertOrUpdateProcessDefinitions(String.valueOf(themeDisplay.getScopeGroupId()), codice, modelloXml.getBytes());
+					
+					if(Validator.isNotNull(deploymentId)) {
+						processo.setDeploymentId(deploymentId);
+					}
 				}
 				
 				processo.setCodice(codice);

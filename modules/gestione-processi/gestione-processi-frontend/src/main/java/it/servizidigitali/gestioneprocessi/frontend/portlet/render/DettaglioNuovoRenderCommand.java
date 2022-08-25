@@ -11,9 +11,13 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
+import java.io.File;
+import java.io.IOException;
+
+import it.servizidigitali.camunda.integration.client.CamundaClient;
 import it.servizidigitali.gestioneprocessi.frontend.constants.GestioneProcessiPortletKeys;
 import it.servizidigitali.gestioneprocessi.model.Processo;
 import it.servizidigitali.gestioneprocessi.service.ProcessoLocalService;
@@ -37,21 +41,26 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 	
 	@Reference
 	private ProcessoLocalService processoLocalService;
+	
+	@Reference
+	private CamundaClient camundaClient;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 		long idProcesso = ParamUtil.getLong(renderRequest, GestioneProcessiPortletKeys.ID_PROCESSO);
 		Processo processo = null;
 		String modelloXml = "";
+		
 		if(idProcesso>0) {
 			try {
 				processo = processoLocalService.getProcesso(idProcesso);
 				
+				File deployment = camundaClient.getDeploymentFile(processo.getDeploymentId());
+
 				try {
-					modelloXml = processoLocalService.recuperaProcessoXml(processo.getFileEntryId());
-				} catch (Exception e) {
-					_log.error("Errore durante il recupero dell'xml dal sistema!");
-					SessionErrors.add(renderRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_RECUPERO_PROCESSO_REPOSITORY);
+					modelloXml = FileUtil.read(deployment);
+				} catch (IOException e) {
+					_log.error("Errore durante il recupero del file del deployment" + e.getMessage());
 				}
 				
 			} catch (PortalException e) {

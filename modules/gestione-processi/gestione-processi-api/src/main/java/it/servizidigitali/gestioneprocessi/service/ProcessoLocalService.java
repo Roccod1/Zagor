@@ -23,14 +23,11 @@ import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.PersistedModel;
-import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.BaseLocalService;
 import com.liferay.portal.kernel.service.PersistedModelLocalService;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -320,13 +317,6 @@ public interface ProcessoLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getProcessosCount();
 
-	public String recuperaProcessoXml(long fileEntryId) throws Exception;
-
-	public FileEntry updateDocumentLibrary(
-			String file, String nomeFile, String nomeCartella, long userId,
-			ServiceContext serviceCtx, long fileEntryId)
-		throws PortalException;
-
 	/**
 	 * Updates the processo in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
@@ -339,10 +329,5 @@ public interface ProcessoLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Processo updateProcesso(Processo processo);
-
-	public FileEntry uploadDocumentLibrary(
-			String file, String nomeFile, String nomeCartella, Group group,
-			long userId, ServiceContext serviceCtx)
-		throws PortalException;
 
 }
