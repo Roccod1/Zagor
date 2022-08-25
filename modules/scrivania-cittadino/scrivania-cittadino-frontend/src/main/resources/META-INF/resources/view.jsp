@@ -1,5 +1,22 @@
-<%@ include file="/init.jsp" %>
+<%@page import="it.servizidigitali.scrivaniacittadino.frontend.constants.ScrivaniaCittadinoPortletKeys"%>
+<%@ include file="init.jsp" %>
 
-<p>
-	<b><liferay-ui:message key="scrivaniacittadino.caption"/></b>
-</p>
+<div>
+	<h5>${themeDisplay.realUser.fullName}</h5>
+	<small>CF: CODICE FISCALE</small>
+</div>
+
+<liferay-ui:tabs 
+	names="<%=ScrivaniaCittadinoPortletKeys.SEZIONE_SCRIVANIA+','+ScrivaniaCittadinoPortletKeys.SEZIONE_ATTIVITA %>"
+	type="tabs nav-tabs-default"
+	param="tabs" 
+	refresh="false"
+	>
+		<liferay-ui:section>
+			<%@ include file="scrivania.jsp" %>
+		</liferay-ui:section>
+		
+		<liferay-ui:section>
+			<%@ include file="attivita.jsp" %>
+		</liferay-ui:section>
+</liferay-ui:tabs>
