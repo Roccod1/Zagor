@@ -2,14 +2,9 @@
     "private": true,
     "workspaces": {
         "packages": [
-<<<<<<< HEAD
             "modules/presentatore-forms/presentatore-forms-frontend",
             "modules/gestione-processi/gestione-processi-frontend",
             "modules/gestione-forms/gestione-forms-frontend"
-=======
-            "modules/gestione-forms/gestione-forms-frontend",
-            "modules/presentatore-forms/presentatore-forms-frontend"
->>>>>>> refs/remotes/origin/feature/presentatore-forms
         ]
     }
 }
