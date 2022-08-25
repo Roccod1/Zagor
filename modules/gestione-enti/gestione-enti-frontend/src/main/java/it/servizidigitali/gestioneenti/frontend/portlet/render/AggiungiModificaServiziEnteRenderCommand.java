@@ -77,19 +77,15 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 		ThemeDisplay themeDisplay = null;
 		List<JournalArticle> listaArticoliCatalogoServizi = new ArrayList<JournalArticle>();
 		Map<String, List<Layout>> pagineDisponibili = null;
-		long groupId = 0;
 		try {
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
 			themeDisplay = serviceContext.getThemeDisplay();
-			groupId = themeDisplay.getSiteGroupId();
-			if(groupId > 0) {
-				listaArticoliCatalogoServizi = gestioneEntiMiddlewareService.getListaArticleIdDisponibili(groupId, organizationId, servizioId);
-			}
+			listaArticoliCatalogoServizi = gestioneEntiMiddlewareService.getListaArticleIdDisponibili(organizationId, servizioId);
 
 
-			pagineDisponibili = gestioneEntiMiddlewareService.getListaPagineUtilizzabili(groupId, organizationId, servizioId, themeDisplay.getCompanyId());
+			pagineDisponibili = gestioneEntiMiddlewareService.getListaPagineUtilizzabili(organizationId, servizioId, themeDisplay.getCompanyId());
 			
-//			creo copia servizioId per non sovrascrivere l'originale
+			//	creo copia servizioId per non sovrascrivere l'originale
 			Long tempServizioId = servizioId;
 			
 			if (Validator.isNotNull(organizationId)) {
