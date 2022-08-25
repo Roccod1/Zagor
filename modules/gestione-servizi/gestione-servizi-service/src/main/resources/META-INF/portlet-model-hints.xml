@@ -33,9 +33,6 @@
 		<field name="descrizione" type="String" />
 		<field name="descrizioneEstesa" type="String" />
 		<field name="codice" type="String" />
-		<field name="uri" type="String" />
-		<field name="uriGuest" type="String" />
-		<field name="uriScheda" type="String" />
 		<field name="autenticazione" type="boolean" />
 		<field name="dataInizioAttivazione" type="Date" />
 		<field name="dataFineAttivazione" type="Date" />

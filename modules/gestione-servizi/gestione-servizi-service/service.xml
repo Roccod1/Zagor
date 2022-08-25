@@ -31,9 +31,6 @@
 		<column name="descrizione" type="String" />
 		<column name="descrizioneEstesa" type="String" />
 		<column name="codice" type="String" />
-		<column name="uri" type="String" />
-		<column name="uriGuest" type="String" />
-		<column name="uriScheda" type="String" />
 		<column name="autenticazione" type="boolean" />
 		<column name="dataInizioAttivazione" type="Date" />
 		<column name="dataFineAttivazione" type="Date" />

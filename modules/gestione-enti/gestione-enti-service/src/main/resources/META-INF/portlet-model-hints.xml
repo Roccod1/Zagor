@@ -11,10 +11,12 @@
 		<field name="userName" type="String" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="uri" type="String" />
-		<field name="uriGuest" type="String" />
-		<field name="uriScheda" type="String" />
+		<field name="privateLayoutId" type="long" />
+		<field name="publicLayoutId" type="long" />
+		<field name="uriEsterna" type="String" />
+		<field name="catalogoServizioArticleId" type="long" />
 		<field name="autenticazione" type="boolean" />
+		<field name="livelloAutenticazione" type="int" />
 		<field name="dataInizioAttivazione" type="Date" />
 		<field name="dataFineAttivazione" type="Date" />
 		<field name="cittadino" type="boolean" />
