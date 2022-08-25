@@ -1,10 +1,13 @@
-// var fs = require('fs');
+var fs = require('fs');
+
+var BpmnModeler = require('bpmn-js/lib/Modeler');
 
 var modeler = new BpmnJS({
         container: "#canvas"
       });
 
-	  var diagram = `__DIAGRAM_XML__`;  /*fs.readFileSync(__dirname + '/../bpmn/newDiagram.bpmn', 'utf-8');*/
+	  // var diagram = `__DIAGRAM_XML__`;
+	  var diagram = fs.readFileSync(__dirname + '/../bpmn/newDiagram.bpmn', 'utf-8');
       var eventBus = modeler.get("eventBus");
 
       if(inputText.val()){

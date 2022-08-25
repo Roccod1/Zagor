@@ -5,6 +5,7 @@ module.exports = function(grunt) {
     clean: ['modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist'],
     browserify: {
       options: {
+		plugin: [require('esmify')],                        
         browserifyOptions: {
           debug: true,
           list: true,
@@ -18,7 +19,11 @@ module.exports = function(grunt) {
             }
           }
         },
-        transform: [ 'brfs' ]
+       // transform: ['brfs' ]
+       transform: [
+			['babelify',  { "presets": ["@babel/preset-env"] }  ],
+			'brfs'
+		],
       },
       app: {
         files: {
@@ -75,6 +80,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-replace');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-babel');
 
   grunt.registerTask('test', ['jshint']);
 
