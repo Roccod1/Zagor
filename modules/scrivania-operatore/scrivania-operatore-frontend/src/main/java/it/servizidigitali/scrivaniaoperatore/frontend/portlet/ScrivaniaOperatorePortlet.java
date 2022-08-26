@@ -1,5 +1,6 @@
 package it.servizidigitali.scrivaniaoperatore.frontend.portlet;
 
+import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
@@ -60,6 +61,7 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 				new Object()
 		));
 
+		request.setAttribute("stati", StatoRichiesta.values());
 		request.setAttribute("queryTab", queryTab);
 		request.setAttribute("queryNome", queryNome);
 		request.setAttribute("queryCf", queryCf);

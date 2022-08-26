@@ -32,16 +32,17 @@
 		</div>
 		<div class="col-3">
 			<aui:select name="queryAut" label="tipo-autenticazione" value="${queryAut}">
-				<aui:option value="0">Val 1</aui:option>
-				<aui:option value="1">Val 2</aui:option>
-				<aui:option value="2">Val 3</aui:option>
+				<aui:option value="0"><liferay-ui:message key="tutti" /></aui:option>
+				<aui:option value="1"><liferay-ui:message key="utente-autenticato" /></aui:option>
+				<aui:option value="2"><liferay-ui:message key="utente-guest" /></aui:option>
 			</aui:select>
 		</div>
 		<div class="col-3">
 			<aui:select name="queryStato" label="stato-richiesta" value="${queryStato}">
-				<aui:option value="0">Val 1</aui:option>
-				<aui:option value="1">Val 2</aui:option>
-				<aui:option value="2">Val 3</aui:option>
+				<aui:option value=""><liferay-ui:message key="tutti" /></aui:option>
+				<c:forEach items="${stati}" var="stato">
+					<aui:option value="${stato.key}">${stato.value}</aui:option>
+				</c:forEach>
 			</aui:select>
 		</div>
 	</div>
