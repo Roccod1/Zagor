@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -79,20 +80,23 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 		List<it.servizidigitali.gestionecomunicazioni.model.Comunicazione> comunicazioni = comunicazioneLocalService.getNonInviate();
 
 		for (it.servizidigitali.gestionecomunicazioni.model.Comunicazione comunicazione : comunicazioni) {
-			List<User> utenti;
+			Stream<User> streamUtenti;
 			long userId = comunicazione.getDestinatarioUserId();
 			
-			//TODO controllo degli user attivi
 			if (userId == 0) {
-				utenti = userLocalService.getOrganizationUsers(comunicazione.getDestinatarioOrganizationId());
+				streamUtenti = userLocalService.getOrganizationUsers(comunicazione.getDestinatarioOrganizationId()).stream();
 			} else {
-				utenti = Collections.singletonList(userLocalService.fetchUser(userId));
+				streamUtenti = Stream.of(userLocalService.fetchUser(userId));
 			}
+			
+			List<User> utenti = streamUtenti.filter(x -> x.isActive()).collect(Collectors.toList());
 			
 			for (User user : utenti) {
 				sendComunicazione(comunicazione, user);
 			}
-			//TODO aggiorna dataInvio della comunicazione
+			
+			comunicazione.setDataInvio(new Date());
+			comunicazioneLocalService.updateComunicazione(comunicazione);
 		}
 	}
 
@@ -107,7 +111,7 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 		for (Canale canale : canali) {
 			//TODO carica email
 			Utente utente = new Utente();
-			utente.setEmail("michele.rizzitelli@linksmt.it");
+			utente.setEmail(user.getEmailAddress());
 			
 			//TODO impostare html?
 			Comunicazione com = new Comunicazione("Test", "Da scheduler", Collections.singletonList(utente), null, true, null, 0, 0);
