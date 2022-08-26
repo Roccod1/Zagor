@@ -6,6 +6,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
 import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
@@ -14,13 +15,16 @@ import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.scheduler.StorageTypeAware;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -29,13 +33,13 @@ import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.communication.enumeration.Canale;
+import it.servizidigitali.communication.exception.CommunicationException;
 import it.servizidigitali.communication.model.Comunicazione;
 import it.servizidigitali.communication.model.EsitoComunicazione;
 import it.servizidigitali.communication.model.Utente;
 import it.servizidigitali.communication.sender.CommunicationSender;
 import it.servizidigitali.gestionecomunicazioni.configuration.InvioComunicazioniSchedulerConfiguration;
 import it.servizidigitali.gestionecomunicazioni.service.ComunicazioneLocalService;
-import it.servizidigitali.profiloutente.model.UtenteOrganizzazioneCanaleComunicazione;
 import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneCanaleComunicazioneLocalService;
 
 /**
@@ -59,38 +63,59 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 
 	@Reference
 	private ComunicazioneLocalService comunicazioneLocalService;
-
 	@Reference
 	private CommunicationSender communicationSender;
-
 	@Reference
 	private UtenteOrganizzazioneCanaleComunicazioneLocalService utenteOrganizzazioneCanaleComunicazioneLocalService;
-
+	@Reference
+	private OrganizationLocalService organizationLocalService;
+	@Reference
+	private UserLocalService userLocalService;
+	
 	@Override
 	protected void doReceive(Message message) throws Exception {
 
 		_log.debug("Scheduled task executed...");
-		// TODO caricare comunicazioni non ancora inviate
 		List<it.servizidigitali.gestionecomunicazioni.model.Comunicazione> comunicazioni = comunicazioneLocalService.getNonInviate();
 
-		// TODO creare oggetto comunicazione per invio + invio. ATTENZIONE: l'invio deve essere
-		// effettuato sulla base delle preferenze dell'utente
+		for (it.servizidigitali.gestionecomunicazioni.model.Comunicazione comunicazione : comunicazioni) {
+			List<User> utenti;
+			long userId = comunicazione.getDestinatarioUserId();
+			
+			//TODO controllo degli user attivi
+			if (userId == 0) {
+				utenti = userLocalService.getOrganizationUsers(comunicazione.getDestinatarioOrganizationId());
+			} else {
+				utenti = Collections.singletonList(userLocalService.fetchUser(userId));
+			}
+			
+			for (User user : utenti) {
+				sendComunicazione(comunicazione, user);
+			}
+			//TODO aggiorna dataInvio della comunicazione
+		}
+	}
 
-		// TODO leggere da comunicazione
-		long utenteId = 0;
-		long groupId = 0;
-		List<UtenteOrganizzazioneCanaleComunicazione> listaCanaleComunicazioneByUtenteOrganization = utenteOrganizzazioneCanaleComunicazioneLocalService
-				.getListaCanaleComunicazioneByUtenteOrganization(utenteId, groupId);
-		List<Utente> utenti = new ArrayList<Utente>();
-		Utente utente = new Utente();
-		utente.setEmail("gianluca.pindinelli@linksmt.it");
-		utenti.add(utente);
-		// TODO leggere companyId e groupId da comunicazione
-		Comunicazione comunicazione = new Comunicazione("Test", "Da scheduler", utenti, null, true, null, 0, 0);
-		EsitoComunicazione esito = communicationSender.sendNow(comunicazione, Canale.EMAIL);
-		String messageId = esito.getMessageId();
-
-		// TODO salva messageId
+	private void sendComunicazione(it.servizidigitali.gestionecomunicazioni.model.Comunicazione comunicazione, User user) throws Exception, CommunicationException {
+		List<Canale> canali = utenteOrganizzazioneCanaleComunicazioneLocalService
+				.getListaCanaleComunicazioneByUtenteOrganization(user.getUserId(), comunicazione.getDestinatarioOrganizationId())
+				.stream()
+				.map(x -> x.getCanale())
+				.map(x -> Canale.getSupportedChannel(x.getCodice()))
+				.collect(Collectors.toList());
+		
+		for (Canale canale : canali) {
+			//TODO carica email
+			Utente utente = new Utente();
+			utente.setEmail("michele.rizzitelli@linksmt.it");
+			
+			//TODO impostare html?
+			Comunicazione com = new Comunicazione("Test", "Da scheduler", Collections.singletonList(utente), null, true, null, 0, 0);
+			EsitoComunicazione esito = communicationSender.sendNow(com, canale);
+			
+			//TODO gestire messageId
+			String messageId = esito.getMessageId();
+		}
 	}
 
 	public LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
