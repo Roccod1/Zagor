@@ -6,6 +6,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
@@ -40,6 +41,7 @@ import it.servizidigitali.communication.model.EsitoComunicazione;
 import it.servizidigitali.communication.model.Utente;
 import it.servizidigitali.communication.sender.CommunicationSender;
 import it.servizidigitali.gestionecomunicazioni.configuration.InvioComunicazioniSchedulerConfiguration;
+import it.servizidigitali.gestionecomunicazioni.model.TipologiaComunicazione;
 import it.servizidigitali.gestionecomunicazioni.service.ComunicazioneLocalService;
 import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneCanaleComunicazioneLocalService;
 
@@ -90,9 +92,11 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 			}
 			
 			List<User> utenti = streamUtenti.filter(x -> x.isActive()).collect(Collectors.toList());
+			Organization organization = organizationLocalService.fetchOrganization(comunicazione.getDestinatarioOrganizationId());
+			TipologiaComunicazione tipologia = comunicazione.getTipologia();
 			
 			for (User user : utenti) {
-				sendComunicazione(comunicazione, user);
+				sendComunicazione(comunicazione, user, organization, tipologia);
 			}
 			
 			comunicazione.setDataInvio(new Date());
@@ -100,7 +104,7 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 		}
 	}
 
-	private void sendComunicazione(it.servizidigitali.gestionecomunicazioni.model.Comunicazione comunicazione, User user) throws Exception, CommunicationException {
+	private void sendComunicazione(it.servizidigitali.gestionecomunicazioni.model.Comunicazione comunicazione, User user, Organization organization, TipologiaComunicazione tipologia) throws Exception, CommunicationException {
 		List<Canale> canali = utenteOrganizzazioneCanaleComunicazioneLocalService
 				.getListaCanaleComunicazioneByUtenteOrganization(user.getUserId(), comunicazione.getDestinatarioOrganizationId())
 				.stream()
@@ -109,12 +113,14 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 				.collect(Collectors.toList());
 		
 		for (Canale canale : canali) {
-			//TODO carica email
 			Utente utente = new Utente();
 			utente.setEmail(user.getEmailAddress());
 			
-			//TODO impostare html?
-			Comunicazione com = new Comunicazione("Test", "Da scheduler", Collections.singletonList(utente), null, true, null, 0, 0);
+			String oggetto = String.format("[%s] - %s - %s", 
+					organization.getName(), 
+					tipologia.getNome(),
+					comunicazione.getTitolo());
+			Comunicazione com = new Comunicazione(oggetto, comunicazione.getDescrizione(), Collections.singletonList(utente), null, true, null, 0, 0);
 			EsitoComunicazione esito = communicationSender.sendNow(com, canale);
 			
 			//TODO gestire messageId
