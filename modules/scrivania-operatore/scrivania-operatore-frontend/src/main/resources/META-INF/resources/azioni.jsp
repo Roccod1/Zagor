@@ -1,3 +1,3 @@
-<%@ include file="/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <button class="btn btn-primary">?</button>

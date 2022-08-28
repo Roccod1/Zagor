@@ -1,3 +1,5 @@
+<%@ include file="init.jsp" %>
+
 <portlet:renderURL var="searchURL">
 </portlet:renderURL>
 
@@ -41,7 +43,7 @@
 			<aui:select name="queryStato" label="stato-richiesta" value="${queryStato}">
 				<aui:option value=""><liferay-ui:message key="tutti" /></aui:option>
 				<c:forEach items="${stati}" var="stato">
-					<aui:option value="${stato.key}">${stato.value}</aui:option>
+					<aui:option value="${stato}"><liferay-ui:message key="stato-richiesta-${stato}"/></aui:option>
 				</c:forEach>
 			</aui:select>
 		</div>
