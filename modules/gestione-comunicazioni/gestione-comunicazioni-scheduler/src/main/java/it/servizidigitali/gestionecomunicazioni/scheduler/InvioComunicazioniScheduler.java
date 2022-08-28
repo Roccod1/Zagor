@@ -120,7 +120,7 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 					organization.getName(), 
 					tipologia.getNome(),
 					comunicazione.getTitolo());
-			Comunicazione com = new Comunicazione(oggetto, comunicazione.getDescrizione(), Collections.singletonList(utente), null, true, null, 0, 0);
+			Comunicazione com = new Comunicazione(oggetto, comunicazione.getDescrizione(), Collections.singletonList(utente), null, true, null, comunicazione.getCompanyId(), comunicazione.getGroupId());
 			EsitoComunicazione esito = communicationSender.sendNow(com, canale);
 			
 			//TODO gestire messageId
