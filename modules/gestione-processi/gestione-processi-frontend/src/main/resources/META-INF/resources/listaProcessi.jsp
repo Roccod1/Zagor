@@ -29,6 +29,9 @@
 				
 				<liferay-ui:search-container-column-text value="${createDate}" name="<%=GestioneProcessiPortletKeys.DATA_CREAZIONE %>" orderable="true" orderableProperty="createDate"/>
 				
+				<liferay-ui:search-container-column-text property="<%=GestioneProcessiPortletKeys.NOME_ENTE %>" name="nomeEnte"/>
+				
+				
 				<portlet:renderURL var="dettaglioNuovoURL">
 					<portlet:param name="mvcRenderCommandName" value="/dettaglioNuovo" />
 					<portlet:param name="idProcesso" value="${processo.processoId}" />

@@ -81,8 +81,9 @@ public interface ProcessoLocalService
 	public Processo addProcesso(Processo processo);
 
 	public List<Processo> cerca(
-		String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta,
-		int cur, String orderByCol, String orderByType);
+			String nome, Date dataInserimentoDa, Date dataInserimentoA,
+			int delta, int cur, String orderByCol, String orderByType)
+		throws PortalException;
 
 	/**
 	 * @throws PortalException

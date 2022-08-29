@@ -15,8 +15,13 @@
 package it.servizidigitali.gestioneprocessi.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
+import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -41,7 +46,7 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 	
 	public static final Log _log = LogFactoryUtil.getLog(ProcessoLocalServiceImpl.class);
 	
-	public List<Processo> cerca(String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta, int cur, String orderByCol, String orderByType){
+	public List<Processo> cerca(String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta, int cur, String orderByCol, String orderByType) throws PortalException{
 		boolean direzione = false;
 		
 		if(orderByType.equalsIgnoreCase("asc")) {
@@ -54,6 +59,18 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 		
 		OrderByComparator<Processo> comparator = OrderByComparatorFactoryUtil.create("Processo", orderByCol, direzione);	
 		List<Processo> listaProcesso = processoFinder.findByFilters(nome, dataInserimentoDa, dataInserimentoA, cur, delta, comparator);
+		
+		
+		for(Processo processo : listaProcesso) {
+			Group group = GroupLocalServiceUtil.getGroup(processo.getGroupId());
+			if(group.getOrganizationId()>0) {
+				Organization organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
+				processo.setNomeEnte(organization.getName());
+			}else {
+				processo.setNomeEnte("-");
+			}
+			
+		}
 		
 		return listaProcesso;
 	}

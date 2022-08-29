@@ -55,10 +55,11 @@ public class ProcessoLocalServiceWrapper
 
 	@Override
 	public java.util.List<it.servizidigitali.gestioneprocessi.model.Processo>
-		cerca(
-			String nome, java.util.Date dataInserimentoDa,
-			java.util.Date dataInserimentoA, int delta, int cur,
-			String orderByCol, String orderByType) {
+			cerca(
+				String nome, java.util.Date dataInserimentoDa,
+				java.util.Date dataInserimentoA, int delta, int cur,
+				String orderByCol, String orderByType)
+		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _processoLocalService.cerca(
 			nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol,

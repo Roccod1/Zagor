@@ -5,8 +5,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -53,7 +51,6 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		
-		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
 		long idProcesso = ParamUtil.getLong(actionRequest, GestioneProcessiPortletKeys.ID_PROCESSO);
@@ -88,9 +85,8 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 			processo.setCodice(codice);
 			processo.setNome(nome);
 			processo.setAttivo(true);
-			processo.setUserId(serviceContext.getThemeDisplay().getUserId());
-			processo.setGroupId(serviceContext.getThemeDisplay().getScopeGroupId());
-			processo.setUserName(serviceContext.getThemeDisplay().getUser().getScreenName());
+			processo.setUserId(themeDisplay.getUserId());
+			processo.setUserName(themeDisplay.getUser().getScreenName());
 		}else {
 			try {
 				processo = processoLocalService.getProcessoByCodice(codice);
@@ -122,9 +118,9 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 				processo.setCodice(codice);
 				processo.setNome(nome);
 				processo.setAttivo(true);
-				processo.setUserId(serviceContext.getThemeDisplay().getUserId());
-				processo.setGroupId(serviceContext.getThemeDisplay().getScopeGroupId());
-				processo.setUserName(serviceContext.getThemeDisplay().getUser().getScreenName());
+				processo.setUserId(themeDisplay.getUserId());
+				processo.setGroupId(themeDisplay.getScopeGroupId());
+				processo.setUserName(themeDisplay.getUser().getScreenName());
 						
 			}	
 		}

@@ -81,13 +81,12 @@ public class GestioneProcessiPortlet extends MVCPortlet {
 				dataInserimentoA = simpleDateFormat.parse(dataInserimentoAString);
 			}
 			
-		}catch(ParseException e) {
-			_log.error("Impossibile effettuare il parse delle date!");
+			listaProcessi = processoLocalService.cerca(nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);
+			
+		}catch(Exception e) {
+			_log.error("Errore durante la ricerca dei processi!" + e.getMessage());
 		}
 		
-
-		listaProcessi = processoLocalService.cerca(nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);
-
 		
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.LISTA_PROCESSI, listaProcessi);
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.NOME_RICERCA, nome);
