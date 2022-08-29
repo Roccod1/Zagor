@@ -3,7 +3,7 @@ Bundle-SymbolicName: it.servizidigitali.camunda.integration
 Bundle-Version: 1.0.0
 
 Export-Package: \
-	it.servizidigitali.camunda.integration.client
+	it.servizidigitali.camunda.integration.*
 	
 Import-Package: \
   	!android.net.*,\

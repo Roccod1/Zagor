@@ -21,6 +21,7 @@ import org.camunda.community.rest.client.api.DeploymentApi;
 import org.camunda.community.rest.client.api.ProcessDefinitionApi;
 import org.camunda.community.rest.client.api.ProcessInstanceApi;
 import org.camunda.community.rest.client.api.TaskApi;
+import org.camunda.community.rest.client.api.TenantApi;
 import org.camunda.community.rest.client.api.VariableInstanceApi;
 import org.camunda.community.rest.client.dto.CompleteTaskDto;
 import org.camunda.community.rest.client.dto.CountResultDto;
@@ -34,12 +35,14 @@ import org.camunda.community.rest.client.dto.SortTaskQueryParametersDto;
 import org.camunda.community.rest.client.dto.TaskDto;
 import org.camunda.community.rest.client.dto.TaskQueryDto;
 import org.camunda.community.rest.client.dto.TaskQueryDtoSorting;
+import org.camunda.community.rest.client.dto.TenantDto;
 import org.camunda.community.rest.client.dto.UserIdDto;
 import org.camunda.community.rest.client.dto.VariableInstanceDto;
 import org.camunda.community.rest.client.dto.VariableInstanceQueryDto;
 import org.camunda.community.rest.client.dto.VariableQueryParameterDto;
 import org.camunda.community.rest.client.dto.VariableValueDto;
 import org.camunda.community.rest.client.invoker.ApiClient;
+import org.camunda.community.rest.client.invoker.ApiException;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
@@ -203,11 +206,10 @@ public class CamundaClientImpl implements CamundaClient {
 		String deploymentId = "";
 		DeploymentWithDefinitionsDto output = null;
 
-		
 		try {
 
 			ApiClient client = getApiClient();
-			
+
 			String time = "_" + new Date().getTime();
 
 			String suffix = ".bpmn";
@@ -221,11 +223,11 @@ public class CamundaClientImpl implements CamundaClient {
 			Path filePath = Files.write(path, byteArray);
 
 			file = filePath.toFile();
-			
+
 			output = new DeploymentApi(client).createDeployment(tenantId, null, false, false, "AutoDeployment", null, file);
-			
+
 			deploymentId = output.getId();
-			
+
 			log.debug("Created " + output.getId());
 
 		}
@@ -241,7 +243,7 @@ public class CamundaClientImpl implements CamundaClient {
 				tempFolder.delete();
 			}
 		}
-		
+
 		return deploymentId;
 	}
 
@@ -600,19 +602,19 @@ public class CamundaClientImpl implements CamundaClient {
 
 	@Override
 	public File getDeploymentFile(String id) throws CamundaClientException {
-		
+
 		File output = null;
-		
-		
+
 		try {
 
 			ApiClient client = getApiClient();
-			
+
 			List<DeploymentResourceDto> listResource = new DeploymentApi(client).getDeploymentResources(id);
-			
-			if(!listResource.isEmpty()) {
+
+			if (!listResource.isEmpty()) {
 				output = new DeploymentApi(client).getDeploymentResourceData(id, listResource.get(0).getId());
-			}else {
+			}
+			else {
 				log.error("getDeploymentFile :: Impossibile recuperare la resource del deployment con ID : " + id);
 			}
 
@@ -621,8 +623,53 @@ public class CamundaClientImpl implements CamundaClient {
 			log.error("getDeploymentFile", e);
 			throw new CamundaClientException("getDeploymentFile :: " + e.getMessage(), e);
 		}
-		
+
 		return output;
 	}
 
+	@Override
+	public void insertOrUpdateTenant(String tenantId, String tenantName) {
+
+		try {
+			ApiClient client = getApiClient();
+
+			TenantDto tenantDto = new TenantDto();
+			tenantDto.setId(tenantId);
+			tenantDto.setName(tenantName);
+
+			TenantApi tenantApi = new TenantApi(client);
+
+			TenantDto tenant = null;
+			try {
+				tenant = tenantApi.getTenant(tenantId);
+			}
+			catch (Exception e) {
+				log.warn("insertOrUpdateTenant :: " + e.getMessage());
+			}
+			if (tenant == null) {
+				tenantApi.createTenant(tenantDto);
+			}
+			else {
+				tenantApi.updateTenant(tenantId, tenantDto);
+			}
+		}
+		catch (Exception e) {
+			log.error("insertOrUpdateTenand :: " + e.getMessage(), e);
+			throw new CamundaClientException("insertOrUpdateTenand :: " + e.getMessage(), e);
+		}
+
+	}
+
+	@Override
+	public void removeTenant(String tenantId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.deleteTenant(tenantId);
+		}
+		catch (ApiException e) {
+			log.error("removeTenant :: " + e.getMessage(), e);
+			throw new CamundaClientException("removeTenant :: " + e.getMessage(), e);
+		}
+	}
 }

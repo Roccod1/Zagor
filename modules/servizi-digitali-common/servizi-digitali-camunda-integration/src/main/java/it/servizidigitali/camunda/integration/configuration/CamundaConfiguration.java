@@ -10,6 +10,9 @@ import aQute.bnd.annotation.metatype.Meta;
 @Meta.OCD(id = "it.servizidigitali.camunda.integration.configuration.CamundaConfiguration", name = "Configurazioni Camunda")
 public interface CamundaConfiguration {
 
+	@Meta.AD(deflt = "true", required = false, description = "Abilita/Disabilita l'integrazione con Camunda BPMN Engine")
+	boolean integrationEnabled();
+
 	@Meta.AD(deflt = "http://servizi-digitali-dev:8082/engine-rest", required = false, description = "Path API Camunda")
 	String apiBasePath();
 

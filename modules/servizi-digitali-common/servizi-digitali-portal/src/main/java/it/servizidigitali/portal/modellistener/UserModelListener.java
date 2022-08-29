@@ -29,7 +29,7 @@ import it.servizidigitali.portal.util.LDAPManager;
 		immediate = true, //
 		service = ModelListener.class//
 ) //
-public class ServiziDigitaliUserModelListener extends BaseModelListener<User> {
+public class UserModelListener extends BaseModelListener<User> {
 
 	private ConfigurationProvider<LDAPServerConfiguration> ldapServerConfigurationProvider;
 
@@ -82,6 +82,6 @@ public class ServiziDigitaliUserModelListener extends BaseModelListener<User> {
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(ServiziDigitaliUserModelListener.class);
+	private static final Log _log = LogFactoryUtil.getLog(UserModelListener.class);
 
 }
