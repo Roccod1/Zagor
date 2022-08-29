@@ -13,8 +13,7 @@
 		<field name="codice" type="String" />
 		<field name="nome" type="String" />
 		<field name="stato" type="String" />
-		<field name="multiente" type="boolean" />
-		<field name="fileEntryId" type="long" />
+		<field name="deploymentId" type="String" />
 		<field name="attivo" type="boolean" />
 	</model>
 </model-hints>
