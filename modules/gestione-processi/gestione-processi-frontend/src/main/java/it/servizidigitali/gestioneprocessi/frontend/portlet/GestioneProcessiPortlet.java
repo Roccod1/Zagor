@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.util.Validator;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -87,6 +88,9 @@ public class GestioneProcessiPortlet extends MVCPortlet {
 			_log.error("Errore durante la ricerca dei processi!" + e.getMessage());
 		}
 		
+		if (listaProcessi == null) {
+			listaProcessi = new ArrayList<Processo>();
+		}
 		
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.LISTA_PROCESSI, listaProcessi);
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.NOME_RICERCA, nome);
