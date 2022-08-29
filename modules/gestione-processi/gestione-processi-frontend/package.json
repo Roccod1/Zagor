@@ -26,7 +26,8 @@
     "copy-webpack-plugin": "^7.0.0",
     "esmify": "2.1.1",
     "babelify": "10.0.0",
-    "@babel/preset-env": "7.18.10"
+    "@babel/preset-env": "7.18.10",
+    "@bpmn-io/properties-panel": "^0.19.0"
   },
   "dependencies": {
 	"bpmn-js": "^9.4.0",
