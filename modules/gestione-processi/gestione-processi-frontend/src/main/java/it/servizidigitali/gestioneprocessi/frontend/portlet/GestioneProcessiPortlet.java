@@ -15,7 +15,6 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -82,7 +81,7 @@ public class GestioneProcessiPortlet extends MVCPortlet {
 				dataInserimentoA = simpleDateFormat.parse(dataInserimentoAString);
 			}
 			
-			listaProcessi = processoLocalService.cerca(nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);
+			listaProcessi = processoLocalService.search(nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);
 			
 		}catch(Exception e) {
 			_log.error("Errore durante la ricerca dei processi!" + e.getMessage());
@@ -91,7 +90,8 @@ public class GestioneProcessiPortlet extends MVCPortlet {
 		if (listaProcessi == null) {
 			listaProcessi = new ArrayList<Processo>();
 		}
-		
+
+			
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.LISTA_PROCESSI, listaProcessi);
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.NOME_RICERCA, nome);
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.DATA_INSERIMENTO_DA, dataInserimentoDaString);

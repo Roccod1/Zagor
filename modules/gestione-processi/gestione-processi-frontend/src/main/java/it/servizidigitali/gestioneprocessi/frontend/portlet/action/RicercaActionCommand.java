@@ -63,7 +63,7 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 		String orderByCol = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		String orderByType = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 		
-		List<Processo> listaProcessi = processoLocalService.cerca(nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);
+		List<Processo> listaProcessi = processoLocalService.search(nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);
 		
 		actionRequest.setAttribute(GestioneProcessiPortletKeys.LISTA_PROCESSI, listaProcessi);
 		
