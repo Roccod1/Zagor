@@ -126,7 +126,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 			ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
-			servizioEnte.setGroupId(themeDisplay.getCompanyGroupId());
+			servizioEnte.setGroupId(themeDisplay.getSiteGroupId());
 			servizioEnte.setUserId(themeDisplay.getUserId());
 
 			servizioEnte.setPrivateLayoutId(uri);
