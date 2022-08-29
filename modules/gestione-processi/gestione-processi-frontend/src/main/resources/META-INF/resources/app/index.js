@@ -2,8 +2,22 @@ var fs = require('fs');
 
 var BpmnModeler = require('bpmn-js/lib/Modeler');
 
-var modeler = new BpmnJS({
-        container: "#canvas"
+var propertiesPanelModule = require('bpmn-js-properties-panel');
+//	propertiesProviderModule = require('bpmn-js-properties-panel/lib/provider/camunda'),
+//	camundaModdleDescriptor = require('camunda-bpmn-moddle/resources/camunda');
+
+var modeler = new BpmnModeler({
+        container: "#canvas",
+        propertiesPanel: {
+            parent: '#js-properties-panel'
+        },
+//        additionalModules: [
+//            propertiesPanelModule,
+//            propertiesProviderModule
+//        ],
+//        moddleExtensions: {
+//            camunda: camundaModdleDescriptor
+//        }
       });
 
 	  // var diagram = `__DIAGRAM_XML__`;
