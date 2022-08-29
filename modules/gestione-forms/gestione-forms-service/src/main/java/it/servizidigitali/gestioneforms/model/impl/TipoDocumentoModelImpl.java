@@ -79,10 +79,9 @@ public class TipoDocumentoModelImpl
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"codice", Types.VARCHAR}, {"nome", Types.VARCHAR},
 		{"descrizione", Types.VARCHAR}, {"categoria", Types.VARCHAR},
-		{"estensioni_file", Types.VARCHAR}, {"stato", Types.VARCHAR},
-		{"numero_required", Types.BIGINT},
-		{"data_scadenza_required", Types.BIGINT},
-		{"organizationId", Types.BIGINT}
+		{"estensioniFile", Types.VARCHAR}, {"stato", Types.VARCHAR},
+		{"numeroRequired", Types.BIGINT},
+		{"dataScadenzaRequired", Types.BIGINT}, {"organizationId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -101,15 +100,15 @@ public class TipoDocumentoModelImpl
 		TABLE_COLUMNS_MAP.put("nome", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("descrizione", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("categoria", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("estensioni_file", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("estensioniFile", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("stato", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("numero_required", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("data_scadenza_required", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("numeroRequired", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("dataScadenzaRequired", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("organizationId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table tipo_documento (uuid_ VARCHAR(75) null,tipoDocumentoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codice VARCHAR(75) null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,categoria VARCHAR(75) null,estensioni_file VARCHAR(75) null,stato VARCHAR(75) null,numero_required LONG,data_scadenza_required LONG,organizationId LONG)";
+		"create table tipo_documento (uuid_ VARCHAR(75) null,tipoDocumentoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codice VARCHAR(75) null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,categoria VARCHAR(75) null,estensioniFile VARCHAR(75) null,stato VARCHAR(75) null,numeroRequired LONG,dataScadenzaRequired LONG,organizationId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table tipo_documento";
 
@@ -826,13 +825,13 @@ public class TipoDocumentoModelImpl
 		tipoDocumentoImpl.setCategoria(
 			this.<String>getColumnOriginalValue("categoria"));
 		tipoDocumentoImpl.setEstensioniFile(
-			this.<String>getColumnOriginalValue("estensioni_file"));
+			this.<String>getColumnOriginalValue("estensioniFile"));
 		tipoDocumentoImpl.setStato(
 			this.<String>getColumnOriginalValue("stato"));
 		tipoDocumentoImpl.setNumeroRequired(
-			this.<Long>getColumnOriginalValue("numero_required"));
+			this.<Long>getColumnOriginalValue("numeroRequired"));
 		tipoDocumentoImpl.setDataScadenzaRequired(
-			this.<Long>getColumnOriginalValue("data_scadenza_required"));
+			this.<Long>getColumnOriginalValue("dataScadenzaRequired"));
 		tipoDocumentoImpl.setOrganizationId(
 			this.<Long>getColumnOriginalValue("organizationId"));
 
@@ -1160,11 +1159,11 @@ public class TipoDocumentoModelImpl
 		_columnOriginalValues.put("nome", _nome);
 		_columnOriginalValues.put("descrizione", _descrizione);
 		_columnOriginalValues.put("categoria", _categoria);
-		_columnOriginalValues.put("estensioni_file", _estensioniFile);
+		_columnOriginalValues.put("estensioniFile", _estensioniFile);
 		_columnOriginalValues.put("stato", _stato);
-		_columnOriginalValues.put("numero_required", _numeroRequired);
+		_columnOriginalValues.put("numeroRequired", _numeroRequired);
 		_columnOriginalValues.put(
-			"data_scadenza_required", _dataScadenzaRequired);
+			"dataScadenzaRequired", _dataScadenzaRequired);
 		_columnOriginalValues.put("organizationId", _organizationId);
 	}
 
@@ -1174,9 +1173,6 @@ public class TipoDocumentoModelImpl
 		Map<String, String> attributeNames = new HashMap<>();
 
 		attributeNames.put("uuid_", "uuid");
-		attributeNames.put("estensioni_file", "estensioniFile");
-		attributeNames.put("numero_required", "numeroRequired");
-		attributeNames.put("data_scadenza_required", "dataScadenzaRequired");
 
 		_attributeNames = Collections.unmodifiableMap(attributeNames);
 	}
@@ -1216,13 +1212,13 @@ public class TipoDocumentoModelImpl
 
 		columnBitmasks.put("categoria", 2048L);
 
-		columnBitmasks.put("estensioni_file", 4096L);
+		columnBitmasks.put("estensioniFile", 4096L);
 
 		columnBitmasks.put("stato", 8192L);
 
-		columnBitmasks.put("numero_required", 16384L);
+		columnBitmasks.put("numeroRequired", 16384L);
 
-		columnBitmasks.put("data_scadenza_required", 32768L);
+		columnBitmasks.put("dataScadenzaRequired", 32768L);
 
 		columnBitmasks.put("organizationId", 65536L);
 
