@@ -94,13 +94,16 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 			List<User> utenti = streamUtenti.filter(x -> x.isActive()).collect(Collectors.toList());
 			Organization organization = organizationLocalService.fetchOrganization(comunicazione.getDestinatarioOrganizationId());
 			TipologiaComunicazione tipologia = comunicazione.getTipologia();
-			
-			for (User user : utenti) {
-				sendComunicazione(comunicazione, user, organization, tipologia);
+			try {
+				for (User user : utenti) {
+					sendComunicazione(comunicazione, user, organization, tipologia);
+				}
+				
+				comunicazione.setDataInvio(new Date());
+				comunicazioneLocalService.updateComunicazione(comunicazione);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
 			}
-			
-			comunicazione.setDataInvio(new Date());
-			comunicazioneLocalService.updateComunicazione(comunicazione);
 		}
 	}
 
