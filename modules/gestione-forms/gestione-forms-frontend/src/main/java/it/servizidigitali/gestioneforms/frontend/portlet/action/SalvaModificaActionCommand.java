@@ -75,11 +75,15 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		
 		if(Validator.isNull(nome)) {
 			SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+			actionRequest.setAttribute(GestioneFormsPortletKeys.MODELLO_FORM, modelloForm);
+			actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaForm.jsp");
 			return;
 		}
 		
 		if(Validator.isNull(codice)) {
 			SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+			actionRequest.setAttribute(GestioneFormsPortletKeys.MODELLO_FORM, modelloForm);
+			actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaForm.jsp");
 			return;
 		}
 		
@@ -95,9 +99,9 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		form.setNome(nome);
 		form.setJson(modelloForm);
 		form.setPrincipale(principale);
-		form.setUserId(serviceContext.getThemeDisplay().getUserId());
-		form.setGroupId(serviceContext.getThemeDisplay().getScopeGroupId());
-		form.setUserName(serviceContext.getThemeDisplay().getUser().getScreenName());
+		form.setUserId(themeDisplay.getUserId());
+		form.setGroupId(themeDisplay.getSiteGroupId());
+		form.setUserName(themeDisplay.getUser().getFullName());
 		
 		formLocalService.updateForm(form);
 		
@@ -126,6 +130,8 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 				allegato.setDenominazione(denominazione);
 			}else {
 				SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+				actionRequest.setAttribute(GestioneFormsPortletKeys.MODELLO_FORM, modelloForm);
+				actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaForm.jsp");
 				return;
 			}
 			
@@ -133,6 +139,8 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 				allegato.setTipiFileAmmessi(String.join(",", tipiFileAmmessi));
 			}else {
 				SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+				actionRequest.setAttribute(GestioneFormsPortletKeys.MODELLO_FORM, modelloForm);
+				actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaForm.jsp");
 				return;
 			}
 			

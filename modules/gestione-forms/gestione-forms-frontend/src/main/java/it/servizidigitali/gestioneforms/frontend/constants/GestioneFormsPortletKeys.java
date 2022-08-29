@@ -38,6 +38,8 @@ public class GestioneFormsPortletKeys {
 	public static final String DEFINIZIONE_ALLEGATO_FILENAME = "filenameModello";
 	public static final String DEFINIZIONE_ALLEGATO_OBBLIGATORIO = "obbligatorio";
 	
+	public static final String SESSION_MESSAGE_ERRORE_NON_AUTORIZZATO = "errore-non-autorizzato";
+	
 	
 	
 	

@@ -32,7 +32,6 @@
 		<column name="codice" type="String" />
 		<column name="json" type="String" />
 		<column name="principale" type="boolean" />
-		<column name="multiutente" type="boolean" />
 		
 		<!-- FK -->
 		<column name="organizationId" type="long" />

@@ -31,14 +31,7 @@
 				
 				<liferay-ui:search-container-column-text value="${createDate}" name="<%=GestioneFormsPortletKeys.DATA_CREAZIONE %>" orderable="true" orderableProperty="createDate"/>
 				
-				<c:choose>
-					<c:when test="${form.multiutente eq true}">
-						<liferay-ui:search-container-column-text align="center" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" value="<i class='icon-ok text-success'></i>"/>
-					</c:when>
-					<c:when test="${form.multiutente eq false}">
-						<liferay-ui:search-container-column-text  align="center" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" value="<i class='icon-remove text-danger'></i>"/>
-					</c:when>
-				</c:choose>
+				<liferay-ui:search-container-column-text property="nomeEnte" name="nomeEnte"/>
 				
 				<c:choose>
 					<c:when test="${form.principale eq true}">
@@ -55,8 +48,17 @@
 					<portlet:param name="<%=GestioneFormsPortletKeys.ID_FORM %>" value="${form.formId}" />
 				</portlet:renderURL>
 				
-				<liferay-ui:search-container-column-text name="<%=GestioneFormsPortletKeys.AZIONI %>" align="center" value="<i class='icon-edit'></i>" href="${dettaglioNuovoURL}"/>
-			
+				<c:choose>
+					<c:when test="${organizationIdSitePrincipale == 0}">
+						<liferay-ui:search-container-column-text name="<%=GestioneFormsPortletKeys.AZIONI %>" align="center" value="<i class='icon-edit'></i>" href="${dettaglioNuovoURL}"/>
+					</c:when>
+					<c:when test="${form.groupId == groupIdUtente}">
+						<liferay-ui:search-container-column-text name="<%=GestioneFormsPortletKeys.AZIONI %>" align="center" value="<i class='icon-edit'></i>" href="${dettaglioNuovoURL}"/>
+					</c:when>
+					<c:when test="${form.groupId != groupIdUtente && organizationIdSitePrincipale!=0}">
+						<liferay-ui:search-container-column-text name="<%=GestioneFormsPortletKeys.AZIONI %>" align="center" value=""/>
+					</c:when>
+				</c:choose>			
 			</liferay-ui:search-container-row>
 		<liferay-ui:search-iterator />
 		

@@ -10,13 +10,15 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -68,8 +70,12 @@ public class GestioneFormsPortlet extends MVCPortlet {
 
 	public void render (RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException{
 		
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
 		
 		List<Form> listaForm = (List<Form>) renderRequest.getAttribute(GestioneFormsPortletKeys.LISTA_FORM);
+		long groupIdUtente = themeDisplay.getSiteGroupId();
+		long organizationIdSitePrincipale = themeDisplay.getSiteGroup().getOrganizationId();
 		
 		int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM,GestioneFormsPortletKeys.DEFAULT_CUR);
 		int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,GestioneFormsPortletKeys.DEFAULT_DELTA);
@@ -93,18 +99,22 @@ public class GestioneFormsPortlet extends MVCPortlet {
 				dataInserimentoA = simpleDateFormat.parse(dataInserimentoAString);
 			}
 			
-		}catch(ParseException e) {
-			_log.error("Impossibile effettuare il parse delle date!");
+			listaForm = formLocalService.search(nome, dataInserimentoDa, dataInserimentoA, delta, cur,orderByCol, orderByType);
+			
+		}catch(Exception e) {
+			_log.error("Impossibile recuperare la lista dei form!" + e.getMessage());
 		}
 		
-		
-		
-		listaForm = formLocalService.search(nome, dataInserimentoDa, dataInserimentoA, delta, cur,orderByCol, orderByType);
+		if(listaForm == null) {
+			listaForm = new ArrayList<Form>();
+		}
 		
 		renderRequest.setAttribute(GestioneFormsPortletKeys.LISTA_FORM, listaForm);	
-		renderRequest.setAttribute("nomeRicerca", nome);
-		renderRequest.setAttribute("dataInserimentoDa", dataInserimentoDaString);
-		renderRequest.setAttribute("dataInserimentoA", dataInserimentoAString);
+		renderRequest.setAttribute(GestioneFormsPortletKeys.NOME_RICERCA, nome);
+		renderRequest.setAttribute(GestioneFormsPortletKeys.DATA_INSERIMENTO_DA, dataInserimentoDaString);
+		renderRequest.setAttribute(GestioneFormsPortletKeys.DATA_INSERIMENTO_A, dataInserimentoAString);
+		renderRequest.setAttribute("groupIdUtente", groupIdUtente);
+		renderRequest.setAttribute("organizationIdSitePrincipale", organizationIdSitePrincipale);
 		
 		
 		// Rimozione messaggi default

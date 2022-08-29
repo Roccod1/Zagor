@@ -9,6 +9,8 @@
 <portlet:resourceURL id="<%=GestioneFormsPortletKeys.UPLOAD_ALLEGATO_RESOURCE_COMMAND %>" var="uploadFileUrl">
 </portlet:resourceURL>
 
+<liferay-ui:error key="<%=GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO %>" message="compilare-tutti-i-campi-obbligatori" />
+
 
 
 
@@ -58,27 +60,7 @@
 		
 			<div class="col-6">			
 				<div class="form-group form-check">	
-					<c:choose>
-						<c:when test="${form.principale eq true }">
-							<aui:input label="principale" type="checkbox" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>"/>					
-						</c:when>
-						<c:otherwise>
-							<aui:input label="principale" type="checkbox" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>"/>
-						</c:otherwise>
-					</c:choose>									
-				</div>
-			</div>
-			
-			<div class="col-6">			
-				<div class="form-group form-check">	
-					<c:choose>
-						<c:when test="${form.multiutente eq true}">
-							<aui:input label="multiente" type="checkbox" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" checked="true"/>	
-						</c:when>						
-						<c:otherwise>
-							<aui:input label="multiente" type="checkbox" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" />	
-						</c:otherwise>
-					</c:choose>						
+					<aui:input label="principale" type="checkbox" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>" value="${form.principale}"/>
 				</div>
 			</div>
 			
