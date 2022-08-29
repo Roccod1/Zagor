@@ -1,25 +1,22 @@
 <%@ include file="init.jsp" %>
 
-<link
+	<link
       rel="stylesheet"
       href="https://unpkg.com/bpmn-js@5.1.2/dist/assets/diagram-js.css"
   	/>
+  	
     <link
       rel="stylesheet"
       href="https://unpkg.com/bpmn-js@5.1.2/dist/assets/bpmn-font/css/bpmn.css"
     />
-    
-    <link rel="stylesheet" href="https://unpkg.com/bpmn-js-properties-panel/dist/assets/properties-panel.css">
-
-    <!-- modeler distro -->
-    <script src="https://unpkg.com/bpmn-js@5.1.2/dist/bpmn-modeler.development.js"></script>
-    
-    
-
+  
 <portlet:actionURL name="<%=GestioneProcessiPortletKeys.SALVA_CREA_ACTION_COMMAND %>" var="salvaModificaURL" />
 <portlet:renderURL var="homeURL"></portlet:renderURL>
 
-<liferay-ui:success key="<%=GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_RECUPERO_PROCESSO_REPOSITORY %>" message="impossibile-recuperare-processo-da-sistema"/>
+<liferay-ui:error key="<%=GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_CAMUNDA %>" message="impossibile-effettuare-salvataggio-camunda" />
+<liferay-ui:error key="<%=GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_PROCESSO_CODICE_ESISTENTE %>" message="esiste-gia-un-processo-con-codice-specificato" />
+
+
 
 
 <div class="page-header">
@@ -70,17 +67,8 @@
 	</aui:form>
 </div>
 
-<div class="row">
-
-	<div class="col-8">
-		<div id="canvas"></div>
-	</div>
-	
-	<div class="col-4">
-		<div id="js-properties-panel"></div>
-	</div>
-
-</div>
+<div id="canvas"></div>
+<div id="js-properties-panel"></div>
 
 <script>
 

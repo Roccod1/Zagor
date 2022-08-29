@@ -33,7 +33,8 @@ public class GestioneProcessiPortletKeys {
 	public static final String SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE = "eseguito-correttamente";
 	public static final String SESSION_MESSAGE_ERRORE_ATTIVA_DISATTIVA_PROCESSO = "errore-attiva-disattiva-servizio";
 	public static final String SESSION_MESSAGE_ERRORE_PROCESSO_CODICE_ESISTENTE = "errore-processo-codice-esistente";
-	public static final String SESSION_MESSAGE_ERRORE_RECUPERO_PROCESSO_REPOSITORY = "errore-recupero-processo-repository";
+	public static final String SESSION_MESSAGE_ERRORE_NON_AUTORIZZATO = "errore-non-autorizzato";
+	public static final String SESSION_MESSAGE_ERRORE_CAMUNDA = "errore-camunda";
 	
 	public static final int DEFAULT_CUR = 1;
 	public static final int DEFAULT_DELTA = 10;

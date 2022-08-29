@@ -6,6 +6,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -75,10 +76,18 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 			}
 			
 			if(Validator.isNotNull(modelloXml)) {
-				String deploymentId = camundaClient.insertOrUpdateProcessDefinitions(String.valueOf(themeDisplay.getScopeGroupId()), codice, modelloXml.getBytes());
-				
-				if(Validator.isNotNull(deploymentId)) {
-					processo.setDeploymentId(deploymentId);
+				try {
+					String deploymentId = camundaClient.insertOrUpdateProcessDefinitions(String.valueOf(themeDisplay.getScopeGroupId()), codice, modelloXml.getBytes());
+					
+					if(Validator.isNotNull(deploymentId)) {
+						processo.setDeploymentId(deploymentId);
+					}
+					
+				}catch(Exception e) {
+					SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_CAMUNDA);
+					actionRequest.setAttribute(GestioneProcessiPortletKeys.MODELLOXML, modelloXml);
+					actionResponse.getRenderParameters().setValue(GestioneProcessiPortletKeys.MODELLOXML, modelloXml);
+					return;
 				}
 			}
 			
@@ -86,12 +95,14 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 			processo.setNome(nome);
 			processo.setAttivo(true);
 			processo.setUserId(themeDisplay.getUserId());
-			processo.setUserName(themeDisplay.getUser().getScreenName());
+			processo.setUserName(themeDisplay.getUser().getFullName());
 		}else {
 			try {
 				processo = processoLocalService.getProcessoByCodice(codice);
 				_log.error("Processo già esistente con codice: " + codice);
 				SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_PROCESSO_CODICE_ESISTENTE);
+				actionRequest.setAttribute(GestioneProcessiPortletKeys.MODELLOXML, modelloXml);
+				actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaProcesso.jsp");
 				return;
 			}catch(NoSuchProcessoException e) {
 				
@@ -108,10 +119,18 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 				}
 				
 				if(Validator.isNotNull(modelloXml)) {
-					String deploymentId = camundaClient.insertOrUpdateProcessDefinitions(String.valueOf(themeDisplay.getScopeGroupId()), codice, modelloXml.getBytes());
-					
-					if(Validator.isNotNull(deploymentId)) {
-						processo.setDeploymentId(deploymentId);
+					try {
+						String deploymentId = camundaClient.insertOrUpdateProcessDefinitions(String.valueOf(themeDisplay.getScopeGroupId()), codice, modelloXml.getBytes());
+						
+						if(Validator.isNotNull(deploymentId)) {
+							processo.setDeploymentId(deploymentId);
+						}
+						
+					}catch(Exception exception) {
+						SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_CAMUNDA);
+						actionRequest.setAttribute(GestioneProcessiPortletKeys.MODELLOXML, modelloXml);
+						actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaProcesso.jsp");
+						return;
 					}
 				}
 				
@@ -119,12 +138,13 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand{
 				processo.setNome(nome);
 				processo.setAttivo(true);
 				processo.setUserId(themeDisplay.getUserId());
-				processo.setGroupId(themeDisplay.getScopeGroupId());
-				processo.setUserName(themeDisplay.getUser().getScreenName());
+				processo.setGroupId(themeDisplay.getSiteGroupId());
+				processo.setUserName(themeDisplay.getUser().getFullName());
 						
 			}	
 		}
 		
+		SessionMessages.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE);
 		processoLocalService.updateProcesso(processo);
 		
 	}
