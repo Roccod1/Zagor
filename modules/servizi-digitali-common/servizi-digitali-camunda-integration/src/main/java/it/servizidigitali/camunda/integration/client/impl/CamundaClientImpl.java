@@ -23,6 +23,7 @@ import org.camunda.community.rest.client.api.ProcessDefinitionApi;
 import org.camunda.community.rest.client.api.ProcessInstanceApi;
 import org.camunda.community.rest.client.api.TaskApi;
 import org.camunda.community.rest.client.api.TenantApi;
+import org.camunda.community.rest.client.api.UserApi;
 import org.camunda.community.rest.client.api.VariableInstanceApi;
 import org.camunda.community.rest.client.dto.CompleteTaskDto;
 import org.camunda.community.rest.client.dto.CountResultDto;
@@ -38,7 +39,9 @@ import org.camunda.community.rest.client.dto.TaskDto;
 import org.camunda.community.rest.client.dto.TaskQueryDto;
 import org.camunda.community.rest.client.dto.TaskQueryDtoSorting;
 import org.camunda.community.rest.client.dto.TenantDto;
+import org.camunda.community.rest.client.dto.UserDto;
 import org.camunda.community.rest.client.dto.UserIdDto;
+import org.camunda.community.rest.client.dto.UserProfileDto;
 import org.camunda.community.rest.client.dto.VariableInstanceDto;
 import org.camunda.community.rest.client.dto.VariableInstanceQueryDto;
 import org.camunda.community.rest.client.dto.VariableQueryParameterDto;
@@ -725,5 +728,57 @@ public class CamundaClientImpl implements CamundaClient {
 			throw new CamundaClientException("removeGroup :: " + e.getMessage(), e);
 		}
 
+	}
+
+	@Override
+	public void inserOrUpdateUser(String userId, String firstName, String lastName, String email, String password) {
+
+		try {
+			ApiClient client = getApiClient();
+			UserApi userApi = new UserApi(client);
+
+			UserProfileDto userProfileDto = null;
+			try {
+				userProfileDto = userApi.getUserProfile(userId);
+			}
+			catch (Exception e) {
+				log.warn("inserOrUpdateUser :: " + e.getMessage());
+			}
+			if (userProfileDto == null) {
+				UserProfileDto userProfileDto2 = new UserProfileDto();
+				userProfileDto2.setId(userId);
+				userProfileDto2.setFirstName(firstName);
+				userProfileDto2.setLastName(lastName);
+				userProfileDto2.setEmail(email);
+				UserDto userDto = new UserDto();
+				userDto.setProfile(userProfileDto2);
+				userApi.createUser(userDto);
+			}
+			else {
+				userProfileDto.setId(userId);
+				userProfileDto.setFirstName(firstName);
+				userProfileDto.setLastName(lastName);
+				userProfileDto.setEmail(email);
+				userApi.updateProfile(userId, userProfileDto);
+			}
+		}
+		catch (ApiException e) {
+			log.error("inserOrUpdateUser :: " + e.getMessage(), e);
+			throw new CamundaClientException("inserOrUpdateUser :: " + e.getMessage(), e);
+		}
+
+	}
+
+	@Override
+	public void removeUser(String userId) {
+		try {
+			ApiClient client = getApiClient();
+			UserApi userApi = new UserApi(client);
+			userApi.deleteUser(userId);
+		}
+		catch (ApiException e) {
+			log.error("removeUser :: " + e.getMessage(), e);
+			throw new CamundaClientException("removeUser :: " + e.getMessage(), e);
+		}
 	}
 }

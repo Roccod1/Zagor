@@ -2,11 +2,15 @@ package it.servizidigitali.portal.modellistener;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.ModelListenerException;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.BaseModelListener;
 import com.liferay.portal.kernel.model.ModelListener;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 
 import java.util.Map;
 
@@ -33,6 +37,12 @@ public class OrganizationModelListener extends BaseModelListener<Organization> {
 	private volatile CamundaConfiguration camundaConfiguration;
 
 	private boolean camundaIntegrationEnabled;
+
+	@Reference
+	private OrganizationLocalService organizationLocalService;
+
+	@Reference
+	private UserLocalService userLocalService;
 
 	@Activate
 	@Modified
@@ -84,6 +94,34 @@ public class OrganizationModelListener extends BaseModelListener<Organization> {
 			// E' un organizzazione figlia = è una ripartizione dell'Ente
 			camundaClient.removeGroup(String.valueOf(organizationId));
 		}
+	}
+
+	@Override
+	public void onAfterAddAssociation(Object classPK, String associationClassName, Object associationClassPK) throws ModelListenerException {
+
+		if (associationClassName.equals(User.class.toString())) {
+			try {
+				long organizationId = (long) classPK;
+				Organization organization = organizationLocalService.getOrganization(organizationId);
+				long parentOrganizationId = organization.getParentOrganizationId();
+				long userId = (long) associationClassPK;
+
+				if (parentOrganizationId != 0) {
+					// TODO assegnazione utente a gruppo Camunda BPMN
+					User user = userLocalService.getUser(userId);
+				}
+			}
+			catch (PortalException e) {
+				_log.error("onAfterAddAssociation :: " + e.getMessage(), e);
+			}
+
+		}
+
+	}
+
+	@Override
+	public void onAfterRemoveAssociation(Object classPK, String associationClassName, Object associationClassPK) throws ModelListenerException {
+		// TODO Auto-generated method stub
 	}
 
 	/**

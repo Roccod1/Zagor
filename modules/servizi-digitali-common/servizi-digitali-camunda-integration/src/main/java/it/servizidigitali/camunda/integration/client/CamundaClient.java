@@ -259,4 +259,20 @@ public interface CamundaClient {
 	 */
 	void removeGroup(String groupId);
 
+	/**
+	 *
+	 * @param userId
+	 * @param firstName
+	 * @param lastName
+	 * @param email
+	 * @param password
+	 */
+	void inserOrUpdateUser(String userId, String firstName, String lastName, String email, String password);
+
+	/**
+	 *
+	 * @param userId
+	 */
+	void removeUser(String userId);
+
 }
