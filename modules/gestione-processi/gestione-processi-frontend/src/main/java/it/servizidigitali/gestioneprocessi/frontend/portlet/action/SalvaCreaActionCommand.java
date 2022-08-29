@@ -5,6 +5,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -49,6 +51,12 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 	@Reference
 	private CamundaClient camundaClient;
 
+	@Reference
+	private OrganizationLocalService organizationLocalService;
+
+	@Reference
+	private GroupLocalService groupLocalService;
+
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
@@ -69,6 +77,7 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		if (idProcesso > 0) {
 
 			processo = processoLocalService.getProcesso(idProcesso);
+			tenantId = String.valueOf(groupLocalService.getGroup(processo.getGroupId()).getOrganizationId());
 
 			if (Validator.isNull(codice)) {
 				SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
