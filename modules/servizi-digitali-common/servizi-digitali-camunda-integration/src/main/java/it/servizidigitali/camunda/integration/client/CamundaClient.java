@@ -245,4 +245,18 @@ public interface CamundaClient {
 	 */
 	void removeTenant(String tenantId);
 
+	/**
+	 *
+	 * @param groupId
+	 * @param groupName
+	 * @param groupType
+	 */
+	void inserOrUpdateGroup(String groupId, String groupName, String groupType);
+
+	/**
+	 *
+	 * @param groupId
+	 */
+	void removeGroup(String groupId);
+
 }

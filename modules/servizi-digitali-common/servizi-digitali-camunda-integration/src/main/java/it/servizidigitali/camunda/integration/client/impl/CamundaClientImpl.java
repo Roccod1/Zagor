@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.camunda.community.rest.client.api.DeploymentApi;
+import org.camunda.community.rest.client.api.GroupApi;
 import org.camunda.community.rest.client.api.ProcessDefinitionApi;
 import org.camunda.community.rest.client.api.ProcessInstanceApi;
 import org.camunda.community.rest.client.api.TaskApi;
@@ -27,6 +28,7 @@ import org.camunda.community.rest.client.dto.CompleteTaskDto;
 import org.camunda.community.rest.client.dto.CountResultDto;
 import org.camunda.community.rest.client.dto.DeploymentResourceDto;
 import org.camunda.community.rest.client.dto.DeploymentWithDefinitionsDto;
+import org.camunda.community.rest.client.dto.GroupDto;
 import org.camunda.community.rest.client.dto.PatchVariablesDto;
 import org.camunda.community.rest.client.dto.ProcessDefinitionDto;
 import org.camunda.community.rest.client.dto.ProcessInstanceDto;
@@ -671,5 +673,57 @@ public class CamundaClientImpl implements CamundaClient {
 			log.error("removeTenant :: " + e.getMessage(), e);
 			throw new CamundaClientException("removeTenant :: " + e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public void inserOrUpdateGroup(String groupId, String groupName, String groupType) {
+
+		try {
+			ApiClient client = getApiClient();
+			GroupApi groupApi = new GroupApi(client);
+
+			GroupDto group = null;
+			try {
+				group = groupApi.getGroup(groupId);
+			}
+			catch (Exception e) {
+				log.warn("inserOrUpdateGroup :: " + e.getMessage());
+			}
+			if (group == null) {
+				GroupDto groupDto = new GroupDto();
+				groupDto.setId(groupId);
+				groupDto.setName(groupName);
+				groupDto.setType(groupType);
+				groupApi.createGroup(groupDto);
+			}
+			else {
+				GroupDto groupDto = new GroupDto();
+				groupDto.setId(groupId);
+				groupDto.setName(groupName);
+				groupDto.setType(groupType);
+				groupApi.updateGroup(groupId, groupDto);
+
+			}
+		}
+		catch (ApiException e) {
+			log.error("inserOrUpdateGroup :: " + e.getMessage(), e);
+			throw new CamundaClientException("inserOrUpdateGroup :: " + e.getMessage(), e);
+		}
+
+	}
+
+	@Override
+	public void removeGroup(String groupId) {
+
+		try {
+			ApiClient client = getApiClient();
+			GroupApi groupApi = new GroupApi(client);
+			groupApi.deleteGroup(groupId);
+		}
+		catch (ApiException e) {
+			log.error("removeGroup :: " + e.getMessage(), e);
+			throw new CamundaClientException("removeGroup :: " + e.getMessage(), e);
+		}
+
 	}
 }

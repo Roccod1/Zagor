@@ -52,6 +52,7 @@ public class OrganizationModelListener extends BaseModelListener<Organization> {
 		}
 
 		insertOrUpdateCamundaTenant(model);
+		insertOrUpdateCamundaGroup(model);
 	}
 
 	@Override
@@ -62,6 +63,7 @@ public class OrganizationModelListener extends BaseModelListener<Organization> {
 		}
 
 		insertOrUpdateCamundaTenant(model);
+		insertOrUpdateCamundaGroup(model);
 	}
 
 	@Override
@@ -73,10 +75,14 @@ public class OrganizationModelListener extends BaseModelListener<Organization> {
 
 		// eliminazione tenant su Camunda BPMN Engine
 		long parentOrganizationId = model.getParentOrganizationId();
+		long organizationId = model.getOrganizationId();
 		if (parentOrganizationId == 0) {
 			// E' un organizzazione padre = è un Ente
-			long organizationId = model.getOrganizationId();
 			camundaClient.removeTenant(String.valueOf(organizationId));
+		}
+		else {
+			// E' un organizzazione figlia = è una ripartizione dell'Ente
+			camundaClient.removeGroup(String.valueOf(organizationId));
 		}
 	}
 
@@ -92,6 +98,21 @@ public class OrganizationModelListener extends BaseModelListener<Organization> {
 			String organizationName = model.getName();
 			camundaClient.insertOrUpdateTenant(String.valueOf(organizationId), organizationName);
 		}
+	}
+
+	/**
+	 * @param model
+	 */
+	private void insertOrUpdateCamundaGroup(Organization model) {
+
+		long parentOrganizationId = model.getParentOrganizationId();
+		if (parentOrganizationId != 0) {
+			// E' un organizzazione figlia = è una ripartizione dell'Ente
+			long organizationId = model.getOrganizationId();
+			String organizationName = model.getName();
+			camundaClient.inserOrUpdateGroup(String.valueOf(organizationId), organizationName, null);
+		}
+
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(OrganizationModelListener.class);
