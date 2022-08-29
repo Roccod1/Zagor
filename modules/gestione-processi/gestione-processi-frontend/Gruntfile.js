@@ -21,7 +21,14 @@ module.exports = function(grunt) {
         },
        // transform: ['brfs' ]
        transform: [
-			['babelify',  { "presets": ["@babel/preset-env"] }  ],
+			['babelify',  { 
+				"presets": ["@babel/preset-env"] ,
+				"global": true, 
+       	 		"ignore": [
+					/\/node_modules\/(?!bpmn-js-properties-panel|min-dom\/)/
+					]
+				}  
+			],
 			'brfs'
 		],
       },
