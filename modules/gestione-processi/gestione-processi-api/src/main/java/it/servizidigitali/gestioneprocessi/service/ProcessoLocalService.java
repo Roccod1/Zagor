@@ -80,11 +80,6 @@ public interface ProcessoLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public Processo addProcesso(Processo processo);
 
-	public List<Processo> cerca(
-			String nome, Date dataInserimentoDa, Date dataInserimentoA,
-			int delta, int cur, String orderByCol, String orderByType)
-		throws PortalException;
-
 	/**
 	 * @throws PortalException
 	 */
@@ -317,6 +312,12 @@ public interface ProcessoLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getProcessosCount();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Processo> search(
+			String nome, Date dataInserimentoDa, Date dataInserimentoA,
+			int delta, int cur, String orderByCol, String orderByType)
+		throws PortalException;
 
 	/**
 	 * Updates the processo in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

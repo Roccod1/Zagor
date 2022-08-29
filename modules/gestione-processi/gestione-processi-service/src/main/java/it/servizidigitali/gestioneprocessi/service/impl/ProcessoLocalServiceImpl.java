@@ -46,7 +46,7 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 	
 	public static final Log _log = LogFactoryUtil.getLog(ProcessoLocalServiceImpl.class);
 	
-	public List<Processo> cerca(String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta, int cur, String orderByCol, String orderByType) throws PortalException{
+	public List<Processo> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta, int cur, String orderByCol, String orderByType) throws PortalException{
 		boolean direzione = false;
 		
 		if(orderByType.equalsIgnoreCase("asc")) {
