@@ -1,7 +1,5 @@
 package it.servizidigitali.communication.sender.impl;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -57,16 +55,7 @@ public abstract class CommunicationEngineChannelSender {
 			log.error(":::: sendMessage :: error ", e);
 
 			String errorResponse = e.getMessage();
-
-			ObjectMapper om = new ObjectMapper();
-			om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-			try {
-				result = om.readValue(errorResponse, Result.class);
-			}
-			catch (Exception ex) {
-				log.error(":::: sendMessage :: error ", ex);
-			}
+			throw new CommunicationException(errorResponse, e);
 		}
 
 		log.debug(":::: sendMessage :: end :: " + result);
@@ -99,16 +88,7 @@ public abstract class CommunicationEngineChannelSender {
 			log.error(":::: sendNowMessage :: error ", e);
 
 			String errorResponse = e.getMessage();
-
-			ObjectMapper om = new ObjectMapper();
-			om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-			try {
-				result = om.readValue(errorResponse, Result.class);
-			}
-			catch (Exception ex) {
-				log.error(":::: sendNowMessage :: error ", ex);
-			}
+			throw new CommunicationException(errorResponse, e);
 		}
 
 		log.debug(":::: sendNowMessage :: end :: " + result);
