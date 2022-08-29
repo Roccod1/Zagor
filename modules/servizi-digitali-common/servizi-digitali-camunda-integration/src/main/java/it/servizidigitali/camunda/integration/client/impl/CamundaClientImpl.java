@@ -781,4 +781,82 @@ public class CamundaClientImpl implements CamundaClient {
 			throw new CamundaClientException("removeUser :: " + e.getMessage(), e);
 		}
 	}
+
+	@Override
+	public void addUserToGroup(String groupId, String userId) {
+		try {
+			ApiClient client = getApiClient();
+			GroupApi groupApi = new GroupApi(client);
+			groupApi.createGroupMember(groupId, userId);
+		}
+		catch (ApiException e) {
+			log.error("addUserToGroup :: " + e.getMessage(), e);
+			throw new CamundaClientException("addUserToGroup :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void removeUserFromGroup(String groupId, String userId) {
+		try {
+			ApiClient client = getApiClient();
+			GroupApi groupApi = new GroupApi(client);
+			groupApi.deleteGroupMember(groupId, userId);
+		}
+		catch (ApiException e) {
+			log.error("removeUserFromGroup :: " + e.getMessage(), e);
+			throw new CamundaClientException("removeUserFromGroup :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void addGroupToTenant(String tenantId, String groupId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.createGroupMembership(tenantId, groupId);
+		}
+		catch (ApiException e) {
+			log.error("addGroupToTenant :: " + e.getMessage(), e);
+			throw new CamundaClientException("addGroupToTenant :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void removeGroupFromTenant(String tenantId, String groupId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.deleteGroupMembership(tenantId, groupId);
+		}
+		catch (ApiException e) {
+			log.error("removeGroupFromTenant :: " + e.getMessage(), e);
+			throw new CamundaClientException("removeGroupFromTenant :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void addUserToTenant(String tenantId, String userId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.createUserMembership(tenantId, userId);
+		}
+		catch (ApiException e) {
+			log.error("addUserToTenant :: " + e.getMessage(), e);
+			throw new CamundaClientException("addUserToTenant :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void removeUserFromTenant(String tenantId, String userId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.deleteUserMembership(tenantId, userId);
+		}
+		catch (ApiException e) {
+			log.error("removeUserFromTenant :: " + e.getMessage(), e);
+			throw new CamundaClientException("removeUserFromTenant :: " + e.getMessage(), e);
+		}
+	}
 }

@@ -99,7 +99,11 @@ public class OrganizationModelListener extends BaseModelListener<Organization> {
 	@Override
 	public void onAfterAddAssociation(Object classPK, String associationClassName, Object associationClassPK) throws ModelListenerException {
 
-		if (associationClassName.equals(User.class.toString())) {
+		if (!camundaIntegrationEnabled) {
+			return;
+		}
+
+		if (associationClassName.equals(User.class.getName())) {
 			try {
 				long organizationId = (long) classPK;
 				Organization organization = organizationLocalService.getOrganization(organizationId);
@@ -107,21 +111,46 @@ public class OrganizationModelListener extends BaseModelListener<Organization> {
 				long userId = (long) associationClassPK;
 
 				if (parentOrganizationId != 0) {
-					// TODO assegnazione utente a gruppo Camunda BPMN
+					// assegnazione utente a gruppo Camunda BPMN
 					User user = userLocalService.getUser(userId);
+					camundaClient.inserOrUpdateUser(user.getScreenName(), user.getFirstName(), user.getLastName(), user.getEmailAddress(), null);
+					camundaClient.addUserToGroup(String.valueOf(organizationId), user.getScreenName());
+					camundaClient.addUserToTenant(String.valueOf(parentOrganizationId), user.getScreenName());
+
 				}
 			}
 			catch (PortalException e) {
 				_log.error("onAfterAddAssociation :: " + e.getMessage(), e);
 			}
-
 		}
-
 	}
 
 	@Override
 	public void onAfterRemoveAssociation(Object classPK, String associationClassName, Object associationClassPK) throws ModelListenerException {
-		// TODO Auto-generated method stub
+
+		if (!camundaIntegrationEnabled) {
+			return;
+		}
+
+		if (associationClassName.equals(User.class.getName())) {
+			try {
+				long organizationId = (long) classPK;
+				Organization organization = organizationLocalService.getOrganization(organizationId);
+				long parentOrganizationId = organization.getParentOrganizationId();
+				long userId = (long) associationClassPK;
+
+				if (parentOrganizationId != 0) {
+					// assegnazione utente a gruppo Camunda BPMN
+					User user = userLocalService.getUser(userId);
+					camundaClient.removeUserFromGroup(String.valueOf(organizationId), user.getScreenName());
+					camundaClient.removeUserFromTenant(String.valueOf(parentOrganizationId), user.getScreenName());
+				}
+			}
+			catch (PortalException e) {
+				_log.error("onAfterRemoveAssociation :: " + e.getMessage(), e);
+			}
+		}
+
 	}
 
 	/**
@@ -149,6 +178,9 @@ public class OrganizationModelListener extends BaseModelListener<Organization> {
 			long organizationId = model.getOrganizationId();
 			String organizationName = model.getName();
 			camundaClient.inserOrUpdateGroup(String.valueOf(organizationId), organizationName, null);
+
+			// Assegnazione gruppo a tenant
+			camundaClient.addGroupToTenant(String.valueOf(parentOrganizationId), String.valueOf(organizationId));
 		}
 
 	}

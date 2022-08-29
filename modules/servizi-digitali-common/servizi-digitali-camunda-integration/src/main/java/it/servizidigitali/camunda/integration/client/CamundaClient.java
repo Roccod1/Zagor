@@ -275,4 +275,44 @@ public interface CamundaClient {
 	 */
 	void removeUser(String userId);
 
+	/**
+	 * @param groupId
+	 * @param userId
+	 */
+	void addUserToGroup(String groupId, String userId);
+
+	/**
+	 * @param groupId
+	 * @param userId
+	 */
+	void removeUserFromGroup(String groupId, String userId);
+
+	/**
+	 *
+	 * @param tenantId
+	 * @param groupId
+	 */
+	void addGroupToTenant(String tenantId, String groupId);
+
+	/**
+	 *
+	 * @param tenantId
+	 * @param groupId
+	 */
+	void removeGroupFromTenant(String tenantId, String groupId);
+
+	/**
+	 *
+	 * @param tenantId
+	 * @param userId
+	 */
+	void addUserToTenant(String tenantId, String userId);
+
+	/**
+	 *
+	 * @param tenantId
+	 * @param userId
+	 */
+	void removeUserFromTenant(String tenantId, String userId);
+
 }
