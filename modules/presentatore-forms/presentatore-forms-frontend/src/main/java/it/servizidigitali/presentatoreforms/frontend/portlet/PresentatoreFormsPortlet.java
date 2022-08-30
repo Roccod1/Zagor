@@ -71,7 +71,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 			Form form = formLocalService.getForm(idFormMock);
 			form.setListaDefinizioneAllegato(definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idFormMock));
 
-			FormData formData = AlpacaUtil.loadFormData(form, null);
+			FormData formData = AlpacaUtil.loadFormData(form, null, false);
 			AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
 			renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 		} catch (Exception e) {
