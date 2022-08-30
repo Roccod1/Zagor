@@ -236,6 +236,11 @@ public interface ServizioEnteLocalService
 			long companyId, long organizationId, boolean attivo)
 		throws Exception;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Long> getListaServiziByOrganizationAttivo(
+			long organizationId, boolean attivo)
+		throws Exception;
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *

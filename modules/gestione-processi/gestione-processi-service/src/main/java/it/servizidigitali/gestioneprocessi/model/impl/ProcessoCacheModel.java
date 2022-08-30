@@ -62,7 +62,7 @@ public class ProcessoCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -86,8 +86,6 @@ public class ProcessoCacheModel
 		sb.append(nome);
 		sb.append(", stato=");
 		sb.append(stato);
-		sb.append(", multiente=");
-		sb.append(multiente);
 		sb.append(", deploymentId=");
 		sb.append(deploymentId);
 		sb.append(", attivo=");
@@ -155,8 +153,6 @@ public class ProcessoCacheModel
 			processoImpl.setStato(stato);
 		}
 
-		processoImpl.setMultiente(multiente);
-
 		if (deploymentId == null) {
 			processoImpl.setDeploymentId("");
 		}
@@ -188,8 +184,6 @@ public class ProcessoCacheModel
 		codice = objectInput.readUTF();
 		nome = objectInput.readUTF();
 		stato = objectInput.readUTF();
-
-		multiente = objectInput.readBoolean();
 		deploymentId = objectInput.readUTF();
 
 		attivo = objectInput.readBoolean();
@@ -243,8 +237,6 @@ public class ProcessoCacheModel
 			objectOutput.writeUTF(stato);
 		}
 
-		objectOutput.writeBoolean(multiente);
-
 		if (deploymentId == null) {
 			objectOutput.writeUTF("");
 		}
@@ -266,7 +258,6 @@ public class ProcessoCacheModel
 	public String codice;
 	public String nome;
 	public String stato;
-	public boolean multiente;
 	public String deploymentId;
 	public boolean attivo;
 

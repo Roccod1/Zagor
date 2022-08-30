@@ -357,6 +357,16 @@ public class FormLocalServiceWrapper
 		return _formLocalService.getIndexableActionableDynamicQuery();
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.gestioneforms.model.Form>
+			getListaFormByOrganizationPrincipale(
+				long groupId, boolean principale)
+		throws Exception {
+
+		return _formLocalService.getListaFormByOrganizationPrincipale(
+			groupId, principale);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *

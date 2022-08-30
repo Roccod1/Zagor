@@ -55,7 +55,6 @@ public class FormWrapper
 		attributes.put("codice", getCodice());
 		attributes.put("json", getJson());
 		attributes.put("principale", isPrincipale());
-		attributes.put("multiutente", isMultiutente());
 		attributes.put("organizationId", getOrganizationId());
 
 		return attributes;
@@ -139,12 +138,6 @@ public class FormWrapper
 
 		if (principale != null) {
 			setPrincipale(principale);
-		}
-
-		Boolean multiutente = (Boolean)attributes.get("multiutente");
-
-		if (multiutente != null) {
-			setMultiutente(multiutente);
 		}
 
 		Long organizationId = (Long)attributes.get("organizationId");
@@ -248,16 +241,6 @@ public class FormWrapper
 	}
 
 	/**
-	 * Returns the multiutente of this form.
-	 *
-	 * @return the multiutente of this form
-	 */
-	@Override
-	public boolean getMultiutente() {
-		return model.getMultiutente();
-	}
-
-	/**
 	 * Returns the nome of this form.
 	 *
 	 * @return the nome of this form
@@ -335,16 +318,6 @@ public class FormWrapper
 	@Override
 	public String getUuid() {
 		return model.getUuid();
-	}
-
-	/**
-	 * Returns <code>true</code> if this form is multiutente.
-	 *
-	 * @return <code>true</code> if this form is multiutente; <code>false</code> otherwise
-	 */
-	@Override
-	public boolean isMultiutente() {
-		return model.isMultiutente();
 	}
 
 	/**
@@ -449,16 +422,6 @@ public class FormWrapper
 	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		model.setModifiedDate(modifiedDate);
-	}
-
-	/**
-	 * Sets whether this form is multiutente.
-	 *
-	 * @param multiutente the multiutente of this form
-	 */
-	@Override
-	public void setMultiutente(boolean multiutente) {
-		model.setMultiutente(multiutente);
 	}
 
 	/**

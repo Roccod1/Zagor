@@ -15,6 +15,11 @@
 package it.servizidigitali.gestioneforms.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -22,6 +27,7 @@ import com.liferay.portal.kernel.util.Validator;
 import java.util.Date;
 import java.util.List;
 
+import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.base.FormLocalServiceBaseImpl;
 
@@ -35,6 +41,9 @@ import org.osgi.service.component.annotations.Component;
 	service = AopService.class
 )
 public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
+	
+	public static final Log _log = LogFactoryUtil.getLog(FormLocalServiceImpl.class);
+
 	
 	public List<Form> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta, int cur, String orderByCol, String orderByType){
 		boolean direzione = false;
@@ -50,6 +59,37 @@ public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
 		OrderByComparator<Form> comparator = OrderByComparatorFactoryUtil.create("Form", orderByCol, direzione);
 		
 		List<Form> listaForm = formFinder.findFormByFilter(nome, dataInserimentoDa, dataInserimentoA, cur, delta, comparator);
+		
+		return listaForm;
+	}
+	
+	
+	public List<Form> getListaFormByOrganizationPrincipale(long groupId, boolean principale) throws Exception{
+		
+		ClassLoader classLoader = getClassLoader();
+		DynamicQuery formDynamicQuery = DynamicQueryFactoryUtil.forClass(Form.class, classLoader);
+
+		formDynamicQuery.add(RestrictionsFactoryUtil.eq("principale", principale));
+		
+		if(groupId > 0) {
+			formDynamicQuery.add(RestrictionsFactoryUtil.eq("groupId", groupId));
+		}
+		
+		List<Form> listaForm = formPersistence.findWithDynamicQuery(formDynamicQuery);
+		
+		if(Validator.isNotNull(listaForm)) {
+			for(Form form : listaForm) {
+				List<DefinizioneAllegato> listaAllegati = definizioneAllegatoPersistence.findByformIdAndEliminato(form.getFormId(), false);
+				
+				if(Validator.isNotNull(listaAllegati)) {
+					form.setListaDefinizioneAllegato(listaAllegati);
+				}else {
+					_log.error(":: getListaFormByOrganizationPrincipale :: Impossibile recuperare la lista degli allegati per il form con ID : " + form.getFormId());
+				}
+			}
+		}else {
+			_log.error(":: getListaFormByOrganizationPrincipale :: Impossibile recuperare la lista dei form dell'ente con ID : " + groupId);
+		}
 		
 		return listaForm;
 	}

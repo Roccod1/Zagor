@@ -65,7 +65,7 @@ public class GestioneProcedurePortlet extends MVCPortlet {
 		String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 		
 		String nome = ParamUtil.getString(renderRequest, GestioneProcedurePortletKeys.NOME_RICERCA);
-		String stato = ParamUtil.getString(renderRequest, GestioneProcedurePortletKeys.STATO_RICERCA);
+		boolean attiva = ParamUtil.getBoolean(renderRequest, GestioneProcedurePortletKeys.STATO_RICERCA);
 		String dataInserimentoDaString = ParamUtil.getString(renderRequest, GestioneProcedurePortletKeys.DATA_INSERIMENTO_DA);
 		String dataInserimentoAString = ParamUtil.getString(renderRequest, GestioneProcedurePortletKeys.DATA_INSERIMENTO_A);
 		
@@ -87,12 +87,12 @@ public class GestioneProcedurePortlet extends MVCPortlet {
 		}
 		
 
-		listaProcedure = proceduraLocalService.cerca(nome, stato, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);;
+		listaProcedure = proceduraLocalService.search(nome, attiva, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);;
 
 		
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_PROCEDURE, listaProcedure);
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.NOME_RICERCA, nome);
-		renderRequest.setAttribute(GestioneProcedurePortletKeys.STATO_RICERCA, stato);
+		renderRequest.setAttribute(GestioneProcedurePortletKeys.STATO_RICERCA, attiva);
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.DATA_INSERIMENTO_DA, dataInserimentoDaString);
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.DATA_INSERIMENTO_A, dataInserimentoAString);
 		

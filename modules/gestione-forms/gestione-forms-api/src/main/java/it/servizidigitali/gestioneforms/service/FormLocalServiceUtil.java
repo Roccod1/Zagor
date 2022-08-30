@@ -320,6 +320,14 @@ public class FormLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
+	public static List<Form> getListaFormByOrganizationPrincipale(
+			long groupId, boolean principale)
+		throws Exception {
+
+		return getService().getListaFormByOrganizationPrincipale(
+			groupId, principale);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *

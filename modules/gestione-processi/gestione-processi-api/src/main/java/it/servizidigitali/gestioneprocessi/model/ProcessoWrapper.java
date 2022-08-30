@@ -54,7 +54,6 @@ public class ProcessoWrapper
 		attributes.put("codice", getCodice());
 		attributes.put("nome", getNome());
 		attributes.put("stato", getStato());
-		attributes.put("multiente", isMultiente());
 		attributes.put("deploymentId", getDeploymentId());
 		attributes.put("attivo", isAttivo());
 
@@ -127,12 +126,6 @@ public class ProcessoWrapper
 
 		if (stato != null) {
 			setStato(stato);
-		}
-
-		Boolean multiente = (Boolean)attributes.get("multiente");
-
-		if (multiente != null) {
-			setMultiente(multiente);
 		}
 
 		String deploymentId = (String)attributes.get("deploymentId");
@@ -221,16 +214,6 @@ public class ProcessoWrapper
 	@Override
 	public Date getModifiedDate() {
 		return model.getModifiedDate();
-	}
-
-	/**
-	 * Returns the multiente of this processo.
-	 *
-	 * @return the multiente of this processo
-	 */
-	@Override
-	public boolean getMultiente() {
-		return model.getMultiente();
 	}
 
 	/**
@@ -323,16 +306,6 @@ public class ProcessoWrapper
 		return model.isAttivo();
 	}
 
-	/**
-	 * Returns <code>true</code> if this processo is multiente.
-	 *
-	 * @return <code>true</code> if this processo is multiente; <code>false</code> otherwise
-	 */
-	@Override
-	public boolean isMultiente() {
-		return model.isMultiente();
-	}
-
 	@Override
 	public void persist() {
 		model.persist();
@@ -406,16 +379,6 @@ public class ProcessoWrapper
 	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		model.setModifiedDate(modifiedDate);
-	}
-
-	/**
-	 * Sets whether this processo is multiente.
-	 *
-	 * @param multiente the multiente of this processo
-	 */
-	@Override
-	public void setMultiente(boolean multiente) {
-		model.setMultiente(multiente);
 	}
 
 	/**

@@ -15,6 +15,9 @@
 package it.servizidigitali.gestioneprocessi.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -61,6 +64,20 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 	public Processo getProcessoByCodice(String codice) throws NoSuchProcessoException {
 		Processo processo = processoPersistence.findByCodice(codice);
 		return processo;
+	}
+	
+	public List<Processo> getListaProcessiByOrganizationAttivo(long groupId, boolean attivo) throws Exception{
+		
+		ClassLoader classLoader = getClassLoader();
+		DynamicQuery processoDynamicQuery = DynamicQueryFactoryUtil.forClass(Processo.class, classLoader);
+
+		processoDynamicQuery.add(RestrictionsFactoryUtil.eq("attivo", attivo));
+		
+		if(groupId > 0) {
+			processoDynamicQuery.add(RestrictionsFactoryUtil.eq("groupId", groupId));
+		}
+		
+		return processoPersistence.findWithDynamicQuery(processoDynamicQuery);
 	}
 	
 }

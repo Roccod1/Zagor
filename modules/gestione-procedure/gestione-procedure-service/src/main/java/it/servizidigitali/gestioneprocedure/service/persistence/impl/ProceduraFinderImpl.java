@@ -20,7 +20,7 @@ import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFinder;
 
 @Component(service = ProceduraFinder.class)
 public class ProceduraFinderImpl extends ProceduraFinderBaseImpl implements ProceduraFinder{
-	public List<Procedura> findByFilters(String denominazione, String stato, Date dataInserimentoDa, Date dataInserimentoA, int cur, int delta, OrderByComparator<Procedura> ordine){
+	public List<Procedura> findByFilters(String denominazione, Boolean attiva, Date dataInserimentoDa, Date dataInserimentoA, int cur, int delta, OrderByComparator<Procedura> ordine){
 		List<Procedura> listaProcedure = new ArrayList<>();
 		
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -31,8 +31,8 @@ public class ProceduraFinderImpl extends ProceduraFinderBaseImpl implements Proc
 			dynamicQuery.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + denominazione + StringPool.PERCENT));
 		}
 		
-		if(Validator.isNotNull(stato)) {
-			dynamicQuery.add(RestrictionsFactoryUtil.eq("stato",stato));
+		if(Validator.isNotNull(attiva)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("attiva",attiva));
 		}
 		
 		if(Validator.isNotNull(dataInserimentoDa)) {

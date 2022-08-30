@@ -1,3 +1,4 @@
+<portlet:actionURL name="<%=GestioneProcedurePortletKeys.RICERCA_ACTION_COMMAND %>" var="ricercaURL" />
 <portlet:renderURL var="homeURL"></portlet:renderURL>
 <portlet:renderURL var="dettaglioNuovoURL">
 		<portlet:param name="mvcRenderCommandName" value="<%=GestioneProcedurePortletKeys.DETTAGLIO_NUOVO_RENDER_COMMAND %>" />
@@ -6,15 +7,13 @@
 
 <div class="container mb-4 pl-0 pr-0">
 	<aui:form action="${ricercaURL}" id="form" name="fm">
-	<div class="row">
+	<aui:row>
 	
-			<div class="col-6">
-				<div class="form-group">
+			<aui:col span="6">
 					<aui:input label="nome" id="nome" name="<%=GestioneProcedurePortletKeys.NOME_RICERCA %>" type="text"/>	
-				</div>
-			</div>
+			</aui:col>
 			
-			<div class="col-6">
+			<aui:col span="6">
 			
 				<aui:select label="stato" id="stato" name="<%=GestioneProcedurePortletKeys.STATO_RICERCA %>">
 					<aui:option value="" selected="true">Tutte</aui:option>
@@ -22,30 +21,26 @@
 					<aui:option value="0" >Inattive</aui:option>
 				</aui:select>
 			
-			</div>
+			</aui:col>
 			
 			
 
-	</div>
+	</aui:row>
 	
 	
-	<div class="row">
+	<aui:row>
 	
-		<div class="col-3">
-			<div class="form-group ">
+		<aui:col span="3">
 					<aui:input value="${dataInserimentoDa}" label="data-inserimento-da" id="dataInserimentoDa" name="<%=GestioneProcedurePortletKeys.DATA_INSERIMENTO_DA %>" type="date"/>	
-			</div>	
-		</div>
+		</aui:col>
 				
 
-		<div class="col-3">
-			<div class="form-group ">
+		<aui:col span="3">
 					<aui:input label="data-inserimento-a" value="${dataInserimentoA}" id="dataInserimentoA" name="<%=GestioneProcedurePortletKeys.DATA_INSERIMENTO_A %>" type="date"/>	
-			</div>
-		</div>
+		</aui:col>
 	
 	
-	</div>
+	</aui:row>
 	
 	<aui:button-row cssClass="text-right">
 			<aui:button type="submit" value="cerca" id="cerca"/>

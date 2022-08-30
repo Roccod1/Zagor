@@ -22,6 +22,9 @@ public class GestioneProcedurePortletKeys {
 	
 	public static final String LISTA_PROCEDURE = "listaProcedure";
 	
+	public static final String SALVA_CREA_ACTION_COMMAND = "/salvaModifica";
+	public static final String RICERCA_ACTION_COMMAND  = "/ricerca";
+	
 	public static final String NOME = "Denominazione";
 	public static final String PEC = "PEC";
 	public static final String ATTIVA_PROCEDURA = "attivaProcedura";
@@ -35,6 +38,8 @@ public class GestioneProcedurePortletKeys {
 	public static final String TIPI_INTEGRAZIONI_BACKOFFICE = "tipiIntegrazioniBackoffice";
 	public static final String CARICAMENTO_DA = "caricamentoDa";
 	public static final String TIPI_GENERAZIONE_TEMPLATE = "tipiGenerazioneTemplate";
+	public static final String ABILITA_CACHE_INTEGRAZIONI_BACKOFFICE = "abilitaCacheIntegrazioniBackoffice";
+	public static final String ABILITA_PAGAMENTO = "abilitaPagamento";
 		
 	public static final String JSP_HOME = "/view.jsp";
 	public static final String JSP_AGGIUNGI_MODIFICA_PROCEDURA = "/aggiungiModificaProcedura.jsp";
