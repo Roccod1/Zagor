@@ -666,7 +666,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public void removeTenant(String tenantId) {
+	public void deleteTenant(String tenantId) {
 		try {
 			ApiClient client = getApiClient();
 			TenantApi tenantApi = new TenantApi(client);
@@ -716,7 +716,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public void removeGroup(String groupId) {
+	public void deleteGroup(String groupId) {
 
 		try {
 			ApiClient client = getApiClient();
@@ -770,7 +770,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public void removeUser(String userId) {
+	public void deleteUser(String userId) {
 		try {
 			ApiClient client = getApiClient();
 			UserApi userApi = new UserApi(client);

@@ -243,7 +243,7 @@ public interface CamundaClient {
 	 *
 	 * @param tenantId
 	 */
-	void removeTenant(String tenantId);
+	void deleteTenant(String tenantId);
 
 	/**
 	 *
@@ -257,7 +257,7 @@ public interface CamundaClient {
 	 *
 	 * @param groupId
 	 */
-	void removeGroup(String groupId);
+	void deleteGroup(String groupId);
 
 	/**
 	 *
@@ -273,7 +273,7 @@ public interface CamundaClient {
 	 *
 	 * @param userId
 	 */
-	void removeUser(String userId);
+	void deleteUser(String userId);
 
 	/**
 	 * @param groupId
