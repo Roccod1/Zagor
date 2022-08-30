@@ -2,14 +2,28 @@
 
 	<link
       rel="stylesheet"
-      href="https://unpkg.com/bpmn-js@5.1.2/dist/assets/diagram-js.css"
+      href="https://unpkg.com/bpmn-js@9.4.0/dist/assets/diagram-js.css"
   	/>
   	
     <link
       rel="stylesheet"
-      href="https://unpkg.com/bpmn-js@5.1.2/dist/assets/bpmn-font/css/bpmn.css"
+      href="https://unpkg.com/bpmn-js@9.4.0/dist/assets/bpmn-font/css/bpmn.css"
     />
-  
+    
+    <link
+      rel="stylesheet"
+      href="<%=request.getContextPath()%>/assets/element-templates.css"
+    />
+    
+    <link
+      rel="stylesheet"
+      href="<%=request.getContextPath()%>/assets/properties-panel.css"
+    />
+    
+    <script src="https://unpkg.com/bpmn-js@9.4.0/dist/bpmn-modeler.development.js"></script>
+    
+    <script type="text/javascript" src="<%=request.getContextPath()%>/script/bpmn-js-properties-panel.umd.js" />
+     
 <portlet:actionURL name="<%=GestioneProcessiPortletKeys.SALVA_CREA_ACTION_COMMAND %>" var="salvaModificaURL" />
 <portlet:renderURL var="homeURL"></portlet:renderURL>
 

@@ -1,26 +1,9 @@
 var fs = require('fs');
 
-var BpmnModeler = require('bpmn-js/lib/Modeler');
-
-var propertiesPanelModule = require('bpmn-js-properties-panel');
-//	propertiesProviderModule = require('bpmn-js-properties-panel/lib/provider/camunda'),
-//	camundaModdleDescriptor = require('camunda-bpmn-moddle/resources/camunda');
-
-var modeler = new BpmnModeler({
-        container: "#canvas",
-        propertiesPanel: {
-            parent: '#js-properties-panel'
-        },
-//        additionalModules: [
-//            propertiesPanelModule,
-//            propertiesProviderModule
-//        ],
-//        moddleExtensions: {
-//            camunda: camundaModdleDescriptor
-//        }
+var modeler = new BpmnJS({
+        container: "#canvas"
       });
 
-	  // var diagram = `__DIAGRAM_XML__`;
 	  var diagram = fs.readFileSync(__dirname + '/../bpmn/newDiagram.bpmn', 'utf-8');
       var eventBus = modeler.get("eventBus");
 
