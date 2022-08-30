@@ -50,6 +50,7 @@ import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalServiceUtil;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPersistence;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.IstanzaFormPersistence;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.RichiestaFinder;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.RichiestaPersistence;
 
 import java.io.Serializable;
@@ -603,6 +604,9 @@ public abstract class IstanzaFormLocalServiceBaseImpl
 
 	@Reference
 	protected RichiestaPersistence richiestaPersistence;
+
+	@Reference
+	protected RichiestaFinder richiestaFinder;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService

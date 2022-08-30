@@ -16,6 +16,10 @@ package it.servizidigitali.scrivaniaoperatore.service.impl;
 
 import com.liferay.portal.aop.AopService;
 
+import java.util.List;
+
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
 import it.servizidigitali.scrivaniaoperatore.service.base.RichiestaLocalServiceBaseImpl;
 
 import org.osgi.service.component.annotations.Component;
@@ -28,4 +32,12 @@ import org.osgi.service.component.annotations.Component;
 	service = AopService.class
 )
 public class RichiestaLocalServiceImpl extends RichiestaLocalServiceBaseImpl {
+	
+	public List<Richiesta> findByFilters(RichiestaFilters filters, int start, int end) {
+		return richiestaFinder.findByFilters(filters, start, end);
+	}
+	
+	public int countByFilters(RichiestaFilters filters) {
+		return richiestaFinder.countByFilters(filters);
+	}
 }

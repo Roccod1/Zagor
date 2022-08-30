@@ -60,6 +60,12 @@ public class RichiestaLocalServiceUtil {
 		return getService().addRichiesta(richiesta);
 	}
 
+	public static int countByFilters(
+		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters) {
+
+		return getService().countByFilters(filters);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -221,6 +227,13 @@ public class RichiestaLocalServiceUtil {
 		String uuid, long groupId) {
 
 		return getService().fetchRichiestaByUuidAndGroupId(uuid, groupId);
+	}
+
+	public static List<Richiesta> findByFilters(
+		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters,
+		int start, int end) {
+
+		return getService().findByFilters(filters, start, end);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery

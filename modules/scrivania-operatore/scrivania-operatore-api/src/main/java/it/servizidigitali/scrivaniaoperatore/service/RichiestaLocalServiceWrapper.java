@@ -53,6 +53,13 @@ public class RichiestaLocalServiceWrapper
 		return _richiestaLocalService.addRichiesta(richiesta);
 	}
 
+	@Override
+	public int countByFilters(
+		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters) {
+
+		return _richiestaLocalService.countByFilters(filters);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -247,6 +254,16 @@ public class RichiestaLocalServiceWrapper
 
 		return _richiestaLocalService.fetchRichiestaByUuidAndGroupId(
 			uuid, groupId);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
+		findByFilters(
+			it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters
+				filters,
+			int start, int end) {
+
+		return _richiestaLocalService.findByFilters(filters, start, end);
 	}
 
 	@Override

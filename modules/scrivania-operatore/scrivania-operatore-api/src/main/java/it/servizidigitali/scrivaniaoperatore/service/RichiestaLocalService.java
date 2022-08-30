@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
 
 import java.io.Serializable;
 
@@ -77,6 +78,8 @@ public interface RichiestaLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Richiesta addRichiesta(Richiesta richiesta);
+
+	public int countByFilters(RichiestaFilters filters);
 
 	/**
 	 * @throws PortalException
@@ -211,6 +214,9 @@ public interface RichiestaLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Richiesta fetchRichiestaByUuidAndGroupId(String uuid, long groupId);
+
+	public List<Richiesta> findByFilters(
+		RichiestaFilters filters, int start, int end);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();

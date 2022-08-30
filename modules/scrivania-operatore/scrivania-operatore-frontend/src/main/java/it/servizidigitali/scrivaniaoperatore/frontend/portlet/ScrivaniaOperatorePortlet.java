@@ -1,15 +1,14 @@
 package it.servizidigitali.scrivaniaoperatore.frontend.portlet;
 
-import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
-import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
-
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
@@ -17,6 +16,14 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
+import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
  * @author pindi
@@ -38,6 +45,9 @@ import org.osgi.service.component.annotations.Component;
 )
 public class ScrivaniaOperatorePortlet extends MVCPortlet {
 	
+	@Reference
+	private RichiestaLocalService richiestaLocalService;
+	
 	@Override
 	public void render(RenderRequest request, RenderResponse response)
 			throws IOException, PortletException {
@@ -50,17 +60,31 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		String queryNumProt = ParamUtil.getString(request, "queryNumProt");
 		String queryDataRichDa = ParamUtil.getString(request, "queryDataRichDa");
 		String queryDataRichA = ParamUtil.getString(request, "queryDataRichA");
-		String queryAut = ParamUtil.getString(request, "queryAut");
+		int queryAut = ParamUtil.getInteger(request, "queryAut");
 		String queryStato = ParamUtil.getString(request, "queryStato");
 		
-		request.setAttribute("totale", 10000);
-		request.setAttribute("lista", Arrays.asList(
-				new Object(), new Object(), new Object(), 
-				new Object(), new Object(), new Object(), 
-				new Object(), new Object(), new Object(), 
-				new Object()
-		));
-
+		int[] limits = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int start = limits[0];
+		int end = limits[1];
+		
+		RichiestaFilters filters = new RichiestaFilters();
+		//filters.setNomeCognome(queryNome.isBlank() ? null : queryNome.trim());
+		//filters.setCodiceFiscale(queryCf.isBlank() ? null : queryCf.trim());
+		//filters.setIdRichiesta(queryRichiestaId.isBlank() ? null : queryRichiestaId.trim());
+		//filters.setNumeroProtocollo(queryNumProt.isBlank() ? null : queryNumProt.trim());
+		//filters.setDataDa(null);
+		//filters.setDataA(null);
+		filters.setAutenticazione(mapAutenticazione(queryAut));
+		//filters.setTipo(null);
+		
+		int count = richiestaLocalService.countByFilters(filters);
+		List<RichiestaDTO> elems = richiestaLocalService.findByFilters(filters, start, end)
+				.stream()
+				.map(this::mapRichiesta)
+				.collect(Collectors.toList());
+		
+		request.setAttribute("totale", count);
+		request.setAttribute("lista", elems);
 		request.setAttribute("stati", StatoRichiesta.values());
 		request.setAttribute("queryTab", queryTab);
 		request.setAttribute("queryNome", queryNome);
@@ -75,4 +99,21 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		super.render(request, response);
 	}
 	
+	private Boolean mapAutenticazione(int queryAut) {
+		switch (queryAut) {
+		case ScrivaniaOperatorePortletKeys.AUT_TUTTI:
+			return null;
+		case ScrivaniaOperatorePortletKeys.AUT_AUTH:
+			return true;
+		case ScrivaniaOperatorePortletKeys.AUT_GUEST:
+			return false;
+		default:
+			throw new RuntimeException("queryAut");
+		}
+	}
+
+	private RichiestaDTO mapRichiesta(Richiesta richiesta) {
+		RichiestaDTO dto = new RichiestaDTO();
+		return dto;
+	}
 }
