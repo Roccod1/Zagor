@@ -13,6 +13,11 @@ public class GestioneProcedurePortletKeys {
 	public static final String DATA_INSERIMENTO_DA = "dataInserimentoDa";
 	public static final String DATA_INSERIMENTO_A = "dataInserimentoA";
 	
+	public static final String LISTA_SERVIZI = "listaServizi";
+	public static final String LISTA_PROCESSI = "listaProcessi";
+	public static final String LISTA_FORM_PRINCIPALI = "listaFormPrincipali";
+	public static final String LISTA_FORM_INTEGRATIVI = "listaFormIntegrativi";
+	
 	public static final String DATA_CREAZIONE = "data-creazione";
 	public static final String AZIONI = "azioni";
 	public static final String STATO = "stato";

@@ -64,10 +64,10 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 			_log.error("Impossibile recuperare la lista dei servizi!" + e.getMessage());
 		}
 		
-		renderRequest.setAttribute("listaServizi",listaServizi);
-		renderRequest.setAttribute("listaProcessi",listaProcessi);
-		renderRequest.setAttribute("listaFormPrincipali", listaFormPrincipali);
-		renderRequest.setAttribute("listaFormIntegrativi", listaFormIntegrativi);
+		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_SERVIZI,listaServizi);
+		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_PROCESSI,listaProcessi);
+		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_FORM_PRINCIPALI, listaFormPrincipali);
+		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_FORM_INTEGRATIVI, listaFormIntegrativi);
 		
 		return GestioneProcedurePortletKeys.JSP_AGGIUNGI_MODIFICA_PROCEDURA;
 	}

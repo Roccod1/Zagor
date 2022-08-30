@@ -45,11 +45,12 @@
 					</aui:col>
 					
 					<aui:col span="6">
-								<aui:select label="processo-bpmn" name="<%=GestioneProcedurePortletKeys.PROCESSO_BPMN %>" >
+								<aui:select label="processo-bpmn" name="<%=GestioneProcedurePortletKeys.PROCESSO_BPMN %>">
 									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
 										<c:forEach items="${listaProcessi }" var="processo">
-											<aui:option value="${processo.processoId }" label="${processo.nome }"/>
+											<aui:option value="${processo.processoId }">${processo.nome}</aui:option>
 										</c:forEach>
+								<aui:validator name="required"/>
 								</aui:select>
 						</aui:col>
 					</aui:row>
@@ -82,7 +83,7 @@
 								<aui:select label="identificativo-form-principale" name="<%=GestioneProcedurePortletKeys.IDENTIFICATIVO_FORM_PRINCIPALE %>">
 									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
 										<c:forEach items="${listaFormPrincipali}" var="form">
-											<aui:option value="${form.formId}" label="${form.nome}"/>
+											<aui:option value="${form.formId}">${form.nome}</aui:option>
 										</c:forEach>
 								<aui:validator name="required"/>
 								</aui:select>
@@ -92,7 +93,7 @@
 								<aui:select label="identificativi-form-integrativi" name="<%=GestioneProcedurePortletKeys.IDENTIFICATIVI_FORM_INTEGRATIVI %>" multiple="true">
 									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
 										<c:forEach items="${listaFormIntegrativi}" var="form">
-											<aui:option value="${form.formId}" label="${form.nome}"/>
+											<aui:option value="${form.formId}">${form.nome}</aui:option>
 										</c:forEach>
 								</aui:select>
 					</aui:col>
