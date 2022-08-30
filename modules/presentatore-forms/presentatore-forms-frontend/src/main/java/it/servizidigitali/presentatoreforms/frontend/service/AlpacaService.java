@@ -1,14 +1,19 @@
 package it.servizidigitali.presentatoreforms.frontend.service;
 
+import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
+import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -30,15 +35,15 @@ public class AlpacaService {
 
 	private static final Log log = LogFactoryUtil.getLog(AlpacaService.class.getName());
 
-	@Reference
-	private OrganizationLocalService organizationLocalService;
+	private static final ServiceTrackerList<BackofficeIntegrationService> SERVICE_TRACKER_LIST = ServiceTrackerListFactory.open(SystemBundleUtil.getBundleContext(),
+			BackofficeIntegrationService.class);
 
 	private List<IntegrationService> inputIntegrationServices;
+	private List<BackofficeIntegrationService> inputBackofficeIntegrationServices;
+	private List<NucleoFamiliareIntegrationService> inputNucleoFamiliareIntegrationServices;
 
 	@Reference
-	private List<BackofficeIntegrationService> inputBackofficeIntegrationServices;
-
-	private List<NucleoFamiliareIntegrationService> inputNucleoFamiliareIntegrationServices;
+	private OrganizationLocalService organizationLocalService;
 
 	private DatiAnagraficiPortletService datiAnagraficiPortletService;
 
@@ -63,7 +68,13 @@ public class AlpacaService {
 	/**
 	 * Inizializzazione variabili di classe.
 	 */
+	@Activate
 	private void init() {
+		Iterator<BackofficeIntegrationService> iterator = SERVICE_TRACKER_LIST.iterator();
+		while (iterator.hasNext()) {
+			BackofficeIntegrationService backofficeIntegrationService = iterator.next();
+
+		}
 
 		inputBackofficeIntegrationServicesMap = new LinkedHashMap<TipoIntegrazione, Map<TipoIntegrazioneBackoffice, List<BackofficeIntegrationService>>>();
 		if (inputBackofficeIntegrationServices != null) {
