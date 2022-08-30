@@ -18,14 +18,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.camunda.community.rest.client.api.DeploymentApi;
+import org.camunda.community.rest.client.api.GroupApi;
 import org.camunda.community.rest.client.api.ProcessDefinitionApi;
 import org.camunda.community.rest.client.api.ProcessInstanceApi;
 import org.camunda.community.rest.client.api.TaskApi;
+import org.camunda.community.rest.client.api.TenantApi;
+import org.camunda.community.rest.client.api.UserApi;
 import org.camunda.community.rest.client.api.VariableInstanceApi;
 import org.camunda.community.rest.client.dto.CompleteTaskDto;
 import org.camunda.community.rest.client.dto.CountResultDto;
 import org.camunda.community.rest.client.dto.DeploymentResourceDto;
 import org.camunda.community.rest.client.dto.DeploymentWithDefinitionsDto;
+import org.camunda.community.rest.client.dto.GroupDto;
 import org.camunda.community.rest.client.dto.PatchVariablesDto;
 import org.camunda.community.rest.client.dto.ProcessDefinitionDto;
 import org.camunda.community.rest.client.dto.ProcessInstanceDto;
@@ -34,12 +38,16 @@ import org.camunda.community.rest.client.dto.SortTaskQueryParametersDto;
 import org.camunda.community.rest.client.dto.TaskDto;
 import org.camunda.community.rest.client.dto.TaskQueryDto;
 import org.camunda.community.rest.client.dto.TaskQueryDtoSorting;
+import org.camunda.community.rest.client.dto.TenantDto;
+import org.camunda.community.rest.client.dto.UserDto;
 import org.camunda.community.rest.client.dto.UserIdDto;
+import org.camunda.community.rest.client.dto.UserProfileDto;
 import org.camunda.community.rest.client.dto.VariableInstanceDto;
 import org.camunda.community.rest.client.dto.VariableInstanceQueryDto;
 import org.camunda.community.rest.client.dto.VariableQueryParameterDto;
 import org.camunda.community.rest.client.dto.VariableValueDto;
 import org.camunda.community.rest.client.invoker.ApiClient;
+import org.camunda.community.rest.client.invoker.ApiException;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
@@ -203,11 +211,10 @@ public class CamundaClientImpl implements CamundaClient {
 		String deploymentId = "";
 		DeploymentWithDefinitionsDto output = null;
 
-		
 		try {
 
 			ApiClient client = getApiClient();
-			
+
 			String time = "_" + new Date().getTime();
 
 			String suffix = ".bpmn";
@@ -221,11 +228,11 @@ public class CamundaClientImpl implements CamundaClient {
 			Path filePath = Files.write(path, byteArray);
 
 			file = filePath.toFile();
-			
+
 			output = new DeploymentApi(client).createDeployment(tenantId, null, false, false, "AutoDeployment", null, file);
-			
+
 			deploymentId = output.getId();
-			
+
 			log.debug("Created " + output.getId());
 
 		}
@@ -241,7 +248,7 @@ public class CamundaClientImpl implements CamundaClient {
 				tempFolder.delete();
 			}
 		}
-		
+
 		return deploymentId;
 	}
 
@@ -600,19 +607,19 @@ public class CamundaClientImpl implements CamundaClient {
 
 	@Override
 	public File getDeploymentFile(String id) throws CamundaClientException {
-		
+
 		File output = null;
-		
-		
+
 		try {
 
 			ApiClient client = getApiClient();
-			
+
 			List<DeploymentResourceDto> listResource = new DeploymentApi(client).getDeploymentResources(id);
-			
-			if(!listResource.isEmpty()) {
+
+			if (!listResource.isEmpty()) {
 				output = new DeploymentApi(client).getDeploymentResourceData(id, listResource.get(0).getId());
-			}else {
+			}
+			else {
 				log.error("getDeploymentFile :: Impossibile recuperare la resource del deployment con ID : " + id);
 			}
 
@@ -621,8 +628,235 @@ public class CamundaClientImpl implements CamundaClient {
 			log.error("getDeploymentFile", e);
 			throw new CamundaClientException("getDeploymentFile :: " + e.getMessage(), e);
 		}
-		
+
 		return output;
 	}
 
+	@Override
+	public void insertOrUpdateTenant(String tenantId, String tenantName) {
+
+		try {
+			ApiClient client = getApiClient();
+
+			TenantDto tenantDto = new TenantDto();
+			tenantDto.setId(tenantId);
+			tenantDto.setName(tenantName);
+
+			TenantApi tenantApi = new TenantApi(client);
+
+			TenantDto tenant = null;
+			try {
+				tenant = tenantApi.getTenant(tenantId);
+			}
+			catch (Exception e) {
+				log.warn("insertOrUpdateTenant :: " + e.getMessage());
+			}
+			if (tenant == null) {
+				tenantApi.createTenant(tenantDto);
+			}
+			else {
+				tenantApi.updateTenant(tenantId, tenantDto);
+			}
+		}
+		catch (Exception e) {
+			log.error("insertOrUpdateTenand :: " + e.getMessage(), e);
+			throw new CamundaClientException("insertOrUpdateTenand :: " + e.getMessage(), e);
+		}
+
+	}
+
+	@Override
+	public void removeTenant(String tenantId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.deleteTenant(tenantId);
+		}
+		catch (ApiException e) {
+			log.error("removeTenant :: " + e.getMessage(), e);
+			throw new CamundaClientException("removeTenant :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void inserOrUpdateGroup(String groupId, String groupName, String groupType) {
+
+		try {
+			ApiClient client = getApiClient();
+			GroupApi groupApi = new GroupApi(client);
+
+			GroupDto group = null;
+			try {
+				group = groupApi.getGroup(groupId);
+			}
+			catch (Exception e) {
+				log.warn("inserOrUpdateGroup :: " + e.getMessage());
+			}
+			if (group == null) {
+				GroupDto groupDto = new GroupDto();
+				groupDto.setId(groupId);
+				groupDto.setName(groupName);
+				groupDto.setType(groupType);
+				groupApi.createGroup(groupDto);
+			}
+			else {
+				GroupDto groupDto = new GroupDto();
+				groupDto.setId(groupId);
+				groupDto.setName(groupName);
+				groupDto.setType(groupType);
+				groupApi.updateGroup(groupId, groupDto);
+
+			}
+		}
+		catch (ApiException e) {
+			log.error("inserOrUpdateGroup :: " + e.getMessage(), e);
+			throw new CamundaClientException("inserOrUpdateGroup :: " + e.getMessage(), e);
+		}
+
+	}
+
+	@Override
+	public void removeGroup(String groupId) {
+
+		try {
+			ApiClient client = getApiClient();
+			GroupApi groupApi = new GroupApi(client);
+			groupApi.deleteGroup(groupId);
+		}
+		catch (ApiException e) {
+			log.error("removeGroup :: " + e.getMessage(), e);
+			throw new CamundaClientException("removeGroup :: " + e.getMessage(), e);
+		}
+
+	}
+
+	@Override
+	public void inserOrUpdateUser(String userId, String firstName, String lastName, String email, String password) {
+
+		try {
+			ApiClient client = getApiClient();
+			UserApi userApi = new UserApi(client);
+
+			UserProfileDto userProfileDto = null;
+			try {
+				userProfileDto = userApi.getUserProfile(userId);
+			}
+			catch (Exception e) {
+				log.warn("inserOrUpdateUser :: " + e.getMessage());
+			}
+			if (userProfileDto == null) {
+				UserProfileDto userProfileDto2 = new UserProfileDto();
+				userProfileDto2.setId(userId);
+				userProfileDto2.setFirstName(firstName);
+				userProfileDto2.setLastName(lastName);
+				userProfileDto2.setEmail(email);
+				UserDto userDto = new UserDto();
+				userDto.setProfile(userProfileDto2);
+				userApi.createUser(userDto);
+			}
+			else {
+				userProfileDto.setId(userId);
+				userProfileDto.setFirstName(firstName);
+				userProfileDto.setLastName(lastName);
+				userProfileDto.setEmail(email);
+				userApi.updateProfile(userId, userProfileDto);
+			}
+		}
+		catch (ApiException e) {
+			log.error("inserOrUpdateUser :: " + e.getMessage(), e);
+			throw new CamundaClientException("inserOrUpdateUser :: " + e.getMessage(), e);
+		}
+
+	}
+
+	@Override
+	public void removeUser(String userId) {
+		try {
+			ApiClient client = getApiClient();
+			UserApi userApi = new UserApi(client);
+			userApi.deleteUser(userId);
+		}
+		catch (ApiException e) {
+			log.error("removeUser :: " + e.getMessage(), e);
+			throw new CamundaClientException("removeUser :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void addUserToGroup(String groupId, String userId) {
+		try {
+			ApiClient client = getApiClient();
+			GroupApi groupApi = new GroupApi(client);
+			groupApi.createGroupMember(groupId, userId);
+		}
+		catch (ApiException e) {
+			log.error("addUserToGroup :: " + e.getMessage(), e);
+			throw new CamundaClientException("addUserToGroup :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void removeUserFromGroup(String groupId, String userId) {
+		try {
+			ApiClient client = getApiClient();
+			GroupApi groupApi = new GroupApi(client);
+			groupApi.deleteGroupMember(groupId, userId);
+		}
+		catch (ApiException e) {
+			log.error("removeUserFromGroup :: " + e.getMessage(), e);
+			throw new CamundaClientException("removeUserFromGroup :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void addGroupToTenant(String tenantId, String groupId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.createGroupMembership(tenantId, groupId);
+		}
+		catch (ApiException e) {
+			log.error("addGroupToTenant :: " + e.getMessage(), e);
+			throw new CamundaClientException("addGroupToTenant :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void removeGroupFromTenant(String tenantId, String groupId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.deleteGroupMembership(tenantId, groupId);
+		}
+		catch (ApiException e) {
+			log.error("removeGroupFromTenant :: " + e.getMessage(), e);
+			throw new CamundaClientException("removeGroupFromTenant :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void addUserToTenant(String tenantId, String userId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.createUserMembership(tenantId, userId);
+		}
+		catch (ApiException e) {
+			log.error("addUserToTenant :: " + e.getMessage(), e);
+			throw new CamundaClientException("addUserToTenant :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void removeUserFromTenant(String tenantId, String userId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.deleteUserMembership(tenantId, userId);
+		}
+		catch (ApiException e) {
+			log.error("removeUserFromTenant :: " + e.getMessage(), e);
+			throw new CamundaClientException("removeUserFromTenant :: " + e.getMessage(), e);
+		}
+	}
 }

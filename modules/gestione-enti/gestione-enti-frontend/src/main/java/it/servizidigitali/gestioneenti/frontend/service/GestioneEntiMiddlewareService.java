@@ -77,10 +77,6 @@ public class GestioneEntiMiddlewareService {
 			throw new NullPointerException("organizationId e' null");
 		}
 
-		if (Validator.isNull(servizioId)) {
-			throw new NullPointerException("servizioId e' null");
-		}
-
 		if (Validator.isNull(companyId)) {
 			throw new NullPointerException("companyId e' null");
 		}
@@ -169,7 +165,7 @@ public class GestioneEntiMiddlewareService {
 		String structureKey = "";
 		List<DDMStructure> structures = DDMStructureLocalServiceUtil.getStructures(groupId);
 		for (DDMStructure structure : structures) {
-			if (GestioneEntiPortletKeys.STRUCTURE_NAME_CATALOGO_SERVIZI.equalsIgnoreCase(structure.getName(Locale.ROOT))) {
+			if (GestioneEntiPortletKeys.STRUCTURE_NAME_SCHEDA_SERVIZIO.equalsIgnoreCase(structure.getName(Locale.ROOT))) {
 				structureKey = structure.getStructureKey();
 			}
 		}

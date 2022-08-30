@@ -278,6 +278,20 @@ public interface ServizioEnteModel
 	public void setCatalogoServizioArticleId(long catalogoServizioArticleId);
 
 	/**
+	 * Returns the sub organization ID of this servizio ente.
+	 *
+	 * @return the sub organization ID of this servizio ente
+	 */
+	public long getSubOrganizationId();
+
+	/**
+	 * Sets the sub organization ID of this servizio ente.
+	 *
+	 * @param subOrganizationId the sub organization ID of this servizio ente
+	 */
+	public void setSubOrganizationId(long subOrganizationId);
+
+	/**
 	 * Returns the autenticazione of this servizio ente.
 	 *
 	 * @return the autenticazione of this servizio ente
