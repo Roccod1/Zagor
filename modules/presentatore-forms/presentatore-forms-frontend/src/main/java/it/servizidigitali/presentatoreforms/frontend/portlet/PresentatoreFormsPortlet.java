@@ -19,6 +19,7 @@ import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
+import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
@@ -64,9 +65,13 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 	@Reference
 	private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
 	
+	@Reference
+	private AlpacaService alpacaService;
+	
 	public void render (RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException{
 		_log.info("render presentatore forms");
 		try {
+			alpacaService.test();
 			Long idFormMock = 49940L;
 			Form form = formLocalService.getForm(idFormMock);
 			form.setListaDefinizioneAllegato(definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idFormMock));
@@ -74,6 +79,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 			FormData formData = AlpacaUtil.loadFormData(form, null, false);
 			AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
 			renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+			
 		} catch (Exception e) {
 			_log.error(e.getMessage());
 		}

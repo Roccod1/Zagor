@@ -15,9 +15,9 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.backoffice.integration.enums.TipoIntegrazione;
 import it.servizidigitali.backoffice.integration.enums.TipoIntegrazioneBackoffice;
 import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletService;
-import it.servizidigitali.presentatoreforms.frontend.service.input.BackofficeIntegrationService;
-import it.servizidigitali.presentatoreforms.frontend.service.input.IntegrationService;
-import it.servizidigitali.presentatoreforms.frontend.service.input.NucleoFamiliareIntegrationService;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.BackofficeIntegrationService;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.IntegrationService;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.NucleoFamiliareIntegrationService;
 
 /**
  * The Alpaca service.
@@ -35,6 +35,7 @@ public class AlpacaService {
 
 	private List<IntegrationService> inputIntegrationServices;
 
+	@Reference
 	private List<BackofficeIntegrationService> inputBackofficeIntegrationServices;
 
 	private List<NucleoFamiliareIntegrationService> inputNucleoFamiliareIntegrationServices;
@@ -52,12 +53,12 @@ public class AlpacaService {
 	 */
 	private Map<TipoIntegrazione, List<IntegrationService>> inputIntegrationServicesMap;
 
-	private List<it.servizidigitali.presentatoreforms.frontend.service.output.IntegrationService> outputIntegrationServices;
+	private List<it.servizidigitali.presentatoreforms.frontend.service.integration.output.IntegrationService> outputIntegrationServices;
 	/**
 	 * Mappa servizi di integrazione di output raggruppati per chiave "TipoIntegrazione" e per
 	 * codice servizio (sotto mappa).
 	 */
-	private Map<TipoIntegrazione, Map<String, it.servizidigitali.presentatoreforms.frontend.service.output.IntegrationService>> outputBackofficeIntegrationServicesMap;
+	private Map<TipoIntegrazione, Map<String, it.servizidigitali.presentatoreforms.frontend.service.integration.output.IntegrationService>> outputBackofficeIntegrationServicesMap;
 
 	/**
 	 * Inizializzazione variabili di classe.
@@ -93,18 +94,22 @@ public class AlpacaService {
 			}
 		}
 
-		outputBackofficeIntegrationServicesMap = new LinkedHashMap<TipoIntegrazione, Map<String, it.servizidigitali.presentatoreforms.frontend.service.output.IntegrationService>>();
+		outputBackofficeIntegrationServicesMap = new LinkedHashMap<TipoIntegrazione, Map<String, it.servizidigitali.presentatoreforms.frontend.service.integration.output.IntegrationService>>();
 		if (outputIntegrationServices != null) {
-			for (it.servizidigitali.presentatoreforms.frontend.service.output.IntegrationService integrationService : outputIntegrationServices) {
-				Map<String, it.servizidigitali.presentatoreforms.frontend.service.output.IntegrationService> innerMap = outputBackofficeIntegrationServicesMap
+			for (it.servizidigitali.presentatoreforms.frontend.service.integration.output.IntegrationService integrationService : outputIntegrationServices) {
+				Map<String, it.servizidigitali.presentatoreforms.frontend.service.integration.output.IntegrationService> innerMap = outputBackofficeIntegrationServicesMap
 						.get(integrationService.getIntegrationType());
 				if (innerMap == null) {
-					innerMap = new LinkedHashMap<String, it.servizidigitali.presentatoreforms.frontend.service.output.IntegrationService>();
+					innerMap = new LinkedHashMap<String, it.servizidigitali.presentatoreforms.frontend.service.integration.output.IntegrationService>();
 					outputBackofficeIntegrationServicesMap.put(integrationService.getIntegrationType(), innerMap);
 				}
 				innerMap.put(integrationService.getServiceCode(), integrationService);
 			}
 		}
+	}
+
+	public void test() {
+		log.info(inputBackofficeIntegrationServices);
 	}
 
 	// /**
