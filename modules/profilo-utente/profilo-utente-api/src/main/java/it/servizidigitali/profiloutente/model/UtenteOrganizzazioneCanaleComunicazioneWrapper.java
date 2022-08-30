@@ -130,6 +130,13 @@ public class UtenteOrganizzazioneCanaleComunicazioneWrapper
 		return wrap(model.cloneWithOriginalValues());
 	}
 
+	@Override
+	public it.servizidigitali.profiloutente.model.CanaleComunicazione
+		getCanale() {
+
+		return model.getCanale();
+	}
+
 	/**
 	 * Returns the canale comunicazione ID of this utente organizzazione canale comunicazione.
 	 *
