@@ -5,7 +5,10 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +58,9 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 		
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		long organizationIdSitePrincipale = themeDisplay.getSiteGroup().getOrganizationId();
+		
 		// Inizializzazione valori dei formati accettati per gli allegati
 		
 		attachmentFileTypesMap = new HashMap<>();
@@ -73,6 +79,12 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 		if(idForm>0) {
 			try {
 				form = formLocalService.getForm(idForm);
+				
+				if(form.getGroupId() != themeDisplay.getSiteGroupId() && organizationIdSitePrincipale!=0) {
+					SessionErrors.add(renderRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_NON_AUTORIZZATO);
+					return GestioneFormsPortletKeys.JSP_VIEW;
+				}
+				
 				form.setListaDefinizioneAllegato(definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idForm));
 			} catch (PortalException e) {
 				_log.error("Impossibile recuperare il form!" + e.getMessage());
