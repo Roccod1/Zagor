@@ -7,7 +7,7 @@
 </div>
 
 <liferay-ui:tabs 
-	names="<%=ScrivaniaCittadinoPortletKeys.SEZIONE_SCRIVANIA+','+ScrivaniaCittadinoPortletKeys.SEZIONE_ATTIVITA %>"
+	names="<%=ScrivaniaCittadinoPortletKeys.SEZIONE_SCRIVANIA+','+ScrivaniaCittadinoPortletKeys.SEZIONE_ATTIVITA+','+ScrivaniaCittadinoPortletKeys.SEZIONE_MESSAGGI+','+ScrivaniaCittadinoPortletKeys.SEZIONE_SERVIZI %>"
 	type="tabs nav-tabs-default"
 	param="tabs" 
 	refresh="false"
@@ -18,5 +18,13 @@
 		
 		<liferay-ui:section>
 			<%@ include file="attivita.jsp" %>
+		</liferay-ui:section>
+		
+		<liferay-ui:section>
+			<%@ include file="messaggi.jsp" %>
+		</liferay-ui:section>
+		
+		<liferay-ui:section>
+			<%@ include file="servizi.jsp" %>
 		</liferay-ui:section>
 </liferay-ui:tabs>
