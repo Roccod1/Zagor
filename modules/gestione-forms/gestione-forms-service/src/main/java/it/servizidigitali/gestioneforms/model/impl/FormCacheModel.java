@@ -61,7 +61,7 @@ public class FormCacheModel implements CacheModel<Form>, Externalizable {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -89,8 +89,6 @@ public class FormCacheModel implements CacheModel<Form>, Externalizable {
 		sb.append(json);
 		sb.append(", principale=");
 		sb.append(principale);
-		sb.append(", multiutente=");
-		sb.append(multiutente);
 		sb.append(", organizationId=");
 		sb.append(organizationId);
 		sb.append("}");
@@ -164,7 +162,6 @@ public class FormCacheModel implements CacheModel<Form>, Externalizable {
 		}
 
 		formImpl.setPrincipale(principale);
-		formImpl.setMultiutente(multiutente);
 		formImpl.setOrganizationId(organizationId);
 
 		formImpl.resetOriginalValues();
@@ -192,8 +189,6 @@ public class FormCacheModel implements CacheModel<Form>, Externalizable {
 		json = objectInput.readUTF();
 
 		principale = objectInput.readBoolean();
-
-		multiutente = objectInput.readBoolean();
 
 		organizationId = objectInput.readLong();
 	}
@@ -255,8 +250,6 @@ public class FormCacheModel implements CacheModel<Form>, Externalizable {
 
 		objectOutput.writeBoolean(principale);
 
-		objectOutput.writeBoolean(multiutente);
-
 		objectOutput.writeLong(organizationId);
 	}
 
@@ -273,7 +266,6 @@ public class FormCacheModel implements CacheModel<Form>, Externalizable {
 	public String codice;
 	public String json;
 	public boolean principale;
-	public boolean multiutente;
 	public long organizationId;
 
 }

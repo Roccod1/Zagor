@@ -15,6 +15,11 @@
 package it.servizidigitali.gestioneforms.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
+import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -36,7 +41,7 @@ import org.osgi.service.component.annotations.Component;
 )
 public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
 	
-	public List<Form> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta, int cur, String orderByCol, String orderByType){
+	public List<Form> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta, int cur, String orderByCol, String orderByType) throws PortalException{
 		boolean direzione = false;
 		
 		if(orderByType.equalsIgnoreCase("asc")) {
@@ -50,6 +55,17 @@ public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
 		OrderByComparator<Form> comparator = OrderByComparatorFactoryUtil.create("Form", orderByCol, direzione);
 		
 		List<Form> listaForm = formFinder.findFormByFilter(nome, dataInserimentoDa, dataInserimentoA, cur, delta, comparator);
+		
+		
+		for(Form form : listaForm) {
+			Group group = GroupLocalServiceUtil.getGroup(form.getGroupId());
+			if(group.getOrganizationId()>0) {
+				Organization organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
+				form.setNomeEnte(organization.getName());
+			}else {
+				form.setNomeEnte("-");
+			}
+		}
 		
 		return listaForm;
 	}

@@ -91,4 +91,8 @@ public class ComunicazioneLocalServiceImpl extends ComunicazioneLocalServiceBase
 	public int countComunicazioni(ComunicazioneFilters filters) {
 		return comunicazioneFinder.countByFilters(filters);
 	}
+	
+	public List<Comunicazione> getNonInviate() {
+		return comunicazionePersistence.findByDataInvio(null);
+	}
 }

@@ -9,6 +9,8 @@
 <portlet:resourceURL id="<%=GestioneFormsPortletKeys.UPLOAD_ALLEGATO_RESOURCE_COMMAND %>" var="uploadFileUrl">
 </portlet:resourceURL>
 
+<liferay-ui:error key="<%=GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO %>" message="compilare-tutti-i-campi-obbligatori" />
+
 
 
 
@@ -58,27 +60,7 @@
 		
 			<div class="col-6">			
 				<div class="form-group form-check">	
-					<c:choose>
-						<c:when test="${form.principale eq true }">
-							<aui:input label="principale" type="checkbox" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>"/>					
-						</c:when>
-						<c:otherwise>
-							<aui:input label="principale" type="checkbox" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>"/>
-						</c:otherwise>
-					</c:choose>									
-				</div>
-			</div>
-			
-			<div class="col-6">			
-				<div class="form-group form-check">	
-					<c:choose>
-						<c:when test="${form.multiutente eq true}">
-							<aui:input label="multiente" type="checkbox" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" checked="true"/>	
-						</c:when>						
-						<c:otherwise>
-							<aui:input label="multiente" type="checkbox" name="<%=GestioneFormsPortletKeys.MULTIENTE %>" />	
-						</c:otherwise>
-					</c:choose>						
+					<aui:input label="principale" type="checkbox" name="<%=GestioneFormsPortletKeys.PRINCIPALE %>" value="${form.principale}"/>
 				</div>
 			</div>
 			
@@ -466,15 +448,18 @@
 	function aggiungiRigaTabella(attachmentIdValue, attachmentNameValue,
 				attachmentMandatoryValue, attachmentFiletypeValue, attachmentCodetypesValue,
 				attachmentFileNameValue, idAllegatoTemporaneoValue) {
+		
 			
-			var attachmentId = '<input type="text" class="nostylereadonly definizioneAllegatoId" id="definizioneAllegatoId'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].definizioneAllegatoId" readonly value='+ attachmentIdValue +'>';
-	    	var attachmentName = '<input type="text" class="nostylereadonly" id="denominazione'+ index +'" name="<portlet:namespace />denominazione'+ index +'" value='+ attachmentNameValue +' readonly>';
-	    	var attachmentMandatory = '<input type="text" class="nostylereadonly" id="obbligatorio'+ index +'" name="<portlet:namespace />obbligatorio'+ index +'" value='+ attachmentMandatoryValue +' onclick="return false;" readonly checked>';
-	    	var attachmentFiletype = '<input type="text" class="nostylereadonly" id="tipiFileAmmessi'+ index +'" name="<portlet:namespace />tipiFileAmmessi'+ index +'" value='+ attachmentFiletypeValue +' readonly>';
-	    	var attachmentCodetypes = '<input type="text" class="nostylereadonly" id="codiciTipologiaDocumento'+ index +'" name="<portlet:namespace />codiciTipologiaDocumento'+ index +'" value='+ attachmentCodetypesValue +' readonly>';
+			
+			var attachmentId = '<input type="text" class="nostylereadonly definizioneAllegatoId" id="definizioneAllegatoId'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].definizioneAllegatoId" readonly value="'+ attachmentIdValue +'">';
+	    	var attachmentName = '<input type="text" class="nostylereadonly" id="denominazione'+ index +'" name="<portlet:namespace />denominazione'+ index +'" value="'+ attachmentNameValue +'" readonly>';
+	    	var attachmentMandatory = '<input type="text" class="nostylereadonly" id="obbligatorio'+ index +'" name="<portlet:namespace />obbligatorio'+ index +'" value="'+ attachmentMandatoryValue +'" onclick="return false;" readonly checked>';
+	    	var attachmentFiletype = '<input type="text" class="nostylereadonly" id="tipiFileAmmessi'+ index +'" name="<portlet:namespace />tipiFileAmmessi'+ index +'" value="'+ attachmentFiletypeValue +'" readonly>';
+	    	var attachmentCodetypes = '<input type="text" class="nostylereadonly" id="codiciTipologiaDocumento'+ index +'" name="<portlet:namespace />codiciTipologiaDocumento'+ index +'" value="'+ attachmentCodetypesValue +'" readonly>';
 	    	var attachmentFileName = '<input type="text" class="nostylereadonly" id="filenameModello'+ index +'" name="<portlet:namespace />filenameModello'+ index +'" value=\'' +  attachmentFileNameValue + '\' size="50"  readonly>';
 			var idAllegatoTemporaneoInput = '<input type="hidden" id="idAllegatoTemporaneo'+ index +'" name="<portlet:namespace />idAllegatoTemporaneo'+ index +'" value="'+ idAllegatoTemporaneoValue +'">';
 			
+			console.log("Valore nome: " + attachmentName);
 			
 	    	var $trToAdd = $('<tr>')
 	    	.append($('<td>'+ attachmentId))

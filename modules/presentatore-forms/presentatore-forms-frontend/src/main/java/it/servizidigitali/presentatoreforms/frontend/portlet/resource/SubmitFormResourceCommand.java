@@ -5,6 +5,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCResourceCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -24,7 +25,7 @@ import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 @Component(immediate = true, 
 property = { 
 			"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS,
-			"mvc.command.name=/submitForm" 
+			"mvc.command.name=" + PresentatoreFormsPortletKeys.SUBMIT_FORM_RESOURCE_COMMAND
 		}, 
 service = { MVCResourceCommand.class }
 )
@@ -35,10 +36,10 @@ public class SubmitFormResourceCommand  extends BaseMVCResourceCommand{
 			throws Exception {
 		
 		HttpServletRequest request = PortalUtil.getHttpServletRequest(resourceRequest);
-
-		
-		String dataForm = ParamUtil.getString(resourceRequest, "dataForm");
-		boolean caricaBozza = ParamUtil.getBoolean(resourceRequest, "caricaBozza");
+		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(resourceRequest);
+		String dataForm = ParamUtil.getString(uploadRequest, "dataForm");
+		//FIXME inserito false per di default per il caricaBozza param non ancora implementato
+		boolean caricaBozza = ParamUtil.getBoolean(resourceRequest, "caricaBozza", false);
 		
 		String status = null;
 		
@@ -48,14 +49,15 @@ public class SubmitFormResourceCommand  extends BaseMVCResourceCommand{
 		
 		AlpacaJsonStructure alpacaStructure = des.deserialize(dataForm,AlpacaJsonStructure.class);
 		
-		
 
-		
-		
+		// mock gz
+		JSONObject richiesta = JSONFactoryUtil.createJSONObject();
+		richiesta.put("id", 1);
+		status = "ok";
 		json.put("status", status);
+		json.put("richiesta", richiesta);
 		resourceResponse.setContentType(ContentTypes.APPLICATION_JSON);
 		resourceResponse.getWriter().print(json.toString());
-		
 		
 	}
 

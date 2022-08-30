@@ -14,9 +14,16 @@
 
 package it.servizidigitali.profiloutente.model.impl;
 
+import it.servizidigitali.profiloutente.model.CanaleComunicazione;
+import it.servizidigitali.profiloutente.service.CanaleComunicazioneLocalServiceUtil;
+
 /**
  * @author Brian Wing Shun Chan
  */
 public class UtenteOrganizzazioneCanaleComunicazioneImpl
 	extends UtenteOrganizzazioneCanaleComunicazioneBaseImpl {
+	
+	public CanaleComunicazione getCanale() {
+		return CanaleComunicazioneLocalServiceUtil.fetchCanaleComunicazione(getCanaleComunicazioneId());
+	}
 }

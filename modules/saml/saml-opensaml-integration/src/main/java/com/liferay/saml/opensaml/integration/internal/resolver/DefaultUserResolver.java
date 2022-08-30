@@ -97,14 +97,6 @@ public class DefaultUserResolver implements UserResolver {
 			userResolverSAMLContext.resolveSubjectNameIdentifier(),
 			subjectNameFormat, userResolverSAMLContext, serviceContext);
 		
-		//Associazione organizzazione sito corrente (se presente)
-		if (user != null) {
-			long currentOrganizationId = serviceContext.getScopeGroup().getOrganizationId();
-			if (currentOrganizationId != 0) {
-				_userLocalService.addOrganizationUser(currentOrganizationId, user.getUserId());
-			}
-		}
-		
 		return user;
 	}
 
