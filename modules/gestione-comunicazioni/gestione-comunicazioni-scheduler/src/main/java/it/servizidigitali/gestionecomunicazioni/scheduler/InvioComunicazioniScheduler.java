@@ -66,12 +66,16 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 
 	@Reference
 	private ComunicazioneLocalService comunicazioneLocalService;
+	
 	@Reference
 	private CommunicationSender communicationSender;
+	
 	@Reference
 	private UtenteOrganizzazioneCanaleComunicazioneLocalService utenteOrganizzazioneCanaleComunicazioneLocalService;
+	
 	@Reference
 	private OrganizationLocalService organizationLocalService;
+	
 	@Reference
 	private UserLocalService userLocalService;
 	
@@ -124,7 +128,9 @@ public class InvioComunicazioniScheduler extends BaseMessageListener {
 					tipologia.getNome(),
 					comunicazione.getTitolo());
 			Comunicazione com = new Comunicazione(oggetto, comunicazione.getDescrizione(), Collections.singletonList(utente), null, true, null, comunicazione.getCompanyId(), comunicazione.getGroupId());
+			_log.debug("Invio comunicazione tramite canale '" + canale.getName() + "' a '" + user.getScreenName() + "'");
 			EsitoComunicazione esito = communicationSender.sendNow(com, canale);
+			_log.debug("Comunicazione tramite canale '" + canale.getName() + "' a '" + user.getScreenName() + "' inviata. MessageID: " + esito.getMessageId());
 			
 			//TODO gestire messageId
 			String messageId = esito.getMessageId();
