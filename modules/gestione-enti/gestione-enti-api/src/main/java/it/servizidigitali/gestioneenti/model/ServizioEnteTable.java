@@ -60,6 +60,9 @@ public class ServizioEnteTable extends BaseTable<ServizioEnteTable> {
 		createColumn(
 			"catalogoServizioArticleId", Long.class, Types.BIGINT,
 			Column.FLAG_DEFAULT);
+	public final Column<ServizioEnteTable, Long> subOrganizationId =
+		createColumn(
+			"subOrganizationId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<ServizioEnteTable, Boolean> autenticazione =
 		createColumn(
 			"autenticazione", Boolean.class, Types.BOOLEAN,

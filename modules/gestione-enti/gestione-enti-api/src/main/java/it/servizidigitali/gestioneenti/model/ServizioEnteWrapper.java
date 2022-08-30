@@ -57,6 +57,7 @@ public class ServizioEnteWrapper
 		attributes.put("uriEsterna", getUriEsterna());
 		attributes.put(
 			"catalogoServizioArticleId", getCatalogoServizioArticleId());
+		attributes.put("subOrganizationId", getSubOrganizationId());
 		attributes.put("autenticazione", isAutenticazione());
 		attributes.put("livelloAutenticazione", getLivelloAutenticazione());
 		attributes.put("dataInizioAttivazione", getDataInizioAttivazione());
@@ -154,6 +155,12 @@ public class ServizioEnteWrapper
 
 		if (catalogoServizioArticleId != null) {
 			setCatalogoServizioArticleId(catalogoServizioArticleId);
+		}
+
+		Long subOrganizationId = (Long)attributes.get("subOrganizationId");
+
+		if (subOrganizationId != null) {
+			setSubOrganizationId(subOrganizationId);
 		}
 
 		Boolean autenticazione = (Boolean)attributes.get("autenticazione");
@@ -499,6 +506,16 @@ public class ServizioEnteWrapper
 	@Override
 	public long getServizioId() {
 		return model.getServizioId();
+	}
+
+	/**
+	 * Returns the sub organization ID of this servizio ente.
+	 *
+	 * @return the sub organization ID of this servizio ente
+	 */
+	@Override
+	public long getSubOrganizationId() {
+		return model.getSubOrganizationId();
 	}
 
 	/**
@@ -929,6 +946,16 @@ public class ServizioEnteWrapper
 	@Override
 	public void setServizioId(long servizioId) {
 		model.setServizioId(servizioId);
+	}
+
+	/**
+	 * Sets the sub organization ID of this servizio ente.
+	 *
+	 * @param subOrganizationId the sub organization ID of this servizio ente
+	 */
+	@Override
+	public void setSubOrganizationId(long subOrganizationId) {
+		model.setSubOrganizationId(subOrganizationId);
 	}
 
 	/**

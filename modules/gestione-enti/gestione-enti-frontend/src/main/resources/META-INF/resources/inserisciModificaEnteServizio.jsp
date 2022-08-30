@@ -132,6 +132,17 @@
 			        </aui:input>
 				</div>
 			</div>
+
+			<div class="col">
+				<div class="form-group">
+					<aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_SOTTO_ORGANIZZAZIONE_ID %>" label="sotto-organizzazione" type="text" value="${servizioEnte.subOrganizationId}">
+			        	<aui:option value="" label="seleziona" selected="selected"/>
+			        	<c:forEach items="${sottoOrganizzazioni}" var="sottoOrganizzazione">
+			        		<aui:option value="${sottoOrganizzazione.organizationId}">${sottoOrganizzazione.name}</aui:option>
+			        	</c:forEach>
+			        </aui:select>
+				</div>
+			</div>
 		</div>		
 		
 		<div class="row">
