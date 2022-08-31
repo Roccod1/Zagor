@@ -2,11 +2,15 @@ package it.servizidigitali.scrivaniaoperatore.frontend.portlet;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +51,8 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 	
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
+	@Reference
+	private UserLocalService userLocalService;
 	
 	@Override
 	public void render(RenderRequest request, RenderResponse response)
@@ -62,6 +68,13 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		String queryDataRichA = ParamUtil.getString(request, "queryDataRichA");
 		int queryAut = ParamUtil.getInteger(request, "queryAut");
 		String queryStato = ParamUtil.getString(request, "queryStato");
+		
+		ServiceContext ctx;
+		try {
+			ctx = ServiceContextFactory.getInstance(request);
+		} catch (PortalException e) {
+			throw new RuntimeException(e);
+		}
 		
 		int[] limits = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
 		int start = limits[0];
@@ -80,7 +93,7 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		int count = richiestaLocalService.countByFilters(filters);
 		List<RichiestaDTO> elems = richiestaLocalService.findByFilters(filters, start, end)
 				.stream()
-				.map(this::mapRichiesta)
+				.map(x -> mapRichiesta(ctx.getCompanyId(), x))
 				.collect(Collectors.toList());
 		
 		request.setAttribute("totale", count);
@@ -112,8 +125,17 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		}
 	}
 
-	private RichiestaDTO mapRichiesta(Richiesta richiesta) {
+	private RichiestaDTO mapRichiesta(long companyId, Richiesta richiesta) {
 		RichiestaDTO dto = new RichiestaDTO();
+		dto.setId(richiesta.getRichiestaId());
+		dto.setNumeroProtocollo(richiesta.getNumeroProtocollo());
+		dto.setDataUltimoAggiornamento(richiesta.getModifiedDate());
+		
+		User user = userLocalService.fetchUserByScreenName(companyId, richiesta.getCodiceFiscale());
+		dto.setRichiedente(user.getFullName());
+		
+		dto.setStato(richiesta.getStato());
+		dto.setCf(richiesta.getCodiceFiscale().toUpperCase());
 		return dto;
 	}
 }

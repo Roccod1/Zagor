@@ -72,14 +72,16 @@
                              delta="10">
 	<liferay-ui:search-container-results results="${lista}" />
 	
-	<liferay-ui:search-container-row className="a" modelVar="elem">
-		<liferay-ui:search-container-column-text name="id" value="1" />
-		<liferay-ui:search-container-column-text name="n-protocollo" value="1" />
-		<liferay-ui:search-container-column-text name="richiedente" value="1" />
-		<liferay-ui:search-container-column-text name="cf-piva" value="1" />
-		<liferay-ui:search-container-column-text name="data-ultimo-aggiornamento" value="1" />
-		<liferay-ui:search-container-column-text name="accesso" value="1" />
-		<liferay-ui:search-container-column-text name="stato" value="1" />
+	<liferay-ui:search-container-row className="it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO" 
+	                                 modelVar="elem">
+		<liferay-ui:search-container-column-text name="id" value="${elem.id}" />
+		<liferay-ui:search-container-column-text name="n-protocollo" value="${elem.numeroProtocollo}" />
+		<liferay-ui:search-container-column-text name="richiedente" value="${elem.richiedente}" />
+		<liferay-ui:search-container-column-text name="cf-piva" value="${elem.cf}" />
+		<fmt:formatDate value="${elem.dataUltimoAggiornamento}" pattern="dd/MM/yyyy" var="elemData" />
+		<liferay-ui:search-container-column-text name="data-ultimo-aggiornamento" value="${elemData}" />
+		<liferay-ui:search-container-column-text name="accesso" value="?" />
+		<liferay-ui:search-container-column-text name="stato" value="stato-richiesta-${elem.stato}" translate="true" />
 		<liferay-ui:search-container-column-jsp name="azioni" path="/azioni.jsp" />
 	</liferay-ui:search-container-row>
 	
