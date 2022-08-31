@@ -25,6 +25,14 @@
 		<aui:input name="stato" value="${stato}"  readonly="true" />
 	</div>
 </div>
+<div class="row">
+	<div class="col-12">
+		<liferay-editor:editor name="descrizione"
+							   contents="${comunicazione.descrizione}"
+	   		                   placeholder="descrizione"
+	                     	   editorName="ckeditor" />
+	</div>
+</div>
 
 <div class="row">
 	<div class="col-4">
