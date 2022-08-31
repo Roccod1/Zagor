@@ -8,12 +8,10 @@ import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -35,12 +33,16 @@ public class AlpacaService {
 
 	private static final Log log = LogFactoryUtil.getLog(AlpacaService.class.getName());
 
-	private static final ServiceTrackerList<BackofficeIntegrationService> SERVICE_TRACKER_LIST = ServiceTrackerListFactory.open(SystemBundleUtil.getBundleContext(),
+	private static final ServiceTrackerList<IntegrationService> inputIntegrationServicesServiceTrackerList = ServiceTrackerListFactory.open(SystemBundleUtil.getBundleContext(),
+			IntegrationService.class);
+	private static final ServiceTrackerList<BackofficeIntegrationService> backofficeIntegrationServiceTrackerList = ServiceTrackerListFactory.open(SystemBundleUtil.getBundleContext(),
 			BackofficeIntegrationService.class);
+	private static final ServiceTrackerList<NucleoFamiliareIntegrationService> nucleoFamiliareIntegrationServiceTrackerList = ServiceTrackerListFactory.open(SystemBundleUtil.getBundleContext(),
+			NucleoFamiliareIntegrationService.class);
 
-	private List<IntegrationService> inputIntegrationServices;
-	private List<BackofficeIntegrationService> inputBackofficeIntegrationServices;
-	private List<NucleoFamiliareIntegrationService> inputNucleoFamiliareIntegrationServices;
+	private List<IntegrationService> inputIntegrationServices = new ArrayList<IntegrationService>();
+	private List<BackofficeIntegrationService> inputBackofficeIntegrationServices = new ArrayList<BackofficeIntegrationService>();
+	private List<NucleoFamiliareIntegrationService> inputNucleoFamiliareIntegrationServices = new ArrayList<NucleoFamiliareIntegrationService>();
 
 	@Reference
 	private OrganizationLocalService organizationLocalService;
@@ -65,16 +67,22 @@ public class AlpacaService {
 	 */
 	private Map<TipoIntegrazione, Map<String, it.servizidigitali.presentatoreforms.frontend.service.integration.output.IntegrationService>> outputBackofficeIntegrationServicesMap;
 
+	private boolean initialized;
+
 	/**
 	 * Inizializzazione variabili di classe.
+	 *
+	 * @throws InterruptedException
 	 */
-	@Activate
-	private void init() {
-		Iterator<BackofficeIntegrationService> iterator = SERVICE_TRACKER_LIST.iterator();
-		while (iterator.hasNext()) {
-			BackofficeIntegrationService backofficeIntegrationService = iterator.next();
+	public void init() {
 
+		if (initialized) {
+			return;
 		}
+
+		inputIntegrationServicesServiceTrackerList.forEach(inputIntegrationServices::add);
+		backofficeIntegrationServiceTrackerList.forEach(inputBackofficeIntegrationServices::add);
+		nucleoFamiliareIntegrationServiceTrackerList.forEach(inputNucleoFamiliareIntegrationServices::add);
 
 		inputBackofficeIntegrationServicesMap = new LinkedHashMap<TipoIntegrazione, Map<TipoIntegrazioneBackoffice, List<BackofficeIntegrationService>>>();
 		if (inputBackofficeIntegrationServices != null) {
@@ -117,10 +125,8 @@ public class AlpacaService {
 				innerMap.put(integrationService.getServiceCode(), integrationService);
 			}
 		}
-	}
 
-	public void test() {
-		log.info(inputBackofficeIntegrationServices);
+		initialized = true;
 	}
 
 	// /**

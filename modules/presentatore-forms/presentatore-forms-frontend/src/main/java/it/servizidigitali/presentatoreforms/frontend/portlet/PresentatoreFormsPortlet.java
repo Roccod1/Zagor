@@ -71,7 +71,6 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 	public void render (RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException{
 		_log.info("render presentatore forms");
 		try {
-			alpacaService.test();
 			Long idFormMock = 49940L;
 			Form form = formLocalService.getForm(idFormMock);
 			form.setListaDefinizioneAllegato(definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idFormMock));
