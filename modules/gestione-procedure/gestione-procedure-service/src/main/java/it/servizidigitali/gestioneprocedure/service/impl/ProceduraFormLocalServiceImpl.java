@@ -56,6 +56,7 @@ public class ProceduraFormLocalServiceImpl
 				proceduraFormPk.setProceduraId(idProcedura);
 				
 				proceduraForm = proceduraFormPersistence.create(proceduraFormPk);
+				proceduraFormPersistence.update(proceduraForm);
 				
 				listaProceduraFormIntegrativi.add(proceduraForm);
 				
@@ -65,7 +66,7 @@ public class ProceduraFormLocalServiceImpl
 		return listaProceduraFormIntegrativi;
 	}
 	
-	public List<String> getFormIntegrativiProcedura(long idProcedura) throws PortalException {
+	public String getFormIntegrativiProcedura(long idProcedura) throws PortalException {
 		List<ProceduraForm> listaProceduraForm = new ArrayList<ProceduraForm>();
 		List<String> listaFormIntegrativiProcedura = new ArrayList<String>();
 		
@@ -88,7 +89,9 @@ public class ProceduraFormLocalServiceImpl
 			}
 		}
 		
-		return listaFormIntegrativiProcedura;
+		String listaId = String.join(",", listaFormIntegrativiProcedura);
+		
+		return listaId;
 	}
 	
 	public long getFormPrincipaleProcedura(long idProcedura) throws PortalException {

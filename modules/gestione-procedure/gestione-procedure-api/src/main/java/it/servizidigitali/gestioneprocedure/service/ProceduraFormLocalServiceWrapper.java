@@ -268,7 +268,7 @@ public class ProceduraFormLocalServiceWrapper
 	}
 
 	@Override
-	public java.util.List<String> getFormIntegrativiProcedura(long idProcedura)
+	public String getFormIntegrativiProcedura(long idProcedura)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _proceduraFormLocalService.getFormIntegrativiProcedura(

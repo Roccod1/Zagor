@@ -133,7 +133,7 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		
 		proceduraForm = proceduraFormLocalService.createProceduraForm(proceduraFormPk);
 				
-		proceduraFormLocalService.salvaListaFormIntegrativi(idFormIntegrativi, idProcedura);
+		proceduraFormLocalService.salvaListaFormIntegrativi(idFormIntegrativi, procedura.getProceduraId());
 		
 		procedura.setUserId(themeDisplay.getUserId());
 		procedura.setGroupId(themeDisplay.getSiteGroupId());

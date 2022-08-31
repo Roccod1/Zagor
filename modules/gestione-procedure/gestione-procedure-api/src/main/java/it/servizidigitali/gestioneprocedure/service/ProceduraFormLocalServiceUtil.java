@@ -240,7 +240,7 @@ public class ProceduraFormLocalServiceUtil {
 		return getService().getActionableDynamicQuery();
 	}
 
-	public static List<String> getFormIntegrativiProcedura(long idProcedura)
+	public static String getFormIntegrativiProcedura(long idProcedura)
 		throws PortalException {
 
 		return getService().getFormIntegrativiProcedura(idProcedura);

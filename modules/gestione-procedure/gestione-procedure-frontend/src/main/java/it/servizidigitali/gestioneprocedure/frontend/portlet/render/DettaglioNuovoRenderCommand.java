@@ -81,7 +81,7 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 		List<Form> listaFormIntegrativi = new ArrayList<Form>();
 		
 		Procedura procedura = null;
-		List<String> listaFormIntegrativiProcedura = null;
+		String listaFormIntegrativiProcedura = null;
 		long idFormPrincipale = 0;
 		
 		try {

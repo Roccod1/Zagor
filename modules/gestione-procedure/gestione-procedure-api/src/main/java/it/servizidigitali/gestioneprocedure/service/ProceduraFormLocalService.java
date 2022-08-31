@@ -217,7 +217,7 @@ public interface ProceduraFormLocalService
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<String> getFormIntegrativiProcedura(long idProcedura)
+	public String getFormIntegrativiProcedura(long idProcedura)
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
