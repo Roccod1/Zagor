@@ -69,5 +69,8 @@
 
 		<!-- Audit fields -->
 		<column name="companyId" type="long" />
+        <finder name="proceduraId" return-type="Collection">
+            <finder-column name="proceduraId"></finder-column>
+        </finder>
 	</entity>
 </service-builder>

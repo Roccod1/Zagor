@@ -16,7 +16,7 @@
 			<aui:col span="6">
 			
 				<aui:select label="stato" id="stato" name="<%=GestioneProcedurePortletKeys.STATO_RICERCA %>">
-					<aui:option value="" selected="true">Tutte</aui:option>
+					<aui:option value="-1" selected="true">Tutte</aui:option>
 					<aui:option value="1">Attive</aui:option>
 					<aui:option value="0" >Inattive</aui:option>
 				</aui:select>

@@ -346,13 +346,13 @@ public class ProceduraLocalServiceUtil {
 	}
 
 	public static List<Procedura> search(
-		String nome, Boolean attiva, java.util.Date dataInserimentoDa,
-		java.util.Date dataInserimentoA, int delta, int cur, String orderByCol,
-		String orderByType) {
+		String nome, String attiva, java.util.Date dataInserimentoDa,
+		java.util.Date dataInserimentoA, long siteGroupId, int delta, int cur,
+		String orderByCol, String orderByType) {
 
 		return getService().search(
-			nome, attiva, dataInserimentoDa, dataInserimentoA, delta, cur,
-			orderByCol, orderByType);
+			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId,
+			delta, cur, orderByCol, orderByType);
 	}
 
 	/**

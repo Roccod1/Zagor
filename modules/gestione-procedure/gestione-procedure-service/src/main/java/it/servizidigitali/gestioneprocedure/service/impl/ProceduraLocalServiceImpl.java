@@ -39,7 +39,7 @@ import org.osgi.service.component.annotations.Component;
 public class ProceduraLocalServiceImpl extends ProceduraLocalServiceBaseImpl {
 	public static final Log _log = LogFactoryUtil.getLog(ProceduraLocalServiceImpl.class);
 	
-	public List<Procedura> search(String nome, Boolean attiva, Date dataInserimentoDa, Date dataInserimentoA, int delta, int cur, String orderByCol, String orderByType){
+	public List<Procedura> search(String nome, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId, int delta, int cur, String orderByCol, String orderByType){
 		boolean direzione = false;
 		
 		if(orderByType.equalsIgnoreCase("asc")) {
@@ -51,7 +51,7 @@ public class ProceduraLocalServiceImpl extends ProceduraLocalServiceBaseImpl {
 		}
 		
 		OrderByComparator<Procedura> comparator = OrderByComparatorFactoryUtil.create("Procedura", orderByCol, direzione);
-		List<Procedura> listaProcedure = proceduraFinder.findByFilters(nome, attiva,dataInserimentoDa, dataInserimentoA, cur, delta, comparator);
+		List<Procedura> listaProcedure = proceduraFinder.findByFilters(nome, attiva,dataInserimentoDa, dataInserimentoA, siteGroupId, cur, delta, comparator);
 		
 		return listaProcedure;
 	}

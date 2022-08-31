@@ -25,9 +25,9 @@ public interface ProceduraFinder {
 
 	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
 		findByFilters(
-			String denominazione, Boolean attiva,
+			String denominazione, String attiva,
 			java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
-			int cur, int delta,
+			long siteGroupId, int cur, int delta,
 			com.liferay.portal.kernel.util.OrderByComparator
 				<it.servizidigitali.gestioneprocedure.model.Procedura> ordine);
 

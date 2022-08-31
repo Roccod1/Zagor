@@ -24,7 +24,7 @@
 				
 				<liferay-ui:search-container-column-text property="<%=GestioneProcedurePortletKeys.NOME %>" name="<%=GestioneProcedurePortletKeys.NOME %>" orderable="true" orderableProperty="nome"/>
 				
-				<fmt:formatDate value="${processo.createDate}" var="createDate" pattern="dd/MM/yyyy HH:mm:ss"/>
+				<fmt:formatDate value="${procedura.createDate}" var="createDate" pattern="dd/MM/yyyy HH:mm:ss"/>
 				
 				<liferay-ui:search-container-column-text value="${createDate}" name="<%=GestioneProcedurePortletKeys.DATA_CREAZIONE %>" orderable="true" orderableProperty="createDate"/>
 				
@@ -32,10 +32,19 @@
 					<portlet:param name="mvcRenderCommandName" value="/dettaglioNuovo" />
 					<portlet:param name="idProcedura" value="${procedura.proceduraId}" />
 				</portlet:renderURL>
-
-				<liferay-ui:search-container-column-text property="<%=GestioneProcedurePortletKeys.STATO %>" name="<%=GestioneProcedurePortletKeys.STATO %>" orderable="true" orderableProperty="stato"/>
 				
+				<c:choose>
+					<c:when test="${procedura.attiva eq true}">
+						<liferay-ui:search-container-column-text align="center" name="<%=GestioneProcedurePortletKeys.STATO %>" value="<i class='icon-ok text-success'></i>"/>
+					</c:when>
+					<c:when test="${procedura.attiva eq false}">
+						<liferay-ui:search-container-column-text  align="center" name="<%=GestioneProcedurePortletKeys.STATO %>" value="<i class='icon-remove text-danger'></i>"/>
+					</c:when>
+				</c:choose>
 
+				
+				<liferay-ui:search-container-column-text name="<%=GestioneProcedurePortletKeys.AZIONI %>" align="center" value="<a href='${dettaglioNuovoURL}'><i class='icon-edit'></i></a>"/>
+				
 
 			</liferay-ui:search-container-row>
 		<liferay-ui:search-iterator />

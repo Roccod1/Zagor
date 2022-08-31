@@ -15,10 +15,20 @@
 package it.servizidigitali.gestioneprocedure.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import it.servizidigitali.gestioneforms.model.Form;
+import it.servizidigitali.gestioneforms.service.FormLocalService;
+import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.base.ProceduraFormLocalServiceBaseImpl;
+import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFormPK;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Brian Wing Shun Chan
@@ -29,4 +39,81 @@ import org.osgi.service.component.annotations.Component;
 )
 public class ProceduraFormLocalServiceImpl
 	extends ProceduraFormLocalServiceBaseImpl {
+	
+	@Reference
+	private FormLocalService formLocalService;
+	
+	public List<ProceduraForm> salvaListaFormIntegrativi (String[] listaFormIntegrativi, long idProcedura){
+		List<ProceduraForm> listaProceduraFormIntegrativi = new ArrayList<ProceduraForm>();
+		
+		if(Validator.isNotNull(listaFormIntegrativi)) {
+			for(String idForm : listaFormIntegrativi) {
+				
+				ProceduraForm proceduraForm = null;
+				
+				ProceduraFormPK proceduraFormPk = new ProceduraFormPK();
+				proceduraFormPk.setFormId(Long.valueOf(idForm));
+				proceduraFormPk.setProceduraId(idProcedura);
+				
+				proceduraForm = proceduraFormPersistence.create(proceduraFormPk);
+				
+				listaProceduraFormIntegrativi.add(proceduraForm);
+				
+			}
+		}
+		
+		return listaProceduraFormIntegrativi;
+	}
+	
+	public List<String> getFormIntegrativiProcedura(long idProcedura) throws PortalException {
+		List<ProceduraForm> listaProceduraForm = new ArrayList<ProceduraForm>();
+		List<String> listaFormIntegrativiProcedura = new ArrayList<String>();
+		
+		listaProceduraForm = proceduraFormPersistence.findByproceduraId(idProcedura);
+		
+		if(!listaProceduraForm.isEmpty()) {
+			for(ProceduraForm proceduraForm : listaProceduraForm) {
+				Form form = null;
+				
+				if(Validator.isNotNull(proceduraForm)) {
+					form = formLocalService.getForm(proceduraForm.getFormId());
+					
+					if(Validator.isNotNull(form)) {
+						if(!form.getPrincipale()) {
+							listaFormIntegrativiProcedura.add(String.valueOf(form.getFormId()));
+						}
+					}
+				}
+				
+			}
+		}
+		
+		return listaFormIntegrativiProcedura;
+	}
+	
+	public long getFormPrincipaleProcedura(long idProcedura) throws PortalException {
+		long idFormPrincipale = 0;
+		List<ProceduraForm> listaProceduraForm = new ArrayList<ProceduraForm>();
+		
+		listaProceduraForm = proceduraFormPersistence.findByproceduraId(idProcedura);
+		
+		if(!listaProceduraForm.isEmpty()) {
+			for(ProceduraForm proceduraForm : listaProceduraForm) {
+				Form form = null;
+				
+				if(Validator.isNotNull(proceduraForm)) {
+					form = formLocalService.getForm(proceduraForm.getFormId());
+					
+					if(Validator.isNotNull(form)) {
+						if(form.getPrincipale()) {
+							idFormPrincipale = form.getFormId();
+						}
+					}
+				}
+				
+			}
+		}
+		
+		return idFormPrincipale;
+	}
 }

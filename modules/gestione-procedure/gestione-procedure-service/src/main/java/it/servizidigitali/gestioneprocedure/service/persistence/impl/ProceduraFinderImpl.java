@@ -20,7 +20,7 @@ import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFinder;
 
 @Component(service = ProceduraFinder.class)
 public class ProceduraFinderImpl extends ProceduraFinderBaseImpl implements ProceduraFinder{
-	public List<Procedura> findByFilters(String denominazione, Boolean attiva, Date dataInserimentoDa, Date dataInserimentoA, int cur, int delta, OrderByComparator<Procedura> ordine){
+	public List<Procedura> findByFilters(String denominazione, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId, int cur, int delta, OrderByComparator<Procedura> ordine){
 		List<Procedura> listaProcedure = new ArrayList<>();
 		
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -31,9 +31,20 @@ public class ProceduraFinderImpl extends ProceduraFinderBaseImpl implements Proc
 			dynamicQuery.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + denominazione + StringPool.PERCENT));
 		}
 		
-		if(Validator.isNotNull(attiva)) {
-			dynamicQuery.add(RestrictionsFactoryUtil.eq("attiva",attiva));
+		if(Validator.isNotNull(attiva) && !attiva.equalsIgnoreCase("-1")) {
+			
+			if(attiva.equalsIgnoreCase("1")) {
+				dynamicQuery.add(RestrictionsFactoryUtil.eq("attiva", true));
+			}else {
+				dynamicQuery.add(RestrictionsFactoryUtil.eq("attiva", Boolean.parseBoolean(attiva)));
+			}
+			
 		}
+		
+		if(Validator.isNotNull(siteGroupId)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("groupId", siteGroupId));
+		}
+		
 		
 		if(Validator.isNotNull(dataInserimentoDa)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.ge("createDate", dataInserimentoDa));

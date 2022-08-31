@@ -1,5 +1,18 @@
 <%@ include file="init.jsp" %>
 
+<portlet:actionURL name="<%=GestioneProcedurePortletKeys.SALVA_CREA_ACTION_COMMAND %>" var="salvaModificaURL" />
+<portlet:renderURL var="homeURL"></portlet:renderURL>
+
+<liferay-ui:error key="<%=GestioneProcedurePortletKeys.SESSION_ERROR_CAMPI_OBBLIGATORI %>" message="compilare-campi-obbligatori" />
+<liferay-ui:error key="<%=GestioneProcedurePortletKeys.SESSION_ERROR_IMPOSSIBILE_RECUPERARE_SERVIZI %>" message="impossibile-recuperare-servizi" />
+<liferay-ui:error key="<%=GestioneProcedurePortletKeys.SESSION_ERROR_IMPOSSIBILE_RECUPERARE_PROCESSI %>" message="impossibile-recuperare-processi" />
+<liferay-ui:error key="<%=GestioneProcedurePortletKeys.SESSION_ERROR_IMPOSSIBILE_RECUPERARE_FORM_PRINCIPALI %>" message="impossibile-recuperare-form-principali" />
+<liferay-ui:error key="<%=GestioneProcedurePortletKeys.SESSION_ERROR_IMPOSSIBILE_RECUPERARE_FORM_INTEGRATIVI %>" message="impossibile-recuperare-form-integrativi" />
+<liferay-ui:error key="<%=GestioneProcedurePortletKeys.SESSION_ERROR_IMPOSSIBILE_RECUPERARE_PROCEDURA %>" message="impossibile-recuperare-procedura" />
+
+
+
+
 <div class="page-header">
 	<h2><liferay-ui:message key="procedura"/></h2>
 </div>
@@ -9,24 +22,24 @@
 
 	<aui:col span="12">
 	
-		<aui:form id="nuovaProceduraForm" action="" name="formConfiguraProcedura">
+		<aui:form id="nuovaProceduraForm" action="${salvaModificaURL}" name="formConfiguraProcedura">
 			<fieldset>
 				<legend><liferay-ui:message key="dati-identificativi"/></legend>
 				<aui:row>
 					<aui:col span="6">
-							<aui:input label="nome" name="<%=GestioneProcedurePortletKeys.NOME %>" type="text" value=""> 
+							<aui:input label="nome" name="<%=GestioneProcedurePortletKeys.NOME %>" type="text" value="${procedura.nome}"> 
 							<aui:validator name="required"/>
-							</aui:input>
+							</aui:input>"
 					</aui:col>
 					<aui:col span="6">
-							<aui:input label="pec" name="<%=GestioneProcedurePortletKeys.PEC %>" type="text" value="">
+							<aui:input label="pec" name="<%=GestioneProcedurePortletKeys.PEC %>" type="text" value="${procedura.pecDestinazione}">
 							<aui:validator name="required"/>
 							</aui:input> 
 					</aui:col>
 				</aui:row>
 				<aui:row>
 					<aui:col span="12">
-								<aui:input label="attiva-procedura" name="<%=GestioneProcedurePortletKeys.ATTIVA_PROCEDURA %>" type="checkbox"/>
+								<aui:input label="attiva-procedura" name="<%=GestioneProcedurePortletKeys.ATTIVA_PROCEDURA %>" type="checkbox" value="${procedura.attiva}"/>
 					</aui:col>
 				</aui:row>
 			</fieldset>
@@ -35,7 +48,7 @@
 				<legend><liferay-ui:message key="configurazione-procedura"/></legend>
 				<aui:row>
 					<aui:col span="6">
-								<aui:select label="servizio" name="<%=GestioneProcedurePortletKeys.SERVIZIO %>">
+								<aui:select label="servizio" name="<%=GestioneProcedurePortletKeys.SERVIZIO %>" value="${procedura.servizioId}">
 									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
 										<c:forEach items="${listaServizi }" var="servizio">
 											<aui:option value="${servizio.servizioId }" label="${servizio.nome }"/>
@@ -45,7 +58,7 @@
 					</aui:col>
 					
 					<aui:col span="6">
-								<aui:select label="processo-bpmn" name="<%=GestioneProcedurePortletKeys.PROCESSO_BPMN %>">
+								<aui:select label="processo-bpmn" name="<%=GestioneProcedurePortletKeys.PROCESSO_BPMN %>" value="${procedura.processoId}">
 									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
 										<c:forEach items="${listaProcessi }" var="processo">
 											<aui:option value="${processo.processoId }">${processo.nome}</aui:option>
@@ -56,7 +69,7 @@
 				
 				<aui:row>
 					<aui:col span="6">
-								<aui:select label="identificativo-form-principale" name="<%=GestioneProcedurePortletKeys.IDENTIFICATIVO_FORM_PRINCIPALE %>">
+								<aui:select label="identificativo-form-principale" name="<%=GestioneProcedurePortletKeys.IDENTIFICATIVO_FORM_PRINCIPALE %>" value="${idFormPrincipale}">
 									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
 										<c:forEach items="${listaFormPrincipali}" var="form">
 											<aui:option value="${form.formId}">${form.nome}</aui:option>
@@ -66,7 +79,7 @@
 					</aui:col>
 				
 					<aui:col span="6">
-								<aui:select label="identificativi-form-integrativi" name="<%=GestioneProcedurePortletKeys.IDENTIFICATIVI_FORM_INTEGRATIVI %>" multiple="true">
+								<aui:select label="identificativi-form-integrativi" name="<%=GestioneProcedurePortletKeys.IDENTIFICATIVI_FORM_INTEGRATIVI %>" multiple="true" value="${listaFormIntegrativiProcedura}">
 									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
 										<c:forEach items="${listaFormIntegrativi}" var="form">
 											<aui:option value="${form.formId}">${form.nome}</aui:option>

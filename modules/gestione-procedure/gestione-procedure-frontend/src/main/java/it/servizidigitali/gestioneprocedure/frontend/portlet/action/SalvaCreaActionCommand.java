@@ -65,7 +65,7 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		
 		long idServizio = ParamUtil.getLong(actionRequest, GestioneProcedurePortletKeys.SERVIZIO);
 		long idProcesso = ParamUtil.getLong(actionRequest, GestioneProcedurePortletKeys.PROCESSO_BPMN);
-		String idFormPrincipale = ParamUtil.getString(actionRequest, GestioneProcedurePortletKeys.IDENTIFICATIVO_FORM_PRINCIPALE);
+		long idFormPrincipale = ParamUtil.getLong(actionRequest, GestioneProcedurePortletKeys.IDENTIFICATIVO_FORM_PRINCIPALE);
 		
 		String[] idFormIntegrativi = ParamUtil.getStringValues(actionRequest, GestioneProcedurePortletKeys.IDENTIFICATIVI_FORM_INTEGRATIVI);
 		boolean step1Attivo = ParamUtil.getBoolean(actionRequest, GestioneProcedurePortletKeys.CONFIGURAZIONE_STEP1_ATTIVO);
@@ -87,7 +87,6 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 			procedura = proceduraLocalService.getProcedura(idProcedura);
 		}else {
 			procedura = proceduraLocalService.createProcedura(counterLocalService.increment());
-			ProceduraFormPK proceduraFormPk = null;
 		}
 		
 		
@@ -128,6 +127,13 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		procedura.setAttiva(attivaProcedura);
 		procedura.setServizioId(idServizio);
 		
+		ProceduraFormPK proceduraFormPk = new ProceduraFormPK();
+		proceduraFormPk.setProceduraId(procedura.getProceduraId());
+		proceduraFormPk.setFormId(idFormPrincipale);
+		
+		proceduraForm = proceduraFormLocalService.createProceduraForm(proceduraFormPk);
+				
+		proceduraFormLocalService.salvaListaFormIntegrativi(idFormIntegrativi, idProcedura);
 		
 		procedura.setUserId(themeDisplay.getUserId());
 		procedura.setGroupId(themeDisplay.getSiteGroupId());
@@ -136,6 +142,7 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		
 		SessionMessages.add(actionRequest, GestioneProcedurePortletKeys.SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE);
 		proceduraLocalService.updateProcedura(procedura);
+		proceduraFormLocalService.updateProceduraForm(proceduraForm);
 
 	}
 

@@ -310,9 +310,9 @@ public interface ProceduraLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Procedura> search(
-		String nome, Boolean attiva, Date dataInserimentoDa,
-		Date dataInserimentoA, int delta, int cur, String orderByCol,
-		String orderByType);
+		String nome, String attiva, Date dataInserimentoDa,
+		Date dataInserimentoA, long siteGroupId, int delta, int cur,
+		String orderByCol, String orderByType);
 
 	/**
 	 * Updates the procedura in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

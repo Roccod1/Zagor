@@ -10,9 +10,11 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -57,6 +59,10 @@ public class GestioneProcedurePortlet extends MVCPortlet {
 
 	
 	public void render (RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException{
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+		
 		List<Procedura> listaProcedure = (List<Procedura>) renderRequest.getAttribute(GestioneProcedurePortletKeys.LISTA_PROCEDURE);
 		
 		int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM,GestioneProcedurePortletKeys.DEFAULT_CUR);
@@ -65,7 +71,7 @@ public class GestioneProcedurePortlet extends MVCPortlet {
 		String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 		
 		String nome = ParamUtil.getString(renderRequest, GestioneProcedurePortletKeys.NOME_RICERCA);
-		boolean attiva = ParamUtil.getBoolean(renderRequest, GestioneProcedurePortletKeys.STATO_RICERCA);
+		String attiva = ParamUtil.getString(renderRequest, GestioneProcedurePortletKeys.STATO_RICERCA);
 		String dataInserimentoDaString = ParamUtil.getString(renderRequest, GestioneProcedurePortletKeys.DATA_INSERIMENTO_DA);
 		String dataInserimentoAString = ParamUtil.getString(renderRequest, GestioneProcedurePortletKeys.DATA_INSERIMENTO_A);
 		
@@ -87,7 +93,7 @@ public class GestioneProcedurePortlet extends MVCPortlet {
 		}
 		
 
-		listaProcedure = proceduraLocalService.search(nome, attiva, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);;
+		listaProcedure = proceduraLocalService.search(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), delta, cur, orderByCol, orderByType);
 
 		
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_PROCEDURE, listaProcedure);
