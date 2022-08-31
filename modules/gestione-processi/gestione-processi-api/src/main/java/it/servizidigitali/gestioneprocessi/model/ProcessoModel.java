@@ -250,27 +250,6 @@ public interface ProcessoModel
 	public void setStato(String stato);
 
 	/**
-	 * Returns the multiente of this processo.
-	 *
-	 * @return the multiente of this processo
-	 */
-	public boolean getMultiente();
-
-	/**
-	 * Returns <code>true</code> if this processo is multiente.
-	 *
-	 * @return <code>true</code> if this processo is multiente; <code>false</code> otherwise
-	 */
-	public boolean isMultiente();
-
-	/**
-	 * Sets whether this processo is multiente.
-	 *
-	 * @param multiente the multiente of this processo
-	 */
-	public void setMultiente(boolean multiente);
-
-	/**
 	 * Returns the deployment ID of this processo.
 	 *
 	 * @return the deployment ID of this processo

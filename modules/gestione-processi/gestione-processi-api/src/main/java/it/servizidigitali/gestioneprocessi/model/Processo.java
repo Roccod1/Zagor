@@ -58,4 +58,8 @@ public interface Processo extends PersistedModel, ProcessoModel {
 
 		};
 
+	public String getNomeEnte();
+
+	public void setNomeEnte(String nomeEnte);
+
 }

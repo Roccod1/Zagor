@@ -11,8 +11,12 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +51,9 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		long organizationIdSitePrincipale = themeDisplay.getSiteGroup().getOrganizationId();
+
 		long idProcesso = ParamUtil.getLong(renderRequest, GestioneProcessiPortletKeys.ID_PROCESSO);
 		Processo processo = null;
 		String modelloXml = "";
@@ -54,6 +61,11 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 		if(idProcesso>0) {
 			try {
 				processo = processoLocalService.getProcesso(idProcesso);
+				
+				if(processo.getGroupId() != themeDisplay.getSiteGroupId() && organizationIdSitePrincipale!=0) {
+					SessionErrors.add(renderRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_NON_AUTORIZZATO);
+					return GestioneProcessiPortletKeys.JSP_HOME;
+				}
 				
 				File deployment = camundaClient.getDeploymentFile(processo.getDeploymentId());
 
@@ -68,8 +80,15 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 			}
 			
 			renderRequest.setAttribute(GestioneProcessiPortletKeys.ATTRIBUTO_PROCESSO, processo);
-			renderRequest.setAttribute(GestioneProcessiPortletKeys.MODELLOXML, modelloXml);
+			
+			if(Validator.isNotNull(modelloXml)) {
+				renderRequest.setAttribute(GestioneProcessiPortletKeys.MODELLOXML, modelloXml);
+			}
+			
 		}
+		
+		renderRequest.setAttribute(GestioneProcessiPortletKeys.ORGANIZATION_ID, themeDisplay.getScopeGroup().getOrganizationId());
+
 		
 		return GestioneProcessiPortletKeys.JSP_AGGIUNGI_MODIFICA_PROCESSO;
 	}

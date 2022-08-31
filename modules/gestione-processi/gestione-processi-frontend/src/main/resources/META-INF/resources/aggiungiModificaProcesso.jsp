@@ -1,25 +1,37 @@
 <%@ include file="init.jsp" %>
 
-<link
+	<link
       rel="stylesheet"
-      href="https://unpkg.com/bpmn-js@5.1.2/dist/assets/diagram-js.css"
+      href="<%=request.getContextPath()%>/css/diagram-js.css"
   	/>
+  	
     <link
       rel="stylesheet"
-      href="https://unpkg.com/bpmn-js@5.1.2/dist/assets/bpmn-font/css/bpmn.css"
+      href="<%=request.getContextPath()%>/css/bpmn.css"
     />
     
-    <link rel="stylesheet" href="https://unpkg.com/bpmn-js-properties-panel/dist/assets/properties-panel.css">
-
-    <!-- modeler distro -->
-    <script src="https://unpkg.com/bpmn-js@5.1.2/dist/bpmn-modeler.development.js"></script>
+    <link
+      rel="stylesheet"
+      href="<%=request.getContextPath()%>/dist/bpmn-js-properties-panel/assets/element-templates.css"
+    />
     
+    <link
+      rel="stylesheet"
+      href="<%=request.getContextPath()%>/dist/bpmn-js-properties-panel/assets/properties-panel.css"
+    />
     
+    <script src="<%=request.getContextPath()%>/app/bpmn-modeler.development.js"></script>
+    
+    <script type="text/javascript" src="<%=request.getContextPath()%>/dist/bpmn-js-properties-panel/bpmn-js-properties-panel.umd.js" /></script>
 
+     
 <portlet:actionURL name="<%=GestioneProcessiPortletKeys.SALVA_CREA_ACTION_COMMAND %>" var="salvaModificaURL" />
 <portlet:renderURL var="homeURL"></portlet:renderURL>
 
-<liferay-ui:success key="<%=GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_RECUPERO_PROCESSO_REPOSITORY %>" message="impossibile-recuperare-processo-da-sistema"/>
+<liferay-ui:error key="<%=GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_CAMUNDA %>" message="impossibile-effettuare-salvataggio-camunda" />
+<liferay-ui:error key="<%=GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_PROCESSO_CODICE_ESISTENTE %>" message="esiste-gia-un-processo-con-codice-specificato" />
+
+
 
 
 <div class="page-header">
@@ -70,26 +82,28 @@
 	</aui:form>
 </div>
 
-<div class="row">
-
-	<div class="col-8">
+<aui:row>
+	<aui:col span="8">
 		<div id="canvas"></div>
-	</div>
+	</aui:col>
 	
-	<div class="col-4">
+	<aui:col span="4">
 		<div id="js-properties-panel"></div>
-	</div>
+	</aui:col>
 
-</div>
+</aui:row>
+
+
+
 
 <script>
 
 var inputText = $('#<portlet:namespace />modelloXml');
 
+
 </script>
 
-<script type="text/javascript" src="<%=request.getContextPath()%>/dist/index.js">
-  </script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/dist/index.js"></script>
 
 
 
