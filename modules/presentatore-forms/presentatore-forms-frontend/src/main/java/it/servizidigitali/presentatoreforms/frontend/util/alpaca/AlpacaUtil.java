@@ -341,54 +341,6 @@ public class AlpacaUtil {
 	}
 
 	/**
-	 * Find all the searchList {@link String}s in text and replace them using replacementList
-	 * {@link String}s.
-	 *
-	 * @param text The text from which find the searchList.
-	 * @param searchList The list of {@link String} to find.
-	 * @param replacementList The list of {@link String} to use to replace.
-	 * @return Returns the replaced {@link String}.
-	 */
-	// private static String replaceEach(String text, String[] searchList, String[] replacementList)
-	// {
-	// for (int i = 0; i < searchList.length; i++) {
-	// text = StringUtils.replace(text, searchList[i], replacementList[i]);
-	// }
-	// return text;
-	// }
-
-	/**
-	 * Costruisce l'URL per i contatti.
-	 *
-	 * @param idComune L'id del comune.
-	 * @param codiceServizio Il codice del servizio.
-	 * @return Restituisce l'URL per i contatti in base i parametri passati.
-	 */
-	public static String buildContattiUrl(String idComune, String codiceServizio) {
-		return CUSTOM_FIELD_DATA_SOURCE + "/contatti/" + idComune + "/" + codiceServizio + "/" + codiceServizio + ".json";
-	}
-
-	/**
-	 * Risolve il valore dei placeholder.
-	 *
-	 * @param text La stringa su cui effettuare le sostituzioni.
-	 * @param placeholders I placeholders da utilizzare.
-	 * @return Restituisce la stringa con i placeholder sostituiti.
-	 */
-	// public static String risolviPlaceholder(String text, Placeholders placeholders) {
-	// List<Placeholder> placeholderList = placeholders.getList();
-	// List<String> keys = new ArrayList<String>();
-	// List<String> values = new ArrayList<String>();
-	// for (Placeholder placeholder : placeholderList) {
-	// keys.add(placeholder.getKey());
-	// values.add(placeholder.getValue());
-	// }
-	// String[] searchList = keys.toArray(new String[keys.size()]);
-	// String[] replacementList = values.toArray(new String[values.size()]);
-	// return replaceEach(text, searchList, replacementList);
-	// }
-
-	/**
 	 *
 	 * @param alpacaJsonOptionsStructure
 	 * @param type
