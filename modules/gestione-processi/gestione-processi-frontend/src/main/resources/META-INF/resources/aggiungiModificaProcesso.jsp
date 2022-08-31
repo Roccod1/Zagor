@@ -2,12 +2,12 @@
 
 	<link
       rel="stylesheet"
-      href="https://unpkg.com/bpmn-js@9.4.0/dist/assets/diagram-js.css"
+      href="<%=request.getContextPath()%>/css/diagram-js.css"
   	/>
   	
     <link
       rel="stylesheet"
-      href="https://unpkg.com/bpmn-js@9.4.0/dist/assets/bpmn-font/css/bpmn.css"
+      href="<%=request.getContextPath()%>/css/bpmn.css"
     />
     
     <link
@@ -20,9 +20,8 @@
       href="<%=request.getContextPath()%>/dist/bpmn-js-properties-panel/assets/properties-panel.css"
     />
     
-    <script src="https://unpkg.com/bpmn-js@9.4.0/dist/bpmn-modeler.development.js"></script>
+    <script src="<%=request.getContextPath()%>/app/bpmn-modeler.development.js"></script>
     
-<%--     <script type="text/javascript" src="<%=request.getContextPath()%>/script/bpmn-js-properties-panel.umd.js" /></script> --%>
     <script type="text/javascript" src="<%=request.getContextPath()%>/dist/bpmn-js-properties-panel/bpmn-js-properties-panel.umd.js" /></script>
 
      

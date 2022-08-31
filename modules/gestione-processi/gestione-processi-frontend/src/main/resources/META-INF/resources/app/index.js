@@ -27,27 +27,45 @@ var modeler = new BpmnJS({
       var eventBus = modeler.get("eventBus");
 
       if(inputText.val()){
-    	  modeler.importXML(inputText.val(), function(err) {
-
-    		    if (err) {
+    	  
+    	  modeler.importXML(inputText.val(), (err, warnings) => {
+    		  if (err) {
     		      console.log("errore caricamento xml esistente");
-    		    } else {
+    		  } else {
     		    	console.log("caricamento xml esistente avvenuto correttamente");
-    		    }
-
-
-    		  });
+    		  }
+    	  });
+    	  
+//    	  modeler.importXML(inputText.val(), function(err) {
+//
+//    		    if (err) {
+//    		      console.log("errore caricamento xml esistente");
+//    		    } else {
+//    		    	console.log("caricamento xml esistente avvenuto correttamente");
+//    		    }
+//
+//
+//    		  });
       }else{
-    	  modeler.importXML(diagram, function(err) {
-
-  		    if (err) {
-  		      console.log("errore caricamento xml vuoto");
-  		    } else {
-  		    	console.log("caricamento xml vuoto avvenuto correttamente");
-  		    }
-
-
-  		  });
+    	  
+    	  modeler.importXML(diagram, (err, warnings) => {
+    		  if (err) {
+    		      console.log("errore caricamento xml esistente");
+    		  } else {
+    		    	console.log("caricamento xml esistente avvenuto correttamente");
+    		  }
+    	  });
+    	  
+//    	  modeler.importXML(diagram, function(err) {
+//
+//  		    if (err) {
+//  		      console.log("errore caricamento xml vuoto");
+//  		    } else {
+//  		    	console.log("caricamento xml vuoto avvenuto correttamente");
+//  		    }
+//
+//
+//  		  });
       }
       
       eventBus.on("commandStack.changed", function(event) {
