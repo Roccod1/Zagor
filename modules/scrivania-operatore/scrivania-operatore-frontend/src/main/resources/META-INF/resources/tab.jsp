@@ -27,10 +27,18 @@
 	</div>
 	<div class="row">
 		<div class="col-3">
-			<aui:input name="queryDataRichDa" label="data-richiesta-da" value="${queryDataRichDa}" />
+			<label><liferay-ui:message key="data-richiesta-da" /></label>
+			<input type="datetime-local"
+		           id="<portlet:namespace/>queryDataRichDa"
+		           name="<portlet:namespace/>queryDataRichDa"
+		           value="${queryDataRichDa}">
 		</div>
 		<div class="col-3">
-			<aui:input name="queryDataRichA" label="data-richiesta-a" value="${queryDataRichA}" />
+			<label><liferay-ui:message key="data-richiesta-a" /></label>
+			<input type="datetime-local"
+		           id="<portlet:namespace/>queryDataRichA"
+		           name="<portlet:namespace/>queryDataRichA"
+		           value="${queryDataRichA}">
 		</div>
 		<div class="col-3">
 			<aui:select name="queryAut" label="tipo-autenticazione" value="${queryAut}">
@@ -68,7 +76,7 @@
 
 <liferay-ui:search-container total="${totale}"
                              iteratorURL="${iteratorURL}"
-                             emptyResultsMessage=""
+                             emptyResultsMessage="nessuna-richiesta"
                              delta="10">
 	<liferay-ui:search-container-results results="${lista}" />
 	
@@ -80,7 +88,9 @@
 		<liferay-ui:search-container-column-text name="cf-piva" value="${elem.cf}" />
 		<fmt:formatDate value="${elem.dataUltimoAggiornamento}" pattern="dd/MM/yyyy" var="elemData" />
 		<liferay-ui:search-container-column-text name="data-ultimo-aggiornamento" value="${elemData}" />
-		<liferay-ui:search-container-column-text name="accesso" value="?" />
+		<liferay-ui:search-container-column-text name="accesso">
+			<clay:icon symbol="lock" />
+		</liferay-ui:search-container-column-text>
 		<liferay-ui:search-container-column-text name="stato" value="stato-richiesta-${elem.stato}" translate="true" />
 		<liferay-ui:search-container-column-jsp name="azioni" path="/azioni.jsp" />
 	</liferay-ui:search-container-row>

@@ -9,6 +9,7 @@ public class RichiestaDTO {
 	private String richiedente;
 	private String stato;
 	private String cf;
+	private boolean accesso;
 	
 	public long getId() {
 		return id;
@@ -45,6 +46,12 @@ public class RichiestaDTO {
 	}
 	public void setCf(String cf) {
 		this.cf = cf;
+	}
+	public boolean isAccesso() {
+		return accesso;
+	}
+	public void setAccesso(boolean accesso) {
+		this.accesso = accesso;
 	}
 	
 }

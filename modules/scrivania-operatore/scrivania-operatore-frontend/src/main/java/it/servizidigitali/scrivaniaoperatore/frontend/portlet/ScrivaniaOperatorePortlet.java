@@ -11,6 +11,8 @@ import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,8 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 	service = Portlet.class
 )
 public class ScrivaniaOperatorePortlet extends MVCPortlet {
+
+	private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 	
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
@@ -81,14 +85,18 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		int end = limits[1];
 		
 		RichiestaFilters filters = new RichiestaFilters();
-		//filters.setNomeCognome(queryNome.isBlank() ? null : queryNome.trim());
-		//filters.setCodiceFiscale(queryCf.isBlank() ? null : queryCf.trim());
-		//filters.setIdRichiesta(queryRichiestaId.isBlank() ? null : queryRichiestaId.trim());
-		//filters.setNumeroProtocollo(queryNumProt.isBlank() ? null : queryNumProt.trim());
-		//filters.setDataDa(null);
-		//filters.setDataA(null);
+		filters.setNomeCognome(queryNome.isBlank() ? null : queryNome.trim());
+		filters.setCodiceFiscale(queryCf.isBlank() ? null : queryCf.trim());
+		filters.setIdRichiesta(queryRichiestaId.isBlank() ? null : queryRichiestaId.trim());
+		filters.setNumeroProtocollo(queryNumProt.isBlank() ? null : queryNumProt.trim());
+		try {
+			filters.setDataDa(queryDataRichDa.isBlank() ? null : FORMATTER.parse(queryDataRichDa));
+			filters.setDataA(queryDataRichA.isBlank() ? null : FORMATTER.parse(queryDataRichA));
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
 		filters.setAutenticazione(mapAutenticazione(queryAut));
-		//filters.setTipo(null);
+		filters.setTipo(queryStato.isBlank() ? null : queryStato);
 		
 		int count = richiestaLocalService.countByFilters(filters);
 		List<RichiestaDTO> elems = richiestaLocalService.findByFilters(filters, start, end)
