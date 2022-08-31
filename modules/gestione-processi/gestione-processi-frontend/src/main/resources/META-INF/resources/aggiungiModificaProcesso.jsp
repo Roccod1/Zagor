@@ -83,8 +83,19 @@
 	</aui:form>
 </div>
 
-<div id="canvas"></div>
-<div id="js-properties-panel"></div>
+<aui:row>
+	<aui:col span="8">
+		<div id="canvas"></div>
+	</aui:col>
+	
+	<aui:col span="4">
+		<div id="js-properties-panel"></div>
+	</aui:col>
+
+</aui:row>
+
+
+
 
 <script>
 
