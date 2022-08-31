@@ -30,6 +30,7 @@ public class GestioneProcedurePortletKeys {
 	public static final String SALVA_CREA_ACTION_COMMAND = "/salvaModifica";
 	public static final String RICERCA_ACTION_COMMAND  = "/ricerca";
 	
+	public static final String ID_PROCEDURA = "idProcedura";
 	public static final String NOME = "Denominazione";
 	public static final String PEC = "PEC";
 	public static final String ATTIVA_PROCEDURA = "attivaProcedura";
@@ -48,6 +49,10 @@ public class GestioneProcedurePortletKeys {
 		
 	public static final String JSP_HOME = "/view.jsp";
 	public static final String JSP_AGGIUNGI_MODIFICA_PROCEDURA = "/aggiungiModificaProcedura.jsp";
+	
+	
+	public static final String SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE = "eseguito-correttamente";
+	public static final String SESSION_ERROR_CAMPI_OBBLIGATORI = "errore-campi-obbligatori";
 
 
 	public static final String DETTAGLIO_NUOVO_RENDER_COMMAND = "/dettaglioNuovo";

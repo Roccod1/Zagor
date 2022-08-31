@@ -50,33 +50,9 @@
 										<c:forEach items="${listaProcessi }" var="processo">
 											<aui:option value="${processo.processoId }">${processo.nome}</aui:option>
 										</c:forEach>
-								<aui:validator name="required"/>
 								</aui:select>
 						</aui:col>
 					</aui:row>
-					
-				
-				
-					
-<!-- 						<div class="col-6"> -->
-<!-- 							<div class="form-group"> -->
-<!-- 									<form:select id="identificativoProcesso" path="identificativoProcesso" class="col-12" > -->
-<!-- 										<option value=""></option> -->
-<%-- 										<c:choose> --%>
-<%-- 											<c:when test="${formConfiguraProcedura.parametriConfigurazioneProcedura.usaBpmn == true}"> --%>
-<%-- 												<form:options items="${formConfiguraProcedura.parametriConfigurazioneProcedura.listProcessiBpmn}" itemLabel="denominazione" itemValue="codiceIdentificativo" /> --%>
-<%-- 											</c:when> --%>
-<%-- 											<c:otherwise> --%>
-<%-- 												<c:forEach items="${formConfiguraProcedura.parametriConfigurazioneProcedura.listProcessiBpmn}" var="processo"> --%>
-<%-- 													<c:if test="${processo.noBackoffice}"> --%>
-<%-- 														<option value="${processo.codiceIdentificativo}">${processo.denominazione}</option> --%>
-<%-- 													</c:if> --%>
-<%-- 												</c:forEach> --%>
-<%-- 											</c:otherwise> --%>
-<%-- 										</c:choose> --%>
-<!-- 									</form:select> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
 				
 				<aui:row>
 					<aui:col span="6">
