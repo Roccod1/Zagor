@@ -89,7 +89,14 @@
 		<fmt:formatDate value="${elem.dataUltimoAggiornamento}" pattern="dd/MM/yyyy" var="elemData" />
 		<liferay-ui:search-container-column-text name="data-ultimo-aggiornamento" value="${elemData}" />
 		<liferay-ui:search-container-column-text name="accesso">
-			<clay:icon symbol="lock" />
+			<c:choose>
+				<c:when test="${elem.accesso}">
+					<clay:icon symbol="lock" />
+				</c:when>
+				<c:otherwise>
+					<clay:icon symbol="unlock" />
+				</c:otherwise>
+			</c:choose>
 		</liferay-ui:search-container-column-text>
 		<liferay-ui:search-container-column-text name="stato" value="stato-richiesta-${elem.stato}" translate="true" />
 		<liferay-ui:search-container-column-jsp name="azioni" path="/azioni.jsp" />

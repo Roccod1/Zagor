@@ -144,6 +144,7 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		
 		dto.setStato(richiesta.getStato());
 		dto.setCf(richiesta.getCodiceFiscale().toUpperCase());
+		dto.setAccesso(!richiesta.getInvioGuest());
 		return dto;
 	}
 }
