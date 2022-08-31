@@ -1,6 +1,6 @@
 {
   "name": "gestione-processi-portlet",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Gestione processi portlet",
   "license": "MIT",
   "scripts": {
@@ -32,7 +32,7 @@
   "dependencies": {
 	"bpmn-js": "^9.4.0",
 	"bpmn-js-properties-panel": "^1.5.0",
-	"camunda-bpmn-moddle": "^0.8.1",
+	"camunda-bpmn-moddle": "^6.1.2",
 	"diagram-js": "^0.19.0",
 	"lodash":"^3.0.0"
   }

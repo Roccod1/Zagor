@@ -25,7 +25,7 @@ module.exports = function(grunt) {
 				"presets": ["@babel/preset-env"] ,
 				"global": true, 
        	 		"ignore": [
-					/\/node_modules\/(?!bpmn-js-properties-panel|min-dom\/)/
+					/\/node_modules\/(?!camunda-bpmn-moddle\/)/
 					]
 				}  
 			],
@@ -58,6 +58,26 @@ module.exports = function(grunt) {
             cwd: 'node_modules/bpmn-js/assets',
             src: ['**/*.*', '!**/*.js'],
             dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist/vendor'
+          }
+        ]
+      },
+      bpmn_js_properties_panel: {
+        files: [
+          {
+            expand: true,
+            cwd: 'node_modules/gestione-processi-portlet/node_modules/bpmn-js-properties-panel/dist',
+            src: ['**/*'],
+            dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist/bpmn-js-properties-panel'
+          }
+        ]
+      },
+      camunda_moddle_descriptors: {
+        files: [
+          {
+            expand: true,
+            cwd: 'node_modules/gestione-processi-portlet/node_modules/camunda-bpmn-moddle/resources',
+            src: ['camunda.json'],
+            dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist'
           }
         ]
       },

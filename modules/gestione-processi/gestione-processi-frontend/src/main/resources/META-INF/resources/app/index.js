@@ -1,7 +1,26 @@
 var fs = require('fs');
 
+var camundaExtensionModule = require('camunda-bpmn-moddle/lib');
+// var camundaModdle = require('camunda-bpmn-moddle/resources/camunda');
+
+var camundaModdleDescriptorsRaw = fs.readFileSync(__dirname + '/../dist/camunda.json', 'utf-8');
+var camundaModdleDescriptors = JSON.parse(camundaModdleDescriptorsRaw);
+
+console.log('camundaExtensionModule', camundaExtensionModule);
+
 var modeler = new BpmnJS({
-        container: "#canvas"
+        container: "#canvas",
+        propertiesPanel: {
+		    parent: '#js-properties-panel'
+		  },
+        additionalModules: [
+			BpmnJSPropertiesPanel.BpmnPropertiesPanelModule,
+			BpmnJSPropertiesPanel.BpmnPropertiesProviderModule,
+			BpmnJSPropertiesPanel.CamundaPlatformPropertiesProviderModule
+		],
+		  moddleExtensions: {
+	      camunda: camundaModdleDescriptors
+	    }
       });
 
 	  var diagram = fs.readFileSync(__dirname + '/../bpmn/newDiagram.bpmn', 'utf-8');

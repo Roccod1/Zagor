@@ -12,17 +12,19 @@
     
     <link
       rel="stylesheet"
-      href="<%=request.getContextPath()%>/assets/element-templates.css"
+      href="<%=request.getContextPath()%>/dist/bpmn-js-properties-panel/assets/element-templates.css"
     />
     
     <link
       rel="stylesheet"
-      href="<%=request.getContextPath()%>/assets/properties-panel.css"
+      href="<%=request.getContextPath()%>/dist/bpmn-js-properties-panel/assets/properties-panel.css"
     />
     
     <script src="https://unpkg.com/bpmn-js@9.4.0/dist/bpmn-modeler.development.js"></script>
     
-    <script type="text/javascript" src="<%=request.getContextPath()%>/script/bpmn-js-properties-panel.umd.js" />
+<%--     <script type="text/javascript" src="<%=request.getContextPath()%>/script/bpmn-js-properties-panel.umd.js" /></script> --%>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/dist/bpmn-js-properties-panel/bpmn-js-properties-panel.umd.js" /></script>
+
      
 <portlet:actionURL name="<%=GestioneProcessiPortletKeys.SALVA_CREA_ACTION_COMMAND %>" var="salvaModificaURL" />
 <portlet:renderURL var="homeURL"></portlet:renderURL>
@@ -88,10 +90,10 @@
 
 var inputText = $('#<portlet:namespace />modelloXml');
 
+
 </script>
 
-<script type="text/javascript" src="<%=request.getContextPath()%>/dist/index.js">
-  </script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/dist/index.js"></script>
 
 
 
