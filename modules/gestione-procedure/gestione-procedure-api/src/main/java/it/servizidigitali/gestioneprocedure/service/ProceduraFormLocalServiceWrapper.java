@@ -268,6 +268,22 @@ public class ProceduraFormLocalServiceWrapper
 	}
 
 	@Override
+	public String getFormIntegrativiProcedura(long idProcedura)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _proceduraFormLocalService.getFormIntegrativiProcedura(
+			idProcedura);
+	}
+
+	@Override
+	public long getFormPrincipaleProcedura(long idProcedura)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _proceduraFormLocalService.getFormPrincipaleProcedura(
+			idProcedura);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery
 		getIndexableActionableDynamicQuery() {
 
@@ -356,6 +372,16 @@ public class ProceduraFormLocalServiceWrapper
 	@Override
 	public int getProceduraFormsCount() {
 		return _proceduraFormLocalService.getProceduraFormsCount();
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.gestioneprocedure.model.ProceduraForm>
+			salvaListaFormIntegrativi(
+				String[] listaFormIntegrativi, long idProcedura) {
+
+		return _proceduraFormLocalService.salvaListaFormIntegrativi(
+			listaFormIntegrativi, idProcedura);
 	}
 
 	/**

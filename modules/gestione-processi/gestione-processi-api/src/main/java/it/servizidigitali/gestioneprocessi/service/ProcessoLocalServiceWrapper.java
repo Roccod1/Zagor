@@ -272,6 +272,15 @@ public class ProcessoLocalServiceWrapper
 		return _processoLocalService.getIndexableActionableDynamicQuery();
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.gestioneprocessi.model.Processo>
+			getListaProcessiByOrganizationAttivo(long groupId, boolean attivo)
+		throws Exception {
+
+		return _processoLocalService.getListaProcessiByOrganizationAttivo(
+			groupId, attivo);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *

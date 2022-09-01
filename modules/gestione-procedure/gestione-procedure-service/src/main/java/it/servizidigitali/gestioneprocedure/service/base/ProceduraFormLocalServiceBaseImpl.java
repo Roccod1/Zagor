@@ -42,6 +42,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalServiceUtil;
+import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFinder;
 import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFormPK;
 import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFormPersistence;
 import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraPersistence;
@@ -495,6 +496,9 @@ public abstract class ProceduraFormLocalServiceBaseImpl
 
 	@Reference
 	protected ProceduraPersistence proceduraPersistence;
+
+	@Reference
+	protected ProceduraFinder proceduraFinder;
 
 	protected ProceduraFormLocalService proceduraFormLocalService;
 

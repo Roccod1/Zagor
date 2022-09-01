@@ -235,20 +235,109 @@ public interface ProceduraModel
 	public void setPecDestinazione(String pecDestinazione);
 
 	/**
-	 * Returns the configurazioni presentatore form of this procedura.
+	 * Returns the step1 attivo of this procedura.
 	 *
-	 * @return the configurazioni presentatore form of this procedura
+	 * @return the step1 attivo of this procedura
 	 */
-	@AutoEscape
-	public String getConfigurazioniPresentatoreForm();
+	public boolean getStep1Attivo();
 
 	/**
-	 * Sets the configurazioni presentatore form of this procedura.
+	 * Returns <code>true</code> if this procedura is step1 attivo.
 	 *
-	 * @param configurazioniPresentatoreForm the configurazioni presentatore form of this procedura
+	 * @return <code>true</code> if this procedura is step1 attivo; <code>false</code> otherwise
 	 */
-	public void setConfigurazioniPresentatoreForm(
-		String configurazioniPresentatoreForm);
+	public boolean isStep1Attivo();
+
+	/**
+	 * Sets whether this procedura is step1 attivo.
+	 *
+	 * @param step1Attivo the step1 attivo of this procedura
+	 */
+	public void setStep1Attivo(boolean step1Attivo);
+
+	/**
+	 * Returns the step1 tipo componenti nucleo familiare of this procedura.
+	 *
+	 * @return the step1 tipo componenti nucleo familiare of this procedura
+	 */
+	@AutoEscape
+	public String getStep1TipoComponentiNucleoFamiliare();
+
+	/**
+	 * Sets the step1 tipo componenti nucleo familiare of this procedura.
+	 *
+	 * @param step1TipoComponentiNucleoFamiliare the step1 tipo componenti nucleo familiare of this procedura
+	 */
+	public void setStep1TipoComponentiNucleoFamiliare(
+		String step1TipoComponentiNucleoFamiliare);
+
+	/**
+	 * Returns the step2 tipo servizio of this procedura.
+	 *
+	 * @return the step2 tipo servizio of this procedura
+	 */
+	@AutoEscape
+	public String getStep2TipoServizio();
+
+	/**
+	 * Sets the step2 tipo servizio of this procedura.
+	 *
+	 * @param step2TipoServizio the step2 tipo servizio of this procedura
+	 */
+	public void setStep2TipoServizio(String step2TipoServizio);
+
+	/**
+	 * Returns the step2 tipi integrazione backoffice of this procedura.
+	 *
+	 * @return the step2 tipi integrazione backoffice of this procedura
+	 */
+	@AutoEscape
+	public String getStep2TipiIntegrazioneBackoffice();
+
+	/**
+	 * Sets the step2 tipi integrazione backoffice of this procedura.
+	 *
+	 * @param step2TipiIntegrazioneBackoffice the step2 tipi integrazione backoffice of this procedura
+	 */
+	public void setStep2TipiIntegrazioneBackoffice(
+		String step2TipiIntegrazioneBackoffice);
+
+	/**
+	 * Returns the abilita cache integrazione backoffice of this procedura.
+	 *
+	 * @return the abilita cache integrazione backoffice of this procedura
+	 */
+	public boolean getAbilitaCacheIntegrazioneBackoffice();
+
+	/**
+	 * Returns <code>true</code> if this procedura is abilita cache integrazione backoffice.
+	 *
+	 * @return <code>true</code> if this procedura is abilita cache integrazione backoffice; <code>false</code> otherwise
+	 */
+	public boolean isAbilitaCacheIntegrazioneBackoffice();
+
+	/**
+	 * Sets whether this procedura is abilita cache integrazione backoffice.
+	 *
+	 * @param abilitaCacheIntegrazioneBackoffice the abilita cache integrazione backoffice of this procedura
+	 */
+	public void setAbilitaCacheIntegrazioneBackoffice(
+		boolean abilitaCacheIntegrazioneBackoffice);
+
+	/**
+	 * Returns the tipo generazione pdf of this procedura.
+	 *
+	 * @return the tipo generazione pdf of this procedura
+	 */
+	@AutoEscape
+	public String getTipoGenerazionePDF();
+
+	/**
+	 * Sets the tipo generazione pdf of this procedura.
+	 *
+	 * @param tipoGenerazionePDF the tipo generazione pdf of this procedura
+	 */
+	public void setTipoGenerazionePDF(String tipoGenerazionePDF);
 
 	/**
 	 * Returns the attiva of this procedura.

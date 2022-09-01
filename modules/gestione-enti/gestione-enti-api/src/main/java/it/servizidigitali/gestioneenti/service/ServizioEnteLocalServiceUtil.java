@@ -270,6 +270,14 @@ public class ServizioEnteLocalServiceUtil {
 			companyId, organizationId, attivo);
 	}
 
+	public static List<Long> getListaServiziByOrganizationAttivo(
+			long organizationId, boolean attivo)
+		throws Exception {
+
+		return getService().getListaServiziByOrganizationAttivo(
+			organizationId, attivo);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
