@@ -15,10 +15,10 @@ import it.servizidigitali.backoffice.integration.enums.TipoIntegrazioneBackoffic
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici;
 import it.servizidigitali.backoffice.integration.model.commmon.IntegrationPreferences;
 import it.servizidigitali.backoffice.integration.service.AnagrafeIntegrationService;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.IntegrationServiceFactory;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.exception.BackofficeServiceException;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.BackofficeIntegrationService;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.JsonEnrich;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.implementation.backoffice.DatiAnagraficiJsonEnrich;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.EnrichmentModel;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonOptionsStructure;
@@ -39,7 +39,7 @@ public class DatiAnagraficiIntegrationServiceImpl implements BackofficeIntegrati
 	private OrganizationLocalService organizationLocalService;
 
 	@Reference
-	private List<DatiAnagraficiJsonEnrich> jsonEnrichs;
+	private IntegrationServiceFactory integrationServiceFactory;
 
 	@Override
 	public void enrich(AlpacaJsonOptionsStructure alpacaJsonOptionsStructure, JsonObject jsonObject, UserPreferences userPreferences, long organizationId, long servizioId,
@@ -49,6 +49,7 @@ public class DatiAnagraficiIntegrationServiceImpl implements BackofficeIntegrati
 
 		DatiAnagrafici datiAnagrafici = getDatiAnagrafici(codiceFiscale, organizationId, integrationPreferences);
 		if (datiAnagrafici != null) {
+			List<JsonEnrich> jsonEnrichs = integrationServiceFactory.getJsonEnrichs();
 			if (jsonEnrichs != null) {
 				for (JsonEnrich jsonEnrich : jsonEnrichs) {
 					EnrichmentModel<?> enrichmentModel = new EnrichmentModel<>(alpacaJsonOptionsStructure, jsonObject, datiAnagrafici, organizationId, servizioId, userPreferences);

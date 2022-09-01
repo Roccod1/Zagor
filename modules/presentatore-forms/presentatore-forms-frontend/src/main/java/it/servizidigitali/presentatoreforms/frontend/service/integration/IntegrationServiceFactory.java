@@ -19,6 +19,7 @@ import it.servizidigitali.backoffice.integration.enums.TipoIntegrazioneBackoffic
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.BackofficeIntegrationService;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.IntegrationService;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.NucleoFamiliareIntegrationService;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.JsonEnrich;
 
 /**
  * @author pindi
@@ -40,6 +41,9 @@ public class IntegrationServiceFactory {
 
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 	private volatile List<NucleoFamiliareIntegrationService> inputNucleoFamiliareIntegrationServices;
+
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+	private volatile List<JsonEnrich> jsonEnrichs;
 
 	/**
 	 * Mappa servizi di integrazione di input raggruppati per chiave "TipoIntegrazione".
@@ -137,6 +141,13 @@ public class IntegrationServiceFactory {
 	public Map<TipoIntegrazione, Map<String, it.servizidigitali.presentatoreforms.frontend.service.integration.output.IntegrationService>> getOutputBackofficeIntegrationServicesMap() {
 		init();
 		return outputBackofficeIntegrationServicesMap;
+	}
+
+	/**
+	 * @return the jsonEnrichs
+	 */
+	public List<JsonEnrich> getJsonEnrichs() {
+		return jsonEnrichs;
 	}
 
 }
