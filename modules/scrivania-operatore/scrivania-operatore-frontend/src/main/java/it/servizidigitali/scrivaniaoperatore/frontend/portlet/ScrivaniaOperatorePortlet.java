@@ -3,7 +3,6 @@ package it.servizidigitali.scrivaniaoperatore.frontend.portlet;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
@@ -27,7 +26,7 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
-import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.frontend.util.MapUtil;
 import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
@@ -101,7 +100,7 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		int count = richiestaLocalService.countByFilters(filters);
 		List<RichiestaDTO> elems = richiestaLocalService.findByFilters(filters, start, end)
 				.stream()
-				.map(x -> mapRichiesta(ctx.getCompanyId(), x))
+				.map(x -> MapUtil.mapRichiesta(ctx.getCompanyId(), x))
 				.collect(Collectors.toList());
 		
 		request.setAttribute("totale", count);
@@ -133,18 +132,4 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		}
 	}
 
-	private RichiestaDTO mapRichiesta(long companyId, Richiesta richiesta) {
-		RichiestaDTO dto = new RichiestaDTO();
-		dto.setId(richiesta.getRichiestaId());
-		dto.setNumeroProtocollo(richiesta.getNumeroProtocollo());
-		dto.setDataUltimoAggiornamento(richiesta.getModifiedDate());
-		
-		User user = userLocalService.fetchUserByScreenName(companyId, richiesta.getCodiceFiscale());
-		dto.setRichiedente(user.getFullName());
-		
-		dto.setStato(richiesta.getStato());
-		dto.setCf(richiesta.getCodiceFiscale().toUpperCase());
-		dto.setAccesso(!richiesta.getInvioGuest());
-		return dto;
-	}
 }
