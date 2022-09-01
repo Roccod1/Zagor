@@ -52,10 +52,14 @@ public class ServizioEnteWrapper
 		attributes.put("userName", getUserName());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
-		attributes.put("uri", getUri());
-		attributes.put("uriGuest", getUriGuest());
-		attributes.put("uriScheda", getUriScheda());
+		attributes.put("privateLayoutId", getPrivateLayoutId());
+		attributes.put("publicLayoutId", getPublicLayoutId());
+		attributes.put("uriEsterna", getUriEsterna());
+		attributes.put(
+			"catalogoServizioArticleId", getCatalogoServizioArticleId());
+		attributes.put("subOrganizationId", getSubOrganizationId());
 		attributes.put("autenticazione", isAutenticazione());
+		attributes.put("livelloAutenticazione", getLivelloAutenticazione());
 		attributes.put("dataInizioAttivazione", getDataInizioAttivazione());
 		attributes.put("dataFineAttivazione", getDataFineAttivazione());
 		attributes.put("cittadino", isCittadino());
@@ -128,28 +132,48 @@ public class ServizioEnteWrapper
 			setModifiedDate(modifiedDate);
 		}
 
-		String uri = (String)attributes.get("uri");
+		Long privateLayoutId = (Long)attributes.get("privateLayoutId");
 
-		if (uri != null) {
-			setUri(uri);
+		if (privateLayoutId != null) {
+			setPrivateLayoutId(privateLayoutId);
 		}
 
-		String uriGuest = (String)attributes.get("uriGuest");
+		Long publicLayoutId = (Long)attributes.get("publicLayoutId");
 
-		if (uriGuest != null) {
-			setUriGuest(uriGuest);
+		if (publicLayoutId != null) {
+			setPublicLayoutId(publicLayoutId);
 		}
 
-		String uriScheda = (String)attributes.get("uriScheda");
+		String uriEsterna = (String)attributes.get("uriEsterna");
 
-		if (uriScheda != null) {
-			setUriScheda(uriScheda);
+		if (uriEsterna != null) {
+			setUriEsterna(uriEsterna);
+		}
+
+		Long catalogoServizioArticleId = (Long)attributes.get(
+			"catalogoServizioArticleId");
+
+		if (catalogoServizioArticleId != null) {
+			setCatalogoServizioArticleId(catalogoServizioArticleId);
+		}
+
+		Long subOrganizationId = (Long)attributes.get("subOrganizationId");
+
+		if (subOrganizationId != null) {
+			setSubOrganizationId(subOrganizationId);
 		}
 
 		Boolean autenticazione = (Boolean)attributes.get("autenticazione");
 
 		if (autenticazione != null) {
 			setAutenticazione(autenticazione);
+		}
+
+		Integer livelloAutenticazione = (Integer)attributes.get(
+			"livelloAutenticazione");
+
+		if (livelloAutenticazione != null) {
+			setLivelloAutenticazione(livelloAutenticazione);
 		}
 
 		Date dataInizioAttivazione = (Date)attributes.get(
@@ -273,6 +297,16 @@ public class ServizioEnteWrapper
 	}
 
 	/**
+	 * Returns the catalogo servizio article ID of this servizio ente.
+	 *
+	 * @return the catalogo servizio article ID of this servizio ente
+	 */
+	@Override
+	public long getCatalogoServizioArticleId() {
+		return model.getCatalogoServizioArticleId();
+	}
+
+	/**
 	 * Returns the chatbot of this servizio ente.
 	 *
 	 * @return the chatbot of this servizio ente
@@ -373,6 +407,16 @@ public class ServizioEnteWrapper
 	}
 
 	/**
+	 * Returns the livello autenticazione of this servizio ente.
+	 *
+	 * @return the livello autenticazione of this servizio ente
+	 */
+	@Override
+	public int getLivelloAutenticazione() {
+		return model.getLivelloAutenticazione();
+	}
+
+	/**
 	 * Returns the modified date of this servizio ente.
 	 *
 	 * @return the modified date of this servizio ente
@@ -435,6 +479,26 @@ public class ServizioEnteWrapper
 	}
 
 	/**
+	 * Returns the private layout ID of this servizio ente.
+	 *
+	 * @return the private layout ID of this servizio ente
+	 */
+	@Override
+	public long getPrivateLayoutId() {
+		return model.getPrivateLayoutId();
+	}
+
+	/**
+	 * Returns the public layout ID of this servizio ente.
+	 *
+	 * @return the public layout ID of this servizio ente
+	 */
+	@Override
+	public long getPublicLayoutId() {
+		return model.getPublicLayoutId();
+	}
+
+	/**
 	 * Returns the servizio ID of this servizio ente.
 	 *
 	 * @return the servizio ID of this servizio ente
@@ -442,6 +506,16 @@ public class ServizioEnteWrapper
 	@Override
 	public long getServizioId() {
 		return model.getServizioId();
+	}
+
+	/**
+	 * Returns the sub organization ID of this servizio ente.
+	 *
+	 * @return the sub organization ID of this servizio ente
+	 */
+	@Override
+	public long getSubOrganizationId() {
+		return model.getSubOrganizationId();
 	}
 
 	/**
@@ -455,33 +529,13 @@ public class ServizioEnteWrapper
 	}
 
 	/**
-	 * Returns the uri of this servizio ente.
+	 * Returns the uri esterna of this servizio ente.
 	 *
-	 * @return the uri of this servizio ente
+	 * @return the uri esterna of this servizio ente
 	 */
 	@Override
-	public String getUri() {
-		return model.getUri();
-	}
-
-	/**
-	 * Returns the uri guest of this servizio ente.
-	 *
-	 * @return the uri guest of this servizio ente
-	 */
-	@Override
-	public String getUriGuest() {
-		return model.getUriGuest();
-	}
-
-	/**
-	 * Returns the uri scheda of this servizio ente.
-	 *
-	 * @return the uri scheda of this servizio ente
-	 */
-	@Override
-	public String getUriScheda() {
-		return model.getUriScheda();
+	public String getUriEsterna() {
+		return model.getUriEsterna();
 	}
 
 	/**
@@ -680,6 +734,16 @@ public class ServizioEnteWrapper
 	}
 
 	/**
+	 * Sets the catalogo servizio article ID of this servizio ente.
+	 *
+	 * @param catalogoServizioArticleId the catalogo servizio article ID of this servizio ente
+	 */
+	@Override
+	public void setCatalogoServizioArticleId(long catalogoServizioArticleId) {
+		model.setCatalogoServizioArticleId(catalogoServizioArticleId);
+	}
+
+	/**
 	 * Sets whether this servizio ente is chatbot.
 	 *
 	 * @param chatbot the chatbot of this servizio ente
@@ -780,6 +844,16 @@ public class ServizioEnteWrapper
 	}
 
 	/**
+	 * Sets the livello autenticazione of this servizio ente.
+	 *
+	 * @param livelloAutenticazione the livello autenticazione of this servizio ente
+	 */
+	@Override
+	public void setLivelloAutenticazione(int livelloAutenticazione) {
+		model.setLivelloAutenticazione(livelloAutenticazione);
+	}
+
+	/**
 	 * Sets the modified date of this servizio ente.
 	 *
 	 * @param modifiedDate the modified date of this servizio ente
@@ -845,6 +919,26 @@ public class ServizioEnteWrapper
 	}
 
 	/**
+	 * Sets the private layout ID of this servizio ente.
+	 *
+	 * @param privateLayoutId the private layout ID of this servizio ente
+	 */
+	@Override
+	public void setPrivateLayoutId(long privateLayoutId) {
+		model.setPrivateLayoutId(privateLayoutId);
+	}
+
+	/**
+	 * Sets the public layout ID of this servizio ente.
+	 *
+	 * @param publicLayoutId the public layout ID of this servizio ente
+	 */
+	@Override
+	public void setPublicLayoutId(long publicLayoutId) {
+		model.setPublicLayoutId(publicLayoutId);
+	}
+
+	/**
 	 * Sets the servizio ID of this servizio ente.
 	 *
 	 * @param servizioId the servizio ID of this servizio ente
@@ -852,6 +946,16 @@ public class ServizioEnteWrapper
 	@Override
 	public void setServizioId(long servizioId) {
 		model.setServizioId(servizioId);
+	}
+
+	/**
+	 * Sets the sub organization ID of this servizio ente.
+	 *
+	 * @param subOrganizationId the sub organization ID of this servizio ente
+	 */
+	@Override
+	public void setSubOrganizationId(long subOrganizationId) {
+		model.setSubOrganizationId(subOrganizationId);
 	}
 
 	/**
@@ -865,33 +969,13 @@ public class ServizioEnteWrapper
 	}
 
 	/**
-	 * Sets the uri of this servizio ente.
+	 * Sets the uri esterna of this servizio ente.
 	 *
-	 * @param uri the uri of this servizio ente
+	 * @param uriEsterna the uri esterna of this servizio ente
 	 */
 	@Override
-	public void setUri(String uri) {
-		model.setUri(uri);
-	}
-
-	/**
-	 * Sets the uri guest of this servizio ente.
-	 *
-	 * @param uriGuest the uri guest of this servizio ente
-	 */
-	@Override
-	public void setUriGuest(String uriGuest) {
-		model.setUriGuest(uriGuest);
-	}
-
-	/**
-	 * Sets the uri scheda of this servizio ente.
-	 *
-	 * @param uriScheda the uri scheda of this servizio ente
-	 */
-	@Override
-	public void setUriScheda(String uriScheda) {
-		model.setUriScheda(uriScheda);
+	public void setUriEsterna(String uriEsterna) {
+		model.setUriEsterna(uriEsterna);
 	}
 
 	/**

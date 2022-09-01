@@ -221,49 +221,75 @@ public interface ServizioEnteModel
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
-	 * Returns the uri of this servizio ente.
+	 * Returns the private layout ID of this servizio ente.
 	 *
-	 * @return the uri of this servizio ente
+	 * @return the private layout ID of this servizio ente
+	 */
+	public long getPrivateLayoutId();
+
+	/**
+	 * Sets the private layout ID of this servizio ente.
+	 *
+	 * @param privateLayoutId the private layout ID of this servizio ente
+	 */
+	public void setPrivateLayoutId(long privateLayoutId);
+
+	/**
+	 * Returns the public layout ID of this servizio ente.
+	 *
+	 * @return the public layout ID of this servizio ente
+	 */
+	public long getPublicLayoutId();
+
+	/**
+	 * Sets the public layout ID of this servizio ente.
+	 *
+	 * @param publicLayoutId the public layout ID of this servizio ente
+	 */
+	public void setPublicLayoutId(long publicLayoutId);
+
+	/**
+	 * Returns the uri esterna of this servizio ente.
+	 *
+	 * @return the uri esterna of this servizio ente
 	 */
 	@AutoEscape
-	public String getUri();
+	public String getUriEsterna();
 
 	/**
-	 * Sets the uri of this servizio ente.
+	 * Sets the uri esterna of this servizio ente.
 	 *
-	 * @param uri the uri of this servizio ente
+	 * @param uriEsterna the uri esterna of this servizio ente
 	 */
-	public void setUri(String uri);
+	public void setUriEsterna(String uriEsterna);
 
 	/**
-	 * Returns the uri guest of this servizio ente.
+	 * Returns the catalogo servizio article ID of this servizio ente.
 	 *
-	 * @return the uri guest of this servizio ente
+	 * @return the catalogo servizio article ID of this servizio ente
 	 */
-	@AutoEscape
-	public String getUriGuest();
+	public long getCatalogoServizioArticleId();
 
 	/**
-	 * Sets the uri guest of this servizio ente.
+	 * Sets the catalogo servizio article ID of this servizio ente.
 	 *
-	 * @param uriGuest the uri guest of this servizio ente
+	 * @param catalogoServizioArticleId the catalogo servizio article ID of this servizio ente
 	 */
-	public void setUriGuest(String uriGuest);
+	public void setCatalogoServizioArticleId(long catalogoServizioArticleId);
 
 	/**
-	 * Returns the uri scheda of this servizio ente.
+	 * Returns the sub organization ID of this servizio ente.
 	 *
-	 * @return the uri scheda of this servizio ente
+	 * @return the sub organization ID of this servizio ente
 	 */
-	@AutoEscape
-	public String getUriScheda();
+	public long getSubOrganizationId();
 
 	/**
-	 * Sets the uri scheda of this servizio ente.
+	 * Sets the sub organization ID of this servizio ente.
 	 *
-	 * @param uriScheda the uri scheda of this servizio ente
+	 * @param subOrganizationId the sub organization ID of this servizio ente
 	 */
-	public void setUriScheda(String uriScheda);
+	public void setSubOrganizationId(long subOrganizationId);
 
 	/**
 	 * Returns the autenticazione of this servizio ente.
@@ -285,6 +311,20 @@ public interface ServizioEnteModel
 	 * @param autenticazione the autenticazione of this servizio ente
 	 */
 	public void setAutenticazione(boolean autenticazione);
+
+	/**
+	 * Returns the livello autenticazione of this servizio ente.
+	 *
+	 * @return the livello autenticazione of this servizio ente
+	 */
+	public int getLivelloAutenticazione();
+
+	/**
+	 * Sets the livello autenticazione of this servizio ente.
+	 *
+	 * @param livelloAutenticazione the livello autenticazione of this servizio ente
+	 */
+	public void setLivelloAutenticazione(int livelloAutenticazione);
 
 	/**
 	 * Returns the data inizio attivazione of this servizio ente.

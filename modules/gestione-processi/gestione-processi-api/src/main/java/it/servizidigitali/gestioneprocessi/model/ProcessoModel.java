@@ -271,18 +271,19 @@ public interface ProcessoModel
 	public void setMultiente(boolean multiente);
 
 	/**
-	 * Returns the file entry ID of this processo.
+	 * Returns the deployment ID of this processo.
 	 *
-	 * @return the file entry ID of this processo
+	 * @return the deployment ID of this processo
 	 */
-	public long getFileEntryId();
+	@AutoEscape
+	public String getDeploymentId();
 
 	/**
-	 * Sets the file entry ID of this processo.
+	 * Sets the deployment ID of this processo.
 	 *
-	 * @param fileEntryId the file entry ID of this processo
+	 * @param deploymentId the deployment ID of this processo
 	 */
-	public void setFileEntryId(long fileEntryId);
+	public void setDeploymentId(String deploymentId);
 
 	/**
 	 * Returns the attivo of this processo.

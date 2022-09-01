@@ -34,9 +34,11 @@ import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
+import it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -77,6 +79,15 @@ public interface ComunicazioneLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Comunicazione addComunicazione(Comunicazione comunicazione);
+
+	public Comunicazione addComunicazione(
+			long groupId, long companyId, long userId, long organizationId,
+			String userName, String titolo, String descrizione, Date dataInizio,
+			Date dataFine, long tipologiaId, Long destinatarioUserId,
+			long destinatarioOrganizationId)
+		throws PortalException;
+
+	public int countComunicazioni(ComunicazioneFilters filters);
 
 	/**
 	 * Creates a new comunicazione with the primary key. Does not add the comunicazione to the database.
@@ -296,6 +307,9 @@ public interface ComunicazioneLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Comunicazione> getNonInviate();
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -310,6 +324,14 @@ public interface ComunicazioneLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Comunicazione> searchComunicazioni(
+		ComunicazioneFilters filters);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Comunicazione> searchComunicazioni(
+		ComunicazioneFilters filters, int cur, int delta);
 
 	/**
 	 * Updates the comunicazione in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

@@ -339,9 +339,10 @@ public class FormLocalServiceUtil {
 	}
 
 	public static List<Form> search(
-		String nome, java.util.Date dataInserimentoDa,
-		java.util.Date dataInserimentoA, int delta, int cur, String orderByCol,
-		String orderByType) {
+			String nome, java.util.Date dataInserimentoDa,
+			java.util.Date dataInserimentoA, int delta, int cur,
+			String orderByCol, String orderByType)
+		throws PortalException {
 
 		return getService().search(
 			nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol,

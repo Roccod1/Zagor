@@ -92,6 +92,13 @@ public class ServizioLocalServiceUtil {
 		getService().clearTipologiaServizios(tipologiaId);
 	}
 
+	public static int countSearchServizio(
+		String nome, String codice, Boolean soloServiziAttivi) {
+
+		return getService().countSearchServizio(
+			nome, codice, soloServiziAttivi);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -401,6 +408,16 @@ public class ServizioLocalServiceUtil {
 	 */
 	public static int getServiziosCount() {
 		return getService().getServiziosCount();
+	}
+
+	public static List<Servizio> getServiziUtilizzabili(
+		List<Object> listaServiziEnte, String nome, long areaTematicaId,
+		long tipologiaId, int cur, int delta, String orderByCol,
+		String orderByType) {
+
+		return getService().getServiziUtilizzabili(
+			listaServiziEnte, nome, areaTematicaId, tipologiaId, cur, delta,
+			orderByCol, orderByType);
 	}
 
 	/**

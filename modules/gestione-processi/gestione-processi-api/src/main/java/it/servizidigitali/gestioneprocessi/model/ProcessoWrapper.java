@@ -55,7 +55,7 @@ public class ProcessoWrapper
 		attributes.put("nome", getNome());
 		attributes.put("stato", getStato());
 		attributes.put("multiente", isMultiente());
-		attributes.put("fileEntryId", getFileEntryId());
+		attributes.put("deploymentId", getDeploymentId());
 		attributes.put("attivo", isAttivo());
 
 		return attributes;
@@ -135,10 +135,10 @@ public class ProcessoWrapper
 			setMultiente(multiente);
 		}
 
-		Long fileEntryId = (Long)attributes.get("fileEntryId");
+		String deploymentId = (String)attributes.get("deploymentId");
 
-		if (fileEntryId != null) {
-			setFileEntryId(fileEntryId);
+		if (deploymentId != null) {
+			setDeploymentId(deploymentId);
 		}
 
 		Boolean attivo = (Boolean)attributes.get("attivo");
@@ -194,13 +194,13 @@ public class ProcessoWrapper
 	}
 
 	/**
-	 * Returns the file entry ID of this processo.
+	 * Returns the deployment ID of this processo.
 	 *
-	 * @return the file entry ID of this processo
+	 * @return the deployment ID of this processo
 	 */
 	@Override
-	public long getFileEntryId() {
-		return model.getFileEntryId();
+	public String getDeploymentId() {
+		return model.getDeploymentId();
 	}
 
 	/**
@@ -379,13 +379,13 @@ public class ProcessoWrapper
 	}
 
 	/**
-	 * Sets the file entry ID of this processo.
+	 * Sets the deployment ID of this processo.
 	 *
-	 * @param fileEntryId the file entry ID of this processo
+	 * @param deploymentId the deployment ID of this processo
 	 */
 	@Override
-	public void setFileEntryId(long fileEntryId) {
-		model.setFileEntryId(fileEntryId);
+	public void setDeploymentId(String deploymentId) {
+		model.setDeploymentId(deploymentId);
 	}
 
 	/**

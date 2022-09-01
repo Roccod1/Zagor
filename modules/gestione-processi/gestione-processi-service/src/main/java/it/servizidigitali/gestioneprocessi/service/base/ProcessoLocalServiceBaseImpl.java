@@ -48,6 +48,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import it.servizidigitali.gestioneprocessi.model.Processo;
 import it.servizidigitali.gestioneprocessi.service.ProcessoLocalService;
 import it.servizidigitali.gestioneprocessi.service.ProcessoLocalServiceUtil;
+import it.servizidigitali.gestioneprocessi.service.persistence.ProcessoFinder;
 import it.servizidigitali.gestioneprocessi.service.persistence.ProcessoPersistence;
 
 import java.io.Serializable;
@@ -587,6 +588,9 @@ public abstract class ProcessoLocalServiceBaseImpl
 
 	@Reference
 	protected ProcessoPersistence processoPersistence;
+
+	@Reference
+	protected ProcessoFinder processoFinder;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService

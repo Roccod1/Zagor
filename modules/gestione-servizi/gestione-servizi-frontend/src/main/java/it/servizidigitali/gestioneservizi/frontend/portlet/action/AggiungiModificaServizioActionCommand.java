@@ -61,9 +61,6 @@ public class AggiungiModificaServizioActionCommand extends BaseMVCActionCommand 
 		String descrizione = ParamUtil.getString(actionRequest, "descrizione");
 		Long areaTematicaId = ParamUtil.getLong(actionRequest, "areaTematicaId");
 		String descrizioneEstesa = ParamUtil.getString(actionRequest, "descrizioneEstesa");
-		String uri = ParamUtil.getString(actionRequest, "uri");
-		String uriGuest = ParamUtil.getString(actionRequest, "uriGuest");
-		String uriScheda = ParamUtil.getString(actionRequest, "uriScheda");
 		Boolean autenticazione = ParamUtil.getBoolean(actionRequest, "autenticazione");
 		Boolean attivo = ParamUtil.getBoolean(actionRequest, "attivo");
 		Date dataInizioAttivazione = ParamUtil.getDate(actionRequest, "dataInizioAttivazione", GestioneServiziPortlet.SIMPLE_DATE_FORMAT, null);
@@ -132,9 +129,6 @@ public class AggiungiModificaServizioActionCommand extends BaseMVCActionCommand 
 		servizio.setDescrizione(descrizione);						
 		servizio.setAreaTematicaId(areaTematicaId);						
 		servizio.setDescrizioneEstesa(descrizioneEstesa);						
-		servizio.setUri(uri);						
-		servizio.setUriGuest(uriGuest);						
-		servizio.setUriScheda(uriScheda);						
 		servizio.setAutenticazione(autenticazione);						
 		servizio.setAttivo(attivo);						
 		servizio.setDataInizioAttivazione(dataInizioAttivazione);						

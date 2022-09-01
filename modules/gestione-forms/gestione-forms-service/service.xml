@@ -32,7 +32,6 @@
 		<column name="codice" type="String" />
 		<column name="json" type="String" />
 		<column name="principale" type="boolean" />
-		<column name="multiutente" type="boolean" />
 		
 		<!-- FK -->
 		<column name="organizationId" type="long" />
@@ -124,10 +123,10 @@
 		<column name="nome" type="String" />
 		<column name="descrizione" type="String" />
 		<column name="categoria" type="String" />
-		<column name="estensioniFile" type="String" db-name="estensioni_file"/>
+		<column name="estensioniFile" type="String"/>
 		<column name="stato" type="String" />
-		<column name="numeroRequired" type="long" db-name="numero_required"/>
-		<column name="dataScadenzaRequired" type="long" db-name="data_scadenza_required"/>
+		<column name="numeroRequired" type="long"/>
+		<column name="dataScadenzaRequired" type="long"/>
 		
 		<!-- FK -->
 		<column name="organizationId" type="long" />	

@@ -17,6 +17,7 @@ package it.servizidigitali.gestioneservizi.model.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.servizidigitali.gestioneservizi.model.AreaTematica;
 import it.servizidigitali.gestioneservizi.model.Tipologia;
 
 /**
@@ -25,6 +26,7 @@ import it.servizidigitali.gestioneservizi.model.Tipologia;
 public class ServizioImpl extends ServizioBaseImpl {
 	
 	private List<Tipologia> listaTipologie = null;
+	private AreaTematica areaTematica = null;
 	
 	public ServizioImpl() {
 		this.listaTipologie = new ArrayList<Tipologia>();
@@ -36,6 +38,12 @@ public class ServizioImpl extends ServizioBaseImpl {
 	public void setListaTipologie(List<Tipologia> listaTipologie) {
 		this.listaTipologie = listaTipologie;
 	}
-	
-	
+
+	public AreaTematica getAreaTematica() {
+		return areaTematica;
+	}
+
+	public void setAreaTematica(AreaTematica areaTematica) {
+		this.areaTematica = areaTematica;
+	}
 }

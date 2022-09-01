@@ -79,7 +79,7 @@ public class ProcessoModelImpl
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"codice", Types.VARCHAR}, {"nome", Types.VARCHAR},
 		{"stato", Types.VARCHAR}, {"multiente", Types.BOOLEAN},
-		{"fileEntryId", Types.BIGINT}, {"attivo", Types.BOOLEAN}
+		{"deploymentId", Types.VARCHAR}, {"attivo", Types.BOOLEAN}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -98,12 +98,12 @@ public class ProcessoModelImpl
 		TABLE_COLUMNS_MAP.put("nome", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("stato", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("multiente", Types.BOOLEAN);
-		TABLE_COLUMNS_MAP.put("fileEntryId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("deploymentId", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("attivo", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table processo (uuid_ VARCHAR(75) null,processoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codice VARCHAR(75) null,nome VARCHAR(75) null,stato VARCHAR(75) null,multiente BOOLEAN,fileEntryId LONG,attivo BOOLEAN)";
+		"create table processo (uuid_ VARCHAR(75) null,processoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codice VARCHAR(75) null,nome VARCHAR(75) null,stato VARCHAR(75) null,multiente BOOLEAN,deploymentId VARCHAR(75) null,attivo BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP = "drop table processo";
 
@@ -342,10 +342,10 @@ public class ProcessoModelImpl
 		attributeGetterFunctions.put("multiente", Processo::getMultiente);
 		attributeSetterBiConsumers.put(
 			"multiente", (BiConsumer<Processo, Boolean>)Processo::setMultiente);
-		attributeGetterFunctions.put("fileEntryId", Processo::getFileEntryId);
+		attributeGetterFunctions.put("deploymentId", Processo::getDeploymentId);
 		attributeSetterBiConsumers.put(
-			"fileEntryId",
-			(BiConsumer<Processo, Long>)Processo::setFileEntryId);
+			"deploymentId",
+			(BiConsumer<Processo, String>)Processo::setDeploymentId);
 		attributeGetterFunctions.put("attivo", Processo::getAttivo);
 		attributeSetterBiConsumers.put(
 			"attivo", (BiConsumer<Processo, Boolean>)Processo::setAttivo);
@@ -633,17 +633,22 @@ public class ProcessoModelImpl
 	}
 
 	@Override
-	public long getFileEntryId() {
-		return _fileEntryId;
+	public String getDeploymentId() {
+		if (_deploymentId == null) {
+			return "";
+		}
+		else {
+			return _deploymentId;
+		}
 	}
 
 	@Override
-	public void setFileEntryId(long fileEntryId) {
+	public void setDeploymentId(String deploymentId) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
 
-		_fileEntryId = fileEntryId;
+		_deploymentId = deploymentId;
 	}
 
 	@Override
@@ -749,7 +754,7 @@ public class ProcessoModelImpl
 		processoImpl.setNome(getNome());
 		processoImpl.setStato(getStato());
 		processoImpl.setMultiente(isMultiente());
-		processoImpl.setFileEntryId(getFileEntryId());
+		processoImpl.setDeploymentId(getDeploymentId());
 		processoImpl.setAttivo(isAttivo());
 
 		processoImpl.resetOriginalValues();
@@ -779,8 +784,8 @@ public class ProcessoModelImpl
 		processoImpl.setStato(this.<String>getColumnOriginalValue("stato"));
 		processoImpl.setMultiente(
 			this.<Boolean>getColumnOriginalValue("multiente"));
-		processoImpl.setFileEntryId(
-			this.<Long>getColumnOriginalValue("fileEntryId"));
+		processoImpl.setDeploymentId(
+			this.<String>getColumnOriginalValue("deploymentId"));
 		processoImpl.setAttivo(this.<Boolean>getColumnOriginalValue("attivo"));
 
 		return processoImpl;
@@ -927,7 +932,13 @@ public class ProcessoModelImpl
 
 		processoCacheModel.multiente = isMultiente();
 
-		processoCacheModel.fileEntryId = getFileEntryId();
+		processoCacheModel.deploymentId = getDeploymentId();
+
+		String deploymentId = processoCacheModel.deploymentId;
+
+		if ((deploymentId != null) && (deploymentId.length() == 0)) {
+			processoCacheModel.deploymentId = null;
+		}
 
 		processoCacheModel.attivo = isAttivo();
 
@@ -1034,7 +1045,7 @@ public class ProcessoModelImpl
 	private String _nome;
 	private String _stato;
 	private boolean _multiente;
-	private long _fileEntryId;
+	private String _deploymentId;
 	private boolean _attivo;
 
 	public <T> T getColumnValue(String columnName) {
@@ -1078,7 +1089,7 @@ public class ProcessoModelImpl
 		_columnOriginalValues.put("nome", _nome);
 		_columnOriginalValues.put("stato", _stato);
 		_columnOriginalValues.put("multiente", _multiente);
-		_columnOriginalValues.put("fileEntryId", _fileEntryId);
+		_columnOriginalValues.put("deploymentId", _deploymentId);
 		_columnOriginalValues.put("attivo", _attivo);
 	}
 
@@ -1127,7 +1138,7 @@ public class ProcessoModelImpl
 
 		columnBitmasks.put("multiente", 2048L);
 
-		columnBitmasks.put("fileEntryId", 4096L);
+		columnBitmasks.put("deploymentId", 4096L);
 
 		columnBitmasks.put("attivo", 8192L);
 

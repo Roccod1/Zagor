@@ -33,8 +33,13 @@ import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
  * @author pindi
  */
 
-@Component(immediate = true, property = { "javax.portlet.name=" + GestioneEntiPortletKeys.GESTIONEENTI,
-		"mvc.command.name=" + GestioneEntiPortletKeys.SALVA_ACTION_COMMAND_NAME }, service = MVCActionCommand.class)
+@Component(immediate = true, //
+		property = { //
+				"javax.portlet.name=" + GestioneEntiPortletKeys.GESTIONEENTI, //
+				"mvc.command.name=" + GestioneEntiPortletKeys.SALVA_ACTION_COMMAND_NAME //
+		}, //
+		service = MVCActionCommand.class//
+)
 public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionCommand {
 
 	private static final Log _log = LogFactoryUtil.getLog(AggiungiModificaEnteServizioActionCommand.class);
@@ -53,10 +58,11 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 
 		Long servizioId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ID);
 		Long organizationId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_ID);
-		String uri = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI);
-		String uriGuest = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI_GUEST);
-		String uriScheda = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_SCHEDA);
+		long uri = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_PRIVATE_LAYOUT_ID);
+		long uriGuest = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_PUBLIC_LAYOUT_ID);
+		long catalogoServizioArticleId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_CATALOGO_SERVIZI_ARTICLE_ID);
 		Boolean autenticazione = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_AUTENTICAZIONE);
+		Integer livelloAutenticazione = ParamUtil.getInteger(actionRequest, GestioneEntiPortletKeys.SERVIZIO_LIVELLO_AUTENTICAZIONE);
 		Boolean attivo = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ATTIVO);
 		Date dataInizioAttivazione = ParamUtil.getDate(actionRequest, GestioneEntiPortletKeys.SERVIZIO_DATA_INIZIO_ATTIVAZIONE, GestioneEntiPortlet.SIMPLE_DATE_FORMAT, null);
 		Date dataFineAttivazione = ParamUtil.getDate(actionRequest, GestioneEntiPortletKeys.SERVIZIO_DATA_FINE_ATTIVAZIONE, GestioneEntiPortlet.SIMPLE_DATE_FORMAT, null);
@@ -69,6 +75,8 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		Boolean chatBot = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_CHATBOT);
 		Boolean iseeInps = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ISEE_INPS);
 		Boolean timbroCertificato = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_TIMBRO_CERTIFICATO);
+		String uriEsterna = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI_ESTERNA);
+		Long subOrganizationId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_SOTTO_ORGANIZZAZIONE_ID);
 
 		String redirect = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.INDIRIZZO_REDIRECT);
 
@@ -104,34 +112,30 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 				}
 			}
 
-			if (!Validator.isBlank(uri) && uri.trim().length() > 255) {
-				_log.error("La lunghezza dell'uri e' superiore a 255 caratteri");
-				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI);
-				throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI);
-			}
-
-			if (!Validator.isBlank(uriGuest) && uriGuest.trim().length() > 255) {
-				_log.error("La lunghezza dell'uriGuest e' superiore a 255 caratteri");
-				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_GUEST);
-				throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_GUEST);
-			}
-
-			if (!Validator.isBlank(uriScheda) && uriScheda.trim().length() > 255) {
-				_log.error("La lunghezza dell'uriScheda e' superiore a 255 caratteri");
-				SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_SCHEDA);
-				throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_SCHEDA);
+			if (Validator.isNotNull(uriEsterna)) {
+				if (!Validator.isUrl(uriEsterna)) {
+					SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_ESTERNA);
+					throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI_ESTERNA);
+				}
+				else {
+					if (uriEsterna.trim().length() > 255) {
+						SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI);
+						throw new Exception(GestioneEntiPortletKeys.ERRORE_VALIDAZIONE_URI);
+					}
+				}
 			}
 
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 			ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
-			servizioEnte.setGroupId(themeDisplay.getCompanyGroupId());
+			servizioEnte.setGroupId(themeDisplay.getSiteGroupId());
 			servizioEnte.setUserId(themeDisplay.getUserId());
-			servizioEnte.setUserName(themeDisplay.getUser().getFullName());
 
-			servizioEnte.setUri(uri);
-			servizioEnte.setUriGuest(uriGuest);
-			servizioEnte.setUriScheda(uriScheda);
+			servizioEnte.setPrivateLayoutId(uri);
+			servizioEnte.setPublicLayoutId(uriGuest);
+			servizioEnte.setCatalogoServizioArticleId(catalogoServizioArticleId);
+			servizioEnte.setSubOrganizationId(subOrganizationId);
 			servizioEnte.setAutenticazione(autenticazione);
+			servizioEnte.setLivelloAutenticazione(livelloAutenticazione);
 			servizioEnte.setAttivo(attivo);
 			servizioEnte.setDataInizioAttivazione(dataInizioAttivazione);
 			servizioEnte.setCittadino(cittadino);
@@ -144,6 +148,8 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 			servizioEnte.setChatbot(chatBot);
 			servizioEnte.setIseeInps(iseeInps);
 			servizioEnte.setTimbroCertificato(timbroCertificato);
+			servizioEnte.setUriEsterna(uriEsterna);
+			servizioEnte.setUserName(themeDisplay.getUser().getFullName());
 
 			servizioEnteLocalService.updateServizioEnte(servizioEnte);
 			SessionMessages.add(actionRequest, GestioneEntiPortletKeys.SALVATAGGIO_SUCCESSO);

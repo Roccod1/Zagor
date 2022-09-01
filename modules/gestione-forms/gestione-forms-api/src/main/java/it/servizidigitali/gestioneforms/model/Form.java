@@ -65,4 +65,8 @@ public interface Form extends FormModel, PersistedModel {
 			<it.servizidigitali.gestioneforms.model.DefinizioneAllegato>
 				listaDefinizioneAllegato);
 
+	public String getNomeEnte();
+
+	public void setNomeEnte(String nomeEnte);
+
 }

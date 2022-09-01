@@ -380,9 +380,10 @@ public class FormLocalServiceWrapper
 
 	@Override
 	public java.util.List<it.servizidigitali.gestioneforms.model.Form> search(
-		String nome, java.util.Date dataInserimentoDa,
-		java.util.Date dataInserimentoA, int delta, int cur, String orderByCol,
-		String orderByType) {
+			String nome, java.util.Date dataInserimentoDa,
+			java.util.Date dataInserimentoA, int delta, int cur,
+			String orderByCol, String orderByType)
+		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _formLocalService.search(
 			nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol,

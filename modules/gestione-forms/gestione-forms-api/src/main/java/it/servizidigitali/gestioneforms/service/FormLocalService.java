@@ -309,8 +309,9 @@ public interface FormLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Form> search(
-		String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta,
-		int cur, String orderByCol, String orderByType);
+			String nome, Date dataInserimentoDa, Date dataInserimentoA,
+			int delta, int cur, String orderByCol, String orderByType)
+		throws PortalException;
 
 	/**
 	 * Updates the form in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

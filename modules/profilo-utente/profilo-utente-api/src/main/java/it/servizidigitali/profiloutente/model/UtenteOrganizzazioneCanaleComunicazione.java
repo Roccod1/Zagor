@@ -118,4 +118,7 @@ public interface UtenteOrganizzazioneCanaleComunicazione
 
 			};
 
+	public it.servizidigitali.profiloutente.model.CanaleComunicazione
+		getCanale();
+
 }

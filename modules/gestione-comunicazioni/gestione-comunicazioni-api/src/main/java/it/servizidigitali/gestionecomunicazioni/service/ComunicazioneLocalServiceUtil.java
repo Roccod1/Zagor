@@ -60,6 +60,27 @@ public class ComunicazioneLocalServiceUtil {
 		return getService().addComunicazione(comunicazione);
 	}
 
+	public static Comunicazione addComunicazione(
+			long groupId, long companyId, long userId, long organizationId,
+			String userName, String titolo, String descrizione,
+			java.util.Date dataInizio, java.util.Date dataFine,
+			long tipologiaId, Long destinatarioUserId,
+			long destinatarioOrganizationId)
+		throws PortalException {
+
+		return getService().addComunicazione(
+			groupId, companyId, userId, organizationId, userName, titolo,
+			descrizione, dataInizio, dataFine, tipologiaId, destinatarioUserId,
+			destinatarioOrganizationId);
+	}
+
+	public static int countComunicazioni(
+		it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters
+			filters) {
+
+		return getService().countComunicazioni(filters);
+	}
+
 	/**
 	 * Creates a new comunicazione with the primary key. Does not add the comunicazione to the database.
 	 *
@@ -330,6 +351,10 @@ public class ComunicazioneLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
+	public static List<Comunicazione> getNonInviate() {
+		return getService().getNonInviate();
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -346,6 +371,21 @@ public class ComunicazioneLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static List<Comunicazione> searchComunicazioni(
+		it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters
+			filters) {
+
+		return getService().searchComunicazioni(filters);
+	}
+
+	public static List<Comunicazione> searchComunicazioni(
+		it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters
+			filters,
+		int cur, int delta) {
+
+		return getService().searchComunicazioni(filters, cur, delta);
 	}
 
 	/**

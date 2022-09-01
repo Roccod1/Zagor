@@ -78,8 +78,7 @@ public class FormModelImpl extends BaseModelImpl<Form> implements FormModel {
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"nome", Types.VARCHAR}, {"descrizione", Types.VARCHAR},
 		{"codice", Types.VARCHAR}, {"json", Types.VARCHAR},
-		{"principale", Types.BOOLEAN}, {"multiutente", Types.BOOLEAN},
-		{"organizationId", Types.BIGINT}
+		{"principale", Types.BOOLEAN}, {"organizationId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -99,12 +98,11 @@ public class FormModelImpl extends BaseModelImpl<Form> implements FormModel {
 		TABLE_COLUMNS_MAP.put("codice", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("json", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("principale", Types.BOOLEAN);
-		TABLE_COLUMNS_MAP.put("multiutente", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("organizationId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table form (uuid_ VARCHAR(75) null,formId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,codice VARCHAR(75) null,json VARCHAR(75) null,principale BOOLEAN,multiutente BOOLEAN,organizationId LONG)";
+		"create table form (uuid_ VARCHAR(75) null,formId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,codice VARCHAR(75) null,json VARCHAR(75) null,principale BOOLEAN,organizationId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table form";
 
@@ -326,9 +324,6 @@ public class FormModelImpl extends BaseModelImpl<Form> implements FormModel {
 		attributeGetterFunctions.put("principale", Form::getPrincipale);
 		attributeSetterBiConsumers.put(
 			"principale", (BiConsumer<Form, Boolean>)Form::setPrincipale);
-		attributeGetterFunctions.put("multiutente", Form::getMultiutente);
-		attributeSetterBiConsumers.put(
-			"multiutente", (BiConsumer<Form, Boolean>)Form::setMultiutente);
 		attributeGetterFunctions.put("organizationId", Form::getOrganizationId);
 		attributeSetterBiConsumers.put(
 			"organizationId", (BiConsumer<Form, Long>)Form::setOrganizationId);
@@ -626,25 +621,6 @@ public class FormModelImpl extends BaseModelImpl<Form> implements FormModel {
 	}
 
 	@Override
-	public boolean getMultiutente() {
-		return _multiutente;
-	}
-
-	@Override
-	public boolean isMultiutente() {
-		return _multiutente;
-	}
-
-	@Override
-	public void setMultiutente(boolean multiutente) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_multiutente = multiutente;
-	}
-
-	@Override
 	public long getOrganizationId() {
 		return _organizationId;
 	}
@@ -733,7 +709,6 @@ public class FormModelImpl extends BaseModelImpl<Form> implements FormModel {
 		formImpl.setCodice(getCodice());
 		formImpl.setJson(getJson());
 		formImpl.setPrincipale(isPrincipale());
-		formImpl.setMultiutente(isMultiutente());
 		formImpl.setOrganizationId(getOrganizationId());
 
 		formImpl.resetOriginalValues();
@@ -761,8 +736,6 @@ public class FormModelImpl extends BaseModelImpl<Form> implements FormModel {
 		formImpl.setJson(this.<String>getColumnOriginalValue("json"));
 		formImpl.setPrincipale(
 			this.<Boolean>getColumnOriginalValue("principale"));
-		formImpl.setMultiutente(
-			this.<Boolean>getColumnOriginalValue("multiutente"));
 		formImpl.setOrganizationId(
 			this.<Long>getColumnOriginalValue("organizationId"));
 
@@ -916,8 +889,6 @@ public class FormModelImpl extends BaseModelImpl<Form> implements FormModel {
 
 		formCacheModel.principale = isPrincipale();
 
-		formCacheModel.multiutente = isMultiutente();
-
 		formCacheModel.organizationId = getOrganizationId();
 
 		return formCacheModel;
@@ -1022,7 +993,6 @@ public class FormModelImpl extends BaseModelImpl<Form> implements FormModel {
 	private String _codice;
 	private String _json;
 	private boolean _principale;
-	private boolean _multiutente;
 	private long _organizationId;
 
 	public <T> T getColumnValue(String columnName) {
@@ -1067,7 +1037,6 @@ public class FormModelImpl extends BaseModelImpl<Form> implements FormModel {
 		_columnOriginalValues.put("codice", _codice);
 		_columnOriginalValues.put("json", _json);
 		_columnOriginalValues.put("principale", _principale);
-		_columnOriginalValues.put("multiutente", _multiutente);
 		_columnOriginalValues.put("organizationId", _organizationId);
 	}
 
@@ -1118,9 +1087,7 @@ public class FormModelImpl extends BaseModelImpl<Form> implements FormModel {
 
 		columnBitmasks.put("principale", 4096L);
 
-		columnBitmasks.put("multiutente", 8192L);
-
-		columnBitmasks.put("organizationId", 16384L);
+		columnBitmasks.put("organizationId", 8192L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

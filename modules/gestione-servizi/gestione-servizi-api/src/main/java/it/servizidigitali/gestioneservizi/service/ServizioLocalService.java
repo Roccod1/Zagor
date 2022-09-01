@@ -92,6 +92,9 @@ public interface ServizioLocalService
 
 	public void clearTipologiaServizios(long tipologiaId);
 
+	public int countSearchServizio(
+		String nome, String codice, Boolean soloServiziAttivi);
+
 	/**
 	 * @throws PortalException
 	 */
@@ -332,6 +335,12 @@ public interface ServizioLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getServiziosCount();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Servizio> getServiziUtilizzabili(
+		List<Object> listaServiziEnte, String nome, long areaTematicaId,
+		long tipologiaId, int cur, int delta, String orderByCol,
+		String orderByType);
 
 	/**
 	 * Returns the tipologiaIds of the tipologias associated with the servizio.

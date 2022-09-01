@@ -48,6 +48,8 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalServiceUtil;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPersistence;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.IstanzaFormPersistence;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.RichiestaPersistence;
 
 import java.io.Serializable;
@@ -583,6 +585,12 @@ public abstract class RichiestaLocalServiceBaseImpl
 			throw new RuntimeException(reflectiveOperationException);
 		}
 	}
+
+	@Reference
+	protected AllegatoRichiestaPersistence allegatoRichiestaPersistence;
+
+	@Reference
+	protected IstanzaFormPersistence istanzaFormPersistence;
 
 	protected RichiestaLocalService richiestaLocalService;
 

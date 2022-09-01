@@ -59,15 +59,14 @@ public class TipoDocumentoTable extends BaseTable<TipoDocumentoTable> {
 		"categoria", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<TipoDocumentoTable, String> estensioniFile =
 		createColumn(
-			"estensioni_file", String.class, Types.VARCHAR,
-			Column.FLAG_DEFAULT);
+			"estensioniFile", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<TipoDocumentoTable, String> stato = createColumn(
 		"stato", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<TipoDocumentoTable, Long> numeroRequired = createColumn(
-		"numero_required", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+		"numeroRequired", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<TipoDocumentoTable, Long> dataScadenzaRequired =
 		createColumn(
-			"data_scadenza_required", Long.class, Types.BIGINT,
+			"dataScadenzaRequired", Long.class, Types.BIGINT,
 			Column.FLAG_DEFAULT);
 	public final Column<TipoDocumentoTable, Long> organizationId = createColumn(
 		"organizationId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
