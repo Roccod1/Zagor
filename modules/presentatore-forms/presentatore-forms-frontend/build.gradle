@@ -10,6 +10,7 @@ dependencies {
 	compileOnly project(":modules:scrivania-operatore:scrivania-operatore-api")
 	compileOnly project(":modules:gestione-procedure:gestione-procedure-api")
 	compileOnly project(":modules:gestione-servizi:gestione-servizi-api")
+	compileOnly project(":modules:gestione-enti:gestione-enti-api")
 }
 
 buildscript {
