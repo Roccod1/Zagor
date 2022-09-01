@@ -16,6 +16,8 @@ package it.servizidigitali.gestioneprocedure.service.impl;
 
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
@@ -90,8 +92,11 @@ public class ProceduraFormLocalServiceImpl
 		}
 		
 		String listaId = String.join(",", listaFormIntegrativiProcedura);
+		listaId = "[" + listaId + "]";
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(listaId);
+		String jsonArrayString = JSONFactoryUtil.createJSONSerializer().serialize(jsonArray);
 		
-		return listaId;
+		return jsonArrayString;
 	}
 	
 	public long getFormPrincipaleProcedura(long idProcedura) throws PortalException {

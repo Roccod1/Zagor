@@ -74,11 +74,9 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		String tipologiaServizio = ParamUtil.getString(actionRequest, GestioneProcedurePortletKeys.TIPOLOGIA_SERVIZIO);
 		
 		String[] tipiIntegrazioniBackoffice = ParamUtil.getStringValues(actionRequest, GestioneProcedurePortletKeys.TIPI_INTEGRAZIONI_BACKOFFICE);
-		String tipoCaricamentoNucleoFamiliare = ParamUtil.getString(actionRequest, GestioneProcedurePortletKeys.CARICAMENTO_DA);
 		boolean abilitaCacheIntegrazioneBackoffice = ParamUtil.getBoolean(actionRequest, GestioneProcedurePortletKeys.ABILITA_CACHE_INTEGRAZIONI_BACKOFFICE);
 		
 		String tipoGenerazioneTemplate = ParamUtil.getString(actionRequest, GestioneProcedurePortletKeys.TIPI_GENERAZIONE_TEMPLATE);
-		boolean abilitaPagamento = ParamUtil.getBoolean(actionRequest, GestioneProcedurePortletKeys.ABILITA_PAGAMENTO);
 		
 		Procedura procedura = null;
 		ProceduraForm proceduraForm = null;
@@ -134,6 +132,15 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		proceduraForm = proceduraFormLocalService.createProceduraForm(proceduraFormPk);
 				
 		proceduraFormLocalService.salvaListaFormIntegrativi(idFormIntegrativi, procedura.getProceduraId());
+		
+		procedura.setStep1Attivo(step1Attivo);
+		procedura.setStep1TipoComponentiNucleoFamiliare(filtroComponentiNucleoFamiliare);
+		
+		procedura.setStep2TipoServizio(tipologiaServizio);
+		procedura.setStep2TipiIntegrazioneBackoffice(String.join(",", tipiIntegrazioniBackoffice));
+		procedura.setAbilitaCacheIntegrazioneBackoffice(abilitaCacheIntegrazioneBackoffice);
+		procedura.setTipoGenerazionePDF(tipoGenerazioneTemplate);
+		
 		
 		procedura.setUserId(themeDisplay.getUserId());
 		procedura.setGroupId(themeDisplay.getSiteGroupId());

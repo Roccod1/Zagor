@@ -1,14 +1,12 @@
 package it.servizidigitali.gestioneprocedure.frontend.portlet.render;
 
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.ArrayList;
@@ -21,12 +19,15 @@ import javax.portlet.RenderResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.backoffice.integration.enums.TipoIntegrazioneBackoffice;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneprocedure.frontend.constants.GestioneProcedurePortletKeys;
+import it.servizidigitali.gestioneprocedure.frontend.enumeration.FiltroComponentiNucleoFamiliare;
+import it.servizidigitali.gestioneprocedure.frontend.enumeration.TipoGenerazionePDF;
+import it.servizidigitali.gestioneprocedure.frontend.enumeration.TipoServizio;
 import it.servizidigitali.gestioneprocedure.frontend.service.GestioneProcedureMiddlewareService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
-import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneprocessi.model.Processo;
@@ -80,6 +81,7 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 		List<Form> listaFormPrincipali = new ArrayList<Form>();
 		List<Form> listaFormIntegrativi = new ArrayList<Form>();
 		
+		
 		Procedura procedura = null;
 		String listaFormIntegrativiProcedura = null;
 		long idFormPrincipale = 0;
@@ -121,11 +123,17 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 				procedura = proceduraLocalService.getProcedura(idProcedura);
 				listaFormIntegrativiProcedura = proceduraFormLocalService.getFormIntegrativiProcedura(idProcedura);
 				idFormPrincipale = proceduraFormLocalService.getFormPrincipaleProcedura(idProcedura);
+				String tipiIntegrazioneBackoffice = null;
 				
 				if(idFormPrincipale>0) {
 					renderRequest.setAttribute(GestioneProcedurePortletKeys.ID_FORM_PRINCIPALE, idFormPrincipale);
 				}
 				
+				if(Validator.isNotNull(procedura.getStep2TipiIntegrazioneBackoffice())) {
+					tipiIntegrazioneBackoffice = proceduraLocalService.getStringSelectMultipla(procedura.getStep2TipiIntegrazioneBackoffice());
+				}
+				
+				renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_TIPO_INTEGRAZIONE_BACKOFFICE_PROCEDURA, tipiIntegrazioneBackoffice);
 				renderRequest.setAttribute(GestioneProcedurePortletKeys.PROCEDURA, procedura);
 				renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_FORM_INTEGRATIVI_PROCEDURA, listaFormIntegrativiProcedura);
 			} catch (Exception e) {
@@ -133,8 +141,16 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 				SessionErrors.add(renderRequest, GestioneProcedurePortletKeys.SESSION_ERROR_IMPOSSIBILE_RECUPERARE_PROCEDURA);
 				return GestioneProcedurePortletKeys.JSP_AGGIUNGI_MODIFICA_PROCEDURA;
 			}
+		}else {
+			renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_FORM_INTEGRATIVI_PROCEDURA, GestioneProcedurePortletKeys.LISTA_VUOTA);
+			renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_TIPO_INTEGRAZIONE_BACKOFFICE_PROCEDURA, GestioneProcedurePortletKeys.LISTA_VUOTA);
 		}
 		
+		
+		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_TIPO_COMPONENTI_FAMILIARI, FiltroComponentiNucleoFamiliare.values());
+		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_TIPO_SERVIZIO, TipoServizio.values());
+		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_TIPO_GENERAZIONE_PDF, TipoGenerazionePDF.values());
+		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_TIPO_INTEGRAZIONE_BACKOFFICE,TipoIntegrazioneBackoffice.values());
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_SERVIZI,listaServizi);
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_PROCESSI,listaProcessi);
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_FORM_PRINCIPALI, listaFormPrincipali);

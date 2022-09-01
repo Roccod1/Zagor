@@ -18,6 +18,11 @@ public class GestioneProcedurePortletKeys {
 	public static final String LISTA_FORM_PRINCIPALI = "listaFormPrincipali";
 	public static final String LISTA_FORM_INTEGRATIVI = "listaFormIntegrativi";
 	public static final String LISTA_FORM_INTEGRATIVI_PROCEDURA = "listaFormIntegrativiProcedura";
+	public static final String LISTA_TIPO_INTEGRAZIONE_BACKOFFICE = "listaTipoIntegrazioneBackoffice";
+	public static final String LISTA_TIPO_INTEGRAZIONE_BACKOFFICE_PROCEDURA = "listaTipoIntegrazioneBackofficeProcedura";
+	public static final String LISTA_TIPO_GENERAZIONE_PDF = "listaTipoGenerazionePDF";
+	public static final String LISTA_TIPO_SERVIZIO = "listaTipoServizio";
+	public static final String LISTA_TIPO_COMPONENTI_FAMILIARI = "listaTipoComponentiFamiliari";
 	
 	public static final String DATA_CREAZIONE = "data-creazione";
 	public static final String AZIONI = "Azioni";
@@ -25,6 +30,7 @@ public class GestioneProcedurePortletKeys {
 	
 	public static final int DEFAULT_CUR = 1;
 	public static final int DEFAULT_DELTA = 10;
+	public static final String LISTA_VUOTA = "'listaVuota'";
 	
 	public static final String LISTA_PROCEDURE = "listaProcedure";
 	
@@ -46,10 +52,8 @@ public class GestioneProcedurePortletKeys {
 	public static final String FILTRO_COMPONENTI_NUCLEO_FAMILIARE = "filtroComponentiNucleoFamiliare";
 	public static final String TIPOLOGIA_SERVIZIO = "tipologiaServizio";
 	public static final String TIPI_INTEGRAZIONI_BACKOFFICE = "tipiIntegrazioniBackoffice";
-	public static final String CARICAMENTO_DA = "caricamentoDa";
 	public static final String TIPI_GENERAZIONE_TEMPLATE = "tipiGenerazioneTemplate";
 	public static final String ABILITA_CACHE_INTEGRAZIONI_BACKOFFICE = "abilitaCacheIntegrazioniBackoffice";
-	public static final String ABILITA_PAGAMENTO = "abilitaPagamento";
 		
 	public static final String JSP_HOME = "/view.jsp";
 	public static final String JSP_AGGIUNGI_MODIFICA_PROCEDURA = "/aggiungiModificaProcedura.jsp";

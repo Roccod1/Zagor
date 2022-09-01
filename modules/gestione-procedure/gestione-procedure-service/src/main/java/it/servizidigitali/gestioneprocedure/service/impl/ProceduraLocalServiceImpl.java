@@ -15,6 +15,9 @@
 package it.servizidigitali.gestioneprocedure.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -55,4 +58,14 @@ public class ProceduraLocalServiceImpl extends ProceduraLocalServiceBaseImpl {
 		
 		return listaProcedure;
 	}
+	
+	
+	public String getStringSelectMultipla (String string) throws JSONException {
+		string = "[" + string + "]";
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(string);
+		String jsonArrayString = JSONFactoryUtil.createJSONSerializer().serialize(jsonArray);
+		
+		return jsonArrayString;
+	}
+
 }

@@ -391,6 +391,13 @@ public class ProceduraLocalServiceWrapper
 	}
 
 	@Override
+	public String getStringSelectMultipla(String string)
+		throws com.liferay.portal.kernel.json.JSONException {
+
+		return _proceduraLocalService.getStringSelectMultipla(string);
+	}
+
+	@Override
 	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
 		search(
 			String nome, String attiva, java.util.Date dataInserimentoDa,
