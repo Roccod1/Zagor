@@ -34,7 +34,8 @@
 		<column name="step1TipoComponentiNucleoFamiliare" type="String" />
 		<column name="step2TipoServizio" type="String" />
 		<column name="step2TipiIntegrazioneBackoffice" type="String" />
-		<column name="step2AbilitaCacheIntegrazioneBackoffice" type="boolean" />
+		<column name="abilitaCacheIntegrazioneBackoffice" type="boolean" />
+		<column name="tipoGenerazionePDF" type="String" />
 		<column name="attiva" type="boolean" />
 		
 		<column name="servizioId" type="long" />
