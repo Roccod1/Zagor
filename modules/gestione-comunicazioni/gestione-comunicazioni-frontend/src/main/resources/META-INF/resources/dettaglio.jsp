@@ -25,6 +25,12 @@
 		<aui:input name="stato" value="${stato}"  readonly="true" />
 	</div>
 </div>
+<div class="row">
+	<div class="col-12">
+		<label class="control-label"><liferay-ui:message key="descrizione" /></label>
+		${comunicazione.descrizione}
+	</div>
+</div>
 
 <div class="row">
 	<div class="col-4">
