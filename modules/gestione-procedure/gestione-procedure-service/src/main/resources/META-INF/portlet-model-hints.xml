@@ -12,7 +12,10 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="nome" type="String" />
 		<field name="pecDestinazione" type="String" />
-		<field name="configurazioniPresentatoreForm" type="String" />
+		<field name="step1Attivo" type="boolean" />
+		<field name="step1TipoComponentiNucleoFamiliare" type="String" />
+		<field name="step2TipoServizio" type="String" />
+		<field name="step2TipiIntegrazioneBackoffice" type="String" />
 		<field name="attiva" type="boolean" />
 		<field name="servizioId" type="long" />
 		<field name="processoId" type="long" />

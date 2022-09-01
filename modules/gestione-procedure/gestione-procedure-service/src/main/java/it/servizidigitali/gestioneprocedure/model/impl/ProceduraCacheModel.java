@@ -62,7 +62,7 @@ public class ProceduraCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -84,8 +84,14 @@ public class ProceduraCacheModel
 		sb.append(nome);
 		sb.append(", pecDestinazione=");
 		sb.append(pecDestinazione);
-		sb.append(", configurazioniPresentatoreForm=");
-		sb.append(configurazioniPresentatoreForm);
+		sb.append(", step1Attivo=");
+		sb.append(step1Attivo);
+		sb.append(", step1TipoComponentiNucleoFamiliare=");
+		sb.append(step1TipoComponentiNucleoFamiliare);
+		sb.append(", step2TipoServizio=");
+		sb.append(step2TipoServizio);
+		sb.append(", step2TipiIntegrazioneBackoffice=");
+		sb.append(step2TipiIntegrazioneBackoffice);
 		sb.append(", attiva=");
 		sb.append(attiva);
 		sb.append(", servizioId=");
@@ -148,12 +154,29 @@ public class ProceduraCacheModel
 			proceduraImpl.setPecDestinazione(pecDestinazione);
 		}
 
-		if (configurazioniPresentatoreForm == null) {
-			proceduraImpl.setConfigurazioniPresentatoreForm("");
+		proceduraImpl.setStep1Attivo(step1Attivo);
+
+		if (step1TipoComponentiNucleoFamiliare == null) {
+			proceduraImpl.setStep1TipoComponentiNucleoFamiliare("");
 		}
 		else {
-			proceduraImpl.setConfigurazioniPresentatoreForm(
-				configurazioniPresentatoreForm);
+			proceduraImpl.setStep1TipoComponentiNucleoFamiliare(
+				step1TipoComponentiNucleoFamiliare);
+		}
+
+		if (step2TipoServizio == null) {
+			proceduraImpl.setStep2TipoServizio("");
+		}
+		else {
+			proceduraImpl.setStep2TipoServizio(step2TipoServizio);
+		}
+
+		if (step2TipiIntegrazioneBackoffice == null) {
+			proceduraImpl.setStep2TipiIntegrazioneBackoffice("");
+		}
+		else {
+			proceduraImpl.setStep2TipiIntegrazioneBackoffice(
+				step2TipiIntegrazioneBackoffice);
 		}
 
 		proceduraImpl.setAttiva(attiva);
@@ -181,7 +204,11 @@ public class ProceduraCacheModel
 		modifiedDate = objectInput.readLong();
 		nome = objectInput.readUTF();
 		pecDestinazione = objectInput.readUTF();
-		configurazioniPresentatoreForm = objectInput.readUTF();
+
+		step1Attivo = objectInput.readBoolean();
+		step1TipoComponentiNucleoFamiliare = objectInput.readUTF();
+		step2TipoServizio = objectInput.readUTF();
+		step2TipiIntegrazioneBackoffice = objectInput.readUTF();
 
 		attiva = objectInput.readBoolean();
 
@@ -231,11 +258,27 @@ public class ProceduraCacheModel
 			objectOutput.writeUTF(pecDestinazione);
 		}
 
-		if (configurazioniPresentatoreForm == null) {
+		objectOutput.writeBoolean(step1Attivo);
+
+		if (step1TipoComponentiNucleoFamiliare == null) {
 			objectOutput.writeUTF("");
 		}
 		else {
-			objectOutput.writeUTF(configurazioniPresentatoreForm);
+			objectOutput.writeUTF(step1TipoComponentiNucleoFamiliare);
+		}
+
+		if (step2TipoServizio == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(step2TipoServizio);
+		}
+
+		if (step2TipiIntegrazioneBackoffice == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(step2TipiIntegrazioneBackoffice);
 		}
 
 		objectOutput.writeBoolean(attiva);
@@ -255,7 +298,10 @@ public class ProceduraCacheModel
 	public long modifiedDate;
 	public String nome;
 	public String pecDestinazione;
-	public String configurazioniPresentatoreForm;
+	public boolean step1Attivo;
+	public String step1TipoComponentiNucleoFamiliare;
+	public String step2TipoServizio;
+	public String step2TipiIntegrazioneBackoffice;
 	public boolean attiva;
 	public long servizioId;
 	public long processoId;

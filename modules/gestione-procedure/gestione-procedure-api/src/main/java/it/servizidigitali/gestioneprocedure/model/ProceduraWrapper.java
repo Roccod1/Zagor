@@ -53,9 +53,14 @@ public class ProceduraWrapper
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("nome", getNome());
 		attributes.put("pecDestinazione", getPecDestinazione());
+		attributes.put("step1Attivo", isStep1Attivo());
 		attributes.put(
-			"configurazioniPresentatoreForm",
-			getConfigurazioniPresentatoreForm());
+			"step1TipoComponentiNucleoFamiliare",
+			getStep1TipoComponentiNucleoFamiliare());
+		attributes.put("step2TipoServizio", getStep2TipoServizio());
+		attributes.put(
+			"step2TipiIntegrazioneBackoffice",
+			getStep2TipiIntegrazioneBackoffice());
 		attributes.put("attiva", isAttiva());
 		attributes.put("servizioId", getServizioId());
 		attributes.put("processoId", getProcessoId());
@@ -125,11 +130,31 @@ public class ProceduraWrapper
 			setPecDestinazione(pecDestinazione);
 		}
 
-		String configurazioniPresentatoreForm = (String)attributes.get(
-			"configurazioniPresentatoreForm");
+		Boolean step1Attivo = (Boolean)attributes.get("step1Attivo");
 
-		if (configurazioniPresentatoreForm != null) {
-			setConfigurazioniPresentatoreForm(configurazioniPresentatoreForm);
+		if (step1Attivo != null) {
+			setStep1Attivo(step1Attivo);
+		}
+
+		String step1TipoComponentiNucleoFamiliare = (String)attributes.get(
+			"step1TipoComponentiNucleoFamiliare");
+
+		if (step1TipoComponentiNucleoFamiliare != null) {
+			setStep1TipoComponentiNucleoFamiliare(
+				step1TipoComponentiNucleoFamiliare);
+		}
+
+		String step2TipoServizio = (String)attributes.get("step2TipoServizio");
+
+		if (step2TipoServizio != null) {
+			setStep2TipoServizio(step2TipoServizio);
+		}
+
+		String step2TipiIntegrazioneBackoffice = (String)attributes.get(
+			"step2TipiIntegrazioneBackoffice");
+
+		if (step2TipiIntegrazioneBackoffice != null) {
+			setStep2TipiIntegrazioneBackoffice(step2TipiIntegrazioneBackoffice);
 		}
 
 		Boolean attiva = (Boolean)attributes.get("attiva");
@@ -174,16 +199,6 @@ public class ProceduraWrapper
 	@Override
 	public long getCompanyId() {
 		return model.getCompanyId();
-	}
-
-	/**
-	 * Returns the configurazioni presentatore form of this procedura.
-	 *
-	 * @return the configurazioni presentatore form of this procedura
-	 */
-	@Override
-	public String getConfigurazioniPresentatoreForm() {
-		return model.getConfigurazioniPresentatoreForm();
 	}
 
 	/**
@@ -277,6 +292,46 @@ public class ProceduraWrapper
 	}
 
 	/**
+	 * Returns the step1 attivo of this procedura.
+	 *
+	 * @return the step1 attivo of this procedura
+	 */
+	@Override
+	public boolean getStep1Attivo() {
+		return model.getStep1Attivo();
+	}
+
+	/**
+	 * Returns the step1 tipo componenti nucleo familiare of this procedura.
+	 *
+	 * @return the step1 tipo componenti nucleo familiare of this procedura
+	 */
+	@Override
+	public String getStep1TipoComponentiNucleoFamiliare() {
+		return model.getStep1TipoComponentiNucleoFamiliare();
+	}
+
+	/**
+	 * Returns the step2 tipi integrazione backoffice of this procedura.
+	 *
+	 * @return the step2 tipi integrazione backoffice of this procedura
+	 */
+	@Override
+	public String getStep2TipiIntegrazioneBackoffice() {
+		return model.getStep2TipiIntegrazioneBackoffice();
+	}
+
+	/**
+	 * Returns the step2 tipo servizio of this procedura.
+	 *
+	 * @return the step2 tipo servizio of this procedura
+	 */
+	@Override
+	public String getStep2TipoServizio() {
+		return model.getStep2TipoServizio();
+	}
+
+	/**
 	 * Returns the user ID of this procedura.
 	 *
 	 * @return the user ID of this procedura
@@ -326,6 +381,16 @@ public class ProceduraWrapper
 		return model.isAttiva();
 	}
 
+	/**
+	 * Returns <code>true</code> if this procedura is step1 attivo.
+	 *
+	 * @return <code>true</code> if this procedura is step1 attivo; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isStep1Attivo() {
+		return model.isStep1Attivo();
+	}
+
 	@Override
 	public void persist() {
 		model.persist();
@@ -349,18 +414,6 @@ public class ProceduraWrapper
 	@Override
 	public void setCompanyId(long companyId) {
 		model.setCompanyId(companyId);
-	}
-
-	/**
-	 * Sets the configurazioni presentatore form of this procedura.
-	 *
-	 * @param configurazioniPresentatoreForm the configurazioni presentatore form of this procedura
-	 */
-	@Override
-	public void setConfigurazioniPresentatoreForm(
-		String configurazioniPresentatoreForm) {
-
-		model.setConfigurazioniPresentatoreForm(configurazioniPresentatoreForm);
 	}
 
 	/**
@@ -451,6 +504,52 @@ public class ProceduraWrapper
 	@Override
 	public void setServizioId(long servizioId) {
 		model.setServizioId(servizioId);
+	}
+
+	/**
+	 * Sets whether this procedura is step1 attivo.
+	 *
+	 * @param step1Attivo the step1 attivo of this procedura
+	 */
+	@Override
+	public void setStep1Attivo(boolean step1Attivo) {
+		model.setStep1Attivo(step1Attivo);
+	}
+
+	/**
+	 * Sets the step1 tipo componenti nucleo familiare of this procedura.
+	 *
+	 * @param step1TipoComponentiNucleoFamiliare the step1 tipo componenti nucleo familiare of this procedura
+	 */
+	@Override
+	public void setStep1TipoComponentiNucleoFamiliare(
+		String step1TipoComponentiNucleoFamiliare) {
+
+		model.setStep1TipoComponentiNucleoFamiliare(
+			step1TipoComponentiNucleoFamiliare);
+	}
+
+	/**
+	 * Sets the step2 tipi integrazione backoffice of this procedura.
+	 *
+	 * @param step2TipiIntegrazioneBackoffice the step2 tipi integrazione backoffice of this procedura
+	 */
+	@Override
+	public void setStep2TipiIntegrazioneBackoffice(
+		String step2TipiIntegrazioneBackoffice) {
+
+		model.setStep2TipiIntegrazioneBackoffice(
+			step2TipiIntegrazioneBackoffice);
+	}
+
+	/**
+	 * Sets the step2 tipo servizio of this procedura.
+	 *
+	 * @param step2TipoServizio the step2 tipo servizio of this procedura
+	 */
+	@Override
+	public void setStep2TipoServizio(String step2TipoServizio) {
+		model.setStep2TipoServizio(step2TipoServizio);
 	}
 
 	/**

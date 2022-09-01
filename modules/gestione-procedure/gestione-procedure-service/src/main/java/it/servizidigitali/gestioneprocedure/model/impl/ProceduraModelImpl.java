@@ -78,7 +78,10 @@ public class ProceduraModelImpl
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"nome", Types.VARCHAR}, {"pecDestinazione", Types.VARCHAR},
-		{"configurazioniPresentatoreForm", Types.VARCHAR},
+		{"step1Attivo", Types.BOOLEAN},
+		{"step1TipoComponentiNucleoFamiliare", Types.VARCHAR},
+		{"step2TipoServizio", Types.VARCHAR},
+		{"step2TipiIntegrazioneBackoffice", Types.VARCHAR},
 		{"attiva", Types.BOOLEAN}, {"servizioId", Types.BIGINT},
 		{"processoId", Types.BIGINT}
 	};
@@ -97,14 +100,18 @@ public class ProceduraModelImpl
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("nome", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("pecDestinazione", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("configurazioniPresentatoreForm", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("step1Attivo", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put(
+			"step1TipoComponentiNucleoFamiliare", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("step2TipoServizio", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("step2TipiIntegrazioneBackoffice", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("attiva", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("servizioId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("processoId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table procedura (uuid_ VARCHAR(75) null,proceduraId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,pecDestinazione VARCHAR(75) null,configurazioniPresentatoreForm VARCHAR(75) null,attiva BOOLEAN,servizioId LONG,processoId LONG)";
+		"create table procedura (uuid_ VARCHAR(75) null,proceduraId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,pecDestinazione VARCHAR(75) null,step1Attivo BOOLEAN,step1TipoComponentiNucleoFamiliare VARCHAR(75) null,step2TipoServizio VARCHAR(75) null,step2TipiIntegrazioneBackoffice VARCHAR(75) null,attiva BOOLEAN,servizioId LONG,processoId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table procedura";
 
@@ -336,13 +343,29 @@ public class ProceduraModelImpl
 		attributeSetterBiConsumers.put(
 			"pecDestinazione",
 			(BiConsumer<Procedura, String>)Procedura::setPecDestinazione);
-		attributeGetterFunctions.put(
-			"configurazioniPresentatoreForm",
-			Procedura::getConfigurazioniPresentatoreForm);
+		attributeGetterFunctions.put("step1Attivo", Procedura::getStep1Attivo);
 		attributeSetterBiConsumers.put(
-			"configurazioniPresentatoreForm",
+			"step1Attivo",
+			(BiConsumer<Procedura, Boolean>)Procedura::setStep1Attivo);
+		attributeGetterFunctions.put(
+			"step1TipoComponentiNucleoFamiliare",
+			Procedura::getStep1TipoComponentiNucleoFamiliare);
+		attributeSetterBiConsumers.put(
+			"step1TipoComponentiNucleoFamiliare",
 			(BiConsumer<Procedura, String>)
-				Procedura::setConfigurazioniPresentatoreForm);
+				Procedura::setStep1TipoComponentiNucleoFamiliare);
+		attributeGetterFunctions.put(
+			"step2TipoServizio", Procedura::getStep2TipoServizio);
+		attributeSetterBiConsumers.put(
+			"step2TipoServizio",
+			(BiConsumer<Procedura, String>)Procedura::setStep2TipoServizio);
+		attributeGetterFunctions.put(
+			"step2TipiIntegrazioneBackoffice",
+			Procedura::getStep2TipiIntegrazioneBackoffice);
+		attributeSetterBiConsumers.put(
+			"step2TipiIntegrazioneBackoffice",
+			(BiConsumer<Procedura, String>)
+				Procedura::setStep2TipiIntegrazioneBackoffice);
 		attributeGetterFunctions.put("attiva", Procedura::getAttiva);
 		attributeSetterBiConsumers.put(
 			"attiva", (BiConsumer<Procedura, Boolean>)Procedura::setAttiva);
@@ -572,24 +595,84 @@ public class ProceduraModelImpl
 	}
 
 	@Override
-	public String getConfigurazioniPresentatoreForm() {
-		if (_configurazioniPresentatoreForm == null) {
+	public boolean getStep1Attivo() {
+		return _step1Attivo;
+	}
+
+	@Override
+	public boolean isStep1Attivo() {
+		return _step1Attivo;
+	}
+
+	@Override
+	public void setStep1Attivo(boolean step1Attivo) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_step1Attivo = step1Attivo;
+	}
+
+	@Override
+	public String getStep1TipoComponentiNucleoFamiliare() {
+		if (_step1TipoComponentiNucleoFamiliare == null) {
 			return "";
 		}
 		else {
-			return _configurazioniPresentatoreForm;
+			return _step1TipoComponentiNucleoFamiliare;
 		}
 	}
 
 	@Override
-	public void setConfigurazioniPresentatoreForm(
-		String configurazioniPresentatoreForm) {
+	public void setStep1TipoComponentiNucleoFamiliare(
+		String step1TipoComponentiNucleoFamiliare) {
 
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
 
-		_configurazioniPresentatoreForm = configurazioniPresentatoreForm;
+		_step1TipoComponentiNucleoFamiliare =
+			step1TipoComponentiNucleoFamiliare;
+	}
+
+	@Override
+	public String getStep2TipoServizio() {
+		if (_step2TipoServizio == null) {
+			return "";
+		}
+		else {
+			return _step2TipoServizio;
+		}
+	}
+
+	@Override
+	public void setStep2TipoServizio(String step2TipoServizio) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_step2TipoServizio = step2TipoServizio;
+	}
+
+	@Override
+	public String getStep2TipiIntegrazioneBackoffice() {
+		if (_step2TipiIntegrazioneBackoffice == null) {
+			return "";
+		}
+		else {
+			return _step2TipiIntegrazioneBackoffice;
+		}
+	}
+
+	@Override
+	public void setStep2TipiIntegrazioneBackoffice(
+		String step2TipiIntegrazioneBackoffice) {
+
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_step2TipiIntegrazioneBackoffice = step2TipiIntegrazioneBackoffice;
 	}
 
 	@Override
@@ -741,8 +824,12 @@ public class ProceduraModelImpl
 		proceduraImpl.setModifiedDate(getModifiedDate());
 		proceduraImpl.setNome(getNome());
 		proceduraImpl.setPecDestinazione(getPecDestinazione());
-		proceduraImpl.setConfigurazioniPresentatoreForm(
-			getConfigurazioniPresentatoreForm());
+		proceduraImpl.setStep1Attivo(isStep1Attivo());
+		proceduraImpl.setStep1TipoComponentiNucleoFamiliare(
+			getStep1TipoComponentiNucleoFamiliare());
+		proceduraImpl.setStep2TipoServizio(getStep2TipoServizio());
+		proceduraImpl.setStep2TipiIntegrazioneBackoffice(
+			getStep2TipiIntegrazioneBackoffice());
 		proceduraImpl.setAttiva(isAttiva());
 		proceduraImpl.setServizioId(getServizioId());
 		proceduraImpl.setProcessoId(getProcessoId());
@@ -772,9 +859,16 @@ public class ProceduraModelImpl
 		proceduraImpl.setNome(this.<String>getColumnOriginalValue("nome"));
 		proceduraImpl.setPecDestinazione(
 			this.<String>getColumnOriginalValue("pecDestinazione"));
-		proceduraImpl.setConfigurazioniPresentatoreForm(
+		proceduraImpl.setStep1Attivo(
+			this.<Boolean>getColumnOriginalValue("step1Attivo"));
+		proceduraImpl.setStep1TipoComponentiNucleoFamiliare(
 			this.<String>getColumnOriginalValue(
-				"configurazioniPresentatoreForm"));
+				"step1TipoComponentiNucleoFamiliare"));
+		proceduraImpl.setStep2TipoServizio(
+			this.<String>getColumnOriginalValue("step2TipoServizio"));
+		proceduraImpl.setStep2TipiIntegrazioneBackoffice(
+			this.<String>getColumnOriginalValue(
+				"step2TipiIntegrazioneBackoffice"));
 		proceduraImpl.setAttiva(this.<Boolean>getColumnOriginalValue("attiva"));
 		proceduraImpl.setServizioId(
 			this.<Long>getColumnOriginalValue("servizioId"));
@@ -915,16 +1009,38 @@ public class ProceduraModelImpl
 			proceduraCacheModel.pecDestinazione = null;
 		}
 
-		proceduraCacheModel.configurazioniPresentatoreForm =
-			getConfigurazioniPresentatoreForm();
+		proceduraCacheModel.step1Attivo = isStep1Attivo();
 
-		String configurazioniPresentatoreForm =
-			proceduraCacheModel.configurazioniPresentatoreForm;
+		proceduraCacheModel.step1TipoComponentiNucleoFamiliare =
+			getStep1TipoComponentiNucleoFamiliare();
 
-		if ((configurazioniPresentatoreForm != null) &&
-			(configurazioniPresentatoreForm.length() == 0)) {
+		String step1TipoComponentiNucleoFamiliare =
+			proceduraCacheModel.step1TipoComponentiNucleoFamiliare;
 
-			proceduraCacheModel.configurazioniPresentatoreForm = null;
+		if ((step1TipoComponentiNucleoFamiliare != null) &&
+			(step1TipoComponentiNucleoFamiliare.length() == 0)) {
+
+			proceduraCacheModel.step1TipoComponentiNucleoFamiliare = null;
+		}
+
+		proceduraCacheModel.step2TipoServizio = getStep2TipoServizio();
+
+		String step2TipoServizio = proceduraCacheModel.step2TipoServizio;
+
+		if ((step2TipoServizio != null) && (step2TipoServizio.length() == 0)) {
+			proceduraCacheModel.step2TipoServizio = null;
+		}
+
+		proceduraCacheModel.step2TipiIntegrazioneBackoffice =
+			getStep2TipiIntegrazioneBackoffice();
+
+		String step2TipiIntegrazioneBackoffice =
+			proceduraCacheModel.step2TipiIntegrazioneBackoffice;
+
+		if ((step2TipiIntegrazioneBackoffice != null) &&
+			(step2TipiIntegrazioneBackoffice.length() == 0)) {
+
+			proceduraCacheModel.step2TipiIntegrazioneBackoffice = null;
 		}
 
 		proceduraCacheModel.attiva = isAttiva();
@@ -1034,7 +1150,10 @@ public class ProceduraModelImpl
 	private boolean _setModifiedDate;
 	private String _nome;
 	private String _pecDestinazione;
-	private String _configurazioniPresentatoreForm;
+	private boolean _step1Attivo;
+	private String _step1TipoComponentiNucleoFamiliare;
+	private String _step2TipoServizio;
+	private String _step2TipiIntegrazioneBackoffice;
 	private boolean _attiva;
 	private long _servizioId;
 	private long _processoId;
@@ -1078,8 +1197,14 @@ public class ProceduraModelImpl
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
 		_columnOriginalValues.put("nome", _nome);
 		_columnOriginalValues.put("pecDestinazione", _pecDestinazione);
+		_columnOriginalValues.put("step1Attivo", _step1Attivo);
 		_columnOriginalValues.put(
-			"configurazioniPresentatoreForm", _configurazioniPresentatoreForm);
+			"step1TipoComponentiNucleoFamiliare",
+			_step1TipoComponentiNucleoFamiliare);
+		_columnOriginalValues.put("step2TipoServizio", _step2TipoServizio);
+		_columnOriginalValues.put(
+			"step2TipiIntegrazioneBackoffice",
+			_step2TipiIntegrazioneBackoffice);
 		_columnOriginalValues.put("attiva", _attiva);
 		_columnOriginalValues.put("servizioId", _servizioId);
 		_columnOriginalValues.put("processoId", _processoId);
@@ -1126,13 +1251,19 @@ public class ProceduraModelImpl
 
 		columnBitmasks.put("pecDestinazione", 512L);
 
-		columnBitmasks.put("configurazioniPresentatoreForm", 1024L);
+		columnBitmasks.put("step1Attivo", 1024L);
 
-		columnBitmasks.put("attiva", 2048L);
+		columnBitmasks.put("step1TipoComponentiNucleoFamiliare", 2048L);
 
-		columnBitmasks.put("servizioId", 4096L);
+		columnBitmasks.put("step2TipoServizio", 4096L);
 
-		columnBitmasks.put("processoId", 8192L);
+		columnBitmasks.put("step2TipiIntegrazioneBackoffice", 8192L);
+
+		columnBitmasks.put("attiva", 16384L);
+
+		columnBitmasks.put("servizioId", 32768L);
+
+		columnBitmasks.put("processoId", 65536L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}
