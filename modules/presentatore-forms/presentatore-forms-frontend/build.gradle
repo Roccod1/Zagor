@@ -2,9 +2,14 @@ dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.portal.api"
 
 	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.0.2"
+	
+	compileInclude group: "com.google.code.gson", name: "gson", version: "2.9.0"
 	compileOnly project(":modules:gestione-forms:gestione-forms-api")
-	compileOnly project(":modules:gestione-forms:gestione-forms-service")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-api")
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-backoffice-integration")
+	compileOnly project(":modules:scrivania-operatore:scrivania-operatore-api")
+	compileOnly project(":modules:gestione-procedure:gestione-procedure-api")
+	compileOnly project(":modules:gestione-servizi:gestione-servizi-api")
 }
 
 buildscript {
