@@ -59,16 +59,16 @@ public class SecurityAccessFilter implements RenderFilter {
 
 		boolean isUserSignedIn = themeDisplay.isSignedIn();
 
-		boolean isPrivateService = false;
-
 		ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnteByGroupIdLayoutId(groupId, layoutId);
 
 		if (servizioEnte == null) {
 			// TODO testare
+			log.debug("Servizio non trovato :: groupId: " + groupId + ", layoutId: " + layoutId);
 			throw new SecurityException("");
 		}
 		// TODO verifica servizio attivo
 		if (!servizioEnte.getAttivo()) {
+			log.debug("Servizio non attivo :: servizioId: " + servizioEnte.getServizioId() + ", organizationId: " + servizioEnte.getOrganizationId());
 			// TODO testare
 			throw new SecurityException("");
 		}
@@ -76,6 +76,7 @@ public class SecurityAccessFilter implements RenderFilter {
 		int livelloAutenticazione = servizioEnte.getLivelloAutenticazione();
 		boolean autenticazione = servizioEnte.getAutenticazione();
 		if (autenticazione && !isUserSignedIn) {
+			log.debug("Il servizio richiede autenticazione ma l'utente non è loggato :: servizioId: " + servizioEnte.getServizioId() + ", organizationId: " + servizioEnte.getOrganizationId());
 			// TODO testare
 			throw new SecurityException("");
 		}
@@ -91,6 +92,8 @@ public class SecurityAccessFilter implements RenderFilter {
 				if (livelloSpid != null) {
 					int livelloSpidUser = (int) livelloSpid;
 					if (livelloSpidUser < servizioEnte.getLivelloAutenticazione()) {
+						log.debug("Livello SPID non sufficiente per accedere al servizio :: servizioId: " + servizioEnte.getServizioId() + ", organizationId: " + servizioEnte.getOrganizationId()
+								+ ", livelloSpidUser: " + livelloSpidUser + ", livelloAutenticazione: " + servizioEnte.getLivelloAutenticazione());
 						// TODO implementare meccanismo per permettere il login con livello spid
 						// corretto (N.B.: DIPENDE DA IAM!)
 					}
