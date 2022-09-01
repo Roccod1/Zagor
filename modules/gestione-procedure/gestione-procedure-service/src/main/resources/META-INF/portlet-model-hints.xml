@@ -16,6 +16,7 @@
 		<field name="step1TipoComponentiNucleoFamiliare" type="String" />
 		<field name="step2TipoServizio" type="String" />
 		<field name="step2TipiIntegrazioneBackoffice" type="String" />
+		<field name="step2AbilitaCacheIntegrazioneBackoffice" type="boolean" />
 		<field name="attiva" type="boolean" />
 		<field name="servizioId" type="long" />
 		<field name="processoId" type="long" />

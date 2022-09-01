@@ -303,6 +303,28 @@ public interface ProceduraModel
 		String step2TipiIntegrazioneBackoffice);
 
 	/**
+	 * Returns the step2 abilita cache integrazione backoffice of this procedura.
+	 *
+	 * @return the step2 abilita cache integrazione backoffice of this procedura
+	 */
+	public boolean getStep2AbilitaCacheIntegrazioneBackoffice();
+
+	/**
+	 * Returns <code>true</code> if this procedura is step2 abilita cache integrazione backoffice.
+	 *
+	 * @return <code>true</code> if this procedura is step2 abilita cache integrazione backoffice; <code>false</code> otherwise
+	 */
+	public boolean isStep2AbilitaCacheIntegrazioneBackoffice();
+
+	/**
+	 * Sets whether this procedura is step2 abilita cache integrazione backoffice.
+	 *
+	 * @param step2AbilitaCacheIntegrazioneBackoffice the step2 abilita cache integrazione backoffice of this procedura
+	 */
+	public void setStep2AbilitaCacheIntegrazioneBackoffice(
+		boolean step2AbilitaCacheIntegrazioneBackoffice);
+
+	/**
 	 * Returns the attiva of this procedura.
 	 *
 	 * @return the attiva of this procedura

@@ -62,7 +62,7 @@ public class ProceduraCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(35);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -92,6 +92,8 @@ public class ProceduraCacheModel
 		sb.append(step2TipoServizio);
 		sb.append(", step2TipiIntegrazioneBackoffice=");
 		sb.append(step2TipiIntegrazioneBackoffice);
+		sb.append(", step2AbilitaCacheIntegrazioneBackoffice=");
+		sb.append(step2AbilitaCacheIntegrazioneBackoffice);
 		sb.append(", attiva=");
 		sb.append(attiva);
 		sb.append(", servizioId=");
@@ -179,6 +181,8 @@ public class ProceduraCacheModel
 				step2TipiIntegrazioneBackoffice);
 		}
 
+		proceduraImpl.setStep2AbilitaCacheIntegrazioneBackoffice(
+			step2AbilitaCacheIntegrazioneBackoffice);
 		proceduraImpl.setAttiva(attiva);
 		proceduraImpl.setServizioId(servizioId);
 		proceduraImpl.setProcessoId(processoId);
@@ -209,6 +213,8 @@ public class ProceduraCacheModel
 		step1TipoComponentiNucleoFamiliare = objectInput.readUTF();
 		step2TipoServizio = objectInput.readUTF();
 		step2TipiIntegrazioneBackoffice = objectInput.readUTF();
+
+		step2AbilitaCacheIntegrazioneBackoffice = objectInput.readBoolean();
 
 		attiva = objectInput.readBoolean();
 
@@ -281,6 +287,8 @@ public class ProceduraCacheModel
 			objectOutput.writeUTF(step2TipiIntegrazioneBackoffice);
 		}
 
+		objectOutput.writeBoolean(step2AbilitaCacheIntegrazioneBackoffice);
+
 		objectOutput.writeBoolean(attiva);
 
 		objectOutput.writeLong(servizioId);
@@ -302,6 +310,7 @@ public class ProceduraCacheModel
 	public String step1TipoComponentiNucleoFamiliare;
 	public String step2TipoServizio;
 	public String step2TipiIntegrazioneBackoffice;
+	public boolean step2AbilitaCacheIntegrazioneBackoffice;
 	public boolean attiva;
 	public long servizioId;
 	public long processoId;

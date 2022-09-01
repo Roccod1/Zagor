@@ -61,6 +61,9 @@ public class ProceduraWrapper
 		attributes.put(
 			"step2TipiIntegrazioneBackoffice",
 			getStep2TipiIntegrazioneBackoffice());
+		attributes.put(
+			"step2AbilitaCacheIntegrazioneBackoffice",
+			isStep2AbilitaCacheIntegrazioneBackoffice());
 		attributes.put("attiva", isAttiva());
 		attributes.put("servizioId", getServizioId());
 		attributes.put("processoId", getProcessoId());
@@ -155,6 +158,14 @@ public class ProceduraWrapper
 
 		if (step2TipiIntegrazioneBackoffice != null) {
 			setStep2TipiIntegrazioneBackoffice(step2TipiIntegrazioneBackoffice);
+		}
+
+		Boolean step2AbilitaCacheIntegrazioneBackoffice =
+			(Boolean)attributes.get("step2AbilitaCacheIntegrazioneBackoffice");
+
+		if (step2AbilitaCacheIntegrazioneBackoffice != null) {
+			setStep2AbilitaCacheIntegrazioneBackoffice(
+				step2AbilitaCacheIntegrazioneBackoffice);
 		}
 
 		Boolean attiva = (Boolean)attributes.get("attiva");
@@ -312,6 +323,16 @@ public class ProceduraWrapper
 	}
 
 	/**
+	 * Returns the step2 abilita cache integrazione backoffice of this procedura.
+	 *
+	 * @return the step2 abilita cache integrazione backoffice of this procedura
+	 */
+	@Override
+	public boolean getStep2AbilitaCacheIntegrazioneBackoffice() {
+		return model.getStep2AbilitaCacheIntegrazioneBackoffice();
+	}
+
+	/**
 	 * Returns the step2 tipi integrazione backoffice of this procedura.
 	 *
 	 * @return the step2 tipi integrazione backoffice of this procedura
@@ -389,6 +410,16 @@ public class ProceduraWrapper
 	@Override
 	public boolean isStep1Attivo() {
 		return model.isStep1Attivo();
+	}
+
+	/**
+	 * Returns <code>true</code> if this procedura is step2 abilita cache integrazione backoffice.
+	 *
+	 * @return <code>true</code> if this procedura is step2 abilita cache integrazione backoffice; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isStep2AbilitaCacheIntegrazioneBackoffice() {
+		return model.isStep2AbilitaCacheIntegrazioneBackoffice();
 	}
 
 	@Override
@@ -527,6 +558,19 @@ public class ProceduraWrapper
 
 		model.setStep1TipoComponentiNucleoFamiliare(
 			step1TipoComponentiNucleoFamiliare);
+	}
+
+	/**
+	 * Sets whether this procedura is step2 abilita cache integrazione backoffice.
+	 *
+	 * @param step2AbilitaCacheIntegrazioneBackoffice the step2 abilita cache integrazione backoffice of this procedura
+	 */
+	@Override
+	public void setStep2AbilitaCacheIntegrazioneBackoffice(
+		boolean step2AbilitaCacheIntegrazioneBackoffice) {
+
+		model.setStep2AbilitaCacheIntegrazioneBackoffice(
+			step2AbilitaCacheIntegrazioneBackoffice);
 	}
 
 	/**

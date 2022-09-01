@@ -66,6 +66,10 @@ public class ProceduraTable extends BaseTable<ProceduraTable> {
 		step2TipiIntegrazioneBackoffice = createColumn(
 			"step2TipiIntegrazioneBackoffice", String.class, Types.VARCHAR,
 			Column.FLAG_DEFAULT);
+	public final Column<ProceduraTable, Boolean>
+		step2AbilitaCacheIntegrazioneBackoffice = createColumn(
+			"step2AbilitaCacheIntegrazioneBackoffice", Boolean.class,
+			Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<ProceduraTable, Boolean> attiva = createColumn(
 		"attiva", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<ProceduraTable, Long> servizioId = createColumn(
