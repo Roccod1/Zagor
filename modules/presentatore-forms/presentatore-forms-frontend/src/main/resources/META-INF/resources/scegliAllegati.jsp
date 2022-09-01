@@ -1,6 +1,7 @@
 <%@ include file="./init.jsp"%>
 
-<portlet:resourceURL id="uploadFile" var="uploadFileUrl">
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.UPLOAD_ALLEGATO_RESOURCE_COMMAND %>" var="uploadFileUrl">
 	<portlet:param name="idServizio" value="${idServizio}" />
 </portlet:resourceURL>
 
@@ -80,7 +81,8 @@ console.log("dentro scegli allegati");
            			  </div>
         		</div>
         		
-				<form id="salva-form" method="POST" action="${salvaUrl}">
+				<aui:form action="${salvaUrl}" name="salva-form" enctype="multipart/form-data">
+				
 					<div class="row-fluid">
 						<div class="span12">
 							<div class="control-group">
@@ -108,11 +110,16 @@ console.log("dentro scegli allegati");
 										<div class="controls">
 											<input type="hidden" class="allegato" name="${nomeFileFirmato}"	value="${empty pdfFirmato ? '' : pdfFirmato.fileName }">
 											<div class="span8" style="margin-left:0px;">
-												<input type="file" class="file-loading" id="uploadFileFirmato" name="file">
+												<input type="file" class="file-loading" id="uploadFileFirmato" name="file" required accept=".pdf,.p7m">
+												<button class="btn btn-secondary save-file-firmato" type="button">
+										    		<liferay-ui:message key="label-carica"/>
+										    	</button>
 											</div>
-											<div class="span12" style="margin-left:0px;">
-												<div id="kv-error-uploadFileFirmato" style="display: none;"></div>
+											<div id="alertUplaodAllegato" class="portlet-msg-alert hidden">
+												<liferay-ui:message key="errore-durante-il-caricamento-dell-allegato"/>
 											</div>
+											
+											
 											<c:if test="${not empty pdfFirmato}">
 												<div id="allegatodocumentale-container-${nomeFileFirmato}"
 													class="alert alert-info">
@@ -207,7 +214,6 @@ console.log("dentro scegli allegati");
 											</c:if>
 	
 											<div class="controls">
-												<input type="hidden" class="allegato" name="allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" value="${empty allegato.datiFile ? '' : allegato.datiFile.fileName }">
 												<div class="row-fluid">
 													<div class="span8">
 														<c:choose>
@@ -265,10 +271,38 @@ console.log("dentro scegli allegati");
 																<a class="toggleUploadFileLink" data-param1="${loop.index}-${allegato.definizione.definizioneAllegatoId}" href="#"><liferay-ui:message key="file.da.documenti.personali.3" /></a>.
 															</div>
 														</c:if>
-														<div id="div-allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" <c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>>
-															<input type="file" class="file-loading"	id="allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" name="file">
-															<div id="kv-error-${loop.index}-${allegato.definizione.definizioneAllegatoId}" style="display: none;"></div>
+														
+														<%-- +++ MODIFICATO --%>
+														<div id="div-allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" <c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>>					
+														
+															<div class="control-group">
+														  	  	<div class="controls">
+																	<aui:input type="file" id="allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" name="" required="${allegato.definizione.obbligatorio}">
+																		<aui:validator name="acceptFiles">"${allegato.definizione.tipiFileAmmessi}"</aui:validator>
+																		<aui:validator name="custom" errorMessage="La dimensione del file non deve superare ${uploadFileMaxSizeLabel}">
+																			function(val,node,junction){
+																			return node._node.files[0].size <= ${uploadFileMaxSize};
+																			}
+																			</aui:validator>
+																	</aui:input>
+																	 
+																</div>
+															</div>
+															
+															<div id="alertUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" class="portlet-msg-alert hidden">
+																<liferay-ui:message key="errore-durante-il-caricamento-dell-allegato"/>
+															</div>
+														    
+														    <div class="control-group">
+															    <div class="controls">
+															    	<button class="btn btn-secondary save-attachment-${loop.index}-${allegato.definizione.definizioneAllegatoId}" type="button">
+															    		<liferay-ui:message key="salva"/>
+															    	</button>
+															    </div>
+														    </div>
+														
 														</div>
+														
 													</div>
 												</div>
 											</div>
@@ -280,7 +314,8 @@ console.log("dentro scegli allegati");
 					</c:if>
 					<input type="hidden" name="idIstanzaForm" value="${idRichiesta}">
 					<input type="hidden" name="inBozza" value="true" id="in-bozza">
-				</form>
+					
+				</aui:form>
 				<div class="form-actions">
 					<a class="btn btn-sm btn-secondary" href="${homeScrivaniaUrl}"><liferay-ui:message key="label.indietro" /></a>
 					<c:choose>
@@ -383,11 +418,19 @@ console.log("dentro scegli allegati");
 		</c:otherwise>
 	
 </c:choose>
+<aui:script use="liferay-form">
+console.log("aaa");
+        function validateSingleField(fieldName) {
+        		console.log(fieldName);
+                var formValidator = 
+                Liferay.Form.get('<portlet:namespace />salva-form').formValidator;
+                formValidator.validateField(fieldName);
+        }
+</aui:script>
 <script>
 
 	var isDebugEnabled = ${isDebugEnabled};
 
-	$(function(){
 		//Salva in bozza handler
 		$('#salva-in-bozza').click(function(){
 			var $bottone = $(this);
@@ -396,7 +439,7 @@ console.log("dentro scegli allegati");
 			$("#in-bozza").val("true");
 			
 			//Submit del form
-			$("#salva-form").submit();
+			$("#<portlet:namespace />salva-form").submit();
 		});
 		
 		//Apre il modal
@@ -435,7 +478,7 @@ console.log("dentro scegli allegati");
 			$("#in-bozza").val("false");
 			
 			//Submit del form
-			$("#salva-form").submit();
+			$("#<portlet:namespace />salva-form").submit();
 		});
 		
 		
@@ -449,52 +492,53 @@ console.log("dentro scegli allegati");
 		
 		
 		
-		//Gestisci allegato
-		var maxSize = '${uploadFileMaxSize}';
-		maxSize = maxSize ? maxSize.slice(0,-3) : "3072";
-		var maxSizeHumanReadable = '${uploadFileMaxSizeLabel}';
-		maxSizeHumanReadable = maxSizeHumanReadable ? maxSizeHumanReadable : "3MB";
+		
 		
 		
 		// +++++++++++ HIC SUNT LEONES +++++++++++
-		// <aui:form action="${salvaModificaURL}" id="formPrincipale" name="formPrincipale" enctype="multipart/form-data">
 	
 		<c:forEach items="${allegati}" var="allegato" varStatus="loop">
-			$("[id='allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}']").fileinput({
-				language: "it",
-				showPreview: false,
-				uploadAsync: true,
-				required: true,
-				allowedFileExtensions: ${allegato.definizione.tipiFileAmmessi},
-				elErrorContainer: '#kv-error-${loop.index}-${allegato.definizione.definizioneAllegatoId}',
-				uploadUrl: "${uploadFileUrl}",
-				maxFileSize: maxSize,
-				msgSizeTooLarge: "Il file {name} supera la dimensione massima consentita di " + maxSizeHumanReadable,
-				uploadExtraData: function (previewId, index) {
-					var additionalData = {
-						"idIstanzaForm": "${idRichiesta}",
-						"idDefinizioneAllegato": "${allegato.definizione.definizioneAllegatoId}"
-					};
-					if (isDebugEnabled) {
-						console.log('Upload extra data', additionalData);
-					}
-					return additionalData;
-				}
-	        }).on('fileuploaded', function(event, data, previewId, index) {
-	        	var response = data.response;
+		
+		$('.save-attachment-${loop.index}-${allegato.definizione.definizioneAllegatoId}').on('click', function(){
+			
+			
+			var nomeAllegato = $('#<portlet:namespace />allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').val();
+	    	var attachmentFileNameValue = nomeAllegato.replace('C:\\fakepath\\', ' ');
+			var idAllegatoTemporaneoValue = '';
+			
+			var formData = new FormData();
+			formData.append('<portlet:namespace />' + 'attachmentFile', $('#<portlet:namespace />allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}')[0].files[0]);
+			formData.append('<portlet:namespace />' + 'idDefinizioneAllegato', ${allegato.definizione.definizioneAllegatoId});
+			formData.append('<portlet:namespace />' + 'idIstanzaForm', ${idRichiesta});
+			
+			if(nomeAllegato){
+				
+				$.ajax({
+		    		url: "${uploadFileUrl}",
+		    		type: 'POST',
+		    		data: formData,
+		    		processData: false,
+		    		contentType: false,
+		    		success: function(data){	
+		    			if(data.status==='ok'){
+		    				console.log("Successo in upload del file!");
+		    				$("#<portlet:namespace />allegatodocumentale-container-${loop.index}-${allegato.definizione.definizioneAllegatoId}").remove();
+		    				$('#alertUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').addClass('hidden');
+	 	    				idAllegatoTemporaneoValue = data.idAllegatoTemporaneo;
+		    			}else if(data.status==='error'){
+		    				$('#alertUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').removeClass('hidden');
+		    				console.log("Errore durante l'upload del file!");
+		    			}
+		    		}, error: function(xhr){
+	    				console.log("Errore durante CHIAMATA l'upload del file!");
 
-	        	//Imposta il valore di allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}
-	        	$("input[name='allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}']").val(response.fileName);
-	        	$("input[name='allegatodocumentale-personale-${loop.index}-${allegato.definizione.definizioneAllegatoId}']").prop('checked', false);
-	    	}).on('fileclear', function(event) {
-	        	//Resetta il valore di allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}
-	        	$("input[name='allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}']").val('');
-	        	$("input[name='allegatodocumentale-${loop.index}-${allegato.definizione.definizioneAllegatoId}']").val('');
-	        	
-	        	//Rimozione dell'eventuale allegato documentale
-	        	$("#allegatodocumentale-container-${loop.index}-${allegato.definizione.definizioneAllegatoId}").remove();
-	    	});
-		</c:forEach>
+		    		}
+		    	});
+			}
+		
+    });
+			
+	</c:forEach>
 		
 		
 		// +++++++++++ HIC SUNT LEONES +++++++++++
@@ -584,4 +628,9 @@ console.log("dentro scegli allegati");
 	
 	*/ 
 	--%>
+	
+	$(document).ready(function() {
+		console.log("ready");
+		
+	})
 </script>

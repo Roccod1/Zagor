@@ -13,9 +13,17 @@ public class PresentatoreFormsPortletKeys {
 	// DEFINIZIONE COMMAND
 	public static final String SCEGLI_ALLEGATI_RENDER_COMMAND = "/scegliAllegati";
 	public static final String SUBMIT_FORM_RESOURCE_COMMAND = "/submitForm";
-	
+	public static final String UPLOAD_ALLEGATO_RESOURCE_COMMAND = "/uploadFile";
+
 	
 	//JSP
 	public static final String JSP_SCEGLI_ALLEGATI = "/scegliAllegati.jsp";
+
+	// JSON
+	public static final String STATUS = "status";
+	public static final String STATUS_OK = "ok";
+	public static final String STATUS_ERROR = "error";
+	
+	public static final String DEFINIZIONE_ALLEGATO_ID_TEMPORANEO = "idAllegatoTemporaneo";
 
 }

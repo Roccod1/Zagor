@@ -106,7 +106,6 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 		renderRequest.setAttribute("evaluationServiceEnable",false);
 		renderRequest.setAttribute("pathScrivaniaVirtuale","/");
 		renderRequest.setAttribute("isDebugEnabled",true);
-		renderRequest.setAttribute("uploadFileUrl","/");
 		
 		return PresentatoreFormsPortletKeys.JSP_SCEGLI_ALLEGATI;
 	}
