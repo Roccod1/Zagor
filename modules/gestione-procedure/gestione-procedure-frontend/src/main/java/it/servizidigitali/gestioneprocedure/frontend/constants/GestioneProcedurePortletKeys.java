@@ -62,7 +62,6 @@ public class GestioneProcedurePortletKeys {
 	
 	public static final String SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE = "eseguito-correttamente";
 	public static final String SESSION_ERROR_CAMPI_OBBLIGATORI = "errore-campi-obbligatori";
-	public static final String SESSION_ERROR_MODIFICA_NON_AUTORIZZATA = "modifica-non-autorizzata";
 	public static final String SESSION_ERROR_IMPOSSIBILE_RECUPERARE_PROCEDURA = "impossibile-recuperare-procedura";
 	public static final String SESSION_ERROR_IMPOSSIBILE_RECUPERARE_SERVIZI = "impossibile-recuperare-servizi";
 	public static final String SESSION_ERROR_IMPOSSIBILE_RECUPERARE_PROCESSI = "impossibile-recuperare-processi";

@@ -67,13 +67,6 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
-//		PermissionChecker permissionChecker = PermissionThreadLocal.getPermissionChecker();
-//		
-//		if(permissionChecker.isOmniadmin()) {
-//			SessionErrors.add(renderRequest, GestioneProcedurePortletKeys.SESSION_ERROR_MODIFICA_NON_AUTORIZZATA);
-//			return GestioneProcedurePortletKeys.JSP_MODIFICA_NON_AUTORIZZATA;
-//		}
-		
 		long idProcedura = ParamUtil.getLong(renderRequest, GestioneProcedurePortletKeys.ID_PROCEDURA);
 		
 		List<Servizio> listaServizi = new ArrayList<Servizio>();
