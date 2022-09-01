@@ -82,9 +82,9 @@ public class ProceduraModelImpl
 		{"step1TipoComponentiNucleoFamiliare", Types.VARCHAR},
 		{"step2TipoServizio", Types.VARCHAR},
 		{"step2TipiIntegrazioneBackoffice", Types.VARCHAR},
-		{"step2AbilitaCacheIntegrazioneBackoffice", Types.BOOLEAN},
-		{"attiva", Types.BOOLEAN}, {"servizioId", Types.BIGINT},
-		{"processoId", Types.BIGINT}
+		{"abilitaCacheIntegrazioneBackoffice", Types.BOOLEAN},
+		{"tipoGenerazionePDF", Types.VARCHAR}, {"attiva", Types.BOOLEAN},
+		{"servizioId", Types.BIGINT}, {"processoId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -107,14 +107,15 @@ public class ProceduraModelImpl
 		TABLE_COLUMNS_MAP.put("step2TipoServizio", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("step2TipiIntegrazioneBackoffice", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put(
-			"step2AbilitaCacheIntegrazioneBackoffice", Types.BOOLEAN);
+			"abilitaCacheIntegrazioneBackoffice", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("tipoGenerazionePDF", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("attiva", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("servizioId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("processoId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table procedura (uuid_ VARCHAR(75) null,proceduraId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,pecDestinazione VARCHAR(75) null,step1Attivo BOOLEAN,step1TipoComponentiNucleoFamiliare VARCHAR(75) null,step2TipoServizio VARCHAR(75) null,step2TipiIntegrazioneBackoffice VARCHAR(75) null,step2AbilitaCacheIntegrazioneBackoffice BOOLEAN,attiva BOOLEAN,servizioId LONG,processoId LONG)";
+		"create table procedura (uuid_ VARCHAR(75) null,proceduraId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,pecDestinazione VARCHAR(75) null,step1Attivo BOOLEAN,step1TipoComponentiNucleoFamiliare VARCHAR(75) null,step2TipoServizio VARCHAR(75) null,step2TipiIntegrazioneBackoffice VARCHAR(75) null,abilitaCacheIntegrazioneBackoffice BOOLEAN,tipoGenerazionePDF VARCHAR(75) null,attiva BOOLEAN,servizioId LONG,processoId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table procedura";
 
@@ -370,12 +371,17 @@ public class ProceduraModelImpl
 			(BiConsumer<Procedura, String>)
 				Procedura::setStep2TipiIntegrazioneBackoffice);
 		attributeGetterFunctions.put(
-			"step2AbilitaCacheIntegrazioneBackoffice",
-			Procedura::getStep2AbilitaCacheIntegrazioneBackoffice);
+			"abilitaCacheIntegrazioneBackoffice",
+			Procedura::getAbilitaCacheIntegrazioneBackoffice);
 		attributeSetterBiConsumers.put(
-			"step2AbilitaCacheIntegrazioneBackoffice",
+			"abilitaCacheIntegrazioneBackoffice",
 			(BiConsumer<Procedura, Boolean>)
-				Procedura::setStep2AbilitaCacheIntegrazioneBackoffice);
+				Procedura::setAbilitaCacheIntegrazioneBackoffice);
+		attributeGetterFunctions.put(
+			"tipoGenerazionePDF", Procedura::getTipoGenerazionePDF);
+		attributeSetterBiConsumers.put(
+			"tipoGenerazionePDF",
+			(BiConsumer<Procedura, String>)Procedura::setTipoGenerazionePDF);
 		attributeGetterFunctions.put("attiva", Procedura::getAttiva);
 		attributeSetterBiConsumers.put(
 			"attiva", (BiConsumer<Procedura, Boolean>)Procedura::setAttiva);
@@ -686,25 +692,44 @@ public class ProceduraModelImpl
 	}
 
 	@Override
-	public boolean getStep2AbilitaCacheIntegrazioneBackoffice() {
-		return _step2AbilitaCacheIntegrazioneBackoffice;
+	public boolean getAbilitaCacheIntegrazioneBackoffice() {
+		return _abilitaCacheIntegrazioneBackoffice;
 	}
 
 	@Override
-	public boolean isStep2AbilitaCacheIntegrazioneBackoffice() {
-		return _step2AbilitaCacheIntegrazioneBackoffice;
+	public boolean isAbilitaCacheIntegrazioneBackoffice() {
+		return _abilitaCacheIntegrazioneBackoffice;
 	}
 
 	@Override
-	public void setStep2AbilitaCacheIntegrazioneBackoffice(
-		boolean step2AbilitaCacheIntegrazioneBackoffice) {
+	public void setAbilitaCacheIntegrazioneBackoffice(
+		boolean abilitaCacheIntegrazioneBackoffice) {
 
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
 
-		_step2AbilitaCacheIntegrazioneBackoffice =
-			step2AbilitaCacheIntegrazioneBackoffice;
+		_abilitaCacheIntegrazioneBackoffice =
+			abilitaCacheIntegrazioneBackoffice;
+	}
+
+	@Override
+	public String getTipoGenerazionePDF() {
+		if (_tipoGenerazionePDF == null) {
+			return "";
+		}
+		else {
+			return _tipoGenerazionePDF;
+		}
+	}
+
+	@Override
+	public void setTipoGenerazionePDF(String tipoGenerazionePDF) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_tipoGenerazionePDF = tipoGenerazionePDF;
 	}
 
 	@Override
@@ -862,8 +887,9 @@ public class ProceduraModelImpl
 		proceduraImpl.setStep2TipoServizio(getStep2TipoServizio());
 		proceduraImpl.setStep2TipiIntegrazioneBackoffice(
 			getStep2TipiIntegrazioneBackoffice());
-		proceduraImpl.setStep2AbilitaCacheIntegrazioneBackoffice(
-			isStep2AbilitaCacheIntegrazioneBackoffice());
+		proceduraImpl.setAbilitaCacheIntegrazioneBackoffice(
+			isAbilitaCacheIntegrazioneBackoffice());
+		proceduraImpl.setTipoGenerazionePDF(getTipoGenerazionePDF());
 		proceduraImpl.setAttiva(isAttiva());
 		proceduraImpl.setServizioId(getServizioId());
 		proceduraImpl.setProcessoId(getProcessoId());
@@ -903,9 +929,11 @@ public class ProceduraModelImpl
 		proceduraImpl.setStep2TipiIntegrazioneBackoffice(
 			this.<String>getColumnOriginalValue(
 				"step2TipiIntegrazioneBackoffice"));
-		proceduraImpl.setStep2AbilitaCacheIntegrazioneBackoffice(
+		proceduraImpl.setAbilitaCacheIntegrazioneBackoffice(
 			this.<Boolean>getColumnOriginalValue(
-				"step2AbilitaCacheIntegrazioneBackoffice"));
+				"abilitaCacheIntegrazioneBackoffice"));
+		proceduraImpl.setTipoGenerazionePDF(
+			this.<String>getColumnOriginalValue("tipoGenerazionePDF"));
 		proceduraImpl.setAttiva(this.<Boolean>getColumnOriginalValue("attiva"));
 		proceduraImpl.setServizioId(
 			this.<Long>getColumnOriginalValue("servizioId"));
@@ -1080,8 +1108,18 @@ public class ProceduraModelImpl
 			proceduraCacheModel.step2TipiIntegrazioneBackoffice = null;
 		}
 
-		proceduraCacheModel.step2AbilitaCacheIntegrazioneBackoffice =
-			isStep2AbilitaCacheIntegrazioneBackoffice();
+		proceduraCacheModel.abilitaCacheIntegrazioneBackoffice =
+			isAbilitaCacheIntegrazioneBackoffice();
+
+		proceduraCacheModel.tipoGenerazionePDF = getTipoGenerazionePDF();
+
+		String tipoGenerazionePDF = proceduraCacheModel.tipoGenerazionePDF;
+
+		if ((tipoGenerazionePDF != null) &&
+			(tipoGenerazionePDF.length() == 0)) {
+
+			proceduraCacheModel.tipoGenerazionePDF = null;
+		}
 
 		proceduraCacheModel.attiva = isAttiva();
 
@@ -1194,7 +1232,8 @@ public class ProceduraModelImpl
 	private String _step1TipoComponentiNucleoFamiliare;
 	private String _step2TipoServizio;
 	private String _step2TipiIntegrazioneBackoffice;
-	private boolean _step2AbilitaCacheIntegrazioneBackoffice;
+	private boolean _abilitaCacheIntegrazioneBackoffice;
+	private String _tipoGenerazionePDF;
 	private boolean _attiva;
 	private long _servizioId;
 	private long _processoId;
@@ -1247,8 +1286,9 @@ public class ProceduraModelImpl
 			"step2TipiIntegrazioneBackoffice",
 			_step2TipiIntegrazioneBackoffice);
 		_columnOriginalValues.put(
-			"step2AbilitaCacheIntegrazioneBackoffice",
-			_step2AbilitaCacheIntegrazioneBackoffice);
+			"abilitaCacheIntegrazioneBackoffice",
+			_abilitaCacheIntegrazioneBackoffice);
+		_columnOriginalValues.put("tipoGenerazionePDF", _tipoGenerazionePDF);
 		_columnOriginalValues.put("attiva", _attiva);
 		_columnOriginalValues.put("servizioId", _servizioId);
 		_columnOriginalValues.put("processoId", _processoId);
@@ -1303,13 +1343,15 @@ public class ProceduraModelImpl
 
 		columnBitmasks.put("step2TipiIntegrazioneBackoffice", 8192L);
 
-		columnBitmasks.put("step2AbilitaCacheIntegrazioneBackoffice", 16384L);
+		columnBitmasks.put("abilitaCacheIntegrazioneBackoffice", 16384L);
 
-		columnBitmasks.put("attiva", 32768L);
+		columnBitmasks.put("tipoGenerazionePDF", 32768L);
 
-		columnBitmasks.put("servizioId", 65536L);
+		columnBitmasks.put("attiva", 65536L);
 
-		columnBitmasks.put("processoId", 131072L);
+		columnBitmasks.put("servizioId", 131072L);
+
+		columnBitmasks.put("processoId", 262144L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

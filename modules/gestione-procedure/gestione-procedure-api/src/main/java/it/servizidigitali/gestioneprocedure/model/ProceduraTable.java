@@ -67,9 +67,13 @@ public class ProceduraTable extends BaseTable<ProceduraTable> {
 			"step2TipiIntegrazioneBackoffice", String.class, Types.VARCHAR,
 			Column.FLAG_DEFAULT);
 	public final Column<ProceduraTable, Boolean>
-		step2AbilitaCacheIntegrazioneBackoffice = createColumn(
-			"step2AbilitaCacheIntegrazioneBackoffice", Boolean.class,
-			Types.BOOLEAN, Column.FLAG_DEFAULT);
+		abilitaCacheIntegrazioneBackoffice = createColumn(
+			"abilitaCacheIntegrazioneBackoffice", Boolean.class, Types.BOOLEAN,
+			Column.FLAG_DEFAULT);
+	public final Column<ProceduraTable, String> tipoGenerazionePDF =
+		createColumn(
+			"tipoGenerazionePDF", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
 	public final Column<ProceduraTable, Boolean> attiva = createColumn(
 		"attiva", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<ProceduraTable, Long> servizioId = createColumn(

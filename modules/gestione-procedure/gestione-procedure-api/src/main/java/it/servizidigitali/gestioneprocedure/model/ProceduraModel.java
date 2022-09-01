@@ -303,26 +303,41 @@ public interface ProceduraModel
 		String step2TipiIntegrazioneBackoffice);
 
 	/**
-	 * Returns the step2 abilita cache integrazione backoffice of this procedura.
+	 * Returns the abilita cache integrazione backoffice of this procedura.
 	 *
-	 * @return the step2 abilita cache integrazione backoffice of this procedura
+	 * @return the abilita cache integrazione backoffice of this procedura
 	 */
-	public boolean getStep2AbilitaCacheIntegrazioneBackoffice();
+	public boolean getAbilitaCacheIntegrazioneBackoffice();
 
 	/**
-	 * Returns <code>true</code> if this procedura is step2 abilita cache integrazione backoffice.
+	 * Returns <code>true</code> if this procedura is abilita cache integrazione backoffice.
 	 *
-	 * @return <code>true</code> if this procedura is step2 abilita cache integrazione backoffice; <code>false</code> otherwise
+	 * @return <code>true</code> if this procedura is abilita cache integrazione backoffice; <code>false</code> otherwise
 	 */
-	public boolean isStep2AbilitaCacheIntegrazioneBackoffice();
+	public boolean isAbilitaCacheIntegrazioneBackoffice();
 
 	/**
-	 * Sets whether this procedura is step2 abilita cache integrazione backoffice.
+	 * Sets whether this procedura is abilita cache integrazione backoffice.
 	 *
-	 * @param step2AbilitaCacheIntegrazioneBackoffice the step2 abilita cache integrazione backoffice of this procedura
+	 * @param abilitaCacheIntegrazioneBackoffice the abilita cache integrazione backoffice of this procedura
 	 */
-	public void setStep2AbilitaCacheIntegrazioneBackoffice(
-		boolean step2AbilitaCacheIntegrazioneBackoffice);
+	public void setAbilitaCacheIntegrazioneBackoffice(
+		boolean abilitaCacheIntegrazioneBackoffice);
+
+	/**
+	 * Returns the tipo generazione pdf of this procedura.
+	 *
+	 * @return the tipo generazione pdf of this procedura
+	 */
+	@AutoEscape
+	public String getTipoGenerazionePDF();
+
+	/**
+	 * Sets the tipo generazione pdf of this procedura.
+	 *
+	 * @param tipoGenerazionePDF the tipo generazione pdf of this procedura
+	 */
+	public void setTipoGenerazionePDF(String tipoGenerazionePDF);
 
 	/**
 	 * Returns the attiva of this procedura.

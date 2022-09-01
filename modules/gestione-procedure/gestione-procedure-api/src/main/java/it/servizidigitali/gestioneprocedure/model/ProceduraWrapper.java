@@ -62,8 +62,9 @@ public class ProceduraWrapper
 			"step2TipiIntegrazioneBackoffice",
 			getStep2TipiIntegrazioneBackoffice());
 		attributes.put(
-			"step2AbilitaCacheIntegrazioneBackoffice",
-			isStep2AbilitaCacheIntegrazioneBackoffice());
+			"abilitaCacheIntegrazioneBackoffice",
+			isAbilitaCacheIntegrazioneBackoffice());
+		attributes.put("tipoGenerazionePDF", getTipoGenerazionePDF());
 		attributes.put("attiva", isAttiva());
 		attributes.put("servizioId", getServizioId());
 		attributes.put("processoId", getProcessoId());
@@ -160,12 +161,19 @@ public class ProceduraWrapper
 			setStep2TipiIntegrazioneBackoffice(step2TipiIntegrazioneBackoffice);
 		}
 
-		Boolean step2AbilitaCacheIntegrazioneBackoffice =
-			(Boolean)attributes.get("step2AbilitaCacheIntegrazioneBackoffice");
+		Boolean abilitaCacheIntegrazioneBackoffice = (Boolean)attributes.get(
+			"abilitaCacheIntegrazioneBackoffice");
 
-		if (step2AbilitaCacheIntegrazioneBackoffice != null) {
-			setStep2AbilitaCacheIntegrazioneBackoffice(
-				step2AbilitaCacheIntegrazioneBackoffice);
+		if (abilitaCacheIntegrazioneBackoffice != null) {
+			setAbilitaCacheIntegrazioneBackoffice(
+				abilitaCacheIntegrazioneBackoffice);
+		}
+
+		String tipoGenerazionePDF = (String)attributes.get(
+			"tipoGenerazionePDF");
+
+		if (tipoGenerazionePDF != null) {
+			setTipoGenerazionePDF(tipoGenerazionePDF);
 		}
 
 		Boolean attiva = (Boolean)attributes.get("attiva");
@@ -190,6 +198,16 @@ public class ProceduraWrapper
 	@Override
 	public Procedura cloneWithOriginalValues() {
 		return wrap(model.cloneWithOriginalValues());
+	}
+
+	/**
+	 * Returns the abilita cache integrazione backoffice of this procedura.
+	 *
+	 * @return the abilita cache integrazione backoffice of this procedura
+	 */
+	@Override
+	public boolean getAbilitaCacheIntegrazioneBackoffice() {
+		return model.getAbilitaCacheIntegrazioneBackoffice();
 	}
 
 	/**
@@ -323,16 +341,6 @@ public class ProceduraWrapper
 	}
 
 	/**
-	 * Returns the step2 abilita cache integrazione backoffice of this procedura.
-	 *
-	 * @return the step2 abilita cache integrazione backoffice of this procedura
-	 */
-	@Override
-	public boolean getStep2AbilitaCacheIntegrazioneBackoffice() {
-		return model.getStep2AbilitaCacheIntegrazioneBackoffice();
-	}
-
-	/**
 	 * Returns the step2 tipi integrazione backoffice of this procedura.
 	 *
 	 * @return the step2 tipi integrazione backoffice of this procedura
@@ -350,6 +358,16 @@ public class ProceduraWrapper
 	@Override
 	public String getStep2TipoServizio() {
 		return model.getStep2TipoServizio();
+	}
+
+	/**
+	 * Returns the tipo generazione pdf of this procedura.
+	 *
+	 * @return the tipo generazione pdf of this procedura
+	 */
+	@Override
+	public String getTipoGenerazionePDF() {
+		return model.getTipoGenerazionePDF();
 	}
 
 	/**
@@ -393,6 +411,16 @@ public class ProceduraWrapper
 	}
 
 	/**
+	 * Returns <code>true</code> if this procedura is abilita cache integrazione backoffice.
+	 *
+	 * @return <code>true</code> if this procedura is abilita cache integrazione backoffice; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isAbilitaCacheIntegrazioneBackoffice() {
+		return model.isAbilitaCacheIntegrazioneBackoffice();
+	}
+
+	/**
 	 * Returns <code>true</code> if this procedura is attiva.
 	 *
 	 * @return <code>true</code> if this procedura is attiva; <code>false</code> otherwise
@@ -412,19 +440,22 @@ public class ProceduraWrapper
 		return model.isStep1Attivo();
 	}
 
-	/**
-	 * Returns <code>true</code> if this procedura is step2 abilita cache integrazione backoffice.
-	 *
-	 * @return <code>true</code> if this procedura is step2 abilita cache integrazione backoffice; <code>false</code> otherwise
-	 */
-	@Override
-	public boolean isStep2AbilitaCacheIntegrazioneBackoffice() {
-		return model.isStep2AbilitaCacheIntegrazioneBackoffice();
-	}
-
 	@Override
 	public void persist() {
 		model.persist();
+	}
+
+	/**
+	 * Sets whether this procedura is abilita cache integrazione backoffice.
+	 *
+	 * @param abilitaCacheIntegrazioneBackoffice the abilita cache integrazione backoffice of this procedura
+	 */
+	@Override
+	public void setAbilitaCacheIntegrazioneBackoffice(
+		boolean abilitaCacheIntegrazioneBackoffice) {
+
+		model.setAbilitaCacheIntegrazioneBackoffice(
+			abilitaCacheIntegrazioneBackoffice);
 	}
 
 	/**
@@ -561,19 +592,6 @@ public class ProceduraWrapper
 	}
 
 	/**
-	 * Sets whether this procedura is step2 abilita cache integrazione backoffice.
-	 *
-	 * @param step2AbilitaCacheIntegrazioneBackoffice the step2 abilita cache integrazione backoffice of this procedura
-	 */
-	@Override
-	public void setStep2AbilitaCacheIntegrazioneBackoffice(
-		boolean step2AbilitaCacheIntegrazioneBackoffice) {
-
-		model.setStep2AbilitaCacheIntegrazioneBackoffice(
-			step2AbilitaCacheIntegrazioneBackoffice);
-	}
-
-	/**
 	 * Sets the step2 tipi integrazione backoffice of this procedura.
 	 *
 	 * @param step2TipiIntegrazioneBackoffice the step2 tipi integrazione backoffice of this procedura
@@ -594,6 +612,16 @@ public class ProceduraWrapper
 	@Override
 	public void setStep2TipoServizio(String step2TipoServizio) {
 		model.setStep2TipoServizio(step2TipoServizio);
+	}
+
+	/**
+	 * Sets the tipo generazione pdf of this procedura.
+	 *
+	 * @param tipoGenerazionePDF the tipo generazione pdf of this procedura
+	 */
+	@Override
+	public void setTipoGenerazionePDF(String tipoGenerazionePDF) {
+		model.setTipoGenerazionePDF(tipoGenerazionePDF);
 	}
 
 	/**
