@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 
@@ -55,6 +56,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -2458,6 +2460,497 @@ public class ServizioEntePersistenceImpl
 	private static final String _FINDER_COLUMN_SERVIZIOID_SERVIZIOID_2 =
 		"servizioEnte.id.servizioId = ?";
 
+	private FinderPath _finderPathFetchByGroupIdPrivateLayoutId;
+	private FinderPath _finderPathCountByGroupIdPrivateLayoutId;
+
+	/**
+	 * Returns the servizio ente where groupId = &#63; and privateLayoutId = &#63; or throws a <code>NoSuchServizioEnteException</code> if it could not be found.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayoutId the private layout ID
+	 * @return the matching servizio ente
+	 * @throws NoSuchServizioEnteException if a matching servizio ente could not be found
+	 */
+	@Override
+	public ServizioEnte findByGroupIdPrivateLayoutId(
+			long groupId, long privateLayoutId)
+		throws NoSuchServizioEnteException {
+
+		ServizioEnte servizioEnte = fetchByGroupIdPrivateLayoutId(
+			groupId, privateLayoutId);
+
+		if (servizioEnte == null) {
+			StringBundler sb = new StringBundler(6);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("groupId=");
+			sb.append(groupId);
+
+			sb.append(", privateLayoutId=");
+			sb.append(privateLayoutId);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchServizioEnteException(sb.toString());
+		}
+
+		return servizioEnte;
+	}
+
+	/**
+	 * Returns the servizio ente where groupId = &#63; and privateLayoutId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayoutId the private layout ID
+	 * @return the matching servizio ente, or <code>null</code> if a matching servizio ente could not be found
+	 */
+	@Override
+	public ServizioEnte fetchByGroupIdPrivateLayoutId(
+		long groupId, long privateLayoutId) {
+
+		return fetchByGroupIdPrivateLayoutId(groupId, privateLayoutId, true);
+	}
+
+	/**
+	 * Returns the servizio ente where groupId = &#63; and privateLayoutId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayoutId the private layout ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching servizio ente, or <code>null</code> if a matching servizio ente could not be found
+	 */
+	@Override
+	public ServizioEnte fetchByGroupIdPrivateLayoutId(
+		long groupId, long privateLayoutId, boolean useFinderCache) {
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {groupId, privateLayoutId};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByGroupIdPrivateLayoutId, finderArgs);
+		}
+
+		if (result instanceof ServizioEnte) {
+			ServizioEnte servizioEnte = (ServizioEnte)result;
+
+			if ((groupId != servizioEnte.getGroupId()) ||
+				(privateLayoutId != servizioEnte.getPrivateLayoutId())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_SELECT_SERVIZIOENTE_WHERE);
+
+			sb.append(_FINDER_COLUMN_GROUPIDPRIVATELAYOUTID_GROUPID_2);
+
+			sb.append(_FINDER_COLUMN_GROUPIDPRIVATELAYOUTID_PRIVATELAYOUTID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(groupId);
+
+				queryPos.add(privateLayoutId);
+
+				List<ServizioEnte> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByGroupIdPrivateLayoutId,
+							finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {
+									groupId, privateLayoutId
+								};
+							}
+
+							_log.warn(
+								"ServizioEntePersistenceImpl.fetchByGroupIdPrivateLayoutId(long, long, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					ServizioEnte servizioEnte = list.get(0);
+
+					result = servizioEnte;
+
+					cacheResult(servizioEnte);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (ServizioEnte)result;
+		}
+	}
+
+	/**
+	 * Removes the servizio ente where groupId = &#63; and privateLayoutId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayoutId the private layout ID
+	 * @return the servizio ente that was removed
+	 */
+	@Override
+	public ServizioEnte removeByGroupIdPrivateLayoutId(
+			long groupId, long privateLayoutId)
+		throws NoSuchServizioEnteException {
+
+		ServizioEnte servizioEnte = findByGroupIdPrivateLayoutId(
+			groupId, privateLayoutId);
+
+		return remove(servizioEnte);
+	}
+
+	/**
+	 * Returns the number of servizio entes where groupId = &#63; and privateLayoutId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayoutId the private layout ID
+	 * @return the number of matching servizio entes
+	 */
+	@Override
+	public int countByGroupIdPrivateLayoutId(
+		long groupId, long privateLayoutId) {
+
+		FinderPath finderPath = _finderPathCountByGroupIdPrivateLayoutId;
+
+		Object[] finderArgs = new Object[] {groupId, privateLayoutId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_SERVIZIOENTE_WHERE);
+
+			sb.append(_FINDER_COLUMN_GROUPIDPRIVATELAYOUTID_GROUPID_2);
+
+			sb.append(_FINDER_COLUMN_GROUPIDPRIVATELAYOUTID_PRIVATELAYOUTID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(groupId);
+
+				queryPos.add(privateLayoutId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_GROUPIDPRIVATELAYOUTID_GROUPID_2 =
+			"servizioEnte.groupId = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_GROUPIDPRIVATELAYOUTID_PRIVATELAYOUTID_2 =
+			"servizioEnte.privateLayoutId = ?";
+
+	private FinderPath _finderPathFetchByGroupIdPublicLayoutId;
+	private FinderPath _finderPathCountByGroupIdPublicLayoutId;
+
+	/**
+	 * Returns the servizio ente where groupId = &#63; and publicLayoutId = &#63; or throws a <code>NoSuchServizioEnteException</code> if it could not be found.
+	 *
+	 * @param groupId the group ID
+	 * @param publicLayoutId the public layout ID
+	 * @return the matching servizio ente
+	 * @throws NoSuchServizioEnteException if a matching servizio ente could not be found
+	 */
+	@Override
+	public ServizioEnte findByGroupIdPublicLayoutId(
+			long groupId, long publicLayoutId)
+		throws NoSuchServizioEnteException {
+
+		ServizioEnte servizioEnte = fetchByGroupIdPublicLayoutId(
+			groupId, publicLayoutId);
+
+		if (servizioEnte == null) {
+			StringBundler sb = new StringBundler(6);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("groupId=");
+			sb.append(groupId);
+
+			sb.append(", publicLayoutId=");
+			sb.append(publicLayoutId);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchServizioEnteException(sb.toString());
+		}
+
+		return servizioEnte;
+	}
+
+	/**
+	 * Returns the servizio ente where groupId = &#63; and publicLayoutId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param publicLayoutId the public layout ID
+	 * @return the matching servizio ente, or <code>null</code> if a matching servizio ente could not be found
+	 */
+	@Override
+	public ServizioEnte fetchByGroupIdPublicLayoutId(
+		long groupId, long publicLayoutId) {
+
+		return fetchByGroupIdPublicLayoutId(groupId, publicLayoutId, true);
+	}
+
+	/**
+	 * Returns the servizio ente where groupId = &#63; and publicLayoutId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param publicLayoutId the public layout ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching servizio ente, or <code>null</code> if a matching servizio ente could not be found
+	 */
+	@Override
+	public ServizioEnte fetchByGroupIdPublicLayoutId(
+		long groupId, long publicLayoutId, boolean useFinderCache) {
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {groupId, publicLayoutId};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByGroupIdPublicLayoutId, finderArgs);
+		}
+
+		if (result instanceof ServizioEnte) {
+			ServizioEnte servizioEnte = (ServizioEnte)result;
+
+			if ((groupId != servizioEnte.getGroupId()) ||
+				(publicLayoutId != servizioEnte.getPublicLayoutId())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_SELECT_SERVIZIOENTE_WHERE);
+
+			sb.append(_FINDER_COLUMN_GROUPIDPUBLICLAYOUTID_GROUPID_2);
+
+			sb.append(_FINDER_COLUMN_GROUPIDPUBLICLAYOUTID_PUBLICLAYOUTID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(groupId);
+
+				queryPos.add(publicLayoutId);
+
+				List<ServizioEnte> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByGroupIdPublicLayoutId, finderArgs,
+							list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {
+									groupId, publicLayoutId
+								};
+							}
+
+							_log.warn(
+								"ServizioEntePersistenceImpl.fetchByGroupIdPublicLayoutId(long, long, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					ServizioEnte servizioEnte = list.get(0);
+
+					result = servizioEnte;
+
+					cacheResult(servizioEnte);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (ServizioEnte)result;
+		}
+	}
+
+	/**
+	 * Removes the servizio ente where groupId = &#63; and publicLayoutId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param publicLayoutId the public layout ID
+	 * @return the servizio ente that was removed
+	 */
+	@Override
+	public ServizioEnte removeByGroupIdPublicLayoutId(
+			long groupId, long publicLayoutId)
+		throws NoSuchServizioEnteException {
+
+		ServizioEnte servizioEnte = findByGroupIdPublicLayoutId(
+			groupId, publicLayoutId);
+
+		return remove(servizioEnte);
+	}
+
+	/**
+	 * Returns the number of servizio entes where groupId = &#63; and publicLayoutId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param publicLayoutId the public layout ID
+	 * @return the number of matching servizio entes
+	 */
+	@Override
+	public int countByGroupIdPublicLayoutId(long groupId, long publicLayoutId) {
+		FinderPath finderPath = _finderPathCountByGroupIdPublicLayoutId;
+
+		Object[] finderArgs = new Object[] {groupId, publicLayoutId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_SERVIZIOENTE_WHERE);
+
+			sb.append(_FINDER_COLUMN_GROUPIDPUBLICLAYOUTID_GROUPID_2);
+
+			sb.append(_FINDER_COLUMN_GROUPIDPUBLICLAYOUTID_PUBLICLAYOUTID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(groupId);
+
+				queryPos.add(publicLayoutId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_GROUPIDPUBLICLAYOUTID_GROUPID_2 =
+		"servizioEnte.groupId = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_GROUPIDPUBLICLAYOUTID_PUBLICLAYOUTID_2 =
+			"servizioEnte.publicLayoutId = ?";
+
 	public ServizioEntePersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -2486,6 +2979,20 @@ public class ServizioEntePersistenceImpl
 		finderCache.putResult(
 			_finderPathFetchByUUID_G,
 			new Object[] {servizioEnte.getUuid(), servizioEnte.getGroupId()},
+			servizioEnte);
+
+		finderCache.putResult(
+			_finderPathFetchByGroupIdPrivateLayoutId,
+			new Object[] {
+				servizioEnte.getGroupId(), servizioEnte.getPrivateLayoutId()
+			},
+			servizioEnte);
+
+		finderCache.putResult(
+			_finderPathFetchByGroupIdPublicLayoutId,
+			new Object[] {
+				servizioEnte.getGroupId(), servizioEnte.getPublicLayoutId()
+			},
 			servizioEnte);
 	}
 
@@ -2567,6 +3074,28 @@ public class ServizioEntePersistenceImpl
 		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, servizioEnteModelImpl);
+
+		args = new Object[] {
+			servizioEnteModelImpl.getGroupId(),
+			servizioEnteModelImpl.getPrivateLayoutId()
+		};
+
+		finderCache.putResult(
+			_finderPathCountByGroupIdPrivateLayoutId, args, Long.valueOf(1));
+		finderCache.putResult(
+			_finderPathFetchByGroupIdPrivateLayoutId, args,
+			servizioEnteModelImpl);
+
+		args = new Object[] {
+			servizioEnteModelImpl.getGroupId(),
+			servizioEnteModelImpl.getPublicLayoutId()
+		};
+
+		finderCache.putResult(
+			_finderPathCountByGroupIdPublicLayoutId, args, Long.valueOf(1));
+		finderCache.putResult(
+			_finderPathFetchByGroupIdPublicLayoutId, args,
+			servizioEnteModelImpl);
 	}
 
 	/**
@@ -3124,6 +3653,28 @@ public class ServizioEntePersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByServizioId",
 			new String[] {Long.class.getName()}, new String[] {"servizioId"},
 			false);
+
+		_finderPathFetchByGroupIdPrivateLayoutId = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByGroupIdPrivateLayoutId",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"groupId", "privateLayoutId"}, true);
+
+		_finderPathCountByGroupIdPrivateLayoutId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByGroupIdPrivateLayoutId",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"groupId", "privateLayoutId"}, false);
+
+		_finderPathFetchByGroupIdPublicLayoutId = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByGroupIdPublicLayoutId",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"groupId", "publicLayoutId"}, true);
+
+		_finderPathCountByGroupIdPublicLayoutId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByGroupIdPublicLayoutId",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"groupId", "publicLayoutId"}, false);
 
 		_setServizioEnteUtilPersistence(this);
 	}

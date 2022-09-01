@@ -307,6 +307,12 @@ public class ServizioEnteLocalServiceUtil {
 		return getService().getServizioEnte(servizioEntePK);
 	}
 
+	public static ServizioEnte getServizioEnteByGroupIdLayoutId(
+		long groupId, long layoutId) {
+
+		return getService().getServizioEnteByGroupIdLayoutId(groupId, layoutId);
+	}
+
 	/**
 	 * Returns the servizio ente matching the UUID and group.
 	 *

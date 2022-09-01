@@ -172,4 +172,10 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 
 		return servizioEntePersistence.findWithDynamicQuery(servizioEnteDynamicQuery);
 	}
+
+	@Override
+	public ServizioEnte getServizioEnteByGroupIdLayoutId(long groupId, long layoutId) {
+		ServizioEnte servizioEnte = servizioEnteFinder.findServizioEnteByGroupIdLayoutId(groupId, layoutId);
+		return servizioEnte;
+	}
 }
