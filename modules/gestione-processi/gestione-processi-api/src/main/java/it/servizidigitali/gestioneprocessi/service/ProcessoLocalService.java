@@ -224,6 +224,11 @@ public interface ProcessoLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Processo> getListaProcessiByOrganizationAttivo(
+			long groupId, boolean attivo)
+		throws Exception;
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *

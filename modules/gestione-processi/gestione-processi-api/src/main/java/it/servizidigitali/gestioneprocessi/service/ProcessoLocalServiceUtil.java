@@ -244,6 +244,14 @@ public class ProcessoLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
+	public static List<Processo> getListaProcessiByOrganizationAttivo(
+			long groupId, boolean attivo)
+		throws Exception {
+
+		return getService().getListaProcessiByOrganizationAttivo(
+			groupId, attivo);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
