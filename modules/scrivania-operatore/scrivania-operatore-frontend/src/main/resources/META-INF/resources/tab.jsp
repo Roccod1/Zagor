@@ -57,7 +57,7 @@
 		</div>
 	</div>
 	<div class="d-flex justify-content-end">
-		<a href="${resetURL}" class="btn btn-secondary mr-1"><liferay-ui:message key="annulla" /></a>
+		<a href="${resetURL}" class="btn btn-secondary mr-1"><liferay-ui:message key="reset" /></a>
 		<aui:button type="submit" value="cerca" />
 	</div>
 </aui:form>
