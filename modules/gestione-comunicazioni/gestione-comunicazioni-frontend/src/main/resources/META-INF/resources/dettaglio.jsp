@@ -27,10 +27,8 @@
 </div>
 <div class="row">
 	<div class="col-12">
-		<liferay-editor:editor name="descrizione"
-							   contents="${comunicazione.descrizione}"
-	   		                   placeholder="descrizione"
-	                     	   editorName="ckeditor" />
+		<label class="control-label"><liferay-ui:message key="descrizione" /></label>
+		${comunicazione.descrizione}
 	</div>
 </div>
 
