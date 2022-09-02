@@ -3,7 +3,7 @@
 
 <div>
 	<h5>${themeDisplay.realUser.fullName}</h5>
-	<small>CF: CODICE FISCALE</small>
+	<small class="text-uppercase"><liferay-ui:message key="cf"/>: ${themeDisplay.user.screenName }</small>
 </div>
 
 <liferay-ui:tabs 

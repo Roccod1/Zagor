@@ -3,7 +3,11 @@ package it.servizidigitali.scrivaniacittadino.frontend.portlet;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +21,9 @@ import javax.portlet.RenderResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
+import it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters;
+import it.servizidigitali.gestionecomunicazioni.service.ComunicazioneLocalService;
 import it.servizidigitali.scrivaniacittadino.frontend.constants.ScrivaniaCittadinoPortletKeys;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
@@ -46,20 +53,38 @@ public class ScrivaniaCittadinoPortlet extends MVCPortlet {
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
 	
+	@Reference
+	private ComunicazioneLocalService comunicazioneLocalService;
+	
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
 		
        List<Richiesta> listaRichieste = new ArrayList<Richiesta>();
-        try {
-            listaRichieste = (List<Richiesta>)this.richiestaLocalService.getRichiestas(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-        }
-        catch (Exception e) {
+       List<Comunicazione> listaComunicazioni = new ArrayList<Comunicazione>();
+        
+       ServiceContext serviceContext = null;
+       ThemeDisplay themeDisplay = null;
+       
+       try {
+            listaRichieste = richiestaLocalService.getRichiestas(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+            
+            serviceContext = ServiceContextFactory.getInstance(renderRequest);
+            themeDisplay = serviceContext.getThemeDisplay();
+            User loggedUser = themeDisplay.getUser();
+            
+            ComunicazioneFilters comunicazioneFilters = new ComunicazioneFilters();
+            comunicazioneFilters.setUserId(loggedUser.getUserId());
+            
+            int countComunicazioni = comunicazioneLocalService.countComunicazioni(comunicazioneFilters);
+            listaComunicazioni = comunicazioneLocalService.searchComunicazioni(comunicazioneFilters, 0, countComunicazioni);
+        }catch (Exception e) {
             _log.error("render() :: " + e.getMessage(), e);
         }
-        renderRequest.setAttribute("listaRichieste", listaRichieste);
-        renderRequest.setAttribute("listaPrenotazioni", (Object)new ArrayList<Object>());
-        renderRequest.setAttribute("listaComunicazioni", (Object)new ArrayList<Object>());
-        renderRequest.setAttribute("listaPagamenti", (Object)new ArrayList<Object>());
+       
+        renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_RICHIESTE, listaRichieste);
+        renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_PAGAMENTI, new ArrayList<Object>());
+        renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_COMUNICAZIONI, listaComunicazioni);
+        renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_PRENOTAZIONI, new ArrayList<Object>());
 
 		super.render(renderRequest, renderResponse);
 	}

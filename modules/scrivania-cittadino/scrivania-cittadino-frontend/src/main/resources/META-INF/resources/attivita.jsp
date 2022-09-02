@@ -6,7 +6,9 @@
 			  <div class="collapse-header" id="heading${richiesta.richiestaId }">
 			    <button data-toggle="collapse" data-target="#collapse${richiesta.richiestaId }" aria-expanded="false" aria-controls="collapse${richiesta.richiestaId }">
 			       <div class="button-wrapper">
-			   		 ${richiesta.oggetto}
+			         <span class="text-uppercase">
+				   		 ${richiesta.oggetto}			         
+			         </span>
 				     <div class="icon-wrapper">
 				       <svg class="icon icon-xs me-1 icon-primary">
 				         <use href="/o/portale-istituzionale-theme/svg/sprite.svg#it-check"></use>
