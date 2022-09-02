@@ -321,7 +321,8 @@ public interface ProcessoLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Processo> search(
 			String nome, Date dataInserimentoDa, Date dataInserimentoA,
-			int delta, int cur, String orderByCol, String orderByType)
+			long groupId, int delta, int cur, String orderByCol,
+			String orderByType)
 		throws PortalException;
 
 	/**

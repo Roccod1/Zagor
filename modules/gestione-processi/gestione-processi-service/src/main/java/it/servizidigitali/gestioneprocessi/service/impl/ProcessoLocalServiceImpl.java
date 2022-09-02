@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 	public static final Log _log = LogFactoryUtil.getLog(ProcessoLocalServiceImpl.class);
 
 	@Override
-	public List<Processo> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta, int cur, String orderByCol, String orderByType) throws PortalException {
+	public List<Processo> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, long groupId, int delta, int cur, String orderByCol, String orderByType) throws PortalException {
 		boolean direzione = false;
 
 		if (orderByType.equalsIgnoreCase("asc")) {
@@ -58,20 +59,36 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 
 		OrderByComparator<Processo> comparator = OrderByComparatorFactoryUtil.create("Processo", orderByCol, direzione);
 		List<Processo> listaProcesso = processoFinder.findByFilters(nome, dataInserimentoDa, dataInserimentoA, cur, delta, comparator);
+		List<Processo> listaProcessoFiltrata = new ArrayList<Processo>();
+		Group group = null;
+		Organization organization = null;
 
 		for (Processo processo : listaProcesso) {
-			Group group = GroupLocalServiceUtil.getGroup(processo.getGroupId());
-			if (group.getOrganizationId() > 0) {
-				Organization organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
-				processo.setNomeEnte(organization.getName());
+			group = GroupLocalServiceUtil.getGroup(processo.getGroupId());
+			
+			if(group.getGroupId()==groupId) {
+				
+				if (group.getOrganizationId() > 0) {
+					organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
+					processo.setNomeEnte(organization.getName());
+				}else {
+					processo.setNomeEnte("-");
+				}
+				
+				listaProcessoFiltrata.add(processo);	
+
 			}
-			else {
-				processo.setNomeEnte("-");
+			
+			if(group.getOrganizationId()==0) {
+				if(!listaProcessoFiltrata.contains(processo)) {
+					processo.setNomeEnte("-");
+					listaProcessoFiltrata.add(processo);
+				}
 			}
 
 		}
 
-		return listaProcesso;
+		return listaProcessoFiltrata;
 	}
 
 	@Override

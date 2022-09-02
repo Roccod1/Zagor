@@ -90,7 +90,7 @@ public class GestioneProcessiPortlet extends MVCPortlet {
 				dataInserimentoA = simpleDateFormat.parse(dataInserimentoAString);
 			}
 			
-			listaProcessi = processoLocalService.search(nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);
+			listaProcessi = processoLocalService.search(nome, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), delta, cur, orderByCol, orderByType);
 			
 		}catch(Exception e) {
 			_log.error("Errore durante la ricerca dei processi!" + e.getMessage());

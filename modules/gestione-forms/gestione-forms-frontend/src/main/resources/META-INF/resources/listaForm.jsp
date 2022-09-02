@@ -52,10 +52,10 @@
 					<c:when test="${organizationIdSitePrincipale == 0}">
 						<liferay-ui:search-container-column-text name="<%=GestioneFormsPortletKeys.AZIONI %>" align="center" value="<i class='icon-edit'></i>" href="${dettaglioNuovoURL}"/>
 					</c:when>
-					<c:when test="${form.groupId == groupIdUtente}">
+					<c:when test="${form.groupId == siteGroupId}">
 						<liferay-ui:search-container-column-text name="<%=GestioneFormsPortletKeys.AZIONI %>" align="center" value="<i class='icon-edit'></i>" href="${dettaglioNuovoURL}"/>
 					</c:when>
-					<c:when test="${form.groupId != groupIdUtente && organizationIdSitePrincipale!=0}">
+					<c:when test="${form.groupId != siteGroupId && organizationIdSitePrincipale!=0}">
 						<liferay-ui:search-container-column-text name="<%=GestioneFormsPortletKeys.AZIONI %>" align="center" value=""/>
 					</c:when>
 				</c:choose>			
