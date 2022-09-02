@@ -65,8 +65,9 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 
 		for (Processo processo : listaProcesso) {
 			group = GroupLocalServiceUtil.getGroup(processo.getGroupId());
+			long organizationIdSite = GroupLocalServiceUtil.getGroup(groupId).getOrganizationId();
 			
-			if(group.getGroupId()==groupId) {
+			if(organizationIdSite==0) {
 				
 				if (group.getOrganizationId() > 0) {
 					organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
@@ -75,14 +76,26 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 					processo.setNomeEnte("-");
 				}
 				
-				listaProcessoFiltrata.add(processo);	
+				listaProcessoFiltrata.add(processo);
+			}else {
+				if(group.getGroupId()==groupId) {
+					
+					if (group.getOrganizationId() > 0) {
+						organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
+						processo.setNomeEnte(organization.getName());
+					}else {
+						processo.setNomeEnte("-");
+					}
+					
+					listaProcessoFiltrata.add(processo);	
 
-			}
-			
-			if(group.getOrganizationId()==0) {
-				if(!listaProcessoFiltrata.contains(processo)) {
-					processo.setNomeEnte("-");
-					listaProcessoFiltrata.add(processo);
+				}
+				
+				if(group.getOrganizationId()==0) {
+					if(!listaProcessoFiltrata.contains(processo)) {
+						processo.setNomeEnte("-");
+						listaProcessoFiltrata.add(processo);
+					}
 				}
 			}
 

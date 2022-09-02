@@ -66,8 +66,9 @@ public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
 
 		for (Form form : listaForm) {
 			group = GroupLocalServiceUtil.getGroup(form.getGroupId());
+			long organizationIdSite = GroupLocalServiceUtil.getGroup(groupId).getOrganizationId();
 			
-			if(group.getGroupId()==groupId) {
+			if(organizationIdSite==0) {
 				
 				if (group.getOrganizationId() > 0) {
 					organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
@@ -76,14 +77,26 @@ public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
 					form.setNomeEnte("-");
 				}
 				
-				listaFormFiltrata.add(form);	
+				listaFormFiltrata.add(form);
+			}else {
+				if(group.getGroupId()==groupId) {
+					
+					if (group.getOrganizationId() > 0) {
+						organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
+						form.setNomeEnte(organization.getName());
+					}else {
+						form.setNomeEnte("-");
+					}
+					
+					listaFormFiltrata.add(form);	
 
-			}
-			
-			if(group.getOrganizationId()==0) {
-				if(!listaFormFiltrata.contains(form)) {
-					form.setNomeEnte("-");
-					listaFormFiltrata.add(form);
+				}
+				
+				if(group.getOrganizationId()==0) {
+					if(!listaFormFiltrata.contains(form)) {
+						form.setNomeEnte("-");
+						listaFormFiltrata.add(form);
+					}
 				}
 			}
 		}
