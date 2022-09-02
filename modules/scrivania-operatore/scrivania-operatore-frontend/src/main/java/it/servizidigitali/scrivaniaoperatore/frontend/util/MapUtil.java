@@ -20,6 +20,9 @@ public class MapUtil {
 		dto.setStato(richiesta.getStato());
 		dto.setCf(richiesta.getCodiceFiscale().toUpperCase());
 		dto.setAccesso(!richiesta.getInvioGuest());
+		dto.setDataInserimento(richiesta.getCreateDate());
+		dto.setOggetto(richiesta.getOggetto());
+		dto.setNote(richiesta.getNote());
 		return dto;
 	}
 }

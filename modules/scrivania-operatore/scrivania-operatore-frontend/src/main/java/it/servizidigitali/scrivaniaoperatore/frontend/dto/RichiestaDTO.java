@@ -10,6 +10,9 @@ public class RichiestaDTO {
 	private String stato;
 	private String cf;
 	private boolean accesso;
+	private Date dataInserimento;
+	private String oggetto;
+	private String note;
 	
 	public long getId() {
 		return id;
@@ -52,6 +55,24 @@ public class RichiestaDTO {
 	}
 	public void setAccesso(boolean accesso) {
 		this.accesso = accesso;
+	}
+	public Date getDataInserimento() {
+		return dataInserimento;
+	}
+	public void setDataInserimento(Date dataInserimento) {
+		this.dataInserimento = dataInserimento;
+	}
+	public String getOggetto() {
+		return oggetto;
+	}
+	public void setOggetto(String oggetto) {
+		this.oggetto = oggetto;
+	}
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
 	}
 	
 }
