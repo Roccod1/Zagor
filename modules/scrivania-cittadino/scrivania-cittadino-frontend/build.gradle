@@ -1,7 +1,6 @@
 dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.portal.api"
 
-	compile project(":modules:scrivania-cittadino:scrivania-cittadino-api")
 	compile project(":modules:scrivania-operatore:scrivania-operatore-api")
 	compile project(":modules:gestione-comunicazioni:gestione-comunicazioni-api")
 	
