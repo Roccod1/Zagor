@@ -25,6 +25,7 @@ import java.util.List;
 
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
+import it.servizidigitali.gestioneprocedure.exception.NoSuchProceduraFormException;
 import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.base.ProceduraFormLocalServiceBaseImpl;
 import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFormPK;
@@ -57,15 +58,35 @@ public class ProceduraFormLocalServiceImpl
 				proceduraFormPk.setFormId(Long.valueOf(idForm));
 				proceduraFormPk.setProceduraId(idProcedura);
 				
-				proceduraForm = proceduraFormPersistence.create(proceduraFormPk);
-				proceduraFormPersistence.update(proceduraForm);
-				
-				listaProceduraFormIntegrativi.add(proceduraForm);
-				
+				try {
+					proceduraFormPersistence.findByPrimaryKey(proceduraFormPk);
+				} catch (NoSuchProceduraFormException e) {
+					proceduraForm = proceduraFormPersistence.create(proceduraFormPk);
+					proceduraFormPersistence.update(proceduraForm);
+					listaProceduraFormIntegrativi.add(proceduraForm);
+				}
+
 			}
 		}
 		
 		return listaProceduraFormIntegrativi;
+	}
+	
+	public ProceduraForm salvaProceduraFormPrincipale (long idFormPrincipale, long idProcedura) {
+		ProceduraForm proceduraForm = null;
+		
+		ProceduraFormPK proceduraFormPk = new ProceduraFormPK();
+		proceduraFormPk.setProceduraId(idProcedura);
+		proceduraFormPk.setFormId(idFormPrincipale);
+		
+		try {
+			proceduraForm = proceduraFormPersistence.findByPrimaryKey(proceduraFormPk);
+		} catch (NoSuchProceduraFormException e) {
+			proceduraForm = proceduraFormPersistence.create(proceduraFormPk);
+			proceduraFormPersistence.update(proceduraForm);
+		}
+		
+		return proceduraForm;
 	}
 	
 	public String getFormIntegrativiProcedura(long idProcedura) throws PortalException {
@@ -124,4 +145,5 @@ public class ProceduraFormLocalServiceImpl
 		
 		return idFormPrincipale;
 	}
+
 }

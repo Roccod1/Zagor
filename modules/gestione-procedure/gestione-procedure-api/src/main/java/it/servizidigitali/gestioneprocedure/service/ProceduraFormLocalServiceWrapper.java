@@ -384,6 +384,14 @@ public class ProceduraFormLocalServiceWrapper
 			listaFormIntegrativi, idProcedura);
 	}
 
+	@Override
+	public it.servizidigitali.gestioneprocedure.model.ProceduraForm
+		salvaProceduraFormPrincipale(long idFormPrincipale, long idProcedura) {
+
+		return _proceduraFormLocalService.salvaProceduraFormPrincipale(
+			idFormPrincipale, idProcedura);
+	}
+
 	/**
 	 * Updates the procedura form in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

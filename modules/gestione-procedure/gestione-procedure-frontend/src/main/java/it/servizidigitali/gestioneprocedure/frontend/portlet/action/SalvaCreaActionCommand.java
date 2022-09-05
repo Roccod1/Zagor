@@ -21,10 +21,8 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneprocedure.frontend.constants.GestioneProcedurePortletKeys;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
-import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
-import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFormPK;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 
 @Component(immediate = true, 
@@ -79,7 +77,6 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		String tipoGenerazioneTemplate = ParamUtil.getString(actionRequest, GestioneProcedurePortletKeys.TIPI_GENERAZIONE_TEMPLATE);
 		
 		Procedura procedura = null;
-		ProceduraForm proceduraForm = null;
 		
 		if(idProcedura>0) {
 			procedura = proceduraLocalService.getProcedura(idProcedura);
@@ -124,15 +121,7 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		procedura.setPecDestinazione(pec);
 		procedura.setAttiva(attivaProcedura);
 		procedura.setServizioId(idServizio);
-		
-		ProceduraFormPK proceduraFormPk = new ProceduraFormPK();
-		proceduraFormPk.setProceduraId(procedura.getProceduraId());
-		proceduraFormPk.setFormId(idFormPrincipale);
-		
-		proceduraForm = proceduraFormLocalService.createProceduraForm(proceduraFormPk);
 				
-		proceduraFormLocalService.salvaListaFormIntegrativi(idFormIntegrativi, procedura.getProceduraId());
-		
 		procedura.setStep1Attivo(step1Attivo);
 		procedura.setStep1TipoComponentiNucleoFamiliare(filtroComponentiNucleoFamiliare);
 		
@@ -149,7 +138,9 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		
 		SessionMessages.add(actionRequest, GestioneProcedurePortletKeys.SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE);
 		proceduraLocalService.updateProcedura(procedura);
-		proceduraFormLocalService.updateProceduraForm(proceduraForm);
+				
+		proceduraFormLocalService.salvaProceduraFormPrincipale(idFormPrincipale, procedura.getProceduraId());
+		proceduraFormLocalService.salvaListaFormIntegrativi(idFormIntegrativi, procedura.getProceduraId());
 
 	}
 
