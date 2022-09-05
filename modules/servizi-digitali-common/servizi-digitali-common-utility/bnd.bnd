@@ -3,4 +3,4 @@ Bundle-SymbolicName: it.servizidigitali.common.utility
 Bundle-Version: 1.0.0
 
 Export-Package: \
-	it.servizidigitali.common.utility
+	it.servizidigitali.common.utility.*
