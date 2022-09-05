@@ -56,24 +56,25 @@
 					</c:choose>
 				</div>
 			</div>
-
+			
 			<div class="col">
 				<div class="form-group">
+				
 					<c:choose>
-						<c:when test="${empty listaUriPrivata }">
+						<c:when test="${empty listaArticleCatalogoServizi }">
 							<div class="alert alert-warning" role="alert">
-							  <liferay-ui:message key="nessun-uri-privata-disponibile"/>
+							  <liferay-ui:message key="nessun-article-id-assegnabile"/>
 							</div>
 						</c:when>
 						
 						<c:otherwise>
-					        <aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_PRIVATE_LAYOUT_ID %>" label="uri-privata" type="text" value="${servizioEnte.privateLayoutId}">
-					        	<aui:option value="" label="seleziona" selected="selected"/>
-					        	<c:forEach items="${listaUriPrivata }" var="uriPrivata">
-					        		<aui:option value="${uriPrivata.layoutId}">${uriPrivata.name}</aui:option>
+							<aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_CATALOGO_SERVIZI_ARTICLE_ID %>" label="id-article-catalogo-servizi" value="${servizioEnte.catalogoServizioArticleId}">
+					        	<aui:option value="" label="seleziona" selected="true"/>
+					        	<c:forEach items="${listaArticleCatalogoServizi}" var="article">
+					        		<aui:option value="${article.articleId }">${article.articleId } - ${article.title }</aui:option>
 					        	</c:forEach>
 					        </aui:select>
-						</c:otherwise>
+				       	 </c:otherwise>
 					</c:choose>
 				</div>
 			</div>
@@ -102,39 +103,22 @@
 			
 			<div class="col">
 				<div class="form-group">
-				
 					<c:choose>
-						<c:when test="${empty listaArticleCatalogoServizi }">
+						<c:when test="${empty listaUriPrivata }">
 							<div class="alert alert-warning" role="alert">
-							  <liferay-ui:message key="nessun-article-id-assegnabile"/>
+							  <liferay-ui:message key="nessun-uri-privata-disponibile"/>
 							</div>
 						</c:when>
 						
 						<c:otherwise>
-							<aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_CATALOGO_SERVIZI_ARTICLE_ID %>" label="id-article-catalogo-servizi" value="${servizioEnte.catalogoServizioArticleId}">
-					        	<aui:option value="" label="seleziona" selected="true"/>
-					        	<c:forEach items="${listaArticleCatalogoServizi}" var="article">
-					        		<aui:option value="${article.articleId }">${article.articleId } - ${article.title }</aui:option>
+					        <aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_PRIVATE_LAYOUT_ID %>" label="uri-privata" type="text" value="${servizioEnte.privateLayoutId}">
+					        	<aui:option value="" label="seleziona" selected="selected"/>
+					        	<c:forEach items="${listaUriPrivata }" var="uriPrivata">
+					        		<aui:option value="${uriPrivata.layoutId}">${uriPrivata.name}</aui:option>
 					        	</c:forEach>
 					        </aui:select>
-				       	 </c:otherwise>
+						</c:otherwise>
 					</c:choose>
-				</div>
-			</div>
-		</div>
-		
-		<div class="row">
-			<div class="col">
-				<div class="form-group">
-   					<fmt:formatDate value="${servizioEnte.dataInizioAttivazione}" pattern="yyyy-MM-dd'T'HH:mm" var="dataInizioAttivazioneFormattato"/>
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_INIZIO_ATTIVAZIONE %>" label="data-inizio-attivazione" type="datetime-local" value="${dataInizioAttivazioneFormattato }"/>					
-				</div>
-			</div>
-			
-			<div class="col">
-				<div class="form-group">
-   					<fmt:formatDate value="${servizioEnte.dataFineAttivazione}" pattern="yyyy-MM-dd'T'HH:mm" var="dataFineAttivazioneFormattato"/>
-			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_FINE_ATTIVAZIONE %>" label="data-fine-attivazione" type="datetime-local" value="${dataFineAttivazioneFormattato}"/>
 				</div>
 			</div>
 		</div>
@@ -148,14 +132,31 @@
 			        </aui:input>
 				</div>
 			</div>
+
+			<div class="col">
+				<div class="form-group">
+					<aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_SOTTO_ORGANIZZAZIONE_ID %>" label="sotto-organizzazione" type="text" value="${servizioEnte.subOrganizationId}">
+			        	<aui:option value="" label="seleziona" selected="selected"/>
+			        	<c:forEach items="${sottoOrganizzazioni}" var="sottoOrganizzazione">
+			        		<aui:option value="${sottoOrganizzazione.organizationId}">${sottoOrganizzazione.name}</aui:option>
+			        	</c:forEach>
+			        </aui:select>
+				</div>
+			</div>
+		</div>		
+		
+		<div class="row">
+			<div class="col">
+				<div class="form-group">
+   					<fmt:formatDate value="${servizioEnte.dataInizioAttivazione}" pattern="yyyy-MM-dd'T'HH:mm" var="dataInizioAttivazioneFormattato"/>
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_INIZIO_ATTIVAZIONE %>" label="data-inizio-attivazione" type="datetime-local" value="${dataInizioAttivazioneFormattato }"/>					
+				</div>
+			</div>
 			
 			<div class="col">
 				<div class="form-group">
-					<aui:select name="<%=GestioneEntiPortletKeys.SERVIZIO_LIVELLO_AUTENTICAZIONE %>" label="livello-autenticazione" value="${servizioEnte.livelloAutenticazione}">
-						<aui:option value="1">1</aui:option>
-						<aui:option value="2">2</aui:option>
-						<aui:option value="3">3</aui:option>
-					</aui:select>
+   					<fmt:formatDate value="${servizioEnte.dataFineAttivazione}" pattern="yyyy-MM-dd'T'HH:mm" var="dataFineAttivazioneFormattato"/>
+			        <aui:input name="<%=GestioneEntiPortletKeys.SERVIZIO_DATA_FINE_ATTIVAZIONE %>" label="data-fine-attivazione" type="datetime-local" value="${dataFineAttivazioneFormattato}"/>
 				</div>
 			</div>
 		</div>

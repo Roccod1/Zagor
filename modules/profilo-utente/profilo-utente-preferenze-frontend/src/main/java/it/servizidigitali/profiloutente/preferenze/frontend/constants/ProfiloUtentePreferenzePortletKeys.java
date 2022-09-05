@@ -14,6 +14,7 @@ public class ProfiloUtentePreferenzePortletKeys {
 	
 //	dettaglio preferenze
 	public static final String ORGANIZZAZIONE = "organizzazione";
+	public static final String ORGANIZZAZIONE_ID_CORRENTE = "currentOrganizationId";
 	public static final String UTENTE_ORGANIZZAZIONE = "utenteOrganizzazione";
 	public static final String UTENTE_ORGANIZZAZIONE_PREFERITA = "utenteOrganizzazionePreferita";
 	public static final String UTENTE_ACCETTA_PRIVACY = "utenteAccettaPrivacy";

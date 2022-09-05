@@ -1,12 +1,27 @@
 package it.servizidigitali.presentatoreforms.frontend.portlet;
 
-import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
-
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+
 import javax.portlet.Portlet;
+import javax.portlet.PortletException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+import it.servizidigitali.gestioneforms.model.Form;
+import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
+import it.servizidigitali.gestioneforms.service.FormLocalService;
+import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
+import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
+import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
+import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 
 /**
  * @author pindi
@@ -38,5 +53,32 @@ import org.osgi.service.component.annotations.Component;
 	service = Portlet.class
 )
 public class PresentatoreFormsPortlet extends MVCPortlet {
+	
+	public static final Log _log = LogFactoryUtil.getLog(PresentatoreFormsPortlet.class);
+	
+	public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	
+	@Reference
+	private FormLocalService formLocalService;
+	
+	@Reference
+	private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
+	
+	public void render (RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException{
+		_log.info("render presentatore forms");
+		try {
+			Long idFormMock = 49940L;
+			Form form = formLocalService.getForm(idFormMock);
+			form.setListaDefinizioneAllegato(definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idFormMock));
+
+			FormData formData = AlpacaUtil.loadFormData(form, null);
+			AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
+			renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+		} catch (Exception e) {
+			_log.error(e.getMessage());
+		}
+		super.render(renderRequest, renderResponse);
+	}
+
 	
 }

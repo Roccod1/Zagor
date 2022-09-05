@@ -58,8 +58,6 @@ public class FormTable extends BaseTable<FormTable> {
 		"json", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<FormTable, Boolean> principale = createColumn(
 		"principale", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
-	public final Column<FormTable, Boolean> multiutente = createColumn(
-		"multiutente", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<FormTable, Long> organizationId = createColumn(
 		"organizationId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 

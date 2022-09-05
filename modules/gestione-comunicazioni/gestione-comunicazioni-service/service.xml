@@ -59,6 +59,10 @@
 		<finder name="DestinatarioUserId" return-type="Collection">
 			<finder-column name="destinatarioOrganizationId" />
 		</finder>
+		
+		<finder name="DataInvio" return-type="Collection">
+			<finder-column name="dataInvio" />
+		</finder>
 	</entity>
 	
 	<entity 

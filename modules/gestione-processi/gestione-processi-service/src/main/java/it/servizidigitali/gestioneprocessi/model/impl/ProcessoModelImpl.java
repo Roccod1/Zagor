@@ -78,8 +78,8 @@ public class ProcessoModelImpl
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"codice", Types.VARCHAR}, {"nome", Types.VARCHAR},
-		{"stato", Types.VARCHAR}, {"multiente", Types.BOOLEAN},
-		{"fileEntryId", Types.BIGINT}, {"attivo", Types.BOOLEAN}
+		{"stato", Types.VARCHAR}, {"deploymentId", Types.VARCHAR},
+		{"attivo", Types.BOOLEAN}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -97,13 +97,12 @@ public class ProcessoModelImpl
 		TABLE_COLUMNS_MAP.put("codice", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("nome", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("stato", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("multiente", Types.BOOLEAN);
-		TABLE_COLUMNS_MAP.put("fileEntryId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("deploymentId", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("attivo", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table processo (uuid_ VARCHAR(75) null,processoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codice VARCHAR(75) null,nome VARCHAR(75) null,stato VARCHAR(75) null,multiente BOOLEAN,fileEntryId LONG,attivo BOOLEAN)";
+		"create table processo (uuid_ VARCHAR(75) null,processoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codice VARCHAR(75) null,nome VARCHAR(75) null,stato VARCHAR(75) null,deploymentId VARCHAR(75) null,attivo BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP = "drop table processo";
 
@@ -147,26 +146,20 @@ public class ProcessoModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long MULTIENTE_COLUMN_BITMASK = 16L;
+	public static final long STATO_COLUMN_BITMASK = 16L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long STATO_COLUMN_BITMASK = 32L;
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
-	 */
-	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 64L;
+	public static final long UUID_COLUMN_BITMASK = 32L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long PROCESSOID_COLUMN_BITMASK = 128L;
+	public static final long PROCESSOID_COLUMN_BITMASK = 64L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -339,13 +332,10 @@ public class ProcessoModelImpl
 		attributeGetterFunctions.put("stato", Processo::getStato);
 		attributeSetterBiConsumers.put(
 			"stato", (BiConsumer<Processo, String>)Processo::setStato);
-		attributeGetterFunctions.put("multiente", Processo::getMultiente);
+		attributeGetterFunctions.put("deploymentId", Processo::getDeploymentId);
 		attributeSetterBiConsumers.put(
-			"multiente", (BiConsumer<Processo, Boolean>)Processo::setMultiente);
-		attributeGetterFunctions.put("fileEntryId", Processo::getFileEntryId);
-		attributeSetterBiConsumers.put(
-			"fileEntryId",
-			(BiConsumer<Processo, Long>)Processo::setFileEntryId);
+			"deploymentId",
+			(BiConsumer<Processo, String>)Processo::setDeploymentId);
 		attributeGetterFunctions.put("attivo", Processo::getAttivo);
 		attributeSetterBiConsumers.put(
 			"attivo", (BiConsumer<Processo, Boolean>)Processo::setAttivo);
@@ -604,46 +594,22 @@ public class ProcessoModelImpl
 	}
 
 	@Override
-	public boolean getMultiente() {
-		return _multiente;
+	public String getDeploymentId() {
+		if (_deploymentId == null) {
+			return "";
+		}
+		else {
+			return _deploymentId;
+		}
 	}
 
 	@Override
-	public boolean isMultiente() {
-		return _multiente;
-	}
-
-	@Override
-	public void setMultiente(boolean multiente) {
+	public void setDeploymentId(String deploymentId) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
 
-		_multiente = multiente;
-	}
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #getColumnOriginalValue(String)}
-	 */
-	@Deprecated
-	public boolean getOriginalMultiente() {
-		return GetterUtil.getBoolean(
-			this.<Boolean>getColumnOriginalValue("multiente"));
-	}
-
-	@Override
-	public long getFileEntryId() {
-		return _fileEntryId;
-	}
-
-	@Override
-	public void setFileEntryId(long fileEntryId) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_fileEntryId = fileEntryId;
+		_deploymentId = deploymentId;
 	}
 
 	@Override
@@ -748,8 +714,7 @@ public class ProcessoModelImpl
 		processoImpl.setCodice(getCodice());
 		processoImpl.setNome(getNome());
 		processoImpl.setStato(getStato());
-		processoImpl.setMultiente(isMultiente());
-		processoImpl.setFileEntryId(getFileEntryId());
+		processoImpl.setDeploymentId(getDeploymentId());
 		processoImpl.setAttivo(isAttivo());
 
 		processoImpl.resetOriginalValues();
@@ -777,10 +742,8 @@ public class ProcessoModelImpl
 		processoImpl.setCodice(this.<String>getColumnOriginalValue("codice"));
 		processoImpl.setNome(this.<String>getColumnOriginalValue("nome"));
 		processoImpl.setStato(this.<String>getColumnOriginalValue("stato"));
-		processoImpl.setMultiente(
-			this.<Boolean>getColumnOriginalValue("multiente"));
-		processoImpl.setFileEntryId(
-			this.<Long>getColumnOriginalValue("fileEntryId"));
+		processoImpl.setDeploymentId(
+			this.<String>getColumnOriginalValue("deploymentId"));
 		processoImpl.setAttivo(this.<Boolean>getColumnOriginalValue("attivo"));
 
 		return processoImpl;
@@ -925,9 +888,13 @@ public class ProcessoModelImpl
 			processoCacheModel.stato = null;
 		}
 
-		processoCacheModel.multiente = isMultiente();
+		processoCacheModel.deploymentId = getDeploymentId();
 
-		processoCacheModel.fileEntryId = getFileEntryId();
+		String deploymentId = processoCacheModel.deploymentId;
+
+		if ((deploymentId != null) && (deploymentId.length() == 0)) {
+			processoCacheModel.deploymentId = null;
+		}
 
 		processoCacheModel.attivo = isAttivo();
 
@@ -1033,8 +1000,7 @@ public class ProcessoModelImpl
 	private String _codice;
 	private String _nome;
 	private String _stato;
-	private boolean _multiente;
-	private long _fileEntryId;
+	private String _deploymentId;
 	private boolean _attivo;
 
 	public <T> T getColumnValue(String columnName) {
@@ -1077,8 +1043,7 @@ public class ProcessoModelImpl
 		_columnOriginalValues.put("codice", _codice);
 		_columnOriginalValues.put("nome", _nome);
 		_columnOriginalValues.put("stato", _stato);
-		_columnOriginalValues.put("multiente", _multiente);
-		_columnOriginalValues.put("fileEntryId", _fileEntryId);
+		_columnOriginalValues.put("deploymentId", _deploymentId);
 		_columnOriginalValues.put("attivo", _attivo);
 	}
 
@@ -1125,11 +1090,9 @@ public class ProcessoModelImpl
 
 		columnBitmasks.put("stato", 1024L);
 
-		columnBitmasks.put("multiente", 2048L);
+		columnBitmasks.put("deploymentId", 2048L);
 
-		columnBitmasks.put("fileEntryId", 4096L);
-
-		columnBitmasks.put("attivo", 8192L);
+		columnBitmasks.put("attivo", 4096L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

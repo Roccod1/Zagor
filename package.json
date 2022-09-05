@@ -2,6 +2,7 @@
     "private": true,
     "workspaces": {
         "packages": [
+            "modules/gestione-processi/gestione-processi-frontend",
             "modules/gestione-forms/gestione-forms-frontend",
             "modules/presentatore-forms/presentatore-forms-frontend"
         ]

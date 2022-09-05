@@ -33,10 +33,12 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import it.servizidigitali.gestioneprocessi.exception.NoSuchProcessoException;
 import it.servizidigitali.gestioneprocessi.model.Processo;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -222,6 +224,11 @@ public interface ProcessoLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Processo> getListaProcessiByOrganizationAttivo(
+			long groupId, boolean attivo)
+		throws Exception;
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -246,6 +253,10 @@ public interface ProcessoLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Processo getProcesso(long processoId) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Processo getProcessoByCodice(String codice)
+		throws NoSuchProcessoException;
 
 	/**
 	 * Returns the processo matching the UUID and group.
@@ -306,6 +317,13 @@ public interface ProcessoLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getProcessosCount();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Processo> search(
+			String nome, Date dataInserimentoDa, Date dataInserimentoA,
+			long groupId, int delta, int cur, String orderByCol,
+			String orderByType)
+		throws PortalException;
 
 	/**
 	 * Updates the processo in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

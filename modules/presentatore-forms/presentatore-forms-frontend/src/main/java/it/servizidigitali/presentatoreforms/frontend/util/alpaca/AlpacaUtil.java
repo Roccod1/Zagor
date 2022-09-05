@@ -1,5 +1,6 @@
 package it.servizidigitali.presentatoreforms.frontend.util.alpaca;
 
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONDeserializer;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -8,7 +9,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,8 +22,6 @@ import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonOption
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonSchemaStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
-import it.servizidigitali.presentatoreforms.frontend.util.model.Placeholder;
-import it.servizidigitali.presentatoreforms.frontend.util.model.Placeholders;
 
 
 public class AlpacaUtil {
@@ -173,10 +171,48 @@ public class AlpacaUtil {
 	 * @throws JSONException 
 	 */
 	public static JSONObject addAttachmentsToView(final String view, final List<DefinizioneAllegato> definizioneAllegati) throws JSONException {
-		JSONObject jsonView = JSONFactoryUtil.createJSONObject(view);
-		return jsonView;
+		if (view != null && !view.isEmpty()) {
+			JSONObject jsonView = JSONFactoryUtil.createJSONObject(view);
+
+			String finalHtmlAttachments = HTML_SPAZIO_ALLEGATI;
+			String templateString = "";
+
+			
+			JSONObject wizard = jsonView.getJSONObject(AlpacaKey.WIZARD.getName());
+				if (wizard != null) {
+					JSONObject bindings = wizard.getJSONObject(AlpacaKey.BINDINGS.getName());
+					JSONArray steps = wizard.getJSONArray(AlpacaKey.STEPS.getName());
+					if (steps != null) {
+						int attachmentsStep = (steps.length() > 0) ? steps.length() : 1;
+						for (DefinizioneAllegato allegato : definizioneAllegati) {
+							bindings.put(generateAllegatoCheckboxName(allegato), attachmentsStep);
+							finalHtmlAttachments = finalHtmlAttachments + "<div class='row'><div class='col-md-12' data-alpaca-layout-binding='" + generateAllegatoCheckboxName(allegato)
+									+ "'></div></div>";
+						}
+						finalHtmlAttachments = finalHtmlAttachments + "</div>";
+
+						// wizard.remove(AlpacaKey.BINDINGS.getName());
+						wizard.put(AlpacaKey.BINDINGS.getName(), bindings);
+
+						JSONObject jsonElementLayout = jsonView.getJSONObject(AlpacaKey.LAYOUT.getName());
+						if (jsonElementLayout != null) {
+							templateString = jsonElementLayout.getString(AlpacaKey.TEMPLATE.getName());
+							if (templateString != null) {
+								if (templateString.contains(HTML_SPAZIO_ALLEGATI)) {
+									String newTemplateString = templateString.replace(HTML_SPAZIO_ALLEGATI, finalHtmlAttachments);
+									jsonElementLayout.remove("template");
+									jsonElementLayout.put("template", newTemplateString);
+								}
+							}
+						}
+					}
+				}
+
+			return jsonView;
+		}
+		return null;
 	}
-	
+
 	/**
 	 * Carica la struttura Json di Alpaca nell'oggetto {@link FormData}.
 	 *
@@ -194,17 +230,16 @@ public class AlpacaUtil {
 		FormData formData = new FormData();
 		JSONDeserializer<AlpacaJsonStructure> des = JSONFactoryUtil.createJSONDeserializer();
 		
+		// temp poiché listaAllegati arriva null
 		
-		// temp poichÃ© listaAllegati arriva null
-		
-		List<DefinizioneAllegato> listaAllegati = new ArrayList<>();
+		List<DefinizioneAllegato> listaAllegati = form.getListaDefinizioneAllegato();
 		if (savedJson == null) {
 			AlpacaJsonStructure alpacaStructure = des.deserialize(form.getJson(), AlpacaJsonStructure.class);
 
-			alpacaStructure.setSchema(addAttachmentsToSchema(JSONFactoryUtil.createJSONSerializer().serialize(alpacaStructure.getSchema()), listaAllegati));
-			alpacaStructure.setOptions(loadOptions(JSONFactoryUtil.createJSONSerializer().serialize(alpacaStructure.getOptions()), listaAllegati));
-			alpacaStructure.setData(loadData(JSONFactoryUtil.createJSONSerializer().serialize(alpacaStructure.getData())));
-			alpacaStructure.setView(addAttachmentsToView(JSONFactoryUtil.createJSONSerializer().serialize(alpacaStructure.getView()), listaAllegati));
+			alpacaStructure.setSchema(addAttachmentsToSchema(JSONFactoryUtil.createJSONSerializer().serializeDeep(alpacaStructure.getSchema()), listaAllegati));
+			alpacaStructure.setOptions(loadOptions(JSONFactoryUtil.createJSONSerializer().serializeDeep(alpacaStructure.getOptions()), listaAllegati));
+			alpacaStructure.setData(loadData(JSONFactoryUtil.createJSONSerializer().serializeDeep(alpacaStructure.getData())));
+			alpacaStructure.setView(addAttachmentsToView(JSONFactoryUtil.createJSONSerializer().serializeDeep(alpacaStructure.getView()), listaAllegati));
 			formData.setAlpaca(alpacaStructure);
 		}
 		else {

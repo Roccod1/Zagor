@@ -54,8 +54,7 @@ public class ProcessoWrapper
 		attributes.put("codice", getCodice());
 		attributes.put("nome", getNome());
 		attributes.put("stato", getStato());
-		attributes.put("multiente", isMultiente());
-		attributes.put("fileEntryId", getFileEntryId());
+		attributes.put("deploymentId", getDeploymentId());
 		attributes.put("attivo", isAttivo());
 
 		return attributes;
@@ -129,16 +128,10 @@ public class ProcessoWrapper
 			setStato(stato);
 		}
 
-		Boolean multiente = (Boolean)attributes.get("multiente");
+		String deploymentId = (String)attributes.get("deploymentId");
 
-		if (multiente != null) {
-			setMultiente(multiente);
-		}
-
-		Long fileEntryId = (Long)attributes.get("fileEntryId");
-
-		if (fileEntryId != null) {
-			setFileEntryId(fileEntryId);
+		if (deploymentId != null) {
+			setDeploymentId(deploymentId);
 		}
 
 		Boolean attivo = (Boolean)attributes.get("attivo");
@@ -194,13 +187,13 @@ public class ProcessoWrapper
 	}
 
 	/**
-	 * Returns the file entry ID of this processo.
+	 * Returns the deployment ID of this processo.
 	 *
-	 * @return the file entry ID of this processo
+	 * @return the deployment ID of this processo
 	 */
 	@Override
-	public long getFileEntryId() {
-		return model.getFileEntryId();
+	public String getDeploymentId() {
+		return model.getDeploymentId();
 	}
 
 	/**
@@ -224,16 +217,6 @@ public class ProcessoWrapper
 	}
 
 	/**
-	 * Returns the multiente of this processo.
-	 *
-	 * @return the multiente of this processo
-	 */
-	@Override
-	public boolean getMultiente() {
-		return model.getMultiente();
-	}
-
-	/**
 	 * Returns the nome of this processo.
 	 *
 	 * @return the nome of this processo
@@ -241,6 +224,11 @@ public class ProcessoWrapper
 	@Override
 	public String getNome() {
 		return model.getNome();
+	}
+
+	@Override
+	public String getNomeEnte() {
+		return model.getNomeEnte();
 	}
 
 	/**
@@ -323,16 +311,6 @@ public class ProcessoWrapper
 		return model.isAttivo();
 	}
 
-	/**
-	 * Returns <code>true</code> if this processo is multiente.
-	 *
-	 * @return <code>true</code> if this processo is multiente; <code>false</code> otherwise
-	 */
-	@Override
-	public boolean isMultiente() {
-		return model.isMultiente();
-	}
-
 	@Override
 	public void persist() {
 		model.persist();
@@ -379,13 +357,13 @@ public class ProcessoWrapper
 	}
 
 	/**
-	 * Sets the file entry ID of this processo.
+	 * Sets the deployment ID of this processo.
 	 *
-	 * @param fileEntryId the file entry ID of this processo
+	 * @param deploymentId the deployment ID of this processo
 	 */
 	@Override
-	public void setFileEntryId(long fileEntryId) {
-		model.setFileEntryId(fileEntryId);
+	public void setDeploymentId(String deploymentId) {
+		model.setDeploymentId(deploymentId);
 	}
 
 	/**
@@ -409,16 +387,6 @@ public class ProcessoWrapper
 	}
 
 	/**
-	 * Sets whether this processo is multiente.
-	 *
-	 * @param multiente the multiente of this processo
-	 */
-	@Override
-	public void setMultiente(boolean multiente) {
-		model.setMultiente(multiente);
-	}
-
-	/**
 	 * Sets the nome of this processo.
 	 *
 	 * @param nome the nome of this processo
@@ -426,6 +394,11 @@ public class ProcessoWrapper
 	@Override
 	public void setNome(String nome) {
 		model.setNome(nome);
+	}
+
+	@Override
+	public void setNomeEnte(String nomeEnte) {
+		model.setNomeEnte(nomeEnte);
 	}
 
 	/**

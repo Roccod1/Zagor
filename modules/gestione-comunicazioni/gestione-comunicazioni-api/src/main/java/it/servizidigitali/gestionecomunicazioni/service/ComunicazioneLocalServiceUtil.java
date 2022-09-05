@@ -351,6 +351,10 @@ public class ComunicazioneLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
+	public static List<Comunicazione> getNonInviate() {
+		return getService().getNonInviate();
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *

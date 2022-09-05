@@ -300,6 +300,15 @@ public class ServizioEnteLocalServiceWrapper
 				companyId, organizationId, attivo);
 	}
 
+	@Override
+	public java.util.List<Long> getListaServiziByOrganizationAttivo(
+			long organizationId, boolean attivo)
+		throws Exception {
+
+		return _servizioEnteLocalService.getListaServiziByOrganizationAttivo(
+			organizationId, attivo);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *

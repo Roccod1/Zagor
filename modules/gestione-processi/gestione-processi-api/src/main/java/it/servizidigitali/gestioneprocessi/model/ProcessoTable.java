@@ -54,10 +54,8 @@ public class ProcessoTable extends BaseTable<ProcessoTable> {
 		"nome", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<ProcessoTable, String> stato = createColumn(
 		"stato", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<ProcessoTable, Boolean> multiente = createColumn(
-		"multiente", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
-	public final Column<ProcessoTable, Long> fileEntryId = createColumn(
-		"fileEntryId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<ProcessoTable, String> deploymentId = createColumn(
+		"deploymentId", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<ProcessoTable, Boolean> attivo = createColumn(
 		"attivo", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 

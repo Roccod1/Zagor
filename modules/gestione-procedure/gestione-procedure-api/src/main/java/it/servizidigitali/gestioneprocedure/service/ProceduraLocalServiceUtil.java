@@ -345,6 +345,22 @@ public class ProceduraLocalServiceUtil {
 		return getService().getProcedurasCount();
 	}
 
+	public static String getStringSelectMultipla(String string)
+		throws com.liferay.portal.kernel.json.JSONException {
+
+		return getService().getStringSelectMultipla(string);
+	}
+
+	public static List<Procedura> search(
+		String nome, String attiva, java.util.Date dataInserimentoDa,
+		java.util.Date dataInserimentoA, long siteGroupId, int delta, int cur,
+		String orderByCol, String orderByType) {
+
+		return getService().search(
+			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId,
+			delta, cur, orderByCol, orderByType);
+	}
+
 	/**
 	 * Updates the procedura in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

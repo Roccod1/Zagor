@@ -250,39 +250,19 @@ public interface ProcessoModel
 	public void setStato(String stato);
 
 	/**
-	 * Returns the multiente of this processo.
+	 * Returns the deployment ID of this processo.
 	 *
-	 * @return the multiente of this processo
+	 * @return the deployment ID of this processo
 	 */
-	public boolean getMultiente();
+	@AutoEscape
+	public String getDeploymentId();
 
 	/**
-	 * Returns <code>true</code> if this processo is multiente.
+	 * Sets the deployment ID of this processo.
 	 *
-	 * @return <code>true</code> if this processo is multiente; <code>false</code> otherwise
+	 * @param deploymentId the deployment ID of this processo
 	 */
-	public boolean isMultiente();
-
-	/**
-	 * Sets whether this processo is multiente.
-	 *
-	 * @param multiente the multiente of this processo
-	 */
-	public void setMultiente(boolean multiente);
-
-	/**
-	 * Returns the file entry ID of this processo.
-	 *
-	 * @return the file entry ID of this processo
-	 */
-	public long getFileEntryId();
-
-	/**
-	 * Sets the file entry ID of this processo.
-	 *
-	 * @param fileEntryId the file entry ID of this processo
-	 */
-	public void setFileEntryId(long fileEntryId);
+	public void setDeploymentId(String deploymentId);
 
 	/**
 	 * Returns the attivo of this processo.

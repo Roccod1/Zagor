@@ -244,6 +244,14 @@ public class ProcessoLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
+	public static List<Processo> getListaProcessiByOrganizationAttivo(
+			long groupId, boolean attivo)
+		throws Exception {
+
+		return getService().getListaProcessiByOrganizationAttivo(
+			groupId, attivo);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -271,6 +279,13 @@ public class ProcessoLocalServiceUtil {
 	 */
 	public static Processo getProcesso(long processoId) throws PortalException {
 		return getService().getProcesso(processoId);
+	}
+
+	public static Processo getProcessoByCodice(String codice)
+		throws it.servizidigitali.gestioneprocessi.exception.
+			NoSuchProcessoException {
+
+		return getService().getProcessoByCodice(codice);
 	}
 
 	/**
@@ -341,6 +356,17 @@ public class ProcessoLocalServiceUtil {
 	 */
 	public static int getProcessosCount() {
 		return getService().getProcessosCount();
+	}
+
+	public static List<Processo> search(
+			String nome, java.util.Date dataInserimentoDa,
+			java.util.Date dataInserimentoA, long groupId, int delta, int cur,
+			String orderByCol, String orderByType)
+		throws PortalException {
+
+		return getService().search(
+			nome, dataInserimentoDa, dataInserimentoA, groupId, delta, cur,
+			orderByCol, orderByType);
 	}
 
 	/**

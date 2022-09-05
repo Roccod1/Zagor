@@ -402,6 +402,14 @@ public class ComunicazioneLocalServiceWrapper
 		return _comunicazioneLocalService.getIndexableActionableDynamicQuery();
 	}
 
+	@Override
+	public java.util.List
+		<it.servizidigitali.gestionecomunicazioni.model.Comunicazione>
+			getNonInviate() {
+
+		return _comunicazioneLocalService.getNonInviate();
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *

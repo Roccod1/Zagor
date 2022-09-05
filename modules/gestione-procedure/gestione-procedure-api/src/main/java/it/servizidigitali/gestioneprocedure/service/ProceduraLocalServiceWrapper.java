@@ -390,6 +390,25 @@ public class ProceduraLocalServiceWrapper
 		return _proceduraLocalService.getProcedurasCount();
 	}
 
+	@Override
+	public String getStringSelectMultipla(String string)
+		throws com.liferay.portal.kernel.json.JSONException {
+
+		return _proceduraLocalService.getStringSelectMultipla(string);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
+		search(
+			String nome, String attiva, java.util.Date dataInserimentoDa,
+			java.util.Date dataInserimentoA, long siteGroupId, int delta,
+			int cur, String orderByCol, String orderByType) {
+
+		return _proceduraLocalService.search(
+			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId,
+			delta, cur, orderByCol, orderByType);
+	}
+
 	/**
 	 * Updates the procedura in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

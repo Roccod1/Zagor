@@ -15,6 +15,7 @@
 		<field name="publicLayoutId" type="long" />
 		<field name="uriEsterna" type="String" />
 		<field name="catalogoServizioArticleId" type="long" />
+		<field name="subOrganizationId" type="long" />
 		<field name="autenticazione" type="boolean" />
 		<field name="livelloAutenticazione" type="int" />
 		<field name="dataInizioAttivazione" type="Date" />

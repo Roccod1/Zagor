@@ -30,6 +30,9 @@ public class GestioneFormsPortletKeys {
 	
 	public static final String FILE = "file";
 	
+	public static final String SITE_GROUP_ID = "siteGroupId";
+	public static final String ORGANIZATION_ID_SITE_PRINCIPALE = "organizationIdSitePrincipale";
+	
 	public static final String DEFINIZIONE_ALLEGATO_ID = "definizioneAllegatoId";
 	public static final String DEFINIZIONE_ALLEGATO_DENOMINAZIONE = "denominazione";
 	public static final String DEFINIZIONE_ALLEGATO_FILE_AMMESSI = "tipiFileAmmessi";
@@ -38,8 +41,7 @@ public class GestioneFormsPortletKeys {
 	public static final String DEFINIZIONE_ALLEGATO_FILENAME = "filenameModello";
 	public static final String DEFINIZIONE_ALLEGATO_OBBLIGATORIO = "obbligatorio";
 	
-	
-	
+	public static final String SESSION_MESSAGE_ERRORE_NON_AUTORIZZATO = "errore-non-autorizzato";
 	
 	// FORM RICERCA
 	

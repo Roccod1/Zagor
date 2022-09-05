@@ -75,6 +75,10 @@ public class EmailSender extends CommunicationEngineChannelSender {
 			if (Validator.isNotNull(tenantId)) {
 				message.setExternalId(tenantId);
 			}
+			else {
+				message.setExternalId(String.valueOf(comunicazione.getGroupId()));
+			}
+
 			String from = null;
 			boolean accountEnabled = accountEnteConfiguration.accountEmailEnabled();
 			if (accountEnabled) {

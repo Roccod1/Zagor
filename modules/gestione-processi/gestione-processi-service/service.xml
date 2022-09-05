@@ -31,8 +31,7 @@
 		<column name="codice" type="String" />
 		<column name="nome" type="String" />
 		<column name="stato" type="String" />
-		<column name="multiente" type="boolean" />
-		<column name="fileEntryId" type="long" />
+		<column name="deploymentId" type="String" />
 		<column name="attivo" type="boolean" />
 		
 		<!-- Finder methods -->
@@ -42,10 +41,6 @@
 
 		<finder name="Stato" return-type="Collection">
 			<finder-column name="stato" />
-		</finder>
-
-		<finder name="Multiente" return-type="Collection">
-			<finder-column name="multiente" />
 		</finder>
 
 		<finder name="Attivo" return-type="Collection">
