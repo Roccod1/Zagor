@@ -22,6 +22,7 @@ import it.servizidigitali.backoffice.integration.model.anagrafe.DatiVariazioniDo
 import it.servizidigitali.backoffice.integration.model.commmon.IntegrationPreferences;
 import it.servizidigitali.backoffice.integration.service.AnagrafeIntegrationService;
 import it.servizidigitali.backoffice.integration.service.CacheService;
+import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
 import noNamespace.DatiAnagraficiGeneraliDocument;
 import noNamespace.DatiElettoraliDocument;
 import noNamespace.DatiUtenteDocument;
@@ -114,8 +115,8 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeIntegra
 		richiestaDocument.setRichiestaDatiAnagrafici(richiesta);
 		Organization organization = organizationLocalService.getOrganization(organizationId);
 		String payloadXml = richiestaDocument.toString();
-		String wsUrl = organization.getExpandoBridge().getAttribute("uriBackoffice").toString();
-		String codiceIstat = organization.getExpandoBridge().getAttribute("codiceISTAT").toString();
+		String wsUrl = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.URI_BACKOFFICE.getNomeAttributo()).toString();
+		String codiceIstat = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_ISTAT.getNomeAttributo()).toString();
 
 		String xmlResponse = backofficeIntegrationClient.sendXml(payloadXml, RICHIESTA_DATI_ANAGRAFICI_CRIPAL, wsUrl, 30000);
 		noNamespace.VisuraAnagraficaDocument datiAnagraficiCRIPAL = VisuraAnagraficaDocument.Factory.parse(xmlResponse);
@@ -165,7 +166,7 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeIntegra
 		richiestaDocument.setDatiAnagraficiGenerali(richiesta);
 		Organization organization = organizationLocalService.getOrganization(organizationId);
 		String payloadXml = richiestaDocument.toString();
-		String wsUrl = organization.getExpandoBridge().getAttribute("uriBackoffice").toString();
+		String wsUrl = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.URI_BACKOFFICE.getNomeAttributo()).toString();
 
 		String xmlResponse = backofficeIntegrationClient.sendXml(payloadXml, RICHIESTA_DATI_ANAGRAFICI_GENERALI, wsUrl, 30000);
 		noNamespace.DatiUtenteDocument datiUtenteDocument = DatiUtenteDocument.Factory.parse(xmlResponse);
@@ -215,7 +216,7 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeIntegra
 		richiestaDocument.setRichiestaDatiElettorali(richiesta);
 		Organization organization = organizationLocalService.getOrganization(organizationId);
 		String payloadXml = richiestaDocument.toString();
-		String wsUrl = organization.getExpandoBridge().getAttribute("uriBackoffice").toString();
+		String wsUrl = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.URI_BACKOFFICE.getNomeAttributo()).toString();
 
 		String xmlResponse = backofficeIntegrationClient.sendXml(payloadXml, RICHIESTA_DATI_ELETTORALI, wsUrl, 30000);
 		noNamespace.DatiElettoraliDocument datiElettoraliDocument = DatiElettoraliDocument.Factory.parse(xmlResponse);
@@ -267,7 +268,7 @@ public class AnagrafeBackofficeIntegrationServiceImpl implements AnagrafeIntegra
 		richiestaDocument.setRichiestaVariazioniDomiciliari(richiesta);
 		Organization organization = organizationLocalService.getOrganization(organizationId);
 		String payloadXml = richiestaDocument.toString();
-		String wsUrl = organization.getExpandoBridge().getAttribute("uriBackoffice").toString();
+		String wsUrl = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.URI_BACKOFFICE.getNomeAttributo()).toString();
 
 		String xmlResponse = backofficeIntegrationClient.sendXml(payloadXml, RICHIESTA_DATI_VARIAZIONI_DOMICILIARI, wsUrl, 30000);
 		noNamespace.VariazioniDomiciliariDocument variazioniDomiciliariDocument = VariazioniDomiciliariDocument.Factory.parse(xmlResponse);
