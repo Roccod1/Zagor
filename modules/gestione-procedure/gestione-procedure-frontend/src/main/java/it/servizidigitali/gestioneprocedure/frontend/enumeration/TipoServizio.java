@@ -6,6 +6,6 @@ package it.servizidigitali.gestioneprocedure.frontend.enumeration;
  */
 public enum TipoServizio {
 
-	DICHIARAZIONE, AUTODICHIARAZIONE, CERTIFICATO, VISURA, PAGAMENTO, CONCORSO;
+	DICHIARAZIONE, AUTO_DICHIARAZIONE, CERTIFICATO, VISURA, PAGAMENTO, CONCORSO;
 
 }

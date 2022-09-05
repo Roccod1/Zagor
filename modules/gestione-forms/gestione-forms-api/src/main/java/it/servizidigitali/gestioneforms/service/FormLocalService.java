@@ -315,7 +315,8 @@ public interface FormLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Form> search(
 			String nome, Date dataInserimentoDa, Date dataInserimentoA,
-			int delta, int cur, String orderByCol, String orderByType)
+			long groupId, int delta, int cur, String orderByCol,
+			String orderByType)
 		throws PortalException;
 
 	/**

@@ -35,7 +35,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import it.servizidigitali.gestioneforms.enumeration.CartelleAllegatiEnum;
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneforms.service.base.DefinizioneAllegatoLocalServiceBaseImpl;
 
@@ -128,27 +128,27 @@ public class DefinizioneAllegatoLocalServiceImpl
 			try {
 				folderConfigurazionePiattaforma = DLFolderLocalServiceUtil.getFolder(group.getGroupId(),
 						DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
-						"Configurazione Piattaforma");
+						CartelleAllegatiEnum.CONFIGURAZIONE_PIATTAFORMA.getName());
 				
 				folderForm = DLFolderLocalServiceUtil.getFolder(group.getGroupId(), folderConfigurazionePiattaforma.getFolderId(),
-						"Form");
+						CartelleAllegatiEnum.FORM.getName());
 				
-				folderTemplate = DLFolderLocalServiceUtil.getFolder(group.getGroupId(), folderForm.getFolderId(),"Template");
+				folderTemplate = DLFolderLocalServiceUtil.getFolder(group.getGroupId(), folderForm.getFolderId(),CartelleAllegatiEnum.TEMPLATE.getName());
 				
 			}catch(NoSuchFolderException e) {
 				_log.info("Cartella di configurazione form non presente, creazione!");
 				
 				Folder folderConfigurazionePiattaformaNuova = DLAppLocalServiceUtil.addFolder(userId,
-						repositoryId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Piattaforma",
-						"Configurazione Piattaforma", serviceContext);
+						repositoryId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, CartelleAllegatiEnum.CONFIGURAZIONE_PIATTAFORMA.getName(),
+						CartelleAllegatiEnum.CONFIGURAZIONE_PIATTAFORMA.getName(), serviceContext);
 				
 				Folder folderFormNuova = DLAppLocalServiceUtil.addFolder(userId,
-						repositoryId, folderConfigurazionePiattaformaNuova.getFolderId(), "Form",
-						"Form", serviceContext);
+						repositoryId, folderConfigurazionePiattaformaNuova.getFolderId(), CartelleAllegatiEnum.FORM.getName(),
+						CartelleAllegatiEnum.FORM.getName(), serviceContext);
 				
 				folderTemplateNuova = DLAppLocalServiceUtil.addFolder(userId,
-						repositoryId, folderFormNuova.getFolderId(), "Template",
-						"Template", serviceContext);
+						repositoryId, folderFormNuova.getFolderId(), CartelleAllegatiEnum.TEMPLATE.getName(),
+						CartelleAllegatiEnum.TEMPLATE.getName(), serviceContext);
 			}
 			
 			if(Validator.isNull(folderTemplate)) {

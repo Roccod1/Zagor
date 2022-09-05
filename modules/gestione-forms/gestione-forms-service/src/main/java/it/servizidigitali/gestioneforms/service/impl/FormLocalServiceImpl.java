@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
 	public static final Log _log = LogFactoryUtil.getLog(FormLocalServiceImpl.class);
 
 	@Override
-	public List<Form> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, int delta, int cur, String orderByCol, String orderByType) throws PortalException {
+	public List<Form> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, long groupId, int delta, int cur, String orderByCol, String orderByType) throws PortalException {
 		boolean direzione = false;
 
 		if (orderByType.equalsIgnoreCase("asc")) {
@@ -59,19 +60,48 @@ public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
 		OrderByComparator<Form> comparator = OrderByComparatorFactoryUtil.create("Form", orderByCol, direzione);
 
 		List<Form> listaForm = formFinder.findFormByFilter(nome, dataInserimentoDa, dataInserimentoA, cur, delta, comparator);
+		List<Form> listaFormFiltrata = new ArrayList<Form>();
+		Group group = null;
+		Organization organization = null;
 
 		for (Form form : listaForm) {
-			Group group = GroupLocalServiceUtil.getGroup(form.getGroupId());
-			if (group.getOrganizationId() > 0) {
-				Organization organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
-				form.setNomeEnte(organization.getName());
-			}
-			else {
-				form.setNomeEnte("-");
+			group = GroupLocalServiceUtil.getGroup(form.getGroupId());
+			long organizationIdSite = GroupLocalServiceUtil.getGroup(groupId).getOrganizationId();
+			
+			if(organizationIdSite==0) {
+				
+				if (group.getOrganizationId() > 0) {
+					organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
+					form.setNomeEnte(organization.getName());
+				}else {
+					form.setNomeEnte("-");
+				}
+				
+				listaFormFiltrata.add(form);
+			}else {
+				if(group.getGroupId()==groupId) {
+					
+					if (group.getOrganizationId() > 0) {
+						organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
+						form.setNomeEnte(organization.getName());
+					}else {
+						form.setNomeEnte("-");
+					}
+					
+					listaFormFiltrata.add(form);	
+
+				}
+				
+				if(group.getOrganizationId()==0) {
+					if(!listaFormFiltrata.contains(form)) {
+						form.setNomeEnte("-");
+						listaFormFiltrata.add(form);
+					}
+				}
 			}
 		}
 
-		return listaForm;
+		return listaFormFiltrata;
 	}
 
 	@Override

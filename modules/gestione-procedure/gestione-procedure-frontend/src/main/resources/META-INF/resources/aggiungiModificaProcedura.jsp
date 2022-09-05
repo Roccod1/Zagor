@@ -115,7 +115,8 @@
 								<aui:select label="tipologia-servizio" name="<%=GestioneProcedurePortletKeys.TIPOLOGIA_SERVIZIO %>" value="${procedura.step2TipoServizio}">
 									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
 										<c:forEach items="${listaTipoServizio}" var="tipoServizio">
-											<aui:option value="${tipoServizio}" label="${tipoServizio}"></aui:option>
+											<c:set var="labelTipoServizio" value="tipo-servizio_${tipoServizio}" />
+											<aui:option value="${tipoServizio}" label="${labelTipoServizio}"></aui:option>
 										</c:forEach>
 								</aui:select>
 						</aui:col>
@@ -123,7 +124,8 @@
 								<aui:select id="tipiIntegrazioneBackoffice" label="tipi-integrazioni-con-backoffice" name="<%=GestioneProcedurePortletKeys.TIPI_INTEGRAZIONI_BACKOFFICE %>" multiple="true" value="${listaTipoIntegrazioneBackofficeProcedura}">
 									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
 										<c:forEach items="${listaTipoIntegrazioneBackoffice}" var="tipoIntegrazioneBackoffice">
-											<aui:option value="${tipoIntegrazioneBackoffice}" label="${tipoIntegrazioneBackoffice}"></aui:option>
+											<c:set var="labelTipoIntegrazioneBackoffice" value="tipo-integrazione-backoffice_${tipoIntegrazioneBackoffice}" />
+											<aui:option value="${tipoIntegrazioneBackoffice}" label="${labelTipoIntegrazioneBackoffice}"></aui:option>
 										</c:forEach>
 								</aui:select>
 						</aui:col>
@@ -143,7 +145,8 @@
 								<aui:select label="generazione-template" name="<%=GestioneProcedurePortletKeys.TIPI_GENERAZIONE_TEMPLATE %>" value="${procedura.tipoGenerazionePDF}">
 									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
 										<c:forEach items="${listaTipoGenerazionePDF}" var="tipoGenerazionePDF">
-											<aui:option value="${tipoGenerazionePDF}" label="${tipoGenerazionePDF}"></aui:option>
+											<c:set var="labelTipoGenerazionePDF" value="generazione-template_${tipoGenerazionePDF}" />
+											<aui:option value="${tipoGenerazionePDF}" label="${labelTipoGenerazionePDF}"></aui:option>
 										</c:forEach>
 								</aui:select>
 						</aui:col>
