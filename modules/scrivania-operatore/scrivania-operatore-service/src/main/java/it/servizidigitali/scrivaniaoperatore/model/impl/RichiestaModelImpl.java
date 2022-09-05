@@ -80,7 +80,9 @@ public class RichiestaModelImpl
 		{"codiceFiscale", Types.VARCHAR}, {"partitaIva", Types.VARCHAR},
 		{"email", Types.VARCHAR}, {"codiceFiscaleDelegato", Types.VARCHAR},
 		{"stato", Types.VARCHAR}, {"numeroProtocollo", Types.VARCHAR},
-		{"dataProtocollo", Types.TIMESTAMP}, {"oggetto", Types.VARCHAR},
+		{"dataProtocollo", Types.TIMESTAMP},
+		{"numeroProtocolloEsterno", Types.VARCHAR},
+		{"dataProtocolloEsterno", Types.TIMESTAMP}, {"oggetto", Types.VARCHAR},
 		{"note", Types.VARCHAR}, {"invioGuest", Types.BOOLEAN},
 		{"tokenVisualizzazione", Types.VARCHAR},
 		{"chiaveAssociazioneBackoffice", Types.VARCHAR},
@@ -106,6 +108,8 @@ public class RichiestaModelImpl
 		TABLE_COLUMNS_MAP.put("stato", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("numeroProtocollo", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("dataProtocollo", Types.TIMESTAMP);
+		TABLE_COLUMNS_MAP.put("numeroProtocolloEsterno", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("dataProtocolloEsterno", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("oggetto", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("note", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("invioGuest", Types.BOOLEAN);
@@ -116,7 +120,7 @@ public class RichiestaModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table richiesta (uuid_ VARCHAR(75) null,richiestaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codiceFiscale VARCHAR(75) null,partitaIva VARCHAR(75) null,email VARCHAR(75) null,codiceFiscaleDelegato VARCHAR(75) null,stato VARCHAR(75) null,numeroProtocollo VARCHAR(75) null,dataProtocollo DATE null,oggetto VARCHAR(75) null,note VARCHAR(75) null,invioGuest BOOLEAN,tokenVisualizzazione VARCHAR(75) null,chiaveAssociazioneBackoffice VARCHAR(75) null,delegaId LONG,proceduraId LONG)";
+		"create table richiesta (uuid_ VARCHAR(75) null,richiestaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codiceFiscale VARCHAR(75) null,partitaIva VARCHAR(75) null,email VARCHAR(75) null,codiceFiscaleDelegato VARCHAR(75) null,stato VARCHAR(75) null,numeroProtocollo VARCHAR(75) null,dataProtocollo DATE null,numeroProtocolloEsterno VARCHAR(75) null,dataProtocolloEsterno DATE null,oggetto VARCHAR(75) null,note VARCHAR(75) null,invioGuest BOOLEAN,tokenVisualizzazione VARCHAR(75) null,chiaveAssociazioneBackoffice VARCHAR(75) null,delegaId LONG,proceduraId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table richiesta";
 
@@ -394,6 +398,17 @@ public class RichiestaModelImpl
 		attributeSetterBiConsumers.put(
 			"dataProtocollo",
 			(BiConsumer<Richiesta, Date>)Richiesta::setDataProtocollo);
+		attributeGetterFunctions.put(
+			"numeroProtocolloEsterno", Richiesta::getNumeroProtocolloEsterno);
+		attributeSetterBiConsumers.put(
+			"numeroProtocolloEsterno",
+			(BiConsumer<Richiesta, String>)
+				Richiesta::setNumeroProtocolloEsterno);
+		attributeGetterFunctions.put(
+			"dataProtocolloEsterno", Richiesta::getDataProtocolloEsterno);
+		attributeSetterBiConsumers.put(
+			"dataProtocolloEsterno",
+			(BiConsumer<Richiesta, Date>)Richiesta::setDataProtocolloEsterno);
 		attributeGetterFunctions.put("oggetto", Richiesta::getOggetto);
 		attributeSetterBiConsumers.put(
 			"oggetto", (BiConsumer<Richiesta, String>)Richiesta::setOggetto);
@@ -767,6 +782,39 @@ public class RichiestaModelImpl
 	}
 
 	@Override
+	public String getNumeroProtocolloEsterno() {
+		if (_numeroProtocolloEsterno == null) {
+			return "";
+		}
+		else {
+			return _numeroProtocolloEsterno;
+		}
+	}
+
+	@Override
+	public void setNumeroProtocolloEsterno(String numeroProtocolloEsterno) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_numeroProtocolloEsterno = numeroProtocolloEsterno;
+	}
+
+	@Override
+	public Date getDataProtocolloEsterno() {
+		return _dataProtocolloEsterno;
+	}
+
+	@Override
+	public void setDataProtocolloEsterno(Date dataProtocolloEsterno) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_dataProtocolloEsterno = dataProtocolloEsterno;
+	}
+
+	@Override
 	public String getOggetto() {
 		if (_oggetto == null) {
 			return "";
@@ -997,6 +1045,8 @@ public class RichiestaModelImpl
 		richiestaImpl.setStato(getStato());
 		richiestaImpl.setNumeroProtocollo(getNumeroProtocollo());
 		richiestaImpl.setDataProtocollo(getDataProtocollo());
+		richiestaImpl.setNumeroProtocolloEsterno(getNumeroProtocolloEsterno());
+		richiestaImpl.setDataProtocolloEsterno(getDataProtocolloEsterno());
 		richiestaImpl.setOggetto(getOggetto());
 		richiestaImpl.setNote(getNote());
 		richiestaImpl.setInvioGuest(isInvioGuest());
@@ -1040,6 +1090,10 @@ public class RichiestaModelImpl
 			this.<String>getColumnOriginalValue("numeroProtocollo"));
 		richiestaImpl.setDataProtocollo(
 			this.<Date>getColumnOriginalValue("dataProtocollo"));
+		richiestaImpl.setNumeroProtocolloEsterno(
+			this.<String>getColumnOriginalValue("numeroProtocolloEsterno"));
+		richiestaImpl.setDataProtocolloEsterno(
+			this.<Date>getColumnOriginalValue("dataProtocolloEsterno"));
 		richiestaImpl.setOggetto(
 			this.<String>getColumnOriginalValue("oggetto"));
 		richiestaImpl.setNote(this.<String>getColumnOriginalValue("note"));
@@ -1233,6 +1287,28 @@ public class RichiestaModelImpl
 			richiestaCacheModel.dataProtocollo = Long.MIN_VALUE;
 		}
 
+		richiestaCacheModel.numeroProtocolloEsterno =
+			getNumeroProtocolloEsterno();
+
+		String numeroProtocolloEsterno =
+			richiestaCacheModel.numeroProtocolloEsterno;
+
+		if ((numeroProtocolloEsterno != null) &&
+			(numeroProtocolloEsterno.length() == 0)) {
+
+			richiestaCacheModel.numeroProtocolloEsterno = null;
+		}
+
+		Date dataProtocolloEsterno = getDataProtocolloEsterno();
+
+		if (dataProtocolloEsterno != null) {
+			richiestaCacheModel.dataProtocolloEsterno =
+				dataProtocolloEsterno.getTime();
+		}
+		else {
+			richiestaCacheModel.dataProtocolloEsterno = Long.MIN_VALUE;
+		}
+
 		richiestaCacheModel.oggetto = getOggetto();
 
 		String oggetto = richiestaCacheModel.oggetto;
@@ -1387,6 +1463,8 @@ public class RichiestaModelImpl
 	private String _stato;
 	private String _numeroProtocollo;
 	private Date _dataProtocollo;
+	private String _numeroProtocolloEsterno;
+	private Date _dataProtocolloEsterno;
 	private String _oggetto;
 	private String _note;
 	private boolean _invioGuest;
@@ -1440,6 +1518,10 @@ public class RichiestaModelImpl
 		_columnOriginalValues.put("stato", _stato);
 		_columnOriginalValues.put("numeroProtocollo", _numeroProtocollo);
 		_columnOriginalValues.put("dataProtocollo", _dataProtocollo);
+		_columnOriginalValues.put(
+			"numeroProtocolloEsterno", _numeroProtocolloEsterno);
+		_columnOriginalValues.put(
+			"dataProtocolloEsterno", _dataProtocolloEsterno);
 		_columnOriginalValues.put("oggetto", _oggetto);
 		_columnOriginalValues.put("note", _note);
 		_columnOriginalValues.put("invioGuest", _invioGuest);
@@ -1502,19 +1584,23 @@ public class RichiestaModelImpl
 
 		columnBitmasks.put("dataProtocollo", 16384L);
 
-		columnBitmasks.put("oggetto", 32768L);
+		columnBitmasks.put("numeroProtocolloEsterno", 32768L);
 
-		columnBitmasks.put("note", 65536L);
+		columnBitmasks.put("dataProtocolloEsterno", 65536L);
 
-		columnBitmasks.put("invioGuest", 131072L);
+		columnBitmasks.put("oggetto", 131072L);
 
-		columnBitmasks.put("tokenVisualizzazione", 262144L);
+		columnBitmasks.put("note", 262144L);
 
-		columnBitmasks.put("chiaveAssociazioneBackoffice", 524288L);
+		columnBitmasks.put("invioGuest", 524288L);
 
-		columnBitmasks.put("delegaId", 1048576L);
+		columnBitmasks.put("tokenVisualizzazione", 1048576L);
 
-		columnBitmasks.put("proceduraId", 2097152L);
+		columnBitmasks.put("chiaveAssociazioneBackoffice", 2097152L);
+
+		columnBitmasks.put("delegaId", 4194304L);
+
+		columnBitmasks.put("proceduraId", 8388608L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

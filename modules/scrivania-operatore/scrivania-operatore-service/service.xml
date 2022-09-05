@@ -35,6 +35,8 @@
 		<column name="stato" type="String" />
 		<column name="numeroProtocollo" type="String" />
 		<column name="dataProtocollo" type="Date" />
+		<column name="numeroProtocolloEsterno" type="String" />
+		<column name="dataProtocolloEsterno" type="Date" />
 		<column name="oggetto" type="String" />
 		<column name="note" type="String" />
 		<column name="invioGuest" type="boolean" />
