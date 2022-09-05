@@ -1,0 +1,26 @@
+package it.servizidigitali.common.utility.enumeration;
+
+/**
+ * @author pindi
+ *
+ */
+public enum UserCustomAttributes {
+
+	ACCETTA_PRIVACY("accettaPrivacy"), EMAIL_AGGIUNTIVA("emailAggiuntiva"), LIVELLO_SPID("livelloSPID"), PEC("pec"), RESIDENZA("residenza"), SPID_CODE("spidCode");
+
+	private String nomeAttributo;
+
+	/**
+	 *
+	 */
+	private UserCustomAttributes(String nomeAttributo) {
+		this.nomeAttributo = nomeAttributo;
+	}
+
+	/**
+	 * @return the nomeAttributo
+	 */
+	public String getNomeAttributo() {
+		return nomeAttributo;
+	}
+}
