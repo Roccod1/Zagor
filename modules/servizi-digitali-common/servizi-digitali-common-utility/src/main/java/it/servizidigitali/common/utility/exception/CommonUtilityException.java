@@ -1,4 +1,4 @@
-package it.servizidigitali.common.utility;
+package it.servizidigitali.common.utility.exception;
 
 /**
  * @author pindi
