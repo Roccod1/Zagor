@@ -54,10 +54,10 @@ public class RichiestaLocalServiceWrapper
 	}
 
 	@Override
-	public int countByFilters(
+	public int count(
 		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters) {
 
-		return _richiestaLocalService.countByFilters(filters);
+		return _richiestaLocalService.count(filters);
 	}
 
 	/**
@@ -257,16 +257,6 @@ public class RichiestaLocalServiceWrapper
 	}
 
 	@Override
-	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
-		findByFilters(
-			it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters
-				filters,
-			int start, int end) {
-
-		return _richiestaLocalService.findByFilters(filters, start, end);
-	}
-
-	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -406,6 +396,23 @@ public class RichiestaLocalServiceWrapper
 	@Override
 	public int getRichiestasCount() {
 		return _richiestaLocalService.getRichiestasCount();
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
+		getRichiesteByStato(String stato) {
+
+		return _richiestaLocalService.getRichiesteByStato(stato);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
+		search(
+			it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters
+				filters,
+			int start, int end) {
+
+		return _richiestaLocalService.search(filters, start, end);
 	}
 
 	/**

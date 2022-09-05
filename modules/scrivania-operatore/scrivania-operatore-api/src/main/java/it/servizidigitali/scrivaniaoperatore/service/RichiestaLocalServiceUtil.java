@@ -60,10 +60,10 @@ public class RichiestaLocalServiceUtil {
 		return getService().addRichiesta(richiesta);
 	}
 
-	public static int countByFilters(
+	public static int count(
 		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters) {
 
-		return getService().countByFilters(filters);
+		return getService().count(filters);
 	}
 
 	/**
@@ -229,13 +229,6 @@ public class RichiestaLocalServiceUtil {
 		return getService().fetchRichiestaByUuidAndGroupId(uuid, groupId);
 	}
 
-	public static List<Richiesta> findByFilters(
-		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters,
-		int start, int end) {
-
-		return getService().findByFilters(filters, start, end);
-	}
-
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -356,6 +349,17 @@ public class RichiestaLocalServiceUtil {
 	 */
 	public static int getRichiestasCount() {
 		return getService().getRichiestasCount();
+	}
+
+	public static List<Richiesta> getRichiesteByStato(String stato) {
+		return getService().getRichiesteByStato(stato);
+	}
+
+	public static List<Richiesta> search(
+		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters,
+		int start, int end) {
+
+		return getService().search(filters, start, end);
 	}
 
 	/**
