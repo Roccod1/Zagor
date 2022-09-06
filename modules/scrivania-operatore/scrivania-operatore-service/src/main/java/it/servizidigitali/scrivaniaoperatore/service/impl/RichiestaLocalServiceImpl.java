@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
+import it.servizidigitali.scrivaniaoperatore.exception.NoSuchRichiestaException;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
 import it.servizidigitali.scrivaniaoperatore.service.base.RichiestaLocalServiceBaseImpl;
@@ -41,5 +42,12 @@ public class RichiestaLocalServiceImpl extends RichiestaLocalServiceBaseImpl {
 	@Override
 	public List<Richiesta> getRichiesteByStato(String stato) {
 		return richiestaPersistence.findByStato(stato);
+	}
+
+	@Override
+	public void updateStatoRichiesta(long richiestaId, String stato) throws NoSuchRichiestaException {
+		Richiesta richiesta = richiestaPersistence.findByPrimaryKey(richiestaId);
+		richiesta.setStato(stato);
+		richiestaPersistence.update(richiesta);
 	}
 }

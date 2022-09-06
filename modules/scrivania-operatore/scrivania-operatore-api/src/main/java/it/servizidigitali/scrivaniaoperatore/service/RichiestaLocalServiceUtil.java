@@ -376,6 +376,13 @@ public class RichiestaLocalServiceUtil {
 		return getService().updateRichiesta(richiesta);
 	}
 
+	public static void updateStatoRichiesta(long richiestaId, String stato)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchRichiestaException {
+
+		getService().updateStatoRichiesta(richiestaId, stato);
+	}
+
 	public static RichiestaLocalService getService() {
 		return _service;
 	}

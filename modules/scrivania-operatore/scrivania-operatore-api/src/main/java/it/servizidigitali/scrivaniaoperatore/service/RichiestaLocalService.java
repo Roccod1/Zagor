@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import it.servizidigitali.scrivaniaoperatore.exception.NoSuchRichiestaException;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
 
@@ -328,5 +329,8 @@ public interface RichiestaLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Richiesta updateRichiesta(Richiesta richiesta);
+
+	public void updateStatoRichiesta(long richiestaId, String stato)
+		throws NoSuchRichiestaException;
 
 }

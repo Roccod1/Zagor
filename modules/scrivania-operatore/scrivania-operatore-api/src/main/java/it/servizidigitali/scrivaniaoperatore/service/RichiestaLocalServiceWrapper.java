@@ -434,6 +434,14 @@ public class RichiestaLocalServiceWrapper
 	}
 
 	@Override
+	public void updateStatoRichiesta(long richiestaId, String stato)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchRichiestaException {
+
+		_richiestaLocalService.updateStatoRichiesta(richiestaId, stato);
+	}
+
+	@Override
 	public RichiestaLocalService getWrappedService() {
 		return _richiestaLocalService;
 	}
