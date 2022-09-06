@@ -5,6 +5,9 @@ import java.util.Date;
 public class RichiestaDTO {
 	private long id;
 	private String numeroProtocollo;
+	private Date dataProtocollo;
+	private String numeroProtocolloEsterno;
+	private Date dataProtocolloEsterno;
 	private Date dataUltimoAggiornamento;
 	private String richiedente;
 	private String stato;
@@ -13,6 +16,12 @@ public class RichiestaDTO {
 	private Date dataInserimento;
 	private String oggetto;
 	private String note;
+	private String pec;
+	private String parIVA;
+	private String email;
+	private String indirizzoResidenza;
+	private String civicoResidenza;
+	private String comuneResidenza;
 	
 	public long getId() {
 		return id;
@@ -73,6 +82,60 @@ public class RichiestaDTO {
 	}
 	public void setNote(String note) {
 		this.note = note;
+	}
+	public Date getDataProtocollo() {
+		return dataProtocollo;
+	}
+	public void setDataProtocollo(Date dataProtocollo) {
+		this.dataProtocollo = dataProtocollo;
+	}
+	public String getNumeroProtocolloEsterno() {
+		return numeroProtocolloEsterno;
+	}
+	public void setNumeroProtocolloEsterno(String numeroProtocolloEsterno) {
+		this.numeroProtocolloEsterno = numeroProtocolloEsterno;
+	}
+	public Date getDataProtocolloEsterno() {
+		return dataProtocolloEsterno;
+	}
+	public void setDataProtocolloEsterno(Date dataProtocolloEsterno) {
+		this.dataProtocolloEsterno = dataProtocolloEsterno;
+	}
+	public String getPec() {
+		return pec;
+	}
+	public void setPec(String pec) {
+		this.pec = pec;
+	}
+	public String getParIVA() {
+		return parIVA;
+	}
+	public void setParIVA(String parIVA) {
+		this.parIVA = parIVA;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getIndirizzoResidenza() {
+		return indirizzoResidenza;
+	}
+	public void setIndirizzoResidenza(String indirizzoResidenza) {
+		this.indirizzoResidenza = indirizzoResidenza;
+	}
+	public String getCivicoResidenza() {
+		return civicoResidenza;
+	}
+	public void setCivicoResidenza(String civicoResidenza) {
+		this.civicoResidenza = civicoResidenza;
+	}
+	public String getComuneResidenza() {
+		return comuneResidenza;
+	}
+	public void setComuneResidenza(String comuneResidenza) {
+		this.comuneResidenza = comuneResidenza;
 	}
 	
 }

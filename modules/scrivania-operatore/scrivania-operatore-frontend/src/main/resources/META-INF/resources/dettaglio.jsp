@@ -13,19 +13,19 @@
 
 <div class="row">
 	<div class="col-6">
-		<aui:input name="partita-iva" />
+		<aui:input name="partita-iva" value="${richiesta.parIVA}" />
 	</div>
 	<div class="col-6">
-		<aui:input name="comune-residenza" />
+		<aui:input name="comune-residenza" value="${richiesta.comuneResidenza}" />
 	</div>
 </div>
 
 <div class="row">
 	<div class="col-5">
-		<aui:input name="indirizzo-residenza" />
+		<aui:input name="indirizzo-residenza" value="${richiesta.indirizzoResidenza}" />
 	</div>
 	<div class="col-1">
-		<aui:input name="n" />
+		<aui:input name="n" value="${richiesta.civicoResidenza}" />
 	</div>
 	<div class="col-6">
 		<aui:input name="telefono" />
@@ -34,10 +34,10 @@
 
 <div class="row">
 	<div class="col-6">
-		<aui:input name="email" />
+		<aui:input name="email" value="${richiesta.email}" />
 	</div>
 	<div class="col-6">
-		<aui:input name="pec" />
+		<aui:input name="pec" value="${richiesta.pec}" />
 	</div>
 </div>
 
@@ -87,16 +87,18 @@
 		<aui:input name="num-protocollo-richiesta" value="${richiesta.numeroProtocollo}" />
 	</div>
 	<div class="col-6">
-		<aui:input name="data-protocollo-richiesta" />
+		<fmt:formatDate value="${richiesta.dataProtocollo}" pattern="dd/MM/yyyy HH:mm" var="richiestaDataProtocollo" />
+		<aui:input name="data-protocollo-richiesta" value="${richiestaDataProtocollo}" />
 	</div>
 </div>
 
 <div class="row">
 	<div class="col-6">
-		<aui:input name="num-protocollo-esito" />
+		<aui:input name="num-protocollo-esito" value="${richiesta.numeroProtocolloEsterno}" />
 	</div>
 	<div class="col-6">
-		<aui:input name="data-protocollo-esito" />
+		<fmt:formatDate value="${richiesta.dataProtocolloEsterno}" pattern="dd/MM/yyyy HH:mm" var="richiestaDataProtocolloEsterno" />
+		<aui:input name="data-protocollo-esito" value="${richiestaDataProtocolloEsterno}" />
 	</div>
 </div>
 

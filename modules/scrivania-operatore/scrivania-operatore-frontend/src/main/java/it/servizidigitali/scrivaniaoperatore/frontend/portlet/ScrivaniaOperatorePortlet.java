@@ -56,7 +56,9 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 	private RichiestaLocalService richiestaLocalService;
 	@Reference
 	private UserLocalService userLocalService;
-
+	@Reference
+	private MapUtil mapUtil;
+	
 	@Override
 	public void render(RenderRequest request, RenderResponse response) throws IOException, PortletException {
 		String queryTab = ParamUtil.getString(request, "queryTab", ScrivaniaOperatorePortletKeys.TAB_ARRIVO);
@@ -97,9 +99,12 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		}
 		filters.setAutenticazione(mapAutenticazione(queryAut));
 		filters.setTipo(queryStato.isBlank() ? null : queryStato);
-
+		
 		int count = richiestaLocalService.count(filters);
-		List<RichiestaDTO> elems = richiestaLocalService.search(filters, start, end).stream().map(x -> MapUtil.mapRichiesta(ctx.getCompanyId(), x)).collect(Collectors.toList());
+		List<RichiestaDTO> elems = richiestaLocalService.search(filters, start, end)
+				.stream()
+				.map(x -> mapUtil.mapRichiesta(ctx.getCompanyId(), x))
+				.collect(Collectors.toList());
 
 		request.setAttribute("totale", count);
 		request.setAttribute("lista", elems);
