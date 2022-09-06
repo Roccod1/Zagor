@@ -1,44 +1,22 @@
+<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_RICHIESTE %>" var="getRichiesteUtenteResourceCommandUrl">
+</portlet:resourceURL>
+
 <h3>Comunicazioni</h3>
-<c:choose>
-	<c:when test="${not empty listaComunicazioni }">
-		<div id="collapseDiv" class="collapse-div collapse-background-active">
-			<c:forEach items="${listaComunicazioni }" var="comunicazione">
-			  <div class="collapse-header" id="heading${comunicazione.comunicazioneId }">
-			    <button data-toggle="collapse" data-target="#collapse${comunicazione.comunicazioneId }" aria-expanded="false" aria-controls="collapse${comunicazione.comunicazioneId }">
-			       <div class="button-wrapper">
-			       	 <span class="text-uppercase">
-						${comunicazione.titolo}			   		 
-			       	 </span>
-				     <div class="icon-wrapper">
-				         <span>${comunicazione.tipologia.nome}</span>
-				     </div>
-			    </button>
-			  </div>
-			  <div class="collapse-body">
-			  	<fmt:formatDate type="date" dateStyle="short" value="${comunicazione.dataInvio }" var="dataInvioComunicazioneFormattata"/>
-			  	<div>
-			  		${dataInvioComunicazioneFormattata }
-			  	</div>
-			  
-			    <div id="collapse${comunicazione.comunicazioneId }" class="collapse" role="region" aria-labelledby="heading${comunicazione.comunicazioneId }">
-				    <c:if test="${not empty comunicazione.descrizione }">
-			             <p class="mb-3">${comunicazione.descrizione}</p>
-				   	</c:if>
-				   	
-			       <p><liferay-ui:message key="codice-servizio"/>: ${not empty comunicazione.codiceServizio ? comunicazione.codiceServizio : "-"}</p>
-			       <a href="${not empty comunicazione.uriServizio ? comunicazione.uriServizio : "#" }"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio" /></span></a>  
-			    </div>
-			  </div>
-			</c:forEach>
-		</div>		
-	</c:when>
+
+${getRichiesteUtenteResourceCommandUrl }
+
+<%-- <c:choose> --%>
+	<div id="#<portlet:namespace/>accordionContainer"></div>
 	
-	<c:otherwise>
-		<div class="alert alert-secondary" role="alert">
-			<liferay-ui:message key="nessun-risultato-da-visualizzare"/>
-		</div>
-	</c:otherwise>
-</c:choose>
+<%-- 	<c:when test="${not empty listaComunicazioni }"> --%>
+<%-- 	</c:when> --%>
+	
+<%-- 	<c:otherwise> --%>
+<!-- 		<div class="alert alert-secondary" role="alert"> -->
+<%-- 			<liferay-ui:message key="nessun-risultato-da-visualizzare"/> --%>
+<!-- 		</div> -->
+<%-- 	</c:otherwise> --%>
+<%-- </c:choose> --%>
 
 <h3>Le mie prenotazioni</h3>
 <c:choose>
@@ -51,3 +29,132 @@
 		</div>
 	</c:otherwise>
 </c:choose>
+
+
+
+
+
+
+
+<script id="accordion" type="text/x-jsrender">
+<div id="collapseDivRichieste" class="collapse-div collapse-background-active">
+	{{for comunicazioni}}
+	<div class="collapse-header" id="heading{{>comunicazioneId}}">
+		  <button data-toggle="collapse" data-target="#collapse{{>comunicazioneId}}" aria-expanded="false" aria-controls="collapse{{>comunicazioneId}}">
+		     <div class="button-wrapper">
+		     	 <span class="text-uppercase">
+					{{>titolo}}			   		 
+		     	 </span>
+		    <div class="icon-wrapper">
+		        <span>{{>tipologia.nome}}</span>
+		    </div>
+		  </button>
+		</div>
+		<div class="collapse-body">
+			<div>
+				{{>dataInvio}}
+			</div>
+		
+		  <div id="collapse{{>comunicazioneId}}" class="collapse" role="region" aria-labelledby="heading{{>comunicazioneId}}">
+		  {{if descrizione }}
+		           <p class="mb-3">{{>descrizione}}</p>
+		  {{/if}}
+		  	
+		     <p><liferay-ui:message key="codice-servizio"/>: {{codiceServizio ? >codiceServizio : "-"}}</p>
+		     <a href="{{uriServizio ? >uriServizio : "#" }}"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio" /></span></a>  
+		  </div>
+		</div>
+	{{/for}}
+</div>
+</script>
+
+
+
+
+
+
+
+<script type="text/javascript">
+	var cur = 0;
+
+// 	on documentReady
+	$(function(){
+		getRichiesteUtente();
+	});
+	
+	function getRichiesteUtente(){
+		
+		var params = {};
+		params.cur = cur;
+ 		params.orderByCol = '';
+		params.orderByType = '';
+		
+		var accordionContainer = $("#<portlet:namespace/>accordionContainer");
+		var url = '${getRichiesteUtenteResourceCommandUrl}';
+		$.ajax({
+			method: 'GET',
+			url: url,
+			data: '',
+			async: false,
+			success: function(result, status, xhr){
+				console.log("result: ", result);
+				console.log("status: ", status);
+				console.log("xhr: ", xhr);				
+				var tpl = $.templates('#accordion');
+				var html = tpl.render({comunicazioni: result});
+				$(accordionContainer).html(html);
+				
+			},
+			error: function(xhr, status, error){
+				console.log("error: ", error);
+				console.log("status: ", status);
+				console.log("xhr: ", xhr);
+			}
+		});
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</script>

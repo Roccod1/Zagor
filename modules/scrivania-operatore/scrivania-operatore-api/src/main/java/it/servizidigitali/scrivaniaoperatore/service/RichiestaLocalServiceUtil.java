@@ -345,6 +345,18 @@ public class RichiestaLocalServiceUtil {
 		return getService().getRichiestasCount();
 	}
 
+	public static List<Richiesta>
+			getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(
+				String codiceFiscale, long organizationGroupId, int cur,
+				int delta, String orderByCol, String orderByType)
+		throws Exception {
+
+		return getService().
+			getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(
+				codiceFiscale, organizationGroupId, cur, delta, orderByCol,
+				orderByType);
+	}
+
 	/**
 	 * Updates the richiesta in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

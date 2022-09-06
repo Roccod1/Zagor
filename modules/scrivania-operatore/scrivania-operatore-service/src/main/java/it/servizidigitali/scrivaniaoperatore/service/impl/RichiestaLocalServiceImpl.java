@@ -15,10 +15,16 @@
 package it.servizidigitali.scrivaniaoperatore.service.impl;
 
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
-import it.servizidigitali.scrivaniaoperatore.service.base.RichiestaLocalServiceBaseImpl;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
+
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.service.base.RichiestaLocalServiceBaseImpl;
 
 /**
  * @author Brian Wing Shun Chan
@@ -28,4 +34,19 @@ import org.osgi.service.component.annotations.Component;
 	service = AopService.class
 )
 public class RichiestaLocalServiceImpl extends RichiestaLocalServiceBaseImpl {
+	
+	private static final Log _log = LogFactoryUtil.getLog(RichiestaLocalServiceImpl.class);
+	
+	public List<Richiesta> getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(String codiceFiscale, long organizationGroupId, int cur, int delta, String orderByCol, String orderByType) throws Exception{
+		List<Richiesta> listaRichieste = new ArrayList<Richiesta>();
+		
+		try {
+			listaRichieste = richiestaFinder.findRichiestaByCfAndGroupId(codiceFiscale, organizationGroupId, cur, delta, orderByCol, orderByType);
+		}catch(Exception e) {
+			_log.error("getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid() :: " + e.getMessage(), e); 
+			throw new Exception(e);
+		}
+		
+		return listaRichieste;
+	}
 }

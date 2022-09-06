@@ -50,8 +50,7 @@ public class ScrivaniaCittadinoPortlet extends MVCPortlet {
 	
 	private static final Log _log = LogFactoryUtil.getLog(ScrivaniaCittadinoPortlet.class);
 	
-	@Reference
-	private RichiestaLocalService richiestaLocalService;
+
 	
 	@Reference
 	private ComunicazioneLocalService comunicazioneLocalService;
@@ -59,14 +58,13 @@ public class ScrivaniaCittadinoPortlet extends MVCPortlet {
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
 		
-       List<Richiesta> listaRichieste = new ArrayList<Richiesta>();
        List<Comunicazione> listaComunicazioni = new ArrayList<Comunicazione>();
         
        ServiceContext serviceContext = null;
        ThemeDisplay themeDisplay = null;
        
        try {
-            listaRichieste = richiestaLocalService.getRichiestas(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+            
             
             serviceContext = ServiceContextFactory.getInstance(renderRequest);
             themeDisplay = serviceContext.getThemeDisplay();
@@ -81,7 +79,6 @@ public class ScrivaniaCittadinoPortlet extends MVCPortlet {
             _log.error("render() :: " + e.getMessage(), e);
         }
        
-        renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_RICHIESTE, listaRichieste);
         renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_PAGAMENTI, new ArrayList<Object>());
         renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_COMUNICAZIONI, listaComunicazioni);
         renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_PRENOTAZIONI, new ArrayList<Object>());

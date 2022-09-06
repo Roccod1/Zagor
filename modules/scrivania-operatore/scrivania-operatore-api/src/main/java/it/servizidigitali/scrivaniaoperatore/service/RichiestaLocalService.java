@@ -307,6 +307,13 @@ public interface RichiestaLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getRichiestasCount();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Richiesta>
+			getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(
+				String codiceFiscale, long organizationGroupId, int cur,
+				int delta, String orderByCol, String orderByType)
+		throws Exception;
+
 	/**
 	 * Updates the richiesta in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
