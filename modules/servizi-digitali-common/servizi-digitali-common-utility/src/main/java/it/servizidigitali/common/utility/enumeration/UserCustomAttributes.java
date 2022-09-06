@@ -6,7 +6,7 @@ package it.servizidigitali.common.utility.enumeration;
  */
 public enum UserCustomAttributes {
 
-	ACCETTA_PRIVACY("accettaPrivacy"), EMAIL_AGGIUNTIVA("emailAggiuntiva"), LIVELLO_SPID("livelloSPID"), PEC("pec"), RESIDENZA("residenza"), SPID_CODE("spidCode");
+	ACCETTA_PRIVACY("accettaPrivacy"), EMAIL_AGGIUNTIVA("emailAggiuntiva"), LIVELLO_SPID("livelloSPID"), PEC("pec"), RESIDENZA("residenza"), TELEFONO("telefono"), SPID_CODE("spidCode");
 
 	private String nomeAttributo;
 
