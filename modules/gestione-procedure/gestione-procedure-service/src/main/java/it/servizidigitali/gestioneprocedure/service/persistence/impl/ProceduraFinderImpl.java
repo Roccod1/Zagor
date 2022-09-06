@@ -20,6 +20,9 @@ import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFinder;
 
 @Component(service = ProceduraFinder.class)
 public class ProceduraFinderImpl extends ProceduraFinderBaseImpl implements ProceduraFinder{
+
+	
+	
 	public List<Procedura> findByFilters(String denominazione, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId, int cur, int delta, OrderByComparator<Procedura> ordine){
 		List<Procedura> listaProcedure = new ArrayList<>();
 		
@@ -63,4 +66,6 @@ public class ProceduraFinderImpl extends ProceduraFinderBaseImpl implements Proc
 		
 		return listaProcedure;
 	}
+	
+	
 }

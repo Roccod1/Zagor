@@ -246,9 +246,7 @@ public class ProceduraFormLocalServiceUtil {
 		return getService().getFormIntegrativiProcedura(idProcedura);
 	}
 
-	public static long getFormPrincipaleProcedura(long idProcedura)
-		throws PortalException {
-
+	public static long getFormPrincipaleProcedura(long idProcedura) {
 		return getService().getFormPrincipaleProcedura(idProcedura);
 	}
 
@@ -331,10 +329,10 @@ public class ProceduraFormLocalServiceUtil {
 		return getService().getProceduraFormsCount();
 	}
 
-	public static List<ProceduraForm> salvaListaFormIntegrativi(
+	public static void salvaListaFormIntegrativi(
 		String[] listaFormIntegrativi, long idProcedura) {
 
-		return getService().salvaListaFormIntegrativi(
+		getService().salvaListaFormIntegrativi(
 			listaFormIntegrativi, idProcedura);
 	}
 
