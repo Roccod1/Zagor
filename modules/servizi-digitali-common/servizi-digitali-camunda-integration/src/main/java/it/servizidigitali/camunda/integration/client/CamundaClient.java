@@ -326,4 +326,10 @@ public interface CamundaClient {
 	 */
 	String startProcessInstance(String tenantId, String processDefinitionKey, String businessKey, Map<String, Object> variables);
 
+	/**
+	 * @param groupId
+	 * @return
+	 */
+	boolean existsGroup(String groupId);
+
 }

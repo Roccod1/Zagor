@@ -893,4 +893,20 @@ public class CamundaClientImpl implements CamundaClient {
 			throw new CamundaClientException("removeUserFromTenant :: " + e.getMessage(), e);
 		}
 	}
+
+	@Override
+	public boolean existsGroup(String groupId) {
+
+		ApiClient client = getApiClient();
+		GroupApi groupApi = new GroupApi(client);
+
+		GroupDto group = null;
+		try {
+			group = groupApi.getGroup(groupId);
+		}
+		catch (Exception e) {
+			log.warn("existsGroup :: " + e.getMessage());
+		}
+		return group != null;
+	}
 }
