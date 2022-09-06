@@ -36,9 +36,9 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 		}, 
 		service = MVCResourceCommand.class
 )
-public class GetRichiesteCittadino extends BaseMVCResourceCommand {
+public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand {
 
-	private static final Log _log = LogFactoryUtil.getLog(GetRichiesteCittadino.class);
+	private static final Log _log = LogFactoryUtil.getLog(GetRichiesteCittadinoResourceCommand.class);
 
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
