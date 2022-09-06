@@ -1,7 +1,6 @@
 package it.servizidigitali.camunda.integration.client;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,8 +16,6 @@ import it.servizidigitali.camunda.integration.client.exception.CamundaClientExce
  * @author pindi
  */
 public interface CamundaClient {
-
-	static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 	/**
 	 *
