@@ -48,12 +48,12 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
  *
  */
 @Component(immediate = true, //
-		service = InvioComunicazioniScheduler.class, //
+		service = AvvioIstanzaProcessoScheduler.class, //
 		configurationPid = "it.servizidigitali.scrivaniaoperatore.scheduler.configuration.AvvioIstanzaProcessoSchedulerConfiguration"//
 )
-public class InvioComunicazioniScheduler extends BaseMessageListener {
+public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 
-	private static final Log _log = LogFactoryUtil.getLog(InvioComunicazioniScheduler.class);
+	private static final Log _log = LogFactoryUtil.getLog(AvvioIstanzaProcessoScheduler.class);
 
 	private volatile boolean _initialized;
 	private TriggerFactory _triggerFactory;
