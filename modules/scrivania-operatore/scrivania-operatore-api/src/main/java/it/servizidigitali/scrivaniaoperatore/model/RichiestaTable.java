@@ -64,6 +64,14 @@ public class RichiestaTable extends BaseTable<RichiestaTable> {
 		"numeroProtocollo", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<RichiestaTable, Date> dataProtocollo = createColumn(
 		"dataProtocollo", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
+	public final Column<RichiestaTable, String> numeroProtocolloEsterno =
+		createColumn(
+			"numeroProtocolloEsterno", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
+	public final Column<RichiestaTable, Date> dataProtocolloEsterno =
+		createColumn(
+			"dataProtocolloEsterno", Date.class, Types.TIMESTAMP,
+			Column.FLAG_DEFAULT);
 	public final Column<RichiestaTable, String> oggetto = createColumn(
 		"oggetto", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<RichiestaTable, String> note = createColumn(

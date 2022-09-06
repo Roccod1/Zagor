@@ -138,27 +138,32 @@ public class AllegatoRichiestaModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long URL_COLUMN_BITMASK = 8L;
+	public static final long PRINCIPALE_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 16L;
+	public static final long RICHIESTAID_COLUMN_BITMASK = 16L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long URL_COLUMN_BITMASK = 32L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 64L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long RICHIESTAID_COLUMN_BITMASK = 32L;
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *		#getColumnBitmask(String)}
-	 */
-	@Deprecated
-	public static final long FILEENTRYID_COLUMN_BITMASK = 64L;
+	public static final long FILEENTRYID_COLUMN_BITMASK = 128L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -419,6 +424,16 @@ public class AllegatoRichiestaModelImpl
 		_richiestaId = richiestaId;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalRichiestaId() {
+		return GetterUtil.getLong(
+			this.<Long>getColumnOriginalValue("richiestaId"));
+	}
+
 	@Override
 	public long getFileEntryId() {
 		return _fileEntryId;
@@ -655,6 +670,16 @@ public class AllegatoRichiestaModelImpl
 		}
 
 		_principale = principale;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public boolean getOriginalPrincipale() {
+		return GetterUtil.getBoolean(
+			this.<Boolean>getColumnOriginalValue("principale"));
 	}
 
 	@Override

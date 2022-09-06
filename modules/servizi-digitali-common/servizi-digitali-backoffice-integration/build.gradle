@@ -7,6 +7,7 @@ repositories {
 dependencies {
     compileOnly group: "com.liferay.portal", name: "release.portal.api"
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-api")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-utility")
 	compileInclude fileTree(dir: 'lib', include: '*.jar')
 	compileInclude group: 'com.liferay', name: 'org.apache.xmlbeans', version: '2.5.0.LIFERAY-PATCHED-1'
 	compileInclude group: 'com.liferay', name: 'org.apache.axis', version: '1.4.LIFERAY-PATCHED-6'

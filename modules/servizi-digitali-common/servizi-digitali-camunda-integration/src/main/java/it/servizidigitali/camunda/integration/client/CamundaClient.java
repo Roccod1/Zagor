@@ -3,6 +3,7 @@ package it.servizidigitali.camunda.integration.client;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.camunda.community.rest.client.dto.ProcessDefinitionDto;
@@ -243,7 +244,7 @@ public interface CamundaClient {
 	 *
 	 * @param tenantId
 	 */
-	void removeTenant(String tenantId);
+	void deleteTenant(String tenantId);
 
 	/**
 	 *
@@ -257,7 +258,7 @@ public interface CamundaClient {
 	 *
 	 * @param groupId
 	 */
-	void removeGroup(String groupId);
+	void deleteGroup(String groupId);
 
 	/**
 	 *
@@ -273,7 +274,7 @@ public interface CamundaClient {
 	 *
 	 * @param userId
 	 */
-	void removeUser(String userId);
+	void deleteUser(String userId);
 
 	/**
 	 * @param groupId
@@ -314,5 +315,21 @@ public interface CamundaClient {
 	 * @param userId
 	 */
 	void removeUserFromTenant(String tenantId, String userId);
+
+	/**
+	 *
+	 * @param tenantId
+	 * @param processDefinitionKey
+	 * @param businessKey
+	 * @param variables
+	 * @return processId
+	 */
+	String startProcessInstance(String tenantId, String processDefinitionKey, String businessKey, Map<String, Object> variables);
+
+	/**
+	 * @param groupId
+	 * @return
+	 */
+	boolean existsGroup(String groupId);
 
 }

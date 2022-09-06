@@ -33,7 +33,9 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import it.servizidigitali.scrivaniaoperatore.exception.NoSuchRichiestaException;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
 
 import java.io.Serializable;
 
@@ -77,6 +79,8 @@ public interface RichiestaLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Richiesta addRichiesta(Richiesta richiesta);
+
+	public int count(RichiestaFilters filters);
 
 	/**
 	 * @throws PortalException
@@ -314,6 +318,12 @@ public interface RichiestaLocalService
 				int delta, String orderByCol, String orderByType)
 		throws Exception;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Richiesta> getRichiesteByStato(String stato);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Richiesta> search(RichiestaFilters filters, int start, int end);
+
 	/**
 	 * Updates the richiesta in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
@@ -326,5 +336,8 @@ public interface RichiestaLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Richiesta updateRichiesta(Richiesta richiesta);
+
+	public void updateStatoRichiesta(long richiestaId, String stato)
+		throws NoSuchRichiestaException;
 
 }

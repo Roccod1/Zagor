@@ -88,11 +88,11 @@ public class OrganizationModelListener extends BaseModelListener<Organization> {
 		long organizationId = model.getOrganizationId();
 		if (parentOrganizationId == 0) {
 			// E' un organizzazione padre = è un Ente
-			camundaClient.removeTenant(String.valueOf(organizationId));
+			camundaClient.deleteTenant(String.valueOf(organizationId));
 		}
 		else {
 			// E' un organizzazione figlia = è una ripartizione dell'Ente
-			camundaClient.removeGroup(String.valueOf(organizationId));
+			camundaClient.deleteGroup(String.valueOf(organizationId));
 		}
 	}
 

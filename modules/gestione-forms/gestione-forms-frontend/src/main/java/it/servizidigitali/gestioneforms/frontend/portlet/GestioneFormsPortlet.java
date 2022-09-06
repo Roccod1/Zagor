@@ -74,7 +74,7 @@ public class GestioneFormsPortlet extends MVCPortlet {
 		
 		
 		List<Form> listaForm = (List<Form>) renderRequest.getAttribute(GestioneFormsPortletKeys.LISTA_FORM);
-		long groupIdUtente = themeDisplay.getSiteGroupId();
+		long siteGroupId = themeDisplay.getSiteGroupId();
 		long organizationIdSitePrincipale = themeDisplay.getSiteGroup().getOrganizationId();
 		
 		int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM,GestioneFormsPortletKeys.DEFAULT_CUR);
@@ -82,9 +82,9 @@ public class GestioneFormsPortlet extends MVCPortlet {
 		String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 				
-		String nome = ParamUtil.getString(renderRequest, "nomeRicerca");
-		String dataInserimentoDaString = ParamUtil.getString(renderRequest, "dataInserimentoDa");
-		String dataInserimentoAString = ParamUtil.getString(renderRequest, "dataInserimentoA");
+		String nome = ParamUtil.getString(renderRequest, GestioneFormsPortletKeys.NOME_RICERCA);
+		String dataInserimentoDaString = ParamUtil.getString(renderRequest, GestioneFormsPortletKeys.DATA_INSERIMENTO_DA);
+		String dataInserimentoAString = ParamUtil.getString(renderRequest, GestioneFormsPortletKeys.DATA_INSERIMENTO_A);
 		
 		Date dataInserimentoDa = null;
 		Date dataInserimentoA = null;
@@ -99,7 +99,7 @@ public class GestioneFormsPortlet extends MVCPortlet {
 				dataInserimentoA = simpleDateFormat.parse(dataInserimentoAString);
 			}
 			
-			listaForm = formLocalService.search(nome, dataInserimentoDa, dataInserimentoA, delta, cur,orderByCol, orderByType);
+			listaForm = formLocalService.search(nome, dataInserimentoDa, dataInserimentoA, siteGroupId, delta, cur,orderByCol, orderByType);
 			
 		}catch(Exception e) {
 			_log.error("Impossibile recuperare la lista dei form!" + e.getMessage());
@@ -113,8 +113,8 @@ public class GestioneFormsPortlet extends MVCPortlet {
 		renderRequest.setAttribute(GestioneFormsPortletKeys.NOME_RICERCA, nome);
 		renderRequest.setAttribute(GestioneFormsPortletKeys.DATA_INSERIMENTO_DA, dataInserimentoDaString);
 		renderRequest.setAttribute(GestioneFormsPortletKeys.DATA_INSERIMENTO_A, dataInserimentoAString);
-		renderRequest.setAttribute("groupIdUtente", groupIdUtente);
-		renderRequest.setAttribute("organizationIdSitePrincipale", organizationIdSitePrincipale);
+		renderRequest.setAttribute(GestioneFormsPortletKeys.SITE_GROUP_ID, siteGroupId);
+		renderRequest.setAttribute(GestioneFormsPortletKeys.ORGANIZATION_ID_SITE_PRINCIPALE, organizationIdSitePrincipale);
 		
 		
 		// Rimozione messaggi default

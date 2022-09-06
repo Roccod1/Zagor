@@ -20,17 +20,21 @@ public class GestioneProcessiPortletKeys {
 	public static final String DATA_INSERIMENTO_DA = "dataInserimentoDa";
 	public static final String DATA_INSERIMENTO_A = "dataInserimentoA";
 	public static final String ID_PROCESSO = "idProcesso";
+	public static final String ORGANIZATION_ID = "organizationId";
 	
 	public static final String LISTA_PROCESSI = "listaProcessi";
 	public static final String JSP_AGGIUNGI_MODIFICA_PROCESSO = "/aggiungiModificaProcesso.jsp";
 	public static final String ATTRIBUTO_PROCESSO = "processo";
 	public static final String MODELLOXML ="modelloXml";
 	
+	public static final String NOME_ENTE = "nomeEnte";
+	
 	public static final String SESSION_MESSAGE_ERRORE_SALVATAGGIO = "errore-salvataggio";
 	public static final String SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE = "eseguito-correttamente";
 	public static final String SESSION_MESSAGE_ERRORE_ATTIVA_DISATTIVA_PROCESSO = "errore-attiva-disattiva-servizio";
 	public static final String SESSION_MESSAGE_ERRORE_PROCESSO_CODICE_ESISTENTE = "errore-processo-codice-esistente";
-	public static final String SESSION_MESSAGE_ERRORE_RECUPERO_PROCESSO_REPOSITORY = "errore-recupero-processo-repository";
+	public static final String SESSION_MESSAGE_ERRORE_NON_AUTORIZZATO = "errore-non-autorizzato";
+	public static final String SESSION_MESSAGE_ERRORE_CAMUNDA = "errore-camunda";
 	
 	public static final int DEFAULT_CUR = 1;
 	public static final int DEFAULT_DELTA = 10;

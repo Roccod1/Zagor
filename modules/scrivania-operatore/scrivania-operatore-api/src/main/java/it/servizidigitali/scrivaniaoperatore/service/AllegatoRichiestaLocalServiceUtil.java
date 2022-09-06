@@ -242,6 +242,12 @@ public class AllegatoRichiestaLocalServiceUtil {
 		return getService().getActionableDynamicQuery();
 	}
 
+	public static List<AllegatoRichiesta> getAllegatiRichiesta(
+		long richiestaId, long groupId) {
+
+		return getService().getAllegatiRichiesta(richiestaId, groupId);
+	}
+
 	/**
 	 * Returns the allegato richiesta with the primary key.
 	 *
@@ -255,6 +261,13 @@ public class AllegatoRichiestaLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getAllegatoRichiesta(allegatoRichiestaPK);
+	}
+
+	public static AllegatoRichiesta getAllegatoRichiesta(
+		long richiestaId, boolean principale, long groupId) {
+
+		return getService().getAllegatoRichiesta(
+			richiestaId, principale, groupId);
 	}
 
 	/**

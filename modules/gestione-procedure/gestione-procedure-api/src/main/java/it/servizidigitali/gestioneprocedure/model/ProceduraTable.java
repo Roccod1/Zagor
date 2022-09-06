@@ -52,9 +52,27 @@ public class ProceduraTable extends BaseTable<ProceduraTable> {
 		"nome", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<ProceduraTable, String> pecDestinazione = createColumn(
 		"pecDestinazione", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<ProceduraTable, String> configurazioniPresentatoreForm =
+	public final Column<ProceduraTable, Boolean> step1Attivo = createColumn(
+		"step1Attivo", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
+	public final Column<ProceduraTable, String>
+		step1TipoComponentiNucleoFamiliare = createColumn(
+			"step1TipoComponentiNucleoFamiliare", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
+	public final Column<ProceduraTable, String> step2TipoServizio =
 		createColumn(
-			"configurazioniPresentatoreForm", String.class, Types.VARCHAR,
+			"step2TipoServizio", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
+	public final Column<ProceduraTable, String>
+		step2TipiIntegrazioneBackoffice = createColumn(
+			"step2TipiIntegrazioneBackoffice", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
+	public final Column<ProceduraTable, Boolean>
+		abilitaCacheIntegrazioneBackoffice = createColumn(
+			"abilitaCacheIntegrazioneBackoffice", Boolean.class, Types.BOOLEAN,
+			Column.FLAG_DEFAULT);
+	public final Column<ProceduraTable, String> tipoGenerazionePDF =
+		createColumn(
+			"tipoGenerazionePDF", String.class, Types.VARCHAR,
 			Column.FLAG_DEFAULT);
 	public final Column<ProceduraTable, Boolean> attiva = createColumn(
 		"attiva", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);

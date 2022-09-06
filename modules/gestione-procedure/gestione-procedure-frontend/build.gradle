@@ -3,6 +3,8 @@ dependencies {
 	compileOnly project(":modules:gestione-procedure:gestione-procedure-api")
 	compileOnly project(":modules:gestione-servizi:gestione-servizi-api")
 	compileOnly project(":modules:gestione-processi:gestione-processi-api")
-	//compileOnly project(":modules:gestione-forms:gestione-forms-api")
+	compileOnly project(":modules:gestione-enti:gestione-enti-api")
+	compileOnly project(":modules:gestione-forms:gestione-forms-api")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-backoffice-integration")
 	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.0.2"
 }

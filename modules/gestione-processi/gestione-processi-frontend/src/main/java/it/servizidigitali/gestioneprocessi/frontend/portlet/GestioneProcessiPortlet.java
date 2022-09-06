@@ -9,14 +9,17 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,7 +60,13 @@ public class GestioneProcessiPortlet extends MVCPortlet {
 	public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public void render (RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException{
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
 		List<Processo> listaProcessi = (List<Processo>) renderRequest.getAttribute(GestioneProcessiPortletKeys.GESTIONEPROCESSI);
+		long groupIdUtente = themeDisplay.getSiteGroupId();
+		long organizationIdSitePrincipale = themeDisplay.getSiteGroup().getOrganizationId();
+		
 		
 		int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM,GestioneProcessiPortletKeys.DEFAULT_CUR);
 		int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,GestioneProcessiPortletKeys.DEFAULT_DELTA);
@@ -81,18 +90,23 @@ public class GestioneProcessiPortlet extends MVCPortlet {
 				dataInserimentoA = simpleDateFormat.parse(dataInserimentoAString);
 			}
 			
-		}catch(ParseException e) {
-			_log.error("Impossibile effettuare il parse delle date!");
+			listaProcessi = processoLocalService.search(nome, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), delta, cur, orderByCol, orderByType);
+			
+		}catch(Exception e) {
+			_log.error("Errore durante la ricerca dei processi!" + e.getMessage());
 		}
 		
+		if (listaProcessi == null) {
+			listaProcessi = new ArrayList<Processo>();
+		}
 
-		listaProcessi = processoLocalService.cerca(nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol, orderByType);
-
-		
+			
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.LISTA_PROCESSI, listaProcessi);
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.NOME_RICERCA, nome);
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.DATA_INSERIMENTO_DA, dataInserimentoDaString);
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.DATA_INSERIMENTO_A, dataInserimentoAString);
+		renderRequest.setAttribute("groupIdUtente", groupIdUtente);
+		renderRequest.setAttribute("organizationIdSitePrincipale", organizationIdSitePrincipale);
 		
 		// Rimozione messaggi default
 		

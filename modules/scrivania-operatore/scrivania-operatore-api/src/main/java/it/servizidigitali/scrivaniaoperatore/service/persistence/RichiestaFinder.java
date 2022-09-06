@@ -24,6 +24,15 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface RichiestaFinder {
 
 	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
+		findByFilters(
+			it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters
+				filters,
+			int start, int end);
+
+	public int countByFilters(
+		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters);
+
+	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
 		findRichiestaByCfAndGroupId(
 			String cf, long groupId, int cur, int delta, String orderByCol,
 			String orderByType);
