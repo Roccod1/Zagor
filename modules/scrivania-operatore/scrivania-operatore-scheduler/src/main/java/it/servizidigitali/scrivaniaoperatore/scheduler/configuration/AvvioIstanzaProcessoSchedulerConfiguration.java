@@ -13,7 +13,7 @@ public interface AvvioIstanzaProcessoSchedulerConfiguration {
 	@Meta.AD(deflt = "false", required = false, description = "Abilita/disabilita lo scheduler di avvio istanza processi")
 	boolean avvioIstanzaProcessoSchedulerEnabled();
 
-	@Meta.AD(deflt = "*/60 * * * * ?", required = false, description = "Espressione CRON per lo scheduler di avvio istanza processi (ogni minuto di default)")
+	@Meta.AD(deflt = "0 0/1 * * * ?", required = false, description = "Espressione CRON per lo scheduler di avvio istanza processi (ogni minuto di default)")
 	String avvioIstanzaProcessoSchedulerCronExpression();
 
 }
