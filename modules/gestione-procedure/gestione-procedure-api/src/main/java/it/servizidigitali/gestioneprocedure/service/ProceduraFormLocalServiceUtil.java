@@ -338,6 +338,13 @@ public class ProceduraFormLocalServiceUtil {
 			listaFormIntegrativi, idProcedura);
 	}
 
+	public static ProceduraForm salvaProceduraFormPrincipale(
+		long idFormPrincipale, long idProcedura) {
+
+		return getService().salvaProceduraFormPrincipale(
+			idFormPrincipale, idProcedura);
+	}
+
 	/**
 	 * Updates the procedura form in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

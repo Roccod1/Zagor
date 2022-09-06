@@ -274,6 +274,15 @@ public class AllegatoRichiestaLocalServiceWrapper
 		return _allegatoRichiestaLocalService.getActionableDynamicQuery();
 	}
 
+	@Override
+	public java.util.List
+		<it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta>
+			getAllegatiRichiesta(long richiestaId, long groupId) {
+
+		return _allegatoRichiestaLocalService.getAllegatiRichiesta(
+			richiestaId, groupId);
+	}
+
 	/**
 	 * Returns the allegato richiesta with the primary key.
 	 *
@@ -290,6 +299,15 @@ public class AllegatoRichiestaLocalServiceWrapper
 
 		return _allegatoRichiestaLocalService.getAllegatoRichiesta(
 			allegatoRichiestaPK);
+	}
+
+	@Override
+	public it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta
+		getAllegatoRichiesta(
+			long richiestaId, boolean principale, long groupId) {
+
+		return _allegatoRichiestaLocalService.getAllegatoRichiesta(
+			richiestaId, principale, groupId);
 	}
 
 	/**

@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -34,7 +35,9 @@ import org.camunda.community.rest.client.dto.PatchVariablesDto;
 import org.camunda.community.rest.client.dto.ProcessDefinitionDto;
 import org.camunda.community.rest.client.dto.ProcessInstanceDto;
 import org.camunda.community.rest.client.dto.ProcessInstanceQueryDto;
+import org.camunda.community.rest.client.dto.ProcessInstanceWithVariablesDto;
 import org.camunda.community.rest.client.dto.SortTaskQueryParametersDto;
+import org.camunda.community.rest.client.dto.StartProcessInstanceDto;
 import org.camunda.community.rest.client.dto.TaskDto;
 import org.camunda.community.rest.client.dto.TaskQueryDto;
 import org.camunda.community.rest.client.dto.TaskQueryDtoSorting;
@@ -200,6 +203,37 @@ public class CamundaClientImpl implements CamundaClient {
 		catch (Exception e) {
 			log.error("existProcessByBusinessKey", e);
 			throw new CamundaClientException("existProcessByBusinessKey :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public String startProcessInstance(String tenantId, String processDefinitionKey, String businessKey, Map<String, Object> variables) {
+		ProcessDefinitionApi api = new ProcessDefinitionApi(getApiClient());
+
+		try {
+			StartProcessInstanceDto startProcessInstanceDto = new StartProcessInstanceDto();
+			startProcessInstanceDto.setBusinessKey(businessKey);
+
+			if (variables != null) {
+				Map<String, VariableValueDto> variablesMap = new HashMap<String, VariableValueDto>();
+				for (Entry<String, Object> entry : variables.entrySet()) {
+					String key = entry.getKey();
+					Object value = entry.getValue();
+
+					VariableValueDto variableValueDto = new VariableValueDto();
+					variableValueDto.setValue(value);
+
+					variablesMap.put(key, variableValueDto);
+				}
+				startProcessInstanceDto.setVariables(variablesMap);
+			}
+
+			ProcessInstanceWithVariablesDto processInstanceWithVariablesDto = api.startProcessInstance(tenantId, startProcessInstanceDto);
+			return processInstanceWithVariablesDto.getId();
+		}
+		catch (Exception e) {
+			log.error("startProcessInstance", e);
+			throw new CamundaClientException("startProcessInstance :: " + e.getMessage(), e);
 		}
 	}
 
@@ -858,5 +892,21 @@ public class CamundaClientImpl implements CamundaClient {
 			log.error("removeUserFromTenant :: " + e.getMessage(), e);
 			throw new CamundaClientException("removeUserFromTenant :: " + e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public boolean existsGroup(String groupId) {
+
+		ApiClient client = getApiClient();
+		GroupApi groupApi = new GroupApi(client);
+
+		GroupDto group = null;
+		try {
+			group = groupApi.getGroup(groupId);
+		}
+		catch (Exception e) {
+			log.warn("existsGroup :: " + e.getMessage());
+		}
+		return group != null;
 	}
 }

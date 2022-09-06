@@ -54,10 +54,10 @@ public class RichiestaLocalServiceWrapper
 	}
 
 	@Override
-	public int countByFilters(
+	public int count(
 		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters) {
 
-		return _richiestaLocalService.countByFilters(filters);
+		return _richiestaLocalService.count(filters);
 	}
 
 	/**
@@ -257,16 +257,6 @@ public class RichiestaLocalServiceWrapper
 	}
 
 	@Override
-	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
-		findByFilters(
-			it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters
-				filters,
-			int start, int end) {
-
-		return _richiestaLocalService.findByFilters(filters, start, end);
-	}
-
-	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -408,6 +398,23 @@ public class RichiestaLocalServiceWrapper
 		return _richiestaLocalService.getRichiestasCount();
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
+		getRichiesteByStato(String stato) {
+
+		return _richiestaLocalService.getRichiesteByStato(stato);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
+		search(
+			it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters
+				filters,
+			int start, int end) {
+
+		return _richiestaLocalService.search(filters, start, end);
+	}
+
 	/**
 	 * Updates the richiesta in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
@@ -424,6 +431,14 @@ public class RichiestaLocalServiceWrapper
 			it.servizidigitali.scrivaniaoperatore.model.Richiesta richiesta) {
 
 		return _richiestaLocalService.updateRichiesta(richiesta);
+	}
+
+	@Override
+	public void updateStatoRichiesta(long richiestaId, String stato)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchRichiestaException {
+
+		_richiestaLocalService.updateStatoRichiesta(richiestaId, stato);
 	}
 
 	@Override

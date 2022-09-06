@@ -60,10 +60,10 @@ public class RichiestaLocalServiceUtil {
 		return getService().addRichiesta(richiesta);
 	}
 
-	public static int countByFilters(
+	public static int count(
 		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters) {
 
-		return getService().countByFilters(filters);
+		return getService().count(filters);
 	}
 
 	/**
@@ -229,13 +229,6 @@ public class RichiestaLocalServiceUtil {
 		return getService().fetchRichiestaByUuidAndGroupId(uuid, groupId);
 	}
 
-	public static List<Richiesta> findByFilters(
-		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters,
-		int start, int end) {
-
-		return getService().findByFilters(filters, start, end);
-	}
-
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -358,6 +351,17 @@ public class RichiestaLocalServiceUtil {
 		return getService().getRichiestasCount();
 	}
 
+	public static List<Richiesta> getRichiesteByStato(String stato) {
+		return getService().getRichiesteByStato(stato);
+	}
+
+	public static List<Richiesta> search(
+		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters,
+		int start, int end) {
+
+		return getService().search(filters, start, end);
+	}
+
 	/**
 	 * Updates the richiesta in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
@@ -370,6 +374,13 @@ public class RichiestaLocalServiceUtil {
 	 */
 	public static Richiesta updateRichiesta(Richiesta richiesta) {
 		return getService().updateRichiesta(richiesta);
+	}
+
+	public static void updateStatoRichiesta(long richiestaId, String stato)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchRichiestaException {
+
+		getService().updateStatoRichiesta(richiestaId, stato);
 	}
 
 	public static RichiestaLocalService getService() {

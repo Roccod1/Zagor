@@ -291,6 +291,9 @@ public interface ProceduraFormLocalService
 	public List<ProceduraForm> salvaListaFormIntegrativi(
 		String[] listaFormIntegrativi, long idProcedura);
 
+	public ProceduraForm salvaProceduraFormPrincipale(
+		long idFormPrincipale, long idProcedura);
+
 	/**
 	 * Updates the procedura form in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

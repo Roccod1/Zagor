@@ -151,5 +151,16 @@
 		<finder name="Url" return-type="AllegatoRichiesta">
 			<finder-column name="url" />
 		</finder>
+
+		<finder name="R_P_G" return-type="AllegatoRichiesta">
+			<finder-column name="richiestaId" />
+			<finder-column name="principale" />
+			<finder-column name="groupId" />
+		</finder>
+
+		<finder name="R_G" return-type="Collection">
+			<finder-column name="richiestaId" />
+			<finder-column name="groupId" />
+		</finder>
 	</entity>
 </service-builder>

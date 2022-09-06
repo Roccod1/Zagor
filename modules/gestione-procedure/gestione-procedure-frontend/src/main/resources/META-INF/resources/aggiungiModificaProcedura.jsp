@@ -24,6 +24,7 @@
 		<aui:form id="nuovaProceduraForm" action="${salvaModificaURL}" name="formConfiguraProcedura">
 			<fieldset>
 				<legend><liferay-ui:message key="dati-identificativi"/></legend>
+				<aui:input name="idProcedura" type="hidden" value="${procedura.proceduraId}" />
 				<aui:row>
 					<aui:col span="6">
 							<aui:input label="nome" name="<%=GestioneProcedurePortletKeys.NOME %>" type="text" value="${procedura.nome}"> 
