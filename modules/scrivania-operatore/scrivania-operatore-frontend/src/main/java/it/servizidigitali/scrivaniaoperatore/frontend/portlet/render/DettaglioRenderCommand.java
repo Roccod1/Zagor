@@ -26,6 +26,8 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
+	@Reference
+	private MapUtil mapUtil;
 	
 	@Override
 	public String render(RenderRequest request, RenderResponse response) throws PortletException {
@@ -38,7 +40,7 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 			throw new RuntimeException(e);
 		}
 		
-		RichiestaDTO richiesta = MapUtil.mapRichiesta(
+		RichiestaDTO richiesta = mapUtil.mapRichiesta(
 				ctx.getCompanyId(), 
 				richiestaLocalService.fetchRichiesta(id));
 		

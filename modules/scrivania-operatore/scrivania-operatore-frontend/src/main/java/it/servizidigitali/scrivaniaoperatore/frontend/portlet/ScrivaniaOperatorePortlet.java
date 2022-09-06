@@ -56,6 +56,8 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 	private RichiestaLocalService richiestaLocalService;
 	@Reference
 	private UserLocalService userLocalService;
+	@Reference
+	private MapUtil mapUtil;
 	
 	@Override
 	public void render(RenderRequest request, RenderResponse response)
@@ -100,7 +102,7 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		int count = richiestaLocalService.countByFilters(filters);
 		List<RichiestaDTO> elems = richiestaLocalService.findByFilters(filters, start, end)
 				.stream()
-				.map(x -> MapUtil.mapRichiesta(ctx.getCompanyId(), x))
+				.map(x -> mapUtil.mapRichiesta(ctx.getCompanyId(), x))
 				.collect(Collectors.toList());
 		
 		request.setAttribute("totale", count);
