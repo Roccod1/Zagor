@@ -28,7 +28,7 @@
 		<aui:input name="n" value="${richiesta.civicoResidenza}" readonly="true" />
 	</div>
 	<div class="col-6">
-		<aui:input name="telefono" readonly="true" />
+		<aui:input name="telefono" value="${richiesta.telefono}" readonly="true" />
 	</div>
 </div>
 

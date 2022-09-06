@@ -23,6 +23,7 @@ public class RichiestaDTO {
 	private String civicoResidenza;
 	private String comuneResidenza;
 	private String servizio;
+	private String telefono;
 	
 	public long getId() {
 		return id;
@@ -143,6 +144,12 @@ public class RichiestaDTO {
 	}
 	public void setServizio(String servizio) {
 		this.servizio = servizio;
+	}
+	public String getTelefono() {
+		return telefono;
+	}
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
 	}
 	
 }

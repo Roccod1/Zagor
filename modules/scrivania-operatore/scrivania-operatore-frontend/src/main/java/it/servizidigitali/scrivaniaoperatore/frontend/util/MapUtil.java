@@ -42,6 +42,9 @@ public class MapUtil {
 		
 		String pec = (String) user.getExpandoBridge().getAttribute(UserCustomAttributes.PEC.getNomeAttributo());
 		dto.setPec(pec);
+	
+		String telefono = (String) user.getExpandoBridge().getAttribute(UserCustomAttributes.TELEFONO.getNomeAttributo());
+		dto.setTelefono(telefono);
 		
 		IndirizzoResidenza indirizzoResidenza = utenteUtility.getIndirizzoRedidenza(companyId, user.getScreenName());
 		dto.setIndirizzoResidenza(indirizzoResidenza.getTipologia() + " " + indirizzoResidenza.getIndirizzo());
