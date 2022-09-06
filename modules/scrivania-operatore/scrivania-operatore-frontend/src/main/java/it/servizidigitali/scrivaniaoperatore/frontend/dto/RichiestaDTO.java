@@ -22,6 +22,7 @@ public class RichiestaDTO {
 	private String indirizzoResidenza;
 	private String civicoResidenza;
 	private String comuneResidenza;
+	private String servizio;
 	
 	public long getId() {
 		return id;
@@ -136,6 +137,12 @@ public class RichiestaDTO {
 	}
 	public void setComuneResidenza(String comuneResidenza) {
 		this.comuneResidenza = comuneResidenza;
+	}
+	public String getServizio() {
+		return servizio;
+	}
+	public void setServizio(String servizio) {
+		this.servizio = servizio;
 	}
 	
 }

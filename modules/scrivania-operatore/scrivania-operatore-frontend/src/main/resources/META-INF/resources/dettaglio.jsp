@@ -67,7 +67,7 @@
 		<aui:input name="data-ultimo-aggiornamento" value="${richiestaDataUltimoAggiornamento}" readonly="true" />
 	</div>
 	<div class="col-6">
-		<aui:input name="servizio" readonly="true" />
+		<aui:input name="servizio" value="${richiesta.servizio}" readonly="true" />
 	</div>
 </div>
 
