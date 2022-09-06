@@ -84,6 +84,7 @@ public class CamundaClientImpl implements CamundaClient {
 	private String apiBasePath;
 	private String username;
 	private String password;
+	private boolean integrationEnabled;
 
 	@Activate
 	@Modified
@@ -92,9 +93,15 @@ public class CamundaClientImpl implements CamundaClient {
 		apiBasePath = camundaConfiguration.apiBasePath();
 		username = camundaConfiguration.apiUsername();
 		password = camundaConfiguration.apiPassword();
+		integrationEnabled = camundaConfiguration.integrationEnabled();
 	}
 
 	private ApiClient getApiClient() {
+
+		if (!integrationEnabled) {
+			throw new CamundaClientException("Integrazione con Camunda BPMN Engine disabilitata.");
+		}
+
 		OkHttpClient httpClient = new OkHttpClient.Builder().authenticator(new Authenticator() {
 
 			@Override
