@@ -1,5 +1,6 @@
 package it.servizidigitali.scrivaniaoperatore.scheduler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -33,14 +34,19 @@ import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.camunda.integration.client.CamundaClient;
+import it.servizidigitali.camunda.integration.client.constant.CustomProcessVariables;
 import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneprocessi.model.Processo;
 import it.servizidigitali.gestioneprocessi.service.ProcessoLocalService;
+import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.scheduler.configuration.AvvioIstanzaProcessoSchedulerConfiguration;
+import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
@@ -72,6 +78,9 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 	private ProcessoLocalService processoLocalService;
 
 	@Reference
+	private ServizioLocalService servizioLocalService;
+
+	@Reference
 	private CamundaClient camundaClient;
 
 	@Reference
@@ -83,15 +92,21 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 	@Reference
 	private UserLocalService userLocalService;
 
+	@Reference
+	private AllegatoRichiestaLocalService allegatoRichiestaLocalService;
+
 	@Override
 	protected void doReceive(Message message) throws Exception {
+
 		_log.debug("Scheduled task executed...");
-		// TODO caricamento lista richiesta in stato NUOVO
+
+		// Caricamento lista richiesta in stato NUOVO
 		List<Richiesta> richieste = richiestaLocalService.getRichiesteByStato(StatoRichiesta.NUOVA.name());
 		if (richieste != null) {
+			ObjectMapper objectMapper = new ObjectMapper();
 			for (Richiesta richiesta : richieste) {
 
-				// TODO verifica processo già avviato
+				// verifica processo già avviato
 				long groupId = richiesta.getGroupId();
 				long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
 
@@ -118,61 +133,83 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 
 				long processoId = procedura.getProcessoId();
 				if (procedura != null && procedura.isAttiva() && processoId != 0) {
+
+					// Avvio istanza processo
+
 					Processo processo = processoLocalService.getProcesso(processoId);
 
 					if (processo != null && processo.isAttivo()) {
-						// TODO caricare i candidate groups (dalle sotto organizzazioni)
 
-						// TODO chiamata a client per start processo
+						Servizio servizio = servizioLocalService.getServizioById(procedura.getServizioId());
 
 						User userRichiesta = userLocalService.getUserByScreenName(richiesta.getCompanyId(), richiesta.getCodiceFiscale().toLowerCase());
+						String candidateGroups = "";
+						List<Organization> suborganizations = organization.getSuborganizations();
+						if (suborganizations != null) {
+							for (Organization subOrganization : suborganizations) {
+								boolean existsGroup = camundaClient.existsGroup(String.valueOf(subOrganization.getOrganizationId()));
+								if (!existsGroup) {
+									throw new Exception("Impossibile assegnare il Gruppo Destinatario.");
+								}
+
+								if (candidateGroups.length() > 0) {
+									candidateGroups += ",";
+								}
+
+								candidateGroups += subOrganization.getOrganizationId();
+							}
+						}
+
+						// Allegati
+						String allegatiJson = "";
+						List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiesta(richiesta.getRichiestaId(), groupId);
+						if (allegatiRichiesta != null) {
+							allegatiJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(allegatiRichiesta);
+						}
+
+						// PDF principale
+						String pdfFirmatoJson = "";
+						AllegatoRichiesta allegatoPrincipaleRichiesta = allegatoRichiestaLocalService.getAllegatoRichiesta(richiesta.getRichiestaId(), true, groupId);
+						if (allegatoPrincipaleRichiesta != null) {
+							pdfFirmatoJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(allegatoPrincipaleRichiesta);
+						}
 
 						Map<String, Object> variables = new HashMap<String, Object>();
-						// variables.put(CustomProcessVariables.ID_RICHIESTA_SERVIZIO,
-						// richiesta.getRichiestaId());
-						// variables.put(CustomProcessVariables.ID_GRUPPO_REFERENTI,
-						// candidateGroups);
-						//
-						// variables.put(CustomProcessVariables.DENOMINAZIONE_RICHIEDENTE,
-						// userRichiesta.getFullName());
-						// variables.put(CustomProcessVariables.COD_FISCALE_RICHIEDENTE,
-						// StringUtil.trim(richiesta.getCodiceFiscale().toUpperCase()));
-						// variables.put(CustomProcessVariables.EMAIL_RICHIEDENTE,
-						// richiesta.getEmail());
-						// variables.put(CustomProcessVariables.PARTITA_IVA_RICHIEDENTE,
-						// richiesta.getPartitaivaRichiedente());
-						//
-						// variables.put(CustomProcessVariables.OGGETTO, oggetto);
-						//
-						// variables.put(CustomProcessVariables.FILE_ALLEGATI, allegatiJson);
-						// variables.put(CustomProcessVariables.NOME_FILE_FIRMATO,
-						// CommonConstants.ALLEGATO_PDF_FIRMATO);
-						// variables.put(CustomProcessVariables.PDF_FIRMATO, pdfFirmatoJson);
-						//
-						// variables.put(CustomProcessVariables.CODICE_IPA_COMUNE, codiceIPA);
-						// variables.put(CustomProcessVariables.DENOMINAZIONE_COMUNE,
-						// organization.getName());
-						//
-						// variables.put(CustomProcessVariables.CODICE_SERVIZIO,
-						// richiesta.getCodiceIdentificativoServizio());
-						// variables.put(CustomProcessVariables.DENOMINAZIONE_SERVIZIO,
-						// richiesta.getDenominazioneServizio());
-						//
-						// variables.put(CustomProcessVariables.CODICE_AREA_TEMATICA,
-						// richiesta.getCodiceAreaTematica());
-						// variables.put(CustomProcessVariables.DENOMINAZIONE_AREA_TEMATICA,
-						// richiesta.getDenominazioneAreaTematica());
-						//
-						// variables.put(CustomProcessVariables.DATA_CREAZIONE_RICHIESTA,
-						// richiesta.getDataAggiornamento());
-						// variables.put(CustomProcessVariables.STATO_RICHIESTA,
-						// StatoRichiestaEnum.RICHIESTA_NUOVA);
+						variables.put(CustomProcessVariables.ID_RICHIESTA_SERVIZIO, richiesta.getRichiestaId());
+						variables.put(CustomProcessVariables.ID_GRUPPO_REFERENTI, candidateGroups);
+
+						variables.put(CustomProcessVariables.DENOMINAZIONE_RICHIEDENTE, userRichiesta.getFullName());
+						variables.put(CustomProcessVariables.COD_FISCALE_RICHIEDENTE, richiesta.getCodiceFiscale().toUpperCase());
+						variables.put(CustomProcessVariables.EMAIL_RICHIEDENTE, richiesta.getEmail());
+						variables.put(CustomProcessVariables.PARTITA_IVA_RICHIEDENTE, richiesta.getPartitaIva());
+
+						variables.put(CustomProcessVariables.OGGETTO, richiesta.getOggetto());
+
+						variables.put(CustomProcessVariables.FILE_ALLEGATI, allegatiJson);
+						variables.put(CustomProcessVariables.NOME_FILE_FIRMATO, "allegato-pdf-firmato");
+						variables.put(CustomProcessVariables.PDF_FIRMATO, pdfFirmatoJson);
+
+						variables.put(CustomProcessVariables.CODICE_IPA_COMUNE, codiceIPA);
+						variables.put(CustomProcessVariables.DENOMINAZIONE_COMUNE, organization.getName());
+
+						variables.put(CustomProcessVariables.CODICE_SERVIZIO, servizio.getCodice());
+						variables.put(CustomProcessVariables.DENOMINAZIONE_SERVIZIO, servizio.getNome());
+
+						variables.put(CustomProcessVariables.CODICE_AREA_TEMATICA, servizio.getAreaTematica().getCodice());
+						variables.put(CustomProcessVariables.DENOMINAZIONE_AREA_TEMATICA, servizio.getAreaTematica().getNome());
+
+						variables.put(CustomProcessVariables.DATA_CREAZIONE_RICHIESTA, richiesta.getCreateDate());
+						variables.put(CustomProcessVariables.STATO_RICHIESTA, richiesta.getStato());
+
 						camundaClient.startProcessInstance(tenantId, processo.getCodice(), String.valueOf(businessKey), variables);
 					}
 				}
+				else {
+					// Cambio stato in INVIATA
+					richiestaLocalService.updateStatoRichiesta(richiesta.getRichiestaId(), StatoRichiesta.INVIATA.name());
+				}
 			}
 		}
-		// TODO definizione istanza processo da avviare
 	}
 
 	@Activate
