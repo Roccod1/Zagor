@@ -312,6 +312,13 @@ public interface RichiestaLocalService
 	public int getRichiestasCount();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Richiesta>
+			getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(
+				String codiceFiscale, long organizationGroupId, int cur,
+				int delta, String orderByCol, String orderByType)
+		throws Exception;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Richiesta> getRichiesteByStato(String stato);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

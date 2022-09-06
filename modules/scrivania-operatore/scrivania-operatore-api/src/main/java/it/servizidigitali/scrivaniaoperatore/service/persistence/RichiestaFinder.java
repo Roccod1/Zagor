@@ -32,4 +32,9 @@ public interface RichiestaFinder {
 	public int countByFilters(
 		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters);
 
+	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
+		findRichiestaByCfAndGroupId(
+			String cf, long groupId, int cur, int delta, String orderByCol,
+			String orderByType);
+
 }

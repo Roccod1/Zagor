@@ -351,6 +351,18 @@ public class RichiestaLocalServiceUtil {
 		return getService().getRichiestasCount();
 	}
 
+	public static List<Richiesta>
+			getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(
+				String codiceFiscale, long organizationGroupId, int cur,
+				int delta, String orderByCol, String orderByType)
+		throws Exception {
+
+		return getService().
+			getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(
+				codiceFiscale, organizationGroupId, cur, delta, orderByCol,
+				orderByType);
+	}
+
 	public static List<Richiesta> getRichiesteByStato(String stato) {
 		return getService().getRichiesteByStato(stato);
 	}

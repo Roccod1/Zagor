@@ -400,6 +400,19 @@ public class RichiestaLocalServiceWrapper
 
 	@Override
 	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
+			getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(
+				String codiceFiscale, long organizationGroupId, int cur,
+				int delta, String orderByCol, String orderByType)
+		throws Exception {
+
+		return _richiestaLocalService.
+			getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(
+				codiceFiscale, organizationGroupId, cur, delta, orderByCol,
+				orderByType);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
 		getRichiesteByStato(String stato) {
 
 		return _richiestaLocalService.getRichiesteByStato(stato);
