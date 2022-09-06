@@ -17,6 +17,10 @@ import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.scheduler.StorageTypeAware;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
+import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
@@ -102,7 +106,7 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 
 		// Caricamento lista richiesta in stato NUOVO
 		List<Richiesta> richieste = richiestaLocalService.getRichiesteByStato(StatoRichiesta.NUOVA.name());
-		if (richieste != null) {
+		if (richieste != null && !richieste.isEmpty()) {
 			ObjectMapper objectMapper = new ObjectMapper();
 			for (Richiesta richiesta : richieste) {
 
@@ -122,6 +126,11 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 				long proceduraId = richiesta.getProceduraId();
 
 				Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
+				User userRichiesta = userLocalService.getUserByScreenName(richiesta.getCompanyId(), richiesta.getCodiceFiscale().toLowerCase());
+
+				PrincipalThreadLocal.setName(userRichiesta.getUserId());
+				PermissionChecker permissionChecker = PermissionCheckerFactoryUtil.create(userRichiesta);
+				PermissionThreadLocal.setPermissionChecker(permissionChecker);
 
 				Organization organization = organizationLocalService.getOrganization(organizationId);
 				Serializable codiceIPACustomAttribute = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo());
@@ -142,7 +151,6 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 
 						Servizio servizio = servizioLocalService.getServizioById(procedura.getServizioId());
 
-						User userRichiesta = userLocalService.getUserByScreenName(richiesta.getCompanyId(), richiesta.getCodiceFiscale().toLowerCase());
 						String candidateGroups = "";
 						List<Organization> suborganizations = organization.getSuborganizations();
 						if (suborganizations != null) {
