@@ -7,6 +7,7 @@ dependencies {
 	compileOnly project(":modules:gestione-forms:gestione-forms-api")
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-api")
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-backoffice-integration")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-richieste-common")
 	compileOnly project(":modules:scrivania-operatore:scrivania-operatore-api")
 	compileOnly project(":modules:gestione-procedure:gestione-procedure-api")
 	compileOnly project(":modules:gestione-servizi:gestione-servizi-api")
