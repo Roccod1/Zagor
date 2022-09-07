@@ -47,9 +47,11 @@ public class MapUtil {
 		dto.setTelefono(telefono);
 		
 		IndirizzoResidenza indirizzoResidenza = utenteUtility.getIndirizzoRedidenza(companyId, user.getScreenName());
-		dto.setIndirizzoResidenza(indirizzoResidenza.getTipologia() + " " + indirizzoResidenza.getIndirizzo());
-		dto.setCivicoResidenza(indirizzoResidenza.getCivico());
-		dto.setComuneResidenza(indirizzoResidenza.getLuogo());
+		if (indirizzoResidenza != null) {
+			dto.setIndirizzoResidenza(indirizzoResidenza.getTipologia() + " " + indirizzoResidenza.getIndirizzo());
+			dto.setCivicoResidenza(indirizzoResidenza.getCivico());
+			dto.setComuneResidenza(indirizzoResidenza.getLuogo());
+		}
 		
 		dto.setStato(richiesta.getStato());
 		dto.setCf(richiesta.getCodiceFiscale().toUpperCase());

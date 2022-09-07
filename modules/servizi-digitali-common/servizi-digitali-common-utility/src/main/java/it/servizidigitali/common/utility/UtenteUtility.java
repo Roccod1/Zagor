@@ -45,13 +45,18 @@ public class UtenteUtility {
 				if (residenza != null) {
 					String residenzaString = (String) residenza;
 					String[] split = residenzaString.split(StringPool.SPACE);
-					indirizzoResidenza.setTipologia(split[0]);
-					indirizzoResidenza.setIndirizzo(split[1]);
-					indirizzoResidenza.setCivico(split[2]);
-					indirizzoResidenza.setCap(split[3]);
-					indirizzoResidenza.setLuogo(split[4]);
-					if (split.length > 5) {
-						indirizzoResidenza.setProvincia(split[5]);
+					
+					if (split.length >= 5) {
+						indirizzoResidenza.setTipologia(split[0]);
+						indirizzoResidenza.setIndirizzo(split[1]);
+						indirizzoResidenza.setCivico(split[2]);
+						indirizzoResidenza.setCap(split[3]);
+						indirizzoResidenza.setLuogo(split[4]);
+						if (split.length > 5) {
+							indirizzoResidenza.setProvincia(split[5]);
+						}
+					} else {
+						return null;
 					}
 				}
 				return indirizzoResidenza;
