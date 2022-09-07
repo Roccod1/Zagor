@@ -71,4 +71,11 @@ public class RichiestaLocalServiceImpl extends RichiestaLocalServiceBaseImpl {
 
 		return listaRichieste;
 	}
+
+	@Override
+	public void updateProcessiInstanceIdRichiesta(long richiestaId, String processInstanceId) throws NoSuchRichiestaException {
+		Richiesta richiesta = richiestaPersistence.findByPrimaryKey(richiestaId);
+		richiesta.setProcessInstanceId(processInstanceId);
+		richiestaPersistence.update(richiesta);
+	}
 }

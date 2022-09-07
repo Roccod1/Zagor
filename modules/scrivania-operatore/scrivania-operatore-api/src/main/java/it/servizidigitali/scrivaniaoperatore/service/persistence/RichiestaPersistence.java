@@ -1293,6 +1293,51 @@ public interface RichiestaPersistence extends BasePersistence<Richiesta> {
 	public int countByProceduraId(long proceduraId);
 
 	/**
+	 * Returns the richiesta where processInstanceId = &#63; or throws a <code>NoSuchRichiestaException</code> if it could not be found.
+	 *
+	 * @param processInstanceId the process instance ID
+	 * @return the matching richiesta
+	 * @throws NoSuchRichiestaException if a matching richiesta could not be found
+	 */
+	public Richiesta findByProcessInstanceId(String processInstanceId)
+		throws NoSuchRichiestaException;
+
+	/**
+	 * Returns the richiesta where processInstanceId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param processInstanceId the process instance ID
+	 * @return the matching richiesta, or <code>null</code> if a matching richiesta could not be found
+	 */
+	public Richiesta fetchByProcessInstanceId(String processInstanceId);
+
+	/**
+	 * Returns the richiesta where processInstanceId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param processInstanceId the process instance ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching richiesta, or <code>null</code> if a matching richiesta could not be found
+	 */
+	public Richiesta fetchByProcessInstanceId(
+		String processInstanceId, boolean useFinderCache);
+
+	/**
+	 * Removes the richiesta where processInstanceId = &#63; from the database.
+	 *
+	 * @param processInstanceId the process instance ID
+	 * @return the richiesta that was removed
+	 */
+	public Richiesta removeByProcessInstanceId(String processInstanceId)
+		throws NoSuchRichiestaException;
+
+	/**
+	 * Returns the number of richiestas where processInstanceId = &#63;.
+	 *
+	 * @param processInstanceId the process instance ID
+	 * @return the number of matching richiestas
+	 */
+	public int countByProcessInstanceId(String processInstanceId);
+
+	/**
 	 * Caches the richiesta in the entity cache if it is enabled.
 	 *
 	 * @param richiesta the richiesta

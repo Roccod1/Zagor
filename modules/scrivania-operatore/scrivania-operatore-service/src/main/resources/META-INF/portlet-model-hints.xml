@@ -53,6 +53,7 @@
 		<field name="tokenVisualizzazione" type="String" />
 		<field name="chiaveAssociazioneBackoffice" type="String" />
 		<field name="delegaId" type="Long" />
+		<field name="processInstanceId" type="String" />
 		<field name="proceduraId" type="long" />
 	</model>
 </model-hints>

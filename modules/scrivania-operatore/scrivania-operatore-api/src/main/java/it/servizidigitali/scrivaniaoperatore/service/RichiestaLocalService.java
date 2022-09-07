@@ -324,6 +324,10 @@ public interface RichiestaLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Richiesta> search(RichiestaFilters filters, int start, int end);
 
+	public void updateProcessiInstanceIdRichiesta(
+			long richiestaId, String processInstanceId)
+		throws NoSuchRichiestaException;
+
 	/**
 	 * Updates the richiesta in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

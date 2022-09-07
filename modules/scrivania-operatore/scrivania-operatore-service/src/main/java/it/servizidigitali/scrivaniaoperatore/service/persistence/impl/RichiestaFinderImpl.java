@@ -25,6 +25,7 @@ import it.servizidigitali.scrivaniaoperatore.service.persistence.RichiestaFinder
 
 /**
  * @author filierim
+ * @author rizzitellim
  *
  */
 
@@ -34,6 +35,7 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 	@Reference
 	private UserLocalService userLocalService;
 
+	@Override
 	public List<Richiesta> findByFilters(RichiestaFilters filters, int start, int end) {
 		DynamicQuery dq = createQuery(filters);
 		return richiestaPersistence.findWithDynamicQuery(dq, start, end);

@@ -67,6 +67,7 @@ public class RichiestaWrapper
 		attributes.put(
 			"chiaveAssociazioneBackoffice", getChiaveAssociazioneBackoffice());
 		attributes.put("delegaId", getDelegaId());
+		attributes.put("processInstanceId", getProcessInstanceId());
 		attributes.put("proceduraId", getProceduraId());
 
 		return attributes;
@@ -215,6 +216,12 @@ public class RichiestaWrapper
 
 		if (delegaId != null) {
 			setDelegaId(delegaId);
+		}
+
+		String processInstanceId = (String)attributes.get("processInstanceId");
+
+		if (processInstanceId != null) {
+			setProcessInstanceId(processInstanceId);
 		}
 
 		Long proceduraId = (Long)attributes.get("proceduraId");
@@ -417,6 +424,16 @@ public class RichiestaWrapper
 	@Override
 	public long getProceduraId() {
 		return model.getProceduraId();
+	}
+
+	/**
+	 * Returns the process instance ID of this richiesta.
+	 *
+	 * @return the process instance ID of this richiesta
+	 */
+	@Override
+	public String getProcessInstanceId() {
+		return model.getProcessInstanceId();
 	}
 
 	/**
@@ -694,6 +711,16 @@ public class RichiestaWrapper
 	@Override
 	public void setProceduraId(long proceduraId) {
 		model.setProceduraId(proceduraId);
+	}
+
+	/**
+	 * Sets the process instance ID of this richiesta.
+	 *
+	 * @param processInstanceId the process instance ID of this richiesta
+	 */
+	@Override
+	public void setProcessInstanceId(String processInstanceId) {
+		model.setProcessInstanceId(processInstanceId);
 	}
 
 	/**
