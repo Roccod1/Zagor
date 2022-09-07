@@ -10,10 +10,12 @@
 	<portlet:param name="id" value="<%= String.valueOf(richiesta.getId()) %>" />
 </portlet:renderURL>
 
-<a href="${dettaglioURL}" class="btn btn-primary" title="vai-a-dettaglio">
-	<clay:icon symbol="search" />
-</a>
+<div class="d-flex justify-content-start">
+	<a href="${dettaglioURL}" class="btn btn-primary" title="<liferay-ui:message key="vai-a-dettaglio" />">
+		<clay:icon symbol="search" />
+	</a>
 
-<button class="btn btn-primary" title="prendi-in-carico">
-	?
-</button>
+	<button class="btn btn-primary ml-1" title="<liferay-ui:message key="prendi-in-carico" />">
+		<clay:icon symbol="user-plus" />
+	</button>
+</div>
