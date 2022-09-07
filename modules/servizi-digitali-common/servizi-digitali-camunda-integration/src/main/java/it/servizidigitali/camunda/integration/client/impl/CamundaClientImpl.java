@@ -1,6 +1,7 @@
 package it.servizidigitali.camunda.integration.client.impl;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -59,6 +60,10 @@ import org.osgi.service.component.annotations.Modified;
 import it.servizidigitali.camunda.integration.client.CamundaClient;
 import it.servizidigitali.camunda.integration.client.constant.CustomProcessVariables;
 import it.servizidigitali.camunda.integration.client.exception.CamundaClientException;
+import it.servizidigitali.camunda.integration.client.model.ProcessDefinition;
+import it.servizidigitali.camunda.integration.client.model.ProcessInstance;
+import it.servizidigitali.camunda.integration.client.model.Task;
+import it.servizidigitali.camunda.integration.client.model.VariableInstance;
 import it.servizidigitali.camunda.integration.configuration.CamundaConfiguration;
 import okhttp3.Authenticator;
 import okhttp3.Credentials;
@@ -118,15 +123,14 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<ProcessDefinitionDto> getProcessDefinitions(String tenantId) throws CamundaClientException {
+	public List<ProcessDefinition> getProcessDefinitions(String tenantId) throws CamundaClientException {
 
 		ProcessDefinitionApi api = new ProcessDefinitionApi(getApiClient());
-
 		try {
 
-			return api.getProcessDefinitions(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, tenantId, null,
-					null, null, null, null, null, null, null, null, null, null, null);
-
+			List<ProcessDefinitionDto> processDefinitions = api.getProcessDefinitions(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+					null, null, null, null, tenantId, null, null, null, null, null, null, null, null, null, null, null, null);
+			return getProcessDefinitions(processDefinitions);
 		}
 		catch (ApiException e) {
 			log.error("getProcessDefinitions: " + e.getResponseBody(), e);
@@ -134,8 +138,25 @@ public class CamundaClientImpl implements CamundaClient {
 		}
 	}
 
+	/**
+	 * @param processDefinitionsDto
+	 * @return
+	 */
+	private List<ProcessDefinition> getProcessDefinitions(List<ProcessDefinitionDto> processDefinitionsDto) {
+		if (processDefinitionsDto == null) {
+			return null;
+		}
+		List<ProcessDefinition> processDefinitions = new ArrayList<ProcessDefinition>();
+		for (ProcessDefinitionDto processDefinitionDto : processDefinitionsDto) {
+			ProcessDefinition processDefinition = new ProcessDefinition();
+			BeanPropertiesUtil.copyProperties(processDefinitionDto, processDefinition);
+			processDefinitions.add(processDefinition);
+		}
+		return processDefinitions;
+	}
+
 	@Override
-	public List<VariableInstanceDto> getVariablesByTaskId(String tenantId, String taskId) throws CamundaClientException {
+	public List<VariableInstance> getVariablesByTaskId(String tenantId, String taskId) throws CamundaClientException {
 		VariableInstanceApi api = new VariableInstanceApi(getApiClient());
 
 		try {
@@ -147,7 +168,8 @@ public class CamundaClientImpl implements CamundaClient {
 				q.setTenantIdIn(Arrays.asList(tenantId));
 			}
 
-			return api.queryVariableInstances(null, null, null, q);
+			List<VariableInstanceDto> queryVariableInstances = api.queryVariableInstances(null, null, null, q);
+			return getVariableInstances(queryVariableInstances);
 
 			// return api.getVariableInstances(null, null, null, null, null, null, taskId, null,
 			// null, null, null, null, null, null, null, null, null, null, null);
@@ -159,8 +181,26 @@ public class CamundaClientImpl implements CamundaClient {
 		}
 	}
 
+	/**
+	 * @param queryVariableInstancesDto
+	 * @return
+	 */
+	private List<VariableInstance> getVariableInstances(List<VariableInstanceDto> queryVariableInstancesDto) {
+		if (queryVariableInstancesDto == null) {
+			return null;
+		}
+		List<VariableInstance> variableInstances = new ArrayList<VariableInstance>();
+		for (VariableInstanceDto variableInstanceDto : queryVariableInstancesDto) {
+			VariableInstance variableInstance = new VariableInstance();
+			BeanPropertiesUtil.copyProperties(variableInstanceDto, variableInstance);
+			variableInstances.add(variableInstance);
+
+		}
+		return variableInstances;
+	}
+
 	@Override
-	public List<TaskDto> getTasksByBusinessKey(String tenantId, long businessKey, boolean includeCandidateGroups) throws CamundaClientException {
+	public List<Task> getTasksByBusinessKey(String tenantId, long businessKey, boolean includeCandidateGroups) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
@@ -173,7 +213,8 @@ public class CamundaClientImpl implements CamundaClient {
 				q.setTenantIdIn(Arrays.asList(tenantId));
 			}
 
-			return api.queryTasks(null, null, q);
+			List<TaskDto> queryTasks = api.queryTasks(null, null, q);
+			return getTasks(queryTasks);
 		}
 		catch (ApiException e) {
 			log.error("getTasksByBusinessKey: " + e.getResponseBody(), e);
@@ -314,8 +355,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public long countTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstanceDto> variables)
-			throws CamundaClientException {
+	public long countTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstance> variables) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
@@ -334,14 +374,15 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<TaskDto> searchTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned) throws CamundaClientException {
+	public List<Task> searchTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
 
 			TaskQueryDto q = getTaskQueryDto(tenantId, candidateGroups, codiceServizio, unassigned, null, null, null, null, null);
 
-			return api.queryTasks(null, null, q);
+			List<TaskDto> queryTasks = api.queryTasks(null, null, q);
+			return getTasks(queryTasks);
 
 		}
 		catch (ApiException e) {
@@ -351,15 +392,16 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<TaskDto> searchTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstanceDto> variables,
-			Integer firstResult, Integer maxResults, String sortName, String sortOrder, String sortType) throws CamundaClientException {
+	public List<Task> searchTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstance> variables, Integer firstResult, Integer maxResults,
+			String sortName, String sortOrder, String sortType) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
 
 			TaskQueryDto q = getTaskQueryDto(tenantId, candidateGroups, codiceServizio, unassigned, null, sortName, sortOrder, sortType, null);
 
-			return api.queryTasks(firstResult, maxResults, q);
+			List<TaskDto> queryTasks = api.queryTasks(firstResult, maxResults, q);
+			return getTasks(queryTasks);
 
 		}
 		catch (ApiException e) {
@@ -369,15 +411,15 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<TaskDto> searchTasks(String tenantId, String assignee, String codiceServizio) throws CamundaClientException {
+	public List<Task> searchTasks(String tenantId, String assignee, String codiceServizio) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
 
 			TaskQueryDto q = getTaskQueryDto(tenantId, null, codiceServizio, null, null, null, null, null, assignee);
 
-			return api.queryTasks(null, null, q);
-
+			List<TaskDto> queryTasks = api.queryTasks(null, null, q);
+			return getTasks(queryTasks);
 		}
 		catch (ApiException e) {
 			log.error("getTasksByAssigneeAndCodiceServizio: " + e.getResponseBody(), e);
@@ -386,21 +428,40 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<TaskDto> searchTasks(String tenantId, String assignee, String codiceServizio, List<VariableInstanceDto> variables, Integer firstResult, Integer maxResults,
-			String sortName, String sortOrder, String sortType) throws CamundaClientException {
+	public List<Task> searchTasks(String tenantId, String assignee, String codiceServizio, List<VariableInstance> variables, Integer firstResult, Integer maxResults, String sortName, String sortOrder,
+			String sortType) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
 
 			TaskQueryDto q = getTaskQueryDto(tenantId, null, codiceServizio, null, variables, sortName, sortOrder, sortType, assignee);
 
-			return api.queryTasks(firstResult, maxResults, q);
+			List<TaskDto> queryTasks = api.queryTasks(firstResult, maxResults, q);
+			return getTasks(queryTasks);
 
 		}
 		catch (ApiException e) {
 			log.error("getTasksByAssigneeAndCodiceServizio: " + e.getResponseBody(), e);
 			throw new CamundaClientException("getTasksByAssigneeAndCodiceServizio :: " + e.getResponseBody(), e);
 		}
+	}
+
+	/**
+	 * @param queryTasks
+	 * @return
+	 */
+	private List<Task> getTasks(List<TaskDto> queryTasks) {
+
+		if (queryTasks == null) {
+			return null;
+		}
+		List<Task> tasks = new ArrayList<Task>();
+		for (TaskDto taskDto : queryTasks) {
+			Task task = new Task();
+			BeanPropertiesUtil.copyProperties(taskDto, task);
+			tasks.add(task);
+		}
+		return tasks;
 	}
 
 	@Override
@@ -422,7 +483,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public long countTasks(String tenantId, String assignee, String codiceServizio, List<VariableInstanceDto> variables) throws CamundaClientException {
+	public long countTasks(String tenantId, String assignee, String codiceServizio, List<VariableInstance> variables) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
@@ -440,18 +501,33 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public ProcessInstanceDto getProcessInstance(String id) throws CamundaClientException {
+	public ProcessInstance getProcessInstance(String id) throws CamundaClientException {
 		ProcessInstanceApi api = new ProcessInstanceApi(getApiClient());
 
 		try {
 
-			return api.getProcessInstance(id);
+			ProcessInstanceDto processInstanceDto = api.getProcessInstance(id);
+
+			return getProcessInstance(processInstanceDto);
 
 		}
 		catch (ApiException e) {
 			log.error("getProcessInstance: " + e.getResponseBody(), e);
 			throw new CamundaClientException("getProcessInstance :: " + e.getResponseBody(), e);
 		}
+	}
+
+	/**
+	 * @param processInstanceDto
+	 * @return
+	 */
+	private ProcessInstance getProcessInstance(ProcessInstanceDto processInstanceDto) {
+		if (processInstanceDto != null) {
+			ProcessInstance processInstance = new ProcessInstance();
+			BeanPropertiesUtil.copyProperties(processInstanceDto, processInstance);
+			return processInstance;
+		}
+		return null;
 	}
 
 	@Override
@@ -514,7 +590,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public ProcessInstanceDto[] getProcessInstanceByBusinessKey(String tenantId, long businessKey) throws CamundaClientException {
+	public List<ProcessInstance> getProcessInstanceByBusinessKey(String tenantId, long businessKey) throws CamundaClientException {
 		ProcessInstanceApi api = new ProcessInstanceApi(getApiClient());
 
 		try {
@@ -528,13 +604,31 @@ public class CamundaClientImpl implements CamundaClient {
 
 			List<ProcessInstanceDto> res = api.queryProcessInstances(null, null, processInstanceQueryDto);
 
-			return res.toArray(new ProcessInstanceDto[0]);
+			return getProcessInstances(res);
 
 		}
 		catch (ApiException e) {
 			log.error("getProcessInstanceByBusinessKey: " + e.getResponseBody(), e);
 			throw new CamundaClientException("getProcessInstanceByBusinessKey :: " + e.getResponseBody(), e);
 		}
+	}
+
+	/**
+	 * @param processInstancesDto
+	 * @return
+	 */
+	private List<ProcessInstance> getProcessInstances(List<ProcessInstanceDto> processInstancesDto) {
+		if (processInstancesDto == null) {
+			return null;
+		}
+
+		List<ProcessInstance> processInstances = new ArrayList<ProcessInstance>();
+		for (ProcessInstanceDto processInstanceDto : processInstancesDto) {
+			ProcessInstance processInstance = new ProcessInstance();
+			BeanPropertiesUtil.copyProperties(processInstanceDto, processInstance);
+			processInstances.add(processInstance);
+		}
+		return processInstances;
 	}
 
 	@Override
@@ -565,8 +659,8 @@ public class CamundaClientImpl implements CamundaClient {
 
 		try {
 
-			List<VariableInstanceDto> variables = new ArrayList<>();
-			VariableInstanceDto d = new VariableInstanceDto();
+			List<VariableInstance> variables = new ArrayList<>();
+			VariableInstance d = new VariableInstance();
 			d.setName(CustomProcessVariables.CODICE_IPA_COMUNE);
 			d.setValue(codiceIpa);
 			variables.add(d);
@@ -583,7 +677,7 @@ public class CamundaClientImpl implements CamundaClient {
 		}
 	}
 
-	private TaskQueryDto getTaskQueryDto(String tenantId, String[] candidateGroups, String codiceServizio, Boolean unassigned, List<VariableInstanceDto> variables, String sortName, String sortOrder,
+	private TaskQueryDto getTaskQueryDto(String tenantId, String[] candidateGroups, String codiceServizio, Boolean unassigned, List<VariableInstance> variables, String sortName, String sortOrder,
 			String sortType, String assignee) {
 		TaskQueryDto q = new TaskQueryDto();
 
@@ -602,7 +696,7 @@ public class CamundaClientImpl implements CamundaClient {
 		List<VariableQueryParameterDto> vqs = new ArrayList<>();
 
 		if (Validator.isNotNull(variables)) {
-			for (VariableInstanceDto v : variables) {
+			for (VariableInstance v : variables) {
 				VariableQueryParameterDto vq = new VariableQueryParameterDto();
 				vq.setName(v.getName());
 				vq.setValue(v.getValue());
