@@ -6,6 +6,12 @@
 <%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %>
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="clay" uri="http://liferay.com/tld/clay" %>
+
+<%@page import="it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO"%>
+<%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
+<%@page import="com.liferay.portal.kernel.util.WebKeys"%>
 
 <liferay-theme:defineObjects />
 

@@ -53,6 +53,13 @@ public class RichiestaLocalServiceWrapper
 		return _richiestaLocalService.addRichiesta(richiesta);
 	}
 
+	@Override
+	public int count(
+		it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters filters) {
+
+		return _richiestaLocalService.count(filters);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -391,6 +398,46 @@ public class RichiestaLocalServiceWrapper
 		return _richiestaLocalService.getRichiestasCount();
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
+			getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(
+				String codiceFiscale, long organizationGroupId, int cur,
+				int delta, String orderByCol, String orderByType)
+		throws Exception {
+
+		return _richiestaLocalService.
+			getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(
+				codiceFiscale, organizationGroupId, cur, delta, orderByCol,
+				orderByType);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
+		getRichiesteByStato(String stato) {
+
+		return _richiestaLocalService.getRichiesteByStato(stato);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
+		search(
+			it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters
+				filters,
+			int start, int end) {
+
+		return _richiestaLocalService.search(filters, start, end);
+	}
+
+	@Override
+	public void updateProcessiInstanceIdRichiesta(
+			long richiestaId, String processInstanceId)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchRichiestaException {
+
+		_richiestaLocalService.updateProcessiInstanceIdRichiesta(
+			richiestaId, processInstanceId);
+	}
+
 	/**
 	 * Updates the richiesta in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
@@ -407,6 +454,14 @@ public class RichiestaLocalServiceWrapper
 			it.servizidigitali.scrivaniaoperatore.model.Richiesta richiesta) {
 
 		return _richiestaLocalService.updateRichiesta(richiesta);
+	}
+
+	@Override
+	public void updateStatoRichiesta(long richiestaId, String stato)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchRichiestaException {
+
+		_richiestaLocalService.updateStatoRichiesta(richiestaId, stato);
 	}
 
 	@Override

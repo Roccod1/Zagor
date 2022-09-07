@@ -80,11 +80,14 @@ public class RichiestaModelImpl
 		{"codiceFiscale", Types.VARCHAR}, {"partitaIva", Types.VARCHAR},
 		{"email", Types.VARCHAR}, {"codiceFiscaleDelegato", Types.VARCHAR},
 		{"stato", Types.VARCHAR}, {"numeroProtocollo", Types.VARCHAR},
-		{"dataProtocollo", Types.TIMESTAMP}, {"oggetto", Types.VARCHAR},
+		{"dataProtocollo", Types.TIMESTAMP},
+		{"numeroProtocolloEsterno", Types.VARCHAR},
+		{"dataProtocolloEsterno", Types.TIMESTAMP}, {"oggetto", Types.VARCHAR},
 		{"note", Types.VARCHAR}, {"invioGuest", Types.BOOLEAN},
 		{"tokenVisualizzazione", Types.VARCHAR},
 		{"chiaveAssociazioneBackoffice", Types.VARCHAR},
-		{"delegaId", Types.BIGINT}, {"proceduraId", Types.BIGINT}
+		{"delegaId", Types.BIGINT}, {"processInstanceId", Types.VARCHAR},
+		{"proceduraId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -106,17 +109,20 @@ public class RichiestaModelImpl
 		TABLE_COLUMNS_MAP.put("stato", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("numeroProtocollo", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("dataProtocollo", Types.TIMESTAMP);
+		TABLE_COLUMNS_MAP.put("numeroProtocolloEsterno", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("dataProtocolloEsterno", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("oggetto", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("note", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("invioGuest", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("tokenVisualizzazione", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("chiaveAssociazioneBackoffice", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("delegaId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("processInstanceId", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("proceduraId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table richiesta (uuid_ VARCHAR(75) null,richiestaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codiceFiscale VARCHAR(75) null,partitaIva VARCHAR(75) null,email VARCHAR(75) null,codiceFiscaleDelegato VARCHAR(75) null,stato VARCHAR(75) null,numeroProtocollo VARCHAR(75) null,dataProtocollo DATE null,oggetto VARCHAR(75) null,note VARCHAR(75) null,invioGuest BOOLEAN,tokenVisualizzazione VARCHAR(75) null,chiaveAssociazioneBackoffice VARCHAR(75) null,delegaId LONG,proceduraId LONG)";
+		"create table richiesta (uuid_ VARCHAR(75) null,richiestaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codiceFiscale VARCHAR(75) null,partitaIva VARCHAR(75) null,email VARCHAR(75) null,codiceFiscaleDelegato VARCHAR(75) null,stato VARCHAR(75) null,numeroProtocollo VARCHAR(75) null,dataProtocollo DATE null,numeroProtocolloEsterno VARCHAR(75) null,dataProtocolloEsterno DATE null,oggetto VARCHAR(75) null,note VARCHAR(75) null,invioGuest BOOLEAN,tokenVisualizzazione VARCHAR(75) null,chiaveAssociazioneBackoffice VARCHAR(75) null,delegaId LONG,processInstanceId VARCHAR(75) null,proceduraId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table richiesta";
 
@@ -178,26 +184,32 @@ public class RichiestaModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long STATO_COLUMN_BITMASK = 128L;
+	public static final long PROCESSINSTANCEID_COLUMN_BITMASK = 128L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long TOKENVISUALIZZAZIONE_COLUMN_BITMASK = 256L;
+	public static final long STATO_COLUMN_BITMASK = 256L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 512L;
+	public static final long TOKENVISUALIZZAZIONE_COLUMN_BITMASK = 512L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 1024L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long RICHIESTAID_COLUMN_BITMASK = 1024L;
+	public static final long RICHIESTAID_COLUMN_BITMASK = 2048L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -394,6 +406,17 @@ public class RichiestaModelImpl
 		attributeSetterBiConsumers.put(
 			"dataProtocollo",
 			(BiConsumer<Richiesta, Date>)Richiesta::setDataProtocollo);
+		attributeGetterFunctions.put(
+			"numeroProtocolloEsterno", Richiesta::getNumeroProtocolloEsterno);
+		attributeSetterBiConsumers.put(
+			"numeroProtocolloEsterno",
+			(BiConsumer<Richiesta, String>)
+				Richiesta::setNumeroProtocolloEsterno);
+		attributeGetterFunctions.put(
+			"dataProtocolloEsterno", Richiesta::getDataProtocolloEsterno);
+		attributeSetterBiConsumers.put(
+			"dataProtocolloEsterno",
+			(BiConsumer<Richiesta, Date>)Richiesta::setDataProtocolloEsterno);
 		attributeGetterFunctions.put("oggetto", Richiesta::getOggetto);
 		attributeSetterBiConsumers.put(
 			"oggetto", (BiConsumer<Richiesta, String>)Richiesta::setOggetto);
@@ -419,6 +442,11 @@ public class RichiestaModelImpl
 		attributeGetterFunctions.put("delegaId", Richiesta::getDelegaId);
 		attributeSetterBiConsumers.put(
 			"delegaId", (BiConsumer<Richiesta, Long>)Richiesta::setDelegaId);
+		attributeGetterFunctions.put(
+			"processInstanceId", Richiesta::getProcessInstanceId);
+		attributeSetterBiConsumers.put(
+			"processInstanceId",
+			(BiConsumer<Richiesta, String>)Richiesta::setProcessInstanceId);
 		attributeGetterFunctions.put("proceduraId", Richiesta::getProceduraId);
 		attributeSetterBiConsumers.put(
 			"proceduraId",
@@ -767,6 +795,39 @@ public class RichiestaModelImpl
 	}
 
 	@Override
+	public String getNumeroProtocolloEsterno() {
+		if (_numeroProtocolloEsterno == null) {
+			return "";
+		}
+		else {
+			return _numeroProtocolloEsterno;
+		}
+	}
+
+	@Override
+	public void setNumeroProtocolloEsterno(String numeroProtocolloEsterno) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_numeroProtocolloEsterno = numeroProtocolloEsterno;
+	}
+
+	@Override
+	public Date getDataProtocolloEsterno() {
+		return _dataProtocolloEsterno;
+	}
+
+	@Override
+	public void setDataProtocolloEsterno(Date dataProtocolloEsterno) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_dataProtocolloEsterno = dataProtocolloEsterno;
+	}
+
+	@Override
 	public String getOggetto() {
 		if (_oggetto == null) {
 			return "";
@@ -897,6 +958,34 @@ public class RichiestaModelImpl
 	}
 
 	@Override
+	public String getProcessInstanceId() {
+		if (_processInstanceId == null) {
+			return "";
+		}
+		else {
+			return _processInstanceId;
+		}
+	}
+
+	@Override
+	public void setProcessInstanceId(String processInstanceId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_processInstanceId = processInstanceId;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public String getOriginalProcessInstanceId() {
+		return getColumnOriginalValue("processInstanceId");
+	}
+
+	@Override
 	public long getProceduraId() {
 		return _proceduraId;
 	}
@@ -997,6 +1086,8 @@ public class RichiestaModelImpl
 		richiestaImpl.setStato(getStato());
 		richiestaImpl.setNumeroProtocollo(getNumeroProtocollo());
 		richiestaImpl.setDataProtocollo(getDataProtocollo());
+		richiestaImpl.setNumeroProtocolloEsterno(getNumeroProtocolloEsterno());
+		richiestaImpl.setDataProtocolloEsterno(getDataProtocolloEsterno());
 		richiestaImpl.setOggetto(getOggetto());
 		richiestaImpl.setNote(getNote());
 		richiestaImpl.setInvioGuest(isInvioGuest());
@@ -1004,6 +1095,7 @@ public class RichiestaModelImpl
 		richiestaImpl.setChiaveAssociazioneBackoffice(
 			getChiaveAssociazioneBackoffice());
 		richiestaImpl.setDelegaId(getDelegaId());
+		richiestaImpl.setProcessInstanceId(getProcessInstanceId());
 		richiestaImpl.setProceduraId(getProceduraId());
 
 		richiestaImpl.resetOriginalValues();
@@ -1040,6 +1132,10 @@ public class RichiestaModelImpl
 			this.<String>getColumnOriginalValue("numeroProtocollo"));
 		richiestaImpl.setDataProtocollo(
 			this.<Date>getColumnOriginalValue("dataProtocollo"));
+		richiestaImpl.setNumeroProtocolloEsterno(
+			this.<String>getColumnOriginalValue("numeroProtocolloEsterno"));
+		richiestaImpl.setDataProtocolloEsterno(
+			this.<Date>getColumnOriginalValue("dataProtocolloEsterno"));
 		richiestaImpl.setOggetto(
 			this.<String>getColumnOriginalValue("oggetto"));
 		richiestaImpl.setNote(this.<String>getColumnOriginalValue("note"));
@@ -1052,6 +1148,8 @@ public class RichiestaModelImpl
 				"chiaveAssociazioneBackoffice"));
 		richiestaImpl.setDelegaId(
 			this.<Long>getColumnOriginalValue("delegaId"));
+		richiestaImpl.setProcessInstanceId(
+			this.<String>getColumnOriginalValue("processInstanceId"));
 		richiestaImpl.setProceduraId(
 			this.<Long>getColumnOriginalValue("proceduraId"));
 
@@ -1233,6 +1331,28 @@ public class RichiestaModelImpl
 			richiestaCacheModel.dataProtocollo = Long.MIN_VALUE;
 		}
 
+		richiestaCacheModel.numeroProtocolloEsterno =
+			getNumeroProtocolloEsterno();
+
+		String numeroProtocolloEsterno =
+			richiestaCacheModel.numeroProtocolloEsterno;
+
+		if ((numeroProtocolloEsterno != null) &&
+			(numeroProtocolloEsterno.length() == 0)) {
+
+			richiestaCacheModel.numeroProtocolloEsterno = null;
+		}
+
+		Date dataProtocolloEsterno = getDataProtocolloEsterno();
+
+		if (dataProtocolloEsterno != null) {
+			richiestaCacheModel.dataProtocolloEsterno =
+				dataProtocolloEsterno.getTime();
+		}
+		else {
+			richiestaCacheModel.dataProtocolloEsterno = Long.MIN_VALUE;
+		}
+
 		richiestaCacheModel.oggetto = getOggetto();
 
 		String oggetto = richiestaCacheModel.oggetto;
@@ -1277,6 +1397,14 @@ public class RichiestaModelImpl
 
 		if (delegaId != null) {
 			richiestaCacheModel.delegaId = delegaId;
+		}
+
+		richiestaCacheModel.processInstanceId = getProcessInstanceId();
+
+		String processInstanceId = richiestaCacheModel.processInstanceId;
+
+		if ((processInstanceId != null) && (processInstanceId.length() == 0)) {
+			richiestaCacheModel.processInstanceId = null;
 		}
 
 		richiestaCacheModel.proceduraId = getProceduraId();
@@ -1387,12 +1515,15 @@ public class RichiestaModelImpl
 	private String _stato;
 	private String _numeroProtocollo;
 	private Date _dataProtocollo;
+	private String _numeroProtocolloEsterno;
+	private Date _dataProtocolloEsterno;
 	private String _oggetto;
 	private String _note;
 	private boolean _invioGuest;
 	private String _tokenVisualizzazione;
 	private String _chiaveAssociazioneBackoffice;
 	private Long _delegaId;
+	private String _processInstanceId;
 	private long _proceduraId;
 
 	public <T> T getColumnValue(String columnName) {
@@ -1440,6 +1571,10 @@ public class RichiestaModelImpl
 		_columnOriginalValues.put("stato", _stato);
 		_columnOriginalValues.put("numeroProtocollo", _numeroProtocollo);
 		_columnOriginalValues.put("dataProtocollo", _dataProtocollo);
+		_columnOriginalValues.put(
+			"numeroProtocolloEsterno", _numeroProtocolloEsterno);
+		_columnOriginalValues.put(
+			"dataProtocolloEsterno", _dataProtocolloEsterno);
 		_columnOriginalValues.put("oggetto", _oggetto);
 		_columnOriginalValues.put("note", _note);
 		_columnOriginalValues.put("invioGuest", _invioGuest);
@@ -1448,6 +1583,7 @@ public class RichiestaModelImpl
 		_columnOriginalValues.put(
 			"chiaveAssociazioneBackoffice", _chiaveAssociazioneBackoffice);
 		_columnOriginalValues.put("delegaId", _delegaId);
+		_columnOriginalValues.put("processInstanceId", _processInstanceId);
 		_columnOriginalValues.put("proceduraId", _proceduraId);
 	}
 
@@ -1502,19 +1638,25 @@ public class RichiestaModelImpl
 
 		columnBitmasks.put("dataProtocollo", 16384L);
 
-		columnBitmasks.put("oggetto", 32768L);
+		columnBitmasks.put("numeroProtocolloEsterno", 32768L);
 
-		columnBitmasks.put("note", 65536L);
+		columnBitmasks.put("dataProtocolloEsterno", 65536L);
 
-		columnBitmasks.put("invioGuest", 131072L);
+		columnBitmasks.put("oggetto", 131072L);
 
-		columnBitmasks.put("tokenVisualizzazione", 262144L);
+		columnBitmasks.put("note", 262144L);
 
-		columnBitmasks.put("chiaveAssociazioneBackoffice", 524288L);
+		columnBitmasks.put("invioGuest", 524288L);
 
-		columnBitmasks.put("delegaId", 1048576L);
+		columnBitmasks.put("tokenVisualizzazione", 1048576L);
 
-		columnBitmasks.put("proceduraId", 2097152L);
+		columnBitmasks.put("chiaveAssociazioneBackoffice", 2097152L);
+
+		columnBitmasks.put("delegaId", 4194304L);
+
+		columnBitmasks.put("processInstanceId", 8388608L);
+
+		columnBitmasks.put("proceduraId", 16777216L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}
