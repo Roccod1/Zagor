@@ -120,9 +120,7 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		filters.setAutenticazione(mapAutenticazione(queryAut));
 		filters.setTipo(queryStato.isBlank() ? null : queryStato);
 
-		List<Task> organizationTasks = getOrganizationTasks(ctx);
-		Set<String> processInstanceIds = organizationTasks.stream().map(Task::getProcessInstanceId).collect(Collectors.toSet());
-
+		Set<String> processInstanceIds = getProcessInstanceIds(ctx);
 		filters.setProcessInstanceIds(processInstanceIds);
 
 		int count = richiestaLocalService.count(filters);
@@ -144,13 +142,15 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		super.render(request, response);
 	}
 
-	private List<Task> getOrganizationTasks(ServiceContext ctx) {
+	private Set<String> getProcessInstanceIds(ServiceContext ctx) {
 		try {
 			Organization currentOrganization = organizationLocalService.getOrganization(ctx.getScopeGroup().getOrganizationId());
 			String[] organizationIdsArray = currentOrganization.getSuborganizations().stream().map(Organization::getOrganizationId).map(String::valueOf).toArray(String[]::new);
 
 			List<Task> searchTasks = camundaClient.searchTasks(String.valueOf(ctx.getScopeGroup().getOrganizationId()), organizationIdsArray, null, false);
-			return searchTasks;
+
+			Set<String> processInstanceIds = searchTasks.stream().map(Task::getProcessInstanceId).collect(Collectors.toSet());
+			return processInstanceIds;
 		}
 		catch (PortalException e1) {
 			log.error("render :: " + e1.getMessage(), e1);
