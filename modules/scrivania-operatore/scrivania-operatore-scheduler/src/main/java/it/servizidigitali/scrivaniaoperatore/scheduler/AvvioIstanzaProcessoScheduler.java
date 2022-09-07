@@ -216,7 +216,8 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 						variables.put(CustomProcessVariables.DATA_CREAZIONE_RICHIESTA, richiesta.getCreateDate());
 						variables.put(CustomProcessVariables.STATO_RICHIESTA, richiesta.getStato());
 
-						camundaClient.startProcessInstance(tenantId, processo.getCodice(), String.valueOf(businessKey), variables);
+						String processInstanceId = camundaClient.startProcessInstance(tenantId, processo.getCodice(), String.valueOf(businessKey), variables);
+						richiestaLocalService.updateProcessiInstanceIdRichiesta(richiesta.getRichiestaId(), processInstanceId);
 					}
 				}
 				else {
