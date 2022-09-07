@@ -13,7 +13,11 @@ public class RichiestaFilters {
 	private Date dataA;
 	private Boolean autenticazione;
 	private String tipo;
+	private Set<Long> procedureIds;
 	private Set<String> processInstanceIds;
+
+	private long groupId;
+	private long companyId;
 
 	/**
 	 * @return the nomeCognome
@@ -139,5 +143,47 @@ public class RichiestaFilters {
 	 */
 	public void setProcessInstanceIds(Set<String> processInstanceIds) {
 		this.processInstanceIds = processInstanceIds;
+	}
+
+	/**
+	 * @return the procedureIds
+	 */
+	public Set<Long> getProcedureIds() {
+		return procedureIds;
+	}
+
+	/**
+	 * @param procedureIds the procedureIds to set
+	 */
+	public void setProcedureIds(Set<Long> procedureIds) {
+		this.procedureIds = procedureIds;
+	}
+
+	/**
+	 * @return the groupId
+	 */
+	public long getGroupId() {
+		return groupId;
+	}
+
+	/**
+	 * @param groupId the groupId to set
+	 */
+	public void setGroupId(long groupId) {
+		this.groupId = groupId;
+	}
+
+	/**
+	 * @return the companyId
+	 */
+	public long getCompanyId() {
+		return companyId;
+	}
+
+	/**
+	 * @param companyId the companyId to set
+	 */
+	public void setCompanyId(long companyId) {
+		this.companyId = companyId;
 	}
 }

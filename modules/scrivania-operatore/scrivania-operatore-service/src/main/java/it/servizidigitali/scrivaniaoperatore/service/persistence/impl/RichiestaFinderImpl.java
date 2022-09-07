@@ -49,7 +49,8 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 
 	private DynamicQuery createQuery(RichiestaFilters filters) {
 		DynamicQuery dq = DynamicQueryFactoryUtil.forClass(Richiesta.class, getClass().getClassLoader());
-
+		dq.add(RestrictionsFactoryUtil.eq("groupId", filters.getGroupId()));
+		dq.add(RestrictionsFactoryUtil.eq("companyId", filters.getCompanyId()));
 		if (filters.getNomeCognome() != null) {
 			String pattern = StringPool.PERCENT + filters.getNomeCognome() + StringPool.PERCENT;
 
@@ -99,6 +100,10 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 
 		if (filters.getProcessInstanceIds() != null) {
 			dq.add(RestrictionsFactoryUtil.in("processInstanceId", filters.getProcessInstanceIds()));
+		}
+
+		if (filters.getProcedureIds() != null) {
+			dq.add(RestrictionsFactoryUtil.in("proceduraId", filters.getProcedureIds()));
 		}
 
 		return dq;
