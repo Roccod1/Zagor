@@ -30,3 +30,10 @@ ALTER TABLE `servizi_digitali`.`allegato_richiesta`
 ADD COLUMN `idDocumentale` VARCHAR(255) NULL AFTER `nome`,
 ADD COLUMN `url` VARCHAR(255) NULL AFTER `idDocumentale`;
 
+ALTER TABLE `servizi_digitali`.`richiesta` 
+ADD COLUMN `numeroProtocolloEsterno` VARCHAR(75) NULL AFTER `dataProtocollo`,
+ADD COLUMN `dataProtocolloEsterno` TIMESTAMP NULL AFTER `numeroProtocolloEsterno`;
+
+ALTER TABLE `servizi_digitali`.`richiesta` 
+ADD COLUMN `processInstanceId` VARCHAR(75) NULL AFTER `delegaId`;
+
