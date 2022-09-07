@@ -16,6 +16,6 @@
 	</a>
 
 	<button class="btn btn-primary ml-1" title="<liferay-ui:message key="prendi-in-carico" />">
-		<clay:icon symbol="user-plus" />
+		<i class='icon-edit'></i>
 	</button>
 </div>
