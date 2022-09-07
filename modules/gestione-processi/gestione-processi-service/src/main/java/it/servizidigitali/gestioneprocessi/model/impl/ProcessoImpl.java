@@ -18,4 +18,15 @@ package it.servizidigitali.gestioneprocessi.model.impl;
  * @author Brian Wing Shun Chan
  */
 public class ProcessoImpl extends ProcessoBaseImpl {
+	String nomeEnte = null;
+
+	public String getNomeEnte() {
+		return nomeEnte;
+	}
+
+	public void setNomeEnte(String nomeEnte) {
+		this.nomeEnte = nomeEnte;
+	}
+	
+	
 }

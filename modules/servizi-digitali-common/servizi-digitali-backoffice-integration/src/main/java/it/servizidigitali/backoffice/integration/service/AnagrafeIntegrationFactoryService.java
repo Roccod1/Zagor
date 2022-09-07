@@ -10,6 +10,8 @@ import java.io.Serializable;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
+
 /**
  * @author pindi
  *
@@ -33,7 +35,7 @@ public class AnagrafeIntegrationFactoryService {
 		try {
 			Organization organization = organizationLocalService.getOrganization(organizationId);
 
-			Serializable anpr = organization.getExpandoBridge().getAttribute("anpr");
+			Serializable anpr = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.ANPR.getNomeAttributo());
 			if (anpr != null && Boolean.parseBoolean(anpr.toString())) {
 				return anagrafeANPRIntegrationService;
 			}

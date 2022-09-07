@@ -240,6 +240,16 @@ public class ProceduraFormLocalServiceUtil {
 		return getService().getActionableDynamicQuery();
 	}
 
+	public static String getFormIntegrativiProcedura(long idProcedura)
+		throws PortalException {
+
+		return getService().getFormIntegrativiProcedura(idProcedura);
+	}
+
+	public static long getFormPrincipaleProcedura(long idProcedura) {
+		return getService().getFormPrincipaleProcedura(idProcedura);
+	}
+
 	public static
 		com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery
 			getIndexableActionableDynamicQuery() {
@@ -317,6 +327,20 @@ public class ProceduraFormLocalServiceUtil {
 	 */
 	public static int getProceduraFormsCount() {
 		return getService().getProceduraFormsCount();
+	}
+
+	public static void salvaListaFormIntegrativi(
+		String[] listaFormIntegrativi, long idProcedura) {
+
+		getService().salvaListaFormIntegrativi(
+			listaFormIntegrativi, idProcedura);
+	}
+
+	public static ProceduraForm salvaProceduraFormPrincipale(
+		long idFormPrincipale, long idProcedura) {
+
+		return getService().salvaProceduraFormPrincipale(
+			idFormPrincipale, idProcedura);
 	}
 
 	/**

@@ -320,6 +320,14 @@ public class FormLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
+	public static List<Form> getListaFormByOrganizationPrincipale(
+			long groupId, boolean principale)
+		throws Exception {
+
+		return getService().getListaFormByOrganizationPrincipale(
+			groupId, principale);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -340,13 +348,13 @@ public class FormLocalServiceUtil {
 
 	public static List<Form> search(
 			String nome, java.util.Date dataInserimentoDa,
-			java.util.Date dataInserimentoA, int delta, int cur,
+			java.util.Date dataInserimentoA, long groupId, int delta, int cur,
 			String orderByCol, String orderByType)
 		throws PortalException {
 
 		return getService().search(
-			nome, dataInserimentoDa, dataInserimentoA, delta, cur, orderByCol,
-			orderByType);
+			nome, dataInserimentoDa, dataInserimentoA, groupId, delta, cur,
+			orderByCol, orderByType);
 	}
 
 	/**
