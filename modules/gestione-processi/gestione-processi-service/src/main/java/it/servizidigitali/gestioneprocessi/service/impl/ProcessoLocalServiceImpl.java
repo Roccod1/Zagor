@@ -21,8 +21,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
-import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
-import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneprocessi.exception.NoSuchProcessoException;
 import it.servizidigitali.gestioneprocessi.model.Processo;
@@ -44,6 +45,12 @@ import it.servizidigitali.gestioneprocessi.service.base.ProcessoLocalServiceBase
 public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 
 	public static final Log _log = LogFactoryUtil.getLog(ProcessoLocalServiceImpl.class);
+	
+	@Reference
+	private OrganizationLocalService organizationLocalService;
+	
+	@Reference
+	private GroupLocalService groupLocalService;
 
 	@Override
 	public List<Processo> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, long groupId, int delta, int cur, String orderByCol, String orderByType) throws PortalException {
@@ -64,13 +71,13 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 		Organization organization = null;
 
 		for (Processo processo : listaProcesso) {
-			group = GroupLocalServiceUtil.getGroup(processo.getGroupId());
-			long organizationIdSite = GroupLocalServiceUtil.getGroup(groupId).getOrganizationId();
+			group = groupLocalService.getGroup(processo.getGroupId());
+			long organizationIdSite = groupLocalService.getGroup(groupId).getOrganizationId();
 			
 			if(organizationIdSite==0) {
 				
 				if (group.getOrganizationId() > 0) {
-					organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
+					organization = organizationLocalService.getOrganization(group.getOrganizationId());
 					processo.setNomeEnte(organization.getName());
 				}else {
 					processo.setNomeEnte("-");
@@ -81,7 +88,7 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 				if(group.getGroupId()==groupId) {
 					
 					if (group.getOrganizationId() > 0) {
-						organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
+						organization = organizationLocalService.getOrganization(group.getOrganizationId());
 						processo.setNomeEnte(organization.getName());
 					}else {
 						processo.setNomeEnte("-");

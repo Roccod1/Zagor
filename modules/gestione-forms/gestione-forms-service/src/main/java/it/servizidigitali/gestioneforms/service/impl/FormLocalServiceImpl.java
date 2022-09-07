@@ -21,8 +21,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
-import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
-import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneforms.model.Form;
@@ -42,6 +43,12 @@ import it.servizidigitali.gestioneforms.service.base.FormLocalServiceBaseImpl;
  */
 @Component(property = "model.class.name=it.servizidigitali.gestioneforms.model.Form", service = AopService.class)
 public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
+	
+	@Reference
+	private OrganizationLocalService organizationLocalService;
+	
+	@Reference
+	private GroupLocalService groupLocalService;
 
 	public static final Log _log = LogFactoryUtil.getLog(FormLocalServiceImpl.class);
 
@@ -65,13 +72,13 @@ public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
 		Organization organization = null;
 
 		for (Form form : listaForm) {
-			group = GroupLocalServiceUtil.getGroup(form.getGroupId());
-			long organizationIdSite = GroupLocalServiceUtil.getGroup(groupId).getOrganizationId();
+			group = groupLocalService.getGroup(form.getGroupId());
+			long organizationIdSite = groupLocalService.getGroup(groupId).getOrganizationId();
 			
 			if(organizationIdSite==0) {
 				
 				if (group.getOrganizationId() > 0) {
-					organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
+					organization = organizationLocalService.getOrganization(group.getOrganizationId());
 					form.setNomeEnte(organization.getName());
 				}else {
 					form.setNomeEnte("-");
@@ -82,7 +89,7 @@ public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
 				if(group.getGroupId()==groupId) {
 					
 					if (group.getOrganizationId() > 0) {
-						organization = OrganizationLocalServiceUtil.getOrganization(group.getOrganizationId());
+						organization = organizationLocalService.getOrganization(group.getOrganizationId());
 						form.setNomeEnte(organization.getName());
 					}else {
 						form.setNomeEnte("-");

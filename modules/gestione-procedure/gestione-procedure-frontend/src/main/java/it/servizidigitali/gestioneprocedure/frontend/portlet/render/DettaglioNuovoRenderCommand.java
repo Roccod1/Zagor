@@ -124,11 +124,18 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 				
 				if(Validator.isNotNull(procedura.getStep2TipiIntegrazioneBackoffice())) {
 					tipiIntegrazioneBackoffice = proceduraLocalService.getStringSelectMultipla(procedura.getStep2TipiIntegrazioneBackoffice());
+					renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_TIPO_INTEGRAZIONE_BACKOFFICE_PROCEDURA, tipiIntegrazioneBackoffice);
+				}else {
+					renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_TIPO_INTEGRAZIONE_BACKOFFICE_PROCEDURA, GestioneProcedurePortletKeys.LISTA_VUOTA);
 				}
 				
-				renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_TIPO_INTEGRAZIONE_BACKOFFICE_PROCEDURA, tipiIntegrazioneBackoffice);
+				if(Validator.isNotNull(listaFormIntegrativiProcedura)) {
+					renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_FORM_INTEGRATIVI_PROCEDURA, listaFormIntegrativiProcedura);
+				}else {
+					renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_FORM_INTEGRATIVI_PROCEDURA, GestioneProcedurePortletKeys.LISTA_VUOTA);
+				}
+				
 				renderRequest.setAttribute(GestioneProcedurePortletKeys.PROCEDURA, procedura);
-				renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_FORM_INTEGRATIVI_PROCEDURA, listaFormIntegrativiProcedura);
 			} catch (Exception e) {
 				_log.error("Impossibile recuperare la procedura con ID : " + idProcedura + e.getMessage());
 				SessionErrors.add(renderRequest, GestioneProcedurePortletKeys.SESSION_ERROR_IMPOSSIBILE_RECUPERARE_PROCEDURA);

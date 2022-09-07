@@ -276,9 +276,7 @@ public class ProceduraFormLocalServiceWrapper
 	}
 
 	@Override
-	public long getFormPrincipaleProcedura(long idProcedura)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
+	public long getFormPrincipaleProcedura(long idProcedura) {
 		return _proceduraFormLocalService.getFormPrincipaleProcedura(
 			idProcedura);
 	}
@@ -375,12 +373,10 @@ public class ProceduraFormLocalServiceWrapper
 	}
 
 	@Override
-	public java.util.List
-		<it.servizidigitali.gestioneprocedure.model.ProceduraForm>
-			salvaListaFormIntegrativi(
-				String[] listaFormIntegrativi, long idProcedura) {
+	public void salvaListaFormIntegrativi(
+		String[] listaFormIntegrativi, long idProcedura) {
 
-		return _proceduraFormLocalService.salvaListaFormIntegrativi(
+		_proceduraFormLocalService.salvaListaFormIntegrativi(
 			listaFormIntegrativi, idProcedura);
 	}
 

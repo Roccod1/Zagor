@@ -49,7 +49,7 @@
 				<aui:row>
 					<aui:col span="6">
 								<aui:select label="servizio" name="<%=GestioneProcedurePortletKeys.SERVIZIO %>" value="${procedura.servizioId}">
-									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
+										<aui:option value="" label="seleziona" disabled="true" selected="true"/>
 										<c:forEach items="${listaServizi }" var="servizio">
 											<aui:option value="${servizio.servizioId}" label="${servizio.nome}"/>
 										</c:forEach>
@@ -58,8 +58,7 @@
 					</aui:col>
 					
 					<aui:col span="6">
-								<aui:select label="processo-bpmn" name="<%=GestioneProcedurePortletKeys.PROCESSO_BPMN %>" value="${procedura.processoId}">
-									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
+								<aui:select name="<%=GestioneProcedurePortletKeys.PROCESSO_BPMN %>" value="${procedura.processoId}" showEmptyOption="true" label="processo-bpmn">
 										<c:forEach items="${listaProcessi}" var="processo">
 											<aui:option value="${processo.processoId}" label="${processo.nome}"></aui:option>
 										</c:forEach>
@@ -79,8 +78,7 @@
 					</aui:col>
 				
 					<aui:col span="6">
-								<aui:select id="listaFormIntegrativiProcedura" label="identificativi-form-integrativi" name="<%=GestioneProcedurePortletKeys.IDENTIFICATIVI_FORM_INTEGRATIVI %>" multiple="true">
-									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
+								<aui:select id="listaFormIntegrativiProcedura" label="identificativi-form-integrativi" name="<%=GestioneProcedurePortletKeys.IDENTIFICATIVI_FORM_INTEGRATIVI %>" multiple="true" showEmptyOption="true">
 										<c:forEach items="${listaFormIntegrativi}" var="form">
 											<aui:option value="${form.formId}" label="${form.nome}"></aui:option>
 										</c:forEach>
@@ -99,8 +97,7 @@
 								<aui:input label="step1" type="checkbox" name="<%=GestioneProcedurePortletKeys.CONFIGURAZIONE_STEP1_ATTIVO %>" value="${procedura.step1Attivo}"/>
 						</aui:col>
 						<aui:col span="6">
-								<aui:select label="filtro-componenti-nucleo-familiare" name="<%=GestioneProcedurePortletKeys.FILTRO_COMPONENTI_NUCLEO_FAMILIARE %>" value="${procedura.step1TipoComponentiNucleoFamiliare}">
-									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
+								<aui:select label="filtro-componenti-nucleo-familiare" name="<%=GestioneProcedurePortletKeys.FILTRO_COMPONENTI_NUCLEO_FAMILIARE %>" value="${procedura.step1TipoComponentiNucleoFamiliare}" showEmptyOption="true">
 										<c:forEach items="${listaTipoComponentiFamiliari}" var="filtroComponentiNucleoFamiliare">
 											<aui:option value="${filtroComponentiNucleoFamiliare}" label="${filtroComponentiNucleoFamiliare}"></aui:option>
 										</c:forEach>
@@ -113,8 +110,7 @@
 					<h3><liferay-ui:message key="step2"/></h3>
 					<aui:row>
 						<aui:col span="6">
-								<aui:select label="tipologia-servizio" name="<%=GestioneProcedurePortletKeys.TIPOLOGIA_SERVIZIO %>" value="${procedura.step2TipoServizio}">
-									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
+								<aui:select label="tipologia-servizio" name="<%=GestioneProcedurePortletKeys.TIPOLOGIA_SERVIZIO %>" value="${procedura.step2TipoServizio}" showEmptyOption="true">
 										<c:forEach items="${listaTipoServizio}" var="tipoServizio">
 											<c:set var="labelTipoServizio" value="tipo-servizio_${tipoServizio}" />
 											<aui:option value="${tipoServizio}" label="${labelTipoServizio}"></aui:option>
@@ -122,8 +118,7 @@
 								</aui:select>
 						</aui:col>
 						<aui:col span="6">
-								<aui:select id="tipiIntegrazioneBackoffice" label="tipi-integrazioni-con-backoffice" name="<%=GestioneProcedurePortletKeys.TIPI_INTEGRAZIONI_BACKOFFICE %>" multiple="true" value="${listaTipoIntegrazioneBackofficeProcedura}">
-									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
+								<aui:select id="tipiIntegrazioneBackoffice" label="tipi-integrazioni-con-backoffice" name="<%=GestioneProcedurePortletKeys.TIPI_INTEGRAZIONI_BACKOFFICE %>" multiple="true" value="${listaTipoIntegrazioneBackofficeProcedura}" showEmptyOption="true">
 										<c:forEach items="${listaTipoIntegrazioneBackoffice}" var="tipoIntegrazioneBackoffice">
 											<c:set var="labelTipoIntegrazioneBackoffice" value="tipo-integrazione-backoffice_${tipoIntegrazioneBackoffice}" />
 											<aui:option value="${tipoIntegrazioneBackoffice}" label="${labelTipoIntegrazioneBackoffice}"></aui:option>
@@ -143,8 +138,7 @@
 					<h3><liferay-ui:message key="tipo-di-generazione-template-pdf"/></h3>
 					<aui:row>
 						<aui:col span="6">
-								<aui:select label="generazione-template" name="<%=GestioneProcedurePortletKeys.TIPI_GENERAZIONE_TEMPLATE %>" value="${procedura.tipoGenerazionePDF}">
-									<aui:option value="" label="seleziona" disabled="true" selected="true"/>
+								<aui:select label="generazione-template" name="<%=GestioneProcedurePortletKeys.TIPI_GENERAZIONE_TEMPLATE %>" value="${procedura.tipoGenerazionePDF}" showEmptyOption="true">
 										<c:forEach items="${listaTipoGenerazionePDF}" var="tipoGenerazionePDF">
 											<c:set var="labelTipoGenerazionePDF" value="generazione-template_${tipoGenerazionePDF}" />
 											<aui:option value="${tipoGenerazionePDF}" label="${labelTipoGenerazionePDF}"></aui:option>

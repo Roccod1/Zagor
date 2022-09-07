@@ -221,8 +221,7 @@ public interface ProceduraFormLocalService
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public long getFormPrincipaleProcedura(long idProcedura)
-		throws PortalException;
+	public long getFormPrincipaleProcedura(long idProcedura);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
@@ -288,7 +287,7 @@ public interface ProceduraFormLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getProceduraFormsCount();
 
-	public List<ProceduraForm> salvaListaFormIntegrativi(
+	public void salvaListaFormIntegrativi(
 		String[] listaFormIntegrativi, long idProcedura);
 
 	public ProceduraForm salvaProceduraFormPrincipale(

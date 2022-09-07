@@ -17,8 +17,8 @@ package it.servizidigitali.gestioneforms.service.impl;
 import com.liferay.document.library.kernel.exception.NoSuchFolderException;
 import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
-import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
-import com.liferay.document.library.kernel.service.DLFolderLocalServiceUtil;
+import com.liferay.document.library.kernel.service.DLAppLocalService;
+import com.liferay.document.library.kernel.service.DLFolderLocalService;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -40,6 +40,7 @@ import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneforms.service.base.DefinizioneAllegatoLocalServiceBaseImpl;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Brian Wing Shun Chan
@@ -50,6 +51,12 @@ import org.osgi.service.component.annotations.Component;
 )
 public class DefinizioneAllegatoLocalServiceImpl
 	extends DefinizioneAllegatoLocalServiceBaseImpl {
+	
+	@Reference
+	private DLFolderLocalService dlFolderLocalService;
+	
+	@Reference
+	private DLAppLocalService dlAppLocalService;
 	
 	public static final Log _log = LogFactoryUtil.getLog(DefinizioneAllegatoLocalServiceImpl.class);
 	
@@ -126,27 +133,27 @@ public class DefinizioneAllegatoLocalServiceImpl
 			 */
 			
 			try {
-				folderConfigurazionePiattaforma = DLFolderLocalServiceUtil.getFolder(group.getGroupId(),
+				folderConfigurazionePiattaforma = dlFolderLocalService.getFolder(group.getGroupId(),
 						DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
 						CartelleAllegatiEnum.CONFIGURAZIONE_PIATTAFORMA.getName());
 				
-				folderForm = DLFolderLocalServiceUtil.getFolder(group.getGroupId(), folderConfigurazionePiattaforma.getFolderId(),
+				folderForm = dlFolderLocalService.getFolder(group.getGroupId(), folderConfigurazionePiattaforma.getFolderId(),
 						CartelleAllegatiEnum.FORM.getName());
 				
-				folderTemplate = DLFolderLocalServiceUtil.getFolder(group.getGroupId(), folderForm.getFolderId(),CartelleAllegatiEnum.TEMPLATE.getName());
+				folderTemplate = dlFolderLocalService.getFolder(group.getGroupId(), folderForm.getFolderId(),CartelleAllegatiEnum.TEMPLATE.getName());
 				
 			}catch(NoSuchFolderException e) {
 				_log.info("Cartella di configurazione form non presente, creazione!");
 				
-				Folder folderConfigurazionePiattaformaNuova = DLAppLocalServiceUtil.addFolder(userId,
+				Folder folderConfigurazionePiattaformaNuova = dlAppLocalService.addFolder(userId,
 						repositoryId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, CartelleAllegatiEnum.CONFIGURAZIONE_PIATTAFORMA.getName(),
 						CartelleAllegatiEnum.CONFIGURAZIONE_PIATTAFORMA.getName(), serviceContext);
 				
-				Folder folderFormNuova = DLAppLocalServiceUtil.addFolder(userId,
+				Folder folderFormNuova = dlAppLocalService.addFolder(userId,
 						repositoryId, folderConfigurazionePiattaformaNuova.getFolderId(), CartelleAllegatiEnum.FORM.getName(),
 						CartelleAllegatiEnum.FORM.getName(), serviceContext);
 				
-				folderTemplateNuova = DLAppLocalServiceUtil.addFolder(userId,
+				folderTemplateNuova = dlAppLocalService.addFolder(userId,
 						repositoryId, folderFormNuova.getFolderId(), CartelleAllegatiEnum.TEMPLATE.getName(),
 						CartelleAllegatiEnum.TEMPLATE.getName(), serviceContext);
 			}
@@ -160,15 +167,15 @@ public class DefinizioneAllegatoLocalServiceImpl
 			}
 			
 			try {
-				DLFolder cartellaForm = DLFolderLocalServiceUtil.getFolder(group.getGroupId(), folderTemplateId, String.valueOf(formId));		
-				allegatoCaricato = DLAppLocalServiceUtil.addFileEntry(null, userId, cartellaForm.getRepositoryId(), cartellaForm.getFolderId(), fileNameModello, MimeTypesUtil.getContentType(fileTemporaneo), byteArrayAllegatoCaricato, null, null, serviceContext);
+				DLFolder cartellaForm = dlFolderLocalService.getFolder(group.getGroupId(), folderTemplateId, String.valueOf(formId));		
+				allegatoCaricato = dlAppLocalService.addFileEntry(null, userId, cartellaForm.getRepositoryId(), cartellaForm.getFolderId(), fileNameModello, MimeTypesUtil.getContentType(fileTemporaneo), byteArrayAllegatoCaricato, null, null, serviceContext);
 				fileTemporaneo.delete();
 			}catch(NoSuchFolderException e) {
 				_log.info("Cartella allegati per form con ID " + formId + " non presente a sistema,creazione");
-				cartellaAllegatiForm = DLAppLocalServiceUtil.addFolder(userId,
+				cartellaAllegatiForm = dlAppLocalService.addFolder(userId,
 						folderTemplateRepositoryId, folderTemplateId, String.valueOf(formId),
 						String.valueOf(formId), serviceContext);
-				allegatoCaricato = DLAppLocalServiceUtil.addFileEntry(null, userId, cartellaAllegatiForm.getRepositoryId(), cartellaAllegatiForm.getFolderId(), fileNameModello, MimeTypesUtil.getContentType(fileTemporaneo), byteArrayAllegatoCaricato, null, null, serviceContext);
+				allegatoCaricato = dlAppLocalService.addFileEntry(null, userId, cartellaAllegatiForm.getRepositoryId(), cartellaAllegatiForm.getFolderId(), fileNameModello, MimeTypesUtil.getContentType(fileTemporaneo), byteArrayAllegatoCaricato, null, null, serviceContext);
 				fileTemporaneo.delete();
 			}
 			

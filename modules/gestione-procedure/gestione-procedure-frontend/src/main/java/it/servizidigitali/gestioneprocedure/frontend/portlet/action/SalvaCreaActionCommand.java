@@ -106,9 +106,7 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 			return;
 		}
 		
-		if(Validator.isNotNull(idProcesso)) {
-			procedura.setProcessoId(idProcesso);
-		}
+		
 		
 		if(Validator.isNull(idFormPrincipale)) {
 			SessionErrors.add(actionRequest, GestioneProcedurePortletKeys.SESSION_ERROR_CAMPI_OBBLIGATORI);
@@ -121,7 +119,8 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		procedura.setPecDestinazione(pec);
 		procedura.setAttiva(attivaProcedura);
 		procedura.setServizioId(idServizio);
-				
+		procedura.setProcessoId(idProcesso);
+		
 		procedura.setStep1Attivo(step1Attivo);
 		procedura.setStep1TipoComponentiNucleoFamiliare(filtroComponentiNucleoFamiliare);
 		
