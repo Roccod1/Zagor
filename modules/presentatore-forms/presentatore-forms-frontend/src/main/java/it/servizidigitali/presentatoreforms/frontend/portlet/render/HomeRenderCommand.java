@@ -2,6 +2,7 @@ package it.servizidigitali.presentatoreforms.frontend.portlet.render;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -128,14 +129,14 @@ public class HomeRenderCommand implements MVCRenderCommand{
 			 * TODO: Affinare la condizione nell'if una volta fatto il merge
 			 * del branch con gestione procedure
 			 */
-			if(Validator.isNotNull(procedura.getConfigurazioniPresentatoreForm())) {
+//			if(Validator.isNotNull(procedura.getConfigurazioniPresentatoreForm())) {
 				try {
 					alpacaStructure = getAlpacaJsonStructure(richiesta.getRichiestaId(),procedura,false);
 				}catch(Exception e) {
 					_log.error("Errore durante la visualizzazione del form!" + e.getMessage());
 					// capire a quale jsp deve puntare in caso di errore
 				}
-			}
+//			}
 		}
 		
 		renderRequest.setAttribute("statoRichiesta", richiesta.getStato());
@@ -158,8 +159,9 @@ public class HomeRenderCommand implements MVCRenderCommand{
 		if(Validator.isNotNull(caricaBozza) && caricaBozza && idRichiesta>0) {
 			
 			try {
-				istanzaForm = istanzaFormLocalService.getIstanzaFormRichiesta(idRichiesta);
-			} catch (NoSuchIstanzaFormException e) {
+				istanzaForm = istanzaFormLocalService.getIstanzaForm(idRichiesta);
+			}
+			catch (PortalException e) {
 				_log.error("Impossibile recuperare l'istanza della richiesta con ID : " + idRichiesta + "per: " + e.getMessage());
 			}
 			
