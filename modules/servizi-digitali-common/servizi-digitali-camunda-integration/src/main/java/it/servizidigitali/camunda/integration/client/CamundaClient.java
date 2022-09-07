@@ -70,7 +70,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	long countTasks(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned) throws CamundaClientException;
+	long countTasks(String tenantId, List<String> candidateGroups, String codiceServizio, boolean unassigned) throws CamundaClientException;
 
 	/**
 	 *
@@ -82,7 +82,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	long countTasks(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned, List<VariableInstance> variables) throws CamundaClientException;
+	long countTasks(String tenantId, List<String> candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstance> variables) throws CamundaClientException;
 
 	/**
 	 *
@@ -93,7 +93,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	List<Task> searchTasks(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned) throws CamundaClientException;
+	List<Task> searchTasks(String tenantId, List<String> candidateGroups, String codiceServizio, boolean unassigned) throws CamundaClientException;
 
 	/**
 	 *
@@ -110,7 +110,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	List<Task> searchTasks(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned, List<VariableInstance> variables, Integer firstResult, Integer maxResults,
+	List<Task> searchTasks(String tenantId, List<String> candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstance> variables, Integer firstResult, Integer maxResults,
 			String sortName, String sortOrder, String sortType) throws CamundaClientException;
 
 	/**

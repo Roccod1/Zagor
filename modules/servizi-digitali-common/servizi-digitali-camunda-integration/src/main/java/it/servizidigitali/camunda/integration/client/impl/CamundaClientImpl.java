@@ -337,7 +337,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public long countTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned) throws CamundaClientException {
+	public long countTasks(String tenantId, List<String> candidateGroups, String codiceServizio, boolean unassigned) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
@@ -355,7 +355,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public long countTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstance> variables) throws CamundaClientException {
+	public long countTasks(String tenantId, List<String> candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstance> variables) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
@@ -374,7 +374,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<Task> searchTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned) throws CamundaClientException {
+	public List<Task> searchTasks(String tenantId, List<String> candidateGroups, String codiceServizio, boolean unassigned) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
@@ -392,7 +392,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<Task> searchTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstance> variables, Integer firstResult, Integer maxResults,
+	public List<Task> searchTasks(String tenantId, List<String> candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstance> variables, Integer firstResult, Integer maxResults,
 			String sortName, String sortOrder, String sortType) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
@@ -677,7 +677,7 @@ public class CamundaClientImpl implements CamundaClient {
 		}
 	}
 
-	private TaskQueryDto getTaskQueryDto(String tenantId, String[] candidateGroups, String codiceServizio, Boolean unassigned, List<VariableInstance> variables, String sortName, String sortOrder,
+	private TaskQueryDto getTaskQueryDto(String tenantId, List<String> candidateGroups, String codiceServizio, Boolean unassigned, List<VariableInstance> variables, String sortName, String sortOrder,
 			String sortType, String assignee) {
 		TaskQueryDto q = new TaskQueryDto();
 
@@ -689,8 +689,8 @@ public class CamundaClientImpl implements CamundaClient {
 			q.setTenantIdIn(Arrays.asList(tenantId));
 		}
 
-		if (null != candidateGroups && candidateGroups.length > 0) {
-			q.setCandidateGroups(Arrays.asList(candidateGroups));
+		if (null != candidateGroups && !candidateGroups.isEmpty()) {
+			q.setCandidateGroups(candidateGroups);
 		}
 
 		List<VariableQueryParameterDto> vqs = new ArrayList<>();
