@@ -46,6 +46,7 @@ import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFinder;
 import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFormPK;
 import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFormPersistence;
 import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraPersistence;
+import it.servizidigitali.gestioneprocedure.service.persistence.TemplatePdfPersistence;
 
 import java.io.Serializable;
 
@@ -504,6 +505,9 @@ public abstract class ProceduraFormLocalServiceBaseImpl
 
 	@Reference
 	protected ProceduraFormPersistence proceduraFormPersistence;
+
+	@Reference
+	protected TemplatePdfPersistence templatePdfPersistence;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService

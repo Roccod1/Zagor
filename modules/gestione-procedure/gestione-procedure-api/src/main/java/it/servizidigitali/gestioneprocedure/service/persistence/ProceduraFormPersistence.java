@@ -352,7 +352,7 @@ public interface ProceduraFormPersistence
 	 * @param proceduraId the procedura ID
 	 * @return the matching procedura forms
 	 */
-	public java.util.List<ProceduraForm> findByproceduraId(long proceduraId);
+	public java.util.List<ProceduraForm> findByProceduraId(long proceduraId);
 
 	/**
 	 * Returns a range of all the procedura forms where proceduraId = &#63;.
@@ -366,7 +366,7 @@ public interface ProceduraFormPersistence
 	 * @param end the upper bound of the range of procedura forms (not inclusive)
 	 * @return the range of matching procedura forms
 	 */
-	public java.util.List<ProceduraForm> findByproceduraId(
+	public java.util.List<ProceduraForm> findByProceduraId(
 		long proceduraId, int start, int end);
 
 	/**
@@ -382,7 +382,7 @@ public interface ProceduraFormPersistence
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching procedura forms
 	 */
-	public java.util.List<ProceduraForm> findByproceduraId(
+	public java.util.List<ProceduraForm> findByProceduraId(
 		long proceduraId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<ProceduraForm>
 			orderByComparator);
@@ -401,7 +401,7 @@ public interface ProceduraFormPersistence
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching procedura forms
 	 */
-	public java.util.List<ProceduraForm> findByproceduraId(
+	public java.util.List<ProceduraForm> findByProceduraId(
 		long proceduraId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<ProceduraForm>
 			orderByComparator,
@@ -415,7 +415,7 @@ public interface ProceduraFormPersistence
 	 * @return the first matching procedura form
 	 * @throws NoSuchProceduraFormException if a matching procedura form could not be found
 	 */
-	public ProceduraForm findByproceduraId_First(
+	public ProceduraForm findByProceduraId_First(
 			long proceduraId,
 			com.liferay.portal.kernel.util.OrderByComparator<ProceduraForm>
 				orderByComparator)
@@ -428,7 +428,7 @@ public interface ProceduraFormPersistence
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching procedura form, or <code>null</code> if a matching procedura form could not be found
 	 */
-	public ProceduraForm fetchByproceduraId_First(
+	public ProceduraForm fetchByProceduraId_First(
 		long proceduraId,
 		com.liferay.portal.kernel.util.OrderByComparator<ProceduraForm>
 			orderByComparator);
@@ -441,7 +441,7 @@ public interface ProceduraFormPersistence
 	 * @return the last matching procedura form
 	 * @throws NoSuchProceduraFormException if a matching procedura form could not be found
 	 */
-	public ProceduraForm findByproceduraId_Last(
+	public ProceduraForm findByProceduraId_Last(
 			long proceduraId,
 			com.liferay.portal.kernel.util.OrderByComparator<ProceduraForm>
 				orderByComparator)
@@ -454,7 +454,7 @@ public interface ProceduraFormPersistence
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching procedura form, or <code>null</code> if a matching procedura form could not be found
 	 */
-	public ProceduraForm fetchByproceduraId_Last(
+	public ProceduraForm fetchByProceduraId_Last(
 		long proceduraId,
 		com.liferay.portal.kernel.util.OrderByComparator<ProceduraForm>
 			orderByComparator);
@@ -468,7 +468,7 @@ public interface ProceduraFormPersistence
 	 * @return the previous, current, and next procedura form
 	 * @throws NoSuchProceduraFormException if a procedura form with the primary key could not be found
 	 */
-	public ProceduraForm[] findByproceduraId_PrevAndNext(
+	public ProceduraForm[] findByProceduraId_PrevAndNext(
 			it.servizidigitali.gestioneprocedure.service.persistence.
 				ProceduraFormPK proceduraFormPK,
 			long proceduraId,
@@ -481,7 +481,7 @@ public interface ProceduraFormPersistence
 	 *
 	 * @param proceduraId the procedura ID
 	 */
-	public void removeByproceduraId(long proceduraId);
+	public void removeByProceduraId(long proceduraId);
 
 	/**
 	 * Returns the number of procedura forms where proceduraId = &#63;.
@@ -489,7 +489,7 @@ public interface ProceduraFormPersistence
 	 * @param proceduraId the procedura ID
 	 * @return the number of matching procedura forms
 	 */
-	public int countByproceduraId(long proceduraId);
+	public int countByProceduraId(long proceduraId);
 
 	/**
 	 * Caches the procedura form in the entity cache if it is enabled.
