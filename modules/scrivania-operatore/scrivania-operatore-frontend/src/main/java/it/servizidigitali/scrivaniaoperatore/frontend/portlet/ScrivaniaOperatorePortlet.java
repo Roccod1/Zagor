@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.portlet.Portlet;
@@ -120,7 +121,7 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		filters.setTipo(queryStato.isBlank() ? null : queryStato);
 
 		List<Task> organizationTasks = getOrganizationTasks(ctx);
-		List<String> processInstanceIds = organizationTasks.stream().map(Task::getProcessInstanceId).collect(Collectors.toList());
+		Set<String> processInstanceIds = organizationTasks.stream().map(Task::getProcessInstanceId).collect(Collectors.toSet());
 
 		filters.setProcessInstanceIds(processInstanceIds);
 

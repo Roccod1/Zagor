@@ -1,7 +1,7 @@
 package it.servizidigitali.scrivaniaoperatore.model;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 public class RichiestaFilters {
 
@@ -13,7 +13,7 @@ public class RichiestaFilters {
 	private Date dataA;
 	private Boolean autenticazione;
 	private String tipo;
-	private List<String> processInstanceIds;
+	private Set<String> processInstanceIds;
 
 	/**
 	 * @return the nomeCognome
@@ -130,15 +130,14 @@ public class RichiestaFilters {
 	/**
 	 * @return the processInstanceIds
 	 */
-	public List<String> getProcessInstanceIds() {
+	public Set<String> getProcessInstanceIds() {
 		return processInstanceIds;
 	}
 
 	/**
 	 * @param processInstanceIds the processInstanceIds to set
 	 */
-	public void setProcessInstanceIds(List<String> processInstanceIds) {
+	public void setProcessInstanceIds(Set<String> processInstanceIds) {
 		this.processInstanceIds = processInstanceIds;
 	}
-
 }
