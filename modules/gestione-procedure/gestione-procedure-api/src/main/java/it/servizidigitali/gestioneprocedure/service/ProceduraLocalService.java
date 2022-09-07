@@ -310,6 +310,10 @@ public interface ProceduraLocalService
 	public int getProcedurasCount();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Procedura> getProcedureByServiziIdsGroupIdAttiva(
+		List<Long> serviziIds, long groupId, Boolean attiva);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public String getStringSelectMultipla(String string) throws JSONException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
