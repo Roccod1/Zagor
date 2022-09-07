@@ -18,6 +18,10 @@ public class ScrivaniaCittadinoPortletKeys
     public static final String LISTA_PAGAMENTI = "listaPagamenti";
     
     public static final String RESOURCE_COMMAND_GET_RICHIESTE = "/getRichiesteUtente";
+    public static final String RESOURCE_COMMAND_GET_COMUNICAZIONI = "/getComunicazioniUtente";
+    public static final String RESOURCE_COMMAND_GET_PAGAMENTI = "/getPagamentiUtente";
+    public static final String RESOURCE_COMMAND_GET_PRENOTAZIONI = "/getPrenotazioniUtente";
+
 
 	public static final int DEFAULT_DELTA = 10;
 }

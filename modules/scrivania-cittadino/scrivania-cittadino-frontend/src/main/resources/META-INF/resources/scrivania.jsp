@@ -1,160 +1,171 @@
-<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_RICHIESTE %>" var="getRichiesteUtenteResourceCommandUrl">
+<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_COMUNICAZIONI %>" var="getComunicazioniUtenteResourceCommandUrl">
 </portlet:resourceURL>
 
-<h3>Comunicazioni</h3>
-
-${getRichiesteUtenteResourceCommandUrl }
-
-<%-- <c:choose> --%>
-	<div id="#<portlet:namespace/>accordionContainer"></div>
-	
-<%-- 	<c:when test="${not empty listaComunicazioni }"> --%>
-<%-- 	</c:when> --%>
-	
-<%-- 	<c:otherwise> --%>
-<!-- 		<div class="alert alert-secondary" role="alert"> -->
-<%-- 			<liferay-ui:message key="nessun-risultato-da-visualizzare"/> --%>
-<!-- 		</div> -->
-<%-- 	</c:otherwise> --%>
-<%-- </c:choose> --%>
-
-<h3>Le mie prenotazioni</h3>
-<c:choose>
-	<c:when test="${not empty listaPrenotazioni}">
-	</c:when>
-	
-	<c:otherwise>
-		<div class="alert alert-secondary" role="alert">
-			<liferay-ui:message key="nessun-risultato-da-visualizzare"/>
-		</div>
-	</c:otherwise>
-</c:choose>
+<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_PRENOTAZIONI %>" var="getPrenotazioniUtenteResourceCommandUrl">
+</portlet:resourceURL>
 
 
+<h3><liferay-ui:message key="comunicazioni"/></h3>
+<div id="<portlet:namespace/>accordionContainerComunicazioni"></div>
+
+<h3><liferay-ui:message key="le-mie-prenotazioni"/></h3>
+<div id="<portlet:namespace/>accordionContainerPrenotazioni"></div>
 
 
-
-
-
-<script id="accordion" type="text/x-jsrender">
+<script id="accordionComunicazioni" type="text/x-jsrender">
 <div id="collapseDivRichieste" class="collapse-div collapse-background-active">
-	{{for comunicazioni}}
-	<div class="collapse-header" id="heading{{>comunicazioneId}}">
-		  <button data-toggle="collapse" data-target="#collapse{{>comunicazioneId}}" aria-expanded="false" aria-controls="collapse{{>comunicazioneId}}">
+	{{props listaComunicazioni}}
+	<div class="collapse-header" id="heading{{>prop.comunicazioneId}}">
+		  <button data-toggle="collapse" data-target="#collapse{{>prop.comunicazioneId}}" aria-expanded="false" aria-controls="collapse{{>prop.comunicazioneId}}">
 		     <div class="button-wrapper">
 		     	 <span class="text-uppercase">
-					{{>titolo}}			   		 
+					{{>prop.titolo}}			   		 
 		     	 </span>
 		    <div class="icon-wrapper">
-		        <span>{{>tipologia.nome}}</span>
+		        <span>{{>prop.tipologia ? prop.tipologia.nome : ""}}</span>
 		    </div>
 		  </button>
 		</div>
 		<div class="collapse-body">
 			<div>
-				{{>dataInvio}}
+				{{>prop.dataInvio ? prop.dataInvio : ""}}
 			</div>
 		
-		  <div id="collapse{{>comunicazioneId}}" class="collapse" role="region" aria-labelledby="heading{{>comunicazioneId}}">
-		  {{if descrizione }}
-		           <p class="mb-3">{{>descrizione}}</p>
+		  <div id="collapse{{>prop.comunicazioneId}}" class="collapse" role="region" aria-labelledby="heading{{>prop.comunicazioneId}}">
+		  {{if prop.descrizione }}
+				<div class="mb-3">
+					{{:prop.descrizione}}
+				</div>
 		  {{/if}}
 		  	
-		     <p><liferay-ui:message key="codice-servizio"/>: {{codiceServizio ? >codiceServizio : "-"}}</p>
-		     <a href="{{uriServizio ? >uriServizio : "#" }}"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio" /></span></a>  
+		     <p><liferay-ui:message key="codice-servizio"/>: {{>prop.codiceServizio ? prop.codiceServizio : "-"}}</p>
+		     <a href="{{>prop.uriServizio ? prop.uriServizio : "#" }}"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio" /></span></a>  
 		  </div>
 		</div>
-	{{/for}}
+	{{/props}}
+</div>
+<div class="mt-5">
+{{if cur > 1}}
+	<button type="button" class="btn btn-primary" onclick="getComunicazioniUtente({{>cur - 1}})">
+		<svg class="icon icon-sm icon-white">
+			<use href="/o/portale-istituzionale-theme/svg/sprite.svg#it-arrow-left"></use>
+		</svg>
+	</button>
+{{/if}}
+{{if hasNext}}
+	<button type="button" class="btn btn-primary" onclick="getComunicazioniUtente({{>cur + 1}})">
+		<svg class="icon icon-sm icon-white">
+			<use href="/o/portale-istituzionale-theme/svg/sprite.svg#it-arrow-right"></use>
+		</svg>
+	</button>
+{{/if}}
 </div>
 </script>
 
+<script id="accordionPrenotazioni" type="text/x-jsrender">
 
+</script>
 
-
-
-
+<script id="alertTemplate" type="text/x-jsrender">
+	<div class="alert alert-{{>tipo}}" role="alert">
+ 		{{>message}}
+ 	</div>
+</script>
 
 <script type="text/javascript">
-	var cur = 0;
-
 // 	on documentReady
 	$(function(){
-		getRichiesteUtente();
+		getComunicazioniUtente(1);
+		getPrenotazioniUtente(1);
 	});
 	
-	function getRichiesteUtente(){
+	var tpl = $.templates(
+		{
+			accordionComunicazioni: "#accordionComunicazioni",
+			accordionPrenotazioni: "#accordionPrenotazioni",
+			alert: "#alertTemplate"
+		}
+	);
+	
+	function getComunicazioniUtente(cur){
 		
 		var params = {};
 		params.cur = cur;
  		params.orderByCol = '';
 		params.orderByType = '';
 		
-		var accordionContainer = $("#<portlet:namespace/>accordionContainer");
-		var url = '${getRichiesteUtenteResourceCommandUrl}';
+		var accordionContainer = "#<portlet:namespace/>accordionContainerComunicazioni";
+		
+		var html = '';
+		
 		$.ajax({
 			method: 'GET',
-			url: url,
-			data: '',
-			async: false,
+			url: '${getComunicazioniUtenteResourceCommandUrl}',
+			data: params,
+			async: true,
 			success: function(result, status, xhr){
 				console.log("result: ", result);
 				console.log("status: ", status);
-				console.log("xhr: ", xhr);				
-				var tpl = $.templates('#accordion');
-				var html = tpl.render({comunicazioni: result});
-				$(accordionContainer).html(html);
+				console.log("xhr: ", xhr);
 				
+				result = JSON.parse(result);
+
+				if(Array.isArray(result.listaComunicazioni) && result.listaComunicazioni.length > 0){
+					html = $.render.accordionComunicazioni(result);
+				}else{
+					html = $.render.alert({tipo: "secondary", message: "<liferay-ui:message key='nessun-risultato-da-visualizzare'/>"});
+				}
 			},
 			error: function(xhr, status, error){
 				console.log("error: ", error);
 				console.log("status: ", status);
 				console.log("xhr: ", xhr);
+				html = $.render.alert({tipo: "secondary", message: "<liferay-ui:message key='nessun-risultato-da-visualizzare'/>"});
+			},
+			complete: function(xhr, status){
+				$(accordionContainer).html(html);
 			}
 		});
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	function getPrenotazioniUtente(cur){
+		
+		var params = {};
+		params.cur = cur;
+ 		params.orderByCol = '';
+		params.orderByType = '';
+		
+		var accordionContainer = "#<portlet:namespace/>accordionContainerPrenotazioni";
+		
+		var html = '';
+		
+		$.ajax({
+			method: 'GET',
+			url: '${getPrenotazioniUtenteResourceCommandUrl}',
+			data: params,
+			async: true,
+			success: function(result, status, xhr){
+				console.log("result: ", result);
+				console.log("status: ", status);
+				console.log("xhr: ", xhr);
+				
+				result = JSON.parse(result);
+
+				if(Array.isArray(result.listaComunicazioni) && result.listaComunicazioni.length > 0){
+					html = $.render.accordionComunicazioni(result);
+				}else{
+					html = $.render.alert({tipo: "secondary", message: "<liferay-ui:message key='nessun-risultato-da-visualizzare'/>"});
+				}
+			},
+			error: function(xhr, status, error){
+				console.log("error: ", error);
+				console.log("status: ", status);
+				console.log("xhr: ", xhr);
+				html = $.render.alert({tipo: "secondary", message: "<liferay-ui:message key='nessun-risultato-da-visualizzare'/>"});
+			},
+			complete: function(xhr, status){
+				$(accordionContainer).html(html);
+			}
+		});
+	}
 </script>

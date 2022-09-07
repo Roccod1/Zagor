@@ -37,17 +37,20 @@ import it.servizidigitali.scrivaniacittadino.frontend.constants.ScrivaniaCittadi
 @Component(immediate = true, 
 		property = { 
 				"javax.portlet.name=" + ScrivaniaCittadinoPortletKeys.SCRIVANIACITTADINO, 
-				"mvc.command.name=" + ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_RICHIESTE
+				"mvc.command.name=" + ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_PRENOTAZIONI
 		}, 
 		service = MVCResourceCommand.class
 )
-public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand {
+public class GetPrenotazioniCittadinoResourceCommand extends BaseMVCResourceCommand {
 
-	private static final Log _log = LogFactoryUtil.getLog(GetRichiesteCittadinoResourceCommand.class);
+	private static final Log _log = LogFactoryUtil.getLog(GetPrenotazioniCittadinoResourceCommand.class);
 
+	@Reference
+	private ComunicazioneLocalService comunicazioneLocalService;
+	
 	@Override
-	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
-
+	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {		              
+//	       List<Comunicazione> listaComunicazioni = new ArrayList<Comunicazione>();
 	       Map<String, Object> responseMap = new HashMap<String, Object>();
 //		   ServiceContext serviceContext = null;
 //		   ThemeDisplay themeDisplay = null;
@@ -57,12 +60,23 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 ////	       int delta = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_DELTA_PARAM);
 //		   String sortName = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 //		   String sortType = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
-//		
+		
 //		   try {        	   
 //				serviceContext = ServiceContextFactory.getInstance(resourceRequest);
 //				themeDisplay = serviceContext.getThemeDisplay();
 //				User loggedUser = themeDisplay.getUser();
+//				ComunicazioneFilters comunicazioneFilters = new ComunicazioneFilters();
+//				comunicazioneFilters.setUserId(loggedUser.getUserId());
 //				
+//				if(Validator.isNotNull(sortName)) {
+//					comunicazioneFilters.setOrderByCol(sortName);
+//					
+//					if(Validator.isNotNull(sortType)) {
+//						comunicazioneFilters.setOrderByType(sortType);
+//					}
+//				}
+//				
+////				int countComunicazioni = comunicazioneLocalService.countComunicazioni(comunicazioneFilters);
 //				listaComunicazioni = comunicazioneLocalService.searchComunicazioni(comunicazioneFilters, cur, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
 //
 //				List<Comunicazione> paginaSuccessiva = comunicazioneLocalService.searchComunicazioni(comunicazioneFilters, cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
@@ -74,9 +88,10 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 //			   _log.error("doServeResource() :: "+e.getMessage(), e);
 //			   throw new Exception(e);
 //		   }
-		   responseMap.put("listaRichieste", new ArrayList<Object>());
+		   responseMap.put("listaPrenotazioni", new ArrayList<Object>());
 		   responseMap.put("hasNext", false);
 		   responseMap.put("cur", 1);
+		   
 		   String jsonObject = JSONFactoryUtil.looseSerializeDeep(responseMap);
 		   resourceResponse.getWriter().write(jsonObject);
 	}

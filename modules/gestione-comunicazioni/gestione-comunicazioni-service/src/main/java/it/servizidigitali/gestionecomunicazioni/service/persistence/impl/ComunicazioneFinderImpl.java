@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -82,7 +83,7 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 		if (countQuery) {
 			sql = "select count(*) ";
 		} else {
-			sql = "select c.comunicazioneId, c.dataInvio, c.titolo, c.tipologiaComunicazioneId, c.destinatarioOrganizationId ";
+			sql = "select c.comunicazioneId, c.dataInvio, c.titolo, c.tipologiaComunicazioneId, c.destinatarioOrganizationId, c.descrizione, c.codiceServizio ";
 		}
 		
 		sql += "from comunicazione c left join lettura_comunicazione lc on c.comunicazioneId = lc.comunicazioneId where 1 = 1 ";
@@ -108,7 +109,9 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 		if (filters.getDataInvioA() != null) {
 			sql += "and c.dataInvio <= ? ";
 		}
-		
+		if(Validator.isNotNull(filters.getOrderByCol())) {
+			sql += "order by ? ? ";
+		}
 		if (!countQuery) {
 			sql += "limit ?, ?";
 		}
@@ -134,6 +137,10 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 		}
 		if (filters.getDataInvioA() != null) {
 			queryPos.add(filters.getDataInvioA());
+		}
+		if(Validator.isNotNull(filters.getOrderByCol())) {
+			queryPos.add(filters.getOrderByCol());
+			queryPos.add(Validator.isNotNull(filters.getOrderByType()) ? filters.getOrderByType() : "asc");
 		}
 		if (!countQuery) {
 			queryPos.add(start);
@@ -184,6 +191,8 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 		model.setTitolo(x[2].toString());
 		model.setTipologiaComunicazioneId(Long.valueOf(x[3].toString()));
 		model.setDestinatarioOrganizationId(Long.valueOf(x[4].toString()));
+		model.setDescrizione(Validator.isNotNull(x[5]) ? x[5].toString() : null);
+		model.setCodiceServizio(Validator.isNotNull(x[6]) ? x[6].toString() : null);
 		return model;
 	}
 }
