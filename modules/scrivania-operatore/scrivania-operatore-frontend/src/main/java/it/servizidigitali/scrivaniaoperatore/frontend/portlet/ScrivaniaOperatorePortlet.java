@@ -3,7 +3,11 @@ package it.servizidigitali.scrivaniaoperatore.frontend.portlet;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.service.UserLocalService;
@@ -23,6 +27,9 @@ import javax.portlet.RenderResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.camunda.integration.client.CamundaClient;
+import it.servizidigitali.camunda.integration.client.exception.CamundaClientException;
+import it.servizidigitali.camunda.integration.client.model.Task;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
@@ -52,15 +59,26 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 
 	private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
+	private static final Log log = LogFactoryUtil.getLog(ScrivaniaOperatorePortlet.class.getName());
+
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
+
 	@Reference
 	private UserLocalService userLocalService;
+
+	@Reference
+	private OrganizationLocalService organizationLocalService;
+
 	@Reference
 	private MapUtil mapUtil;
-	
+
+	@Reference
+	private CamundaClient camundaClient;
+
 	@Override
 	public void render(RenderRequest request, RenderResponse response) throws IOException, PortletException {
+
 		String queryTab = ParamUtil.getString(request, "queryTab", ScrivaniaOperatorePortletKeys.TAB_ARRIVO);
 		int cur = ParamUtil.getInteger(request, SearchContainer.DEFAULT_CUR_PARAM, 1);
 		int delta = ParamUtil.getInteger(request, SearchContainer.DEFAULT_DELTA_PARAM, 10);
@@ -76,6 +94,7 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		ServiceContext ctx;
 		try {
 			ctx = ServiceContextFactory.getInstance(request);
+			callCamunda(ctx);
 		}
 		catch (PortalException e) {
 			throw new RuntimeException(e);
@@ -99,12 +118,9 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		}
 		filters.setAutenticazione(mapAutenticazione(queryAut));
 		filters.setTipo(queryStato.isBlank() ? null : queryStato);
-		
+
 		int count = richiestaLocalService.count(filters);
-		List<RichiestaDTO> elems = richiestaLocalService.search(filters, start, end)
-				.stream()
-				.map(x -> mapUtil.mapRichiesta(ctx.getCompanyId(), x))
-				.collect(Collectors.toList());
+		List<RichiestaDTO> elems = richiestaLocalService.search(filters, start, end).stream().map(x -> mapUtil.mapRichiesta(ctx.getCompanyId(), x)).collect(Collectors.toList());
 
 		request.setAttribute("totale", count);
 		request.setAttribute("lista", elems);
@@ -120,6 +136,22 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		request.setAttribute("queryStato", queryStato);
 
 		super.render(request, response);
+	}
+
+	private void callCamunda(ServiceContext ctx) {
+		try {
+			Organization currentOrganization = organizationLocalService.getOrganization(ctx.getScopeGroup().getOrganizationId());
+			String[] organizationIdsArray = currentOrganization.getSuborganizations().stream().map(Organization::getOrganizationId).map(String::valueOf).toArray(String[]::new);
+
+			List<Task> searchTasks = camundaClient.searchTasks(String.valueOf(ctx.getScopeGroup().getOrganizationId()), organizationIdsArray, null, false);
+			log.info("searchTasks: " + searchTasks);
+		}
+		catch (PortalException e1) {
+			log.error("render :: " + e1.getMessage(), e1);
+		}
+		catch (CamundaClientException e1) {
+			log.error("render :: " + e1.getMessage(), e1);
+		}
 	}
 
 	private Boolean mapAutenticazione(int queryAut) {
