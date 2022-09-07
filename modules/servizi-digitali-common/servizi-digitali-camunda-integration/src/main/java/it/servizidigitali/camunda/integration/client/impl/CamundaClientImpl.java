@@ -296,7 +296,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public long countTasksByCandidateGroupsAndCodiceServizio(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned) throws CamundaClientException {
+	public long countTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
@@ -314,7 +314,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public long countTasksByCandidateGroupsAndCodiceServizio(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstanceDto> variables)
+	public long countTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstanceDto> variables)
 			throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
@@ -334,7 +334,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<TaskDto> getTasksByCandidateGroupsAndCodiceServizio(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned) throws CamundaClientException {
+	public List<TaskDto> searchTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
@@ -351,7 +351,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<TaskDto> getTasksByCandidateGroupsAndCodiceServizio(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstanceDto> variables,
+	public List<TaskDto> searchTasks(String tenantId, String[] candidateGroups, String codiceServizio, boolean unassigned, List<VariableInstanceDto> variables,
 			Integer firstResult, Integer maxResults, String sortName, String sortOrder, String sortType) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
@@ -369,7 +369,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<TaskDto> getTasksByAssigneeAndCodiceServizio(String tenantId, String assignee, String codiceServizio) throws CamundaClientException {
+	public List<TaskDto> searchTasks(String tenantId, String assignee, String codiceServizio) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
@@ -386,7 +386,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<TaskDto> getTasksByAssigneeAndCodiceServizio(String tenantId, String assignee, String codiceServizio, List<VariableInstanceDto> variables, Integer firstResult, Integer maxResults,
+	public List<TaskDto> searchTasks(String tenantId, String assignee, String codiceServizio, List<VariableInstanceDto> variables, Integer firstResult, Integer maxResults,
 			String sortName, String sortOrder, String sortType) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
@@ -404,7 +404,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public long countTasksByAssigneeAndCodiceServizio(String tenantId, String assignee, String codiceServizio) throws CamundaClientException {
+	public long countTasks(String tenantId, String assignee, String codiceServizio) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
@@ -422,7 +422,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public long countTasksByAssigneeAndCodiceServizio(String tenantId, String assignee, String codiceServizio, List<VariableInstanceDto> variables) throws CamundaClientException {
+	public long countTasks(String tenantId, String assignee, String codiceServizio, List<VariableInstanceDto> variables) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
@@ -519,14 +519,14 @@ public class CamundaClientImpl implements CamundaClient {
 
 		try {
 
-			ProcessInstanceQueryDto q = new ProcessInstanceQueryDto();
-			q.setBusinessKey(String.valueOf(businessKey));
+			ProcessInstanceQueryDto processInstanceQueryDto = new ProcessInstanceQueryDto();
+			processInstanceQueryDto.setBusinessKey(String.valueOf(businessKey));
 
 			if (Validator.isNotNull(tenantId)) {
-				q.setTenantIdIn(Arrays.asList(tenantId));
+				processInstanceQueryDto.setTenantIdIn(Arrays.asList(tenantId));
 			}
 
-			List<ProcessInstanceDto> res = api.queryProcessInstances(null, null, q);
+			List<ProcessInstanceDto> res = api.queryProcessInstances(null, null, processInstanceQueryDto);
 
 			return res.toArray(new ProcessInstanceDto[0]);
 
@@ -560,7 +560,7 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public long countTasksByCodiceIpaComuneAndCodiceServizio(String tenantId, String codiceIpa, String codiceServizio, boolean unassigned) throws CamundaClientException {
+	public long countTasks(String tenantId, String codiceIpa, String codiceServizio, boolean unassigned) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {

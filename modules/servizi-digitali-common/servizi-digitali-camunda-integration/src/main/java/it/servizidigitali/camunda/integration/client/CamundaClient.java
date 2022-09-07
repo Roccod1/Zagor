@@ -71,7 +71,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	long countTasksByCandidateGroupsAndCodiceServizio(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned) throws CamundaClientException;
+	long countTasks(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned) throws CamundaClientException;
 
 	/**
 	 *
@@ -83,8 +83,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	long countTasksByCandidateGroupsAndCodiceServizio(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned, List<VariableInstanceDto> variables)
-			throws CamundaClientException;
+	long countTasks(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned, List<VariableInstanceDto> variables) throws CamundaClientException;
 
 	/**
 	 *
@@ -95,7 +94,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	List<TaskDto> getTasksByCandidateGroupsAndCodiceServizio(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned) throws CamundaClientException;
+	List<TaskDto> searchTasks(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned) throws CamundaClientException;
 
 	/**
 	 *
@@ -112,34 +111,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	List<TaskDto> getTasksByCandidateGroupsAndCodiceServizio(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned, List<VariableInstanceDto> variables,
-			Integer firstResult, Integer maxResults, String sortName, String sortOrder, String sortType) throws CamundaClientException;
-
-	/**
-	 *
-	 * @param tenantId
-	 * @param assignee
-	 * @param codiceServizio
-	 * @return
-	 * @throws CamundaClientException
-	 */
-	List<TaskDto> getTasksByAssigneeAndCodiceServizio(String tenantId, String assignee, String codiceServizio) throws CamundaClientException;
-
-	/**
-	 *
-	 * @param tenantId
-	 * @param assignee
-	 * @param codiceServizio
-	 * @param variables
-	 * @param firstResult
-	 * @param maxResults
-	 * @param sortName
-	 * @param sortOrder
-	 * @param sortType
-	 * @return
-	 * @throws CamundaClientException
-	 */
-	List<TaskDto> getTasksByAssigneeAndCodiceServizio(String tenantId, String assignee, String codiceServizio, List<VariableInstanceDto> variables, Integer firstResult, Integer maxResults,
+	List<TaskDto> searchTasks(String tenantId, String candidateGroups[], String codiceServizio, boolean unassigned, List<VariableInstanceDto> variables, Integer firstResult, Integer maxResults,
 			String sortName, String sortOrder, String sortType) throws CamundaClientException;
 
 	/**
@@ -150,7 +122,34 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	long countTasksByAssigneeAndCodiceServizio(String tenantId, String assignee, String codiceServizio) throws CamundaClientException;
+	List<TaskDto> searchTasks(String tenantId, String assignee, String codiceServizio) throws CamundaClientException;
+
+	/**
+	 *
+	 * @param tenantId
+	 * @param assignee
+	 * @param codiceServizio
+	 * @param variables
+	 * @param firstResult
+	 * @param maxResults
+	 * @param sortName
+	 * @param sortOrder
+	 * @param sortType
+	 * @return
+	 * @throws CamundaClientException
+	 */
+	List<TaskDto> searchTasks(String tenantId, String assignee, String codiceServizio, List<VariableInstanceDto> variables, Integer firstResult, Integer maxResults, String sortName, String sortOrder,
+			String sortType) throws CamundaClientException;
+
+	/**
+	 *
+	 * @param tenantId
+	 * @param assignee
+	 * @param codiceServizio
+	 * @return
+	 * @throws CamundaClientException
+	 */
+	long countTasks(String tenantId, String assignee, String codiceServizio) throws CamundaClientException;
 
 	/**
 	 *
@@ -161,7 +160,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	long countTasksByAssigneeAndCodiceServizio(String tenantId, String assignee, String codiceServizio, List<VariableInstanceDto> variables) throws CamundaClientException;
+	long countTasks(String tenantId, String assignee, String codiceServizio, List<VariableInstanceDto> variables) throws CamundaClientException;
 
 	/**
 	 *
@@ -220,7 +219,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	long countTasksByCodiceIpaComuneAndCodiceServizio(String tenantId, String codiceIpa, String codiceServizio, boolean unassigned) throws CamundaClientException;
+	long countTasks(String tenantId, String codiceIpa, String codiceServizio, boolean unassigned) throws CamundaClientException;
 
 	/**
 	 *
