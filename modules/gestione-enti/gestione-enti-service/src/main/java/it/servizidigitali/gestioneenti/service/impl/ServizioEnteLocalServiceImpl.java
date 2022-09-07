@@ -172,20 +172,26 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 
 		return servizioEntePersistence.findWithDynamicQuery(servizioEnteDynamicQuery);
 	}
-	
-	public List<Long> getListaServiziByOrganizationAttivo(long organizationId, boolean attivo) throws Exception{
-		
+
+	@Override
+	public List<Long> getListaServiziByOrganizationAttivo(long organizationId, boolean attivo) throws Exception {
+
 		ClassLoader classLoader = getClassLoader();
 		DynamicQuery servizioEnteDynamicQuery = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, classLoader);
 
 		servizioEnteDynamicQuery.add(RestrictionsFactoryUtil.eq("attivo", attivo));
-		
-		if(organizationId > 0) {
+
+		if (organizationId > 0) {
 			servizioEnteDynamicQuery.add(RestrictionsFactoryUtil.eq("primaryKey.organizationId", organizationId));
 		}
-		//		imposto projection per ottenere solo gli id delle entity
+		// imposto projection per ottenere solo gli id delle entity
 		servizioEnteDynamicQuery.setProjection(ProjectionFactoryUtil.property("primaryKey.servizioId"));
-		
+
 		return servizioEntePersistence.findWithDynamicQuery(servizioEnteDynamicQuery);
 	}
+
+	public List<ServizioEnte> getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(long organizationId, List<Long> subOrganizationIds, Boolean attivo, long groupId, long companyId) {
+		return servizioEnteFinder.findServizioEnteByFilters(organizationId, subOrganizationIds, attivo, groupId, companyId);
+	}
+
 }
