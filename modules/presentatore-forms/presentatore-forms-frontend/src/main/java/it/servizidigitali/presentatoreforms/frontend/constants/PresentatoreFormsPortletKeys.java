@@ -14,10 +14,12 @@ public class PresentatoreFormsPortletKeys {
 	public static final String SCEGLI_ALLEGATI_RENDER_COMMAND = "/scegliAllegati";
 	public static final String SUBMIT_FORM_RESOURCE_COMMAND = "/submitForm";
 	public static final String UPLOAD_ALLEGATO_RESOURCE_COMMAND = "/uploadFile";
+	public static final String SALVA_DATI_FORM_ACTION_COMMAND = "/salvaDatiForm";
 
 	
 	//JSP
 	public static final String JSP_SCEGLI_ALLEGATI = "/scegliAllegati.jsp";
+	public static final String SELECT_COMPONENTI_NUCLEO_FAMILIARE ="selectComponentiNucleoFamiliare";
 
 	// JSON
 	public static final String STATUS = "status";

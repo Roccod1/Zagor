@@ -1,6 +1,18 @@
 <%@ include file="./init.jsp" %>
 
 <div class="row-fluid">
+	<div class="page-header">
+		<h2 class="noMargin">${titoloPortletServizio}<c:if test="${not empty denominazioneComuneServizio}"> - ${denominazioneComuneServizio}</c:if></h2>
+	</div>
+	<%-- <c:if test="${not empty concorsoAttivo}">
+		<div class="row-fluid">
+			<div class="span12 text-right">
+				<spring:message code="label.concorso.validita" />:&nbsp;
+				<spring:message code="label.concorso.validita.da" />&nbsp;<fmt:formatDate value="${concorsoAttivo.dataApertura}" pattern="dd/MM/yyyy HH:mm"/>&nbsp;
+				<spring:message code="label.concorso.validita.a" />&nbsp;<fmt:formatDate value="${concorsoAttivo.dataChiusura}" pattern="dd/MM/yyyy HH:mm"/>
+			</div>
+		</div>
+	</c:if> --%>
 	<div class="span12 formpresenter-portlet">
 		<div class="alpaca-wizard">
 			<div class="alpaca-wizard-nav">
@@ -12,7 +24,7 @@
 		                               <div class="title"><liferay-ui:message key="label.step.primoStep"/></div>
 		                               <div class="description"><liferay-ui:message key="label.selezionaFamiliare"/></div>
 		                           </div>
-		                           <div class="chevron"></div>
+		                           <div class="chevron"></div> 
 		                       </li>
 		                       <li  data-alpaca-wizard-step-index="1" class="disabled">
 		                           <div class="holder">
@@ -38,15 +50,18 @@
 				<aui:container>			
 					<aui:row cssClass="justify-content-center">	
 						<aui:col md="6">						
-							<aui:select name="<%=PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE %>" cssClass="ml-2" inlineLabel="left" showEmptyOption="true" label="Seleziona il componente del nucleo familiare:">
+							<aui:select name="<%=PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE %>" cssClass="ml-2" inlineLabel="left" showEmptyOption="true" label="${filtroComponentiFamiliari eq 'FIGLI' ? 'label.componenteNucleoFamiliare.figli.seleziona' : 'label.componenteNucleoFamiliare.seleziona'}">
 								<c:forEach items="${componentiNucleoFamiliare}" var="componenteNucleoFamiliare">
 									<aui:option value="${componenteNucleoFamiliare.codiceFiscale}" label="${componenteNucleoFamiliare.nome} ${componenteNucleoFamiliare.cognome}"/>
 								</c:forEach>								
-							</aui:select>						
+							</aui:select>					
 						</aui:col>					
-					</aui:row>			
+					</aui:row>	
 				</aui:container>			
-			</aui:fieldset>		
+			</aui:fieldset>
+			
+			<aui:button cssClass="pull-right" type="submit" value="button.componenteNucleoFamiliare.avanti" />
+			
 		</aui:form>
 	</div>
 </div>
