@@ -97,6 +97,10 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 			dq.add(RestrictionsFactoryUtil.eq("stato", filters.getTipo()));
 		}
 
+		if (filters.getProcessInstanceIds() != null) {
+			dq.add(RestrictionsFactoryUtil.in("processInstanceId", filters.getProcessInstanceIds()));
+		}
+
 		return dq;
 	}
 

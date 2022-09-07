@@ -94,7 +94,7 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		ServiceContext ctx;
 		try {
 			ctx = ServiceContextFactory.getInstance(request);
-			callCamunda(ctx);
+
 		}
 		catch (PortalException e) {
 			throw new RuntimeException(e);
@@ -119,6 +119,11 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		filters.setAutenticazione(mapAutenticazione(queryAut));
 		filters.setTipo(queryStato.isBlank() ? null : queryStato);
 
+		List<Task> organizationTasks = getOrganizationTasks(ctx);
+		List<String> processInstanceIds = organizationTasks.stream().map(Task::getProcessInstanceId).collect(Collectors.toList());
+
+		filters.setProcessInstanceIds(processInstanceIds);
+
 		int count = richiestaLocalService.count(filters);
 		List<RichiestaDTO> elems = richiestaLocalService.search(filters, start, end).stream().map(x -> mapUtil.mapRichiesta(ctx.getCompanyId(), x)).collect(Collectors.toList());
 
@@ -138,13 +143,13 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		super.render(request, response);
 	}
 
-	private void callCamunda(ServiceContext ctx) {
+	private List<Task> getOrganizationTasks(ServiceContext ctx) {
 		try {
 			Organization currentOrganization = organizationLocalService.getOrganization(ctx.getScopeGroup().getOrganizationId());
 			String[] organizationIdsArray = currentOrganization.getSuborganizations().stream().map(Organization::getOrganizationId).map(String::valueOf).toArray(String[]::new);
 
 			List<Task> searchTasks = camundaClient.searchTasks(String.valueOf(ctx.getScopeGroup().getOrganizationId()), organizationIdsArray, null, false);
-			log.info("searchTasks: " + searchTasks);
+			return searchTasks;
 		}
 		catch (PortalException e1) {
 			log.error("render :: " + e1.getMessage(), e1);
@@ -152,6 +157,7 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		catch (CamundaClientException e1) {
 			log.error("render :: " + e1.getMessage(), e1);
 		}
+		return null;
 	}
 
 	private Boolean mapAutenticazione(int queryAut) {
