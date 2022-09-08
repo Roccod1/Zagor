@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.portlet.Portlet;
@@ -24,6 +26,7 @@ import javax.portlet.RenderResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.camunda.integration.client.model.Task;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
@@ -111,18 +114,32 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		filters.setTipo(queryStato.isBlank() ? null : queryStato);
 
 		// TODO se tab In Arrivo
-		filters.setProcedureIds(scrivaniaOperatoreFrontendService.getProcedureIds(ctx));
+		Map<String, Task> tasksMap = scrivaniaOperatoreFrontendService.getOrganizationTasks(ctx);
+		Set<String> processInstanceIds = scrivaniaOperatoreFrontendService.getProcessInstanceIds(tasksMap);
+		filters.setProcessInstanceIds(processInstanceIds);
 
 		// TODO se tab In Carico
-		// filters.setProcessInstanceIds(scrivaniaOperatoreFrontendService.getUserProcessInstanceIds(ctx));
+		// Map<String, Task> tasksMap = scrivaniaOperatoreFrontendService.getUserTasks(ctx);
+		// Set<String> processInstanceIds =
+		// scrivaniaOperatoreFrontendService.getProcessInstanceIds(tasksMap);
+		// filters.setProcessInstanceIds(processInstanceIds);
 
-		// TODO se tab In itinere/chiusi --> da verificare se eliminare
+		// TODO se tab In itinere/chiusi
+		// filters.setProcedureIds(scrivaniaOperatoreFrontendService.getProcedureIds(ctx));
 
 		// TODO lista servizi per cui filtrare
 		// scrivaniaOperatoreFrontendService.getServiziEnte(ctx);
 
 		int count = richiestaLocalService.count(filters);
 		List<RichiestaDTO> elems = richiestaLocalService.search(filters, start, end).stream().map(x -> mapUtil.mapRichiesta(ctx.getCompanyId(), x)).collect(Collectors.toList());
+		if (tasksMap != null) {
+			for (RichiestaDTO richiestaDTO : elems) {
+				if (richiestaDTO.getProcessInstanceId() != null && tasksMap.containsKey(richiestaDTO.getProcessInstanceId())) {
+					Task task = tasksMap.get(richiestaDTO.getProcessInstanceId());
+					richiestaDTO.setTaskId(task.getId());
+				}
+			}
+		}
 
 		request.setAttribute("totale", count);
 		request.setAttribute("lista", elems);

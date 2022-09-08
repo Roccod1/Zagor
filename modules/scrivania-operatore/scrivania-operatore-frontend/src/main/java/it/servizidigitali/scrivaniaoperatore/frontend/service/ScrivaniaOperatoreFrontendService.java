@@ -8,7 +8,9 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -84,15 +86,18 @@ public class ScrivaniaOperatoreFrontendService {
 	 * @param serviceContext
 	 * @return
 	 */
-	public Set<String> getUserProcessInstanceIds(ServiceContext serviceContext) {
+	public Map<String, Task> getUserTasks(ServiceContext serviceContext) {
 		try {
 			long userId = serviceContext.getUserId();
 			User currentUser = userLocalService.getUser(userId);
 
 			List<Task> searchTasks = camundaClient.searchTasks(String.valueOf(serviceContext.getScopeGroup().getOrganizationId()), currentUser.getScreenName().toUpperCase(), null);
+			Map<String, Task> map = new HashMap<>();
+			for (Task task : searchTasks) {
+				map.put(task.getProcessInstanceId(), task);
+			}
 
-			Set<String> processInstanceIds = searchTasks.stream().map(Task::getProcessInstanceId).collect(Collectors.toSet());
-			return processInstanceIds;
+			return map;
 		}
 		catch (PortalException e) {
 			log.error("getProcessInstanceIds :: " + e.getMessage(), e);
@@ -108,7 +113,7 @@ public class ScrivaniaOperatoreFrontendService {
 	 * @param serviceContext
 	 * @return
 	 */
-	public Set<String> getOrganizationProcessInstanceIds(ServiceContext serviceContext) {
+	public Map<String, Task> getOrganizationTasks(ServiceContext serviceContext) {
 		try {
 			List<Long> organizationIds = getUserSubOrganizationIds(serviceContext);
 
@@ -116,8 +121,12 @@ public class ScrivaniaOperatoreFrontendService {
 
 			List<Task> searchTasks = camundaClient.searchTasks(String.valueOf(serviceContext.getScopeGroup().getOrganizationId()), organizationIdsStrings, null, false);
 
-			Set<String> processInstanceIds = searchTasks.stream().map(Task::getProcessInstanceId).collect(Collectors.toSet());
-			return processInstanceIds;
+			Map<String, Task> map = new HashMap<>();
+			for (Task task : searchTasks) {
+				map.put(task.getProcessInstanceId(), task);
+			}
+
+			return map;
 		}
 		catch (PortalException e1) {
 			log.error("getProcessInstanceIds :: " + e1.getMessage(), e1);
@@ -126,6 +135,34 @@ public class ScrivaniaOperatoreFrontendService {
 			log.error("getProcessInstanceIds :: " + e1.getMessage(), e1);
 		}
 		return null;
+	}
+
+	/**
+	 *
+	 * @param userId
+	 * @param taskId
+	 */
+	public void prendiTaskInCarico(String userId, String taskId) {
+		camundaClient.claim(userId, taskId);
+	}
+
+	/**
+	 *
+	 * @param userId
+	 * @param taskId
+	 */
+	public void rilasciaTask(String userId, String taskId) {
+		camundaClient.unclaim(taskId);
+	}
+
+	/**
+	 *
+	 * @param tasksMap
+	 * @return
+	 */
+	public Set<String> getProcessInstanceIds(Map<String, Task> tasksMap) {
+		Set<String> processInstanceIds = tasksMap.values().stream().map(Task::getProcessInstanceId).collect(Collectors.toSet());
+		return processInstanceIds;
 	}
 
 	/**

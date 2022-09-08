@@ -123,7 +123,7 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 
 				String tenantId = String.valueOf(organizationId);
 				long businessKey = richiesta.getRichiestaId();
-				boolean existProcessByBusinessKey = camundaClient.existProcessByBusinessKey(tenantId, businessKey);
+				boolean existProcessByBusinessKey = camundaClient.existProcessByBusinessKey(tenantId, String.valueOf(businessKey));
 
 				if (existProcessByBusinessKey) {
 					_log.debug("Esiste già una istanza di processo attiva per organizationId " + organizationId + " e businessKey " + businessKey);
