@@ -200,13 +200,13 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<Task> getTasksByBusinessKey(String tenantId, long businessKey, boolean includeCandidateGroups) throws CamundaClientException {
+	public List<Task> getTasksByBusinessKey(String tenantId, String businessKey, boolean includeCandidateGroups) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
 
 			TaskQueryDto q = new TaskQueryDto();
-			q.setProcessInstanceBusinessKey(String.valueOf(businessKey));
+			q.setProcessInstanceBusinessKey(businessKey);
 			q.setWithCandidateGroups(includeCandidateGroups);
 
 			if (Validator.isNotNull(tenantId)) {
@@ -223,12 +223,12 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public boolean existProcessByBusinessKey(String tenantId, long businessKey) {
+	public boolean existProcessByBusinessKey(String tenantId, String businessKey) {
 		ProcessInstanceApi api = new ProcessInstanceApi(getApiClient());
 
 		try {
 			ProcessInstanceQueryDto q = new ProcessInstanceQueryDto();
-			q.setBusinessKey(String.valueOf(businessKey));
+			q.setBusinessKey(businessKey);
 
 			if (Validator.isNotNull(tenantId)) {
 				q.setTenantIdIn(Arrays.asList(tenantId));
@@ -590,13 +590,13 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<ProcessInstance> getProcessInstanceByBusinessKey(String tenantId, long businessKey) throws CamundaClientException {
+	public List<ProcessInstance> getProcessInstanceByBusinessKey(String tenantId, String businessKey) throws CamundaClientException {
 		ProcessInstanceApi api = new ProcessInstanceApi(getApiClient());
 
 		try {
 
 			ProcessInstanceQueryDto processInstanceQueryDto = new ProcessInstanceQueryDto();
-			processInstanceQueryDto.setBusinessKey(String.valueOf(businessKey));
+			processInstanceQueryDto.setBusinessKey(businessKey);
 
 			if (Validator.isNotNull(tenantId)) {
 				processInstanceQueryDto.setTenantIdIn(Arrays.asList(tenantId));

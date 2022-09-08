@@ -41,7 +41,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	List<Task> getTasksByBusinessKey(String tenantId, long businessKey, boolean includeCandidateGroups) throws CamundaClientException;
+	List<Task> getTasksByBusinessKey(String tenantId, String businessKey, boolean includeCandidateGroups) throws CamundaClientException;
 
 	/**
 	 *
@@ -49,7 +49,7 @@ public interface CamundaClient {
 	 * @param businessKey
 	 * @return
 	 */
-	boolean existProcessByBusinessKey(String tenantId, long businessKey);
+	boolean existProcessByBusinessKey(String tenantId, String businessKey);
 
 	/**
 	 *
@@ -199,7 +199,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	List<ProcessInstance> getProcessInstanceByBusinessKey(String tenantId, long businessKey) throws CamundaClientException;
+	List<ProcessInstance> getProcessInstanceByBusinessKey(String tenantId, String businessKey) throws CamundaClientException;
 
 	/**
 	 *
