@@ -83,7 +83,6 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		ServiceContext ctx;
 		try {
 			ctx = ServiceContextFactory.getInstance(request);
-
 		}
 		catch (PortalException e) {
 			throw new RuntimeException(e);
@@ -111,7 +110,16 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		filters.setAutenticazione(mapAutenticazione(queryAut));
 		filters.setTipo(queryStato.isBlank() ? null : queryStato);
 
+		// TODO se tab In Arrivo
 		filters.setProcedureIds(scrivaniaOperatoreFrontendService.getProcedureIds(ctx));
+
+		// TODO se tab In Carico
+		// filters.setProcessInstanceIds(scrivaniaOperatoreFrontendService.getUserProcessInstanceIds(ctx));
+
+		// TODO se tab In itinere/chiusi --> da verificare se eliminare
+
+		// TODO lista servizi per cui filtrare
+		// scrivaniaOperatoreFrontendService.getServiziEnte(ctx);
 
 		int count = richiestaLocalService.count(filters);
 		List<RichiestaDTO> elems = richiestaLocalService.search(filters, start, end).stream().map(x -> mapUtil.mapRichiesta(ctx.getCompanyId(), x)).collect(Collectors.toList());

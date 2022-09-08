@@ -84,7 +84,31 @@ public class ScrivaniaOperatoreFrontendService {
 	 * @param serviceContext
 	 * @return
 	 */
-	public Set<String> getProcessInstanceIds(ServiceContext serviceContext) {
+	public Set<String> getUserProcessInstanceIds(ServiceContext serviceContext) {
+		try {
+			long userId = serviceContext.getUserId();
+			User currentUser = userLocalService.getUser(userId);
+
+			List<Task> searchTasks = camundaClient.searchTasks(String.valueOf(serviceContext.getScopeGroup().getOrganizationId()), currentUser.getScreenName().toUpperCase(), null);
+
+			Set<String> processInstanceIds = searchTasks.stream().map(Task::getProcessInstanceId).collect(Collectors.toSet());
+			return processInstanceIds;
+		}
+		catch (PortalException e) {
+			log.error("getProcessInstanceIds :: " + e.getMessage(), e);
+		}
+		catch (CamundaClientException e) {
+			log.error("getProcessInstanceIds :: " + e.getMessage(), e);
+		}
+		return null;
+	}
+
+	/**
+	 *
+	 * @param serviceContext
+	 * @return
+	 */
+	public Set<String> getOrganizationProcessInstanceIds(ServiceContext serviceContext) {
 		try {
 			List<Long> organizationIds = getUserSubOrganizationIds(serviceContext);
 
