@@ -43,6 +43,7 @@
 		<column name="tokenVisualizzazione" type="String" />
 		<column name="chiaveAssociazioneBackoffice" type="String" />
 		<column name="delegaId" type="Long" />
+		<column name="processInstanceId" type="String" />
 		<column name="proceduraId" type="long" />
 		
 		<!-- Finder methods -->
@@ -72,6 +73,10 @@
 		
 		<finder name="ProceduraId" return-type="Collection">
 			<finder-column name="proceduraId" />
+		</finder>
+
+		<finder name="ProcessInstanceId" return-type="Richiesta">
+			<finder-column name="processInstanceId" />
 		</finder>
 	</entity>
 

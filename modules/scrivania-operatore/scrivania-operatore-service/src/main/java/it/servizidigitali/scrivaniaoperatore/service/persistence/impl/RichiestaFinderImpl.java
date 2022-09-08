@@ -25,6 +25,7 @@ import it.servizidigitali.scrivaniaoperatore.service.persistence.RichiestaFinder
 
 /**
  * @author filierim
+ * @author rizzitellim
  *
  */
 
@@ -34,6 +35,7 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 	@Reference
 	private UserLocalService userLocalService;
 
+	@Override
 	public List<Richiesta> findByFilters(RichiestaFilters filters, int start, int end) {
 		DynamicQuery dq = createQuery(filters);
 		return richiestaPersistence.findWithDynamicQuery(dq, start, end);
@@ -47,7 +49,8 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 
 	private DynamicQuery createQuery(RichiestaFilters filters) {
 		DynamicQuery dq = DynamicQueryFactoryUtil.forClass(Richiesta.class, getClass().getClassLoader());
-
+		dq.add(RestrictionsFactoryUtil.eq("groupId", filters.getGroupId()));
+		dq.add(RestrictionsFactoryUtil.eq("companyId", filters.getCompanyId()));
 		if (filters.getNomeCognome() != null) {
 			String pattern = StringPool.PERCENT + filters.getNomeCognome() + StringPool.PERCENT;
 
@@ -93,6 +96,14 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 
 		if (filters.getTipo() != null) {
 			dq.add(RestrictionsFactoryUtil.eq("stato", filters.getTipo()));
+		}
+
+		if (filters.getProcessInstanceIds() != null) {
+			dq.add(RestrictionsFactoryUtil.in("processInstanceId", filters.getProcessInstanceIds()));
+		}
+
+		if (filters.getProcedureIds() != null) {
+			dq.add(RestrictionsFactoryUtil.in("proceduraId", filters.getProcedureIds()));
 		}
 
 		return dq;

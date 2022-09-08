@@ -434,6 +434,21 @@ public interface RichiestaModel
 	public void setDelegaId(Long delegaId);
 
 	/**
+	 * Returns the process instance ID of this richiesta.
+	 *
+	 * @return the process instance ID of this richiesta
+	 */
+	@AutoEscape
+	public String getProcessInstanceId();
+
+	/**
+	 * Sets the process instance ID of this richiesta.
+	 *
+	 * @param processInstanceId the process instance ID of this richiesta
+	 */
+	public void setProcessInstanceId(String processInstanceId);
+
+	/**
 	 * Returns the procedura ID of this richiesta.
 	 *
 	 * @return the procedura ID of this richiesta

@@ -12,7 +12,7 @@
  * details.
  */
 
-package it.servizidigitali.gestioneprocedure.service.persistence;
+package it.servizidigitali.gestioneenti.service.persistence;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -21,18 +21,11 @@ import org.osgi.annotation.versioning.ProviderType;
  * @generated
  */
 @ProviderType
-public interface ProceduraFinder {
+public interface ServizioEnteFinder {
 
-	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
-		findByFilters(
-			String denominazione, String attiva,
-			java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
-			long siteGroupId, int cur, int delta,
-			com.liferay.portal.kernel.util.OrderByComparator
-				<it.servizidigitali.gestioneprocedure.model.Procedura> ordine);
-
-	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
-		findByServiziIdsGroupIdAttiva(
-			java.util.List<Long> serviziIds, long groupId, Boolean attiva);
+	public java.util.List<it.servizidigitali.gestioneenti.model.ServizioEnte>
+		findServizioEnteByFilters(
+			long organizationId, java.util.List<Long> subOrganizationIds,
+			Boolean attivo, long groupId, long companyId);
 
 }

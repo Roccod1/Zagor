@@ -39,6 +39,7 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.camunda.integration.client.CamundaClient;
 import it.servizidigitali.camunda.integration.client.constant.CustomProcessVariables;
+import it.servizidigitali.camunda.integration.configuration.CamundaConfiguration;
 import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
@@ -59,7 +60,8 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
  */
 @Component(immediate = true, //
 		service = AvvioIstanzaProcessoScheduler.class, //
-		configurationPid = "it.servizidigitali.scrivaniaoperatore.scheduler.configuration.AvvioIstanzaProcessoSchedulerConfiguration"//
+		configurationPid = { "it.servizidigitali.scrivaniaoperatore.scheduler.configuration.AvvioIstanzaProcessoSchedulerConfiguration",
+				"it.servizidigitali.camunda.integration.configuration.CamundaConfiguration" }//
 )
 public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 
@@ -71,6 +73,7 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 	private SchedulerEntryImpl _schedulerEntryImpl = null;
 
 	private volatile AvvioIstanzaProcessoSchedulerConfiguration avvioIstanzaProcessoSchedulerConfiguration;
+	private volatile CamundaConfiguration camundaConfiguration;
 
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
@@ -102,6 +105,10 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 	@Override
 	protected void doReceive(Message message) throws Exception {
 
+		if (!camundaConfiguration.integrationEnabled()) {
+			return;
+		}
+
 		_log.debug("Scheduled task executed...");
 
 		// Caricamento lista richiesta in stato NUOVO
@@ -116,7 +123,7 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 
 				String tenantId = String.valueOf(organizationId);
 				long businessKey = richiesta.getRichiestaId();
-				boolean existProcessByBusinessKey = camundaClient.existProcessByBusinessKey(tenantId, businessKey);
+				boolean existProcessByBusinessKey = camundaClient.existProcessByBusinessKey(tenantId, String.valueOf(businessKey));
 
 				if (existProcessByBusinessKey) {
 					_log.debug("Esiste già una istanza di processo attiva per organizationId " + organizationId + " e businessKey " + businessKey);
@@ -209,7 +216,8 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 						variables.put(CustomProcessVariables.DATA_CREAZIONE_RICHIESTA, richiesta.getCreateDate());
 						variables.put(CustomProcessVariables.STATO_RICHIESTA, richiesta.getStato());
 
-						camundaClient.startProcessInstance(tenantId, processo.getCodice(), String.valueOf(businessKey), variables);
+						String processInstanceId = camundaClient.startProcessInstance(tenantId, processo.getCodice(), String.valueOf(businessKey), variables);
+						richiestaLocalService.updateProcessiInstanceIdRichiesta(richiesta.getRichiestaId(), processInstanceId);
 					}
 				}
 				else {
@@ -227,6 +235,7 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 		// extract the cron expression from the properties
 		try {
 			avvioIstanzaProcessoSchedulerConfiguration = ConfigurableUtil.createConfigurable(AvvioIstanzaProcessoSchedulerConfiguration.class, properties);
+			camundaConfiguration = ConfigurableUtil.createConfigurable(CamundaConfiguration.class, properties);
 
 			if (!avvioIstanzaProcessoSchedulerConfiguration.avvioIstanzaProcessoSchedulerEnabled()) {
 				_log.info("Diattivazione scheduler " + this.getClass().getSimpleName());

@@ -88,6 +88,10 @@ public class RichiestaTable extends BaseTable<RichiestaTable> {
 			Column.FLAG_DEFAULT);
 	public final Column<RichiestaTable, Long> delegaId = createColumn(
 		"delegaId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<RichiestaTable, String> processInstanceId =
+		createColumn(
+			"processInstanceId", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
 	public final Column<RichiestaTable, Long> proceduraId = createColumn(
 		"proceduraId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 
