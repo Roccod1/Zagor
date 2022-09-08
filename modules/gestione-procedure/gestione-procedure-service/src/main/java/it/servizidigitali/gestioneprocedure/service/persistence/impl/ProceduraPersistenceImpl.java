@@ -3073,6 +3073,591 @@ public class ProceduraPersistenceImpl
 	private static final String _FINDER_COLUMN_GROUPIDSERVIZIOID_SERVIZIOID_2 =
 		"procedura.servizioId = ?";
 
+	private FinderPath _finderPathWithPaginationFindByGroupIdServizioIdAttiva;
+	private FinderPath
+		_finderPathWithoutPaginationFindByGroupIdServizioIdAttiva;
+	private FinderPath _finderPathCountByGroupIdServizioIdAttiva;
+
+	/**
+	 * Returns all the proceduras where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @return the matching proceduras
+	 */
+	@Override
+	public List<Procedura> findByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva) {
+
+		return findByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+			null);
+	}
+
+	/**
+	 * Returns a range of all the proceduras where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param start the lower bound of the range of proceduras
+	 * @param end the upper bound of the range of proceduras (not inclusive)
+	 * @return the range of matching proceduras
+	 */
+	@Override
+	public List<Procedura> findByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva, int start, int end) {
+
+		return findByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the proceduras where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param start the lower bound of the range of proceduras
+	 * @param end the upper bound of the range of proceduras (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching proceduras
+	 */
+	@Override
+	public List<Procedura> findByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva, int start, int end,
+		OrderByComparator<Procedura> orderByComparator) {
+
+		return findByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the proceduras where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param start the lower bound of the range of proceduras
+	 * @param end the upper bound of the range of proceduras (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching proceduras
+	 */
+	@Override
+	public List<Procedura> findByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva, int start, int end,
+		OrderByComparator<Procedura> orderByComparator,
+		boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath =
+					_finderPathWithoutPaginationFindByGroupIdServizioIdAttiva;
+				finderArgs = new Object[] {groupId, servizioId, attiva};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByGroupIdServizioIdAttiva;
+			finderArgs = new Object[] {
+				groupId, servizioId, attiva, start, end, orderByComparator
+			};
+		}
+
+		List<Procedura> list = null;
+
+		if (useFinderCache) {
+			list = (List<Procedura>)finderCache.getResult(
+				finderPath, finderArgs);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (Procedura procedura : list) {
+					if ((groupId != procedura.getGroupId()) ||
+						(servizioId != procedura.getServizioId()) ||
+						(attiva != procedura.isAttiva())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					5 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(5);
+			}
+
+			sb.append(_SQL_SELECT_PROCEDURA_WHERE);
+
+			sb.append(_FINDER_COLUMN_GROUPIDSERVIZIOIDATTIVA_GROUPID_2);
+
+			sb.append(_FINDER_COLUMN_GROUPIDSERVIZIOIDATTIVA_SERVIZIOID_2);
+
+			sb.append(_FINDER_COLUMN_GROUPIDSERVIZIOIDATTIVA_ATTIVA_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(ProceduraModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(groupId);
+
+				queryPos.add(servizioId);
+
+				queryPos.add(attiva);
+
+				list = (List<Procedura>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first procedura in the ordered set where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching procedura
+	 * @throws NoSuchProceduraException if a matching procedura could not be found
+	 */
+	@Override
+	public Procedura findByGroupIdServizioIdAttiva_First(
+			long groupId, long servizioId, boolean attiva,
+			OrderByComparator<Procedura> orderByComparator)
+		throws NoSuchProceduraException {
+
+		Procedura procedura = fetchByGroupIdServizioIdAttiva_First(
+			groupId, servizioId, attiva, orderByComparator);
+
+		if (procedura != null) {
+			return procedura;
+		}
+
+		StringBundler sb = new StringBundler(8);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("groupId=");
+		sb.append(groupId);
+
+		sb.append(", servizioId=");
+		sb.append(servizioId);
+
+		sb.append(", attiva=");
+		sb.append(attiva);
+
+		sb.append("}");
+
+		throw new NoSuchProceduraException(sb.toString());
+	}
+
+	/**
+	 * Returns the first procedura in the ordered set where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching procedura, or <code>null</code> if a matching procedura could not be found
+	 */
+	@Override
+	public Procedura fetchByGroupIdServizioIdAttiva_First(
+		long groupId, long servizioId, boolean attiva,
+		OrderByComparator<Procedura> orderByComparator) {
+
+		List<Procedura> list = findByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last procedura in the ordered set where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching procedura
+	 * @throws NoSuchProceduraException if a matching procedura could not be found
+	 */
+	@Override
+	public Procedura findByGroupIdServizioIdAttiva_Last(
+			long groupId, long servizioId, boolean attiva,
+			OrderByComparator<Procedura> orderByComparator)
+		throws NoSuchProceduraException {
+
+		Procedura procedura = fetchByGroupIdServizioIdAttiva_Last(
+			groupId, servizioId, attiva, orderByComparator);
+
+		if (procedura != null) {
+			return procedura;
+		}
+
+		StringBundler sb = new StringBundler(8);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("groupId=");
+		sb.append(groupId);
+
+		sb.append(", servizioId=");
+		sb.append(servizioId);
+
+		sb.append(", attiva=");
+		sb.append(attiva);
+
+		sb.append("}");
+
+		throw new NoSuchProceduraException(sb.toString());
+	}
+
+	/**
+	 * Returns the last procedura in the ordered set where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching procedura, or <code>null</code> if a matching procedura could not be found
+	 */
+	@Override
+	public Procedura fetchByGroupIdServizioIdAttiva_Last(
+		long groupId, long servizioId, boolean attiva,
+		OrderByComparator<Procedura> orderByComparator) {
+
+		int count = countByGroupIdServizioIdAttiva(groupId, servizioId, attiva);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Procedura> list = findByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the proceduras before and after the current procedura in the ordered set where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param proceduraId the primary key of the current procedura
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next procedura
+	 * @throws NoSuchProceduraException if a procedura with the primary key could not be found
+	 */
+	@Override
+	public Procedura[] findByGroupIdServizioIdAttiva_PrevAndNext(
+			long proceduraId, long groupId, long servizioId, boolean attiva,
+			OrderByComparator<Procedura> orderByComparator)
+		throws NoSuchProceduraException {
+
+		Procedura procedura = findByPrimaryKey(proceduraId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Procedura[] array = new ProceduraImpl[3];
+
+			array[0] = getByGroupIdServizioIdAttiva_PrevAndNext(
+				session, procedura, groupId, servizioId, attiva,
+				orderByComparator, true);
+
+			array[1] = procedura;
+
+			array[2] = getByGroupIdServizioIdAttiva_PrevAndNext(
+				session, procedura, groupId, servizioId, attiva,
+				orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Procedura getByGroupIdServizioIdAttiva_PrevAndNext(
+		Session session, Procedura procedura, long groupId, long servizioId,
+		boolean attiva, OrderByComparator<Procedura> orderByComparator,
+		boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				6 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(5);
+		}
+
+		sb.append(_SQL_SELECT_PROCEDURA_WHERE);
+
+		sb.append(_FINDER_COLUMN_GROUPIDSERVIZIOIDATTIVA_GROUPID_2);
+
+		sb.append(_FINDER_COLUMN_GROUPIDSERVIZIOIDATTIVA_SERVIZIOID_2);
+
+		sb.append(_FINDER_COLUMN_GROUPIDSERVIZIOIDATTIVA_ATTIVA_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(ProceduraModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(groupId);
+
+		queryPos.add(servizioId);
+
+		queryPos.add(attiva);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(procedura)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<Procedura> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the proceduras where groupId = &#63; and servizioId = &#63; and attiva = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 */
+	@Override
+	public void removeByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva) {
+
+		for (Procedura procedura :
+				findByGroupIdServizioIdAttiva(
+					groupId, servizioId, attiva, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null)) {
+
+			remove(procedura);
+		}
+	}
+
+	/**
+	 * Returns the number of proceduras where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @return the number of matching proceduras
+	 */
+	@Override
+	public int countByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva) {
+
+		FinderPath finderPath = _finderPathCountByGroupIdServizioIdAttiva;
+
+		Object[] finderArgs = new Object[] {groupId, servizioId, attiva};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_COUNT_PROCEDURA_WHERE);
+
+			sb.append(_FINDER_COLUMN_GROUPIDSERVIZIOIDATTIVA_GROUPID_2);
+
+			sb.append(_FINDER_COLUMN_GROUPIDSERVIZIOIDATTIVA_SERVIZIOID_2);
+
+			sb.append(_FINDER_COLUMN_GROUPIDSERVIZIOIDATTIVA_ATTIVA_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(groupId);
+
+				queryPos.add(servizioId);
+
+				queryPos.add(attiva);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_GROUPIDSERVIZIOIDATTIVA_GROUPID_2 =
+			"procedura.groupId = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_GROUPIDSERVIZIOIDATTIVA_SERVIZIOID_2 =
+			"procedura.servizioId = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_GROUPIDSERVIZIOIDATTIVA_ATTIVA_2 =
+			"procedura.attiva = ?";
+
 	public ProceduraPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -3760,6 +4345,35 @@ public class ProceduraPersistenceImpl
 			"countByGroupIdServizioId",
 			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"groupId", "servizioId"}, false);
+
+		_finderPathWithPaginationFindByGroupIdServizioIdAttiva = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByGroupIdServizioIdAttiva",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {"groupId", "servizioId", "attiva"}, true);
+
+		_finderPathWithoutPaginationFindByGroupIdServizioIdAttiva =
+			new FinderPath(
+				FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+				"findByGroupIdServizioIdAttiva",
+				new String[] {
+					Long.class.getName(), Long.class.getName(),
+					Boolean.class.getName()
+				},
+				new String[] {"groupId", "servizioId", "attiva"}, true);
+
+		_finderPathCountByGroupIdServizioIdAttiva = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByGroupIdServizioIdAttiva",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			},
+			new String[] {"groupId", "servizioId", "attiva"}, false);
 
 		_setProceduraUtilPersistence(this);
 	}
