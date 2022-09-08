@@ -1,10 +1,5 @@
 dependencies {
 	compile project(":modules:gestione-procedure:gestione-procedure-api")
-	
-	compileOnly project(":modules:gestione-servizi:gestione-servizi-api")
-	compileOnly project(":modules:gestione-processi:gestione-processi-api")
-	compileOnly project(":modules:gestione-forms:gestione-forms-api")
-
 	compileOnly group: "com.liferay.portal", name: "release.portal.api"
 }
 

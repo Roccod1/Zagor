@@ -28,7 +28,6 @@ import it.servizidigitali.gestioneprocedure.frontend.enumeration.TipoGenerazione
 import it.servizidigitali.gestioneprocedure.frontend.enumeration.TipoServizio;
 import it.servizidigitali.gestioneprocedure.frontend.service.GestioneProcedureMiddlewareService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
-import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneprocessi.model.Processo;
 import it.servizidigitali.gestioneprocessi.service.ProcessoLocalService;
@@ -58,9 +57,6 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 	
 	@Reference
 	private ProceduraLocalService proceduraLocalService;
-	
-	@Reference
-	private ProceduraFormLocalService proceduraFormLocalService;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -77,7 +73,7 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 		
 		Procedura procedura = null;
 		String listaFormIntegrativiProcedura = null;
-		long idFormPrincipale = 0;
+		Form formPrincipale = null;
 		
 		try {
 			listaServizi = gestioneProcedureMiddlewareService.getServiziByOrganizationAttivo(themeDisplay.getSiteGroup().getOrganizationId());
@@ -114,16 +110,16 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 		if(idProcedura>0) {
 			try {
 				procedura = proceduraLocalService.getProcedura(idProcedura);
-				listaFormIntegrativiProcedura = proceduraFormLocalService.getFormIntegrativiProcedura(idProcedura);
-				idFormPrincipale = proceduraFormLocalService.getFormPrincipaleProcedura(idProcedura);
+				listaFormIntegrativiProcedura = gestioneProcedureMiddlewareService.getFormIntegrativiProcedura(idProcedura);
+				formPrincipale = gestioneProcedureMiddlewareService.getFormPrincipaleProcedura(idProcedura);
 				String tipiIntegrazioneBackoffice = null;
 				
-				if(idFormPrincipale>0) {
-					renderRequest.setAttribute(GestioneProcedurePortletKeys.ID_FORM_PRINCIPALE, idFormPrincipale);
+				if(Validator.isNotNull(formPrincipale) && formPrincipale.getFormId()>0) {
+					renderRequest.setAttribute(GestioneProcedurePortletKeys.ID_FORM_PRINCIPALE, formPrincipale.getFormId());
 				}
 				
 				if(Validator.isNotNull(procedura.getStep2TipiIntegrazioneBackoffice())) {
-					tipiIntegrazioneBackoffice = proceduraLocalService.getStringSelectMultipla(procedura.getStep2TipiIntegrazioneBackoffice());
+					tipiIntegrazioneBackoffice = gestioneProcedureMiddlewareService.getStringSelectMultipla(procedura.getStep2TipiIntegrazioneBackoffice());
 					renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_TIPO_INTEGRAZIONE_BACKOFFICE_PROCEDURA, tipiIntegrazioneBackoffice);
 				}else {
 					renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_TIPO_INTEGRAZIONE_BACKOFFICE_PROCEDURA, GestioneProcedurePortletKeys.LISTA_VUOTA);

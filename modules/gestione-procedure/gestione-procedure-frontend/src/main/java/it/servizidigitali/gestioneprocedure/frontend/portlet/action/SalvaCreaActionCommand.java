@@ -20,8 +20,8 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneprocedure.frontend.constants.GestioneProcedurePortletKeys;
+import it.servizidigitali.gestioneprocedure.frontend.service.GestioneProcedureMiddlewareService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
-import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 
@@ -49,13 +49,13 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 	private FormLocalService formLocalService;
 	
 	@Reference
-	private ProceduraFormLocalService proceduraFormLocalService;
+	private GestioneProcedureMiddlewareService gestioneProcedureMiddlewareService;
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		
+
 		long idProcedura = ParamUtil.getLong(actionRequest, GestioneProcedurePortletKeys.ID_PROCEDURA);
 		String nome = ParamUtil.getString(actionRequest, GestioneProcedurePortletKeys.NOME);
 		String pec = ParamUtil.getString(actionRequest, GestioneProcedurePortletKeys.PEC);
@@ -138,8 +138,8 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		SessionMessages.add(actionRequest, GestioneProcedurePortletKeys.SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE);
 		proceduraLocalService.updateProcedura(procedura);
 				
-		proceduraFormLocalService.salvaProceduraFormPrincipale(idFormPrincipale, procedura.getProceduraId());
-		proceduraFormLocalService.salvaListaFormIntegrativi(idFormIntegrativi, procedura.getProceduraId());
+		gestioneProcedureMiddlewareService.salvaProceduraFormPrincipale(idFormPrincipale, procedura.getProceduraId());
+		gestioneProcedureMiddlewareService.salvaListaFormIntegrativi(idFormIntegrativi, procedura.getProceduraId());
 
 	}
 
