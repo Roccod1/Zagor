@@ -18,6 +18,7 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
+import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
@@ -44,6 +45,23 @@ public class GestioneProcedureMiddlewareService {
 	
 	@Reference
 	private ProceduraFormLocalService proceduraFormLocalService;
+	
+	public Procedura getProcedura (long groupId, long servizioId, boolean attiva) {
+		Procedura procedura = null;
+		
+		List<Procedura> listaProcedure = proceduraLocalService.getProcedureByGroupIdServizioIdAttiva(groupId, servizioId, attiva);
+		
+		if(Validator.isNotNull(listaProcedure) && !listaProcedure.isEmpty()) {
+			for(Procedura p : listaProcedure) {
+				Form form = getFormPrincipaleProcedura(p.getProceduraId());
+				if(Validator.isNotNull(form)) {
+					procedura = p;
+				}
+			}
+		}
+		
+		return procedura;
+	}
 	
 	public List<Servizio> getServiziByOrganizationAttivo(long organizationId) throws Exception{
 		

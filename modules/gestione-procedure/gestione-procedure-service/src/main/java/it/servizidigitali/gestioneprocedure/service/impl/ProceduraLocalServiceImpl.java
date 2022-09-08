@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +53,17 @@ public class ProceduraLocalServiceImpl extends ProceduraLocalServiceBaseImpl {
 		
 		OrderByComparator<Procedura> comparator = OrderByComparatorFactoryUtil.create("Procedura", orderByCol, direzione);
 		List<Procedura> listaProcedure = proceduraFinder.findByFilters(nome, attiva,dataInserimentoDa, dataInserimentoA, siteGroupId, cur, delta, comparator);
+		
+		return listaProcedure;
+	}
+	
+	public List<Procedura> getProcedureByGroupIdServizioIdAttiva(long groupId, long servizioId, boolean attiva){
+		List<Procedura> listaProcedure = null;
+		
+		if(groupId>0 && servizioId>0) {
+			listaProcedure = new ArrayList<Procedura>();
+			listaProcedure = proceduraPersistence.findByGroupIdServizioIdAttiva(groupId, servizioId, attiva);
+		}
 		
 		return listaProcedure;
 	}

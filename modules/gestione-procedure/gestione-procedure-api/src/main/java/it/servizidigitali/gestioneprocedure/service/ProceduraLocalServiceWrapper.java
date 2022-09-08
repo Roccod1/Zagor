@@ -392,6 +392,15 @@ public class ProceduraLocalServiceWrapper
 
 	@Override
 	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
+		getProcedureByGroupIdServizioIdAttiva(
+			long groupId, long servizioId, boolean attiva) {
+
+		return _proceduraLocalService.getProcedureByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
 		search(
 			String nome, String attiva, java.util.Date dataInserimentoDa,
 			java.util.Date dataInserimentoA, long siteGroupId, int delta,
