@@ -30,6 +30,7 @@ import it.servizidigitali.scrivaniacittadino.frontend.constants.ScrivaniaCittadi
 	property = {
 		"com.liferay.portlet.display-category=category.servizidigitali",
 		"com.liferay.portlet.header-portlet-css=/css/main.css",
+//		"com.liferay.portlet.header-portlet-js=/js/main.js",
 		"com.liferay.portlet.instanceable=true",
 		"javax.portlet.display-name=ScrivaniaCittadino",
 		"javax.portlet.init-param.template-path=/",
