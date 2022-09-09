@@ -30,6 +30,7 @@ import org.camunda.community.rest.client.api.UserApi;
 import org.camunda.community.rest.client.api.VariableInstanceApi;
 import org.camunda.community.rest.client.dto.CompleteTaskDto;
 import org.camunda.community.rest.client.dto.CountResultDto;
+import org.camunda.community.rest.client.dto.DeploymentDto;
 import org.camunda.community.rest.client.dto.DeploymentResourceDto;
 import org.camunda.community.rest.client.dto.DeploymentWithDefinitionsDto;
 import org.camunda.community.rest.client.dto.GroupDto;
@@ -60,6 +61,7 @@ import org.osgi.service.component.annotations.Modified;
 import it.servizidigitali.camunda.integration.client.CamundaClient;
 import it.servizidigitali.camunda.integration.client.constant.CustomProcessVariables;
 import it.servizidigitali.camunda.integration.client.exception.CamundaClientException;
+import it.servizidigitali.camunda.integration.client.model.DeploymentResource;
 import it.servizidigitali.camunda.integration.client.model.ProcessDefinition;
 import it.servizidigitali.camunda.integration.client.model.ProcessInstance;
 import it.servizidigitali.camunda.integration.client.model.Task;
@@ -79,6 +81,8 @@ import okhttp3.Route;
  */
 @Component(name = "camundaClientImpl", immediate = true, service = CamundaClient.class, configurationPid = "it.servizidigitali.camunda.integration.configuration.CamundaConfiguration")
 public class CamundaClientImpl implements CamundaClient {
+
+	private static final String DEFAULT_CAMUNDA_DEPLOYMENT_NAME = "default";
 
 	private static final Log log = LogFactoryUtil.getLog(CamundaClientImpl.class.getName());
 
@@ -309,7 +313,8 @@ public class CamundaClientImpl implements CamundaClient {
 
 			file = filePath.toFile();
 
-			output = new DeploymentApi(client).createDeployment(tenantId, null, false, false, "AutoDeployment", null, file);
+			DeploymentApi deploymentApi = new DeploymentApi(client);
+			output = deploymentApi.createDeployment(tenantId, null, false, false, "AutoDeployment", null, file);
 
 			deploymentId = output.getId();
 
@@ -741,23 +746,20 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public File getDeploymentFile(String id) throws CamundaClientException {
+	public File getDeploymentFile(String id, String resourceId) throws CamundaClientException {
 
 		File output = null;
 
 		try {
-
 			ApiClient client = getApiClient();
-
-			List<DeploymentResourceDto> listResource = new DeploymentApi(client).getDeploymentResources(id);
-
-			if (!listResource.isEmpty()) {
-				output = new DeploymentApi(client).getDeploymentResourceData(id, listResource.get(0).getId());
+			DeploymentApi deploymentApi = new DeploymentApi(client);
+			if (resourceId != null) {
+				output = deploymentApi.getDeploymentResourceData(id, resourceId);
 			}
 			else {
-				log.error("getDeploymentFile :: Impossibile recuperare la resource del deployment con ID : " + id);
+				List<DeploymentResourceDto> listResource = deploymentApi.getDeploymentResources(id);
+				output = deploymentApi.getDeploymentResourceData(id, listResource.get(0).getId());
 			}
-
 		}
 		catch (ApiException e) {
 			log.error("getDeploymentFile: " + e.getResponseBody(), e);
@@ -1008,5 +1010,77 @@ public class CamundaClientImpl implements CamundaClient {
 			log.warn("existsGroup :: " + e.getMessage());
 		}
 		return group != null;
+	}
+
+	@Override
+	public List<DeploymentResource> getDefaultDeploymentResources() throws CamundaClientException {
+
+		try {
+			ApiClient client = getApiClient();
+			DeploymentApi deploymentApi = new DeploymentApi(client);
+			List<DeploymentDto> deployments = deploymentApi.getDeployments(null, DEFAULT_CAMUNDA_DEPLOYMENT_NAME, null, null, null, null, null, null, null, null, null, null, null, null);
+			if (deployments != null && !deployments.isEmpty()) {
+				DeploymentDto deploymentDto = deployments.get(0);
+				List<DeploymentResourceDto> deploymentResources = deploymentApi.getDeploymentResources(deploymentDto.getId());
+				List<DeploymentResource> resources = new ArrayList<DeploymentResource>();
+				if (deploymentResources != null) {
+					ProcessDefinitionApi processDefinitionApi = new ProcessDefinitionApi(getApiClient());
+
+					for (DeploymentResourceDto deploymentResourceDto : deploymentResources) {
+						DeploymentResource deploymentResource = new DeploymentResource();
+						BeanPropertiesUtil.copyProperties(deploymentResourceDto, deploymentResource);
+
+						// Process Definition
+						List<ProcessDefinitionDto> processDefinitions = processDefinitionApi.getProcessDefinitions(null, null, null, null, deploymentResource.getDeploymentId(), null, null, null, null,
+								null, null, null, null, null, deploymentResource.getName(), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+								null, null, null);
+						if (processDefinitions != null && !processDefinitions.isEmpty()) {
+							deploymentResource.setProcessDefinition(getProcessDefinitions(processDefinitions).get(0));
+						}
+						resources.add(deploymentResource);
+					}
+				}
+				return resources;
+			}
+		}
+		catch (ApiException e) {
+			log.error("getDefaultDeploymentResources: " + e.getResponseBody(), e);
+			throw new CamundaClientException("getDefaultDeploymentResources :: " + e.getResponseBody(), e);
+		}
+		return null;
+	}
+
+	@Override
+	public List<DeploymentResource> getDeploymentResources(String deploymentId) throws CamundaClientException {
+
+		try {
+			ApiClient client = getApiClient();
+			DeploymentApi deploymentApi = new DeploymentApi(client);
+			DeploymentDto deploymentDto = deploymentApi.getDeployment(deploymentId);
+			List<DeploymentResourceDto> deploymentResources = deploymentApi.getDeploymentResources(deploymentDto.getId());
+			List<DeploymentResource> resources = new ArrayList<DeploymentResource>();
+			if (deploymentResources != null) {
+				ProcessDefinitionApi processDefinitionApi = new ProcessDefinitionApi(getApiClient());
+
+				for (DeploymentResourceDto deploymentResourceDto : deploymentResources) {
+					DeploymentResource deploymentResource = new DeploymentResource();
+					BeanPropertiesUtil.copyProperties(deploymentResourceDto, deploymentResource);
+
+					// Process Definition
+					List<ProcessDefinitionDto> processDefinitions = processDefinitionApi.getProcessDefinitions(null, null, null, null, deploymentResource.getDeploymentId(), null, null, null, null,
+							null, null, null, null, null, deploymentResource.getName(), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+							null, null, null);
+					if (processDefinitions != null && !processDefinitions.isEmpty()) {
+						deploymentResource.setProcessDefinition(getProcessDefinitions(processDefinitions).get(0));
+					}
+					resources.add(deploymentResource);
+				}
+			}
+			return resources;
+		}
+		catch (ApiException e) {
+			log.error("getDeploymentResources: " + e.getResponseBody(), e);
+			throw new CamundaClientException("getDeploymentResources :: " + e.getResponseBody(), e);
+		}
 	}
 }
