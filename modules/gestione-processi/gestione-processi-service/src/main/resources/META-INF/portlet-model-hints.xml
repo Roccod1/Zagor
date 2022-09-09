@@ -14,6 +14,8 @@
 		<field name="nome" type="String" />
 		<field name="stato" type="String" />
 		<field name="deploymentId" type="String" />
+		<field name="resourceId" type="String" />
+		<field name="modificabile" type="boolean" />
 		<field name="attivo" type="boolean" />
 	</model>
 </model-hints>

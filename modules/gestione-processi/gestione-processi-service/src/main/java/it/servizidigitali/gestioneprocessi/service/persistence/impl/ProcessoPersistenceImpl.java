@@ -2708,6 +2708,311 @@ public class ProcessoPersistenceImpl
 	private static final String _FINDER_COLUMN_ATTIVO_ATTIVO_2 =
 		"processo.attivo = ?";
 
+	private FinderPath _finderPathFetchByDeploymentIdResourceId;
+	private FinderPath _finderPathCountByDeploymentIdResourceId;
+
+	/**
+	 * Returns the processo where deploymentId = &#63; and resourceId = &#63; or throws a <code>NoSuchProcessoException</code> if it could not be found.
+	 *
+	 * @param deploymentId the deployment ID
+	 * @param resourceId the resource ID
+	 * @return the matching processo
+	 * @throws NoSuchProcessoException if a matching processo could not be found
+	 */
+	@Override
+	public Processo findByDeploymentIdResourceId(
+			String deploymentId, String resourceId)
+		throws NoSuchProcessoException {
+
+		Processo processo = fetchByDeploymentIdResourceId(
+			deploymentId, resourceId);
+
+		if (processo == null) {
+			StringBundler sb = new StringBundler(6);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("deploymentId=");
+			sb.append(deploymentId);
+
+			sb.append(", resourceId=");
+			sb.append(resourceId);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchProcessoException(sb.toString());
+		}
+
+		return processo;
+	}
+
+	/**
+	 * Returns the processo where deploymentId = &#63; and resourceId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param deploymentId the deployment ID
+	 * @param resourceId the resource ID
+	 * @return the matching processo, or <code>null</code> if a matching processo could not be found
+	 */
+	@Override
+	public Processo fetchByDeploymentIdResourceId(
+		String deploymentId, String resourceId) {
+
+		return fetchByDeploymentIdResourceId(deploymentId, resourceId, true);
+	}
+
+	/**
+	 * Returns the processo where deploymentId = &#63; and resourceId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param deploymentId the deployment ID
+	 * @param resourceId the resource ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching processo, or <code>null</code> if a matching processo could not be found
+	 */
+	@Override
+	public Processo fetchByDeploymentIdResourceId(
+		String deploymentId, String resourceId, boolean useFinderCache) {
+
+		deploymentId = Objects.toString(deploymentId, "");
+		resourceId = Objects.toString(resourceId, "");
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {deploymentId, resourceId};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByDeploymentIdResourceId, finderArgs);
+		}
+
+		if (result instanceof Processo) {
+			Processo processo = (Processo)result;
+
+			if (!Objects.equals(deploymentId, processo.getDeploymentId()) ||
+				!Objects.equals(resourceId, processo.getResourceId())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_SELECT_PROCESSO_WHERE);
+
+			boolean bindDeploymentId = false;
+
+			if (deploymentId.isEmpty()) {
+				sb.append(_FINDER_COLUMN_DEPLOYMENTIDRESOURCEID_DEPLOYMENTID_3);
+			}
+			else {
+				bindDeploymentId = true;
+
+				sb.append(_FINDER_COLUMN_DEPLOYMENTIDRESOURCEID_DEPLOYMENTID_2);
+			}
+
+			boolean bindResourceId = false;
+
+			if (resourceId.isEmpty()) {
+				sb.append(_FINDER_COLUMN_DEPLOYMENTIDRESOURCEID_RESOURCEID_3);
+			}
+			else {
+				bindResourceId = true;
+
+				sb.append(_FINDER_COLUMN_DEPLOYMENTIDRESOURCEID_RESOURCEID_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindDeploymentId) {
+					queryPos.add(deploymentId);
+				}
+
+				if (bindResourceId) {
+					queryPos.add(resourceId);
+				}
+
+				List<Processo> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByDeploymentIdResourceId,
+							finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {
+									deploymentId, resourceId
+								};
+							}
+
+							_log.warn(
+								"ProcessoPersistenceImpl.fetchByDeploymentIdResourceId(String, String, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					Processo processo = list.get(0);
+
+					result = processo;
+
+					cacheResult(processo);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (Processo)result;
+		}
+	}
+
+	/**
+	 * Removes the processo where deploymentId = &#63; and resourceId = &#63; from the database.
+	 *
+	 * @param deploymentId the deployment ID
+	 * @param resourceId the resource ID
+	 * @return the processo that was removed
+	 */
+	@Override
+	public Processo removeByDeploymentIdResourceId(
+			String deploymentId, String resourceId)
+		throws NoSuchProcessoException {
+
+		Processo processo = findByDeploymentIdResourceId(
+			deploymentId, resourceId);
+
+		return remove(processo);
+	}
+
+	/**
+	 * Returns the number of processos where deploymentId = &#63; and resourceId = &#63;.
+	 *
+	 * @param deploymentId the deployment ID
+	 * @param resourceId the resource ID
+	 * @return the number of matching processos
+	 */
+	@Override
+	public int countByDeploymentIdResourceId(
+		String deploymentId, String resourceId) {
+
+		deploymentId = Objects.toString(deploymentId, "");
+		resourceId = Objects.toString(resourceId, "");
+
+		FinderPath finderPath = _finderPathCountByDeploymentIdResourceId;
+
+		Object[] finderArgs = new Object[] {deploymentId, resourceId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_PROCESSO_WHERE);
+
+			boolean bindDeploymentId = false;
+
+			if (deploymentId.isEmpty()) {
+				sb.append(_FINDER_COLUMN_DEPLOYMENTIDRESOURCEID_DEPLOYMENTID_3);
+			}
+			else {
+				bindDeploymentId = true;
+
+				sb.append(_FINDER_COLUMN_DEPLOYMENTIDRESOURCEID_DEPLOYMENTID_2);
+			}
+
+			boolean bindResourceId = false;
+
+			if (resourceId.isEmpty()) {
+				sb.append(_FINDER_COLUMN_DEPLOYMENTIDRESOURCEID_RESOURCEID_3);
+			}
+			else {
+				bindResourceId = true;
+
+				sb.append(_FINDER_COLUMN_DEPLOYMENTIDRESOURCEID_RESOURCEID_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindDeploymentId) {
+					queryPos.add(deploymentId);
+				}
+
+				if (bindResourceId) {
+					queryPos.add(resourceId);
+				}
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_DEPLOYMENTIDRESOURCEID_DEPLOYMENTID_2 =
+			"processo.deploymentId = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_DEPLOYMENTIDRESOURCEID_DEPLOYMENTID_3 =
+			"(processo.deploymentId IS NULL OR processo.deploymentId = '') AND ";
+
+	private static final String
+		_FINDER_COLUMN_DEPLOYMENTIDRESOURCEID_RESOURCEID_2 =
+			"processo.resourceId = ?";
+
+	private static final String
+		_FINDER_COLUMN_DEPLOYMENTIDRESOURCEID_RESOURCEID_3 =
+			"(processo.resourceId IS NULL OR processo.resourceId = '')";
+
 	public ProcessoPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -2739,6 +3044,11 @@ public class ProcessoPersistenceImpl
 
 		finderCache.putResult(
 			_finderPathFetchByCodice, new Object[] {processo.getCodice()},
+			processo);
+
+		finderCache.putResult(
+			_finderPathFetchByDeploymentIdResourceId,
+			new Object[] {processo.getDeploymentId(), processo.getResourceId()},
 			processo);
 	}
 
@@ -2825,6 +3135,16 @@ public class ProcessoPersistenceImpl
 		finderCache.putResult(_finderPathCountByCodice, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByCodice, args, processoModelImpl);
+
+		args = new Object[] {
+			processoModelImpl.getDeploymentId(),
+			processoModelImpl.getResourceId()
+		};
+
+		finderCache.putResult(
+			_finderPathCountByDeploymentIdResourceId, args, Long.valueOf(1));
+		finderCache.putResult(
+			_finderPathFetchByDeploymentIdResourceId, args, processoModelImpl);
 	}
 
 	/**
@@ -3382,6 +3702,17 @@ public class ProcessoPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByAttivo",
 			new String[] {Boolean.class.getName()}, new String[] {"attivo"},
 			false);
+
+		_finderPathFetchByDeploymentIdResourceId = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByDeploymentIdResourceId",
+			new String[] {String.class.getName(), String.class.getName()},
+			new String[] {"deploymentId", "resourceId"}, true);
+
+		_finderPathCountByDeploymentIdResourceId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByDeploymentIdResourceId",
+			new String[] {String.class.getName(), String.class.getName()},
+			new String[] {"deploymentId", "resourceId"}, false);
 
 		_setProcessoUtilPersistence(this);
 	}
