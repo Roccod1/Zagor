@@ -45,23 +45,23 @@ import it.servizidigitali.gestioneprocessi.service.base.ProcessoLocalServiceBase
 public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 
 	public static final Log _log = LogFactoryUtil.getLog(ProcessoLocalServiceImpl.class);
-	
+
 	@Reference
 	private OrganizationLocalService organizationLocalService;
-	
+
 	@Reference
 	private GroupLocalService groupLocalService;
 
 	@Override
 	public List<Processo> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, long groupId, int delta, int cur, String orderByCol, String orderByType) throws PortalException {
-		boolean direzione = false;
+		boolean direzione = true;
 
-		if (orderByType.equalsIgnoreCase("asc")) {
-			direzione = true;
+		if (orderByType.equalsIgnoreCase("desc")) {
+			direzione = false;
 		}
 
 		if (Validator.isNull(orderByCol)) {
-			orderByCol = "processoId";
+			orderByCol = "nome";
 		}
 
 		OrderByComparator<Processo> comparator = OrderByComparatorFactoryUtil.create("Processo", orderByCol, direzione);
@@ -73,33 +73,36 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 		for (Processo processo : listaProcesso) {
 			group = groupLocalService.getGroup(processo.getGroupId());
 			long organizationIdSite = groupLocalService.getGroup(groupId).getOrganizationId();
-			
-			if(organizationIdSite==0) {
-				
+
+			if (organizationIdSite == 0) {
+
 				if (group.getOrganizationId() > 0) {
 					organization = organizationLocalService.getOrganization(group.getOrganizationId());
 					processo.setNomeEnte(organization.getName());
-				}else {
+				}
+				else {
 					processo.setNomeEnte("-");
 				}
-				
+
 				listaProcessoFiltrata.add(processo);
-			}else {
-				if(group.getGroupId()==groupId) {
-					
+			}
+			else {
+				if (group.getGroupId() == groupId) {
+
 					if (group.getOrganizationId() > 0) {
 						organization = organizationLocalService.getOrganization(group.getOrganizationId());
 						processo.setNomeEnte(organization.getName());
-					}else {
+					}
+					else {
 						processo.setNomeEnte("-");
 					}
-					
-					listaProcessoFiltrata.add(processo);	
+
+					listaProcessoFiltrata.add(processo);
 
 				}
-				
-				if(group.getOrganizationId()==0) {
-					if(!listaProcessoFiltrata.contains(processo)) {
+
+				if (group.getOrganizationId() == 0) {
+					if (!listaProcessoFiltrata.contains(processo)) {
 						processo.setNomeEnte("-");
 						listaProcessoFiltrata.add(processo);
 					}
@@ -130,6 +133,11 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 		}
 
 		return processoPersistence.findWithDynamicQuery(processoDynamicQuery);
+	}
+
+	@Override
+	public Processo getProcessoByDeploymentIdResourceId(String deploymentId, String resourceId) throws NoSuchProcessoException {
+		return processoPersistence.findByDeploymentIdResourceId(deploymentId, resourceId);
 	}
 
 }

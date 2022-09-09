@@ -40,7 +40,6 @@
 					</c:otherwise>
 				</c:choose>	
 				
-				
 				<fmt:formatDate value="${processo.createDate}" var="createDate" pattern="dd/MM/yyyy HH:mm:ss"/>
 				
 				<c:choose>
@@ -51,7 +50,17 @@
 						<liferay-ui:search-container-column-text value="${createDate}" name="<%=GestioneProcessiPortletKeys.DATA_CREAZIONE %>" orderable="true" orderableProperty="createDate"/>
 					</c:otherwise>
 				</c:choose>	
-				
+
+				<fmt:formatDate value="${processo.modifiedDate}" var="modifiedDate" pattern="dd/MM/yyyy HH:mm:ss"/>
+
+				<c:choose>
+					<c:when test="${processo.groupId != groupIdUtente && organizationIdSitePrincipale!=0}">
+						<liferay-ui:search-container-column-text value="${modifiedDate}" name="<%=GestioneProcessiPortletKeys.DATA_MODIFICA %>" cssClass="processoDisabilitato" orderable="true" orderableProperty="modifiedDate"/>
+					</c:when>
+					<c:otherwise>
+						<liferay-ui:search-container-column-text value="${modifiedDate}" name="<%=GestioneProcessiPortletKeys.DATA_MODIFICA %>" orderable="true" orderableProperty="modifiedDate"/>
+					</c:otherwise>
+				</c:choose>	
 				
 				<c:choose>
 					<c:when test="${organizationIdSitePrincipale == 0}">

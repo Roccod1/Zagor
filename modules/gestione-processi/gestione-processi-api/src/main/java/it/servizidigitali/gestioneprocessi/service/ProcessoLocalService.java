@@ -258,6 +258,11 @@ public interface ProcessoLocalService
 	public Processo getProcessoByCodice(String codice)
 		throws NoSuchProcessoException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Processo getProcessoByDeploymentIdResourceId(
+			String deploymentId, String resourceId)
+		throws NoSuchProcessoException;
+
 	/**
 	 * Returns the processo matching the UUID and group.
 	 *

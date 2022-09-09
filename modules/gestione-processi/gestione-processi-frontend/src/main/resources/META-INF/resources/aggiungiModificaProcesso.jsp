@@ -31,11 +31,8 @@
 <liferay-ui:error key="<%=GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_CAMUNDA %>" message="impossibile-effettuare-salvataggio-camunda" />
 <liferay-ui:error key="<%=GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_PROCESSO_CODICE_ESISTENTE %>" message="esiste-gia-un-processo-con-codice-specificato" />
 
-
-
-
 <div class="page-header">
-				<h2><liferay-ui:message key="processo"/></h2>
+	<h2><liferay-ui:message key="processo"/></h2>
 </div>
 
 <div class="container mb-4 pl-0 pr-0">
@@ -76,7 +73,9 @@
 		
 		<aui:button-row cssClass="text-right">
 			<aui:button value="annulla" id="annulla" href="${homeURL}"/>
-			<aui:button type="submit" value="salva" id="salva"/>
+			<c:if test="${processo.modificabile}">
+				<aui:button type="submit" value="salva" id="salva"/>
+			</c:if>
 		</aui:button-row>
 	
 	</aui:form>
@@ -93,22 +92,8 @@
 
 </aui:row>
 
-
-
-
 <script>
-
-var inputText = $('#<portlet:namespace />modelloXml');
-
-
+	var inputText = $('#<portlet:namespace />modelloXml');
 </script>
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/dist/index.js"></script>
-
-
-
- 
-
- 
-  
-  

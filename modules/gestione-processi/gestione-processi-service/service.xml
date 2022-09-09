@@ -32,6 +32,8 @@
 		<column name="nome" type="String" />
 		<column name="stato" type="String" />
 		<column name="deploymentId" type="String" />
+		<column name="resourceId" type="String" />
+		<column name="modificabile" type="boolean" />
 		<column name="attivo" type="boolean" />
 		
 		<!-- Finder methods -->
@@ -45,6 +47,11 @@
 
 		<finder name="Attivo" return-type="Collection">
 			<finder-column name="attivo" />
+		</finder>
+		
+		<finder name="DeploymentIdResourceId" return-type="Processo">
+			<finder-column name="deploymentId" />
+			<finder-column name="resourceId" />
 		</finder>
 	</entity>
 </service-builder>
