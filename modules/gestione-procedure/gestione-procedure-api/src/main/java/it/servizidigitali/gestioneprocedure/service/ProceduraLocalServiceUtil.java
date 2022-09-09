@@ -345,6 +345,13 @@ public class ProceduraLocalServiceUtil {
 		return getService().getProcedurasCount();
 	}
 
+	public static List<Procedura> getProcedureByServiziIdsGroupIdAttiva(
+		List<Long> serviziIds, long groupId, Boolean attiva) {
+
+		return getService().getProcedureByServiziIdsGroupIdAttiva(
+			serviziIds, groupId, attiva);
+	}
+
 	public static String getStringSelectMultipla(String string)
 		throws com.liferay.portal.kernel.json.JSONException {
 
