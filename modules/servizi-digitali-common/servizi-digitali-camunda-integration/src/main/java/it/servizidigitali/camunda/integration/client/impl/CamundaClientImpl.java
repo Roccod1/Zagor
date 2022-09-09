@@ -275,10 +275,18 @@ public class CamundaClientImpl implements CamundaClient {
 
 					variablesMap.put(key, variableValueDto);
 				}
+
+				// Add tenant ID
+				if (tenantId != null) {
+					VariableValueDto tenantIdVariableValueDto = new VariableValueDto();
+					tenantIdVariableValueDto.setValue(tenantId);
+					variablesMap.put("tenantId", tenantIdVariableValueDto);
+				}
+
 				startProcessInstanceDto.setVariables(variablesMap);
 			}
 
-			ProcessInstanceWithVariablesDto processInstanceWithVariablesDto = api.startProcessInstanceByKeyAndTenantId(processDefinitionKey, tenantId, startProcessInstanceDto);
+			ProcessInstanceWithVariablesDto processInstanceWithVariablesDto = api.startProcessInstanceByKey(processDefinitionKey, startProcessInstanceDto);
 			return processInstanceWithVariablesDto.getId();
 		}
 		catch (ApiException e) {
