@@ -1,6 +1,8 @@
 package it.servizidigitali.scrivaniacittadino.frontend.portlet.resource;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -24,9 +26,9 @@ import javax.portlet.ResourceResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
 import it.servizidigitali.scrivaniacittadino.frontend.constants.ScrivaniaCittadinoPortletKeys;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
@@ -67,8 +69,17 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 				themeDisplay = serviceContext.getThemeDisplay();
 				User loggedUser = themeDisplay.getUser();
 				
-				listaRichieste = richiestaLocalService.getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(loggedUser.getScreenName(), themeDisplay.getSiteGroup().getOrganizationId(), cur, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA, sortName, sortType);
-
+				RichiestaFilters richiestaFilter = new RichiestaFilters();
+				richiestaFilter.setCodiceFiscale(loggedUser.getScreenName());
+				richiestaFilter.setCompanyId(themeDisplay.getSiteGroup().getCompanyId());
+				richiestaFilter.setGroupId(themeDisplay.getSiteGroup().getGroupId());
+				richiestaFilter.setOrderByCol(sortName);
+				richiestaFilter.setOrderByType(sortType);
+				
+				int startEnd[] = calcolaStartEnd(cur, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
+				listaRichieste =  richiestaLocalService.search(richiestaFilter, startEnd[0], startEnd[1]);
+				
+				startEnd = calcolaStartEnd(cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
 				List<Richiesta> paginaSuccessiva = richiestaLocalService.getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(loggedUser.getScreenName(), themeDisplay.getSiteGroup().getOrganizationId(), cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA, sortName, sortType);
 
 				if(Validator.isNotNull(paginaSuccessiva) && !paginaSuccessiva.isEmpty()) {
@@ -84,5 +95,14 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 		   responseMap.put("cur", cur);
 		   String jsonObject = JSONFactoryUtil.looseSerializeDeep(responseMap);
 		   resourceResponse.getWriter().write(jsonObject);
+	}
+	
+	private int[] calcolaStartEnd(int cur, int delta) {
+		int startEnd[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		if (startEnd[0] <= 0 || startEnd[1] <= 0) {
+			startEnd[0] = QueryUtil.ALL_POS;
+			startEnd[1] = QueryUtil.ALL_POS;
+		}
+		return startEnd;
 	}
 }

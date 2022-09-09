@@ -2,7 +2,6 @@ package it.servizidigitali.scrivaniacittadino.frontend.portlet.resource;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
@@ -26,75 +25,66 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
-import it.servizidigitali.gestionecomunicazioni.model.ComunicazioneFilters;
-import it.servizidigitali.gestionecomunicazioni.service.ComunicazioneLocalService;
 import it.servizidigitali.scrivaniacittadino.frontend.constants.ScrivaniaCittadinoPortletKeys;
+import it.servizidigitali.scrivaniacittadino.frontend.service.ScrivaniaCittadinoMiddlewareService;
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 
 /**
  * @author filierim
  */
 
-@Component(immediate = true, 
-		property = { 
-				"javax.portlet.name=" + ScrivaniaCittadinoPortletKeys.SCRIVANIACITTADINO, 
-				"mvc.command.name=" + ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_PAGAMENTI 
-		}, 
-		service = MVCResourceCommand.class
-)
+@Component(immediate = true, property = { "javax.portlet.name=" + ScrivaniaCittadinoPortletKeys.SCRIVANIACITTADINO,
+		"mvc.command.name="
+				+ ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_PAGAMENTI }, service = MVCResourceCommand.class)
 public class GetPagamentiCittadinoResourceCommand extends BaseMVCResourceCommand {
 
 	private static final Log _log = LogFactoryUtil.getLog(GetPagamentiCittadinoResourceCommand.class);
 
 	@Reference
-	private ComunicazioneLocalService comunicazioneLocalService;
-	
-	@Override
-	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
+	private ScrivaniaCittadinoMiddlewareService scrivaniaCittadinoMiddlewareService;
 
-		              
-	       Map<String, Object> responseMap = new HashMap<String, Object>();
-//		   ServiceContext serviceContext = null;
-//		   ThemeDisplay themeDisplay = null;
-//		   boolean hasNext = false;
-//		
-//		   int cur = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_CUR_PARAM, SearchContainer.DEFAULT_CUR);
-////	       int delta = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_DELTA_PARAM);
-//		   String sortName = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
-//		   String sortType = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
-//		
-//		   try {        	   
-//				serviceContext = ServiceContextFactory.getInstance(resourceRequest);
-//				themeDisplay = serviceContext.getThemeDisplay();
-//				User loggedUser = themeDisplay.getUser();
-//				ComunicazioneFilters comunicazioneFilters = new ComunicazioneFilters();
-//				comunicazioneFilters.setUserId(loggedUser.getUserId());
-//				
-//				if(Validator.isNotNull(sortName)) {
-//					comunicazioneFilters.setOrderByCol(sortName);
-//					
-//					if(Validator.isNotNull(sortType)) {
-//						comunicazioneFilters.setOrderByType(sortType);
-//					}
-//				}
-//				
-////				int countComunicazioni = comunicazioneLocalService.countComunicazioni(comunicazioneFilters);
-//				listaComunicazioni = comunicazioneLocalService.searchComunicazioni(comunicazioneFilters, cur, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
-//
-//				List<Comunicazione> paginaSuccessiva = comunicazioneLocalService.searchComunicazioni(comunicazioneFilters, cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
-//
-//				if(Validator.isNotNull(paginaSuccessiva) && !paginaSuccessiva.isEmpty()) {
-//					hasNext = true;
-//				}
-//		   }catch(Exception e) {
-//			   _log.error("doServeResource() :: "+e.getMessage(), e);
-//			   throw new Exception(e);
-//		   }
-	       
-		   responseMap.put("listaPagamenti", new ArrayList<Object>());
-		   responseMap.put("hasNext", false);
-		   responseMap.put("cur", 1);
-		   String jsonObject = JSONFactoryUtil.looseSerializeDeep(responseMap);
-		   resourceResponse.getWriter().write(jsonObject);
+	@Override
+	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+			throws Exception {
+
+		Map<String, Object> responseMap = new HashMap<String, Object>();
+		List<Richiesta> listaPagamenti = new ArrayList<Richiesta>();
+
+		ServiceContext serviceContext = null;
+		ThemeDisplay themeDisplay = null;
+		boolean hasNext = false;
+
+		int cur = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_CUR_PARAM, SearchContainer.DEFAULT_CUR);
+//	       int delta = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_DELTA_PARAM);
+		String sortName = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
+		String sortType = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
+
+		try {
+			serviceContext = ServiceContextFactory.getInstance(resourceRequest);
+			themeDisplay = serviceContext.getThemeDisplay();
+			User loggedUser = themeDisplay.getUser();
+
+			listaPagamenti = scrivaniaCittadinoMiddlewareService.getPagamentiUtente(loggedUser.getScreenName(),
+					themeDisplay.getCompanyId(), themeDisplay.getSiteGroup().getOrganizationId(),
+					themeDisplay.getSiteGroup().getGroupId(), true, cur, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
+
+			List<Richiesta> paginaSuccessiva = scrivaniaCittadinoMiddlewareService.getPagamentiUtente(
+					loggedUser.getScreenName(), themeDisplay.getCompanyId(),
+					themeDisplay.getSiteGroup().getOrganizationId(), themeDisplay.getSiteGroup().getGroupId(), true,
+					cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
+			if (Validator.isNotNull(paginaSuccessiva) && !paginaSuccessiva.isEmpty()) {
+				hasNext = true;
+			}
+		} catch (Exception e) {
+			_log.error("doServeResource() :: " + e.getMessage(), e);
+			throw new Exception(e);
+		}
+
+		responseMap.put("listaPagamenti", listaPagamenti);
+		responseMap.put("hasNext", hasNext);
+		responseMap.put("cur", cur);
+		String jsonObject = JSONFactoryUtil.looseSerializeDeep(responseMap);
+		resourceResponse.getWriter().write(jsonObject);
 	}
 
 }

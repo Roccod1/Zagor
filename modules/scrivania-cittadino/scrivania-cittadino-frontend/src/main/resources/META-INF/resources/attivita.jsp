@@ -1,7 +1,7 @@
 <portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_RICHIESTE %>" var="getRichiesteUtenteResourceCommandUrl">
 </portlet:resourceURL>
 
-<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_RICHIESTE %>" var="getPagamentiUtenteResourceCommandUrl">
+<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_PAGAMENTI %>" var="getPagamentiUtenteResourceCommandUrl">
 </portlet:resourceURL>
 
 
@@ -29,17 +29,18 @@
 		</button>
 	</div>
 	<div class="collapse-body">
-	{{if prop.dataProtocollo }}
-	<div>
-		{{localDate:prop.dataProtocollo}}
-	</div>
-	{{/if}}
-	<div id="collapse{{>prop.richiestaId }}" class="collapse" role="region" aria-labelledby="heading{{>prop.richiestaId }}">
-		{{if prop.note }}">
-			<p class="mb-3">{{>prop.note}}</p>
+		{{if prop.dataProtocollo }}
+		<div>
+			{{localDate:prop.dataProtocollo}}
+		</div>
 		{{/if}}
-		<p>Pratica: {{>prop.richiestaId }}</p>
-		<a href="#"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio"/></span></a>  
+		<div id="collapse{{>prop.richiestaId }}" class="collapse" role="region" aria-labelledby="heading{{>prop.richiestaId }}">
+			{{if prop.note }}">
+				<p class="mb-3">{{>prop.note}}</p>
+			{{/if}}
+			<p>Pratica: {{>prop.richiestaId }}</p>
+			<a href="#"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio"/></span></a>  
+		</div>
 	</div>
 	{{/props}}
 </div>
@@ -62,7 +63,54 @@
 </script>
 
 <script id="accordionPagamenti" type="text/x-jsrender">
-
+<div id="collapseDivRichieste" class="collapse-div collapse-background-active">
+	{{props listaPagamenti}}
+	<div class="collapse-header" id="heading{{>prop.richiestaId }}">
+		<button data-toggle="collapse" data-target="#collapse{{>prop.richiestaId }}" aria-expanded="false" aria-controls="collapse{{>prop.richiestaId }}">
+			<div class="button-wrapper">
+				<span class="text-uppercase">
+					{{>prop.oggetto}}			         
+			    </span>
+				<div class="icon-wrapper">
+				<svg class="icon icon-xs me-1 icon-primary">
+					<use href="/o/portale-istituzionale-theme/svg/sprite.svg#it-check"></use>
+					<span>{{>prop.stato}}</span>
+				</svg>
+			</div>
+		</button>
+	</div>
+	<div class="collapse-body">
+		{{if prop.dataProtocollo }}
+		<div>
+			{{localDate:prop.dataProtocollo}}
+		</div>
+		{{/if}}
+		<div id="collapse{{>prop.richiestaId }}" class="collapse" role="region" aria-labelledby="heading{{>prop.richiestaId }}">
+			{{if prop.note }}">
+				<p class="mb-3">{{>prop.note}}</p>
+			{{/if}}
+			<p>Pratica: {{>prop.richiestaId }}</p>
+			<a href="#"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio"/></span></a>  
+		</div>
+	</div>
+	{{/props}}
+</div>
+<div class="mt-5">
+{{if cur > 1}}
+	<button type="button" class="btn btn-primary" onclick="getComunicazioniUtente({{>cur - 1}})">
+		<svg class="icon icon-sm icon-white">
+			<use href="/o/portale-istituzionale-theme/svg/sprite.svg#it-arrow-left"></use>
+		</svg>
+	</button>
+{{/if}}
+{{if hasNext}}
+	<button type="button" class="btn btn-primary" onclick="getComunicazioniUtente({{>cur + 1}})">
+		<svg class="icon icon-sm icon-white">
+			<use href="/o/portale-istituzionale-theme/svg/sprite.svg#it-arrow-right"></use>
+		</svg>
+	</button>
+{{/if}}
+</div>
 </script>
 
 <script type="text/javascript">

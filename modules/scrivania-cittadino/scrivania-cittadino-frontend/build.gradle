@@ -3,6 +3,12 @@ dependencies {
 
 	compile project(":modules:scrivania-operatore:scrivania-operatore-api")
 	compile project(":modules:gestione-comunicazioni:gestione-comunicazioni-api")
+	compile project(":modules:gestione-enti:gestione-enti-api")
+	compile project(":modules:gestione-servizi:gestione-servizi-api")
+	compile project(":modules:gestione-procedure:gestione-procedure-api")
+	
+	
+	
 	
 	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.0.2"
 }

@@ -14,32 +14,30 @@
 <div id="collapseDivComunicazioni" class="collapse-div collapse-background-active">
 	{{props listaComunicazioni}}
 	<div class="collapse-header" id="heading{{>prop.comunicazioneId}}">
-		  <button data-toggle="collapse" data-target="#collapse{{>prop.comunicazioneId}}" aria-expanded="false" aria-controls="collapse{{>prop.comunicazioneId}}">
-		     <div class="button-wrapper">
-		     	 <span class="text-uppercase">
-					{{>prop.titolo}}			   		 
-		     	 </span>
+		<button data-toggle="collapse" data-target="#collapse{{>prop.comunicazioneId}}" aria-expanded="false" aria-controls="collapse{{>prop.comunicazioneId}}">
+			<div class="button-wrapper">
+			<span class="text-uppercase">
+				{{>prop.titolo}}			   		 
+			</span>
 		    <div class="icon-wrapper">
-		        <span>{{>prop.tipologia ? prop.tipologia.nome : ""}}</span>
+				<span>{{>prop.tipologia ? prop.tipologia.nome : ""}}</span>
 		    </div>
-		  </button>
-		</div>
-		<div class="collapse-body">
-			<div>
-				{{>prop.dataInvio ? prop.dataInvio : ""}}
+		</button>
+	</div>
+	<div class="collapse-body">
+		<div>
+			{{>prop.dataInvio ? prop.dataInvio : ""}}
+		</div>	
+		<div id="collapse{{>prop.comunicazioneId}}" class="collapse" role="region" aria-labelledby="heading{{>prop.comunicazioneId}}">
+			{{if prop.descrizione }}
+			<div class="mb-3">
+				{{:prop.descrizione}}
 			</div>
-		
-		  <div id="collapse{{>prop.comunicazioneId}}" class="collapse" role="region" aria-labelledby="heading{{>prop.comunicazioneId}}">
-		  {{if prop.descrizione }}
-				<div class="mb-3">
-					{{:prop.descrizione}}
-				</div>
-		  {{/if}}
-		  	
-		     <p><liferay-ui:message key="codice-servizio"/>: {{>prop.codiceServizio ? prop.codiceServizio : "-"}}</p>
-		     <a href="{{>prop.uriServizio ? prop.uriServizio : "#" }}"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio"/></span></a>  
-		  </div>
+			{{/if}}  	
+			<p><liferay-ui:message key="codice-servizio"/>: {{>prop.codiceServizio ? prop.codiceServizio : "-"}}</p>
+			<a href="{{>prop.uriServizio ? prop.uriServizio : "#" }}"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio"/></span></a>  
 		</div>
+	</div>
 	{{/props}}
 </div>
 <div class="mt-5">
