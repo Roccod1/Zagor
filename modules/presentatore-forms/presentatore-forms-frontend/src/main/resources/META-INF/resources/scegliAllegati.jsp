@@ -511,7 +511,7 @@ console.log("aui script");
 			$("#<portlet:namespace />salva-form").submit();
 		});
 					
-		<%-- GESTIONE UPLOAD FILE FIRMATO--%>	
+		<%-- GESTIONE UPLOAD FILE FIRMATO --%>	
 	$('.save-attachment-uploadFileFirmato').on('click', function(){	
 			var nomeAllegato = $('#<portlet:namespace />uploadFileFirmato').val();
 	    	var attachmentFileNameValue = nomeAllegato.replace('C:\\fakepath\\', ' ');
