@@ -11,11 +11,11 @@
 </portlet:renderURL>
 
 <div class="d-flex justify-content-start">
-	<a href="${dettaglioURL}" class="btn btn-primary" title="<liferay-ui:message key="vai-a-dettaglio" />">
+	<a href="${dettaglioURL}" title="<liferay-ui:message key="vai-a-dettaglio" />">
 		<clay:icon symbol="search" />
 	</a>
 
-	<button class="btn btn-primary ml-1" title="<liferay-ui:message key="prendi-in-carico" />">
+	<a href="#" class="ml-1" title="<liferay-ui:message key="prendi-in-carico" />">
 		<i class='icon-edit'></i>
-	</button>
+	</a>
 </div>
