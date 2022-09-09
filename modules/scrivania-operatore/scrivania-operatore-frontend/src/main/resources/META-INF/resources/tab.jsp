@@ -56,6 +56,16 @@
 			</aui:select>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-3">
+			<aui:select name="queryServizio" label="servizio">
+				<aui:option value=""><liferay-ui:message key="tutti" /></aui:option>
+				<c:forEach items="${servizi}" var="servizio">
+					<aui:option value="${servizio.id}"><c:out value="${servizio.nome}" /></aui:option>
+				</c:forEach>
+			</aui:select>
+		</div>
+	</div>
 	<div class="d-flex justify-content-end">
 		<a href="${resetURL}" class="btn btn-secondary mr-1"><liferay-ui:message key="reset" /></a>
 		<aui:button type="submit" value="cerca" />

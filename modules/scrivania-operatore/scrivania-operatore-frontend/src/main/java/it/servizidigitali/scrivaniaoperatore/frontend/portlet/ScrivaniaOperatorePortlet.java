@@ -30,6 +30,7 @@ import it.servizidigitali.camunda.integration.client.model.Task;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.ServizioDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.service.ScrivaniaOperatoreFrontendService;
 import it.servizidigitali.scrivaniaoperatore.frontend.util.MapUtil;
 import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
@@ -141,6 +142,13 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 			}
 		}
 
+		List<ServizioDTO> servizi = scrivaniaOperatoreFrontendService
+				.getServiziEnte(ctx)
+				.stream()
+				.map(x -> mapUtil.mapServizio(x))
+				.collect(Collectors.toList());
+		
+		request.setAttribute("servizi", servizi);
 		request.setAttribute("totale", count);
 		request.setAttribute("lista", elems);
 		request.setAttribute("stati", StatoRichiesta.values());
