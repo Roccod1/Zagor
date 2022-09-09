@@ -99,6 +99,7 @@
 		<liferay-ui:search-container-column-text name="cf-piva" value="${elem.cf}" />
 		<fmt:formatDate value="${elem.dataUltimoAggiornamento}" pattern="dd/MM/yyyy" var="elemData" />
 		<liferay-ui:search-container-column-text name="data-ultimo-aggiornamento" value="${elemData}" />
+		<liferay-ui:search-container-column-text name="servizio" value="${elem.servizio}" />
 		<liferay-ui:search-container-column-text name="accesso">
 			<c:choose>
 				<c:when test="${elem.accesso}">
