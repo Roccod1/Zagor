@@ -6,9 +6,11 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.Portlet;
@@ -21,11 +23,14 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.backoffice.integration.model.commmon.ComponenteNucleoFamiliare;
 import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletService;
-
+import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
+import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
+import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
+import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 
 /**
  * @author pindi
@@ -68,11 +73,11 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
-		_log.info("render presentatore forms");
 
+		_log.info("render presentatore forms");
 		ServiceContext serviceContext = null;
 		// TODO: ottimizzare recuperando i dati da configurazione procedura
-		boolean stepComponentiFamiliari = true;
+		boolean stepComponentiFamiliari = false;
 		String filtroComponentiFamiliari = "TUTTI";
 
 		try {
@@ -91,7 +96,24 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 				include("/scegliComponentiNucleoFamiliare.jsp", renderRequest, renderResponse);
 
 			} else {
-				//TODO: visualizzazione form alpaca
+				try {
+					if (!PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND
+							.equals(ParamUtil.getString(renderRequest, "mvcRenderCommandName"))) {
+
+					Long idFormMock = 49940L;
+					Form form = formLocalService.getForm(idFormMock);
+					form.setListaDefinizioneAllegato(definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idFormMock));
+
+					FormData formData = AlpacaUtil.loadFormData(form, null, true);
+					AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
+					
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+						include("/compilaForm.jsp", renderRequest, renderResponse);
+					}
+				} catch (Exception e) {
+					_log.error(e.getMessage());
+				}
+				
 			}
 
 		} catch (Exception e) {

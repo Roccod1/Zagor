@@ -7,6 +7,7 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/journal" prefix="liferay-journal" %>
 
 <%@page import="it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys"%>
+<%@page import="it.servizidigitali.gestioneforms.frontend.constants.GestioneFormsPortletKeys"%>
 
 <liferay-theme:defineObjects />
 
