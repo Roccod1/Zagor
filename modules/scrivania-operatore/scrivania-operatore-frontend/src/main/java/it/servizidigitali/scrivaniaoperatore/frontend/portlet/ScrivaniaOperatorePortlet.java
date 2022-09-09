@@ -83,7 +83,8 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		String queryDataRichA = ParamUtil.getString(request, "queryDataRichA");
 		int queryAut = ParamUtil.getInteger(request, "queryAut");
 		String queryStato = ParamUtil.getString(request, "queryStato");
-
+		long queryServizio = ParamUtil.getLong(request, "queryServizio");
+		
 		ServiceContext ctx;
 		try {
 			ctx = ServiceContextFactory.getInstance(request);
@@ -161,7 +162,8 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		request.setAttribute("queryDataRichA", queryDataRichA);
 		request.setAttribute("queryAut", queryAut);
 		request.setAttribute("queryStato", queryStato);
-
+		request.setAttribute("queryServizio", queryServizio);
+		
 		super.render(request, response);
 	}
 

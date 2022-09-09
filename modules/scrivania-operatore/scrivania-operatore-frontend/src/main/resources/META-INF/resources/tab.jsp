@@ -58,8 +58,8 @@
 	</div>
 	<div class="row">
 		<div class="col-3">
-			<aui:select name="queryServizio" label="servizio">
-				<aui:option value=""><liferay-ui:message key="tutti" /></aui:option>
+			<aui:select name="queryServizio" label="servizio" value="${queryServizio}">
+				<aui:option value="0"><liferay-ui:message key="tutti" /></aui:option>
 				<c:forEach items="${servizi}" var="servizio">
 					<aui:option value="${servizio.id}"><c:out value="${servizio.nome}" /></aui:option>
 				</c:forEach>
@@ -82,6 +82,7 @@
 	<portlet:param name="queryDataRichA" value="${queryDataRichA}" />
 	<portlet:param name="queryAut" value="${queryAut}" />
 	<portlet:param name="queryStato" value="${queryStato}" />
+	<portlet:param name="queryServizio" value="${queryServizio}" />
 </liferay-portlet:renderURL>
 
 <liferay-ui:search-container total="${totale}"
