@@ -61,7 +61,7 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 		
 		_log.info("render scegliAllegati");
 		
-		Long idFormMock = 49940L;
+		Long idFormMock = 52402L;
 		Form form = null;
 		try {
 		form = formLocalService.getForm(idFormMock);

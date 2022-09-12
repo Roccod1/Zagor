@@ -4,6 +4,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
@@ -20,11 +21,14 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.backoffice.integration.model.commmon.ComponenteNucleoFamiliare;
 import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletService;
-
+import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
+import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
+import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
+import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 
 /**
  * @author pindi
@@ -99,14 +103,24 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 				include("/scegliComponentiNucleoFamiliare.jsp", renderRequest, renderResponse);
 
 			} else {
-//				Form form = gestioneProcedureMiddlewareService.getFormPrincipaleProcedura(procedura.getProceduraId());
-				
-//				if(Validator.isNotNull(form)) {
-//					FormData formData = AlpacaUtil.loadFormData(form, null, false);
-//					AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
-//					renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
-//					include("/compilaForm.jsp", renderRequest,renderResponse);
-//				}
+				try {
+					if (!PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND
+							.equals(ParamUtil.getString(renderRequest, "mvcRenderCommandName"))) {
+
+					Long idFormMock = 52402L;
+					Form form = formLocalService.getForm(idFormMock);
+					form.setListaDefinizioneAllegato(definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idFormMock));
+
+					FormData formData = AlpacaUtil.loadFormData(form, null, true);
+					AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
+					
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+						include("/compilaForm.jsp", renderRequest, renderResponse);
+					}
+				} catch (Exception e) {
+					_log.error(e.getMessage());
+				}
+		
 			}
 
 		} catch (Exception e) {
