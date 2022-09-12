@@ -12,9 +12,13 @@ import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+
+import java.io.File;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -59,6 +63,10 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
+		File file = uploadPortletRequest.getFile("attachmentFile0");
+		System.out.println(file);
 		
 		long idForm = ParamUtil.getLong(actionRequest, GestioneFormsPortletKeys.ID_FORM);
 		String codice = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.CODICE);
@@ -115,8 +123,11 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 			String idAllegatoTemporaneo = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_ID_TEMPORANEO + i);
 			String fileNameModello = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_FILENAME + i);
 			boolean obbligatorio = ParamUtil.getBoolean(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_OBBLIGATORIO + i);
+			FileEntry allegatoCaricato = null;
 			
-			FileEntry allegatoCaricato = definizioneAllegatoLocalService.uploadAllegatoDocumentMediaRepository(idAllegatoTemporaneo, fileNameModello, themeDisplay.getScopeGroup(),form.getFormId(),themeDisplay.getUserId(),serviceContext);
+			if(Validator.isNotNull(idAllegatoTemporaneo)) {
+				allegatoCaricato = definizioneAllegatoLocalService.uploadAllegatoDocumentMediaRepository(idAllegatoTemporaneo, fileNameModello, themeDisplay.getScopeGroup(),form.getFormId(),themeDisplay.getUserId(),serviceContext);
+			}
 			
 			DefinizioneAllegato allegato = definizioneAllegatoLocalService.createDefinizioneAllegato(0);
 			
