@@ -69,63 +69,62 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand{
 		try {
 			fileArray = FileUtil.getBytes(file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			_log.error("Impossibile ottenere il byte array del file!");
 		}
 		
 		String encoded = new String(Base64.getEncoder().encode(fileArray));
 				
-//		if(Validator.isNotNull(idRichiesta)) {
-//			try {
-//				richiesta = richiestaLocalService.getRichiesta(idRichiesta);
-//			} catch (Exception e) {
-//				_log.error("Impossibile recuperare la richiesta con ID: " + idRichiesta + "a causa di: " + e.getMessage());
-//				// capire a quale jsp deve puntare in caso di errore
-//				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_RICHIESTA);
-//			}
-//			
-//			try {
-//				procedura = proceduraLocalService.getProcedura(richiesta.getProceduraId());
-//			} catch (Exception e) {
-//				_log.error("Impossibile recuperare la procedura con ID: " + idRichiesta + "a causa di: " + e.getMessage());
-//				// capire a quale jsp deve puntare in caso di errore
-//				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
-//			}
-//			
-//			try {
-//				servizio = servizioLocalService.getServizioById(procedura.getServizioId());
-//			} catch (Exception e) {
-//				_log.error("Impossibile recuperare il servizio con ID: " + idRichiesta + "a causa di: " + e.getMessage());
-//				// capire a quale jsp deve puntare in caso di errore
-//				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_SERVIZIO);
-//			}
-//		}else {
-//			_log.error("Non è stato possibile recuperare l'id della richiesta!");
-//			SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_RICHIESTA);
-//			// capire a quale jsp deve puntare in caso di errore
-//		}
+		if(Validator.isNotNull(idRichiesta)) {
+			try {
+				richiesta = richiestaLocalService.getRichiesta(idRichiesta);
+			} catch (Exception e) {
+				_log.error("Impossibile recuperare la richiesta con ID: " + idRichiesta + "a causa di: " + e.getMessage());
+				// capire a quale jsp deve puntare in caso di errore
+				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_RICHIESTA);
+			}
+			
+			try {
+				procedura = proceduraLocalService.getProcedura(richiesta.getProceduraId());
+			} catch (Exception e) {
+				_log.error("Impossibile recuperare la procedura con ID: " + idRichiesta + "a causa di: " + e.getMessage());
+				// capire a quale jsp deve puntare in caso di errore
+				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
+			}
+			
+			try {
+				servizio = servizioLocalService.getServizioById(procedura.getServizioId());
+			} catch (Exception e) {
+				_log.error("Impossibile recuperare il servizio con ID: " + idRichiesta + "a causa di: " + e.getMessage());
+				// capire a quale jsp deve puntare in caso di errore
+				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_SERVIZIO);
+			}
+		}else {
+			_log.error("Non è stato possibile recuperare l'id della richiesta!");
+			SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_RICHIESTA);
+			// capire a quale jsp deve puntare in caso di errore
+		}
 		
 		// TODO: Delega
 		
 		// TODO: Da Pagare
 		
 		
-//		if(richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
+		if(richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
 			
 			// TODO: Controllare se firmaDocumentoAbilitata
 			
-			// TipoServizio tipoServizio = procedura.getTipoServizio();
+			String tipoServizio = procedura.getStep2TipoServizio();
 			
-//			if(Validator.isNotNull(tipoServizio)) {
-//				renderRequest.setAttribute("configurazione_tipo_servizio_step2_2", tipoServizio);
+			if(Validator.isNotNull(tipoServizio)) {
+				renderRequest.setAttribute("configurazione_tipo_servizio_step2_2", tipoServizio);
 				
 				// TODO: Capire se utilizzare uno switch case per tutti i tipi di servizi o no 
 				
 				// CERTIFICATO
 				
-//				renderRequest.setAttribute(PresentatoreFormsPortletKeys.ANTEPRIMA_CERTIFICATI, certificatiPdfPreviewEnabled); 
+				renderRequest.setAttribute(PresentatoreFormsPortletKeys.ANTEPRIMA_CERTIFICATI, certificatiPdfPreviewEnabled); 
 				
-//				if(certificatiPdfPreviewEnabled) {
+				if(certificatiPdfPreviewEnabled) {
 					/*
 					 * TODO: Realizzare un metodo in ProceduraLocalServiceImpl che dato l'idProcedura
 					 * mi restituisca il json pulito del form principale
@@ -135,9 +134,9 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand{
 					 * TODO: Realizzare un metodo in IstanzaFormLocalSerivceImpl che dato l'idRichiesta
 					 * mi restituisca il json del form con i dati (utilizzare il finder già definito)
 					 */
-//				}
-//			}
-//		}
+				}
+			}
+		}
 		
 //		renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, servizio.getNome());
 //		renderRequest.setAttribute(PresentatoreFormsPortletKeys.DA_PAGARE, daPagare);

@@ -1,5 +1,11 @@
 <%@ include file="./init.jsp" %>
 
+<portlet:renderURL var="renderHomeURL">
+	<portlet:param name="mvcRenderCommandName" value="/home" />
+	<portlet:param name="richiestaId" value="${richiestaId}" />
+	<portlet:param name="servizioId" value="${servizioId}" />
+</portlet:renderURL>
+
 <div class="row-fluid">
 	<div class="page-header">
 		<h2 class="noMargin">${titoloPortletServizio}<c:if test="${not empty denominazioneComuneServizio}"> - ${denominazioneComuneServizio}</c:if></h2>
@@ -60,7 +66,7 @@
 				</aui:container>			
 			</aui:fieldset>
 			
-			<aui:button cssClass="pull-right" type="submit" value="button.componenteNucleoFamiliare.avanti" />
+			<aui:button cssClass="pull-right" type="submit" href="${renderHomeURL}" value="button.componenteNucleoFamiliare.avanti" />
 			
 		</aui:form>
 	</div>

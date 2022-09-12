@@ -8,7 +8,9 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,6 @@ import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
-import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
@@ -34,7 +35,6 @@ import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
-import it.servizidigitali.scrivaniaoperatore.exception.NoSuchIstanzaFormException;
 import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
@@ -55,8 +55,8 @@ public class HomeRenderCommand implements MVCRenderCommand{
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
 	
-	@Reference
-	private ProceduraLocalService proceduraLocalService;
+//	@Reference
+//	private GestioneProcedureMiddlewareService gestioneProcedureMiddlewareService;
 	
 	@Reference
 	private ServizioLocalService servizioLocalService;
@@ -76,7 +76,12 @@ public class HomeRenderCommand implements MVCRenderCommand{
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
-		Long idRichiesta = null;
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		long richiestaId = 0;
+		long servizioId = 0;
+		
 		Richiesta richiesta = null;
 		Procedura procedura = null;
 		Servizio servizio = null;
@@ -84,19 +89,19 @@ public class HomeRenderCommand implements MVCRenderCommand{
 		
 		List<String> lstDestinazioniUso = getListaDestinazioniUso();
 		
-		if(Validator.isNotNull(idRichiesta)) {
+		if(Validator.isNotNull(richiestaId)) {
 			try {
-				richiesta = richiestaLocalService.getRichiesta(idRichiesta);
+				richiesta = richiestaLocalService.getRichiesta(richiestaId);
 			} catch (Exception e) {
-				_log.error("Impossibile recuperare la richiesta con ID: " + idRichiesta + "a causa di: " + e.getMessage());
+				_log.error("Impossibile recuperare la richiesta con ID: " + richiestaId + "a causa di: " + e.getMessage());
 				// capire a quale jsp deve puntare in caso di errore
 				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_RICHIESTA);
 			}
 		
 			try {
-				procedura = proceduraLocalService.getProcedura(richiesta.getProceduraId());
+//				procedura = gestioneProcedureMiddlewareService.getProcedura(themeDisplay.getSiteGroupId(), servizioId, true);
 			} catch (Exception e) {
-				_log.error("Impossibile recuperare la procedura con ID: " + idRichiesta + "a causa di: " + e.getMessage());
+				_log.error("Impossibile recuperare la procedura con servizioId: " + servizioId + "a causa di: " + e.getMessage());
 				// capire a quale jsp deve puntare in caso di errore
 				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
 			}
@@ -104,7 +109,7 @@ public class HomeRenderCommand implements MVCRenderCommand{
 			try {
 				servizio = servizioLocalService.getServizioById(procedura.getServizioId());
 			} catch (Exception e) {
-				_log.error("Impossibile recuperare il servizio con ID: " + idRichiesta + "a causa di: " + e.getMessage());
+				_log.error("Impossibile recuperare il servizio con ID: " + procedura.getServizioId() + "a causa di: " + e.getMessage());
 				// capire a quale jsp deve puntare in caso di errore
 				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_SERVIZIO);
 			}
@@ -114,36 +119,28 @@ public class HomeRenderCommand implements MVCRenderCommand{
 			// capire a quale jsp deve puntare in caso di errore
 		}
 		
-		if(richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
-			renderRequest.setAttribute("bozzaPresente", true);
-			/*
-			 * Return della jsp dove permette di scegliere
-			 * se caricare la bozza oppure compilare nuova
-			 * istanza
-			 */
-			
-			;
-		}else {
-			
-			/*
-			 * TODO: Affinare la condizione nell'if una volta fatto il merge
-			 * del branch con gestione procedure
-			 */
-//			if(Validator.isNotNull(procedura.getConfigurazioniPresentatoreForm())) {
-				try {
-					alpacaStructure = getAlpacaJsonStructure(richiesta.getRichiestaId(),procedura,false);
-				}catch(Exception e) {
-					_log.error("Errore durante la visualizzazione del form!" + e.getMessage());
-					// capire a quale jsp deve puntare in caso di errore
-				}
-//			}
-		}
 		
 		renderRequest.setAttribute("statoRichiesta", richiesta.getStato());
-		renderRequest.setAttribute("configurazioneTipoServizioStep2", "CERTIFICATO");
+		renderRequest.setAttribute("configurazioneTipoServizioStep2", procedura.getStep2TipoServizio());
 		renderRequest.setAttribute("destinazioniUso", lstDestinazioniUso);
+		
+		try {
+			if(richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
+				renderRequest.setAttribute("bozzaPresente", true);
+				return "/home.jsp";
+			}else {
+				alpacaStructure = getAlpacaJsonStructure(richiesta.getRichiestaId(),procedura,false);
+				renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+				
+				return PresentatoreFormsPortletKeys.JSP_COMPILA_FORM;
+				
+			}
+		}catch(Exception e) {
+			_log.error("Errore durante la visualizzazione del form!" + e.getMessage());
+		}
+		
+		return PresentatoreFormsPortletKeys.JSP_HOME;
 
-		return PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO;
 	}
 	
 	private AlpacaJsonStructure getAlpacaJsonStructure(long idRichiesta, Procedura procedura, Boolean caricaBozza) {
@@ -152,13 +149,21 @@ public class HomeRenderCommand implements MVCRenderCommand{
 		IstanzaForm istanzaForm = null;
 		Form form = null;
 		
-		if(Validator.isNotNull(procedura)) {
-			form = getFormPrincipale(procedura.getProceduraId());
+		try {
+			form = formLocalService.getForm(75716);
+		} catch (PortalException e) {
+			_log.error("Errore durante il recupero del form con id 75716" + e.getMessage());
 		}
+		
+//		if(Validator.isNotNull(procedura)) {
+//			form = gestioneProcedureMiddlewareService.getFormPrincipaleProcedura(procedura.getProceduraId());
+//			
+//		}
 		
 		if(Validator.isNotNull(caricaBozza) && caricaBozza && idRichiesta>0) {
 			
 			try {
+				// TODO: Sostituire con metodo che ritorna istanza per idRichiesta
 				istanzaForm = istanzaFormLocalService.getIstanzaForm(idRichiesta);
 			}
 			catch (PortalException e) {
@@ -172,8 +177,14 @@ public class HomeRenderCommand implements MVCRenderCommand{
 			 */
 		}
 		
-		FormData formData = AlpacaUtil.loadFormData(form, jsonDataBozza, caricaBozza);
-		AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
+		FormData formData = null;
+		AlpacaJsonStructure alpacaStructure = null;
+		
+		if(Validator.isNotNull(form)) {
+			formData = AlpacaUtil.loadFormData(form, jsonDataBozza, caricaBozza);
+			alpacaStructure = formData.getAlpaca();
+		}
+
 		UserPreferences userPreferences = new UserPreferences();
 		userPreferences.setCodiceFiscaleComponente(null);
 		userPreferences.setCodiceFiscaleRichiedente(null);
@@ -201,19 +212,6 @@ public class HomeRenderCommand implements MVCRenderCommand{
 		
 		return alpacaStructure;
 
-	}
-	
-	private Form getFormPrincipale(long idProcedura) {
-		Form form = null;
-		if(idProcedura>0) {
-			/*
-			 * TODO: Una volta fatto il merge con il branch di gestione
-			 * procedure, utilizzare proceduraFormLocalService per ottenere l'id
-			 * del form principale attraverso la procedura e recuperarne l'oggetto
-			 */
-		}
-		
-		return form;
 	}
 	
 	private List<String> getListaDestinazioniUso(){

@@ -24,6 +24,8 @@ public class PresentatoreFormsPortletKeys {
 	public static final String SELECT_COMPONENTI_NUCLEO_FAMILIARE ="selectComponentiNucleoFamiliare";
 	public static final String JSP_SCEGLI_DESTINAZIONE_USO = "/scegliDestinazioneUso.jsp";
 	public static final String JSP_SCEGLI_MODALITA_PAGAMENTO = "/scegliModalitaPagamento.jsp";
+	public static final String JSP_COMPILA_FORM = "/compilaForm.jsp";
+	public static final String JSP_HOME = "/home.jsp";
 	
 	// MESSAGGI DI ERRORE
 	public static final String IMPOSSIBILE_RECUPERARE_RICHIESTA = "impossibile-recuperare-richiesta";
