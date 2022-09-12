@@ -13,7 +13,6 @@
 
 
 
-
 <div class="page-header">
 				<h2><liferay-ui:message key="form"/></h2>
 </div>
@@ -404,41 +403,13 @@
 		    	var attachmentFiletypeValue = $('#attachment-filetype').val();
 		    	var attachmentCodetypesValue = $('#attachment-codetype').val();
 		    	var attachmentFileNameValue = nomeAllegato.replace('C:\\fakepath\\', ' ');
-				var idAllegatoTemporaneoValue = '';
 				
 				var $trToAdd = "";
 				var formData = new FormData();
 				formData.append('<portlet:namespace />' + 'attachmentFile', $('#<portlet:namespace />attachment-file')[0].files[0]);
 				
-				if($('#<portlet:namespace />attachment-file').val()){
-					
-					
-					$.ajax({
-			    		url: "${uploadFileUrl}",
-			    		type: 'POST',
-			    		data: formData,
-			    		processData: false,
-			    		contentType: false,
-			    		success: function(data){	
-			    			if(data.status==='ok'){
-			    				$('#alertUploadAllegato').addClass('hidden');
-		 	    				idAllegatoTemporaneoValue = data.idAllegatoTemporaneo;
-		 		 				$trToAdd = aggiungiRigaTabella(attachmentIdValue,attachmentNameValue,attachmentMandatoryValue,attachmentFiletypeValue,attachmentCodetypesValue,attachmentFileNameValue,idAllegatoTemporaneoValue);
-			    			}else if(data.status==='error'){
-			    				$('#alertUploadAllegato').removeClass('hidden');
-			    				console.log("Errore durante l'upload del file!");
-			    			}
-			    		}, error: function(xhr){
-			    			
-			    		}
-			    	});
-				}else{
-	 				$trToAdd = aggiungiRigaTabella(attachmentIdValue,attachmentNameValue,attachmentMandatoryValue,attachmentFiletypeValue,attachmentCodetypesValue,attachmentFileNameValue,idAllegatoTemporaneoValue);
-				}
-		    	
+	 			index = aggiungiRigaTabella(attachmentIdValue,attachmentNameValue,attachmentMandatoryValue,attachmentFiletypeValue,attachmentCodetypesValue,attachmentFileNameValue);
 
-				
-				
 			}
 
 	    });
@@ -447,19 +418,18 @@
 	
 	function aggiungiRigaTabella(attachmentIdValue, attachmentNameValue,
 				attachmentMandatoryValue, attachmentFiletypeValue, attachmentCodetypesValue,
-				attachmentFileNameValue, idAllegatoTemporaneoValue) {
+				attachmentFileNameValue) {
 		
 			
 			
-			var attachmentId = '<input type="text" class="nostylereadonly definizioneAllegatoId" id="definizioneAllegatoId'+ index +'" name="<portlet:namespace />listaDefinizioneAllegato['+ index +'].definizioneAllegatoId" readonly value="'+ attachmentIdValue +'">';
+			var attachmentId = '<input type="text" class="nostylereadonly definizioneAllegatoId" id="definizioneAllegatoId'+ index +'" name="<portlet:namespace />definizioneAllegatoId'+ index +'" readonly value="'+ attachmentIdValue +'">';
 	    	var attachmentName = '<input type="text" class="nostylereadonly" id="denominazione'+ index +'" name="<portlet:namespace />denominazione'+ index +'" value="'+ attachmentNameValue +'" readonly>';
 	    	var attachmentMandatory = '<input type="text" class="nostylereadonly" id="obbligatorio'+ index +'" name="<portlet:namespace />obbligatorio'+ index +'" value="'+ attachmentMandatoryValue +'" onclick="return false;" readonly checked>';
 	    	var attachmentFiletype = '<input type="text" class="nostylereadonly" id="tipiFileAmmessi'+ index +'" name="<portlet:namespace />tipiFileAmmessi'+ index +'" value="'+ attachmentFiletypeValue +'" readonly>';
 	    	var attachmentCodetypes = '<input type="text" class="nostylereadonly" id="codiciTipologiaDocumento'+ index +'" name="<portlet:namespace />codiciTipologiaDocumento'+ index +'" value="'+ attachmentCodetypesValue +'" readonly>';
 	    	var attachmentFileName = '<input type="text" class="nostylereadonly" id="filenameModello'+ index +'" name="<portlet:namespace />filenameModello'+ index +'" value=\'' +  attachmentFileNameValue + '\' size="50"  readonly>';
-			var idAllegatoTemporaneoInput = '<input type="hidden" id="idAllegatoTemporaneo'+ index +'" name="<portlet:namespace />idAllegatoTemporaneo'+ index +'" value="'+ idAllegatoTemporaneoValue +'">';
+			var fileInput = '<input type="file" id="fileInput'+ index +'" name="<portlet:namespace />fileInput'+ index +'">';
 			
-			console.log("Valore nome: " + attachmentName);
 			
 	    	var $trToAdd = $('<tr>')
 	    	.append($('<td>'+ attachmentId))
@@ -468,7 +438,7 @@
 	        .append($('<td>' + attachmentFiletype))
 	        .append($('<td>'+ attachmentCodetypes))
 	        .append($('<td>' + attachmentFileName))
-	        .append($('<td>' + idAllegatoTemporaneoInput))
+	        .append($('<td>' + fileInput))
 	        .append($('<td>')
 	        	.append($('<button>')
 	        			.addClass('btn btn-default delete-attachment')
@@ -512,6 +482,11 @@
 	    	} else {
 	    		$('.attachment-tbody')
 	    			.append($trToAdd);
+	    		
+				if($("#<portlet:namespace />attachment-file")){
+				  $('#fileInput' + index)[0].files = $("#<portlet:namespace />attachment-file")[0].files;
+				}
+
 	    	}
 	    	
 
@@ -525,7 +500,7 @@
 	    	$('#<portlet:namespace />dimensioneListaDefinizioneAllegato').val(index);
 			
 			
-	    	return $trToAdd;
+	    	return index;
 		}
 	
 	
