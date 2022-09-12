@@ -33,7 +33,7 @@ import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreForms
  *
  */
 @Component( //
-		immediate = true, //
+		immediate = false, //
 		property = { //
 				"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
 				"service.ranking:Integer=100" //
@@ -90,7 +90,7 @@ public class SecurityAccessFilter implements RenderFilter {
 				User loggedUser = themeDisplay.getUser();
 				Serializable livelloSpid = loggedUser.getExpandoBridge().getAttribute("livelloSPID");
 				if (livelloSpid != null) {
-					int livelloSpidUser = (int) livelloSpid;
+					short livelloSpidUser = (short) livelloSpid;
 					if (livelloSpidUser < servizioEnte.getLivelloAutenticazione()) {
 						log.debug("Livello SPID non sufficiente per accedere al servizio :: servizioId: " + servizioEnte.getServizioId() + ", organizationId: " + servizioEnte.getOrganizationId()
 								+ ", livelloSpidUser: " + livelloSpidUser + ", livelloAutenticazione: " + servizioEnte.getLivelloAutenticazione());
