@@ -16,6 +16,7 @@ public class ScrivaniaCittadinoPortletKeys
     public static final String LISTA_PRENOTAZIONI = "listaPrenotazioni";
     public static final String LISTA_COMUNICAZIONI = "listaComunicazioni";
     public static final String LISTA_PAGAMENTI = "listaPagamenti";
+    public static final String LISTA_TIPOLOGIA_COMUNICAZIONE = "listaTyipologiaComunicazione";
     
     public static final String RESOURCE_COMMAND_GET_RICHIESTE = "/getRichiesteUtente";
     public static final String RESOURCE_COMMAND_GET_COMUNICAZIONI = "/getComunicazioniUtente";

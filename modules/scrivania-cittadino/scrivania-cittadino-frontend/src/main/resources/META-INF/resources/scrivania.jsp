@@ -4,11 +4,89 @@
 <portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_PRENOTAZIONI %>" var="getPrenotazioniUtenteResourceCommandUrl">
 </portlet:resourceURL>
 
-<h3><liferay-ui:message key="comunicazioni"/></h3>
-<div id="<portlet:namespace/>accordionContainerComunicazioni"></div>
+<div class="container">
+	<div class="row">
+		<div class="col-11">
+			<h3><liferay-ui:message key="comunicazioni"/></h3>						
+		</div>	
+		<div class="col-1">
+			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#filterCollapse" aria-expanded="false">Filtri</button>
+		</div>
+	</div>
+	<div class="row collapse" id="filterCollapse">
+		<div class="col-5">
+			<aui:input type="text" name="filterOggettoComunicazione"/>				
+		</div>
+		
+		<div class="col">
+			<aui:select name="filterTipoComunicazione">
+				<aui:option value="Stato1" label="Stato1"/>
+				<aui:option value="Stato2" label="Stato2"/>
+				<aui:option value="Stato3" label="Stato3"/>
+			</aui:select>			
+		</div>
+		
+		<div class="col">
+			<aui:select name="filterComunicazione">
+				<aui:option value="Stato1" label="Stato1"/>
+				<aui:option value="Stato2" label="Stato2"/>
+				<aui:option value="Stato3" label="Stato3"/>
+			</aui:select>	
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<div id="<portlet:namespace/>accordionContainerComunicazioni"></div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-11">
+			<h3><liferay-ui:message key="le-mie-prenotazioni"/></h3>						
+		</div>
+		<div class="col-1">
+			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#filterCollapsePrenotazioni" aria-expanded="false">Filtri</button>
+		</div>
+	</div>
+	<div class="row collapse" id="filterCollapsePrenotazioni">
+		<div class="col">
+			<div class="d-inline-flex">
+				<select name="listaFiltro4">
+					<option>Stato1</option>
+					<option>Stato2</option>
+					<option>Stato3</option>
+				</select>
 
-<h3><liferay-ui:message key="le-mie-prenotazioni"/></h3>
-<div id="<portlet:namespace/>accordionContainerPrenotazioni"></div>
+				<select name="listaFiltro5">
+					<option>Stato1</option>
+					<option>Stato2</option>
+					<option>Stato3</option>
+				</select>
+				
+				<select name="listaFiltro6">
+					<option>Stato1</option>
+					<option>Stato2</option>
+					<option>Stato3</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<div id="<portlet:namespace/>accordionContainerPrenotazioni"></div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+<!-- <h3><liferay-ui:message key="le-mie-prenotazioni"/></h3> -->
+<%-- <div id="<portlet:namespace/>accordionContainerPrenotazioni"></div> --%>
 
 <script id="accordionComunicazioni" type="text/x-jsrender">
 <div id="collapseDivComunicazioni" class="collapse-div collapse-background-active">
