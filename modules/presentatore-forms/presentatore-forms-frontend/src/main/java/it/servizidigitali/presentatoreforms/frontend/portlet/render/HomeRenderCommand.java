@@ -150,7 +150,7 @@ public class HomeRenderCommand implements MVCRenderCommand{
 		Form form = null;
 		
 		try {
-			form = formLocalService.getForm(75716);
+			form = formLocalService.getForm(52402);
 		} catch (PortalException e) {
 			_log.error("Errore durante il recupero del form con id 75716" + e.getMessage());
 		}
