@@ -687,6 +687,113 @@ public interface ServizioEntePersistence extends BasePersistence<ServizioEnte> {
 	public int countByServizioId(long servizioId);
 
 	/**
+	 * Returns the servizio ente where groupId = &#63; and privateLayoutId = &#63; or throws a <code>NoSuchServizioEnteException</code> if it could not be found.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayoutId the private layout ID
+	 * @return the matching servizio ente
+	 * @throws NoSuchServizioEnteException if a matching servizio ente could not be found
+	 */
+	public ServizioEnte findByGroupIdPrivateLayoutId(
+			long groupId, long privateLayoutId)
+		throws NoSuchServizioEnteException;
+
+	/**
+	 * Returns the servizio ente where groupId = &#63; and privateLayoutId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayoutId the private layout ID
+	 * @return the matching servizio ente, or <code>null</code> if a matching servizio ente could not be found
+	 */
+	public ServizioEnte fetchByGroupIdPrivateLayoutId(
+		long groupId, long privateLayoutId);
+
+	/**
+	 * Returns the servizio ente where groupId = &#63; and privateLayoutId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayoutId the private layout ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching servizio ente, or <code>null</code> if a matching servizio ente could not be found
+	 */
+	public ServizioEnte fetchByGroupIdPrivateLayoutId(
+		long groupId, long privateLayoutId, boolean useFinderCache);
+
+	/**
+	 * Removes the servizio ente where groupId = &#63; and privateLayoutId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayoutId the private layout ID
+	 * @return the servizio ente that was removed
+	 */
+	public ServizioEnte removeByGroupIdPrivateLayoutId(
+			long groupId, long privateLayoutId)
+		throws NoSuchServizioEnteException;
+
+	/**
+	 * Returns the number of servizio entes where groupId = &#63; and privateLayoutId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param privateLayoutId the private layout ID
+	 * @return the number of matching servizio entes
+	 */
+	public int countByGroupIdPrivateLayoutId(
+		long groupId, long privateLayoutId);
+
+	/**
+	 * Returns the servizio ente where groupId = &#63; and publicLayoutId = &#63; or throws a <code>NoSuchServizioEnteException</code> if it could not be found.
+	 *
+	 * @param groupId the group ID
+	 * @param publicLayoutId the public layout ID
+	 * @return the matching servizio ente
+	 * @throws NoSuchServizioEnteException if a matching servizio ente could not be found
+	 */
+	public ServizioEnte findByGroupIdPublicLayoutId(
+			long groupId, long publicLayoutId)
+		throws NoSuchServizioEnteException;
+
+	/**
+	 * Returns the servizio ente where groupId = &#63; and publicLayoutId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param publicLayoutId the public layout ID
+	 * @return the matching servizio ente, or <code>null</code> if a matching servizio ente could not be found
+	 */
+	public ServizioEnte fetchByGroupIdPublicLayoutId(
+		long groupId, long publicLayoutId);
+
+	/**
+	 * Returns the servizio ente where groupId = &#63; and publicLayoutId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param publicLayoutId the public layout ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching servizio ente, or <code>null</code> if a matching servizio ente could not be found
+	 */
+	public ServizioEnte fetchByGroupIdPublicLayoutId(
+		long groupId, long publicLayoutId, boolean useFinderCache);
+
+	/**
+	 * Removes the servizio ente where groupId = &#63; and publicLayoutId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param publicLayoutId the public layout ID
+	 * @return the servizio ente that was removed
+	 */
+	public ServizioEnte removeByGroupIdPublicLayoutId(
+			long groupId, long publicLayoutId)
+		throws NoSuchServizioEnteException;
+
+	/**
+	 * Returns the number of servizio entes where groupId = &#63; and publicLayoutId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param publicLayoutId the public layout ID
+	 * @return the number of matching servizio entes
+	 */
+	public int countByGroupIdPublicLayoutId(long groupId, long publicLayoutId);
+
+	/**
 	 * Caches the servizio ente in the entity cache if it is enabled.
 	 *
 	 * @param servizioEnte the servizio ente

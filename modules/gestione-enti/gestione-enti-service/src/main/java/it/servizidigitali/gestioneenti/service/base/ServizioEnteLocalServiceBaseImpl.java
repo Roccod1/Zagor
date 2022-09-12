@@ -48,6 +48,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalServiceUtil;
+import it.servizidigitali.gestioneenti.service.persistence.ServizioEnteFinder;
 import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
 import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePersistence;
 
@@ -599,6 +600,9 @@ public abstract class ServizioEnteLocalServiceBaseImpl
 
 	@Reference
 	protected ServizioEntePersistence servizioEntePersistence;
+
+	@Reference
+	protected ServizioEnteFinder servizioEnteFinder;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService
