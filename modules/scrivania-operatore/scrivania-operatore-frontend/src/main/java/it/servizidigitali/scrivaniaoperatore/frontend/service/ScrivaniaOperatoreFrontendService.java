@@ -4,8 +4,13 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.model.UserGroupRole;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 
 import java.util.ArrayList;
@@ -24,6 +29,7 @@ import it.servizidigitali.camunda.integration.client.CamundaClient;
 import it.servizidigitali.camunda.integration.client.exception.CamundaClientException;
 import it.servizidigitali.camunda.integration.client.model.Task;
 import it.servizidigitali.camunda.integration.client.model.VariableInstance;
+import it.servizidigitali.common.utility.enumeration.OrganizationRole;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
@@ -52,6 +58,15 @@ public class ScrivaniaOperatoreFrontendService {
 
 	@Reference
 	private CamundaClient camundaClient;
+
+	@Reference
+	private OrganizationLocalService organizationLocalService;
+
+	@Reference
+	private RoleLocalService roleLocalService;
+
+	@Reference
+	private UserGroupRoleLocalService userGroupRoleLocalService;
 
 	/**
 	 *
@@ -226,6 +241,41 @@ public class ScrivaniaOperatoreFrontendService {
 			log.error("getAzioniUtenteDettaglioRichiesta :: " + e.getMessage(), e);
 		}
 		return azioniUtente;
+	}
+
+	/**
+	 * Carica la lista degli utenti assegnati ad una organizzazione ed appartenenti al ruolo passati
+	 * in input.
+	 *
+	 * @param organizationId
+	 * @param organizationRole
+	 * @return
+	 */
+	public List<User> getOrganizationUsersByRole(long organizationId, OrganizationRole organizationRole, long companyId) {
+
+		List<User> users = null;
+
+		try {
+
+			Role role = roleLocalService.getRole(companyId, organizationRole.getChiave());
+			Organization organization = organizationLocalService.getOrganization(organizationId);
+
+			List<UserGroupRole> userGroupRolesByGroupAndRole = userGroupRoleLocalService.getUserGroupRolesByGroupAndRole(organization.getGroupId(), role.getRoleId());
+			if (userGroupRolesByGroupAndRole != null) {
+				users = new ArrayList<User>();
+				for (UserGroupRole userGroupRole : userGroupRolesByGroupAndRole) {
+					users.add(userGroupRole.getUser());
+				}
+
+				return users;
+			}
+
+		}
+		catch (PortalException e) {
+			log.error("getOrganizationUsersByRole :: " + e.getMessage(), e);
+		}
+
+		return null;
 	}
 
 	/**
