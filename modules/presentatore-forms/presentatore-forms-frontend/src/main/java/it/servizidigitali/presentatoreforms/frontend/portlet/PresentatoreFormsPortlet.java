@@ -1,10 +1,13 @@
 package it.servizidigitali.presentatoreforms.frontend.portlet;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
@@ -24,8 +27,13 @@ import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletSe
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
+import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.NucleoFamiliareIntegrationService;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.impl.cripal.DatiAnagraficiIntegrationServiceImpl;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
@@ -71,7 +79,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 	
 //	@Reference
 //	private GestioneProcedureMiddlewareService gestioneProcedureMiddlewareService;
-
+	
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
 		_log.info("render presentatore forms");
@@ -86,7 +94,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 //		boolean stepComponentiFamiliari = procedura.getStep1Attivo();
 //		String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
 		
-		boolean stepComponentiFamiliari = true;
+		boolean stepComponentiFamiliari = false;
 		String filtroComponentiFamiliari = "TUTTI";
 
 		try {
@@ -114,6 +122,17 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 					FormData formData = AlpacaUtil.loadFormData(form, null, true);
 					AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
 					
+					UserPreferences userPreferences = new UserPreferences();
+					
+					if (PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME) != null) {
+						userPreferences = (UserPreferences) PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME);
+					}
+
+					Gson gson = new Gson();
+					JsonObject data = gson.fromJson(gson.toJson(alpacaStructure.getData()), JsonObject.class);
+					
+					//FIXME procedura missing
+					//alpacaService.loadData(data,gson.toJson(alpacaStructure.getSchema()), gson.toJson(alpacaStructure.getOptions()), procedura, userPreferences);
 					renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 						include("/compilaForm.jsp", renderRequest, renderResponse);
 					}

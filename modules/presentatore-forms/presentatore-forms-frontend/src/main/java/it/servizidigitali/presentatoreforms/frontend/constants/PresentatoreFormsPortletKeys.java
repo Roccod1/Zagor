@@ -17,7 +17,8 @@ public class PresentatoreFormsPortletKeys {
 	public static final String SALVA_DATI_FORM_ACTION_COMMAND = "/salvaDatiForm";
 	public static final String HOME_RENDER_COMMAND = "/home";
 	public static final String SCEGLI_MODALITA_PAGAMENTO_RENDER_COMMAND = "/scegliModalitaPagamento";
-
+	public static final String SALVA_INVIA_ACTION_COMMAND = "/salvaInvia";
+	
 	
 	//JSP
 	public static final String JSP_SCEGLI_ALLEGATI = "/scegliAllegati.jsp";
@@ -46,5 +47,6 @@ public class PresentatoreFormsPortletKeys {
 	public static final String STATUS_ERROR = "error";
 	
 	public static final String DEFINIZIONE_ALLEGATO_ID_TEMPORANEO = "idAllegatoTemporaneo";
+	public static final String USER_PREFERENCES_ATTRIBUTE_NAME = "userPreferences";
 
 }
