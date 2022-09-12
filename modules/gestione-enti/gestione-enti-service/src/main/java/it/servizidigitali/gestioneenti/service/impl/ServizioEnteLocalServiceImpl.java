@@ -173,7 +173,7 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 		return servizioEntePersistence.findWithDynamicQuery(servizioEnteDynamicQuery);
 	}
 	
-	public List<Long> getListaServiziByOrganizationAttivo(long organizationId, boolean attivo) throws Exception{
+public List<Long> getListaServiziByOrganizationAttivo(long organizationId, boolean attivo) throws Exception{
 		
 		ClassLoader classLoader = getClassLoader();
 		DynamicQuery servizioEnteDynamicQuery = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, classLoader);
@@ -187,5 +187,11 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 		servizioEnteDynamicQuery.setProjection(ProjectionFactoryUtil.property("primaryKey.servizioId"));
 		
 		return servizioEntePersistence.findWithDynamicQuery(servizioEnteDynamicQuery);
+	}
+
+	@Override
+	public ServizioEnte getServizioEnteByGroupIdLayoutId(long groupId, long layoutId) {
+		ServizioEnte servizioEnte = servizioEnteFinder.findServizioEnteByGroupIdLayoutId(groupId, layoutId);
+		return servizioEnte;
 	}
 }
