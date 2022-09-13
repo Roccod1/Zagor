@@ -35,5 +35,23 @@ import org.osgi.service.component.annotations.Component;
 	service = AopService.class
 )
 public class TemplatePdfLocalServiceImpl
-	extends TemplatePdfLocalServiceBaseImpl {
+	extends TemplatePdfLocalServiceBaseImpl {public List<TemplatePdf> findByProceduraIdAndAttivo (long proceduraId, boolean attivo){
+		List<TemplatePdf> listaTemplatePdf = null;
+		if(proceduraId>0) {
+			listaTemplatePdf = new ArrayList<TemplatePdf>();
+			listaTemplatePdf = templatePdfPersistence.findByProceduraIdAndAttivo(proceduraId, attivo);
+		}
+		
+		return listaTemplatePdf;
+	}
+	
+	public List<TemplatePdf> findByProceduraId (long proceduraId){
+		List<TemplatePdf> listaTemplatePdf = null;
+		if(proceduraId>0) {
+			listaTemplatePdf = new ArrayList<TemplatePdf>();
+			listaTemplatePdf = templatePdfPersistence.findByProceduraId(proceduraId);
+		}
+		
+		return listaTemplatePdf;
+	}
 }

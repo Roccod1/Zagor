@@ -120,5 +120,15 @@
         <finder name="TemplatePdfParentId" return-type="Collection">
             <finder-column name="templatePdfParentId"/>
         </finder>
+        
+         <finder name="ProceduraIdAndAttivo" return-type="Collection">
+            <finder-column name="proceduraId"></finder-column>
+            <finder-column name="attivo"></finder-column>
+        </finder>
+        
+        <finder name="ProceduraId" return-type="Collection">
+            <finder-column name="proceduraId"></finder-column>
+        </finder>
+        
 	</entity>
 </service-builder>
