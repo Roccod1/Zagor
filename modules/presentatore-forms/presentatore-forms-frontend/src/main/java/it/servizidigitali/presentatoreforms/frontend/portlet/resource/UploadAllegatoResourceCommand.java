@@ -35,7 +35,7 @@ public class UploadAllegatoResourceCommand extends BaseMVCResourceCommand{
 	
 	@Reference
     private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
-
+	
 	@Override
 	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws Exception {
@@ -46,7 +46,7 @@ public class UploadAllegatoResourceCommand extends BaseMVCResourceCommand{
 		
 		try {
 			if(Validator.isNotNull(file)) {
-				long idTemporaneoAllegato = 0;
+				long idTemporaneoAllegato = 10;
 				
 				if(Validator.isNotNull(idTemporaneoAllegato)) {
 					json.put(PresentatoreFormsPortletKeys.DEFINIZIONE_ALLEGATO_ID_TEMPORANEO, idTemporaneoAllegato);
