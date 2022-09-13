@@ -113,7 +113,7 @@ public class ScrivaniaOperatoreFrontendService {
 			long userId = serviceContext.getUserId();
 			User currentUser = userLocalService.getUser(userId);
 
-			List<Task> searchTasks = camundaClient.searchTasks(String.valueOf(serviceContext.getScopeGroup().getOrganizationId()), currentUser.getScreenName().toUpperCase(), null);
+			List<Task> searchTasks = camundaClient.searchTasks(String.valueOf(serviceContext.getScopeGroup().getOrganizationId()), currentUser.getScreenName(), null);
 			Map<String, Task> map = new HashMap<>();
 			for (Task task : searchTasks) {
 				map.put(task.getProcessInstanceId(), task);

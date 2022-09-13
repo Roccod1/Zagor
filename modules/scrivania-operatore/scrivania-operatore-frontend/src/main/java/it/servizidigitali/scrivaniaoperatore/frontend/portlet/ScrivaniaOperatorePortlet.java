@@ -115,19 +115,29 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		filters.setAutenticazione(mapAutenticazione(queryAut));
 		filters.setTipo(queryStato.isBlank() ? null : queryStato);
 
-		// TODO se tab In Arrivo
-		Map<String, Task> tasksMap = scrivaniaOperatoreFrontendService.getOrganizationTasks(ctx);
-		Set<String> processInstanceIds = scrivaniaOperatoreFrontendService.getProcessInstanceIds(tasksMap);
-		filters.setProcessInstanceIds(processInstanceIds);
-
-		// TODO se tab In Carico
-		// Map<String, Task> tasksMap = scrivaniaOperatoreFrontendService.getUserTasks(ctx);
-		// Set<String> processInstanceIds =
-		// scrivaniaOperatoreFrontendService.getProcessInstanceIds(tasksMap);
-		// filters.setProcessInstanceIds(processInstanceIds);
-
-		// TODO se tab In itinere/chiusi
-		// filters.setProcedureIds(scrivaniaOperatoreFrontendService.getProcedureIds(ctx));
+		Map<String, Task> tasksMap;
+		
+		switch (queryTab) {
+		case ScrivaniaOperatorePortletKeys.TAB_ARRIVO: {
+			tasksMap = scrivaniaOperatoreFrontendService.getOrganizationTasks(ctx);
+			Set<String> processInstanceIds = scrivaniaOperatoreFrontendService.getProcessInstanceIds(tasksMap);
+			filters.setProcessInstanceIds(processInstanceIds);
+			break;
+		}
+		case ScrivaniaOperatorePortletKeys.TAB_CARICO: {
+			tasksMap = scrivaniaOperatoreFrontendService.getUserTasks(ctx);
+			Set<String> processInstanceIds = scrivaniaOperatoreFrontendService.getProcessInstanceIds(tasksMap);
+			filters.setProcessInstanceIds(processInstanceIds);
+			break;
+		}
+		case ScrivaniaOperatorePortletKeys.TAB_ITINERE_CHIUSI: {
+			tasksMap = null;
+			filters.setProcedureIds(scrivaniaOperatoreFrontendService.getProcedureIds(ctx));
+			break;
+		}	
+		default:
+			throw new RuntimeException("queryTab");
+		}
 
 		int count = richiestaLocalService.count(filters);
 		List<RichiestaDTO> elems = richiestaLocalService.search(filters, start, end).stream().map(x -> mapUtil.mapRichiesta(ctx.getCompanyId(), x)).collect(Collectors.toList());
