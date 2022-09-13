@@ -315,10 +315,11 @@ public class ServizioEnteLocalServiceUtil {
 		return getService().getServizioEnte(servizioEntePK);
 	}
 
-	public static ServizioEnte getServizioEnteByGroupIdLayoutId(
-		long groupId, long layoutId) {
+	public static ServizioEnte getServizioEnteByOrganizationIdLayoutId(
+		long organizationId, long layoutId) {
 
-		return getService().getServizioEnteByGroupIdLayoutId(groupId, layoutId);
+		return getService().getServizioEnteByOrganizationIdLayoutId(
+			organizationId, layoutId);
 	}
 
 	/**

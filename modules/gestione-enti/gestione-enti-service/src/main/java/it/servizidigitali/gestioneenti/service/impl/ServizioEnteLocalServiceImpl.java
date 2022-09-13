@@ -191,8 +191,8 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 	}
 
 	@Override
-	public ServizioEnte getServizioEnteByGroupIdLayoutId(long groupId, long layoutId) {
-		ServizioEnte servizioEnte = servizioEnteFinder.findServizioEnteByGroupIdLayoutId(groupId, layoutId);
+	public ServizioEnte getServizioEnteByOrganizationIdLayoutId(long organizationId, long layoutId) {
+		ServizioEnte servizioEnte = servizioEnteFinder.findServizioEnteByOrganizationIdLayoutId(organizationId, layoutId);
 		return servizioEnte;
 	}
 }
