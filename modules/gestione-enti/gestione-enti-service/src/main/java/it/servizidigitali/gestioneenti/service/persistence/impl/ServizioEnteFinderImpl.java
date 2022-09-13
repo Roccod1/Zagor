@@ -20,6 +20,7 @@ import it.servizidigitali.gestioneenti.service.persistence.ServizioEnteFinder;
 @Component(service = ServizioEnteFinder.class)
 public class ServizioEnteFinderImpl extends ServizioEnteFinderBaseImpl implements ServizioEnteFinder {
 
+	@Override
 	public List<ServizioEnte> findServizioEnteByFilters(long organizationId, List<Long> subOrganizationIds, Boolean attivo, long groupId, long companyId) {
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, getClass().getClassLoader());
@@ -37,7 +38,7 @@ public class ServizioEnteFinderImpl extends ServizioEnteFinderBaseImpl implement
 
 		return servizioEntePersistence.findWithDynamicQuery(dynamicQuery);
 	}
-	
+
 	@Override
 	public ServizioEnte findServizioEnteByOrganizationIdLayoutId(long organizationId, long layoutId) {
 
@@ -46,7 +47,7 @@ public class ServizioEnteFinderImpl extends ServizioEnteFinderBaseImpl implement
 		DynamicQuery query = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, classLoader);
 		Criterion criterion = null;
 
-		criterion = RestrictionsFactoryUtil.eq("organizationId", organizationId);
+		criterion = RestrictionsFactoryUtil.eq("primaryKey.organizationId", organizationId);
 
 		Criterion orCriterion = RestrictionsFactoryUtil.or(RestrictionsFactoryUtil.eq("privateLayoutId", layoutId), RestrictionsFactoryUtil.eq("publicLayoutId", layoutId));
 
