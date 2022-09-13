@@ -18,10 +18,12 @@
 		<clay:icon symbol="search" />
 	</a>
 
-	<aui:form action="${prendiInCaricoURL}">
-		<input type="hidden" name="<portlet:namespace />taskId" value="<%= richiesta.getTaskId() %>"> 
+	<c:if test="${queryTab == 'in-arrivo'}">
+		<aui:form action="${prendiInCaricoURL}">
+			<input type="hidden" name="<portlet:namespace />taskId" value="<%= richiesta.getTaskId() %>"> 
 	
-		<button class="icon-edit border-0 bg-white" type="submit" title="<liferay-ui:message key="prendi-in-carico" />">
-		</button>
-	</aui:form>
+			<button class="icon-edit border-0 bg-white" type="submit" title="<liferay-ui:message key="prendi-in-carico" />">
+			</button>
+		</aui:form>
+	</c:if>
 </div>
