@@ -217,14 +217,10 @@ public interface ProceduraFormLocalService
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public String getFormIntegrativiProcedura(long idProcedura)
-		throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public long getFormPrincipaleProcedura(long idProcedura);
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<ProceduraForm> getListaProceduraFormProcedura(long proceduraId);
 
 	/**
 	 * Returns the OSGi service identifier.
@@ -286,12 +282,6 @@ public interface ProceduraFormLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getProceduraFormsCount();
-
-	public void salvaListaFormIntegrativi(
-		String[] listaFormIntegrativi, long idProcedura);
-
-	public ProceduraForm salvaProceduraFormPrincipale(
-		long idFormPrincipale, long idProcedura);
 
 	/**
 	 * Updates the procedura form in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

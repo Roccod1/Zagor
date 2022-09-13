@@ -391,10 +391,20 @@ public class ProceduraLocalServiceWrapper
 	}
 
 	@Override
-	public String getStringSelectMultipla(String string)
-		throws com.liferay.portal.kernel.json.JSONException {
+	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
+		getProcedureByGroupIdAttiva(long groupId, boolean attiva) {
 
-		return _proceduraLocalService.getStringSelectMultipla(string);
+		return _proceduraLocalService.getProcedureByGroupIdAttiva(
+			groupId, attiva);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
+		getProcedureByGroupIdServizioIdAttiva(
+			long groupId, long servizioId, boolean attiva) {
+
+		return _proceduraLocalService.getProcedureByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva);
 	}
 
 	@Override

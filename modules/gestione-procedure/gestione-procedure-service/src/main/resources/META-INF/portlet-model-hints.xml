@@ -28,4 +28,17 @@
 		<field name="formId" type="long" />
 		<field name="companyId" type="long" />
 	</model>
+	<model name="it.servizidigitali.gestioneprocedure.model.TemplatePdf">
+		<field name="uuid" type="String" />
+		<field name="templatePdfId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="fileEntryId" type="long" />
+		<field name="attivo" type="boolean" />
+		<field name="proceduraId" type="long" />
+		<field name="templatePdfParentId" type="long" />
+	</model>
 </model-hints>

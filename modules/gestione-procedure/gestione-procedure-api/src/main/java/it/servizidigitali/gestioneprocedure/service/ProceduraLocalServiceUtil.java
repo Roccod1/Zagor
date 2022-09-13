@@ -345,10 +345,17 @@ public class ProceduraLocalServiceUtil {
 		return getService().getProcedurasCount();
 	}
 
-	public static String getStringSelectMultipla(String string)
-		throws com.liferay.portal.kernel.json.JSONException {
+	public static List<Procedura> getProcedureByGroupIdAttiva(
+		long groupId, boolean attiva) {
 
-		return getService().getStringSelectMultipla(string);
+		return getService().getProcedureByGroupIdAttiva(groupId, attiva);
+	}
+
+	public static List<Procedura> getProcedureByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva) {
+
+		return getService().getProcedureByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva);
 	}
 
 	public static List<Procedura> search(
