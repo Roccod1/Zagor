@@ -428,7 +428,7 @@
 	    	var attachmentFiletype = '<input type="text" class="nostylereadonly" id="tipiFileAmmessi'+ index +'" name="<portlet:namespace />tipiFileAmmessi'+ index +'" value="'+ attachmentFiletypeValue +'" readonly>';
 	    	var attachmentCodetypes = '<input type="text" class="nostylereadonly" id="codiciTipologiaDocumento'+ index +'" name="<portlet:namespace />codiciTipologiaDocumento'+ index +'" value="'+ attachmentCodetypesValue +'" readonly>';
 	    	var attachmentFileName = '<input type="text" class="nostylereadonly" id="filenameModello'+ index +'" name="<portlet:namespace />filenameModello'+ index +'" value=\'' +  attachmentFileNameValue + '\' size="50"  readonly>';
-			var fileInput = '<input type="file" id="fileInput'+ index +'" name="<portlet:namespace />fileInput'+ index +'">';
+			var fileInput = '<input type="file" class="hidden" id="fileInput'+ index +'" name="<portlet:namespace />fileInput'+ index +'">';
 			
 			
 	    	var $trToAdd = $('<tr>')
