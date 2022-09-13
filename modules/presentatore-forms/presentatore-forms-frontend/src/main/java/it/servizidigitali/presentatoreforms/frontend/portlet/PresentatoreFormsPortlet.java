@@ -6,6 +6,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -92,6 +93,11 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 
 		try {
 			Procedura procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
+
+			if (procedura == null) {
+				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
+				return;
+			}
 
 			boolean stepComponentiFamiliari = procedura.getStep1Attivo();
 			String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
