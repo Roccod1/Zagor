@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
@@ -234,7 +233,7 @@ public class GestioneProcedureMiddlewareService {
 		return jsonArrayString;
 	}
 
-	public List<Servizio> getListaServiziAssociabiliProcedura(long organizationId, long groupId) {
+	public List<Servizio> getListaServiziAssociabiliProcedura(long organizationId, long groupId, long proceduraId) {
 		
 		_log.debug("Recupero elenco servizi associabili a procedura per groupId: " + groupId);
 		
@@ -246,7 +245,7 @@ public class GestioneProcedureMiddlewareService {
 			
 			//lista dei servizi per specifico groupId che gia' associati ad una procedura
 			List<Procedura> listaProcedure = proceduraLocalService.getProcedureByGroupIdAttiva(groupId, true);
-			List<Long> listaServiziAssociatiId = listaProcedure.stream().map(p -> p.getServizioId()).collect(Collectors.toList());
+			List<Long> listaServiziAssociatiId = listaProcedure.stream().filter(p -> p.getProceduraId() != proceduraId).map(p -> p.getServizioId()).collect(Collectors.toList());
 			
 			//lista servizi assegnabili ad una procedura
 			List<Long> listaServiziAssegnabiliId = listaServizioEnteId.stream().filter(idServizio -> !listaServiziAssociatiId.contains(idServizio)).collect(Collectors.toList());
