@@ -326,6 +326,17 @@ public class ProcessoLocalServiceWrapper
 		return _processoLocalService.getProcessoByCodice(codice);
 	}
 
+	@Override
+	public it.servizidigitali.gestioneprocessi.model.Processo
+			getProcessoByDeploymentIdResourceId(
+				String deploymentId, String resourceId)
+		throws it.servizidigitali.gestioneprocessi.exception.
+			NoSuchProcessoException {
+
+		return _processoLocalService.getProcessoByDeploymentIdResourceId(
+			deploymentId, resourceId);
+	}
+
 	/**
 	 * Returns the processo matching the UUID and group.
 	 *

@@ -55,6 +55,8 @@ public class ProcessoWrapper
 		attributes.put("nome", getNome());
 		attributes.put("stato", getStato());
 		attributes.put("deploymentId", getDeploymentId());
+		attributes.put("resourceId", getResourceId());
+		attributes.put("modificabile", isModificabile());
 		attributes.put("attivo", isAttivo());
 
 		return attributes;
@@ -134,6 +136,18 @@ public class ProcessoWrapper
 			setDeploymentId(deploymentId);
 		}
 
+		String resourceId = (String)attributes.get("resourceId");
+
+		if (resourceId != null) {
+			setResourceId(resourceId);
+		}
+
+		Boolean modificabile = (Boolean)attributes.get("modificabile");
+
+		if (modificabile != null) {
+			setModificabile(modificabile);
+		}
+
 		Boolean attivo = (Boolean)attributes.get("attivo");
 
 		if (attivo != null) {
@@ -207,6 +221,16 @@ public class ProcessoWrapper
 	}
 
 	/**
+	 * Returns the modificabile of this processo.
+	 *
+	 * @return the modificabile of this processo
+	 */
+	@Override
+	public boolean getModificabile() {
+		return model.getModificabile();
+	}
+
+	/**
 	 * Returns the modified date of this processo.
 	 *
 	 * @return the modified date of this processo
@@ -249,6 +273,16 @@ public class ProcessoWrapper
 	@Override
 	public long getProcessoId() {
 		return model.getProcessoId();
+	}
+
+	/**
+	 * Returns the resource ID of this processo.
+	 *
+	 * @return the resource ID of this processo
+	 */
+	@Override
+	public String getResourceId() {
+		return model.getResourceId();
 	}
 
 	/**
@@ -309,6 +343,16 @@ public class ProcessoWrapper
 	@Override
 	public boolean isAttivo() {
 		return model.isAttivo();
+	}
+
+	/**
+	 * Returns <code>true</code> if this processo is modificabile.
+	 *
+	 * @return <code>true</code> if this processo is modificabile; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isModificabile() {
+		return model.isModificabile();
 	}
 
 	@Override
@@ -377,6 +421,16 @@ public class ProcessoWrapper
 	}
 
 	/**
+	 * Sets whether this processo is modificabile.
+	 *
+	 * @param modificabile the modificabile of this processo
+	 */
+	@Override
+	public void setModificabile(boolean modificabile) {
+		model.setModificabile(modificabile);
+	}
+
+	/**
 	 * Sets the modified date of this processo.
 	 *
 	 * @param modifiedDate the modified date of this processo
@@ -419,6 +473,16 @@ public class ProcessoWrapper
 	@Override
 	public void setProcessoId(long processoId) {
 		model.setProcessoId(processoId);
+	}
+
+	/**
+	 * Sets the resource ID of this processo.
+	 *
+	 * @param resourceId the resource ID of this processo
+	 */
+	@Override
+	public void setResourceId(String resourceId) {
+		model.setResourceId(resourceId);
 	}
 
 	/**

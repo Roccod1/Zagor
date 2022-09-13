@@ -31,4 +31,8 @@ public interface ProceduraFinder {
 			com.liferay.portal.kernel.util.OrderByComparator
 				<it.servizidigitali.gestioneprocedure.model.Procedura> ordine);
 
+	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
+		findByServiziIdsGroupIdAttiva(
+			java.util.List<Long> serviziIds, long groupId, Boolean attiva);
+
 }

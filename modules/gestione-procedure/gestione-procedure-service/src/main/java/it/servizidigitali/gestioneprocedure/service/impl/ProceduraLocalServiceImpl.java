@@ -77,4 +77,9 @@ public class ProceduraLocalServiceImpl extends ProceduraLocalServiceBaseImpl {
 		
 		return listaProcedure;
 	}
+	@Override
+	public List<Procedura> getProcedureByServiziIdsGroupIdAttiva(List<Long> serviziIds, long groupId, Boolean attiva) {
+		return proceduraFinder.findByServiziIdsGroupIdAttiva(serviziIds, groupId, attiva);
+	}
+
 }

@@ -358,6 +358,13 @@ public class ProceduraLocalServiceUtil {
 			groupId, servizioId, attiva);
 	}
 
+	public static List<Procedura> getProcedureByServiziIdsGroupIdAttiva(
+		List<Long> serviziIds, long groupId, Boolean attiva) {
+
+		return getService().getProcedureByServiziIdsGroupIdAttiva(
+			serviziIds, groupId, attiva);
+	}
+
 	public static List<Procedura> search(
 		String nome, String attiva, java.util.Date dataInserimentoDa,
 		java.util.Date dataInserimentoA, long siteGroupId, int delta, int cur,

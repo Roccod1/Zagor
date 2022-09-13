@@ -20,6 +20,24 @@ import it.servizidigitali.gestioneenti.service.persistence.ServizioEnteFinder;
 @Component(service = ServizioEnteFinder.class)
 public class ServizioEnteFinderImpl extends ServizioEnteFinderBaseImpl implements ServizioEnteFinder {
 
+	public List<ServizioEnte> findServizioEnteByFilters(long organizationId, List<Long> subOrganizationIds, Boolean attivo, long groupId, long companyId) {
+
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, getClass().getClassLoader());
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("primaryKey.organizationId", organizationId));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("groupId", groupId));
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("companyId", companyId));
+
+		if (attivo != null) {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("attivo", attivo));
+		}
+
+		if (subOrganizationIds != null) {
+			dynamicQuery.add(RestrictionsFactoryUtil.in("subOrganizationId", subOrganizationIds));
+		}
+
+		return servizioEntePersistence.findWithDynamicQuery(dynamicQuery);
+	}
+	
 	@Override
 	public ServizioEnte findServizioEnteByOrganizationIdLayoutId(long organizationId, long layoutId) {
 

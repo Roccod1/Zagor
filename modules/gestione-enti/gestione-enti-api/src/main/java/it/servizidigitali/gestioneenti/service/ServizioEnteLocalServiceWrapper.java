@@ -337,6 +337,17 @@ public class ServizioEnteLocalServiceWrapper
 		return _servizioEnteLocalService.getServiziEnte(organizationId);
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.gestioneenti.model.ServizioEnte>
+		getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(
+			long organizationId, java.util.List<Long> subOrganizationIds,
+			Boolean attivo, long groupId, long companyId) {
+
+		return _servizioEnteLocalService.
+			getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(
+				organizationId, subOrganizationIds, attivo, groupId, companyId);
+	}
+
 	/**
 	 * Returns the servizio ente with the primary key.
 	 *

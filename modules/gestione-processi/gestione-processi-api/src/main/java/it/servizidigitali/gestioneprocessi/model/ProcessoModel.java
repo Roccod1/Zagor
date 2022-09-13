@@ -265,6 +265,42 @@ public interface ProcessoModel
 	public void setDeploymentId(String deploymentId);
 
 	/**
+	 * Returns the resource ID of this processo.
+	 *
+	 * @return the resource ID of this processo
+	 */
+	@AutoEscape
+	public String getResourceId();
+
+	/**
+	 * Sets the resource ID of this processo.
+	 *
+	 * @param resourceId the resource ID of this processo
+	 */
+	public void setResourceId(String resourceId);
+
+	/**
+	 * Returns the modificabile of this processo.
+	 *
+	 * @return the modificabile of this processo
+	 */
+	public boolean getModificabile();
+
+	/**
+	 * Returns <code>true</code> if this processo is modificabile.
+	 *
+	 * @return <code>true</code> if this processo is modificabile; <code>false</code> otherwise
+	 */
+	public boolean isModificabile();
+
+	/**
+	 * Sets whether this processo is modificabile.
+	 *
+	 * @param modificabile the modificabile of this processo
+	 */
+	public void setModificabile(boolean modificabile);
+
+	/**
 	 * Returns the attivo of this processo.
 	 *
 	 * @return the attivo of this processo

@@ -317,6 +317,10 @@ public interface ProceduraLocalService
 		long groupId, long servizioId, boolean attiva);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Procedura> getProcedureByServiziIdsGroupIdAttiva(
+		List<Long> serviziIds, long groupId, Boolean attiva);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Procedura> search(
 		String nome, String attiva, Date dataInserimentoDa,
 		Date dataInserimentoA, long siteGroupId, int delta, int cur,
