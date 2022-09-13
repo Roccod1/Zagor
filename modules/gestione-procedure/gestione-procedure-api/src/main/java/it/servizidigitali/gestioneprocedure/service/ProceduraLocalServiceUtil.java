@@ -275,6 +275,14 @@ public class ProceduraLocalServiceUtil {
 		return getService().getProcedura(proceduraId);
 	}
 
+	public static Procedura getProceduraByServizioIdGroupIdAttiva(
+			long servizioId, long groupId, boolean attiva)
+		throws PortalException {
+
+		return getService().getProceduraByServizioIdGroupIdAttiva(
+			servizioId, groupId, attiva);
+	}
+
 	/**
 	 * Returns the procedura matching the UUID and group.
 	 *
