@@ -2,9 +2,10 @@
     "private": true,
     "workspaces": {
         "packages": [
+            "extras/chatbot/widget",
+            "modules/presentatore-forms/presentatore-forms-frontend",
             "modules/gestione-processi/gestione-processi-frontend",
-            "modules/gestione-forms/gestione-forms-frontend",
-            "modules/presentatore-forms/presentatore-forms-frontend"
+            "modules/gestione-forms/gestione-forms-frontend"
         ]
     }
 }

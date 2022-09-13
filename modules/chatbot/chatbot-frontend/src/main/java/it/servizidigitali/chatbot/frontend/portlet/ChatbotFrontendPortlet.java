@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.portlet.Portlet;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
@@ -28,8 +30,11 @@ import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.URLStringEncoder;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import it.servizidigitali.chatbot.frontend.configuration.ChatbotEnteConfiguration;
@@ -53,7 +58,7 @@ import it.servizidigitali.chatbot.frontend.model.ChatbotConfigurationModel;
 				"javax.portlet.init-param.view-template=/view.jsp",
 				"javax.portlet.name=" + ChatbotFrontendPortletKeys.CHATBOTFRONTEND,
 				"javax.portlet.resource-bundle=content.Language",
-				"javax.portlet.security-role-ref=power-user,user"
+				"javax.portlet.security-role-ref=power-user,user",
 		},
 		service = Portlet.class
 		)
@@ -74,6 +79,13 @@ public class ChatbotFrontendPortlet extends MVCPortlet {
 		ChatbotEnteConfiguration _configuration;
 		try {
 			_configuration = _configurationProvider.getGroupConfiguration(ChatbotEnteConfiguration.class, themeDisplay.getScopeGroupId());
+			
+			String keyChatbotBtnLabel = _configuration.chatbotButtonLabelKey();
+			String keyChatbotRecipientName = _configuration.chatbotRecipientNameKey();
+			String keyChatbotWelcomeSummary = _configuration.chatbotWelcomeSummaryKey();
+			String keyChatbotcalloutTitle = _configuration.chatbotCalloutTitleKey();
+			String keyChatbotCalloutMessage = _configuration.chatbotCalloutMessageKey();
+			String keyChatbotWelcomeTitle = _configuration.chatbotWelcomeTitleKey();
 
 
 			String dialogflowAgentId = _configuration.dialogflowAgentId();
@@ -87,21 +99,42 @@ public class ChatbotFrontendPortlet extends MVCPortlet {
 
 			boolean chatbotEnable = true;
 
+			PortletConfig portletConfig = (PortletConfig)renderRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+			ResourceBundle rb = portletConfig.getResourceBundle(themeDisplay.getLocale());
+			
 
-
-			String welcomeTitle = LanguageUtil.get(themeDisplay.getLocale(), "label.welcomeTitle"); // messageSource.getMessage("label.welcomeTitle", null, themeDisplay.getLocale());
-			String welcomeMessage = " ";
+			String welcomeTitle = LanguageUtil.get(themeDisplay.getLocale(), keyChatbotWelcomeTitle); // rb.getString("label.welcomeTitle"); 
+			
+			String welcomeMessage =  "";
+			if(Validator.isNotNull(keyChatbotWelcomeSummary) && Validator.isNotNull(LanguageUtil.get(themeDisplay.getLocale(), keyChatbotWelcomeSummary))) {
+				welcomeMessage = LanguageUtil.get(themeDisplay.getLocale(), keyChatbotWelcomeSummary);
+			}
+			
 			String welcomeImage = portletUrl + "/images/bot-big.png";
+			
 			String logoPath = portletUrl + "/images/logo.png";
+			if(Validator.isNotNull(_configuration.chatbotLogoUrl())) {
+				logoPath = _configuration.chatbotLogoUrl();
+			}
+			
 			String launchJsPath = portletUrl + "/widget/launch.js";
+			
 			String senderUrlImage = portletUrl + "/images/bot-small.png";
+			if(Validator.isNotNull(_configuration.senderImageUrl())) {
+				senderUrlImage = _configuration.senderImageUrl();
+			}
+			
+			
 			String userToken = null;
 
-			boolean showPopup = true;
-			Integer popupIdleTimeout = 30000;
+			boolean showPopup = _configuration.showPopup();
+			
+			
+			Integer popupIdleTimeout = _configuration.popupIdleTimeout();
+			
 
-			String calloutTitle = LanguageUtil.get(themeDisplay.getLocale(), "label.calloutTitle"); // messageSource.getMessage("label.calloutTitle", null, themeDisplay.getLocale());
-			String calloutMsg = LanguageUtil.get(themeDisplay.getLocale(), "label.calloutMsg"); // messageSource.getMessage("label.calloutMsg", null, themeDisplay.getLocale());
+			String calloutTitle =  LanguageUtil.get(themeDisplay.getLocale(), keyChatbotcalloutTitle); // rb.getString("label.calloutTitle"); 
+			String calloutMsg = LanguageUtil.get(themeDisplay.getLocale(), keyChatbotCalloutMessage); // rb.getString("label.calloutMsg"); 
 
 			chatbotConfigurationModel.setAgentId(dialogflowAgentId);
 
@@ -246,12 +279,25 @@ public class ChatbotFrontendPortlet extends MVCPortlet {
 			Map<String, String> payloadMap = new LinkedHashMap<>();
 			payloadMap.put(CustomAttribute.USERTOKEN.getValue(), userToken);
 			customAttributes.put(CustomAttribute.PAYLOAD.getValue(), payloadMap);
-			customAttributes.put(CustomAttribute.URL_AUDIOREPO.getValue(), urlPortal + NODEJS_SERVER_PATH);
-			customAttributes.put(CustomAttribute.PROXY_URL.getValue(), urlPortal + NODEJS_SERVER_PATH + "/proxy");
-			customAttributes.put(CustomAttribute.RECIPIENT_FULLNAME.getValue(), LanguageUtil.get(themeDisplay.getLocale(), "label.customAttributes." + CustomAttribute.RECIPIENT_FULLNAME.name()) /*messageSource.getMessage("label.customAttributes." + CustomAttribute.RECIPIENT_FULLNAME.name(), null, themeDisplay.getLocale())*/);
-			customAttributes.put(CustomAttribute.BUTTON_LABEL.getValue(), LanguageUtil.get(themeDisplay.getLocale(), "label.customAttributes." + CustomAttribute.BUTTON_LABEL.name()) /*messageSource.getMessage("label.customAttributes." + CustomAttribute.BUTTON_LABEL.name(), null, themeDisplay.getLocale())*/);
+			
+			// urlPortal = "https://web18.linksmt.it";
+			String nodeJsBasePath = _configuration.nodeJsBasePath();
+			
+			String buttonLabel = LanguageUtil.get(themeDisplay.getLocale(), keyChatbotBtnLabel); // rb.getString("label.customAttributes." + CustomAttribute.BUTTON_LABEL.name())
+			String recipientName = LanguageUtil.get(themeDisplay.getLocale(), keyChatbotRecipientName); // rb.getString("label.customAttributes." + CustomAttribute.RECIPIENT_FULLNAME.name())
+			String welcomeSummary = LanguageUtil.get(themeDisplay.getLocale(), keyChatbotWelcomeSummary); //rb.getString("label.customAttributes." + CustomAttribute.WELCOME_SUMMARY.name()) 
+			
+			customAttributes.put(CustomAttribute.URL_AUDIOREPO.getValue(), nodeJsBasePath + NODEJS_SERVER_PATH);
+			customAttributes.put(CustomAttribute.PROXY_URL.getValue(), nodeJsBasePath + NODEJS_SERVER_PATH + "/proxy");
+			
+			customAttributes.put(CustomAttribute.RECIPIENT_FULLNAME.getValue(),  recipientName );
+			
+			customAttributes.put(CustomAttribute.BUTTON_LABEL.getValue(), 
+					buttonLabel);
 			customAttributes.put(CustomAttribute.WELCOME_IMAGE.getValue(), welcomeImage);
-			customAttributes.put(CustomAttribute.WELCOME_SUMMARY.getValue(), LanguageUtil.get(themeDisplay.getLocale(), "label.customAttributes." + CustomAttribute.WELCOME_SUMMARY.name()) /*messageSource.getMessage("label.customAttributes." + CustomAttribute.WELCOME_SUMMARY.name(), null, themeDisplay.getLocale())*/);
+			customAttributes.put(CustomAttribute.WELCOME_SUMMARY.getValue(), 
+					welcomeSummary);
+			
 			customAttributes.put(CustomAttribute.START_HIDDEN_MESSAGE.getValue(), "__start");
 
 			chatbotConfigurationModel.setProjectId(projectId);
@@ -272,16 +318,19 @@ public class ChatbotFrontendPortlet extends MVCPortlet {
 				}
 			}
 			chatbotConfigurationModel.setUserId(userId);
-			chatbotConfigurationModel.setWelcomeMsg(welcomeMessage);
-			chatbotConfigurationModel.setWelcomeTitle(welcomeTitle);
-			chatbotConfigurationModel.setCalloutTitle(calloutTitle);
-			chatbotConfigurationModel.setCalloutMsg(calloutMsg);
-			chatbotConfigurationModel.setWidgetTitle(widgetTitle);
+			chatbotConfigurationModel.setWelcomeMsg(HtmlUtil.escapeJS(welcomeMessage));
+			chatbotConfigurationModel.setWelcomeTitle(HtmlUtil.escapeJS(welcomeTitle));
+			chatbotConfigurationModel.setCalloutTitle(HtmlUtil.escapeJS(calloutTitle));
+			chatbotConfigurationModel.setCalloutMsg(HtmlUtil.escapeJS(calloutMsg));
+			chatbotConfigurationModel.setWidgetTitle(HtmlUtil.escapeJS(widgetTitle));
 			chatbotConfigurationModel.setLogoPath(logoPath);
 			chatbotConfigurationModel.setLaunchJsPath(launchJsPath);
 			chatbotConfigurationModel.setSenderUrlImage(senderUrlImage);
 			chatbotConfigurationModel.setShowPopup(showPopup);
 			chatbotConfigurationModel.setPopupIdleTimeout(popupIdleTimeout);
+			
+			renderRequest.setAttribute("chatbotConfigurationModel", chatbotConfigurationModel);
+			
 		} catch (ConfigurationException e1) {
 			// TODO Auto-generated catch block
 			log.error(e1);

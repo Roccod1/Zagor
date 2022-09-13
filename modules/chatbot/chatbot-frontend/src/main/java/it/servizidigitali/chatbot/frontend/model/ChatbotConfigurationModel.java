@@ -248,4 +248,15 @@ public class ChatbotConfigurationModel implements Serializable {
 	public void setAgentId(String agentId) {
 		this.agentId = agentId;
 	}
+
+	@Override
+	public String toString() {
+		return "ChatbotConfigurationModel [active=" + active + ", projectId=" + projectId + ", agentId=" + agentId
+				+ ", userId=" + userId + ", welcomeTitle=" + welcomeTitle + ", welcomeMsg=" + welcomeMsg
+				+ ", widgetTitle=" + widgetTitle + ", logoPath=" + logoPath + ", launchJsPath=" + launchJsPath
+				+ ", senderUrlImage=" + senderUrlImage + ", calloutTitle=" + calloutTitle + ", calloutMsg=" + calloutMsg
+				+ ", customAttributes=" + customAttributes + ", customAttributesString=" + customAttributesString
+				+ ", showPopup=" + showPopup + ", popupIdleTimeout=" + popupIdleTimeout + "]";
+	}
+	
 }
