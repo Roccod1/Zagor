@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.portlet.Portlet;
@@ -24,6 +25,9 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.gestionecomunicazioni.model.TipologiaComunicazione;
 import it.servizidigitali.gestionecomunicazioni.service.ComunicazioneLocalService;
 import it.servizidigitali.gestionecomunicazioni.service.TipologiaComunicazioneLocalService;
+import it.servizidigitali.gestioneservizi.model.Tipologia;
+import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
+import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniacittadino.frontend.constants.ScrivaniaCittadinoPortletKeys;
 
 /**
@@ -55,7 +59,8 @@ public class ScrivaniaCittadinoPortlet extends MVCPortlet {
 	@Reference
 	private TipologiaComunicazioneLocalService tipologiaComunicazioneLocalService;
 	
-	
+	@Reference
+	private TipologiaLocalService tipologiaLocalService;
 	
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
@@ -63,19 +68,22 @@ public class ScrivaniaCittadinoPortlet extends MVCPortlet {
        ServiceContext serviceContext = null;
        ThemeDisplay themeDisplay = null;
        List<TipologiaComunicazione> listaTipologiaComunicazione = new ArrayList<TipologiaComunicazione>();
+       List<Tipologia> listaTipologiaServizi = new ArrayList<Tipologia>();
        try {
             serviceContext = ServiceContextFactory.getInstance(renderRequest);
             themeDisplay = serviceContext.getThemeDisplay();
             User loggedUser = themeDisplay.getUser();
 
             listaTipologiaComunicazione = tipologiaComunicazioneLocalService.getTipologiaComunicaziones(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-            
+            listaTipologiaServizi = tipologiaLocalService.getTipologias(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 		}catch (Exception e) {
 		    _log.error("render() :: " + e.getMessage(), e);
 		}
        
    		renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_TIPOLOGIA_COMUNICAZIONE, listaTipologiaComunicazione);
-       	
+       	renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_STATO, Arrays.asList(StatoRichiesta.values()));
+       	renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_TIPOLOGIA_RICHIESTA, listaTipologiaServizi);
+
    		super.render(renderRequest, renderResponse);
 	}
 	

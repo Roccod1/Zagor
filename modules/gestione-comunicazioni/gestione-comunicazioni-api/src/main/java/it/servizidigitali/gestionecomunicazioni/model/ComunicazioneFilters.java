@@ -3,6 +3,8 @@ package it.servizidigitali.gestionecomunicazioni.model;
 import java.util.Date;
 
 public class ComunicazioneFilters {
+
+	private String titoloDescrizione;
 	private Long organizzazione;
 	private Long tipologia;
 	private String username;
@@ -66,5 +68,11 @@ public class ComunicazioneFilters {
 	}
 	public void setOrderByType(String orderByType) {
 		this.orderByType = orderByType;
+	}
+	public String getTitoloDescrizione() {
+		return titoloDescrizione;
+	}
+	public void setTitoloDescrizione(String titoloOggetto) {
+		this.titoloDescrizione = titoloOggetto;
 	}
 }

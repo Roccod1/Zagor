@@ -5,11 +5,106 @@
 </portlet:resourceURL>
 
 
-<h3><liferay-ui:message key="richieste"/></h3>
-<div id="<portlet:namespace/>accordionContainerRichieste"></div>
+<div class="container">
+	<div class="row">
+		<div class="col-11">
+			<h3><liferay-ui:message key="richieste"/></h3>						
+		</div>	
+		<div class="col-1">
+			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#filterCollapseRichieste" aria-expanded="false"><liferay-ui:message key="filtri"/></button>
+		</div>
+	</div>
+	<div class="row collapse" id="filterCollapseRichieste">
+		<div class="col-5">
+			<aui:input type="text" name="filterOggettoRichieste" label="titolo-o-descrizione"/>				
+		</div>
+		
+		<div class="col">
+			<aui:select name="filterStatoRichiesta" label="stato">
+				<aui:option value=""><liferay-ui:message key="seleziona-opzione"/></aui:option>
+				<c:forEach items="${listaStato }" var="statoRichiesta">
+					<aui:option value="${statoRichiesta}">${statoRichiesta.toString().replace("_", " ")}</aui:option>
+				</c:forEach>
+			</aui:select>			
+		</div>
+		
+		<div class="col">
+			<aui:select name="sortByNameRichiesta" label="stato">
+				<aui:option value=""><liferay-ui:message key="seleziona-opzione"/></aui:option>
+				<aui:option value="createDate"><liferay-ui:message key="data-creazione"/></aui:option>
+				<aui:option value="modifiedDate"><liferay-ui:message key="data-modifica"/></aui:option>
+			</aui:select>			
+		</div>
+		
+		<div class="col">
+			<label><liferay-ui:message key="direzione"/></label>
+			<input type="hidden" id="<portlet:namespace/>orderByTypeRichiesta"/>
+			<div class="form-check">
+				<aui:input type="radio" name="orderByType" id="orderByTypeAsc" class="form-check-input" label="crescente" value="asc" onclick="setSortTypeValue('orderByTypeRichiesta',this)"/>
+			</div>
+			<div class="form-check">
+				<aui:input type="radio" name="orderByType" id="orderByTypeDesc" class="form-check-input" label="decrescente" value="desc" onclick="setSortTypeValue('orderByTypeRichiesta',this)"/>
+			</div>			
+		</div>
+		
+		<div class="col-12">
+			<button class="btn btn-primary" type="button" onclick="getRichiesteUtente(1)"><liferay-ui:message key="cerca"/></button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<div id="<portlet:namespace/>accordionContainerRichieste"></div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-11">
+			<h3><liferay-ui:message key="pagamenti"/></h3>						
+		</div>
+		<div class="col-1">
+			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#filterCollapsePagamenti" aria-expanded="false">Filtri</button>
+		</div>
+	</div>
+	<div class="row collapse" id="filterCollapsePagamenti">
+		<div class="col-5">
+			<aui:input type="text" name="filterOggettoPagamento" label="titolo-o-descrizione"/>				
+		</div>
+		
+		<div class="col">
+			<aui:select name="filterStatoPagamento" label="stato">
+				<aui:option value=""><liferay-ui:message key="seleziona-opzione"/></aui:option>
+				<c:forEach items="${listaStato }" var="statoComunicazione">
+					<aui:option value="${statoComunicazione}">${statoComunicazione.toString().replace("_", " ")}</aui:option>
+				</c:forEach>
+			</aui:select>			
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<div id="<portlet:namespace/>accordionContainerPagamenti"></div>
+		</div>
+	</div>
+</div>
 
-<h3><liferay-ui:message key="pagamenti"/></h3>
-<div id="<portlet:namespace/>accordionContainerPagamenti"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script id="accordionRichieste" type="text/x-jsrender">
 <div id="collapseDivRichieste" class="collapse-div collapse-background-active">
@@ -130,10 +225,13 @@
 	
 	function getRichiesteUtente(cur){
 		
-		var params = {};
-		params.cur = cur;
- 		params.orderByCol = '';
-		params.orderByType = '';
+		var params = {
+			'<portlet:namespace/>cur': cur,
+			'<portlet:namespace/>orderByCol': $("#<portlet:namespace/>sortByNameRichiesta").val(),
+			'<portlet:namespace/>orderByType': $("#<portlet:namespace/>orderByTypeRichiesta").val(),
+			'<portlet:namespace/>filterOggettoRichiesta': $("#<portlet:namespace/>filterOggettoRichiesta").val(),
+			'<portlet:namespace/>filterStatoRichiesta': $("#<portlet:namespace/>filterStatoRichiesta").val(),
+		}
 		
 		var accordionContainer = "#<portlet:namespace/>accordionContainerRichieste";
 		
@@ -171,10 +269,13 @@
 	
 	function getPagamentiUtente(cur){
 		
-		var params = {};
-		params.cur = cur;
- 		params.orderByCol = '';
-		params.orderByType = '';
+		var params = {
+			'<portlet:namespace/>cur': cur,
+			'<portlet:namespace/>orderByCol': '',
+			'<portlet:namespace/>orderByType': '',
+			'<portlet:namespace/>filterOggettoPagamento': $("#<portlet:namespace/>filterOggettoPagamento").val(),
+			'<portlet:namespace/>filterStatoPagamento': $("#<portlet:namespace/>filterStatoPagamento").val(),
+		}
 		
 		var accordionContainer = "#<portlet:namespace/>accordionContainerPagamenti";
 		
@@ -208,6 +309,10 @@
 				$(accordionContainer).html(html);
 			}
 		});
+	}
+	
+	function setSortTypeValue(fieldName, self){
+		$("#<portlet:namespace/>"+fieldName).val(self.value);
 	}
 
 </script>

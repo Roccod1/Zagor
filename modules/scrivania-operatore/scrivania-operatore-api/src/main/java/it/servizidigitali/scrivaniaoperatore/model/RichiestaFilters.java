@@ -15,6 +15,7 @@ public class RichiestaFilters {
 	private String tipo;
 	private Set<Long> procedureIds;
 	private Set<String> processInstanceIds;
+	private String oggettoNote;
 
 	private long groupId;
 	private long companyId;
@@ -204,5 +205,13 @@ public class RichiestaFilters {
 
 	public void setOrderByType(String orderByType) {
 		this.orderByType = orderByType;
+	}
+
+	public String getOggettoNote() {
+		return oggettoNote;
+	}
+
+	public void setOggettoNote(String oggettoNote) {
+		this.oggettoNote = oggettoNote;
 	}
 }

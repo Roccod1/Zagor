@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -17,7 +18,9 @@ import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
@@ -38,7 +41,11 @@ public class ScrivaniaCittadinoMiddlewareService {
 
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
+	
+	@Reference
+	private TipologiaLocalService tipologiaLocalService;
 
+	
 	public List<Richiesta> getPagamentiUtente(String codiceFiscale, long companyId, long organizationId, long groupId, boolean attivo, int cur, int delta) throws Exception {
 
 		try {
@@ -46,6 +53,11 @@ public class ScrivaniaCittadinoMiddlewareService {
 			List<Long> listaIdServizi = new ArrayList<Long>();
 			Set<Long> setIdProcedura = new HashSet<Long>();
 
+//			List<Tipologia> listaTipologieServizio = tipologiaLocalService.getTipologias(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+//			List<Tipologia> listaServiziPagamento = listaTipologieServizio.stream().filter(x -> TipoServizio.PAGAMENTO.toString().equalsIgnoreCase(x.getNome())).collect(Collectors.toList());
+			
+//			List<Servizi> test = tipologiaLocalService.get
+			
 			List<Object> listaServiziAttiviEnte = servizioEnteLocalService.getListaServiziByCompanyOrganizationAttivo(companyId, organizationId, attivo);
 
 			List<Servizio> listaServizi = servizioLocalService.getServiziUtilizzabili(listaServiziAttiviEnte, "", 0, 0, QueryUtil.ALL_POS, QueryUtil.ALL_POS, "", "");

@@ -26,7 +26,7 @@ public class TipologiaFinderImpl extends TipologiaFinderBaseImpl implements Tipo
 		DynamicQuery query = DynamicQueryFactoryUtil.forClass(Tipologia.class, classLoader);
 
 		List<Tipologia> listaTipologiaOrdinata= tipologiaPersistence.findWithDynamicQuery(query, inizio, fine, ordine);
-		
+
 		return listaTipologiaOrdinata;
 	}
 }
