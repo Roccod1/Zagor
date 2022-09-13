@@ -94,57 +94,66 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 //		boolean stepComponentiFamiliari = procedura.getStep1Attivo();
 //		String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
 		
-		boolean stepComponentiFamiliari = false;
+		boolean stepComponentiFamiliari = true;
 		String filtroComponentiFamiliari = "TUTTI";
-
-		try {
-
-			if (stepComponentiFamiliari) {
-				Long organizationId = themeDisplay.getSiteGroup().getOrganizationId();
-				String codiceFiscale = themeDisplay.getUser().getScreenName();
-
-				List<ComponenteNucleoFamiliare> componentiNucleoFamiliare = datiAnagraficiPortletService.getComponentiNucleoFamiliare(codiceFiscale, organizationId, null);
-				renderRequest.setAttribute("componentiNucleoFamiliare", componentiNucleoFamiliare);
-				renderRequest.setAttribute("codiceFiscaleManuale", codiceFiscale);
-				renderRequest.setAttribute("filtroComponentiFamiliari", filtroComponentiFamiliari);
-				
-				include("/scegliComponentiNucleoFamiliare.jsp", renderRequest, renderResponse);
-
-			} else {
-				try {
-					if (!PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND
-							.equals(ParamUtil.getString(renderRequest, "mvcRenderCommandName"))) {
-
-					Long idFormMock = 52402L;
-					Form form = formLocalService.getForm(idFormMock);
-					form.setListaDefinizioneAllegato(definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idFormMock));
-
-					FormData formData = AlpacaUtil.loadFormData(form, null, true);
-					AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
-					
-					UserPreferences userPreferences = new UserPreferences();
-					
-					if (PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME) != null) {
-						userPreferences = (UserPreferences) PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME);
-					}
-
-					Gson gson = new Gson();
-					JsonObject data = gson.fromJson(gson.toJson(alpacaStructure.getData()), JsonObject.class);
-					
-					//FIXME procedura missing
-					//alpacaService.loadData(data,gson.toJson(alpacaStructure.getSchema()), gson.toJson(alpacaStructure.getOptions()), procedura, userPreferences);
-					renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
-						include("/compilaForm.jsp", renderRequest, renderResponse);
-					}
-				} catch (Exception e) {
-					_log.error(e.getMessage());
-				}
 		
-			}
+		// TODO: Controllo bozza
+		
+		if (!PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND
+				.equals(ParamUtil.getString(renderRequest, "mvcRenderCommandName")) 
+				&& !PresentatoreFormsPortletKeys.HOME_RENDER_COMMAND.equals(ParamUtil.getString(renderRequest, "mvcRenderCommandName"))) {
+			
+			try {
 
-		} catch (Exception e) {
-			_log.error(e.getMessage());
+				if (stepComponentiFamiliari) {
+					Long organizationId = themeDisplay.getSiteGroup().getOrganizationId();
+					String codiceFiscale = themeDisplay.getUser().getScreenName();
+
+					List<ComponenteNucleoFamiliare> componentiNucleoFamiliare = datiAnagraficiPortletService.getComponentiNucleoFamiliare(codiceFiscale, organizationId, null);
+					renderRequest.setAttribute("componentiNucleoFamiliare", componentiNucleoFamiliare);
+					renderRequest.setAttribute("codiceFiscaleManuale", codiceFiscale);
+					renderRequest.setAttribute("filtroComponentiFamiliari", filtroComponentiFamiliari);
+					
+					include("/scegliComponentiNucleoFamiliare.jsp", renderRequest, renderResponse);
+
+				} else {
+					try {
+						
+
+						Long idFormMock = 52402L;
+						Form form = formLocalService.getForm(idFormMock);
+						form.setListaDefinizioneAllegato(definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idFormMock));
+
+						FormData formData = AlpacaUtil.loadFormData(form, null, true);
+						AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
+						
+						UserPreferences userPreferences = new UserPreferences();
+						
+						if (PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME) != null) {
+							userPreferences = (UserPreferences) PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME);
+						}
+
+						Gson gson = new Gson();
+						JsonObject data = gson.fromJson(gson.toJson(alpacaStructure.getData()), JsonObject.class);
+						
+						//FIXME procedura missing
+						//alpacaService.loadData(data,gson.toJson(alpacaStructure.getSchema()), gson.toJson(alpacaStructure.getOptions()), procedura, userPreferences);
+						renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+							include("/compilaForm.jsp", renderRequest, renderResponse);
+
+					} catch (Exception e) {
+						_log.error(e.getMessage());
+					}
+			
+				}
+
+			} catch (Exception e) {
+				_log.error(e.getMessage());
+			}
+			
 		}
+
+		
 		super.render(renderRequest, renderResponse);
 
 	}

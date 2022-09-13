@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -23,6 +24,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneforms.model.Form;
+import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
@@ -71,6 +73,9 @@ public class HomeRenderCommand implements MVCRenderCommand{
 	private IstanzaFormLocalService istanzaFormLocalService;
 	
 	@Reference
+	private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
+	
+	@Reference
 	private AlpacaService alpacaService;
 	
 
@@ -80,7 +85,7 @@ public class HomeRenderCommand implements MVCRenderCommand{
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
 		long richiestaId = 0;
-		long servizioId = 0;
+		long proceduraId = 0;
 		
 		Richiesta richiesta = null;
 		Procedura procedura = null;
@@ -89,55 +94,36 @@ public class HomeRenderCommand implements MVCRenderCommand{
 		
 		List<String> lstDestinazioniUso = getListaDestinazioniUso();
 		
-		if(Validator.isNotNull(richiestaId)) {
-			try {
-				richiesta = richiestaLocalService.getRichiesta(richiestaId);
-			} catch (Exception e) {
-				_log.error("Impossibile recuperare la richiesta con ID: " + richiestaId + "a causa di: " + e.getMessage());
-				// capire a quale jsp deve puntare in caso di errore
-				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_RICHIESTA);
-			}
+//		se tipologia servizio = certificato -> step2 altrimenti compila form
 		
-			try {
-//				procedura = gestioneProcedureMiddlewareService.getProcedura(themeDisplay.getSiteGroupId(), servizioId, true);
-			} catch (Exception e) {
-				_log.error("Impossibile recuperare la procedura con servizioId: " + servizioId + "a causa di: " + e.getMessage());
-				// capire a quale jsp deve puntare in caso di errore
-				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
-			}
+		String tipologiaServizio = "DEMO";
+		UserPreferences userPreferences = new UserPreferences();
 		
-			try {
-				servizio = servizioLocalService.getServizioById(procedura.getServizioId());
-			} catch (Exception e) {
-				_log.error("Impossibile recuperare il servizio con ID: " + procedura.getServizioId() + "a causa di: " + e.getMessage());
-				// capire a quale jsp deve puntare in caso di errore
-				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_SERVIZIO);
+		try {
+			alpacaStructure = getAlpacaJsonStructure(0,procedura,false);
+			
+			if(Validator.isNotNull(alpacaStructure)) {
+				renderRequest.setAttribute("alpacaStructure", alpacaStructure);
 			}
-		}else {
-			_log.error("Non è stato possibile recuperare l'id della richiesta!");
-			SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_RICHIESTA);
-			// capire a quale jsp deve puntare in caso di errore
+
+			if(tipologiaServizio.equalsIgnoreCase("CERTIFICATO")) {
+				return PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO;
+			}else {
+				return PresentatoreFormsPortletKeys.JSP_COMPILA_FORM;
+			}
+			
+//			procedura = proceduraLocalService.getProcedura(proceduraId);
+//			servizio = servizioLocalService.getServizioById(procedura.getServizioId());
+
+		}catch(Exception e) {
+			_log.error("");
 		}
+		
 		
 		
 		renderRequest.setAttribute("statoRichiesta", richiesta.getStato());
-		renderRequest.setAttribute("configurazioneTipoServizioStep2", procedura.getStep2TipoServizio());
+		renderRequest.setAttribute("configurazioneTipoServizioStep2", "DEMO");
 		renderRequest.setAttribute("destinazioniUso", lstDestinazioniUso);
-		
-		try {
-			if(richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
-				renderRequest.setAttribute("bozzaPresente", true);
-				return "/home.jsp";
-			}else {
-				alpacaStructure = getAlpacaJsonStructure(richiesta.getRichiestaId(),procedura,false);
-				renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
-				
-				return PresentatoreFormsPortletKeys.JSP_COMPILA_FORM;
-				
-			}
-		}catch(Exception e) {
-			_log.error("Errore durante la visualizzazione del form!" + e.getMessage());
-		}
 		
 		return PresentatoreFormsPortletKeys.JSP_HOME;
 
@@ -151,8 +137,9 @@ public class HomeRenderCommand implements MVCRenderCommand{
 		
 		try {
 			form = formLocalService.getForm(52402);
+			form.setListaDefinizioneAllegato(definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(52402));
 		} catch (PortalException e) {
-			_log.error("Errore durante il recupero del form con id 75716" + e.getMessage());
+			_log.error("Errore durante il recupero del form con id 85607" + e.getMessage());
 		}
 		
 //		if(Validator.isNotNull(procedura)) {
@@ -160,55 +147,11 @@ public class HomeRenderCommand implements MVCRenderCommand{
 //			
 //		}
 		
-		if(Validator.isNotNull(caricaBozza) && caricaBozza && idRichiesta>0) {
-			
-			try {
-				// TODO: Sostituire con metodo che ritorna istanza per idRichiesta
-				istanzaForm = istanzaFormLocalService.getIstanzaForm(idRichiesta);
-			}
-			catch (PortalException e) {
-				_log.error("Impossibile recuperare l'istanza della richiesta con ID : " + idRichiesta + "per: " + e.getMessage());
-			}
-			
-			jsonDataBozza = istanzaForm.getJson();
-		}else {
-			/*
-			 * TODO: Eliminare bozze precedenti
-			 */
-		}
+		FormData formData = AlpacaUtil.loadFormData(form, null, true);
+		AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
 		
-		FormData formData = null;
-		AlpacaJsonStructure alpacaStructure = null;
-		
-		if(Validator.isNotNull(form)) {
-			formData = AlpacaUtil.loadFormData(form, jsonDataBozza, caricaBozza);
-			alpacaStructure = formData.getAlpaca();
-		}
 
-		UserPreferences userPreferences = new UserPreferences();
-		userPreferences.setCodiceFiscaleComponente(null);
-		userPreferences.setCodiceFiscaleRichiedente(null);
-		
-		if(Validator.isNotNull(caricaBozza) && !caricaBozza && (Validator.isNotNull(alpacaStructure.getData()) && alpacaStructure.getData() instanceof JsonObject)) {
-			JsonObject data = gson.fromJson(gson.toJson(alpacaStructure.getData()), JsonObject.class);
-			
-			try {
-				alpacaService.loadData(data, gson.toJson(alpacaStructure.getSchema()), gson.toJson(alpacaStructure.getOptions()), procedura, userPreferences);
-				alpacaStructure.setData(data);
-			}catch(Exception e) {
-				_log.error("Impossibile recuperare le informazioni dai servizi di integrazione!" + e.getMessage());				
-				return null;
-			}
-		}
-		
-		
-		// Chiedere perché viene sostituito nuovamente il valore di data
-		
-		try {
-			AlpacaUtil.loadView(alpacaStructure);
-		} catch (JSONException e) {
-			_log.error("Impossibile caricare la view del form!" + e.getMessage());
-		}
+		JsonObject data = gson.fromJson(gson.toJson(alpacaStructure.getData()), JsonObject.class);
 		
 		return alpacaStructure;
 
