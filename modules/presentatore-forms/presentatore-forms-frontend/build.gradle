@@ -13,6 +13,7 @@ dependencies {
 	compileOnly project(":modules:gestione-procedure:gestione-procedure-api")
 	compileOnly project(":modules:gestione-servizi:gestione-servizi-api")
 	compileOnly project(":modules:gestione-enti:gestione-enti-api")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-utility")
 }
 
 buildscript {
