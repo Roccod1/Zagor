@@ -85,14 +85,14 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 				docPers.setDataCreazione(new Date());
 				docPers.setDataModifica(new Date());
 				docPers.setDataScadenza(new Date(0L));
-				docPers.setDescrizione("questa è una carta di identità");
+				docPers.setDescrizione("questa ï¿½ una carta di identitï¿½");
 				docPers.setInScadenza(false);
 				docPers.setIdRepository("/opt/liferay-ce-portal-7.4.3.30-ga30/data/carta_identita.pdf");
 				docPers.setMetadati("metadati");
 				docPers.setNomeFile("carta_identita.pdf");
 				docPers.setNumero("99999");
 				docPers.setScaduto(true);
-				docPers.setTitolo("carta di identità");
+				docPers.setTitolo("carta di identitï¿½");
 				docPers.setVersione("1");
 				datiDocPersonaleList.add(docPers);
 				
@@ -106,7 +106,7 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 				docPers.setDataCreazione(new Date());
 				docPers.setDataModifica(new Date());
 				docPers.setDataScadenza(new Date(new Date().getTime() + 86400000));
-				docPers.setDescrizione("questo è un cod fisc");
+				docPers.setDescrizione("questo ï¿½ un cod fisc");
 				docPers.setInScadenza(true);
 				docPers.setIdRepository("/opt/liferay-ce-portal-7.4.3.30-ga30/data/cod_fisc.pdf");
 				docPers.setMetadati("metadati");
@@ -118,7 +118,7 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 				datiDocPersonaleList.add(docPers);
 				
 			}
-			allegato.setDocumentiPersonali(datiDocPersonaleList);
+//			allegato.setDocumentiPersonali(datiDocPersonaleList);
 		}
 		
 		renderRequest.setAttribute("idServizio",1);

@@ -21,17 +21,16 @@ import it.servizidigitali.gestioneenti.service.persistence.ServizioEnteFinder;
 public class ServizioEnteFinderImpl extends ServizioEnteFinderBaseImpl implements ServizioEnteFinder {
 
 	@Override
-	public ServizioEnte findServizioEnteByGroupIdLayoutId(long groupId, long layoutId) {
+	public ServizioEnte findServizioEnteByOrganizationIdLayoutId(long organizationId, long layoutId) {
 
 		ClassLoader classLoader = getClass().getClassLoader();
 
 		DynamicQuery query = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, classLoader);
 		Criterion criterion = null;
 
-		criterion = RestrictionsFactoryUtil.eq("groupId", groupId);
+		criterion = RestrictionsFactoryUtil.eq("organizationId", organizationId);
 
-		Criterion orCriterion = RestrictionsFactoryUtil.eq("privateLayoutId", layoutId);
-		orCriterion = RestrictionsFactoryUtil.or(criterion, RestrictionsFactoryUtil.eq("publicLayoutId", layoutId));
+		Criterion orCriterion = RestrictionsFactoryUtil.or(RestrictionsFactoryUtil.eq("privateLayoutId", layoutId), RestrictionsFactoryUtil.eq("publicLayoutId", layoutId));
 
 		criterion = RestrictionsFactoryUtil.and(criterion, orCriterion);
 

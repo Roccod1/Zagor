@@ -355,10 +355,11 @@ public class ServizioEnteLocalServiceWrapper
 
 	@Override
 	public it.servizidigitali.gestioneenti.model.ServizioEnte
-		getServizioEnteByGroupIdLayoutId(long groupId, long layoutId) {
+		getServizioEnteByOrganizationIdLayoutId(
+			long organizationId, long layoutId) {
 
-		return _servizioEnteLocalService.getServizioEnteByGroupIdLayoutId(
-			groupId, layoutId);
+		return _servizioEnteLocalService.
+			getServizioEnteByOrganizationIdLayoutId(organizationId, layoutId);
 	}
 
 	/**

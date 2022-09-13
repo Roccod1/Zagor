@@ -28,10 +28,10 @@ public class PresentatoreFormFrontendService {
 
 		Layout layout = themeDisplay.getLayout();
 
-		long groupId = layout.getGroupId();
+		long organizationId = themeDisplay.getScopeGroup().getOrganizationId();
 		long layoutId = layout.getLayoutId();
 
-		ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnteByGroupIdLayoutId(groupId, layoutId);
+		ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnteByOrganizationIdLayoutId(organizationId, layoutId);
 
 		return servizioEnte;
 	}
@@ -40,10 +40,10 @@ public class PresentatoreFormFrontendService {
 
 		Layout layout = themeDisplay.getLayout();
 
-		long groupId = layout.getGroupId();
+		long organizationId = themeDisplay.getScopeGroup().getOrganizationId();
 		long layoutId = layout.getLayoutId();
 
-		ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnteByGroupIdLayoutId(groupId, layoutId);
+		ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnteByOrganizationIdLayoutId(organizationId, layoutId);
 		// TODO caricare procedura da servizio e groupId
 		return null;
 	}

@@ -271,8 +271,8 @@ public interface ServizioEnteLocalService
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public ServizioEnte getServizioEnteByGroupIdLayoutId(
-		long groupId, long layoutId);
+	public ServizioEnte getServizioEnteByOrganizationIdLayoutId(
+		long organizationId, long layoutId);
 
 	/**
 	 * Returns the servizio ente matching the UUID and group.

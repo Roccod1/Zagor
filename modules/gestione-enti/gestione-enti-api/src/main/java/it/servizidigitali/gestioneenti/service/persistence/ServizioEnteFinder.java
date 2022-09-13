@@ -24,6 +24,7 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface ServizioEnteFinder {
 
 	public it.servizidigitali.gestioneenti.model.ServizioEnte
-		findServizioEnteByGroupIdLayoutId(long groupId, long layoutId);
+		findServizioEnteByOrganizationIdLayoutId(
+			long organizationId, long layoutId);
 
 }
