@@ -61,7 +61,8 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 ////	       int delta = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_DELTA_PARAM);
 		   String sortName = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		   String sortType = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
-	
+		   String filterOggettoNoteRichieste = ParamUtil.getString(resourceRequest, ScrivaniaCittadinoPortletKeys.FILTER_OGGETTO_RICHIESTE);
+		   String filterStatoRichieste = ParamUtil.getString(resourceRequest, ScrivaniaCittadinoPortletKeys.FILTER_STATO_RICHIESTE);
 		   List<Richiesta> listaRichieste = new ArrayList<Richiesta>();
 		   
 		   try {        	   
@@ -73,8 +74,22 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 				richiestaFilter.setCodiceFiscale(loggedUser.getScreenName());
 				richiestaFilter.setCompanyId(themeDisplay.getSiteGroup().getCompanyId());
 				richiestaFilter.setGroupId(themeDisplay.getSiteGroup().getGroupId());
-				richiestaFilter.setOrderByCol(sortName);
-				richiestaFilter.setOrderByType(sortType);
+				
+				if(Validator.isNotNull(filterOggettoNoteRichieste)) {
+					richiestaFilter.setOggettoNote(filterOggettoNoteRichieste);					
+				}
+				
+				if(Validator.isNotNull(filterStatoRichieste)) {
+					richiestaFilter.setTipo(filterStatoRichieste);					
+				}
+				
+				if(Validator.isNotNull(sortName)) {
+					richiestaFilter.setOrderByCol(sortName);					
+				}
+				
+				if(Validator.isNotNull(sortType)) {
+					richiestaFilter.setOrderByType(sortType);					
+				}
 				
 				int startEnd[] = calcolaStartEnd(cur, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
 				listaRichieste =  richiestaLocalService.search(richiestaFilter, startEnd[0], startEnd[1]);

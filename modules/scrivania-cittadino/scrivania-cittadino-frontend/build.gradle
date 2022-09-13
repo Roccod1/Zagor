@@ -6,6 +6,7 @@ dependencies {
 	compile project(":modules:gestione-enti:gestione-enti-api")
 	compile project(":modules:gestione-servizi:gestione-servizi-api")
 	compile project(":modules:gestione-procedure:gestione-procedure-api")
+	compile project(":modules:servizi-digitali-common:servizi-digitali-richieste-common")
 	
 	
 	

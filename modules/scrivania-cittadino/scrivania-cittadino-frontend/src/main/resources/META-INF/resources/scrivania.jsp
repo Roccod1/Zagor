@@ -10,28 +10,25 @@
 			<h3><liferay-ui:message key="comunicazioni"/></h3>						
 		</div>	
 		<div class="col-1">
-			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#filterCollapse" aria-expanded="false">Filtri</button>
+			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#filterCollapse" aria-expanded="false"><liferay-ui:message key="filtri"/></button>
 		</div>
 	</div>
 	<div class="row collapse" id="filterCollapse">
-		<div class="col-5">
-			<aui:input type="text" name="filterOggettoComunicazione"/>				
+		<div class="col">
+			<aui:input type="text" name="filterOggettoComunicazione" label="titolo-o-descrizione"/>				
 		</div>
 		
 		<div class="col">
-			<aui:select name="filterTipoComunicazione">
-				<aui:option value="Stato1" label="Stato1"/>
-				<aui:option value="Stato2" label="Stato2"/>
-				<aui:option value="Stato3" label="Stato3"/>
+			<aui:select name="filterTipoComunicazione" label="tipo-comunicazione">
+				<aui:option value=""><liferay-ui:message key="seleziona-opzione"/></aui:option>
+				<c:forEach items="${listaTipologiaComunicazione }" var="tipologiaComunicazione">
+					<aui:option value="${tipologiaComunicazione.tipologiaComunicazioneId}">${tipologiaComunicazione.nome}</aui:option>
+				</c:forEach>
 			</aui:select>			
 		</div>
 		
-		<div class="col">
-			<aui:select name="filterComunicazione">
-				<aui:option value="Stato1" label="Stato1"/>
-				<aui:option value="Stato2" label="Stato2"/>
-				<aui:option value="Stato3" label="Stato3"/>
-			</aui:select>	
+		<div class="col-12">
+			<button class="btn btn-primary" type="button" onclick="getComunicazioniUtente(1)"><liferay-ui:message key="cerca"/></button>
 		</div>
 	</div>
 	<div class="row">
@@ -45,30 +42,15 @@
 			<h3><liferay-ui:message key="le-mie-prenotazioni"/></h3>						
 		</div>
 		<div class="col-1">
-			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#filterCollapsePrenotazioni" aria-expanded="false">Filtri</button>
+			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#filterCollapsePrenotazioni" aria-expanded="false"><liferay-ui:message key="filtri"/></button>
 		</div>
 	</div>
 	<div class="row collapse" id="filterCollapsePrenotazioni">
 		<div class="col">
-			<div class="d-inline-flex">
-				<select name="listaFiltro4">
-					<option>Stato1</option>
-					<option>Stato2</option>
-					<option>Stato3</option>
-				</select>
-
-				<select name="listaFiltro5">
-					<option>Stato1</option>
-					<option>Stato2</option>
-					<option>Stato3</option>
-				</select>
-				
-				<select name="listaFiltro6">
-					<option>Stato1</option>
-					<option>Stato2</option>
-					<option>Stato3</option>
-				</select>
-			</div>
+			<aui:input type="text" name="filterOggettoPrenotazioni" label="titolo-o-descrizione"/>				
+		</div>
+		<div class="col-12">
+			<button class="btn btn-primary" type="button" onclick="getPrenotazioniUtente(1)"><liferay-ui:message key="cerca"/></button>
 		</div>
 	</div>
 	<div class="row">
@@ -78,15 +60,6 @@
 	</div>
 </div>
 
-
-
-
-
-
-
-
-<!-- <h3><liferay-ui:message key="le-mie-prenotazioni"/></h3> -->
-<%-- <div id="<portlet:namespace/>accordionContainerPrenotazioni"></div> --%>
 
 <script id="accordionComunicazioni" type="text/x-jsrender">
 <div id="collapseDivComunicazioni" class="collapse-div collapse-background-active">
@@ -141,6 +114,8 @@
 </script>
 
 <script type="text/javascript">
+	var defaultTimeoutMs = 1000;
+
 // 	on documentReady
 	$(function(){
 		getComunicazioniUtente(1);
@@ -157,10 +132,18 @@
 	
 	function getComunicazioniUtente(cur){
 		
-		var params = {};
-		params.cur = cur;
- 		params.orderByCol = '';
-		params.orderByType = '';
+		var params = {
+			'<portlet:namespace/>cur': cur,
+			'<portlet:namespace/>orderByCol': '',
+			'<portlet:namespace/>orderByType': '',
+			'<portlet:namespace/>filterOggettoComunicazione': $("#<portlet:namespace/>filterOggettoComunicazione").val(),
+			'<portlet:namespace/>filterTipoComunicazione': $("#<portlet:namespace/>filterTipoComunicazione").val(),
+		};
+// 		params.cur = cur;
+//  	params.orderByCol = '';
+// 		params.orderByType = '';
+// 		params.filterOggettoComunicazione = $("#<portlet:namespace/>filterOggettoComunicazione").val();
+// 		params.filterTipoComunicazione = $("#<portlet:namespace/>filterTipoComunicazione").val();
 		
 		var accordionContainer = "#<portlet:namespace/>accordionContainerComunicazioni";
 		
@@ -198,10 +181,12 @@
 	
 	function getPrenotazioniUtente(cur){
 		
-		var params = {};
-		params.cur = cur;
- 		params.orderByCol = '';
-		params.orderByType = '';
+		var params = {
+			'<portlet:namespace/>cur': cur,
+			'<portlet:namespace/>orderByCol': '',
+			'<portlet:namespace/>orderByType': '',
+			'<portlet:namespace/>filterOggettoPrenotazioni': $("#<portlet:namespace/>filterOggettoPrenotazioni").val(),
+		}
 		
 		var accordionContainer = "#<portlet:namespace/>accordionContainerPrenotazioni";
 		

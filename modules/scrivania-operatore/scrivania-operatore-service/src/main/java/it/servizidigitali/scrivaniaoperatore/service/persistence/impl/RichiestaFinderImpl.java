@@ -40,11 +40,8 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 		DynamicQuery dq = createQuery(filters);
 		OrderByComparator<Richiesta> orderByComparator = null;
 		if(Validator.isNotNull(filters.getOrderByCol())) {
-			orderByComparator = OrderByComparatorFactoryUtil.create(Richiesta.class.getSimpleName(), filters.getOrderByCol());
-			if(Validator.isNotNull(filters.getOrderByType())) {
-				boolean orderByType = "desc".equals(filters.getOrderByType()) ? false : true;
-				orderByComparator = OrderByComparatorFactoryUtil.create(Richiesta.class.getSimpleName(), filters.getOrderByCol(), orderByType);
-			}
+			boolean orderByType = "asc".equals(filters.getOrderByType()) ? true : false;
+			orderByComparator = OrderByComparatorFactoryUtil.create(Richiesta.class.getSimpleName(), filters.getOrderByCol(), orderByType);
 		}
 		return richiestaPersistence.findWithDynamicQuery(dq, start, end, orderByComparator);
 	}
@@ -112,6 +109,12 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 
 		if (filters.getProcedureIds() != null) {
 			dq.add(RestrictionsFactoryUtil.in("proceduraId", filters.getProcedureIds()));
+		}
+		
+		if(Validator.isNotNull(filters.getOggettoNote())) {
+			String pattern = StringPool.PERCENT + filters.getOggettoNote() + StringPool.PERCENT;
+			
+			dq.add(RestrictionsFactoryUtil.or(RestrictionsFactoryUtil.ilike("oggetto", pattern), RestrictionsFactoryUtil.ilike("note", pattern)));	
 		}
 
 		return dq;

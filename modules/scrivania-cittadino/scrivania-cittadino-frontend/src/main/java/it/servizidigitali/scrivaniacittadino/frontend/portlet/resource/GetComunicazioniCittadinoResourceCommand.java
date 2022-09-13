@@ -63,13 +63,22 @@ public class GetComunicazioniCittadinoResourceCommand extends BaseMVCResourceCom
 //	       int delta = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_DELTA_PARAM);
 		   String sortName = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		   String sortType = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
-		
+		   String filterOggettoComunicazione = ParamUtil.getString(resourceRequest, ScrivaniaCittadinoPortletKeys.FILTER_OGGETTO_COMUNICAZIONE);
+		   Long filterTipoComunicazione = ParamUtil.getLong(resourceRequest, ScrivaniaCittadinoPortletKeys.FILTER_TIPO_COMUNICAZIONE);
+		   
 		   try {        	   
 				serviceContext = ServiceContextFactory.getInstance(resourceRequest);
 				themeDisplay = serviceContext.getThemeDisplay();
 				User loggedUser = themeDisplay.getUser();
 				ComunicazioneFilters comunicazioneFilters = new ComunicazioneFilters();
 				comunicazioneFilters.setUsername(loggedUser.getScreenName());
+				if(Validator.isNotNull(filterOggettoComunicazione)) {
+					comunicazioneFilters.setTitoloDescrizione(filterOggettoComunicazione);
+				}
+				
+				if(Validator.isNotNull(filterTipoComunicazione) && filterTipoComunicazione > 0) {
+					comunicazioneFilters.setTipologia(filterTipoComunicazione);
+				}
 				
 				if(Validator.isNotNull(sortName)) {
 					comunicazioneFilters.setOrderByCol(sortName);

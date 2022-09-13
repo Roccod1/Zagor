@@ -109,6 +109,9 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 		if (filters.getDataInvioA() != null) {
 			sql += "and c.dataInvio <= ? ";
 		}
+		if(Validator.isNotNull(filters.getTitoloDescrizione())) {
+			sql += "and (c.titolo like concat('%', ?, '%') or c.descrizione like concat('%', ?, '%')) ";
+		}
 		if(Validator.isNotNull(filters.getOrderByCol())) {
 			sql += "order by ? ? ";
 		}
@@ -137,6 +140,10 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 		}
 		if (filters.getDataInvioA() != null) {
 			queryPos.add(filters.getDataInvioA());
+		}
+		if(Validator.isNotNull(filters.getTitoloDescrizione())) {
+			queryPos.add(filters.getTitoloDescrizione());
+			queryPos.add(filters.getTitoloDescrizione());
 		}
 		if(Validator.isNotNull(filters.getOrderByCol())) {
 			queryPos.add(filters.getOrderByCol());
