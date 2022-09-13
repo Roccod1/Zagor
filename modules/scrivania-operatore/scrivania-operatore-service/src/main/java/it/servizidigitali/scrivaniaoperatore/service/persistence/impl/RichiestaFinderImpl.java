@@ -14,11 +14,15 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.RichiestaFinder;
@@ -34,7 +38,9 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 
 	@Reference
 	private UserLocalService userLocalService;
-
+	@Reference
+	private ProceduraLocalService proceduraLocalService;
+	
 	@Override
 	public List<Richiesta> findByFilters(RichiestaFilters filters, int start, int end) {
 		DynamicQuery dq = createQuery(filters);
@@ -104,6 +110,18 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 
 		if (filters.getProcedureIds() != null) {
 			dq.add(RestrictionsFactoryUtil.in("proceduraId", filters.getProcedureIds()));
+		}
+		
+		if (filters.getServizioId() != null) {
+			List<Long> procedure = proceduraLocalService.getProcedureByServiziIdsGroupIdAttiva(
+					Collections.singletonList(filters.getServizioId()), 
+					filters.getGroupId(), 
+					true)
+					.stream()
+					.map(x -> x.getProceduraId())
+					.collect(Collectors.toList());
+			
+			dq.add(RestrictionsFactoryUtil.in("proceduraId", procedure));
 		}
 
 		return dq;

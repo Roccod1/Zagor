@@ -67,6 +67,7 @@ public class MapUtil {
 		Procedura procedura = proceduraLocalService.fetchProcedura(richiesta.getProceduraId());
 		Servizio servizio = servizioLocalService.fetchServizio(procedura.getServizioId());
 		dto.setServizio(servizio.getNome());
+		dto.setProcessInstanceId(richiesta.getProcessInstanceId());
 		
 		return dto;
 	}

@@ -100,7 +100,7 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 		RichiestaFilters filters = new RichiestaFilters();
 		filters.setGroupId(ctx.getScopeGroupId());
 		filters.setCompanyId(ctx.getCompanyId());
-
+		filters.setServizioId(queryServizio == 0 ? null : queryServizio);
 		filters.setNomeCognome(queryNome.isBlank() ? null : queryNome.trim());
 		filters.setCodiceFiscale(queryCf.isBlank() ? null : queryCf.trim());
 		filters.setIdRichiesta(queryRichiestaId.isBlank() ? null : queryRichiestaId.trim());
@@ -128,9 +128,6 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 
 		// TODO se tab In itinere/chiusi
 		// filters.setProcedureIds(scrivaniaOperatoreFrontendService.getProcedureIds(ctx));
-
-		// TODO lista servizi per cui filtrare
-		// scrivaniaOperatoreFrontendService.getServiziEnte(ctx);
 
 		int count = richiestaLocalService.count(filters);
 		List<RichiestaDTO> elems = richiestaLocalService.search(filters, start, end).stream().map(x -> mapUtil.mapRichiesta(ctx.getCompanyId(), x)).collect(Collectors.toList());

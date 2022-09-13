@@ -15,7 +15,8 @@ public class RichiestaFilters {
 	private String tipo;
 	private Set<Long> procedureIds;
 	private Set<String> processInstanceIds;
-
+	private Long servizioId;
+	
 	private long groupId;
 	private long companyId;
 
@@ -186,4 +187,13 @@ public class RichiestaFilters {
 	public void setCompanyId(long companyId) {
 		this.companyId = companyId;
 	}
+
+	public Long getServizioId() {
+		return servizioId;
+	}
+
+	public void setServizioId(Long servizioId) {
+		this.servizioId = servizioId;
+	}
+	
 }
