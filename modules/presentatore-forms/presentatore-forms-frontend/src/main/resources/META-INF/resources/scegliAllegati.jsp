@@ -490,7 +490,8 @@ console.log("aui script");
 			//Submit del form
 			$("#<portlet:namespace />salva-form").submit();
 		});
-					
+	
+		
 		<%-- GESTIONE UPLOAD FILE FIRMATO --%>	
 	$('.save-attachment-uploadFileFirmato').on('click', function(){	
 			var nomeAllegato = $('#<portlet:namespace />uploadFileFirmato').val();
