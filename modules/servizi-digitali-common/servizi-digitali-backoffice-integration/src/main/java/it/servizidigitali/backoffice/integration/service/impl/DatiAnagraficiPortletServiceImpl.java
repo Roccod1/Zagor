@@ -27,6 +27,7 @@ import it.servizidigitali.common.model.StatoEstero;
 import it.servizidigitali.common.service.ComuneEsteroLocalService;
 import it.servizidigitali.common.service.ComuneLocalService;
 import it.servizidigitali.common.service.StatoEsteroLocalService;
+import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
 
 /**
  * Implementazione di {@link DatiAnagraficiPortletService} che si occupa di caricare i componenti
@@ -43,7 +44,7 @@ public class DatiAnagraficiPortletServiceImpl implements DatiAnagraficiPortletSe
 	@Reference
 	private OrganizationLocalService organizationLocalService;
 
-	@Reference
+	@Reference(target = "(component.name=anagrafeBackofficeIntegrationService)")
 	private AnagrafeIntegrationService anagrafeIntegrationService;
 
 	@Reference
@@ -61,7 +62,7 @@ public class DatiAnagraficiPortletServiceImpl implements DatiAnagraficiPortletSe
 		List<ComponenteNucleoFamiliare> componentiNucleoFamiliare = null;
 		try {
 			Organization organization = organizationLocalService.getOrganization(organizationId);
-			String wsUrl = organization.getExpandoBridge().getAttribute("uriBackoffice").toString();
+			String wsUrl = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.URI_BACKOFFICE.getNomeAttributo()).toString();
 			componentiNucleoFamiliare = null;
 
 			if (Validator.isNotNull(wsUrl)) {
@@ -82,8 +83,14 @@ public class DatiAnagraficiPortletServiceImpl implements DatiAnagraficiPortletSe
 		List<ComponenteNucleoFamiliare> componentiNucleoFamiliare = null;
 		if (organization != null) {
 
-			String anpr = organization.getExpandoBridge().getAttribute("anpr").toString();
-			String tipoIntegrazioneExpando = organization.getExpandoBridge().getAttribute("tipoIntegrazione").toString();
+			String[] tipoIntegrazioneExpandoArray = (String[]) organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.TIPO_INTEGRAZIONE.getNomeAttributo());
+			String anpr = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.ANPR.getNomeAttributo()).toString();
+
+			String tipoIntegrazioneExpando = "";
+
+			if (tipoIntegrazioneExpandoArray.length > 0) {
+				tipoIntegrazioneExpando = tipoIntegrazioneExpandoArray[0];
+			}
 
 			TipoIntegrazione tipoIntegrazione = TipoIntegrazione.valueOf(tipoIntegrazioneExpando);
 			if (Boolean.parseBoolean(anpr)) {
@@ -192,7 +199,7 @@ public class DatiAnagraficiPortletServiceImpl implements DatiAnagraficiPortletSe
 
 				// Comune Residenza
 				if (organization != null) {
-					String codiceISTAT = organization.getExpandoBridge().getAttribute("codiceISTAT").toString();
+					String codiceISTAT = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_ISTAT.getNomeAttributo()).toString();
 					componenteNucleoFamiliare.setCodiceIstatComuneResidenza(codiceISTAT);
 				}
 

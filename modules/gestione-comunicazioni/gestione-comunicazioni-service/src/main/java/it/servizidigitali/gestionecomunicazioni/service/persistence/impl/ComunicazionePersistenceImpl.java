@@ -54,6 +54,8 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 
+import java.sql.Timestamp;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -3522,6 +3524,541 @@ public class ComunicazionePersistenceImpl
 		_FINDER_COLUMN_DESTINATARIOUSERID_DESTINATARIOORGANIZATIONID_2 =
 			"comunicazione.destinatarioOrganizationId = ?";
 
+	private FinderPath _finderPathWithPaginationFindByDataInvio;
+	private FinderPath _finderPathWithoutPaginationFindByDataInvio;
+	private FinderPath _finderPathCountByDataInvio;
+
+	/**
+	 * Returns all the comunicaziones where dataInvio = &#63;.
+	 *
+	 * @param dataInvio the data invio
+	 * @return the matching comunicaziones
+	 */
+	@Override
+	public List<Comunicazione> findByDataInvio(Date dataInvio) {
+		return findByDataInvio(
+			dataInvio, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the comunicaziones where dataInvio = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComunicazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param dataInvio the data invio
+	 * @param start the lower bound of the range of comunicaziones
+	 * @param end the upper bound of the range of comunicaziones (not inclusive)
+	 * @return the range of matching comunicaziones
+	 */
+	@Override
+	public List<Comunicazione> findByDataInvio(
+		Date dataInvio, int start, int end) {
+
+		return findByDataInvio(dataInvio, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the comunicaziones where dataInvio = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComunicazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param dataInvio the data invio
+	 * @param start the lower bound of the range of comunicaziones
+	 * @param end the upper bound of the range of comunicaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching comunicaziones
+	 */
+	@Override
+	public List<Comunicazione> findByDataInvio(
+		Date dataInvio, int start, int end,
+		OrderByComparator<Comunicazione> orderByComparator) {
+
+		return findByDataInvio(dataInvio, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the comunicaziones where dataInvio = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComunicazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param dataInvio the data invio
+	 * @param start the lower bound of the range of comunicaziones
+	 * @param end the upper bound of the range of comunicaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching comunicaziones
+	 */
+	@Override
+	public List<Comunicazione> findByDataInvio(
+		Date dataInvio, int start, int end,
+		OrderByComparator<Comunicazione> orderByComparator,
+		boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByDataInvio;
+				finderArgs = new Object[] {_getTime(dataInvio)};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByDataInvio;
+			finderArgs = new Object[] {
+				_getTime(dataInvio), start, end, orderByComparator
+			};
+		}
+
+		List<Comunicazione> list = null;
+
+		if (useFinderCache) {
+			list = (List<Comunicazione>)finderCache.getResult(
+				finderPath, finderArgs);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (Comunicazione comunicazione : list) {
+					if (!Objects.equals(
+							dataInvio, comunicazione.getDataInvio())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(3);
+			}
+
+			sb.append(_SQL_SELECT_COMUNICAZIONE_WHERE);
+
+			boolean bindDataInvio = false;
+
+			if (dataInvio == null) {
+				sb.append(_FINDER_COLUMN_DATAINVIO_DATAINVIO_1);
+			}
+			else {
+				bindDataInvio = true;
+
+				sb.append(_FINDER_COLUMN_DATAINVIO_DATAINVIO_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(ComunicazioneModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindDataInvio) {
+					queryPos.add(new Timestamp(dataInvio.getTime()));
+				}
+
+				list = (List<Comunicazione>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first comunicazione in the ordered set where dataInvio = &#63;.
+	 *
+	 * @param dataInvio the data invio
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching comunicazione
+	 * @throws NoSuchComunicazioneException if a matching comunicazione could not be found
+	 */
+	@Override
+	public Comunicazione findByDataInvio_First(
+			Date dataInvio, OrderByComparator<Comunicazione> orderByComparator)
+		throws NoSuchComunicazioneException {
+
+		Comunicazione comunicazione = fetchByDataInvio_First(
+			dataInvio, orderByComparator);
+
+		if (comunicazione != null) {
+			return comunicazione;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("dataInvio=");
+		sb.append(dataInvio);
+
+		sb.append("}");
+
+		throw new NoSuchComunicazioneException(sb.toString());
+	}
+
+	/**
+	 * Returns the first comunicazione in the ordered set where dataInvio = &#63;.
+	 *
+	 * @param dataInvio the data invio
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching comunicazione, or <code>null</code> if a matching comunicazione could not be found
+	 */
+	@Override
+	public Comunicazione fetchByDataInvio_First(
+		Date dataInvio, OrderByComparator<Comunicazione> orderByComparator) {
+
+		List<Comunicazione> list = findByDataInvio(
+			dataInvio, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last comunicazione in the ordered set where dataInvio = &#63;.
+	 *
+	 * @param dataInvio the data invio
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching comunicazione
+	 * @throws NoSuchComunicazioneException if a matching comunicazione could not be found
+	 */
+	@Override
+	public Comunicazione findByDataInvio_Last(
+			Date dataInvio, OrderByComparator<Comunicazione> orderByComparator)
+		throws NoSuchComunicazioneException {
+
+		Comunicazione comunicazione = fetchByDataInvio_Last(
+			dataInvio, orderByComparator);
+
+		if (comunicazione != null) {
+			return comunicazione;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("dataInvio=");
+		sb.append(dataInvio);
+
+		sb.append("}");
+
+		throw new NoSuchComunicazioneException(sb.toString());
+	}
+
+	/**
+	 * Returns the last comunicazione in the ordered set where dataInvio = &#63;.
+	 *
+	 * @param dataInvio the data invio
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching comunicazione, or <code>null</code> if a matching comunicazione could not be found
+	 */
+	@Override
+	public Comunicazione fetchByDataInvio_Last(
+		Date dataInvio, OrderByComparator<Comunicazione> orderByComparator) {
+
+		int count = countByDataInvio(dataInvio);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Comunicazione> list = findByDataInvio(
+			dataInvio, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the comunicaziones before and after the current comunicazione in the ordered set where dataInvio = &#63;.
+	 *
+	 * @param comunicazioneId the primary key of the current comunicazione
+	 * @param dataInvio the data invio
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next comunicazione
+	 * @throws NoSuchComunicazioneException if a comunicazione with the primary key could not be found
+	 */
+	@Override
+	public Comunicazione[] findByDataInvio_PrevAndNext(
+			long comunicazioneId, Date dataInvio,
+			OrderByComparator<Comunicazione> orderByComparator)
+		throws NoSuchComunicazioneException {
+
+		Comunicazione comunicazione = findByPrimaryKey(comunicazioneId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Comunicazione[] array = new ComunicazioneImpl[3];
+
+			array[0] = getByDataInvio_PrevAndNext(
+				session, comunicazione, dataInvio, orderByComparator, true);
+
+			array[1] = comunicazione;
+
+			array[2] = getByDataInvio_PrevAndNext(
+				session, comunicazione, dataInvio, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Comunicazione getByDataInvio_PrevAndNext(
+		Session session, Comunicazione comunicazione, Date dataInvio,
+		OrderByComparator<Comunicazione> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(3);
+		}
+
+		sb.append(_SQL_SELECT_COMUNICAZIONE_WHERE);
+
+		boolean bindDataInvio = false;
+
+		if (dataInvio == null) {
+			sb.append(_FINDER_COLUMN_DATAINVIO_DATAINVIO_1);
+		}
+		else {
+			bindDataInvio = true;
+
+			sb.append(_FINDER_COLUMN_DATAINVIO_DATAINVIO_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(ComunicazioneModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		if (bindDataInvio) {
+			queryPos.add(new Timestamp(dataInvio.getTime()));
+		}
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						comunicazione)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<Comunicazione> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the comunicaziones where dataInvio = &#63; from the database.
+	 *
+	 * @param dataInvio the data invio
+	 */
+	@Override
+	public void removeByDataInvio(Date dataInvio) {
+		for (Comunicazione comunicazione :
+				findByDataInvio(
+					dataInvio, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
+			remove(comunicazione);
+		}
+	}
+
+	/**
+	 * Returns the number of comunicaziones where dataInvio = &#63;.
+	 *
+	 * @param dataInvio the data invio
+	 * @return the number of matching comunicaziones
+	 */
+	@Override
+	public int countByDataInvio(Date dataInvio) {
+		FinderPath finderPath = _finderPathCountByDataInvio;
+
+		Object[] finderArgs = new Object[] {_getTime(dataInvio)};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_COMUNICAZIONE_WHERE);
+
+			boolean bindDataInvio = false;
+
+			if (dataInvio == null) {
+				sb.append(_FINDER_COLUMN_DATAINVIO_DATAINVIO_1);
+			}
+			else {
+				bindDataInvio = true;
+
+				sb.append(_FINDER_COLUMN_DATAINVIO_DATAINVIO_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindDataInvio) {
+					queryPos.add(new Timestamp(dataInvio.getTime()));
+				}
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_DATAINVIO_DATAINVIO_1 =
+		"comunicazione.dataInvio IS NULL";
+
+	private static final String _FINDER_COLUMN_DATAINVIO_DATAINVIO_2 =
+		"comunicazione.dataInvio = ?";
+
 	public ComunicazionePersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -4233,6 +4770,24 @@ public class ComunicazionePersistenceImpl
 			"countByDestinatarioUserId", new String[] {Long.class.getName()},
 			new String[] {"destinatarioOrganizationId"}, false);
 
+		_finderPathWithPaginationFindByDataInvio = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByDataInvio",
+			new String[] {
+				Date.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {"dataInvio"}, true);
+
+		_finderPathWithoutPaginationFindByDataInvio = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByDataInvio",
+			new String[] {Date.class.getName()}, new String[] {"dataInvio"},
+			true);
+
+		_finderPathCountByDataInvio = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByDataInvio",
+			new String[] {Date.class.getName()}, new String[] {"dataInvio"},
+			false);
+
 		_setComunicazioneUtilPersistence(this);
 	}
 
@@ -4289,6 +4844,14 @@ public class ComunicazionePersistenceImpl
 
 	@Reference
 	protected FinderCache finderCache;
+
+	private static Long _getTime(Date date) {
+		if (date == null) {
+			return null;
+		}
+
+		return date.getTime();
+	}
 
 	private static final String _SQL_SELECT_COMUNICAZIONE =
 		"SELECT comunicazione FROM Comunicazione comunicazione";

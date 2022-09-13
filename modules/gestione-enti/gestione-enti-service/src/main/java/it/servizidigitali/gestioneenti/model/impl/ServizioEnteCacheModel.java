@@ -64,7 +64,7 @@ public class ServizioEnteCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(55);
+		StringBundler sb = new StringBundler(57);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -92,6 +92,8 @@ public class ServizioEnteCacheModel
 		sb.append(uriEsterna);
 		sb.append(", catalogoServizioArticleId=");
 		sb.append(catalogoServizioArticleId);
+		sb.append(", subOrganizationId=");
+		sb.append(subOrganizationId);
 		sb.append(", autenticazione=");
 		sb.append(autenticazione);
 		sb.append(", livelloAutenticazione=");
@@ -175,6 +177,7 @@ public class ServizioEnteCacheModel
 
 		servizioEnteImpl.setCatalogoServizioArticleId(
 			catalogoServizioArticleId);
+		servizioEnteImpl.setSubOrganizationId(subOrganizationId);
 		servizioEnteImpl.setAutenticazione(autenticazione);
 		servizioEnteImpl.setLivelloAutenticazione(livelloAutenticazione);
 
@@ -233,6 +236,8 @@ public class ServizioEnteCacheModel
 		uriEsterna = objectInput.readUTF();
 
 		catalogoServizioArticleId = objectInput.readLong();
+
+		subOrganizationId = objectInput.readLong();
 
 		autenticazione = objectInput.readBoolean();
 
@@ -305,6 +310,8 @@ public class ServizioEnteCacheModel
 
 		objectOutput.writeLong(catalogoServizioArticleId);
 
+		objectOutput.writeLong(subOrganizationId);
+
 		objectOutput.writeBoolean(autenticazione);
 
 		objectOutput.writeInt(livelloAutenticazione);
@@ -345,6 +352,7 @@ public class ServizioEnteCacheModel
 	public long publicLayoutId;
 	public String uriEsterna;
 	public long catalogoServizioArticleId;
+	public long subOrganizationId;
 	public boolean autenticazione;
 	public int livelloAutenticazione;
 	public long dataInizioAttivazione;

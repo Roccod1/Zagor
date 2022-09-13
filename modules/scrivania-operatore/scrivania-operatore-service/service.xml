@@ -35,12 +35,15 @@
 		<column name="stato" type="String" />
 		<column name="numeroProtocollo" type="String" />
 		<column name="dataProtocollo" type="Date" />
+		<column name="numeroProtocolloEsterno" type="String" />
+		<column name="dataProtocolloEsterno" type="Date" />
 		<column name="oggetto" type="String" />
 		<column name="note" type="String" />
 		<column name="invioGuest" type="boolean" />
 		<column name="tokenVisualizzazione" type="String" />
 		<column name="chiaveAssociazioneBackoffice" type="String" />
 		<column name="delegaId" type="Long" />
+		<column name="processInstanceId" type="String" />
 		<column name="proceduraId" type="long" />
 		
 		<!-- Finder methods -->
@@ -70,6 +73,99 @@
 		
 		<finder name="ProceduraId" return-type="Collection">
 			<finder-column name="proceduraId" />
+		</finder>
+
+		<finder name="ProcessInstanceId" return-type="Richiesta">
+			<finder-column name="processInstanceId" />
+		</finder>
+	</entity>
+
+	<entity 
+		name="IstanzaForm"
+		table="istanza_form"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="istanzaFormId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="json" type="String" />
+		<column name="formId" type="long" />
+		<column name="richiestaId" type="long" />
+		
+		<!-- Finder methods -->
+		<finder name="RichiestaId" return-type="IstanzaForm">
+			<finder-column name="richiestaId" />
+		</finder>
+
+		<finder name="FormId" return-type="Collection">
+			<finder-column name="formId" />
+		</finder>
+	</entity>
+	
+	<entity 
+		name="AllegatoRichiesta"
+		table="allegato_richiesta"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="richiestaId" primary="true" type="long" />
+		<column name="fileEntryId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="nome" type="String" />
+		<column name="idDocumentale" type="String" />
+		<column name="url" type="String" />
+		<column name="principale" type="boolean" />
+		
+		<!-- Finder methods -->
+		<finder name="IdDocumentale" return-type="AllegatoRichiesta">
+			<finder-column name="idDocumentale" />
+		</finder>
+
+		<finder name="Url" return-type="AllegatoRichiesta">
+			<finder-column name="url" />
+		</finder>
+
+		<finder name="R_P_G" return-type="AllegatoRichiesta">
+			<finder-column name="richiestaId" />
+			<finder-column name="principale" />
+			<finder-column name="groupId" />
+		</finder>
+
+		<finder name="R_G" return-type="Collection">
+			<finder-column name="richiestaId" />
+			<finder-column name="groupId" />
 		</finder>
 	</entity>
 </service-builder>

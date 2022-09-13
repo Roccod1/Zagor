@@ -10,36 +10,48 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.camunda.community.rest.client.api.DeploymentApi;
+import org.camunda.community.rest.client.api.GroupApi;
 import org.camunda.community.rest.client.api.ProcessDefinitionApi;
 import org.camunda.community.rest.client.api.ProcessInstanceApi;
 import org.camunda.community.rest.client.api.TaskApi;
+import org.camunda.community.rest.client.api.TenantApi;
+import org.camunda.community.rest.client.api.UserApi;
 import org.camunda.community.rest.client.api.VariableInstanceApi;
 import org.camunda.community.rest.client.dto.CompleteTaskDto;
 import org.camunda.community.rest.client.dto.CountResultDto;
 import org.camunda.community.rest.client.dto.DeploymentResourceDto;
 import org.camunda.community.rest.client.dto.DeploymentWithDefinitionsDto;
+import org.camunda.community.rest.client.dto.GroupDto;
 import org.camunda.community.rest.client.dto.PatchVariablesDto;
 import org.camunda.community.rest.client.dto.ProcessDefinitionDto;
 import org.camunda.community.rest.client.dto.ProcessInstanceDto;
 import org.camunda.community.rest.client.dto.ProcessInstanceQueryDto;
+import org.camunda.community.rest.client.dto.ProcessInstanceWithVariablesDto;
 import org.camunda.community.rest.client.dto.SortTaskQueryParametersDto;
+import org.camunda.community.rest.client.dto.StartProcessInstanceDto;
 import org.camunda.community.rest.client.dto.TaskDto;
 import org.camunda.community.rest.client.dto.TaskQueryDto;
 import org.camunda.community.rest.client.dto.TaskQueryDtoSorting;
+import org.camunda.community.rest.client.dto.TenantDto;
+import org.camunda.community.rest.client.dto.UserDto;
 import org.camunda.community.rest.client.dto.UserIdDto;
+import org.camunda.community.rest.client.dto.UserProfileDto;
 import org.camunda.community.rest.client.dto.VariableInstanceDto;
 import org.camunda.community.rest.client.dto.VariableInstanceQueryDto;
 import org.camunda.community.rest.client.dto.VariableQueryParameterDto;
 import org.camunda.community.rest.client.dto.VariableValueDto;
 import org.camunda.community.rest.client.invoker.ApiClient;
+import org.camunda.community.rest.client.invoker.ApiException;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
@@ -67,9 +79,12 @@ public class CamundaClientImpl implements CamundaClient {
 
 	private volatile CamundaConfiguration camundaConfiguration;
 
+	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
 	private String apiBasePath;
 	private String username;
 	private String password;
+	private boolean integrationEnabled;
 
 	@Activate
 	@Modified
@@ -78,9 +93,15 @@ public class CamundaClientImpl implements CamundaClient {
 		apiBasePath = camundaConfiguration.apiBasePath();
 		username = camundaConfiguration.apiUsername();
 		password = camundaConfiguration.apiPassword();
+		integrationEnabled = camundaConfiguration.integrationEnabled();
 	}
 
 	private ApiClient getApiClient() {
+
+		if (!integrationEnabled) {
+			throw new CamundaClientException("Integrazione con Camunda BPMN Engine disabilitata.");
+		}
+
 		OkHttpClient httpClient = new OkHttpClient.Builder().authenticator(new Authenticator() {
 
 			@Override
@@ -107,9 +128,9 @@ public class CamundaClientImpl implements CamundaClient {
 					null, null, null, null, null, null, null, null, null, null, null);
 
 		}
-		catch (Exception e) {
-			log.error("getProcessDefinitions", e);
-			throw new CamundaClientException("getProcessDefinitions :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("getProcessDefinitions: " + e.getResponseBody(), e);
+			throw new CamundaClientException("getProcessDefinitions :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -132,9 +153,9 @@ public class CamundaClientImpl implements CamundaClient {
 			// null, null, null, null, null, null, null, null, null, null, null);
 
 		}
-		catch (Exception e) {
-			log.error("getVariablesByTaskId", e);
-			throw new CamundaClientException("getVariablesByTaskId :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("getVariablesByTaskId: " + e.getResponseBody(), e);
+			throw new CamundaClientException("getVariablesByTaskId :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -153,22 +174,10 @@ public class CamundaClientImpl implements CamundaClient {
 			}
 
 			return api.queryTasks(null, null, q);
-
-			// return api.getTasks(null, null, null, null, String.valueOf(businessKey), null, null,
-			// null, null, null, null, null, null, null, null, null, null, null,
-			// null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-			// null, null,
-			// null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-			// null, null, null, null, null, null, null,
-			// null, null, null, null, null,
-			// null, null, null, null, null, null, null,
-			// null, null, null, null, null, null, null,
-			// null, null, null, null, null, includeCandidateGroups, null, null, null,
-			// null, null, null, null, null, null, null, null, null, null, null, null);
 		}
-		catch (Exception e) {
-			log.error("getTasksByBusinessKey", e);
-			throw new CamundaClientException("getTasksByBusinessKey :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("getTasksByBusinessKey: " + e.getResponseBody(), e);
+			throw new CamundaClientException("getTasksByBusinessKey :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -189,9 +198,47 @@ public class CamundaClientImpl implements CamundaClient {
 			return count.getCount().compareTo(0L) > 0;
 
 		}
-		catch (Exception e) {
-			log.error("existProcessByBusinessKey", e);
-			throw new CamundaClientException("existProcessByBusinessKey :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("existProcessByBusinessKey: " + e.getResponseBody(), e);
+			throw new CamundaClientException("existProcessByBusinessKey :: " + e.getResponseBody(), e);
+		}
+	}
+
+	@Override
+	public String startProcessInstance(String tenantId, String processDefinitionKey, String businessKey, Map<String, Object> variables) {
+		ProcessDefinitionApi api = new ProcessDefinitionApi(getApiClient());
+
+		try {
+			StartProcessInstanceDto startProcessInstanceDto = new StartProcessInstanceDto();
+			startProcessInstanceDto.setBusinessKey(businessKey);
+
+			if (variables != null) {
+				Map<String, VariableValueDto> variablesMap = new HashMap<String, VariableValueDto>();
+				for (Entry<String, Object> entry : variables.entrySet()) {
+					String key = entry.getKey();
+					Object value = entry.getValue();
+
+					VariableValueDto variableValueDto = new VariableValueDto();
+					if (value instanceof Date) {
+						value = simpleDateFormat.format(value);
+						variableValueDto.setType("date");
+					}
+					else {
+						variableValueDto.setType(value.getClass().getSimpleName().toLowerCase());
+					}
+					variableValueDto.setValue(value);
+
+					variablesMap.put(key, variableValueDto);
+				}
+				startProcessInstanceDto.setVariables(variablesMap);
+			}
+
+			ProcessInstanceWithVariablesDto processInstanceWithVariablesDto = api.startProcessInstanceByKeyAndTenantId(processDefinitionKey, tenantId, startProcessInstanceDto);
+			return processInstanceWithVariablesDto.getId();
+		}
+		catch (ApiException e) {
+			log.error("startProcessInstance: " + e.getResponseBody(), e);
+			throw new CamundaClientException("startProcessInstance :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -203,11 +250,10 @@ public class CamundaClientImpl implements CamundaClient {
 		String deploymentId = "";
 		DeploymentWithDefinitionsDto output = null;
 
-		
 		try {
 
 			ApiClient client = getApiClient();
-			
+
 			String time = "_" + new Date().getTime();
 
 			String suffix = ".bpmn";
@@ -221,16 +267,20 @@ public class CamundaClientImpl implements CamundaClient {
 			Path filePath = Files.write(path, byteArray);
 
 			file = filePath.toFile();
-			
+
 			output = new DeploymentApi(client).createDeployment(tenantId, null, false, false, "AutoDeployment", null, file);
-			
+
 			deploymentId = output.getId();
-			
+
 			log.debug("Created " + output.getId());
 
 		}
+		catch (ApiException e) {
+			log.error("insertOrUpdateProcessDefinitions: " + e.getResponseBody(), e);
+			throw new CamundaClientException("insertOrUpdateProcessDefinitions :: " + e.getResponseBody(), e);
+		}
 		catch (Exception e) {
-			log.error("insertOrUpdateProcessDefinitions", e);
+			log.error("insertOrUpdateProcessDefinitions: " + e.getMessage(), e);
 			throw new CamundaClientException("insertOrUpdateProcessDefinitions :: " + e.getMessage(), e);
 		}
 		finally {
@@ -241,7 +291,7 @@ public class CamundaClientImpl implements CamundaClient {
 				tempFolder.delete();
 			}
 		}
-		
+
 		return deploymentId;
 	}
 
@@ -257,9 +307,9 @@ public class CamundaClientImpl implements CamundaClient {
 			return count.getCount();
 
 		}
-		catch (Exception e) {
-			log.error("countTasksByCandidateGroupsAndCodiceServizio", e);
-			throw new CamundaClientException("countTasksByCandidateGroupsAndCodiceServizio :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("countTasksByCandidateGroupsAndCodiceServizio: " + e.getResponseBody(), e);
+			throw new CamundaClientException("countTasksByCandidateGroupsAndCodiceServizio :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -277,9 +327,9 @@ public class CamundaClientImpl implements CamundaClient {
 			return count.getCount();
 
 		}
-		catch (Exception e) {
-			log.error("countTasksByCandidateGroupsAndCodiceServizio", e);
-			throw new CamundaClientException("countTasksByCandidateGroupsAndCodiceServizio :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("countTasksByCandidateGroupsAndCodiceServizio: " + e.getResponseBody(), e);
+			throw new CamundaClientException("countTasksByCandidateGroupsAndCodiceServizio :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -294,9 +344,9 @@ public class CamundaClientImpl implements CamundaClient {
 			return api.queryTasks(null, null, q);
 
 		}
-		catch (Exception e) {
-			log.error("getTasksByCandidateGroupsAndCodiceServizio", e);
-			throw new CamundaClientException("getTasksByCandidateGroupsAndCodiceServizio :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("getTasksByCandidateGroupsAndCodiceServizio: " + e.getResponseBody(), e);
+			throw new CamundaClientException("getTasksByCandidateGroupsAndCodiceServizio :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -312,9 +362,9 @@ public class CamundaClientImpl implements CamundaClient {
 			return api.queryTasks(firstResult, maxResults, q);
 
 		}
-		catch (Exception e) {
-			log.error("getTasksByCandidateGroupsAndCodiceServizio", e);
-			throw new CamundaClientException("getTasksByCandidateGroupsAndCodiceServizio :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("getTasksByCandidateGroupsAndCodiceServizio: " + e.getResponseBody(), e);
+			throw new CamundaClientException("getTasksByCandidateGroupsAndCodiceServizio :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -329,9 +379,9 @@ public class CamundaClientImpl implements CamundaClient {
 			return api.queryTasks(null, null, q);
 
 		}
-		catch (Exception e) {
-			log.error("getTasksByAssigneeAndCodiceServizio", e);
-			throw new CamundaClientException("getTasksByAssigneeAndCodiceServizio :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("getTasksByAssigneeAndCodiceServizio: " + e.getResponseBody(), e);
+			throw new CamundaClientException("getTasksByAssigneeAndCodiceServizio :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -347,9 +397,9 @@ public class CamundaClientImpl implements CamundaClient {
 			return api.queryTasks(firstResult, maxResults, q);
 
 		}
-		catch (Exception e) {
-			log.error("getTasksByAssigneeAndCodiceServizio", e);
-			throw new CamundaClientException("getTasksByAssigneeAndCodiceServizio :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("getTasksByAssigneeAndCodiceServizio: " + e.getResponseBody(), e);
+			throw new CamundaClientException("getTasksByAssigneeAndCodiceServizio :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -365,9 +415,9 @@ public class CamundaClientImpl implements CamundaClient {
 			return count.getCount();
 
 		}
-		catch (Exception e) {
-			log.error("countTasksByAssigneeAndCodiceServizio", e);
-			throw new CamundaClientException("countTasksByAssigneeAndCodiceServizio :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("countTasksByAssigneeAndCodiceServizio: " + e.getResponseBody(), e);
+			throw new CamundaClientException("countTasksByAssigneeAndCodiceServizio :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -383,9 +433,9 @@ public class CamundaClientImpl implements CamundaClient {
 			return count.getCount();
 
 		}
-		catch (Exception e) {
-			log.error("countTasksByAssigneeAndCodiceServizio", e);
-			throw new CamundaClientException("countTasksByAssigneeAndCodiceServizio :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("countTasksByAssigneeAndCodiceServizio: " + e.getResponseBody(), e);
+			throw new CamundaClientException("countTasksByAssigneeAndCodiceServizio :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -398,9 +448,9 @@ public class CamundaClientImpl implements CamundaClient {
 			return api.getProcessInstance(id);
 
 		}
-		catch (Exception e) {
-			log.error("getProcessInstance", e);
-			throw new CamundaClientException("getProcessInstance :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("getProcessInstance: " + e.getResponseBody(), e);
+			throw new CamundaClientException("getProcessInstance :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -415,9 +465,9 @@ public class CamundaClientImpl implements CamundaClient {
 			return true;
 
 		}
-		catch (Exception e) {
-			log.error("claim", e);
-			throw new CamundaClientException("claim :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("claim: " + e.getResponseBody(), e);
+			throw new CamundaClientException("claim :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -430,9 +480,9 @@ public class CamundaClientImpl implements CamundaClient {
 			return true;
 
 		}
-		catch (Exception e) {
-			log.error("unclaim", e);
-			throw new CamundaClientException("unclaim :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("unclaim: " + e.getResponseBody(), e);
+			throw new CamundaClientException("unclaim :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -457,11 +507,10 @@ public class CamundaClientImpl implements CamundaClient {
 			api.complete(taskId, d);
 
 		}
-		catch (Exception e) {
-			log.error("completeTask", e);
-			throw new CamundaClientException("completeTask :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("completeTask: " + e.getResponseBody(), e);
+			throw new CamundaClientException("completeTask :: " + e.getResponseBody(), e);
 		}
-
 	}
 
 	@Override
@@ -482,9 +531,9 @@ public class CamundaClientImpl implements CamundaClient {
 			return res.toArray(new ProcessInstanceDto[0]);
 
 		}
-		catch (Exception e) {
-			log.error("getProcessInstanceByBusinessKey", e);
-			throw new CamundaClientException("getProcessInstanceByBusinessKey :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("getProcessInstanceByBusinessKey: " + e.getResponseBody(), e);
+			throw new CamundaClientException("getProcessInstanceByBusinessKey :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -504,11 +553,10 @@ public class CamundaClientImpl implements CamundaClient {
 			api.modifyProcessInstanceVariables(processId, d);
 
 		}
-		catch (Exception e) {
-			log.error("updateProcessInstanceVariableByBusinessKey", e);
-			throw new CamundaClientException("updateProcessInstanceVariableByBusinessKey :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("updateProcessInstanceVariableByBusinessKey: " + e.getResponseBody(), e);
+			throw new CamundaClientException("updateProcessInstanceVariableByBusinessKey :: " + e.getResponseBody(), e);
 		}
-
 	}
 
 	@Override
@@ -529,9 +577,9 @@ public class CamundaClientImpl implements CamundaClient {
 			return count.getCount();
 
 		}
-		catch (Exception e) {
-			log.error("countTasksByCodiceIpaComuneAndCodiceServizio", e);
-			throw new CamundaClientException("countTasksByCodiceIpaComuneAndCodiceServizio :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("countTasksByCodiceIpaComuneAndCodiceServizio: " + e.getResponseBody(), e);
+			throw new CamundaClientException("countTasksByCodiceIpaComuneAndCodiceServizio :: " + e.getResponseBody(), e);
 		}
 	}
 
@@ -600,29 +648,271 @@ public class CamundaClientImpl implements CamundaClient {
 
 	@Override
 	public File getDeploymentFile(String id) throws CamundaClientException {
-		
+
 		File output = null;
-		
-		
+
 		try {
 
 			ApiClient client = getApiClient();
-			
+
 			List<DeploymentResourceDto> listResource = new DeploymentApi(client).getDeploymentResources(id);
-			
-			if(!listResource.isEmpty()) {
+
+			if (!listResource.isEmpty()) {
 				output = new DeploymentApi(client).getDeploymentResourceData(id, listResource.get(0).getId());
-			}else {
+			}
+			else {
 				log.error("getDeploymentFile :: Impossibile recuperare la resource del deployment con ID : " + id);
 			}
 
 		}
-		catch (Exception e) {
-			log.error("getDeploymentFile", e);
-			throw new CamundaClientException("getDeploymentFile :: " + e.getMessage(), e);
+		catch (ApiException e) {
+			log.error("getDeploymentFile: " + e.getResponseBody(), e);
+			throw new CamundaClientException("getDeploymentFile :: " + e.getResponseBody(), e);
 		}
-		
+
 		return output;
 	}
 
+	@Override
+	public void insertOrUpdateTenant(String tenantId, String tenantName) {
+
+		try {
+			ApiClient client = getApiClient();
+
+			TenantDto tenantDto = new TenantDto();
+			tenantDto.setId(tenantId);
+			tenantDto.setName(tenantName);
+
+			TenantApi tenantApi = new TenantApi(client);
+
+			TenantDto tenant = null;
+			try {
+				tenant = tenantApi.getTenant(tenantId);
+			}
+			catch (Exception e) {
+				log.warn("insertOrUpdateTenant :: " + e.getMessage());
+			}
+			if (tenant == null) {
+				tenantApi.createTenant(tenantDto);
+			}
+			else {
+				tenantApi.updateTenant(tenantId, tenantDto);
+			}
+		}
+		catch (ApiException e) {
+			log.error("insertOrUpdateTenand: " + e.getResponseBody(), e);
+			throw new CamundaClientException("insertOrUpdateTenand :: " + e.getResponseBody(), e);
+		}
+	}
+
+	@Override
+	public void deleteTenant(String tenantId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.deleteTenant(tenantId);
+		}
+		catch (ApiException e) {
+			log.error("deleteTenant: " + e.getResponseBody(), e);
+			throw new CamundaClientException("deleteTenant :: " + e.getResponseBody(), e);
+		}
+	}
+
+	@Override
+	public void inserOrUpdateGroup(String groupId, String groupName, String groupType) {
+
+		try {
+			ApiClient client = getApiClient();
+			GroupApi groupApi = new GroupApi(client);
+
+			GroupDto group = null;
+			try {
+				group = groupApi.getGroup(groupId);
+			}
+			catch (Exception e) {
+				log.warn("inserOrUpdateGroup :: " + e.getMessage());
+			}
+			if (group == null) {
+				GroupDto groupDto = new GroupDto();
+				groupDto.setId(groupId);
+				groupDto.setName(groupName);
+				groupDto.setType(groupType);
+				groupApi.createGroup(groupDto);
+			}
+			else {
+				GroupDto groupDto = new GroupDto();
+				groupDto.setId(groupId);
+				groupDto.setName(groupName);
+				groupDto.setType(groupType);
+				groupApi.updateGroup(groupId, groupDto);
+
+			}
+		}
+		catch (ApiException e) {
+			log.error("inserOrUpdateGroup: " + e.getResponseBody(), e);
+			throw new CamundaClientException("inserOrUpdateGroup :: " + e.getResponseBody(), e);
+		}
+
+	}
+
+	@Override
+	public void deleteGroup(String groupId) {
+
+		try {
+			ApiClient client = getApiClient();
+			GroupApi groupApi = new GroupApi(client);
+			groupApi.deleteGroup(groupId);
+		}
+		catch (ApiException e) {
+			log.error("startProcessInstance: " + e.getResponseBody(), e);
+			throw new CamundaClientException("startProcessInstance :: " + e.getResponseBody(), e);
+		}
+
+	}
+
+	@Override
+	public void inserOrUpdateUser(String userId, String firstName, String lastName, String email, String password) {
+
+		try {
+			ApiClient client = getApiClient();
+			UserApi userApi = new UserApi(client);
+
+			UserProfileDto userProfileDto = null;
+			try {
+				userProfileDto = userApi.getUserProfile(userId);
+			}
+			catch (Exception e) {
+				log.warn("inserOrUpdateUser :: " + e.getMessage());
+			}
+			if (userProfileDto == null) {
+				UserProfileDto userProfileDto2 = new UserProfileDto();
+				userProfileDto2.setId(userId);
+				userProfileDto2.setFirstName(firstName);
+				userProfileDto2.setLastName(lastName);
+				userProfileDto2.setEmail(email);
+				UserDto userDto = new UserDto();
+				userDto.setProfile(userProfileDto2);
+				userApi.createUser(userDto);
+			}
+			else {
+				userProfileDto.setId(userId);
+				userProfileDto.setFirstName(firstName);
+				userProfileDto.setLastName(lastName);
+				userProfileDto.setEmail(email);
+				userApi.updateProfile(userId, userProfileDto);
+			}
+		}
+		catch (ApiException e) {
+			log.error("inserOrUpdateUser: " + e.getResponseBody(), e);
+			throw new CamundaClientException("inserOrUpdateUser :: " + e.getResponseBody(), e);
+		}
+
+	}
+
+	@Override
+	public void deleteUser(String userId) {
+		try {
+			ApiClient client = getApiClient();
+			UserApi userApi = new UserApi(client);
+			userApi.deleteUser(userId);
+		}
+		catch (ApiException e) {
+			log.error("deleteUser: " + e.getResponseBody(), e);
+			throw new CamundaClientException("deleteUser :: " + e.getResponseBody(), e);
+		}
+	}
+
+	@Override
+	public void addUserToGroup(String groupId, String userId) {
+		try {
+			ApiClient client = getApiClient();
+			GroupApi groupApi = new GroupApi(client);
+			groupApi.createGroupMember(groupId, userId);
+		}
+		catch (ApiException e) {
+			log.error("addUserToGroup: " + e.getResponseBody(), e);
+			throw new CamundaClientException("addUserToGroup :: " + e.getResponseBody(), e);
+		}
+	}
+
+	@Override
+	public void removeUserFromGroup(String groupId, String userId) {
+		try {
+			ApiClient client = getApiClient();
+			GroupApi groupApi = new GroupApi(client);
+			groupApi.deleteGroupMember(groupId, userId);
+		}
+		catch (ApiException e) {
+			log.error("removeUserFromGroup: " + e.getResponseBody(), e);
+			throw new CamundaClientException("removeUserFromGroup :: " + e.getResponseBody(), e);
+		}
+	}
+
+	@Override
+	public void addGroupToTenant(String tenantId, String groupId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.createGroupMembership(tenantId, groupId);
+		}
+		catch (ApiException e) {
+			log.error("addGroupToTenant :: " + e.getMessage(), e);
+			throw new CamundaClientException("addGroupToTenant :: " + e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void removeGroupFromTenant(String tenantId, String groupId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.deleteGroupMembership(tenantId, groupId);
+		}
+		catch (ApiException e) {
+			log.error("startProcessInstance: " + e.getResponseBody(), e);
+			throw new CamundaClientException("startProcessInstance :: " + e.getResponseBody(), e);
+		}
+	}
+
+	@Override
+	public void addUserToTenant(String tenantId, String userId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.createUserMembership(tenantId, userId);
+		}
+		catch (ApiException e) {
+			log.error("addUserToTenant: " + e.getResponseBody(), e);
+			throw new CamundaClientException("addUserToTenant :: " + e.getResponseBody(), e);
+		}
+	}
+
+	@Override
+	public void removeUserFromTenant(String tenantId, String userId) {
+		try {
+			ApiClient client = getApiClient();
+			TenantApi tenantApi = new TenantApi(client);
+			tenantApi.deleteUserMembership(tenantId, userId);
+		}
+		catch (ApiException e) {
+			log.error("removeUserFromTenant: " + e.getResponseBody(), e);
+			throw new CamundaClientException("removeUserFromTenant :: " + e.getResponseBody(), e);
+		}
+	}
+
+	@Override
+	public boolean existsGroup(String groupId) {
+
+		ApiClient client = getApiClient();
+		GroupApi groupApi = new GroupApi(client);
+
+		GroupDto group = null;
+		try {
+			group = groupApi.getGroup(groupId);
+		}
+		catch (Exception e) {
+			log.warn("existsGroup :: " + e.getMessage());
+		}
+		return group != null;
+	}
 }

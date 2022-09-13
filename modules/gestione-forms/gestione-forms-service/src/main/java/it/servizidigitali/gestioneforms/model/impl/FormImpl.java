@@ -23,6 +23,7 @@ import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
  */
 public class FormImpl extends FormBaseImpl {
 	List<DefinizioneAllegato> listaDefinizioneAllegato = null;
+	String nomeEnte = null;
 
 	public List<DefinizioneAllegato> getListaDefinizioneAllegato() {
 		return listaDefinizioneAllegato;
@@ -31,5 +32,15 @@ public class FormImpl extends FormBaseImpl {
 	public void setListaDefinizioneAllegato(List<DefinizioneAllegato> listaDefinizioneAllegato) {
 		this.listaDefinizioneAllegato = listaDefinizioneAllegato;
 	}
+
+	public String getNomeEnte() {
+		return nomeEnte;
+	}
+
+	public void setNomeEnte(String nomeEnte) {
+		this.nomeEnte = nomeEnte;
+	}
+	
+	
 	
 }

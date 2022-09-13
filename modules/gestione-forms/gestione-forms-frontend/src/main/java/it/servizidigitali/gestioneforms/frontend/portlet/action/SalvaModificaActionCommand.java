@@ -5,16 +5,17 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.GroupLocalService;
-import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+
+import java.io.File;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -23,7 +24,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneforms.frontend.constants.GestioneFormsPortletKeys;
-import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
+import it.servizidigitali.gestioneforms.frontend.service.GestioneFormsMiddlewareService;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
@@ -54,11 +55,15 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 	@Reference
 	private GroupLocalService groupLocalService;
 	
+	@Reference
+	private GestioneFormsMiddlewareService gestioneFormsMiddlewareService;
+	
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {			
 		
-		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		
 		long idForm = ParamUtil.getLong(actionRequest, GestioneFormsPortletKeys.ID_FORM);
 		String codice = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.CODICE);
@@ -75,11 +80,15 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		
 		if(Validator.isNull(nome)) {
 			SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+			actionRequest.setAttribute(GestioneFormsPortletKeys.MODELLO_FORM, modelloForm);
+			actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaForm.jsp");
 			return;
 		}
 		
 		if(Validator.isNull(codice)) {
 			SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+			actionRequest.setAttribute(GestioneFormsPortletKeys.MODELLO_FORM, modelloForm);
+			actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaForm.jsp");
 			return;
 		}
 		
@@ -95,9 +104,9 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 		form.setNome(nome);
 		form.setJson(modelloForm);
 		form.setPrincipale(principale);
-		form.setUserId(serviceContext.getThemeDisplay().getUserId());
-		form.setGroupId(serviceContext.getThemeDisplay().getScopeGroupId());
-		form.setUserName(serviceContext.getThemeDisplay().getUser().getFullName());
+		form.setUserId(themeDisplay.getUserId());
+		form.setGroupId(themeDisplay.getSiteGroupId());
+		form.setUserName(themeDisplay.getUser().getFullName());
 		
 		formLocalService.updateForm(form);
 		
@@ -108,48 +117,30 @@ public class SalvaModificaActionCommand extends BaseMVCActionCommand{
 			String denominazione = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_DENOMINAZIONE + i);
 			String[] tipiFileAmmessi = ParamUtil.getParameterValues(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_FILE_AMMESSI + i);
 			String[] codiciTipologiaDocumento = ParamUtil.getParameterValues(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_CODICI_TIPOLOGIA + i);
-			String idAllegatoTemporaneo = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_ID_TEMPORANEO + i);
 			String fileNameModello = ParamUtil.getString(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_FILENAME + i);
 			boolean obbligatorio = ParamUtil.getBoolean(actionRequest, GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_OBBLIGATORIO + i);
-			
-			FileEntry allegatoCaricato = definizioneAllegatoLocalService.uploadAllegatoDocumentMediaRepository(idAllegatoTemporaneo, fileNameModello, themeDisplay.getScopeGroup(),form.getFormId(),themeDisplay.getUserId(),serviceContext);
-			
-			DefinizioneAllegato allegato = definizioneAllegatoLocalService.createDefinizioneAllegato(0);
-			
-			if(definizioneAllegatoId > 0) {
-				allegato = definizioneAllegatoLocalService.getDefinizioneAllegato(definizioneAllegatoId);
-			}else {
-				allegato.setDefinizioneAllegatoId(counterLocalService.increment());
-			}
-			
-			if(Validator.isNotNull(denominazione)) {
-				allegato.setDenominazione(denominazione);
-			}else {
-				SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
-				return;
-			}
-			
-			if(Validator.isNotNull(tipiFileAmmessi)) {
-				allegato.setTipiFileAmmessi(String.join(",", tipiFileAmmessi));
-			}else {
-				SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
-				return;
-			}
-			
-			if(Validator.isNotNull(codiciTipologiaDocumento)) {
-				allegato.setCodiciTipologiaDocumento(String.join(",", codiciTipologiaDocumento));
-			}
-			
-			allegato.setFilenameModello(fileNameModello);
+			File fileCaricato = uploadPortletRequest.getFile("fileInput" + i);
 
-			allegato.setObbligatorio(obbligatorio);
-			allegato.setFormId(form.getFormId());
 			
-			if(Validator.isNotNull(allegatoCaricato)) {
-				allegato.setFileEntryId(allegatoCaricato.getFileEntryId());
+			if(Validator.isNotNull(fileCaricato)) {
+				gestioneFormsMiddlewareService.salvaAllegatoTemplate(definizioneAllegatoId, 
+						denominazione, tipiFileAmmessi, codiciTipologiaDocumento, fileNameModello, 
+						obbligatorio, fileCaricato, form.getFormId(), themeDisplay.getUserId(), themeDisplay.getSiteGroupId());
+			}
+
+			if(Validator.isNull(denominazione)) {
+				SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+				actionRequest.setAttribute(GestioneFormsPortletKeys.MODELLO_FORM, modelloForm);
+				actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaForm.jsp");
+				return;
 			}
 			
-			definizioneAllegatoLocalService.updateDefinizioneAllegato(allegato);
+			if(Validator.isNull(tipiFileAmmessi)) {
+				SessionErrors.add(actionRequest, GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+				actionRequest.setAttribute(GestioneFormsPortletKeys.MODELLO_FORM, modelloForm);
+				actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaForm.jsp");
+				return;
+			}
 		}
 		
 		// Controllo su eventuali rimozioni degli allegati

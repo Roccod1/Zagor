@@ -22,6 +22,7 @@ import it.servizidigitali.gestionecomunicazioni.model.Comunicazione;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1276,6 +1277,178 @@ public class ComunicazioneUtil {
 
 		return getPersistence().countByDestinatarioUserId(
 			destinatarioOrganizationId);
+	}
+
+	/**
+	 * Returns all the comunicaziones where dataInvio = &#63;.
+	 *
+	 * @param dataInvio the data invio
+	 * @return the matching comunicaziones
+	 */
+	public static List<Comunicazione> findByDataInvio(Date dataInvio) {
+		return getPersistence().findByDataInvio(dataInvio);
+	}
+
+	/**
+	 * Returns a range of all the comunicaziones where dataInvio = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComunicazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param dataInvio the data invio
+	 * @param start the lower bound of the range of comunicaziones
+	 * @param end the upper bound of the range of comunicaziones (not inclusive)
+	 * @return the range of matching comunicaziones
+	 */
+	public static List<Comunicazione> findByDataInvio(
+		Date dataInvio, int start, int end) {
+
+		return getPersistence().findByDataInvio(dataInvio, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the comunicaziones where dataInvio = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComunicazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param dataInvio the data invio
+	 * @param start the lower bound of the range of comunicaziones
+	 * @param end the upper bound of the range of comunicaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching comunicaziones
+	 */
+	public static List<Comunicazione> findByDataInvio(
+		Date dataInvio, int start, int end,
+		OrderByComparator<Comunicazione> orderByComparator) {
+
+		return getPersistence().findByDataInvio(
+			dataInvio, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the comunicaziones where dataInvio = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComunicazioneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param dataInvio the data invio
+	 * @param start the lower bound of the range of comunicaziones
+	 * @param end the upper bound of the range of comunicaziones (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching comunicaziones
+	 */
+	public static List<Comunicazione> findByDataInvio(
+		Date dataInvio, int start, int end,
+		OrderByComparator<Comunicazione> orderByComparator,
+		boolean useFinderCache) {
+
+		return getPersistence().findByDataInvio(
+			dataInvio, start, end, orderByComparator, useFinderCache);
+	}
+
+	/**
+	 * Returns the first comunicazione in the ordered set where dataInvio = &#63;.
+	 *
+	 * @param dataInvio the data invio
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching comunicazione
+	 * @throws NoSuchComunicazioneException if a matching comunicazione could not be found
+	 */
+	public static Comunicazione findByDataInvio_First(
+			Date dataInvio, OrderByComparator<Comunicazione> orderByComparator)
+		throws it.servizidigitali.gestionecomunicazioni.exception.
+			NoSuchComunicazioneException {
+
+		return getPersistence().findByDataInvio_First(
+			dataInvio, orderByComparator);
+	}
+
+	/**
+	 * Returns the first comunicazione in the ordered set where dataInvio = &#63;.
+	 *
+	 * @param dataInvio the data invio
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching comunicazione, or <code>null</code> if a matching comunicazione could not be found
+	 */
+	public static Comunicazione fetchByDataInvio_First(
+		Date dataInvio, OrderByComparator<Comunicazione> orderByComparator) {
+
+		return getPersistence().fetchByDataInvio_First(
+			dataInvio, orderByComparator);
+	}
+
+	/**
+	 * Returns the last comunicazione in the ordered set where dataInvio = &#63;.
+	 *
+	 * @param dataInvio the data invio
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching comunicazione
+	 * @throws NoSuchComunicazioneException if a matching comunicazione could not be found
+	 */
+	public static Comunicazione findByDataInvio_Last(
+			Date dataInvio, OrderByComparator<Comunicazione> orderByComparator)
+		throws it.servizidigitali.gestionecomunicazioni.exception.
+			NoSuchComunicazioneException {
+
+		return getPersistence().findByDataInvio_Last(
+			dataInvio, orderByComparator);
+	}
+
+	/**
+	 * Returns the last comunicazione in the ordered set where dataInvio = &#63;.
+	 *
+	 * @param dataInvio the data invio
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching comunicazione, or <code>null</code> if a matching comunicazione could not be found
+	 */
+	public static Comunicazione fetchByDataInvio_Last(
+		Date dataInvio, OrderByComparator<Comunicazione> orderByComparator) {
+
+		return getPersistence().fetchByDataInvio_Last(
+			dataInvio, orderByComparator);
+	}
+
+	/**
+	 * Returns the comunicaziones before and after the current comunicazione in the ordered set where dataInvio = &#63;.
+	 *
+	 * @param comunicazioneId the primary key of the current comunicazione
+	 * @param dataInvio the data invio
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next comunicazione
+	 * @throws NoSuchComunicazioneException if a comunicazione with the primary key could not be found
+	 */
+	public static Comunicazione[] findByDataInvio_PrevAndNext(
+			long comunicazioneId, Date dataInvio,
+			OrderByComparator<Comunicazione> orderByComparator)
+		throws it.servizidigitali.gestionecomunicazioni.exception.
+			NoSuchComunicazioneException {
+
+		return getPersistence().findByDataInvio_PrevAndNext(
+			comunicazioneId, dataInvio, orderByComparator);
+	}
+
+	/**
+	 * Removes all the comunicaziones where dataInvio = &#63; from the database.
+	 *
+	 * @param dataInvio the data invio
+	 */
+	public static void removeByDataInvio(Date dataInvio) {
+		getPersistence().removeByDataInvio(dataInvio);
+	}
+
+	/**
+	 * Returns the number of comunicaziones where dataInvio = &#63;.
+	 *
+	 * @param dataInvio the data invio
+	 * @return the number of matching comunicaziones
+	 */
+	public static int countByDataInvio(Date dataInvio) {
+		return getPersistence().countByDataInvio(dataInvio);
 	}
 
 	/**

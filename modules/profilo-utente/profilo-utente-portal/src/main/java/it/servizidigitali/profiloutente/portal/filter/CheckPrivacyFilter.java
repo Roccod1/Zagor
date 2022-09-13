@@ -22,6 +22,7 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
 
+import it.servizidigitali.common.utility.enumeration.UserCustomAttributes;
 import it.servizidigitali.profiloutente.portal.configuration.ProfiloUtenteConfiguration;
 
 /**
@@ -62,7 +63,7 @@ public class CheckPrivacyFilter extends BaseFilter {
 		User user = PortalUtil.getUser(request);
 		if (!PortalUtil.getCurrentURL(request).contains(redirectCkeckPrivacyPath) && user != null && user.isActive() && !isAdministrator(user)) {
 
-			Serializable accettaPrivacy = user.getExpandoBridge().getAttribute("accettaPrivacy");
+			Serializable accettaPrivacy = user.getExpandoBridge().getAttribute(UserCustomAttributes.ACCETTA_PRIVACY.getNomeAttributo());
 			boolean accettaPrivacyBoolean = accettaPrivacy != null && Boolean.parseBoolean(accettaPrivacy.toString());
 
 			if (!accettaPrivacyBoolean) {

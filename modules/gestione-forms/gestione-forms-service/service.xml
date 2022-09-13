@@ -32,7 +32,6 @@
 		<column name="codice" type="String" />
 		<column name="json" type="String" />
 		<column name="principale" type="boolean" />
-		<column name="multiutente" type="boolean" />
 		
 		<!-- FK -->
 		<column name="organizationId" type="long" />
@@ -49,6 +48,11 @@
 
 		<finder name="Principale" return-type="Collection">
 			<finder-column name="principale" />
+		</finder>
+		
+		<finder name="principaleAndGroupId" return-type="Collection">
+			<finder-column name="principale" />
+			<finder-column name="groupId" />
 		</finder>
 	</entity>
 	

@@ -5,6 +5,7 @@ module.exports = function(grunt) {
     clean: ['modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist'],
     browserify: {
       options: {
+		plugin: [require('esmify')],                        
         browserifyOptions: {
           debug: true,
           list: true,
@@ -18,7 +19,18 @@ module.exports = function(grunt) {
             }
           }
         },
-        transform: [ 'brfs' ]
+       // transform: ['brfs' ]
+       transform: [
+			['babelify',  { 
+				"presets": ["@babel/preset-env"] ,
+				"global": true, 
+       	 		"ignore": [
+					/\/node_modules\/(?!camunda-bpmn-moddle\/)/
+					]
+				}  
+			],
+			'brfs'
+		],
       },
       app: {
         files: {
@@ -49,6 +61,26 @@ module.exports = function(grunt) {
           }
         ]
       },
+      bpmn_js_properties_panel: {
+        files: [
+          {
+            expand: true,
+            cwd: 'node_modules/gestione-processi-portlet/node_modules/bpmn-js-properties-panel/dist',
+            src: ['**/*'],
+            dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist/bpmn-js-properties-panel'
+          }
+        ]
+      },
+      camunda_moddle_descriptors: {
+        files: [
+          {
+            expand: true,
+            cwd: 'node_modules/gestione-processi-portlet/node_modules/camunda-bpmn-moddle/resources',
+            src: ['camunda.json'],
+            dest: 'modules/gestione-processi/gestione-processi-frontend/src/main/resources/META-INF/resources/dist'
+          }
+        ]
+      },
       app: {
         files: [
           {
@@ -75,6 +107,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-replace');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-babel');
 
   grunt.registerTask('test', ['jshint']);
 

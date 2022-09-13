@@ -33,6 +33,7 @@
 		<column name="publicLayoutId" type="long" />
 		<column name="uriEsterna" type="String" />
 		<column name="catalogoServizioArticleId" type="long" />
+		<column name="subOrganizationId" type="long" />
 		<column name="autenticazione" type="boolean" />
 		<column name="livelloAutenticazione" type="int" />
 		<column name="dataInizioAttivazione" type="Date" />
@@ -55,6 +56,16 @@
 
 		<finder name="ServizioId" return-type="Collection">
 			<finder-column name="servizioId" />
+		</finder>
+
+		<finder name="GroupIdPrivateLayoutId" return-type="ServizioEnte">
+			<finder-column name="groupId" />
+			<finder-column name="privateLayoutId" />
+		</finder>
+
+		<finder name="GroupIdPublicLayoutId" return-type="ServizioEnte">
+			<finder-column name="groupId" />
+			<finder-column name="publicLayoutId" />
 		</finder>
 	</entity>
 </service-builder>

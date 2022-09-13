@@ -39,7 +39,6 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.base.ServizioEnteLocalServiceBaseImpl;
-import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
 
 /**
  * @author filierim
@@ -51,9 +50,9 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 
 	@Reference
 	private OrganizationLocalService organizationLocalService;
-	
+
 	@Override
-	public List<ServizioEnte> getServizioEntes(int start, int end){
+	public List<ServizioEnte> getServizioEntes(int start, int end) {
 		List<ServizioEnte> servizioEntes = super.getServizioEntes(start, end);
 
 		if (servizioEntes != null) {
@@ -65,6 +64,7 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 		return servizioEntes;
 	}
 
+	@Override
 	public List<ServizioEnte> getServiziEnte(long organizationId) {
 		return servizioEntePersistence.findByOrganizationId(organizationId);
 	}
@@ -84,83 +84,115 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 				_log.error(e);
 			}
 		}
-	
+
 	}
-	
-	public List<Organization> findOrganizationsByParams(String nome, String codiceIpa,int cur, int delta, String orderByCol, String orderByType) throws Exception{
+
+	@Override
+	public List<Organization> findOrganizationsByParams(String nome, String codiceIpa, int cur, int delta, String orderByCol, String orderByType) throws Exception {
 		_log.debug("Ricerca Organizzazioni :: INIZIO");
-		
+
 		List<Organization> listaOrganizations = null;
 		ClassLoader classLoader = getClass().getClassLoader();
-		
-		//preparo i parametri per ordinamento e paginazione
+
+		// preparo i parametri per ordinamento e paginazione
 		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
 		int inizio = posizioni[0];
 		int fine = posizioni[1];
-		if(Validator.isNull(orderByCol)) {
+		if (Validator.isNull(orderByCol)) {
 			_log.debug("Nessun ordinamento impostato. Uso di default organizationId");
 			orderByCol = "organizationId";
 		}
-		
-		if(inizio <= 0 || fine <= 0) {
+
+		if (inizio <= 0 || fine <= 0) {
 			_log.debug("Posizione iniziale o finale sono minori o uguali a zero. Imposto inizio e fine al valore ALL_POS");
 			inizio = QueryUtil.ALL_POS;
 			fine = QueryUtil.ALL_POS;
 		}
-		
+
 		boolean direzione = "desc".equals(orderByType.toLowerCase()) ? false : true;
 		OrderByComparator<Organization> ordine = OrderByComparatorFactoryUtil.create("Organization", orderByCol, direzione);
-		
-		
+
 		DynamicQuery listaOrganizationQuery = DynamicQueryFactoryUtil.forClass(Organization.class, classLoader);
-		
-		if(Validator.isNotNull(codiceIpa)) {			
+
+		if (Validator.isNotNull(codiceIpa)) {
 			_log.debug("codiceIpa: " + codiceIpa);
-			//ottengo l'id del custom field "codiceIpa"
+			// ottengo l'id del custom field "codiceIpa"
 			DynamicQuery expandoColumn = DynamicQueryFactoryUtil.forClass(ExpandoColumn.class, classLoader);
 			expandoColumn.add(RestrictionsFactoryUtil.eq("name", "codiceIPA"));
 			expandoColumn.setProjection(ProjectionFactoryUtil.property("columnId"));
 
-			//ottengo la lista di id che rispecchiano il filtro per codiceIpa
+			// ottengo la lista di id che rispecchiano il filtro per codiceIpa
 			DynamicQuery expandoValue = DynamicQueryFactoryUtil.forClass(ExpandoValue.class, classLoader);
-			expandoValue.add(RestrictionsFactoryUtil.like("data",StringPool.PERCENT + codiceIpa + StringPool.PERCENT));
+			expandoValue.add(RestrictionsFactoryUtil.like("data", StringPool.PERCENT + codiceIpa + StringPool.PERCENT));
 			expandoValue.add(PropertyFactoryUtil.forName("columnId").in(expandoColumn));
 			expandoValue.setProjection(ProjectionFactoryUtil.property("classPK"));
-			
-			//aggiungo il filtro per codiceIpa alla dynamicquery globale per ottenere le Organization
+
+			// aggiungo il filtro per codiceIpa alla dynamicquery globale per ottenere le
+			// Organization
 			listaOrganizationQuery.add(PropertyFactoryUtil.forName("organizationId").in(expandoValue));
 		}
-		
-		if(Validator.isNotNull(nome)) {
+
+		if (Validator.isNotNull(nome)) {
 			_log.debug("nome: " + nome);
-			listaOrganizationQuery.add(RestrictionsFactoryUtil.like("name",(StringPool.PERCENT + nome + StringPool.PERCENT)));					
+			listaOrganizationQuery.add(RestrictionsFactoryUtil.like("name", (StringPool.PERCENT + nome + StringPool.PERCENT)));
 		}
-		
-		//eseguo la dynamic query
-		
-		listaOrganizations = organizationLocalService.dynamicQuery(listaOrganizationQuery, inizio, fine, ordine);
-		
+
+		// solo organizzazioni di primo livello
+		listaOrganizationQuery.add(RestrictionsFactoryUtil.eq("parentOrganizationId", 0L));
+		// eseguo la dynamic query
+
+		try {
+			listaOrganizations = organizationLocalService.dynamicQuery(listaOrganizationQuery, inizio, fine, ordine);
+		}
+		catch (Exception e) {
+			_log.error("findOrganizationsByParams :: " + e.getMessage(), e);
+		}
+
 		_log.debug("Ricerca Organizzazioni :: FINE");
 		return listaOrganizations;
 	}
-	
-	public List<Object> getListaServiziByCompanyOrganizationAttivo(long companyId, long organizationId, boolean attivo) throws Exception{
-		
+
+	@Override
+	public List<Object> getListaServiziByCompanyOrganizationAttivo(long companyId, long organizationId, boolean attivo) throws Exception {
+
 		ClassLoader classLoader = getClassLoader();
 		DynamicQuery servizioEnteDynamicQuery = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, classLoader);
 
 		servizioEnteDynamicQuery.add(RestrictionsFactoryUtil.eq("attivo", attivo));
-		
-		if(companyId > 0) {
+
+		if (companyId > 0) {
 			servizioEnteDynamicQuery.add(RestrictionsFactoryUtil.eq("companyId", companyId));
 		}
-		
-		if(organizationId > 0) {
+
+		if (organizationId > 0) {
 			servizioEnteDynamicQuery.add(RestrictionsFactoryUtil.eq("primaryKey.organizationId", organizationId));
 		}
-		//		imposto projection per ottenere solo gli id delle entity
+		// imposto projection per ottenere solo gli id delle entity
 		servizioEnteDynamicQuery.setProjection(ProjectionFactoryUtil.property("primaryKey.servizioId"));
-		
+
 		return servizioEntePersistence.findWithDynamicQuery(servizioEnteDynamicQuery);
+	}
+
+	@Override
+	public List<Long> getListaServiziByOrganizationAttivo(long organizationId, boolean attivo) throws Exception {
+
+		ClassLoader classLoader = getClassLoader();
+		DynamicQuery servizioEnteDynamicQuery = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, classLoader);
+
+		servizioEnteDynamicQuery.add(RestrictionsFactoryUtil.eq("attivo", attivo));
+
+		if (organizationId > 0) {
+			servizioEnteDynamicQuery.add(RestrictionsFactoryUtil.eq("primaryKey.organizationId", organizationId));
+		}
+		// imposto projection per ottenere solo gli id delle entity
+		servizioEnteDynamicQuery.setProjection(ProjectionFactoryUtil.property("primaryKey.servizioId"));
+
+		return servizioEntePersistence.findWithDynamicQuery(servizioEnteDynamicQuery);
+	}
+
+	@Override
+	public ServizioEnte getServizioEnteByGroupIdLayoutId(long groupId, long layoutId) {
+		ServizioEnte servizioEnte = servizioEnteFinder.findServizioEnteByGroupIdLayoutId(groupId, layoutId);
+		return servizioEnte;
 	}
 }

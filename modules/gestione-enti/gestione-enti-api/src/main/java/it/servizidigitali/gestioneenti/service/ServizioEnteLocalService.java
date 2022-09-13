@@ -236,6 +236,11 @@ public interface ServizioEnteLocalService
 			long companyId, long organizationId, boolean attivo)
 		throws Exception;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Long> getListaServiziByOrganizationAttivo(
+			long organizationId, boolean attivo)
+		throws Exception;
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -264,6 +269,10 @@ public interface ServizioEnteLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ServizioEnte getServizioEnte(ServizioEntePK servizioEntePK)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public ServizioEnte getServizioEnteByGroupIdLayoutId(
+		long groupId, long layoutId);
 
 	/**
 	 * Returns the servizio ente matching the UUID and group.

@@ -30,7 +30,12 @@
 		<!-- Other fields -->
 		<column name="nome" type="String" />
 		<column name="pecDestinazione" type="String" />
-		<column name="configurazioniPresentatoreForm" type="String" />
+		<column name="step1Attivo" type="boolean" />
+		<column name="step1TipoComponentiNucleoFamiliare" type="String" />
+		<column name="step2TipoServizio" type="String" />
+		<column name="step2TipiIntegrazioneBackoffice" type="String" />
+		<column name="abilitaCacheIntegrazioneBackoffice" type="boolean" />
+		<column name="tipoGenerazionePDF" type="String" />
 		<column name="attiva" type="boolean" />
 		
 		<column name="servizioId" type="long" />
@@ -69,5 +74,8 @@
 
 		<!-- Audit fields -->
 		<column name="companyId" type="long" />
+        <finder name="proceduraId" return-type="Collection">
+            <finder-column name="proceduraId"></finder-column>
+        </finder>
 	</entity>
 </service-builder>

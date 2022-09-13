@@ -1,10 +1,10 @@
 {
   "name": "gestione-processi-portlet",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Gestione processi portlet",
   "license": "MIT",
   "scripts": {
-	"build": "../../../build/node/node ../../../node_modules/webpack-cli/bin/cli -c webpack.config.js"
+	"build": "../../../build/node/node ../../../node_modules/grunt-cli/bin/grunt --gruntfile Gruntfile.js "
   },
   "devDependencies": {
 	"brfs": "^1.2.0",
@@ -23,12 +23,16 @@
     "load-grunt-tasks": "~3.5.0",
     "webpack": "^5.16.0",
     "webpack-cli": "^4.4.0",
-    "copy-webpack-plugin": "^7.0.0"
+    "copy-webpack-plugin": "^7.0.0",
+    "esmify": "2.1.1",
+    "babelify": "10.0.0",
+    "@babel/preset-env": "7.18.10",
+    "@bpmn-io/properties-panel": "^0.19.0"
   },
   "dependencies": {
 	"bpmn-js": "^9.4.0",
 	"bpmn-js-properties-panel": "^1.5.0",
-	"camunda-bpmn-moddle": "^0.8.1",
+	"camunda-bpmn-moddle": "^6.1.2",
 	"diagram-js": "^0.19.0",
 	"lodash":"^3.0.0"
   }

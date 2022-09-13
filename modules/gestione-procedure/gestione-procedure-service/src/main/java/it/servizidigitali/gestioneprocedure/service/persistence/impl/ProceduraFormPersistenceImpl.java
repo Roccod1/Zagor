@@ -1211,6 +1211,506 @@ public class ProceduraFormPersistenceImpl
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 =
 		"proceduraForm.companyId = ?";
 
+	private FinderPath _finderPathWithPaginationFindByproceduraId;
+	private FinderPath _finderPathWithoutPaginationFindByproceduraId;
+	private FinderPath _finderPathCountByproceduraId;
+
+	/**
+	 * Returns all the procedura forms where proceduraId = &#63;.
+	 *
+	 * @param proceduraId the procedura ID
+	 * @return the matching procedura forms
+	 */
+	@Override
+	public List<ProceduraForm> findByproceduraId(long proceduraId) {
+		return findByproceduraId(
+			proceduraId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the procedura forms where proceduraId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraFormModelImpl</code>.
+	 * </p>
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param start the lower bound of the range of procedura forms
+	 * @param end the upper bound of the range of procedura forms (not inclusive)
+	 * @return the range of matching procedura forms
+	 */
+	@Override
+	public List<ProceduraForm> findByproceduraId(
+		long proceduraId, int start, int end) {
+
+		return findByproceduraId(proceduraId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the procedura forms where proceduraId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraFormModelImpl</code>.
+	 * </p>
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param start the lower bound of the range of procedura forms
+	 * @param end the upper bound of the range of procedura forms (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching procedura forms
+	 */
+	@Override
+	public List<ProceduraForm> findByproceduraId(
+		long proceduraId, int start, int end,
+		OrderByComparator<ProceduraForm> orderByComparator) {
+
+		return findByproceduraId(
+			proceduraId, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the procedura forms where proceduraId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraFormModelImpl</code>.
+	 * </p>
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param start the lower bound of the range of procedura forms
+	 * @param end the upper bound of the range of procedura forms (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching procedura forms
+	 */
+	@Override
+	public List<ProceduraForm> findByproceduraId(
+		long proceduraId, int start, int end,
+		OrderByComparator<ProceduraForm> orderByComparator,
+		boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByproceduraId;
+				finderArgs = new Object[] {proceduraId};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByproceduraId;
+			finderArgs = new Object[] {
+				proceduraId, start, end, orderByComparator
+			};
+		}
+
+		List<ProceduraForm> list = null;
+
+		if (useFinderCache) {
+			list = (List<ProceduraForm>)finderCache.getResult(
+				finderPath, finderArgs);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (ProceduraForm proceduraForm : list) {
+					if (proceduraId != proceduraForm.getProceduraId()) {
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(3);
+			}
+
+			sb.append(_SQL_SELECT_PROCEDURAFORM_WHERE);
+
+			sb.append(_FINDER_COLUMN_PROCEDURAID_PROCEDURAID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(ProceduraFormModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(proceduraId);
+
+				list = (List<ProceduraForm>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first procedura form in the ordered set where proceduraId = &#63;.
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching procedura form
+	 * @throws NoSuchProceduraFormException if a matching procedura form could not be found
+	 */
+	@Override
+	public ProceduraForm findByproceduraId_First(
+			long proceduraId,
+			OrderByComparator<ProceduraForm> orderByComparator)
+		throws NoSuchProceduraFormException {
+
+		ProceduraForm proceduraForm = fetchByproceduraId_First(
+			proceduraId, orderByComparator);
+
+		if (proceduraForm != null) {
+			return proceduraForm;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("proceduraId=");
+		sb.append(proceduraId);
+
+		sb.append("}");
+
+		throw new NoSuchProceduraFormException(sb.toString());
+	}
+
+	/**
+	 * Returns the first procedura form in the ordered set where proceduraId = &#63;.
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching procedura form, or <code>null</code> if a matching procedura form could not be found
+	 */
+	@Override
+	public ProceduraForm fetchByproceduraId_First(
+		long proceduraId, OrderByComparator<ProceduraForm> orderByComparator) {
+
+		List<ProceduraForm> list = findByproceduraId(
+			proceduraId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last procedura form in the ordered set where proceduraId = &#63;.
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching procedura form
+	 * @throws NoSuchProceduraFormException if a matching procedura form could not be found
+	 */
+	@Override
+	public ProceduraForm findByproceduraId_Last(
+			long proceduraId,
+			OrderByComparator<ProceduraForm> orderByComparator)
+		throws NoSuchProceduraFormException {
+
+		ProceduraForm proceduraForm = fetchByproceduraId_Last(
+			proceduraId, orderByComparator);
+
+		if (proceduraForm != null) {
+			return proceduraForm;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("proceduraId=");
+		sb.append(proceduraId);
+
+		sb.append("}");
+
+		throw new NoSuchProceduraFormException(sb.toString());
+	}
+
+	/**
+	 * Returns the last procedura form in the ordered set where proceduraId = &#63;.
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching procedura form, or <code>null</code> if a matching procedura form could not be found
+	 */
+	@Override
+	public ProceduraForm fetchByproceduraId_Last(
+		long proceduraId, OrderByComparator<ProceduraForm> orderByComparator) {
+
+		int count = countByproceduraId(proceduraId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<ProceduraForm> list = findByproceduraId(
+			proceduraId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the procedura forms before and after the current procedura form in the ordered set where proceduraId = &#63;.
+	 *
+	 * @param proceduraFormPK the primary key of the current procedura form
+	 * @param proceduraId the procedura ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next procedura form
+	 * @throws NoSuchProceduraFormException if a procedura form with the primary key could not be found
+	 */
+	@Override
+	public ProceduraForm[] findByproceduraId_PrevAndNext(
+			ProceduraFormPK proceduraFormPK, long proceduraId,
+			OrderByComparator<ProceduraForm> orderByComparator)
+		throws NoSuchProceduraFormException {
+
+		ProceduraForm proceduraForm = findByPrimaryKey(proceduraFormPK);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			ProceduraForm[] array = new ProceduraFormImpl[3];
+
+			array[0] = getByproceduraId_PrevAndNext(
+				session, proceduraForm, proceduraId, orderByComparator, true);
+
+			array[1] = proceduraForm;
+
+			array[2] = getByproceduraId_PrevAndNext(
+				session, proceduraForm, proceduraId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected ProceduraForm getByproceduraId_PrevAndNext(
+		Session session, ProceduraForm proceduraForm, long proceduraId,
+		OrderByComparator<ProceduraForm> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(3);
+		}
+
+		sb.append(_SQL_SELECT_PROCEDURAFORM_WHERE);
+
+		sb.append(_FINDER_COLUMN_PROCEDURAID_PROCEDURAID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(ProceduraFormModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(proceduraId);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						proceduraForm)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<ProceduraForm> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the procedura forms where proceduraId = &#63; from the database.
+	 *
+	 * @param proceduraId the procedura ID
+	 */
+	@Override
+	public void removeByproceduraId(long proceduraId) {
+		for (ProceduraForm proceduraForm :
+				findByproceduraId(
+					proceduraId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
+			remove(proceduraForm);
+		}
+	}
+
+	/**
+	 * Returns the number of procedura forms where proceduraId = &#63;.
+	 *
+	 * @param proceduraId the procedura ID
+	 * @return the number of matching procedura forms
+	 */
+	@Override
+	public int countByproceduraId(long proceduraId) {
+		FinderPath finderPath = _finderPathCountByproceduraId;
+
+		Object[] finderArgs = new Object[] {proceduraId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_PROCEDURAFORM_WHERE);
+
+			sb.append(_FINDER_COLUMN_PROCEDURAID_PROCEDURAID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(proceduraId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_PROCEDURAID_PROCEDURAID_2 =
+		"proceduraForm.id.proceduraId = ?";
+
 	public ProceduraFormPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -1790,6 +2290,24 @@ public class ProceduraFormPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "companyId"}, false);
+
+		_finderPathWithPaginationFindByproceduraId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByproceduraId",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {"proceduraId"}, true);
+
+		_finderPathWithoutPaginationFindByproceduraId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByproceduraId",
+			new String[] {Long.class.getName()}, new String[] {"proceduraId"},
+			true);
+
+		_finderPathCountByproceduraId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByproceduraId",
+			new String[] {Long.class.getName()}, new String[] {"proceduraId"},
+			false);
 
 		_setProceduraFormUtilPersistence(this);
 	}

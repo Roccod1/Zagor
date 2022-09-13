@@ -300,6 +300,15 @@ public class ServizioEnteLocalServiceWrapper
 				companyId, organizationId, attivo);
 	}
 
+	@Override
+	public java.util.List<Long> getListaServiziByOrganizationAttivo(
+			long organizationId, boolean attivo)
+		throws Exception {
+
+		return _servizioEnteLocalService.getListaServiziByOrganizationAttivo(
+			organizationId, attivo);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -342,6 +351,14 @@ public class ServizioEnteLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _servizioEnteLocalService.getServizioEnte(servizioEntePK);
+	}
+
+	@Override
+	public it.servizidigitali.gestioneenti.model.ServizioEnte
+		getServizioEnteByGroupIdLayoutId(long groupId, long layoutId) {
+
+		return _servizioEnteLocalService.getServizioEnteByGroupIdLayoutId(
+			groupId, layoutId);
 	}
 
 	/**

@@ -78,7 +78,7 @@ public class ServizioEnteModelImpl
 		{"modifiedDate", Types.TIMESTAMP}, {"privateLayoutId", Types.BIGINT},
 		{"publicLayoutId", Types.BIGINT}, {"uriEsterna", Types.VARCHAR},
 		{"catalogoServizioArticleId", Types.BIGINT},
-		{"autenticazione", Types.BOOLEAN},
+		{"subOrganizationId", Types.BIGINT}, {"autenticazione", Types.BOOLEAN},
 		{"livelloAutenticazione", Types.INTEGER},
 		{"dataInizioAttivazione", Types.TIMESTAMP},
 		{"dataFineAttivazione", Types.TIMESTAMP}, {"cittadino", Types.BOOLEAN},
@@ -106,6 +106,7 @@ public class ServizioEnteModelImpl
 		TABLE_COLUMNS_MAP.put("publicLayoutId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("uriEsterna", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("catalogoServizioArticleId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("subOrganizationId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("autenticazione", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("livelloAutenticazione", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("dataInizioAttivazione", Types.TIMESTAMP);
@@ -123,7 +124,7 @@ public class ServizioEnteModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table servizio_ente (uuid_ VARCHAR(75) null,servizioId LONG not null,organizationId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,privateLayoutId LONG,publicLayoutId LONG,uriEsterna VARCHAR(75) null,catalogoServizioArticleId LONG,autenticazione BOOLEAN,livelloAutenticazione INTEGER,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,prenotabile BOOLEAN,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,iseeInps BOOLEAN,attivo BOOLEAN,primary key (servizioId, organizationId))";
+		"create table servizio_ente (uuid_ VARCHAR(75) null,servizioId LONG not null,organizationId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,privateLayoutId LONG,publicLayoutId LONG,uriEsterna VARCHAR(75) null,catalogoServizioArticleId LONG,subOrganizationId LONG,autenticazione BOOLEAN,livelloAutenticazione INTEGER,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,prenotabile BOOLEAN,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,iseeInps BOOLEAN,attivo BOOLEAN,primary key (servizioId, organizationId))";
 
 	public static final String TABLE_SQL_DROP = "drop table servizio_ente";
 
@@ -161,13 +162,25 @@ public class ServizioEnteModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long SERVIZIOID_COLUMN_BITMASK = 8L;
+	public static final long PRIVATELAYOUTID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 16L;
+	public static final long PUBLICLAYOUTID_COLUMN_BITMASK = 16L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long SERVIZIOID_COLUMN_BITMASK = 32L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 64L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -365,6 +378,11 @@ public class ServizioEnteModelImpl
 			"catalogoServizioArticleId",
 			(BiConsumer<ServizioEnte, Long>)
 				ServizioEnte::setCatalogoServizioArticleId);
+		attributeGetterFunctions.put(
+			"subOrganizationId", ServizioEnte::getSubOrganizationId);
+		attributeSetterBiConsumers.put(
+			"subOrganizationId",
+			(BiConsumer<ServizioEnte, Long>)ServizioEnte::setSubOrganizationId);
 		attributeGetterFunctions.put(
 			"autenticazione", ServizioEnte::getAutenticazione);
 		attributeSetterBiConsumers.put(
@@ -660,6 +678,16 @@ public class ServizioEnteModelImpl
 		_privateLayoutId = privateLayoutId;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalPrivateLayoutId() {
+		return GetterUtil.getLong(
+			this.<Long>getColumnOriginalValue("privateLayoutId"));
+	}
+
 	@Override
 	public long getPublicLayoutId() {
 		return _publicLayoutId;
@@ -672,6 +700,16 @@ public class ServizioEnteModelImpl
 		}
 
 		_publicLayoutId = publicLayoutId;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalPublicLayoutId() {
+		return GetterUtil.getLong(
+			this.<Long>getColumnOriginalValue("publicLayoutId"));
 	}
 
 	@Override
@@ -705,6 +743,20 @@ public class ServizioEnteModelImpl
 		}
 
 		_catalogoServizioArticleId = catalogoServizioArticleId;
+	}
+
+	@Override
+	public long getSubOrganizationId() {
+		return _subOrganizationId;
+	}
+
+	@Override
+	public void setSubOrganizationId(long subOrganizationId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_subOrganizationId = subOrganizationId;
 	}
 
 	@Override
@@ -1021,6 +1073,7 @@ public class ServizioEnteModelImpl
 		servizioEnteImpl.setUriEsterna(getUriEsterna());
 		servizioEnteImpl.setCatalogoServizioArticleId(
 			getCatalogoServizioArticleId());
+		servizioEnteImpl.setSubOrganizationId(getSubOrganizationId());
 		servizioEnteImpl.setAutenticazione(isAutenticazione());
 		servizioEnteImpl.setLivelloAutenticazione(getLivelloAutenticazione());
 		servizioEnteImpl.setDataInizioAttivazione(getDataInizioAttivazione());
@@ -1069,6 +1122,8 @@ public class ServizioEnteModelImpl
 			this.<String>getColumnOriginalValue("uriEsterna"));
 		servizioEnteImpl.setCatalogoServizioArticleId(
 			this.<Long>getColumnOriginalValue("catalogoServizioArticleId"));
+		servizioEnteImpl.setSubOrganizationId(
+			this.<Long>getColumnOriginalValue("subOrganizationId"));
 		servizioEnteImpl.setAutenticazione(
 			this.<Boolean>getColumnOriginalValue("autenticazione"));
 		servizioEnteImpl.setLivelloAutenticazione(
@@ -1228,6 +1283,8 @@ public class ServizioEnteModelImpl
 		servizioEnteCacheModel.catalogoServizioArticleId =
 			getCatalogoServizioArticleId();
 
+		servizioEnteCacheModel.subOrganizationId = getSubOrganizationId();
+
 		servizioEnteCacheModel.autenticazione = isAutenticazione();
 
 		servizioEnteCacheModel.livelloAutenticazione =
@@ -1377,6 +1434,7 @@ public class ServizioEnteModelImpl
 	private long _publicLayoutId;
 	private String _uriEsterna;
 	private long _catalogoServizioArticleId;
+	private long _subOrganizationId;
 	private boolean _autenticazione;
 	private int _livelloAutenticazione;
 	private Date _dataInizioAttivazione;
@@ -1435,6 +1493,7 @@ public class ServizioEnteModelImpl
 		_columnOriginalValues.put("uriEsterna", _uriEsterna);
 		_columnOriginalValues.put(
 			"catalogoServizioArticleId", _catalogoServizioArticleId);
+		_columnOriginalValues.put("subOrganizationId", _subOrganizationId);
 		_columnOriginalValues.put("autenticazione", _autenticazione);
 		_columnOriginalValues.put(
 			"livelloAutenticazione", _livelloAutenticazione);
@@ -1500,33 +1559,35 @@ public class ServizioEnteModelImpl
 
 		columnBitmasks.put("catalogoServizioArticleId", 4096L);
 
-		columnBitmasks.put("autenticazione", 8192L);
+		columnBitmasks.put("subOrganizationId", 8192L);
 
-		columnBitmasks.put("livelloAutenticazione", 16384L);
+		columnBitmasks.put("autenticazione", 16384L);
 
-		columnBitmasks.put("dataInizioAttivazione", 32768L);
+		columnBitmasks.put("livelloAutenticazione", 32768L);
 
-		columnBitmasks.put("dataFineAttivazione", 65536L);
+		columnBitmasks.put("dataInizioAttivazione", 65536L);
 
-		columnBitmasks.put("cittadino", 131072L);
+		columnBitmasks.put("dataFineAttivazione", 131072L);
 
-		columnBitmasks.put("azienda", 262144L);
+		columnBitmasks.put("cittadino", 262144L);
 
-		columnBitmasks.put("delega", 524288L);
+		columnBitmasks.put("azienda", 524288L);
 
-		columnBitmasks.put("chatbot", 1048576L);
+		columnBitmasks.put("delega", 1048576L);
 
-		columnBitmasks.put("prenotabile", 2097152L);
+		columnBitmasks.put("chatbot", 2097152L);
 
-		columnBitmasks.put("privacyDelega", 4194304L);
+		columnBitmasks.put("prenotabile", 4194304L);
 
-		columnBitmasks.put("allegatoDelega", 8388608L);
+		columnBitmasks.put("privacyDelega", 8388608L);
 
-		columnBitmasks.put("timbroCertificato", 16777216L);
+		columnBitmasks.put("allegatoDelega", 16777216L);
 
-		columnBitmasks.put("iseeInps", 33554432L);
+		columnBitmasks.put("timbroCertificato", 33554432L);
 
-		columnBitmasks.put("attivo", 67108864L);
+		columnBitmasks.put("iseeInps", 67108864L);
+
+		columnBitmasks.put("attivo", 134217728L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

@@ -389,25 +389,6 @@ public class DefinizioneAllegatoLocalServiceUtil {
 		return getService().updateDefinizioneAllegato(definizioneAllegato);
 	}
 
-	public static com.liferay.portal.kernel.repository.model.FileEntry
-			uploadAllegatoDocumentMediaRepository(
-				String idAllegatoTemporaneo, String fileNameModello,
-				com.liferay.portal.kernel.model.Group group, long formId,
-				long userId,
-				com.liferay.portal.kernel.service.ServiceContext serviceContext)
-		throws Exception {
-
-		return getService().uploadAllegatoDocumentMediaRepository(
-			idAllegatoTemporaneo, fileNameModello, group, formId, userId,
-			serviceContext);
-	}
-
-	public static long uploadAllegatoTemporaneo(java.io.File allegato)
-		throws Exception {
-
-		return getService().uploadAllegatoTemporaneo(allegato);
-	}
-
 	public static DefinizioneAllegatoLocalService getService() {
 		return _service;
 	}

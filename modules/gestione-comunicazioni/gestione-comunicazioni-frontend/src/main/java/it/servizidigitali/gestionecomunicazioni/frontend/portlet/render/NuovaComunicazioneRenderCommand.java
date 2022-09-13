@@ -23,12 +23,14 @@ import it.servizidigitali.gestionecomunicazioni.frontend.dto.OrganizationDTO;
 import it.servizidigitali.gestionecomunicazioni.frontend.dto.TipologiaDTO;
 import it.servizidigitali.gestionecomunicazioni.service.TipologiaComunicazioneLocalService;
 
-@Component(immediate = true, service = MVCRenderCommand.class, property = {
-		"javax.portlet.name=" + GestioneComunicazioniFrontendPortletKeys.GESTIONECOMUNICAZIONI,
-		"mvc.command.name=/render/nuova"
-})
+@Component(immediate = true, service = MVCRenderCommand.class, //
+		property = { //
+				"javax.portlet.name=" + GestioneComunicazioniFrontendPortletKeys.GESTIONECOMUNICAZIONI, //
+				"mvc.command.name=/render/nuova"//
+		}//
+)
 public class NuovaComunicazioneRenderCommand implements MVCRenderCommand {
-	
+
 	@Reference
 	private TipologiaComunicazioneLocalService tipologiaComunicazioneLocalService;
 	@Reference
@@ -39,38 +41,30 @@ public class NuovaComunicazioneRenderCommand implements MVCRenderCommand {
 		ServiceContext ctx;
 		try {
 			ctx = ServiceContextFactory.getInstance(request);
-		} catch (PortalException e) {
+		}
+		catch (PortalException e) {
 			throw new PortletException(e);
 		}
-		
+
 		long organizationId;
 		try {
 			organizationId = ctx.getScopeGroup().getOrganizationId();
-		} catch (PortalException e) {
+		}
+		catch (PortalException e) {
 			throw new PortletException(e);
 		}
-		
-		List<TipologiaDTO> tipologie = tipologiaComunicazioneLocalService
-				.getTipologiaComunicaziones(QueryUtil.ALL_POS, QueryUtil.ALL_POS)
-				.stream()
-				.map(TipologiaDTO::new)
-				.collect(Collectors.toList());
-		
+
+		List<TipologiaDTO> tipologie = tipologiaComunicazioneLocalService.getTipologiaComunicaziones(QueryUtil.ALL_POS, QueryUtil.ALL_POS).stream().map(TipologiaDTO::new).collect(Collectors.toList());
+
 		List<OrganizationDTO> organizzazioni;
 		if (organizationId == 0) {
-			organizzazioni = organizationLocalService
-					.getOrganizations(QueryUtil.ALL_POS, QueryUtil.ALL_POS)
-					.stream()
-					.map(OrganizationDTO::new)
-					.collect(Collectors.toList());
-		} else {
-			organizzazioni = Collections.singletonList(organizationLocalService
-					.fetchOrganization(organizationId))
-					.stream()
-					.map(OrganizationDTO::new)
-					.collect(Collectors.toList());
+			organizzazioni = organizationLocalService.getOrganizations(QueryUtil.ALL_POS, QueryUtil.ALL_POS).stream().map(OrganizationDTO::new).collect(Collectors.toList());
 		}
-		
+		else {
+			organizzazioni = Collections.singletonList(organizationLocalService.fetchOrganization(organizationId)).stream().map(OrganizationDTO::new).collect(Collectors.toList());
+			request.setAttribute("organizzazioneSito", true);
+		}
+
 		request.setAttribute("organizzazioni", organizzazioni);
 		request.setAttribute("tipologie", tipologie);
 

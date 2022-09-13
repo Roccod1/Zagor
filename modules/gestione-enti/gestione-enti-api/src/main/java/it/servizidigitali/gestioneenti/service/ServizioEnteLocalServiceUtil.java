@@ -270,6 +270,14 @@ public class ServizioEnteLocalServiceUtil {
 			companyId, organizationId, attivo);
 	}
 
+	public static List<Long> getListaServiziByOrganizationAttivo(
+			long organizationId, boolean attivo)
+		throws Exception {
+
+		return getService().getListaServiziByOrganizationAttivo(
+			organizationId, attivo);
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -305,6 +313,12 @@ public class ServizioEnteLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getServizioEnte(servizioEntePK);
+	}
+
+	public static ServizioEnte getServizioEnteByGroupIdLayoutId(
+		long groupId, long layoutId) {
+
+		return getService().getServizioEnteByGroupIdLayoutId(groupId, layoutId);
 	}
 
 	/**

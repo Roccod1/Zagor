@@ -1,4 +1,4 @@
-<%@ include file="/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <portlet:actionURL var="inserisciURL" name="/action/inserisci">
 </portlet:actionURL>
@@ -41,12 +41,19 @@
 		<aui:option value="-"><liferay-ui:message key="nessuna" /></aui:option>
 	</aui:select>
 	
-	<aui:select name="organizzazione" label="ente-obbl">
-		<aui:option value="0"><liferay-ui:message key="seleziona-un-ente" /></aui:option>
-		<c:forEach items="${organizzazioni}" var="organizzazione">
-			<aui:option value="${organizzazione.id}">${organizzazione.nome}</aui:option>
-		</c:forEach>
-	</aui:select>
+	<c:choose>
+		<c:when test="${organizzazioneSito}">
+			<aui:input name="organizzazione" type="hidden" value="${organizzazioni[0].id}"/>
+		</c:when>
+		<c:otherwise>
+			<aui:select name="organizzazione" label="ente-obbl">
+				<aui:option value="0"><liferay-ui:message key="seleziona-un-ente" /></aui:option>
+				<c:forEach items="${organizzazioni}" var="organizzazione">
+					<aui:option value="${organizzazione.id}">${organizzazione.nome}</aui:option>
+				</c:forEach>
+			</aui:select>
+		</c:otherwise>
+	</c:choose>
 	
 	<aui:input name="utenteQuery" label="utente" />
 	<aui:input type="hidden" name="utente" />

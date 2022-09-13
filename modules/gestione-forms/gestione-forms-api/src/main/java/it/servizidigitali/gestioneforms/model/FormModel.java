@@ -285,27 +285,6 @@ public interface FormModel
 	public void setPrincipale(boolean principale);
 
 	/**
-	 * Returns the multiutente of this form.
-	 *
-	 * @return the multiutente of this form
-	 */
-	public boolean getMultiutente();
-
-	/**
-	 * Returns <code>true</code> if this form is multiutente.
-	 *
-	 * @return <code>true</code> if this form is multiutente; <code>false</code> otherwise
-	 */
-	public boolean isMultiutente();
-
-	/**
-	 * Sets whether this form is multiutente.
-	 *
-	 * @param multiutente the multiutente of this form
-	 */
-	public void setMultiutente(boolean multiutente);
-
-	/**
 	 * Returns the organization ID of this form.
 	 *
 	 * @return the organization ID of this form

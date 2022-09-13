@@ -34,7 +34,6 @@
 		<field name="codice" type="String" />
 		<field name="json" type="String" />
 		<field name="principale" type="boolean" />
-		<field name="multiutente" type="boolean" />
 		<field name="organizationId" type="long" />
 	</model>
 	<model name="it.servizidigitali.gestioneforms.model.TipoDocumento">

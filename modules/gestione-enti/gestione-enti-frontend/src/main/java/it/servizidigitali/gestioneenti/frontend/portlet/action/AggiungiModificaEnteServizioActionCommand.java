@@ -76,6 +76,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		Boolean iseeInps = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ISEE_INPS);
 		Boolean timbroCertificato = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_TIMBRO_CERTIFICATO);
 		String uriEsterna = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI_ESTERNA);
+		Long subOrganizationId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_SOTTO_ORGANIZZAZIONE_ID);
 
 		String redirect = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.INDIRIZZO_REDIRECT);
 
@@ -126,12 +127,13 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 			ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
-			servizioEnte.setGroupId(themeDisplay.getCompanyGroupId());
+			servizioEnte.setGroupId(themeDisplay.getSiteGroupId());
 			servizioEnte.setUserId(themeDisplay.getUserId());
 
 			servizioEnte.setPrivateLayoutId(uri);
 			servizioEnte.setPublicLayoutId(uriGuest);
 			servizioEnte.setCatalogoServizioArticleId(catalogoServizioArticleId);
+			servizioEnte.setSubOrganizationId(subOrganizationId);
 			servizioEnte.setAutenticazione(autenticazione);
 			servizioEnte.setLivelloAutenticazione(livelloAutenticazione);
 			servizioEnte.setAttivo(attivo);

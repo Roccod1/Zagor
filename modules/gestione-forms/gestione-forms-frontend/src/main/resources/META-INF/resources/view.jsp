@@ -5,7 +5,8 @@
 %>
 
 <liferay-ui:success key="<%=GestioneFormsPortletKeys.SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE %>" message="operazione-eseguita-correttamente"/>
-<liferay-ui:error key="<%=GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO %>" message="compilare-tutti-i-campi-obbligatori" />
+<liferay-ui:error key="<%=GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_NON_AUTORIZZATO %>" message="non-hai-permessi-sufficienti-per-modificare-processo" />
+
 
 <div class="page-header">
 		<h2><liferay-ui:message key="elenco-form"/></h2>

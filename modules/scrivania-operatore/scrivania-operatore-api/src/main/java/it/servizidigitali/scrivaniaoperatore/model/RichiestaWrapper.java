@@ -58,6 +58,8 @@ public class RichiestaWrapper
 		attributes.put("stato", getStato());
 		attributes.put("numeroProtocollo", getNumeroProtocollo());
 		attributes.put("dataProtocollo", getDataProtocollo());
+		attributes.put("numeroProtocolloEsterno", getNumeroProtocolloEsterno());
+		attributes.put("dataProtocolloEsterno", getDataProtocolloEsterno());
 		attributes.put("oggetto", getOggetto());
 		attributes.put("note", getNote());
 		attributes.put("invioGuest", isInvioGuest());
@@ -65,6 +67,7 @@ public class RichiestaWrapper
 		attributes.put(
 			"chiaveAssociazioneBackoffice", getChiaveAssociazioneBackoffice());
 		attributes.put("delegaId", getDelegaId());
+		attributes.put("processInstanceId", getProcessInstanceId());
 		attributes.put("proceduraId", getProceduraId());
 
 		return attributes;
@@ -163,6 +166,20 @@ public class RichiestaWrapper
 			setDataProtocollo(dataProtocollo);
 		}
 
+		String numeroProtocolloEsterno = (String)attributes.get(
+			"numeroProtocolloEsterno");
+
+		if (numeroProtocolloEsterno != null) {
+			setNumeroProtocolloEsterno(numeroProtocolloEsterno);
+		}
+
+		Date dataProtocolloEsterno = (Date)attributes.get(
+			"dataProtocolloEsterno");
+
+		if (dataProtocolloEsterno != null) {
+			setDataProtocolloEsterno(dataProtocolloEsterno);
+		}
+
 		String oggetto = (String)attributes.get("oggetto");
 
 		if (oggetto != null) {
@@ -199,6 +216,12 @@ public class RichiestaWrapper
 
 		if (delegaId != null) {
 			setDelegaId(delegaId);
+		}
+
+		String processInstanceId = (String)attributes.get("processInstanceId");
+
+		if (processInstanceId != null) {
+			setProcessInstanceId(processInstanceId);
 		}
 
 		Long proceduraId = (Long)attributes.get("proceduraId");
@@ -274,6 +297,16 @@ public class RichiestaWrapper
 	}
 
 	/**
+	 * Returns the data protocollo esterno of this richiesta.
+	 *
+	 * @return the data protocollo esterno of this richiesta
+	 */
+	@Override
+	public Date getDataProtocolloEsterno() {
+		return model.getDataProtocolloEsterno();
+	}
+
+	/**
 	 * Returns the delega ID of this richiesta.
 	 *
 	 * @return the delega ID of this richiesta
@@ -344,6 +377,16 @@ public class RichiestaWrapper
 	}
 
 	/**
+	 * Returns the numero protocollo esterno of this richiesta.
+	 *
+	 * @return the numero protocollo esterno of this richiesta
+	 */
+	@Override
+	public String getNumeroProtocolloEsterno() {
+		return model.getNumeroProtocolloEsterno();
+	}
+
+	/**
 	 * Returns the oggetto of this richiesta.
 	 *
 	 * @return the oggetto of this richiesta
@@ -381,6 +424,16 @@ public class RichiestaWrapper
 	@Override
 	public long getProceduraId() {
 		return model.getProceduraId();
+	}
+
+	/**
+	 * Returns the process instance ID of this richiesta.
+	 *
+	 * @return the process instance ID of this richiesta
+	 */
+	@Override
+	public String getProcessInstanceId() {
+		return model.getProcessInstanceId();
 	}
 
 	/**
@@ -531,6 +584,16 @@ public class RichiestaWrapper
 	}
 
 	/**
+	 * Sets the data protocollo esterno of this richiesta.
+	 *
+	 * @param dataProtocolloEsterno the data protocollo esterno of this richiesta
+	 */
+	@Override
+	public void setDataProtocolloEsterno(Date dataProtocolloEsterno) {
+		model.setDataProtocolloEsterno(dataProtocolloEsterno);
+	}
+
+	/**
 	 * Sets the delega ID of this richiesta.
 	 *
 	 * @param delegaId the delega ID of this richiesta
@@ -601,6 +664,16 @@ public class RichiestaWrapper
 	}
 
 	/**
+	 * Sets the numero protocollo esterno of this richiesta.
+	 *
+	 * @param numeroProtocolloEsterno the numero protocollo esterno of this richiesta
+	 */
+	@Override
+	public void setNumeroProtocolloEsterno(String numeroProtocolloEsterno) {
+		model.setNumeroProtocolloEsterno(numeroProtocolloEsterno);
+	}
+
+	/**
 	 * Sets the oggetto of this richiesta.
 	 *
 	 * @param oggetto the oggetto of this richiesta
@@ -638,6 +711,16 @@ public class RichiestaWrapper
 	@Override
 	public void setProceduraId(long proceduraId) {
 		model.setProceduraId(proceduraId);
+	}
+
+	/**
+	 * Sets the process instance ID of this richiesta.
+	 *
+	 * @param processInstanceId the process instance ID of this richiesta
+	 */
+	@Override
+	public void setProcessInstanceId(String processInstanceId) {
+		model.setProcessInstanceId(processInstanceId);
 	}
 
 	/**

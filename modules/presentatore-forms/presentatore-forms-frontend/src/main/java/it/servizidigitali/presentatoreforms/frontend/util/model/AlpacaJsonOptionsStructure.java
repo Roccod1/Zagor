@@ -1,25 +1,38 @@
 package it.servizidigitali.presentatoreforms.frontend.util.model;
 
+import com.google.gson.JsonObject;
 
 public class AlpacaJsonOptionsStructure {
-	
-	private String type;
-	
-	private Object fields;
 
+	private String type;
+	private JsonObject fields;
+
+	/**
+	 * @return the type
+	 */
 	public String getType() {
 		return type;
 	}
 
+	/**
+	 * @param type the type to set
+	 */
 	public void setType(String type) {
 		this.type = type;
 	}
 
-	public Object getFields() {
+	/**
+	 * @return the fields
+	 */
+	public JsonObject getFields() {
 		return fields;
 	}
 
-	public void setFields(Object fields) {
+	/**
+	 * @param fields the fields to set
+	 */
+	public void setFields(JsonObject fields) {
 		this.fields = fields;
 	}
+
 }
