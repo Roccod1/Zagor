@@ -153,27 +153,6 @@ console.log("dentro scegli allegati");
 											</c:if>
 										</div>
 										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
 				        			</c:when>
 				        			<c:otherwise>
 				        				<c:choose>
@@ -521,7 +500,7 @@ console.log("aui script");
 			
 			var formData = new FormData();
 			formData.append('<portlet:namespace />' + 'attachmentFile', $('#<portlet:namespace />uploadFileFirmato')[0].files[0]);
-			formData.append('<portlet:namespace />' + 'idDefinizioneAllegato', 0;
+			formData.append('<portlet:namespace />' + 'idDefinizioneAllegato', 0);
 			formData.append('<portlet:namespace />' + 'idIstanzaForm', ${idRichiesta});
 			
 			if(nomeAllegato) {
