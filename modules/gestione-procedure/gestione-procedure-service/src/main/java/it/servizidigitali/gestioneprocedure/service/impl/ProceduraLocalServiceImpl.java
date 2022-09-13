@@ -83,6 +83,7 @@ public class ProceduraLocalServiceImpl extends ProceduraLocalServiceBaseImpl {
 		return proceduraFinder.findByServiziIdsGroupIdAttiva(serviziIds, groupId, attiva);
 	}
 
+	@Override
 	public Procedura getProceduraByServizioIdGroupIdAttiva(long servizioId, long groupId, boolean attiva) throws PortalException {
 
 		List<Procedura> findByGroupIdServizioIdAttiva = proceduraPersistence.findByGroupIdServizioIdAttiva(groupId, servizioId, attiva);
@@ -91,7 +92,7 @@ public class ProceduraLocalServiceImpl extends ProceduraLocalServiceBaseImpl {
 			throw new PortalException("Esistono più procedure associate al servizio " + servizioId + " per lo stesso groupId " + groupId);
 		}
 
-		return findByGroupIdServizioIdAttiva.get(0);
+		return findByGroupIdServizioIdAttiva.size() > 0 ? findByGroupIdServizioIdAttiva.get(0) : null;
 	}
 
 }
