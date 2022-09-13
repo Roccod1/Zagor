@@ -1,7 +1,7 @@
 <%@ include file="./init.jsp" %>
 
 <portlet:renderURL var="renderHomeURL">
-	<portlet:param name="mvcRenderCommandName" value="/home" />
+	<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.HOME_RENDER_COMMAND %>" />
 	<portlet:param name="richiestaId" value="${richiestaId}" />
 	<portlet:param name="servizioId" value="${servizioId}" />
 </portlet:renderURL>

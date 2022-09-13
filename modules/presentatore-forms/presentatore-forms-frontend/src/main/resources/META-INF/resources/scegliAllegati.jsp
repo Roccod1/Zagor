@@ -5,10 +5,9 @@
 	<portlet:param name="idServizio" value="${idServizio}" />
 </portlet:resourceURL>
 
-<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.UPLOAD_ALLEGATO_RESOURCE_COMMAND %>" var="uploadFileUrl">
+<portlet:actionURL var="salvaUrl">
+	<portlet:param name="action" value="action-salva" />
 	<portlet:param name="idServizio" value="${idServizio}" />
-</portlet:resourceURL>
-<portlet:actionURL name="<%=PresentatoreFormsPortletKeys.SALVA_INVIA_ACTION_COMMAND %>" var="salvaUrl">
 </portlet:actionURL>
 
 <portlet:renderURL var="homeScrivaniaUrl">
@@ -153,7 +152,28 @@ console.log("dentro scegli allegati");
 												</div>
 											</c:if>
 										</div>
-																	
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
 				        			</c:when>
 				        			<c:otherwise>
 				        				<c:choose>
@@ -500,7 +520,7 @@ console.log("aui script");
 			
 			var formData = new FormData();
 			formData.append('<portlet:namespace />' + 'attachmentFile', $('#<portlet:namespace />uploadFileFirmato')[0].files[0]);
-			formData.append('<portlet:namespace />' + 'idDefinizioneAllegato', 0);
+			formData.append('<portlet:namespace />' + 'idDefinizioneAllegato', 0;
 			formData.append('<portlet:namespace />' + 'idIstanzaForm', ${idRichiesta});
 			
 			if(nomeAllegato) {

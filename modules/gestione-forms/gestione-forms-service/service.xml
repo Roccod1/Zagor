@@ -49,6 +49,11 @@
 		<finder name="Principale" return-type="Collection">
 			<finder-column name="principale" />
 		</finder>
+		
+		<finder name="principaleAndGroupId" return-type="Collection">
+			<finder-column name="principale" />
+			<finder-column name="groupId" />
+		</finder>
 	</entity>
 	
 	<entity 

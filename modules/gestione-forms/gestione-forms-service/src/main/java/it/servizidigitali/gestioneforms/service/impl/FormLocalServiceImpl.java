@@ -13,9 +13,6 @@
 package it.servizidigitali.gestioneforms.service.impl;
 
 import com.liferay.portal.aop.AopService;
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -114,18 +111,9 @@ public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
 	@Override
 	public List<Form> getListaFormByOrganizationPrincipale(long groupId, boolean principale) throws Exception {
 
-		ClassLoader classLoader = getClassLoader();
-		DynamicQuery formDynamicQuery = DynamicQueryFactoryUtil.forClass(Form.class, classLoader);
+		List<Form> listaForm = formPersistence.findByprincipaleAndGroupId(principale, groupId);
 
-		formDynamicQuery.add(RestrictionsFactoryUtil.eq("principale", principale));
-
-		if (groupId > 0) {
-			formDynamicQuery.add(RestrictionsFactoryUtil.eq("groupId", groupId));
-		}
-
-		List<Form> listaForm = formPersistence.findWithDynamicQuery(formDynamicQuery);
-
-		if (Validator.isNotNull(listaForm)) {
+		if (Validator.isNotNull(listaForm) && !listaForm.isEmpty()) {
 			for (Form form : listaForm) {
 				List<DefinizioneAllegato> listaAllegati = definizioneAllegatoPersistence.findByformIdAndEliminato(form.getFormId(), false);
 

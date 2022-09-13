@@ -46,7 +46,7 @@ public class UploadAllegatoResourceCommand extends BaseMVCResourceCommand{
 		
 		try {
 			if(Validator.isNotNull(file)) {
-				long idTemporaneoAllegato = definizioneAllegatoLocalService.uploadAllegatoTemporaneo(file);
+				long idTemporaneoAllegato = 0;
 				
 				if(Validator.isNotNull(idTemporaneoAllegato)) {
 					json.put(PresentatoreFormsPortletKeys.DEFINIZIONE_ALLEGATO_ID_TEMPORANEO, idTemporaneoAllegato);
