@@ -1023,6 +1023,161 @@ public interface ProceduraPersistence extends BasePersistence<Procedura> {
 		long groupId, long servizioId, boolean attiva);
 
 	/**
+	 * Returns all the proceduras where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @return the matching proceduras
+	 */
+	public java.util.List<Procedura> findByGroupIdAttiva(
+		long groupId, boolean attiva);
+
+	/**
+	 * Returns a range of all the proceduras where groupId = &#63; and attiva = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param start the lower bound of the range of proceduras
+	 * @param end the upper bound of the range of proceduras (not inclusive)
+	 * @return the range of matching proceduras
+	 */
+	public java.util.List<Procedura> findByGroupIdAttiva(
+		long groupId, boolean attiva, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the proceduras where groupId = &#63; and attiva = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param start the lower bound of the range of proceduras
+	 * @param end the upper bound of the range of proceduras (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching proceduras
+	 */
+	public java.util.List<Procedura> findByGroupIdAttiva(
+		long groupId, boolean attiva, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<Procedura>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the proceduras where groupId = &#63; and attiva = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param start the lower bound of the range of proceduras
+	 * @param end the upper bound of the range of proceduras (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching proceduras
+	 */
+	public java.util.List<Procedura> findByGroupIdAttiva(
+		long groupId, boolean attiva, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<Procedura>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first procedura in the ordered set where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching procedura
+	 * @throws NoSuchProceduraException if a matching procedura could not be found
+	 */
+	public Procedura findByGroupIdAttiva_First(
+			long groupId, boolean attiva,
+			com.liferay.portal.kernel.util.OrderByComparator<Procedura>
+				orderByComparator)
+		throws NoSuchProceduraException;
+
+	/**
+	 * Returns the first procedura in the ordered set where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching procedura, or <code>null</code> if a matching procedura could not be found
+	 */
+	public Procedura fetchByGroupIdAttiva_First(
+		long groupId, boolean attiva,
+		com.liferay.portal.kernel.util.OrderByComparator<Procedura>
+			orderByComparator);
+
+	/**
+	 * Returns the last procedura in the ordered set where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching procedura
+	 * @throws NoSuchProceduraException if a matching procedura could not be found
+	 */
+	public Procedura findByGroupIdAttiva_Last(
+			long groupId, boolean attiva,
+			com.liferay.portal.kernel.util.OrderByComparator<Procedura>
+				orderByComparator)
+		throws NoSuchProceduraException;
+
+	/**
+	 * Returns the last procedura in the ordered set where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching procedura, or <code>null</code> if a matching procedura could not be found
+	 */
+	public Procedura fetchByGroupIdAttiva_Last(
+		long groupId, boolean attiva,
+		com.liferay.portal.kernel.util.OrderByComparator<Procedura>
+			orderByComparator);
+
+	/**
+	 * Returns the proceduras before and after the current procedura in the ordered set where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param proceduraId the primary key of the current procedura
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next procedura
+	 * @throws NoSuchProceduraException if a procedura with the primary key could not be found
+	 */
+	public Procedura[] findByGroupIdAttiva_PrevAndNext(
+			long proceduraId, long groupId, boolean attiva,
+			com.liferay.portal.kernel.util.OrderByComparator<Procedura>
+				orderByComparator)
+		throws NoSuchProceduraException;
+
+	/**
+	 * Removes all the proceduras where groupId = &#63; and attiva = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 */
+	public void removeByGroupIdAttiva(long groupId, boolean attiva);
+
+	/**
+	 * Returns the number of proceduras where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @return the number of matching proceduras
+	 */
+	public int countByGroupIdAttiva(long groupId, boolean attiva);
+
+	/**
 	 * Caches the procedura in the entity cache if it is enabled.
 	 *
 	 * @param procedura the procedura

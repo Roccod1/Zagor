@@ -63,6 +63,11 @@
 			<finder-column name="attiva" />
 		</finder>
 		
+		<finder name="GroupIdAttiva" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="attiva" />
+		</finder>
+		
 	</entity>
 
 	<entity 

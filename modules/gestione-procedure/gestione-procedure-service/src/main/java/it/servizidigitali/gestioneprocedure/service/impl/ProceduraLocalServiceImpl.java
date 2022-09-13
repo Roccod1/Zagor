@@ -67,4 +67,14 @@ public class ProceduraLocalServiceImpl extends ProceduraLocalServiceBaseImpl {
 		
 		return listaProcedure;
 	}
+	
+	public List<Procedura> getProcedureByGroupIdAttiva(long groupId, boolean attiva){
+		List<Procedura> listaProcedure = null;
+		
+		if(groupId>0) {
+			listaProcedure = proceduraPersistence.findByGroupIdAttiva(groupId, attiva);
+		}
+		
+		return listaProcedure;
+	}
 }

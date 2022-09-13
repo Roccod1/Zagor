@@ -345,6 +345,12 @@ public class ProceduraLocalServiceUtil {
 		return getService().getProcedurasCount();
 	}
 
+	public static List<Procedura> getProcedureByGroupIdAttiva(
+		long groupId, boolean attiva) {
+
+		return getService().getProcedureByGroupIdAttiva(groupId, attiva);
+	}
+
 	public static List<Procedura> getProcedureByGroupIdServizioIdAttiva(
 		long groupId, long servizioId, boolean attiva) {
 
