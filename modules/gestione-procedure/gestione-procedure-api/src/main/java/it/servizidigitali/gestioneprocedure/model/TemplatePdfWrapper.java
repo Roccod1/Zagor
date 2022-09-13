@@ -182,6 +182,11 @@ public class TemplatePdfWrapper
 		return model.getModifiedDate();
 	}
 
+	@Override
+	public String getNomeFile() {
+		return model.getNomeFile();
+	}
+
 	/**
 	 * Returns the primary key of this template pdf.
 	 *
@@ -325,6 +330,11 @@ public class TemplatePdfWrapper
 	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		model.setModifiedDate(modifiedDate);
+	}
+
+	@Override
+	public void setNomeFile(String nomeFile) {
+		model.setNomeFile(nomeFile);
 	}
 
 	/**

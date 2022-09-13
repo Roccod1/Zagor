@@ -58,4 +58,8 @@ public interface TemplatePdf extends PersistedModel, TemplatePdfModel {
 
 		};
 
+	public String getNomeFile();
+
+	public void setNomeFile(String nomeFile);
+
 }

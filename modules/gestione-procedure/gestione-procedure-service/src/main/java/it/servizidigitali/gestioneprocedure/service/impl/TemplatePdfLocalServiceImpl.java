@@ -16,6 +16,13 @@ package it.servizidigitali.gestioneprocedure.service.impl;
 
 import com.liferay.portal.aop.AopService;
 
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+import it.servizidigitali.gestioneprocedure.model.TemplatePdf;
 import it.servizidigitali.gestioneprocedure.service.base.TemplatePdfLocalServiceBaseImpl;
 
 import org.osgi.service.component.annotations.Component;

@@ -5,12 +5,17 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.upload.FileItem;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
+
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -18,12 +23,11 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneprocedure.frontend.constants.GestioneProcedurePortletKeys;
 import it.servizidigitali.gestioneprocedure.frontend.service.GestioneProcedureMiddlewareService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
-import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.gestioneprocedure.service.TemplatePdfLocalService;
 
 @Component(immediate = true, 
 property = { 
@@ -41,12 +45,9 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 	
 	@Reference
 	private ProceduraLocalService proceduraLocalService;
-	
+
 	@Reference
-	private ServizioLocalService servizioLocalService;
-	
-	@Reference
-	private FormLocalService formLocalService;
+	private TemplatePdfLocalService templatePdfLocalService;
 	
 	@Reference
 	private GestioneProcedureMiddlewareService gestioneProcedureMiddlewareService;
@@ -54,8 +55,12 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 
+		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
+		Map<String, FileItem[]> files= uploadPortletRequest.getMultipartParameterMap();
+		String[] rowIndexes = ParamUtil.getStringValues(actionRequest, "rowIndexes");
+		
 		long idProcedura = ParamUtil.getLong(actionRequest, GestioneProcedurePortletKeys.ID_PROCEDURA);
 		String nome = ParamUtil.getString(actionRequest, GestioneProcedurePortletKeys.NOME);
 		String pec = ParamUtil.getString(actionRequest, GestioneProcedurePortletKeys.PEC);
@@ -130,9 +135,9 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		procedura.setTipoGenerazionePDF(tipoGenerazioneTemplate);
 		
 		
-		procedura.setUserId(themeDisplay.getUserId());
-		procedura.setGroupId(themeDisplay.getSiteGroupId());
-		procedura.setUserName(themeDisplay.getUser().getFullName());
+		procedura.setUserId(serviceContext.getThemeDisplay().getUserId());
+		procedura.setGroupId(serviceContext.getThemeDisplay().getSiteGroupId());
+		procedura.setUserName(serviceContext.getThemeDisplay().getUser().getFullName());
 		
 		
 		SessionMessages.add(actionRequest, GestioneProcedurePortletKeys.SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE);
@@ -140,6 +145,7 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 				
 		gestioneProcedureMiddlewareService.salvaProceduraFormPrincipale(idFormPrincipale, procedura.getProceduraId());
 		gestioneProcedureMiddlewareService.salvaListaFormIntegrativi(idFormIntegrativi, procedura.getProceduraId());
+
 
 	}
 

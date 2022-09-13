@@ -18,4 +18,15 @@ package it.servizidigitali.gestioneprocedure.model.impl;
  * @author Brian Wing Shun Chan
  */
 public class TemplatePdfImpl extends TemplatePdfBaseImpl {
+	String nomeFile = null;
+
+	public String getNomeFile() {
+		return nomeFile;
+	}
+
+	public void setNomeFile(String nomeFile) {
+		this.nomeFile = nomeFile;
+	}
+	
+	
 }

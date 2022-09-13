@@ -138,7 +138,7 @@
 					<h3><liferay-ui:message key="tipo-di-generazione-template-pdf"/></h3>
 					<aui:row>
 						<aui:col span="6">
-								<aui:select label="generazione-template" name="<%=GestioneProcedurePortletKeys.TIPI_GENERAZIONE_TEMPLATE %>" value="${procedura.tipoGenerazionePDF}" showEmptyOption="true" onchange="handleAttachments(this);">
+								<aui:select id="tipiGenerazioneTemplate" label="generazione-template" name="<%=GestioneProcedurePortletKeys.TIPI_GENERAZIONE_TEMPLATE %>" value="${procedura.tipoGenerazionePDF}" showEmptyOption="true" onchange="handleAttachments(this);">
 										<c:forEach items="${listaTipoGenerazionePDF}" var="tipoGenerazionePDF">
 											<c:set var="labelTipoGenerazionePDF" value="generazione-template_${tipoGenerazionePDF}" />
 											<aui:option value="${tipoGenerazionePDF}" label="${labelTipoGenerazionePDF}"></aui:option>
@@ -153,10 +153,25 @@
 						
 						<aui:row>
 							<aui:col span="12" id="container-upload-allegati">
-								<div class="lfr-form-row lfr-form-row-inline">
-									<aui:input type="file" name="jasperReportFile0" label="allegato-jasper-report"/>
-									<aui:input label="principale" type="checkbox" id="allegatoPrincipale0" name="allegatoPrincipale0" cssClass="checkboxPrincipaleAllegati" onClick="checkboxJasperReport(this);"/>
-								</div>
+							
+									<c:forEach items="${listaTemplatePdf}" var="templatePdf" varStatus="loop">
+										<div class="lfr-form-row lfr-form-row-inline">
+											<aui:input type="hidden" name="idAllegatoJasper${loop.index}" value="${templatePdf.templatePdfId}"/>
+											 <c:set var = "nomeFile" scope = "session" value = "${templatePdf.nomeFile}"/>
+											<aui:input type="file" name="jasperReportFile${loop.index}" label="allegato-jasper-report" value="${nomeFile}" />
+											<c:choose>
+												<c:when test="${templatePdf.templatePdfParentId > 0}">
+													<aui:input label="principale" type="checkbox" id="allegatoPrincipale${loop.index}" name="allegatoPrincipale${loop.index}" cssClass="checkboxPrincipaleAllegati" onClick="checkboxJasperReport(this);" checked="true"/>
+												</c:when>
+												
+												<c:otherwise>
+													<aui:input label="principale" type="checkbox" id="allegatoPrincipale${loop.index}" name="allegatoPrincipale${loop.index}" cssClass="checkboxPrincipaleAllegati" onClick="checkboxJasperReport(this);"/>
+												</c:otherwise>
+											
+											</c:choose>
+										</div>
+									</c:forEach>
+
 							</aui:col>
 						</aui:row>
 					
@@ -183,7 +198,10 @@ new Liferay.AutoFields({
        			$(ultimoInputFile).val("");
        		},
        		'delete': function(event) {
-       			//alert("-- Delete --");
+       			 console.log(event);
+	       		 var rowEliminata = event.deletedRow;
+	       		 rowEliminata = rowEliminata.replace('DIV','');
+	       		 console.log("Riga eliminata: " + rowEliminata);
        		}
        	}
 }).render();
@@ -193,7 +211,15 @@ new Liferay.AutoFields({
 
 var listaFormIdIntegrativi = ${listaFormIntegrativiProcedura};
 var listaTipiIntegrazioneBackoffice = ${listaTipoIntegrazioneBackofficeProcedura};
-var indiceAllegati = 0;
+var valueSelectAllegati = $('#<portlet:namespace />tipiGenerazioneTemplate').val();
+
+$( document ).ready(function() {
+	
+	    if(valueSelectAllegati=="JASPER_REPORT"){
+ 			$('#container-allegati-template').removeClass("invisible");
+	    }
+   
+});
 
 
 function checkboxJasperReport(checkbox){
@@ -218,6 +244,7 @@ function handleAttachments(selectObj) {
 		$('#container-allegati-template').addClass("invisible");
 	}
 }
+
 
 
 if(listaFormIdIntegrativi!=="listaVuota"){
