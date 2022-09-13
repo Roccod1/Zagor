@@ -79,6 +79,7 @@ public class ProcessoModelImpl
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"codice", Types.VARCHAR}, {"nome", Types.VARCHAR},
 		{"stato", Types.VARCHAR}, {"deploymentId", Types.VARCHAR},
+		{"resourceId", Types.VARCHAR}, {"modificabile", Types.BOOLEAN},
 		{"attivo", Types.BOOLEAN}
 	};
 
@@ -98,11 +99,13 @@ public class ProcessoModelImpl
 		TABLE_COLUMNS_MAP.put("nome", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("stato", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("deploymentId", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("resourceId", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("modificabile", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("attivo", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table processo (uuid_ VARCHAR(75) null,processoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codice VARCHAR(75) null,nome VARCHAR(75) null,stato VARCHAR(75) null,deploymentId VARCHAR(75) null,attivo BOOLEAN)";
+		"create table processo (uuid_ VARCHAR(75) null,processoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codice VARCHAR(75) null,nome VARCHAR(75) null,stato VARCHAR(75) null,deploymentId VARCHAR(75) null,resourceId VARCHAR(75) null,modificabile BOOLEAN,attivo BOOLEAN)";
 
 	public static final String TABLE_SQL_DROP = "drop table processo";
 
@@ -140,26 +143,38 @@ public class ProcessoModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long GROUPID_COLUMN_BITMASK = 8L;
+	public static final long DEPLOYMENTID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long STATO_COLUMN_BITMASK = 16L;
+	public static final long GROUPID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 32L;
+	public static final long RESOURCEID_COLUMN_BITMASK = 32L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long STATO_COLUMN_BITMASK = 64L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 128L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long PROCESSOID_COLUMN_BITMASK = 64L;
+	public static final long PROCESSOID_COLUMN_BITMASK = 256L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -336,6 +351,14 @@ public class ProcessoModelImpl
 		attributeSetterBiConsumers.put(
 			"deploymentId",
 			(BiConsumer<Processo, String>)Processo::setDeploymentId);
+		attributeGetterFunctions.put("resourceId", Processo::getResourceId);
+		attributeSetterBiConsumers.put(
+			"resourceId",
+			(BiConsumer<Processo, String>)Processo::setResourceId);
+		attributeGetterFunctions.put("modificabile", Processo::getModificabile);
+		attributeSetterBiConsumers.put(
+			"modificabile",
+			(BiConsumer<Processo, Boolean>)Processo::setModificabile);
 		attributeGetterFunctions.put("attivo", Processo::getAttivo);
 		attributeSetterBiConsumers.put(
 			"attivo", (BiConsumer<Processo, Boolean>)Processo::setAttivo);
@@ -612,6 +635,62 @@ public class ProcessoModelImpl
 		_deploymentId = deploymentId;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public String getOriginalDeploymentId() {
+		return getColumnOriginalValue("deploymentId");
+	}
+
+	@Override
+	public String getResourceId() {
+		if (_resourceId == null) {
+			return "";
+		}
+		else {
+			return _resourceId;
+		}
+	}
+
+	@Override
+	public void setResourceId(String resourceId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_resourceId = resourceId;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public String getOriginalResourceId() {
+		return getColumnOriginalValue("resourceId");
+	}
+
+	@Override
+	public boolean getModificabile() {
+		return _modificabile;
+	}
+
+	@Override
+	public boolean isModificabile() {
+		return _modificabile;
+	}
+
+	@Override
+	public void setModificabile(boolean modificabile) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_modificabile = modificabile;
+	}
+
 	@Override
 	public boolean getAttivo() {
 		return _attivo;
@@ -715,6 +794,8 @@ public class ProcessoModelImpl
 		processoImpl.setNome(getNome());
 		processoImpl.setStato(getStato());
 		processoImpl.setDeploymentId(getDeploymentId());
+		processoImpl.setResourceId(getResourceId());
+		processoImpl.setModificabile(isModificabile());
 		processoImpl.setAttivo(isAttivo());
 
 		processoImpl.resetOriginalValues();
@@ -744,6 +825,10 @@ public class ProcessoModelImpl
 		processoImpl.setStato(this.<String>getColumnOriginalValue("stato"));
 		processoImpl.setDeploymentId(
 			this.<String>getColumnOriginalValue("deploymentId"));
+		processoImpl.setResourceId(
+			this.<String>getColumnOriginalValue("resourceId"));
+		processoImpl.setModificabile(
+			this.<Boolean>getColumnOriginalValue("modificabile"));
 		processoImpl.setAttivo(this.<Boolean>getColumnOriginalValue("attivo"));
 
 		return processoImpl;
@@ -896,6 +981,16 @@ public class ProcessoModelImpl
 			processoCacheModel.deploymentId = null;
 		}
 
+		processoCacheModel.resourceId = getResourceId();
+
+		String resourceId = processoCacheModel.resourceId;
+
+		if ((resourceId != null) && (resourceId.length() == 0)) {
+			processoCacheModel.resourceId = null;
+		}
+
+		processoCacheModel.modificabile = isModificabile();
+
 		processoCacheModel.attivo = isAttivo();
 
 		return processoCacheModel;
@@ -1001,6 +1096,8 @@ public class ProcessoModelImpl
 	private String _nome;
 	private String _stato;
 	private String _deploymentId;
+	private String _resourceId;
+	private boolean _modificabile;
 	private boolean _attivo;
 
 	public <T> T getColumnValue(String columnName) {
@@ -1044,6 +1141,8 @@ public class ProcessoModelImpl
 		_columnOriginalValues.put("nome", _nome);
 		_columnOriginalValues.put("stato", _stato);
 		_columnOriginalValues.put("deploymentId", _deploymentId);
+		_columnOriginalValues.put("resourceId", _resourceId);
+		_columnOriginalValues.put("modificabile", _modificabile);
 		_columnOriginalValues.put("attivo", _attivo);
 	}
 
@@ -1092,7 +1191,11 @@ public class ProcessoModelImpl
 
 		columnBitmasks.put("deploymentId", 2048L);
 
-		columnBitmasks.put("attivo", 4096L);
+		columnBitmasks.put("resourceId", 4096L);
+
+		columnBitmasks.put("modificabile", 8192L);
+
+		columnBitmasks.put("attivo", 16384L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

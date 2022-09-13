@@ -14,6 +14,8 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
+import java.util.List;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
@@ -21,6 +23,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.camunda.integration.client.CamundaClient;
+import it.servizidigitali.camunda.integration.client.model.DeploymentResource;
 import it.servizidigitali.gestioneprocessi.exception.NoSuchProcessoException;
 import it.servizidigitali.gestioneprocessi.frontend.constants.GestioneProcessiPortletKeys;
 import it.servizidigitali.gestioneprocessi.model.Processo;
@@ -74,43 +77,25 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		if (organizationId > 0) {
 			tenantId = String.valueOf(organizationId);
 		}
+
+		if (Validator.isNull(codice)) {
+			SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+			return;
+		}
+
+		if (Validator.isNull(nome)) {
+			SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+			return;
+		}
+
 		if (idProcesso > 0) {
-
 			processo = processoLocalService.getProcesso(idProcesso);
-			tenantId = String.valueOf(groupLocalService.getGroup(processo.getGroupId()).getOrganizationId());
 
-			if (Validator.isNull(codice)) {
-				SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
+			if (!processo.isModificabile()) {
+				SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_NON_AUTORIZZATO);
 				return;
 			}
 
-			if (Validator.isNull(nome)) {
-				SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
-				return;
-			}
-
-			if (Validator.isNotNull(modelloXml)) {
-				try {
-					String deploymentId = camundaClient.insertOrUpdateProcessDefinitions(tenantId, codice, modelloXml.getBytes());
-
-					if (Validator.isNotNull(deploymentId)) {
-						processo.setDeploymentId(deploymentId);
-					}
-
-				}
-				catch (Exception e) {
-					SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_CAMUNDA);
-					actionRequest.setAttribute(GestioneProcessiPortletKeys.MODELLOXML, modelloXml);
-					actionResponse.getRenderParameters().setValue(GestioneProcessiPortletKeys.MODELLOXML, modelloXml);
-					return;
-				}
-			}
-
-			processo.setCodice(codice);
-			processo.setNome(nome);
-			processo.setAttivo(true);
-			processo.setUserId(themeDisplay.getUserId());
-			processo.setUserName(themeDisplay.getUser().getFullName());
 		}
 		else {
 			try {
@@ -123,44 +108,37 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 			}
 			catch (NoSuchProcessoException e) {
 
-				processo = processoLocalService.createProcesso(counterLocalService.increment());
+			}
 
-				if (Validator.isNull(codice)) {
-					SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
-					return;
+			processo = processoLocalService.createProcesso(counterLocalService.increment());
+		}
+
+		if (Validator.isNotNull(modelloXml)) {
+			try {
+				String deploymentId = camundaClient.insertOrUpdateProcessDefinitions(tenantId, codice, modelloXml.getBytes());
+
+				if (Validator.isNotNull(deploymentId)) {
+					processo.setDeploymentId(deploymentId);
+					List<DeploymentResource> deploymentResources = camundaClient.getDeploymentResources(deploymentId);
+					processo.setResourceId(deploymentResources.get(0).getId());
 				}
-
-				if (Validator.isNull(nome)) {
-					SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO);
-					return;
-				}
-
-				if (Validator.isNotNull(modelloXml)) {
-					try {
-						String deploymentId = camundaClient.insertOrUpdateProcessDefinitions(tenantId, codice, modelloXml.getBytes());
-
-						if (Validator.isNotNull(deploymentId)) {
-							processo.setDeploymentId(deploymentId);
-						}
-
-					}
-					catch (Exception exception) {
-						SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_CAMUNDA);
-						actionRequest.setAttribute(GestioneProcessiPortletKeys.MODELLOXML, modelloXml);
-						actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaProcesso.jsp");
-						return;
-					}
-				}
-
-				processo.setCodice(codice);
-				processo.setNome(nome);
-				processo.setAttivo(true);
-				processo.setUserId(themeDisplay.getUserId());
-				processo.setGroupId(themeDisplay.getSiteGroupId());
-				processo.setUserName(themeDisplay.getUser().getFullName());
 
 			}
+			catch (Exception exception) {
+				SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_CAMUNDA);
+				actionRequest.setAttribute(GestioneProcessiPortletKeys.MODELLOXML, modelloXml);
+				actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaProcesso.jsp");
+				return;
+			}
 		}
+
+		processo.setCodice(codice);
+		processo.setNome(nome);
+		processo.setAttivo(true);
+		processo.setUserId(themeDisplay.getUserId());
+		processo.setGroupId(themeDisplay.getSiteGroupId());
+		processo.setUserName(themeDisplay.getUser().getFullName());
+		processo.setModificabile(true);
 
 		SessionMessages.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ESEGUITO_CORRETTAMENTE);
 		processoLocalService.updateProcesso(processo);

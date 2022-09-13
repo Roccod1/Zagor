@@ -1211,9 +1211,9 @@ public class ProceduraFormPersistenceImpl
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 =
 		"proceduraForm.companyId = ?";
 
-	private FinderPath _finderPathWithPaginationFindByproceduraId;
-	private FinderPath _finderPathWithoutPaginationFindByproceduraId;
-	private FinderPath _finderPathCountByproceduraId;
+	private FinderPath _finderPathWithPaginationFindByProceduraId;
+	private FinderPath _finderPathWithoutPaginationFindByProceduraId;
+	private FinderPath _finderPathCountByProceduraId;
 
 	/**
 	 * Returns all the procedura forms where proceduraId = &#63;.
@@ -1222,8 +1222,8 @@ public class ProceduraFormPersistenceImpl
 	 * @return the matching procedura forms
 	 */
 	@Override
-	public List<ProceduraForm> findByproceduraId(long proceduraId) {
-		return findByproceduraId(
+	public List<ProceduraForm> findByProceduraId(long proceduraId) {
+		return findByProceduraId(
 			proceduraId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
@@ -1240,10 +1240,10 @@ public class ProceduraFormPersistenceImpl
 	 * @return the range of matching procedura forms
 	 */
 	@Override
-	public List<ProceduraForm> findByproceduraId(
+	public List<ProceduraForm> findByProceduraId(
 		long proceduraId, int start, int end) {
 
-		return findByproceduraId(proceduraId, start, end, null);
+		return findByProceduraId(proceduraId, start, end, null);
 	}
 
 	/**
@@ -1260,11 +1260,11 @@ public class ProceduraFormPersistenceImpl
 	 * @return the ordered range of matching procedura forms
 	 */
 	@Override
-	public List<ProceduraForm> findByproceduraId(
+	public List<ProceduraForm> findByProceduraId(
 		long proceduraId, int start, int end,
 		OrderByComparator<ProceduraForm> orderByComparator) {
 
-		return findByproceduraId(
+		return findByProceduraId(
 			proceduraId, start, end, orderByComparator, true);
 	}
 
@@ -1283,7 +1283,7 @@ public class ProceduraFormPersistenceImpl
 	 * @return the ordered range of matching procedura forms
 	 */
 	@Override
-	public List<ProceduraForm> findByproceduraId(
+	public List<ProceduraForm> findByProceduraId(
 		long proceduraId, int start, int end,
 		OrderByComparator<ProceduraForm> orderByComparator,
 		boolean useFinderCache) {
@@ -1295,12 +1295,12 @@ public class ProceduraFormPersistenceImpl
 			(orderByComparator == null)) {
 
 			if (useFinderCache) {
-				finderPath = _finderPathWithoutPaginationFindByproceduraId;
+				finderPath = _finderPathWithoutPaginationFindByProceduraId;
 				finderArgs = new Object[] {proceduraId};
 			}
 		}
 		else if (useFinderCache) {
-			finderPath = _finderPathWithPaginationFindByproceduraId;
+			finderPath = _finderPathWithPaginationFindByProceduraId;
 			finderArgs = new Object[] {
 				proceduraId, start, end, orderByComparator
 			};
@@ -1388,12 +1388,12 @@ public class ProceduraFormPersistenceImpl
 	 * @throws NoSuchProceduraFormException if a matching procedura form could not be found
 	 */
 	@Override
-	public ProceduraForm findByproceduraId_First(
+	public ProceduraForm findByProceduraId_First(
 			long proceduraId,
 			OrderByComparator<ProceduraForm> orderByComparator)
 		throws NoSuchProceduraFormException {
 
-		ProceduraForm proceduraForm = fetchByproceduraId_First(
+		ProceduraForm proceduraForm = fetchByProceduraId_First(
 			proceduraId, orderByComparator);
 
 		if (proceduraForm != null) {
@@ -1420,10 +1420,10 @@ public class ProceduraFormPersistenceImpl
 	 * @return the first matching procedura form, or <code>null</code> if a matching procedura form could not be found
 	 */
 	@Override
-	public ProceduraForm fetchByproceduraId_First(
+	public ProceduraForm fetchByProceduraId_First(
 		long proceduraId, OrderByComparator<ProceduraForm> orderByComparator) {
 
-		List<ProceduraForm> list = findByproceduraId(
+		List<ProceduraForm> list = findByProceduraId(
 			proceduraId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -1442,12 +1442,12 @@ public class ProceduraFormPersistenceImpl
 	 * @throws NoSuchProceduraFormException if a matching procedura form could not be found
 	 */
 	@Override
-	public ProceduraForm findByproceduraId_Last(
+	public ProceduraForm findByProceduraId_Last(
 			long proceduraId,
 			OrderByComparator<ProceduraForm> orderByComparator)
 		throws NoSuchProceduraFormException {
 
-		ProceduraForm proceduraForm = fetchByproceduraId_Last(
+		ProceduraForm proceduraForm = fetchByProceduraId_Last(
 			proceduraId, orderByComparator);
 
 		if (proceduraForm != null) {
@@ -1474,16 +1474,16 @@ public class ProceduraFormPersistenceImpl
 	 * @return the last matching procedura form, or <code>null</code> if a matching procedura form could not be found
 	 */
 	@Override
-	public ProceduraForm fetchByproceduraId_Last(
+	public ProceduraForm fetchByProceduraId_Last(
 		long proceduraId, OrderByComparator<ProceduraForm> orderByComparator) {
 
-		int count = countByproceduraId(proceduraId);
+		int count = countByProceduraId(proceduraId);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<ProceduraForm> list = findByproceduraId(
+		List<ProceduraForm> list = findByProceduraId(
 			proceduraId, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -1503,7 +1503,7 @@ public class ProceduraFormPersistenceImpl
 	 * @throws NoSuchProceduraFormException if a procedura form with the primary key could not be found
 	 */
 	@Override
-	public ProceduraForm[] findByproceduraId_PrevAndNext(
+	public ProceduraForm[] findByProceduraId_PrevAndNext(
 			ProceduraFormPK proceduraFormPK, long proceduraId,
 			OrderByComparator<ProceduraForm> orderByComparator)
 		throws NoSuchProceduraFormException {
@@ -1517,12 +1517,12 @@ public class ProceduraFormPersistenceImpl
 
 			ProceduraForm[] array = new ProceduraFormImpl[3];
 
-			array[0] = getByproceduraId_PrevAndNext(
+			array[0] = getByProceduraId_PrevAndNext(
 				session, proceduraForm, proceduraId, orderByComparator, true);
 
 			array[1] = proceduraForm;
 
-			array[2] = getByproceduraId_PrevAndNext(
+			array[2] = getByProceduraId_PrevAndNext(
 				session, proceduraForm, proceduraId, orderByComparator, false);
 
 			return array;
@@ -1535,7 +1535,7 @@ public class ProceduraFormPersistenceImpl
 		}
 	}
 
-	protected ProceduraForm getByproceduraId_PrevAndNext(
+	protected ProceduraForm getByProceduraId_PrevAndNext(
 		Session session, ProceduraForm proceduraForm, long proceduraId,
 		OrderByComparator<ProceduraForm> orderByComparator, boolean previous) {
 
@@ -1650,9 +1650,9 @@ public class ProceduraFormPersistenceImpl
 	 * @param proceduraId the procedura ID
 	 */
 	@Override
-	public void removeByproceduraId(long proceduraId) {
+	public void removeByProceduraId(long proceduraId) {
 		for (ProceduraForm proceduraForm :
-				findByproceduraId(
+				findByProceduraId(
 					proceduraId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 
 			remove(proceduraForm);
@@ -1666,8 +1666,8 @@ public class ProceduraFormPersistenceImpl
 	 * @return the number of matching procedura forms
 	 */
 	@Override
-	public int countByproceduraId(long proceduraId) {
-		FinderPath finderPath = _finderPathCountByproceduraId;
+	public int countByProceduraId(long proceduraId) {
+		FinderPath finderPath = _finderPathCountByProceduraId;
 
 		Object[] finderArgs = new Object[] {proceduraId};
 
@@ -2291,21 +2291,21 @@ public class ProceduraFormPersistenceImpl
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "companyId"}, false);
 
-		_finderPathWithPaginationFindByproceduraId = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByproceduraId",
+		_finderPathWithPaginationFindByProceduraId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByProceduraId",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				Integer.class.getName(), OrderByComparator.class.getName()
 			},
 			new String[] {"proceduraId"}, true);
 
-		_finderPathWithoutPaginationFindByproceduraId = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByproceduraId",
+		_finderPathWithoutPaginationFindByProceduraId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByProceduraId",
 			new String[] {Long.class.getName()}, new String[] {"proceduraId"},
 			true);
 
-		_finderPathCountByproceduraId = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByproceduraId",
+		_finderPathCountByProceduraId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByProceduraId",
 			new String[] {Long.class.getName()}, new String[] {"proceduraId"},
 			false);
 

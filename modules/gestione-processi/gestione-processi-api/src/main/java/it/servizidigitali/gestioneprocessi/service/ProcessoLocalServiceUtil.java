@@ -288,6 +288,15 @@ public class ProcessoLocalServiceUtil {
 		return getService().getProcessoByCodice(codice);
 	}
 
+	public static Processo getProcessoByDeploymentIdResourceId(
+			String deploymentId, String resourceId)
+		throws it.servizidigitali.gestioneprocessi.exception.
+			NoSuchProcessoException {
+
+		return getService().getProcessoByDeploymentIdResourceId(
+			deploymentId, resourceId);
+	}
+
 	/**
 	 * Returns the processo matching the UUID and group.
 	 *

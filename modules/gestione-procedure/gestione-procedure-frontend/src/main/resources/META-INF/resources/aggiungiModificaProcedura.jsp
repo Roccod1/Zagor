@@ -138,7 +138,7 @@
 					<h3><liferay-ui:message key="tipo-di-generazione-template-pdf"/></h3>
 					<aui:row>
 						<aui:col span="6">
-								<aui:select label="generazione-template" name="<%=GestioneProcedurePortletKeys.TIPI_GENERAZIONE_TEMPLATE %>" value="${procedura.tipoGenerazionePDF}" showEmptyOption="true">
+								<aui:select id="tipiGenerazioneTemplate" label="generazione-template" name="<%=GestioneProcedurePortletKeys.TIPI_GENERAZIONE_TEMPLATE %>" value="${procedura.tipoGenerazionePDF}" showEmptyOption="true" onchange="handleAttachments(this);">
 										<c:forEach items="${listaTipoGenerazionePDF}" var="tipoGenerazionePDF">
 											<c:set var="labelTipoGenerazionePDF" value="generazione-template_${tipoGenerazionePDF}" />
 											<aui:option value="${tipoGenerazionePDF}" label="${labelTipoGenerazionePDF}"></aui:option>
@@ -148,6 +148,35 @@
 					</aui:row>
 
 				</div>
+				
+				<div id="container-allegati-template" class="invisible">
+						
+						<aui:row>
+							<aui:col span="12" id="container-upload-allegati">
+							
+									<c:forEach items="${listaTemplatePdf}" var="templatePdf" varStatus="loop">
+										<div class="lfr-form-row lfr-form-row-inline">
+											<aui:input type="hidden" name="idAllegatoJasper${loop.index}" value="${templatePdf.templatePdfId}"/>
+											 <c:set var = "nomeFile" scope = "session" value = "${templatePdf.nomeFile}"/>
+											<aui:input type="file" name="jasperReportFile${loop.index}" label="allegato-jasper-report" value="${nomeFile}" />
+											<c:choose>
+												<c:when test="${templatePdf.templatePdfParentId > 0}">
+													<aui:input label="principale" type="checkbox" id="allegatoPrincipale${loop.index}" name="allegatoPrincipale${loop.index}" cssClass="checkboxPrincipaleAllegati" onClick="checkboxJasperReport(this);" checked="true"/>
+												</c:when>
+												
+												<c:otherwise>
+													<aui:input label="principale" type="checkbox" id="allegatoPrincipale${loop.index}" name="allegatoPrincipale${loop.index}" cssClass="checkboxPrincipaleAllegati" onClick="checkboxJasperReport(this);"/>
+												</c:otherwise>
+											
+											</c:choose>
+										</div>
+									</c:forEach>
+
+							</aui:col>
+						</aui:row>
+					
+				</div>
+				
 			</fieldset>
 			<aui:button-row cssClass="text-right">
 				<aui:button value="annulla" id="annulla" href="${homeURL}"/>
@@ -159,10 +188,64 @@
 
 </aui:row>
 
+<aui:script use="liferay-auto-fields">
+new Liferay.AutoFields({
+	contentBox: '#<portlet:namespace />container-upload-allegati',
+	fieldIndexes: '<portlet:namespace />rowIndexes',
+	 on: {
+       		'clone': function(event) {
+       			var ultimoInputFile = $("#container-allegati-template").find('input[type=file]:last');
+       			$(ultimoInputFile).val("");
+       		},
+       		'delete': function(event) {
+       			 console.log(event);
+	       		 var rowEliminata = event.deletedRow;
+	       		 rowEliminata = rowEliminata.replace('DIV','');
+	       		 console.log("Riga eliminata: " + rowEliminata);
+       		}
+       	}
+}).render();
+</aui:script>
+
 <script>
 
 var listaFormIdIntegrativi = ${listaFormIntegrativiProcedura};
 var listaTipiIntegrazioneBackoffice = ${listaTipoIntegrazioneBackofficeProcedura};
+var valueSelectAllegati = $('#<portlet:namespace />tipiGenerazioneTemplate').val();
+
+$( document ).ready(function() {
+	
+	    if(valueSelectAllegati=="JASPER_REPORT"){
+ 			$('#container-allegati-template').removeClass("invisible");
+	    }
+   
+});
+
+
+function checkboxJasperReport(checkbox){
+	
+	var idCheckboxSelezionata=$(checkbox).attr('id');
+	$(checkbox).prop("checked",true);
+	
+	$('.checkboxPrincipaleAllegati').each(function () {
+		if(idCheckboxSelezionata!=$(this).attr('id')){
+			$(this).prop("checked", false);
+		}
+	});
+	
+	return false;
+}
+
+function handleAttachments(selectObj) {
+	if (selectObj.value === "JASPER_REPORT") {
+		$('#container-allegati-template').removeClass("invisible");
+		$('#<portlet:namespace />allegatoPrincipale0').prop("checked",true);
+	} else {
+		$('#container-allegati-template').addClass("invisible");
+	}
+}
+
+
 
 if(listaFormIdIntegrativi!=="listaVuota"){
 	var arrayIdFormString = JSON.stringify(listaFormIdIntegrativi); 
@@ -176,7 +259,6 @@ if(listaTipiIntegrazioneBackoffice!=="listaVuota"){
 	console.log("tipiIntegrazioneBackoffice: " + tipiIntegrazioneBackoffice);
 	$('#<portlet:namespace />tipiIntegrazioneBackoffice').val(tipiIntegrazioneBackoffice);
 }
-
 
 
 </script>

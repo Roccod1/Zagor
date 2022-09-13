@@ -56,6 +56,10 @@ public class ProcessoTable extends BaseTable<ProcessoTable> {
 		"stato", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<ProcessoTable, String> deploymentId = createColumn(
 		"deploymentId", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<ProcessoTable, String> resourceId = createColumn(
+		"resourceId", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<ProcessoTable, Boolean> modificabile = createColumn(
+		"modificabile", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<ProcessoTable, Boolean> attivo = createColumn(
 		"attivo", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 

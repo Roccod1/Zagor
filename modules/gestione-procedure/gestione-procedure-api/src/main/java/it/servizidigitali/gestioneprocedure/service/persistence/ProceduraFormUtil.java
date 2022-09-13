@@ -485,8 +485,8 @@ public class ProceduraFormUtil {
 	 * @param proceduraId the procedura ID
 	 * @return the matching procedura forms
 	 */
-	public static List<ProceduraForm> findByproceduraId(long proceduraId) {
-		return getPersistence().findByproceduraId(proceduraId);
+	public static List<ProceduraForm> findByProceduraId(long proceduraId) {
+		return getPersistence().findByProceduraId(proceduraId);
 	}
 
 	/**
@@ -501,10 +501,10 @@ public class ProceduraFormUtil {
 	 * @param end the upper bound of the range of procedura forms (not inclusive)
 	 * @return the range of matching procedura forms
 	 */
-	public static List<ProceduraForm> findByproceduraId(
+	public static List<ProceduraForm> findByProceduraId(
 		long proceduraId, int start, int end) {
 
-		return getPersistence().findByproceduraId(proceduraId, start, end);
+		return getPersistence().findByProceduraId(proceduraId, start, end);
 	}
 
 	/**
@@ -520,11 +520,11 @@ public class ProceduraFormUtil {
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching procedura forms
 	 */
-	public static List<ProceduraForm> findByproceduraId(
+	public static List<ProceduraForm> findByProceduraId(
 		long proceduraId, int start, int end,
 		OrderByComparator<ProceduraForm> orderByComparator) {
 
-		return getPersistence().findByproceduraId(
+		return getPersistence().findByProceduraId(
 			proceduraId, start, end, orderByComparator);
 	}
 
@@ -542,12 +542,12 @@ public class ProceduraFormUtil {
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching procedura forms
 	 */
-	public static List<ProceduraForm> findByproceduraId(
+	public static List<ProceduraForm> findByProceduraId(
 		long proceduraId, int start, int end,
 		OrderByComparator<ProceduraForm> orderByComparator,
 		boolean useFinderCache) {
 
-		return getPersistence().findByproceduraId(
+		return getPersistence().findByProceduraId(
 			proceduraId, start, end, orderByComparator, useFinderCache);
 	}
 
@@ -559,13 +559,13 @@ public class ProceduraFormUtil {
 	 * @return the first matching procedura form
 	 * @throws NoSuchProceduraFormException if a matching procedura form could not be found
 	 */
-	public static ProceduraForm findByproceduraId_First(
+	public static ProceduraForm findByProceduraId_First(
 			long proceduraId,
 			OrderByComparator<ProceduraForm> orderByComparator)
 		throws it.servizidigitali.gestioneprocedure.exception.
 			NoSuchProceduraFormException {
 
-		return getPersistence().findByproceduraId_First(
+		return getPersistence().findByProceduraId_First(
 			proceduraId, orderByComparator);
 	}
 
@@ -576,10 +576,10 @@ public class ProceduraFormUtil {
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching procedura form, or <code>null</code> if a matching procedura form could not be found
 	 */
-	public static ProceduraForm fetchByproceduraId_First(
+	public static ProceduraForm fetchByProceduraId_First(
 		long proceduraId, OrderByComparator<ProceduraForm> orderByComparator) {
 
-		return getPersistence().fetchByproceduraId_First(
+		return getPersistence().fetchByProceduraId_First(
 			proceduraId, orderByComparator);
 	}
 
@@ -591,13 +591,13 @@ public class ProceduraFormUtil {
 	 * @return the last matching procedura form
 	 * @throws NoSuchProceduraFormException if a matching procedura form could not be found
 	 */
-	public static ProceduraForm findByproceduraId_Last(
+	public static ProceduraForm findByProceduraId_Last(
 			long proceduraId,
 			OrderByComparator<ProceduraForm> orderByComparator)
 		throws it.servizidigitali.gestioneprocedure.exception.
 			NoSuchProceduraFormException {
 
-		return getPersistence().findByproceduraId_Last(
+		return getPersistence().findByProceduraId_Last(
 			proceduraId, orderByComparator);
 	}
 
@@ -608,10 +608,10 @@ public class ProceduraFormUtil {
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching procedura form, or <code>null</code> if a matching procedura form could not be found
 	 */
-	public static ProceduraForm fetchByproceduraId_Last(
+	public static ProceduraForm fetchByProceduraId_Last(
 		long proceduraId, OrderByComparator<ProceduraForm> orderByComparator) {
 
-		return getPersistence().fetchByproceduraId_Last(
+		return getPersistence().fetchByProceduraId_Last(
 			proceduraId, orderByComparator);
 	}
 
@@ -624,7 +624,7 @@ public class ProceduraFormUtil {
 	 * @return the previous, current, and next procedura form
 	 * @throws NoSuchProceduraFormException if a procedura form with the primary key could not be found
 	 */
-	public static ProceduraForm[] findByproceduraId_PrevAndNext(
+	public static ProceduraForm[] findByProceduraId_PrevAndNext(
 			it.servizidigitali.gestioneprocedure.service.persistence.
 				ProceduraFormPK proceduraFormPK,
 			long proceduraId,
@@ -632,7 +632,7 @@ public class ProceduraFormUtil {
 		throws it.servizidigitali.gestioneprocedure.exception.
 			NoSuchProceduraFormException {
 
-		return getPersistence().findByproceduraId_PrevAndNext(
+		return getPersistence().findByProceduraId_PrevAndNext(
 			proceduraFormPK, proceduraId, orderByComparator);
 	}
 
@@ -641,8 +641,8 @@ public class ProceduraFormUtil {
 	 *
 	 * @param proceduraId the procedura ID
 	 */
-	public static void removeByproceduraId(long proceduraId) {
-		getPersistence().removeByproceduraId(proceduraId);
+	public static void removeByProceduraId(long proceduraId) {
+		getPersistence().removeByProceduraId(proceduraId);
 	}
 
 	/**
@@ -651,8 +651,8 @@ public class ProceduraFormUtil {
 	 * @param proceduraId the procedura ID
 	 * @return the number of matching procedura forms
 	 */
-	public static int countByproceduraId(long proceduraId) {
-		return getPersistence().countByproceduraId(proceduraId);
+	public static int countByProceduraId(long proceduraId) {
+		return getPersistence().countByProceduraId(proceduraId);
 	}
 
 	/**
