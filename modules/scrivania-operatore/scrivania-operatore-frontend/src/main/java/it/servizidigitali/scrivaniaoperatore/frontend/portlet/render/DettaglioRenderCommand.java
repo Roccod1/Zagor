@@ -6,6 +6,7 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.util.ParamUtil;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.portlet.PortletException;
@@ -17,6 +18,7 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.camunda.integration.client.model.Task;
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.AzioneUtente;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.service.ScrivaniaOperatoreFrontendService;
 import it.servizidigitali.scrivaniaoperatore.frontend.util.MapUtil;
@@ -63,6 +65,9 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 		
 		//TODO dimensione modello compilato dal cittadino
 		request.setAttribute("modelloArgs", "100 MB");
+		
+		List<AzioneUtente> azioni = scrivaniaOperatoreFrontendService.getAzioniUtenteDettaglioRichiesta(id, ctx);
+		
 		// TODO caricamento responsabili ed altri responsabili per modale
 		// List<User> responsabili =
 		// scrivaniaOperatoreFrontendService.getOrganizationUsersByRole(servizio.getSubOrganizationId(),
