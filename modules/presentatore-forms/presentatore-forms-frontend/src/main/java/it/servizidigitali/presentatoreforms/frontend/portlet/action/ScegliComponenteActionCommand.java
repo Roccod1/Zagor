@@ -1,10 +1,11 @@
-package it.servizidigitali.presentatoreforms.frontend.portlet.render;
+package it.servizidigitali.presentatoreforms.frontend.portlet.action;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -13,9 +14,8 @@ import com.liferay.portal.kernel.util.WebKeys;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.portlet.PortletException;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -35,17 +35,21 @@ import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStruct
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 
+/**
+ * @author pindi
+ *
+ */
 @Component(//
 		immediate = true, //
 		property = { //
 				"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
-				"mvc.command.name=" + PresentatoreFormsPortletKeys.HOME_RENDER_COMMAND //
+				"mvc.command.name=" + PresentatoreFormsPortletKeys.SCEGLI_COMPONENTE_ACTION_COMMAND//
 		}, //
-		service = MVCRenderCommand.class//
+		service = { MVCActionCommand.class }//
 )
-public class HomeRenderCommand implements MVCRenderCommand {
+public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 
-	public static final Log log = LogFactoryUtil.getLog(HomeRenderCommand.class);
+	public static final Log log = LogFactoryUtil.getLog(ScegliComponenteActionCommand.class);
 
 	@Reference
 	private PresentatoreFormFrontendService presentatoreFormFrontendService;
@@ -63,9 +67,9 @@ public class HomeRenderCommand implements MVCRenderCommand {
 	private AlpacaService alpacaService;
 
 	@Override
-	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
+	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 		Procedura procedura = null;
 		AlpacaJsonStructure alpacaStructure = null;
@@ -81,10 +85,10 @@ public class HomeRenderCommand implements MVCRenderCommand {
 			TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
 
 			if (Validator.isNotNull(alpacaStructure)) {
-				renderRequest.setAttribute("alpacaStructure", alpacaStructure);
+				actionRequest.setAttribute("alpacaStructure", alpacaStructure);
 			}
 
-			String codiceFiscaleComponente = ParamUtil.getString(renderRequest, PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE);
+			String codiceFiscaleComponente = ParamUtil.getString(actionRequest, PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE);
 			UserPreferences userPreferences = new UserPreferences();
 			userPreferences.setCodiceFiscaleRichiedente(themeDisplay.getUser().getScreenName());
 			userPreferences.setCodiceFiscaleComponente(codiceFiscaleComponente);
@@ -114,23 +118,19 @@ public class HomeRenderCommand implements MVCRenderCommand {
 			JsonObject jsonData = gson.fromJson(dataString, JsonObject.class);
 			alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
 
-			renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+			actionRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 
 			if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
-				return PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO;
-			}
-			else {
-				return PresentatoreFormsPortletKeys.JSP_COMPILA_FORM;
+				// TODO?
 			}
 		}
 		catch (Exception e) {
 			log.error(e);
-			// TODO gestire errori in pagina
+			actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO);
 		}
 
-		renderRequest.setAttribute("destinazioniUso", lstDestinazioniUso);
-
-		return PresentatoreFormsPortletKeys.JSP_HOME;
+		actionRequest.setAttribute("destinazioniUso", lstDestinazioniUso);
+		actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_COMPILA_FORM);
 
 	}
 
