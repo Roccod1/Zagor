@@ -160,13 +160,11 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<VariableInstance> getVariablesByTaskId(String tenantId, String taskId) throws CamundaClientException {
+	public List<VariableInstance> getVariablesByExecutionId(String tenantId, String executionId) throws CamundaClientException {
 		VariableInstanceApi api = new VariableInstanceApi(getApiClient());
-
 		try {
-
 			VariableInstanceQueryDto q = new VariableInstanceQueryDto();
-			q.setTaskIdIn(Arrays.asList(new String[] { taskId }));
+			q.setExecutionIdIn(Arrays.asList(new String[] { executionId }));
 
 			if (Validator.isNotNull(tenantId)) {
 				q.setTenantIdIn(Arrays.asList(tenantId));
@@ -174,9 +172,6 @@ public class CamundaClientImpl implements CamundaClient {
 
 			List<VariableInstanceDto> queryVariableInstances = api.queryVariableInstances(null, null, null, q);
 			return getVariableInstances(queryVariableInstances);
-
-			// return api.getVariableInstances(null, null, null, null, null, null, taskId, null,
-			// null, null, null, null, null, null, null, null, null, null, null);
 
 		}
 		catch (ApiException e) {
