@@ -74,8 +74,6 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 		Procedura procedura = null;
 		AlpacaJsonStructure alpacaStructure = null;
 
-		List<String> lstDestinazioniUso = getListaDestinazioniUso();
-
 		try {
 			procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
 			alpacaStructure = getAlpacaJsonStructure(procedura);
@@ -121,7 +119,9 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 			actionRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 
 			if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
-				// TODO?
+				List<String> lstDestinazioniUso = getListaDestinazioniUso();
+				actionRequest.setAttribute("destinazioniUso", lstDestinazioniUso);
+				// TODO
 			}
 		}
 		catch (Exception e) {
@@ -129,7 +129,6 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 			actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO);
 		}
 
-		actionRequest.setAttribute("destinazioniUso", lstDestinazioniUso);
 		actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_COMPILA_FORM);
 
 	}
