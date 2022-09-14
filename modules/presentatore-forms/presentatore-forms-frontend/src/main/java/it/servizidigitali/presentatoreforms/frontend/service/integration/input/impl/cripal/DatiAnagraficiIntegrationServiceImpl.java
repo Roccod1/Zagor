@@ -19,6 +19,7 @@ import it.servizidigitali.presentatoreforms.frontend.service.integration.Integra
 import it.servizidigitali.presentatoreforms.frontend.service.integration.exception.BackofficeServiceException;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.BackofficeIntegrationService;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.JsonEnrich;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.implementation.backoffice.DatiAnagraficiJsonEnrich;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.EnrichmentModel;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonOptionsStructure;
@@ -49,7 +50,7 @@ public class DatiAnagraficiIntegrationServiceImpl implements BackofficeIntegrati
 
 		DatiAnagrafici datiAnagrafici = getDatiAnagrafici(codiceFiscale, organizationId, integrationPreferences);
 		if (datiAnagrafici != null) {
-			List<JsonEnrich> jsonEnrichs = integrationServiceFactory.getJsonEnrichs();
+			List<DatiAnagraficiJsonEnrich> jsonEnrichs = integrationServiceFactory.getDatiAnagraficiJsonEnrichs();
 			if (jsonEnrichs != null) {
 				for (JsonEnrich jsonEnrich : jsonEnrichs) {
 					EnrichmentModel<?> enrichmentModel = new EnrichmentModel<>(alpacaJsonOptionsStructure, jsonObject, datiAnagrafici, organizationId, servizioId, userPreferences);

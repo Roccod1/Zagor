@@ -87,7 +87,8 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
-		log.info("render presentatore forms");
+
+		log.debug("render presentatore forms");
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
@@ -132,14 +133,13 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 						else {
 							try {
 
-								Long idFormMock = 52402L;
-								Form form = formLocalService.getForm(idFormMock);
-								form.setListaDefinizioneAllegato(definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idFormMock));
+								Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 
 								FormData formData = AlpacaUtil.loadFormData(form, null, true);
 								AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
 
 								UserPreferences userPreferences = new UserPreferences();
+								userPreferences.setCodiceFiscaleRichiedente(themeDisplay.getUser().getScreenName());
 
 								if (PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME) != null) {
 									userPreferences = (UserPreferences) PortalUtil.getHttpServletRequest(renderRequest).getSession()
