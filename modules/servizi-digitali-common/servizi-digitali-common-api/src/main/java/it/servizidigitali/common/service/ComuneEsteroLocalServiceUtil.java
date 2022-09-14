@@ -233,6 +233,12 @@ public class ComuneEsteroLocalServiceUtil {
 		return getService().getComuneEsteroByCodice(codice);
 	}
 
+	public static ComuneEstero getComuneEsteroByDenominazione(
+		String denominazione) {
+
+		return getService().getComuneEsteroByDenominazione(denominazione);
+	}
+
 	/**
 	 * Returns a range of all the comune esteros.
 	 *

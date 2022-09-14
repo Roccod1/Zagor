@@ -218,6 +218,9 @@ public interface ComuneEsteroLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ComuneEstero getComuneEsteroByCodice(int codice);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public ComuneEstero getComuneEsteroByDenominazione(String denominazione);
+
 	/**
 	 * Returns a range of all the comune esteros.
 	 *
