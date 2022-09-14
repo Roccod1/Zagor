@@ -18,7 +18,7 @@
 
 <div class="d-flex justify-content-start">
 	<a href="${dettaglioURL}" title="<liferay-ui:message key="vai-a-dettaglio" />">
-		<clay:icon symbol="search" />
+		<i class="fas fa-search"></i>
 	</a>
 
 	<c:if test="${queryTab == 'in-arrivo'}">
