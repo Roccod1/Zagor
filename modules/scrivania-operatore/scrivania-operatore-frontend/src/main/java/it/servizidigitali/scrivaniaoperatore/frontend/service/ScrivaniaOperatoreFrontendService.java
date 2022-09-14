@@ -214,12 +214,12 @@ public class ScrivaniaOperatoreFrontendService {
 			User currentUser = userLocalService.getUser(userId);
 
 			String tenantId = String.valueOf(serviceContext.getScopeGroup().getOrganizationId());
-			List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(idRichiesta), true);
+			List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(idRichiesta), false);
 			if (tasksByBusinessKey != null) {
 				for (Task task : tasksByBusinessKey) {
 					String assignee = task.getAssignee();
 					if (assignee != null && assignee.contentEquals(currentUser.getScreenName())) {
-						List<VariableInstance> variablesByTaskId = camundaClient.getVariablesByTaskId(tenantId, task.getId());
+						List<VariableInstance> variablesByTaskId = camundaClient.getVariablesByExecutionId(tenantId, task.getExecutionId());
 						if (variablesByTaskId != null) {
 							for (VariableInstance variableInstance : variablesByTaskId) {
 								azioniUtente.addAll(getActionByVariable(variableInstance));
