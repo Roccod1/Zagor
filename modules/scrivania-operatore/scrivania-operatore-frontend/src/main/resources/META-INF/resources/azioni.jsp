@@ -8,6 +8,7 @@
 <portlet:renderURL var="dettaglioURL">
 	<portlet:param name="mvcRenderCommandName" value="/render/dettaglio" />
 	<portlet:param name="id" value="<%= String.valueOf(richiesta.getId()) %>" />
+	<portlet:param name="isMain" value="false" />
 </portlet:renderURL>
 
 <portlet:actionURL var="prendiInCaricoURL" name="/action/prendiInCarico">
