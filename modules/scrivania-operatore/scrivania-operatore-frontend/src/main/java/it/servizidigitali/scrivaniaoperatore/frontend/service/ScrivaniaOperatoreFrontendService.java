@@ -217,7 +217,8 @@ public class ScrivaniaOperatoreFrontendService {
 			List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(idRichiesta), true);
 			if (tasksByBusinessKey != null) {
 				for (Task task : tasksByBusinessKey) {
-					if (task.getAssignee().contentEquals(currentUser.getScreenName().toUpperCase())) {
+					String assignee = task.getAssignee();
+					if (assignee != null && assignee.contentEquals(currentUser.getScreenName())) {
 						List<VariableInstance> variablesByTaskId = camundaClient.getVariablesByTaskId(tenantId, task.getId());
 						if (variablesByTaskId != null) {
 							for (VariableInstance variableInstance : variablesByTaskId) {
