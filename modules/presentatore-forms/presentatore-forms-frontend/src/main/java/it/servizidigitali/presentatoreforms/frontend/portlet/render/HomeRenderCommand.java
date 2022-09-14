@@ -28,6 +28,7 @@ import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.exception.BackofficeServiceException;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
@@ -44,7 +45,7 @@ import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 )
 public class HomeRenderCommand implements MVCRenderCommand {
 
-	public static final Log _log = LogFactoryUtil.getLog(HomeRenderCommand.class);
+	public static final Log log = LogFactoryUtil.getLog(HomeRenderCommand.class);
 
 	@Reference
 	private PresentatoreFormFrontendService presentatoreFormFrontendService;
@@ -90,7 +91,30 @@ public class HomeRenderCommand implements MVCRenderCommand {
 
 			Gson gson = new Gson();
 			JsonObject data = gson.fromJson(gson.toJson(alpacaStructure.getData()), JsonObject.class);
-			alpacaService.loadData(data, gson.toJson(alpacaStructure.getSchema()), gson.toJson(alpacaStructure.getOptions()), procedura, userPreferences);
+			try {
+				alpacaService.loadData(data, gson.toJson(alpacaStructure.getSchema()), gson.toJson(alpacaStructure.getOptions()), procedura, userPreferences);
+				alpacaStructure.setData(data);
+			}
+			catch (BackofficeServiceException e) {
+				log.error("render :: " + e.getMessage(), e);
+				alpacaStructure.setData(data);
+
+				if (e.getConditionCode() != 0) {
+					throw e;
+				}
+
+				if (tipoServizio != null && tipoServizio.equals(TipoServizio.VISURA) || tipoServizio.equals(TipoServizio.CERTIFICATO)) {
+					log.error("renderizzaAlpacaForm :: impossibile caricare le informazioni dal backoffice per il Comune : " + themeDisplay.getScopeGroup().getName() + " :: " + e.getMessage(), e);
+					throw e;
+				}
+			}
+
+			// Sostituzione valore di data
+			String dataString = gson.toJson(alpacaStructure.getData());
+			JsonObject jsonData = gson.fromJson(dataString, JsonObject.class);
+			alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
+
+			renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 
 			if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 				return PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO;
@@ -100,7 +124,8 @@ public class HomeRenderCommand implements MVCRenderCommand {
 			}
 		}
 		catch (Exception e) {
-			_log.error(e);
+			log.error(e);
+			// TODO gestire errori in pagina
 		}
 
 		renderRequest.setAttribute("destinazioniUso", lstDestinazioniUso);
