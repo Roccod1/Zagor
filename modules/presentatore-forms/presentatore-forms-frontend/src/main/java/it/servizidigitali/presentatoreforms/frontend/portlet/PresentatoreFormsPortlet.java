@@ -45,6 +45,9 @@ import it.servizidigitali.presentatoreforms.frontend.service.integration.input.j
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
+import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalServiceUtil;
 
 /**
  * @author pindi
@@ -106,14 +109,18 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
 				return;
 			}
-
+			
+			// TODO: Recuperare richiesta bozza per l'utente
+			
+			Richiesta richiesta = RichiestaLocalServiceUtil.createRichiesta(14);
+			richiesta.setStato(StatoRichiesta.BOZZA.name());
 			boolean stepComponentiFamiliari = procedura.getStep1Attivo();
 			String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
 
-			boolean bozza = false;
-
-			if (bozza) {
-				include(PresentatoreFormsPortletKeys.JSP_HOME, renderRequest, renderResponse);
+			if (Validator.isNotNull(richiesta) && richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
+				renderRequest.setAttribute("richiestaId", richiesta.getRichiestaId());
+				include("/home.jsp", renderRequest, renderResponse);
+				presentatoreFormFrontendService.deleteRichiesteBozzaUtente(themeDisplay.getUser().getScreenName(), procedura.getProceduraId());
 			}
 			else {
 				String mvcRenderCommandName = ParamUtil.getString(renderRequest, "mvcRenderCommandName");
