@@ -6,6 +6,8 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.util.ParamUtil;
 
+import java.util.Map;
+
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -13,6 +15,7 @@ import javax.portlet.RenderResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.camunda.integration.client.model.Task;
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.service.ScrivaniaOperatoreFrontendService;
@@ -51,9 +54,12 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 		}
 
 		RichiestaDTO richiesta = mapUtil.mapRichiesta(ctx.getCompanyId(), richiestaLocalService.fetchRichiesta(id));
-
+		Map<String, Task> userTasks = scrivaniaOperatoreFrontendService.getUserTasks(ctx);
+		boolean inCarico = userTasks.containsKey(richiesta.getProcessInstanceId());
+				
 		request.setAttribute("richiesta", richiesta);
-
+		request.setAttribute("inCarico", inCarico);
+		
 		// TODO caricamento responsabili ed altri responsabili per modale
 		// List<User> responsabili =
 		// scrivaniaOperatoreFrontendService.getOrganizationUsersByRole(servizio.getSubOrganizationId(),

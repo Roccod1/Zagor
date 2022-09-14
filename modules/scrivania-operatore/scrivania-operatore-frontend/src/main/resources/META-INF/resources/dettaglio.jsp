@@ -1,6 +1,27 @@
 <%@ include file="init.jsp" %>
 
-<h1><liferay-ui:message key="dati-richiedente" /></h1>
+<div class="d-flex justify-content-start">
+	<h1><liferay-ui:message key="dati-richiedente" /></h1>
+	<c:choose>
+		<c:when test="${richiesta.accesso}">
+			<clay:icon symbol="lock" />
+		</c:when>
+		<c:otherwise>
+			<clay:icon symbol="unlock" />
+		</c:otherwise>
+	</c:choose>
+</div>
+
+<c:if test="${inCarico}">
+	<div class="row">
+		<button class="btn btn-primary mr-1 mt-1"><liferay-ui:message key="assegna-altro-responsabile" /></button>
+		<button class="btn btn-primary mr-1 mt-1"><liferay-ui:message key="assegna-responsabile" /></button>
+		<button class="btn btn-primary mr-1 mt-1"><liferay-ui:message key="chiudi-esito-positivo" /></button>
+		<button class="btn btn-primary mr-1 mt-1"><liferay-ui:message key="chiudi-esito-negativo" /></button>
+		<button class="btn btn-primary mr-1 mt-1"><liferay-ui:message key="richiedi-modifiche-integrazioni-richiedente" /></button>
+		<button class="btn btn-primary mr-1 mt-1"><liferay-ui:message key="rilascia" /></button>
+	</div>
+</c:if>
 
 <div class="row">
 	<div class="col-6">
@@ -102,4 +123,14 @@
 		<aui:input name="data-protocollo-esito" value="${richiestaDataProtocolloEsterno}" readonly="true" />
 	</div>
 </div>
+
+<div class="row d-flex justify-content-end">
+	<button class="btn btn-primary mr-1">
+		<liferay-ui:message key="scarica-visualizza-modello-compilato-cittadino" arguments="10 kB" />
+	</button>
+	<button class="btn btn-primary">
+		<liferay-ui:message key="salva-dati-protocollo" />
+	</button>
+</div>
+
 
