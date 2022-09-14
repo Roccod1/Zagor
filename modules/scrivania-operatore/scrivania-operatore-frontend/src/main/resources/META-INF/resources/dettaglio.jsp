@@ -1,7 +1,11 @@
 <%@ include file="init.jsp" %>
 
+<h2>
+	<liferay-ui:message key="dati-dettaglio-pratica" arguments="${titleArgs}" />
+</h2>
+
 <div class="d-flex justify-content-start">
-	<h1><liferay-ui:message key="dati-richiedente" /></h1>
+	<h3><liferay-ui:message key="dati-richiedente" /></h3>
 	<c:choose>
 		<c:when test="${richiesta.accesso}">
 			<clay:icon symbol="lock" />
@@ -62,7 +66,7 @@
 	</div>
 </div>
 
-<h1><liferay-ui:message key="dati-richiesta" /></h1>
+<h3><liferay-ui:message key="dati-richiesta" /></h3>
 
 <div class="row">
 	<div class="col-6">
@@ -126,7 +130,7 @@
 
 <div class="row d-flex justify-content-end">
 	<button class="btn btn-primary mr-1">
-		<liferay-ui:message key="scarica-visualizza-modello-compilato-cittadino" arguments="10 kB" />
+		<liferay-ui:message key="scarica-visualizza-modello-compilato-cittadino" arguments="${modelloArgs}" />
 	</button>
 	<button class="btn btn-primary">
 		<liferay-ui:message key="salva-dati-protocollo" />

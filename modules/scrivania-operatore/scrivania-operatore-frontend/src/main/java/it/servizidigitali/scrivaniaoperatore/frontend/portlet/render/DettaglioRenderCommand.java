@@ -59,7 +59,10 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 				
 		request.setAttribute("richiesta", richiesta);
 		request.setAttribute("inCarico", inCarico);
+		request.setAttribute("titleArgs", new String[] { String.valueOf(richiesta.getId()), richiesta.getServizio() });
 		
+		//TODO dimensione modello compilato dal cittadino
+		request.setAttribute("modelloArgs", "100 MB");
 		// TODO caricamento responsabili ed altri responsabili per modale
 		// List<User> responsabili =
 		// scrivaniaOperatoreFrontendService.getOrganizationUsersByRole(servizio.getSubOrganizationId(),
