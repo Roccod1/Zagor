@@ -53,7 +53,7 @@ public class IntegrationServiceFactory {
 	private volatile List<DatiAnagraficiGeneraliJsonEnrich> datiAnagraficiGeneraliJsonEnrichs;
 
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-	private volatile List<DatiElettoraliJsonEnrich> elettoraliJsonEnrichs;
+	private volatile List<DatiElettoraliJsonEnrich> datiElettoraliJsonEnrichs;
 
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 	private volatile List<DatiVariazioneDomicilioJsonEnrich> datiVariazioneDomicilioJsonEnrichs;
@@ -176,8 +176,8 @@ public class IntegrationServiceFactory {
 	/**
 	 * @return the elettoraliJsonEnrichs
 	 */
-	public List<DatiElettoraliJsonEnrich> getElettoraliJsonEnrichs() {
-		return elettoraliJsonEnrichs;
+	public List<DatiElettoraliJsonEnrich> getDatiElettoraliJsonEnrichs() {
+		return datiElettoraliJsonEnrichs;
 	}
 
 	/**
