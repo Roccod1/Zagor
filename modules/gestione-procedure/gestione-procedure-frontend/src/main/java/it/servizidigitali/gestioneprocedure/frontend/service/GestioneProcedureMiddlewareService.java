@@ -369,6 +369,42 @@ public class GestioneProcedureMiddlewareService {
 		
 	}
 	
+	public void aggiornaPrincipaleTemplatePdf(TemplatePdf templatePrincipale, long templatePdfId) {
+
+		List<TemplatePdf> listaTemplateProcedura = recuperaTemplatePdfProceduraAttivo(templatePrincipale.getProceduraId(),true);
+		
+		try {
+			
+			if(Validator.isNotNull(listaTemplateProcedura) && !listaTemplateProcedura.isEmpty()) {
+								
+				// Aggiorno tutti i figli
+				
+				for(TemplatePdf templatePdf : listaTemplateProcedura) {
+					if(templatePdf.getTemplatePdfParentId()==templatePrincipale.getTemplatePdfId()) {
+						templatePdf.setTemplatePdfParentId(templatePdfId);
+						templatePdfLocalService.updateTemplatePdf(templatePdf);
+					}
+				}
+				
+				templatePrincipale.setTemplatePdfParentId(templatePdfId);
+				templatePdfLocalService.updateTemplatePdf(templatePrincipale);
+				
+				// Aggiorno il nuovo principale
+				
+				TemplatePdf templatePdfNuovoPrincipale = templatePdfLocalService.getTemplatePdf(templatePdfId);
+				
+				if(Validator.isNotNull(templatePdfNuovoPrincipale)) {
+					templatePdfNuovoPrincipale.setTemplatePdfParentId(0);
+					templatePdfLocalService.updateTemplatePdf(templatePdfNuovoPrincipale);
+				}
+			}		
+
+		}catch(Exception e) {
+			_log.error("Errore durante l'aggiornamento del report principale!");
+		}
+
+	}
+	
 	
 	public List<TemplatePdf> recuperaTemplatePdfProceduraAttivo(long proceduraId, boolean attivo){
 		List<TemplatePdf> listaTemplatePdf = null;
@@ -444,6 +480,7 @@ public class GestioneProcedureMiddlewareService {
 		}
 
 	}
+	
 	
 	public TemplatePdf recuperaTemplatePdfPrincipale (long proceduraId) {
 		TemplatePdf template = null;

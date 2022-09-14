@@ -158,8 +158,15 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		if(Validator.isNotNull(tipoGenerazioneTemplate) && tipoGenerazioneTemplate.equalsIgnoreCase(TipoGenerazionePDF.JASPER_REPORT.name())) {
 			List<Long> listaReportDaMantenere = new ArrayList<Long>();
 			TemplatePdf templateCaricato = null;
+			TemplatePdf templatePrincipaleProcedura = null;
 			if(Validator.isNotNull(rowIndexes)) {
-			   	for (int i = 0; i < rowIndexes.length; i++) {
+				long reportIdNuovoPrincipale = 0;
+			   	
+				if(idProcedura>0) {
+			   		templatePrincipaleProcedura = gestioneProcedureMiddlewareService.recuperaTemplatePdfPrincipale(idProcedura);
+			   	}
+				
+				for (int i = 0; i < rowIndexes.length; i++) {
 			             boolean principale = ParamUtil.getBoolean(actionRequest, "allegatoPrincipale" + rowIndexes[i]);
 			             long reportId = ParamUtil.getLong(actionRequest, "idAllegatoJasper" + rowIndexes[i]);
 			             File file = uploadPortletRequest.getFile("jasperReportFile" + i);
@@ -167,6 +174,12 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 			             
 			             if(reportId>0) {
 			            	 listaReportDaMantenere.add(reportId);
+			             }
+			             
+			             if(Validator.isNotNull(templatePrincipaleProcedura)) {
+			            	 if(principale && templatePrincipaleProcedura.getTemplatePdfId()!=reportId) {
+			            		 reportIdNuovoPrincipale = reportId;
+			            	 }
 			             }
 			             
 			             if(Validator.isNotNull(file)) {
@@ -178,6 +191,10 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 			            	 }
 			             }
 			              
+			   	}
+			   	
+			   	if(reportIdNuovoPrincipale>0) {
+			   		gestioneProcedureMiddlewareService.aggiornaPrincipaleTemplatePdf(templatePrincipaleProcedura, reportIdNuovoPrincipale);
 			   	}
 			   	
 	             gestioneProcedureMiddlewareService.cancellaTemplatePdf(listaReportDaMantenere, procedura.getProceduraId());
