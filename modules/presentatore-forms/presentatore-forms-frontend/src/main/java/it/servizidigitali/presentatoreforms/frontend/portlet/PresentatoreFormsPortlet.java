@@ -113,7 +113,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 			boolean bozza = false;
 
 			if (bozza) {
-				include("/home.jsp", renderRequest, renderResponse);
+				include(PresentatoreFormsPortletKeys.JSP_HOME, renderRequest, renderResponse);
 			}
 			else {
 				String mvcRenderCommandName = ParamUtil.getString(renderRequest, "mvcRenderCommandName");
