@@ -58,20 +58,21 @@ public class GetPagamentiCittadinoResourceCommand extends BaseMVCResourceCommand
 //	       int delta = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_DELTA_PARAM);
 		String sortName = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		String sortType = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
-
+		String filterStatoPagamento = ParamUtil.getString(resourceRequest, ScrivaniaCittadinoPortletKeys.FILTER_STATO_PAGAMENTO);
+		String filterOggettoNote = ParamUtil.getString(resourceRequest, ScrivaniaCittadinoPortletKeys.FILTER_OGGETTO_PAGAMENTO);
 		try {
 			serviceContext = ServiceContextFactory.getInstance(resourceRequest);
 			themeDisplay = serviceContext.getThemeDisplay();
 			User loggedUser = themeDisplay.getUser();
 
 			listaPagamenti = scrivaniaCittadinoMiddlewareService.getPagamentiUtente(loggedUser.getScreenName(),
-					themeDisplay.getCompanyId(), themeDisplay.getSiteGroup().getOrganizationId(),
-					themeDisplay.getSiteGroup().getGroupId(), true, cur, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
+					filterOggettoNote, filterStatoPagamento, themeDisplay.getCompanyId(), themeDisplay.getSiteGroup().getOrganizationId(),
+					themeDisplay.getSiteGroup().getGroupId(), true, cur, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA, sortName, sortType);
 
 			List<Richiesta> paginaSuccessiva = scrivaniaCittadinoMiddlewareService.getPagamentiUtente(
-					loggedUser.getScreenName(), themeDisplay.getCompanyId(),
+					loggedUser.getScreenName(), filterOggettoNote, filterStatoPagamento, themeDisplay.getCompanyId(),
 					themeDisplay.getSiteGroup().getOrganizationId(), themeDisplay.getSiteGroup().getGroupId(), true,
-					cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
+					cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA, sortName, sortType);
 			if (Validator.isNotNull(paginaSuccessiva) && !paginaSuccessiva.isEmpty()) {
 				hasNext = true;
 			}

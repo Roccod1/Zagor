@@ -38,12 +38,13 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 	@Override
 	public List<Richiesta> findByFilters(RichiestaFilters filters, int start, int end) {
 		DynamicQuery dq = createQuery(filters);
-		OrderByComparator<Richiesta> orderByComparator = null;
-		if(Validator.isNotNull(filters.getOrderByCol())) {
+		
+		if(Validator.isNotNull(filters.getOrderByCol())){
 			boolean orderByType = "asc".equals(filters.getOrderByType()) ? true : false;
-			orderByComparator = OrderByComparatorFactoryUtil.create(Richiesta.class.getSimpleName(), filters.getOrderByCol(), orderByType);
+			OrderByComparator<Richiesta> orderByComparator = OrderByComparatorFactoryUtil.create(Richiesta.class.getSimpleName(), Validator.isNotNull(filters.getOrderByCol()) ? filters.getOrderByCol() : "createDate", orderByType);
+			return richiestaPersistence.findWithDynamicQuery(dq, start, end, orderByComparator);			
 		}
-		return richiestaPersistence.findWithDynamicQuery(dq, start, end, orderByComparator);
+		return richiestaPersistence.findWithDynamicQuery(dq, start, end);			
 	}
 
 	@Override

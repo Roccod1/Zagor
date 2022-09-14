@@ -29,7 +29,7 @@
 		</div>
 		
 		<div class="col">
-			<aui:select name="sortByNameRichiesta" label="stato">
+			<aui:select name="sortByNameRichiesta" label="ordina-per">
 				<aui:option value=""><liferay-ui:message key="seleziona-opzione"/></aui:option>
 				<aui:option value="createDate"><liferay-ui:message key="data-creazione"/></aui:option>
 				<aui:option value="modifiedDate"><liferay-ui:message key="data-modifica"/></aui:option>
@@ -40,10 +40,10 @@
 			<label><liferay-ui:message key="direzione"/></label>
 			<input type="hidden" id="<portlet:namespace/>orderByTypeRichiesta"/>
 			<div class="form-check">
-				<aui:input type="radio" name="orderByType" id="orderByTypeAsc" class="form-check-input" label="crescente" value="asc" onclick="setSortTypeValue('orderByTypeRichiesta',this)"/>
+				<aui:input type="radio" name="orderByType" id="orderByTypeAscRichiesta" class="form-check-input" label="crescente" value="asc" onclick="setSortTypeValue('orderByTypeRichiesta',this)"/>
 			</div>
 			<div class="form-check">
-				<aui:input type="radio" name="orderByType" id="orderByTypeDesc" class="form-check-input" label="decrescente" value="desc" onclick="setSortTypeValue('orderByTypeRichiesta',this)"/>
+				<aui:input type="radio" name="orderByType" id="orderByTypeDescRichiesta" class="form-check-input" label="decrescente" value="desc" onclick="setSortTypeValue('orderByTypeRichiesta',this)"/>
 			</div>			
 		</div>
 		
@@ -73,10 +73,33 @@
 		<div class="col">
 			<aui:select name="filterStatoPagamento" label="stato">
 				<aui:option value=""><liferay-ui:message key="seleziona-opzione"/></aui:option>
-				<c:forEach items="${listaStato }" var="statoComunicazione">
-					<aui:option value="${statoComunicazione}">${statoComunicazione.toString().replace("_", " ")}</aui:option>
+				<c:forEach items="${listaStato }" var="statoRichiesta">
+					<aui:option value="${statoRichiesta}">${statoRichiesta.toString().replace("_", " ")}</aui:option>
 				</c:forEach>
 			</aui:select>			
+		</div>
+		
+		<div class="col">
+			<aui:select name="sortByNamePagamento" label="ordina-per">
+				<aui:option value=""><liferay-ui:message key="seleziona-opzione"/></aui:option>
+				<aui:option value="createDate"><liferay-ui:message key="data-creazione"/></aui:option>
+				<aui:option value="modifiedDate"><liferay-ui:message key="data-modifica"/></aui:option>
+			</aui:select>			
+		</div>
+		
+		<div class="col">
+			<label><liferay-ui:message key="direzione"/></label>
+			<input type="hidden" id="<portlet:namespace/>orderByTypePagamento"/>
+			<div class="form-check">
+				<aui:input type="radio" name="orderByType" id="orderByTypeAscPagamento" class="form-check-input" label="crescente" value="asc" onclick="setSortTypeValue('orderByTypePagamento',this)"/>
+			</div>
+			<div class="form-check">
+				<aui:input type="radio" name="orderByType" id="orderByTypeDescPagamento" class="form-check-input" label="decrescente" value="desc" onclick="setSortTypeValue('orderByTypePagamento',this)"/>
+			</div>			
+		</div>
+		
+		<div class="col-12">
+			<button class="btn btn-primary" type="button" onclick="getPagamentiUtente(1)"><liferay-ui:message key="cerca"/></button>
 		</div>
 	</div>
 	<div class="row">
@@ -271,8 +294,8 @@
 		
 		var params = {
 			'<portlet:namespace/>cur': cur,
-			'<portlet:namespace/>orderByCol': '',
-			'<portlet:namespace/>orderByType': '',
+			'<portlet:namespace/>orderByCol': $("#<portlet:namespace/>sortByNamePagamento").val(),
+			'<portlet:namespace/>orderByType': $("#<portlet:namespace/>orderByTypePagamento").val(),
 			'<portlet:namespace/>filterOggettoPagamento': $("#<portlet:namespace/>filterOggettoPagamento").val(),
 			'<portlet:namespace/>filterStatoPagamento': $("#<portlet:namespace/>filterStatoPagamento").val(),
 		}

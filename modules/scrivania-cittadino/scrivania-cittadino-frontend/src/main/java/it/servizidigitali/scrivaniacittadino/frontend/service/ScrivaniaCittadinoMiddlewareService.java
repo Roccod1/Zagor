@@ -4,6 +4,7 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,26 +47,30 @@ public class ScrivaniaCittadinoMiddlewareService {
 	private TipologiaLocalService tipologiaLocalService;
 
 	
-	public List<Richiesta> getPagamentiUtente(String codiceFiscale, long companyId, long organizationId, long groupId, boolean attivo, int cur, int delta) throws Exception {
+	public List<Richiesta> getPagamentiUtente(String codiceFiscale, String filterOggettoNote, String stato, long companyId, long organizationId, long groupId, boolean attivo, int cur, int delta, String orderByCol, String orderByType) throws Exception {
 
 		try {
 			
 			List<Long> listaIdServizi = new ArrayList<Long>();
 			Set<Long> setIdProcedura = new HashSet<Long>();
-
-//			List<Tipologia> listaTipologieServizio = tipologiaLocalService.getTipologias(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-//			List<Tipologia> listaServiziPagamento = listaTipologieServizio.stream().filter(x -> TipoServizio.PAGAMENTO.toString().equalsIgnoreCase(x.getNome())).collect(Collectors.toList());
+			long tipologiaIdPagamento = 0;
 			
-//			List<Servizi> test = tipologiaLocalService.get
+			List<Tipologia> listaTipologieServizio = tipologiaLocalService.getTipologias(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 			
-			List<Object> listaServiziAttiviEnte = servizioEnteLocalService.getListaServiziByCompanyOrganizationAttivo(companyId, organizationId, attivo);
-
-			List<Servizio> listaServizi = servizioLocalService.getServiziUtilizzabili(listaServiziAttiviEnte, "", 0, 0, QueryUtil.ALL_POS, QueryUtil.ALL_POS, "", "");
-
-			listaServizi.stream().forEach(servizio -> listaIdServizi.add(servizio.getServizioId()));
-
+			List<Tipologia> listaTipologiaPagamento = listaTipologieServizio.stream().filter(x -> TipoServizio.PAGAMENTO.toString().equalsIgnoreCase(x.getNome())).collect(Collectors.toList());
+			if(Validator.isNull(listaTipologiaPagamento) || listaTipologiaPagamento.isEmpty()) {
+				throw new RuntimeException("Impossibile ottenere idTipologia per Tipologia: "+TipoServizio.PAGAMENTO);
+			}
+			tipologiaIdPagamento = listaTipologiaPagamento.get(0).getTipologiaId();
+			
+			List<Servizio> listServiziByTupologia = servizioLocalService.getTipologiaServizios(tipologiaIdPagamento);
+			listServiziByTupologia.stream().forEach(servizio -> listaIdServizi.add(servizio.getServizioId()));
 			List<Procedura> listaProcedure = proceduraLocalService.getProcedureByServiziIdsGroupIdAttiva(listaIdServizi, groupId, attivo);
-
+			
+			if(Validator.isNull(listaProcedure) || listaProcedure.isEmpty()) {
+				throw new RuntimeException("Nessuna procedura legata a servizi di pagamento");
+			}
+			
 			listaProcedure.stream().forEach(procedura -> setIdProcedura.add(procedura.getProceduraId()));
 
 			RichiestaFilters richiestaFilter = new RichiestaFilters();
@@ -73,8 +78,22 @@ public class ScrivaniaCittadinoMiddlewareService {
 			richiestaFilter.setCodiceFiscale(codiceFiscale);
 			richiestaFilter.setCompanyId(companyId);
 			richiestaFilter.setGroupId(groupId);
-			richiestaFilter.setTipo(TipoServizio.PAGAMENTO.toString());
 			
+			if(Validator.isNotNull(filterOggettoNote)) {
+				richiestaFilter.setOggettoNote(filterOggettoNote);
+			}
+			
+			if(Validator.isNotNull(stato)) {
+				richiestaFilter.setTipo(stato);				
+			}
+			
+			if(Validator.isNotNull(orderByCol)) {
+				richiestaFilter.setOrderByCol(orderByCol);				
+			}
+
+			if(Validator.isNotNull(orderByType)) {
+				richiestaFilter.setOrderByType(orderByType);				
+			}			
 			
 			int startEnd[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
 			int start = startEnd[0];
