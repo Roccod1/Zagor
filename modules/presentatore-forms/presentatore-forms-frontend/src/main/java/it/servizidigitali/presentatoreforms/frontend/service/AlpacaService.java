@@ -20,6 +20,7 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.backoffice.integration.enums.TipoIntegrazione;
 import it.servizidigitali.backoffice.integration.enums.TipoIntegrazioneBackoffice;
 import it.servizidigitali.backoffice.integration.model.commmon.IntegrationPreferences;
+import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
@@ -94,9 +95,10 @@ public class AlpacaService {
 
 		Organization organization = organizationLocalService.getOrganization(organizationId);
 		if (organization != null && organization.isRoot()) {
-			Serializable tipoIntegrazioneSerializable = organization.getExpandoBridge().getAttribute("tipoIntegrazione");
+			Serializable tipoIntegrazioneSerializable = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.TIPO_INTEGRAZIONE.getNomeAttributo());
+			String[] tipoIntegrazioneSerializableStrings = (String[]) tipoIntegrazioneSerializable;
 
-			TipoIntegrazione tipoIntegrazione = TipoIntegrazione.valueOf(tipoIntegrazioneSerializable.toString());
+			TipoIntegrazione tipoIntegrazione = TipoIntegrazione.valueOf(tipoIntegrazioneSerializableStrings[0].toString());
 
 			Map<TipoIntegrazione, Map<String, it.servizidigitali.presentatoreforms.frontend.service.integration.output.IntegrationService>> outputBackofficeIntegrationServicesMap = integrationServiceFactory
 					.getOutputBackofficeIntegrationServicesMap();
@@ -137,10 +139,11 @@ public class AlpacaService {
 		// Enrichment sulla base del tipo di integrazione previsto dal Comune e sul tipo
 		// di TipoIntegrazioneBackoffice
 		if (organization != null && organization.isRoot()) {
-			Serializable anprSerializable = organization.getExpandoBridge().getAttribute("anpr");
-			Serializable tipoIntegrazioneSerializable = organization.getExpandoBridge().getAttribute("tipoIntegrazione");
+			Serializable anprSerializable = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.ANPR.getNomeAttributo());
+			Serializable tipoIntegrazioneSerializable = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.TIPO_INTEGRAZIONE.getNomeAttributo());
+			String[] tipoIntegrazioneSerializableStrings = (String[]) tipoIntegrazioneSerializable;
 
-			TipoIntegrazione tipoIntegrazione = TipoIntegrazione.valueOf(tipoIntegrazioneSerializable.toString());
+			TipoIntegrazione tipoIntegrazione = TipoIntegrazione.valueOf(tipoIntegrazioneSerializableStrings[0].toString());
 
 			// Verifica integrazione ANPR (che deve vincere sui servizi di Backoffice Anagrafici)
 			boolean usaANPR = Boolean.parseBoolean(anprSerializable.toString());

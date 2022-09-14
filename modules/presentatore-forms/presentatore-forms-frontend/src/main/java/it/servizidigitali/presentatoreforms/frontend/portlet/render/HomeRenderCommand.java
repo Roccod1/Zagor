@@ -1,9 +1,12 @@
 package it.servizidigitali.presentatoreforms.frontend.portlet.render;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -25,16 +28,24 @@ import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.exception.BackofficeServiceException;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 
-@Component(immediate = true, property = { "javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS,
-		"mvc.command.name=" + PresentatoreFormsPortletKeys.HOME_RENDER_COMMAND }, service = MVCRenderCommand.class)
+@Component(//
+		immediate = true, //
+		property = { //
+				"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
+				"mvc.command.name=" + PresentatoreFormsPortletKeys.HOME_RENDER_COMMAND //
+		}, //
+		service = MVCRenderCommand.class//
+)
 public class HomeRenderCommand implements MVCRenderCommand {
 
-	public static final Log _log = LogFactoryUtil.getLog(HomeRenderCommand.class);
+	public static final Log log = LogFactoryUtil.getLog(HomeRenderCommand.class);
 
 	@Reference
 	private PresentatoreFormFrontendService presentatoreFormFrontendService;
@@ -73,6 +84,38 @@ public class HomeRenderCommand implements MVCRenderCommand {
 				renderRequest.setAttribute("alpacaStructure", alpacaStructure);
 			}
 
+			String codiceFiscaleComponente = ParamUtil.getString(renderRequest, PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE);
+			UserPreferences userPreferences = new UserPreferences();
+			userPreferences.setCodiceFiscaleRichiedente(themeDisplay.getUser().getScreenName());
+			userPreferences.setCodiceFiscaleComponente(codiceFiscaleComponente);
+
+			Gson gson = new Gson();
+			JsonObject data = gson.fromJson(gson.toJson(alpacaStructure.getData()), JsonObject.class);
+			try {
+				alpacaService.loadData(data, gson.toJson(alpacaStructure.getSchema()), gson.toJson(alpacaStructure.getOptions()), procedura, userPreferences);
+				alpacaStructure.setData(data);
+			}
+			catch (BackofficeServiceException e) {
+				log.error("render :: " + e.getMessage(), e);
+				alpacaStructure.setData(data);
+
+				if (e.getConditionCode() != 0) {
+					throw e;
+				}
+
+				if (tipoServizio != null && tipoServizio.equals(TipoServizio.VISURA) || tipoServizio.equals(TipoServizio.CERTIFICATO)) {
+					log.error("renderizzaAlpacaForm :: impossibile caricare le informazioni dal backoffice per il Comune : " + themeDisplay.getScopeGroup().getName() + " :: " + e.getMessage(), e);
+					throw e;
+				}
+			}
+
+			// Sostituzione valore di data
+			String dataString = gson.toJson(alpacaStructure.getData());
+			JsonObject jsonData = gson.fromJson(dataString, JsonObject.class);
+			alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
+
+			renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+
 			if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 				return PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO;
 			}
@@ -81,7 +124,8 @@ public class HomeRenderCommand implements MVCRenderCommand {
 			}
 		}
 		catch (Exception e) {
-			_log.error("");
+			log.error(e);
+			// TODO gestire errori in pagina
 		}
 
 		renderRequest.setAttribute("destinazioniUso", lstDestinazioniUso);

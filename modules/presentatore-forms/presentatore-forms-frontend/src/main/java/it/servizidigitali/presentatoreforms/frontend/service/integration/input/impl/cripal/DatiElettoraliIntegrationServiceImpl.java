@@ -12,14 +12,14 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.backoffice.integration.enums.TipoIntegrazione;
 import it.servizidigitali.backoffice.integration.enums.TipoIntegrazioneBackoffice;
-import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici;
+import it.servizidigitali.backoffice.integration.model.anagrafe.DatiElettorali;
 import it.servizidigitali.backoffice.integration.model.commmon.IntegrationPreferences;
 import it.servizidigitali.backoffice.integration.service.AnagrafeIntegrationService;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.IntegrationServiceFactory;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.exception.BackofficeServiceException;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.BackofficeIntegrationService;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.JsonEnrich;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.implementation.backoffice.DatiAnagraficiJsonEnrich;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.implementation.backoffice.DatiElettoraliJsonEnrich;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.EnrichmentModel;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonOptionsStructure;
@@ -28,10 +28,10 @@ import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonOption
  * @author pindi
  *
  */
-@Component(name = "datiAnagraficiIntegrationServiceImpl", immediate = true, service = BackofficeIntegrationService.class)
-public class DatiAnagraficiIntegrationServiceImpl implements BackofficeIntegrationService {
+@Component(name = "datiElettoraliIntegrationServiceImpl", immediate = true, service = BackofficeIntegrationService.class)
+public class DatiElettoraliIntegrationServiceImpl implements BackofficeIntegrationService {
 
-	private static final Log log = LogFactoryUtil.getLog(DatiAnagraficiIntegrationServiceImpl.class.getName());
+	private static final Log log = LogFactoryUtil.getLog(DatiElettoraliIntegrationServiceImpl.class.getName());
 
 	@Reference(target = "(component.name=anagrafeBackofficeIntegrationService)")
 	private AnagrafeIntegrationService anagrafeBackofficeIntegrationService;
@@ -48,34 +48,34 @@ public class DatiAnagraficiIntegrationServiceImpl implements BackofficeIntegrati
 
 		String codiceFiscale = userPreferences.getCodiceFiscaleRichiedente();
 
-		DatiAnagrafici datiAnagrafici = getDatiAnagrafici(codiceFiscale, organizationId, integrationPreferences);
-		if (datiAnagrafici != null) {
-			List<DatiAnagraficiJsonEnrich> jsonEnrichs = integrationServiceFactory.getDatiAnagraficiJsonEnrichs();
+		DatiElettorali datiElettorali = getDatiElettorali(codiceFiscale, organizationId, integrationPreferences);
+		if (datiElettorali != null) {
+			List<DatiElettoraliJsonEnrich> jsonEnrichs = integrationServiceFactory.getDatiElettoraliJsonEnrichs();
 			if (jsonEnrichs != null) {
 				for (JsonEnrich jsonEnrich : jsonEnrichs) {
-					EnrichmentModel<?> enrichmentModel = new EnrichmentModel<>(alpacaJsonOptionsStructure, jsonObject, datiAnagrafici, organizationId, servizioId, userPreferences);
+					EnrichmentModel<?> enrichmentModel = new EnrichmentModel<>(alpacaJsonOptionsStructure, jsonObject, datiElettorali, organizationId, servizioId, userPreferences);
 					jsonEnrich.enrich(enrichmentModel);
 				}
 			}
 		}
 	}
 
-	private DatiAnagrafici getDatiAnagrafici(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) {
+	private DatiElettorali getDatiElettorali(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) {
 
-		DatiAnagrafici datiAnagrafici = null;
+		DatiElettorali datiElettorali = null;
 		try {
-			datiAnagrafici = anagrafeBackofficeIntegrationService.getDatiAnagrafici(codiceFiscale, organizationId, integrationPreferences);
+			datiElettorali = anagrafeBackofficeIntegrationService.getDatiElettorali(codiceFiscale, organizationId, integrationPreferences);
 		}
 		catch (Exception e) {
-			log.error("getDatiAnagrafici :: " + e.getMessage(), e);
-			throw new BackofficeServiceException("getDatiAnagrafici :: " + e.getMessage(), e);
+			log.error("getDatiElettorali :: " + e.getMessage(), e);
+			throw new BackofficeServiceException("getDatiElettorali :: " + e.getMessage(), e);
 		}
 
-		if (datiAnagrafici == null || datiAnagrafici.getComponentiNucleoFamiliare() == null || datiAnagrafici.getComponentiNucleoFamiliare().isEmpty()) {
-			throw new BackofficeServiceException("getDatiAnagrafici :: lista componenti nucleo familiare vuota");
+		if (datiElettorali == null || datiElettorali.getPosizioniElettorali() == null || datiElettorali.getPosizioniElettorali().isEmpty()) {
+			throw new BackofficeServiceException("getDatiElettorali :: lista posizioni elettorali vuota");
 		}
 
-		return datiAnagrafici;
+		return datiElettorali;
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class DatiAnagraficiIntegrationServiceImpl implements BackofficeIntegrati
 
 	@Override
 	public TipoIntegrazioneBackoffice getBackofficeIntegrationType() {
-		return TipoIntegrazioneBackoffice.VISURA_ANAGRAFICA;
+		return TipoIntegrazioneBackoffice.VISURA_ELETTORALE;
 	}
 
 }
