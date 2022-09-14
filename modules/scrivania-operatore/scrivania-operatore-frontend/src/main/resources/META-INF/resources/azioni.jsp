@@ -25,7 +25,10 @@
 		<aui:form action="${prendiInCaricoURL}">
 			<input type="hidden" name="<portlet:namespace />taskId" value="<%= richiesta.getTaskId() %>"> 
 	
-			<button class="icon-edit border-0 bg-white" type="submit" title="<liferay-ui:message key="prendi-in-carico" />">
+			<button type="submit"
+					class="border-0 bg-white"
+			        title="<liferay-ui:message key="prendi-in-carico" />">
+				<i class="far fa-hand-rock"></i>
 			</button>
 		</aui:form>
 	</c:if>
@@ -33,7 +36,10 @@
 		<aui:form action="${rilasciaURL}">
 			<input type="hidden" name="<portlet:namespace />taskId" value="<%= richiesta.getTaskId() %>"> 
 	
-			<button class="icon-share-alt border-0 bg-white" type="submit" title="<liferay-ui:message key="rilascia" />">
+			<button type="submit"
+					class="border-0 bg-white"
+			        title="<liferay-ui:message key="rilascia" />">
+				<i class="far fa-hand-paper"></i>
 			</button>
 		</aui:form>
 	</c:if>
