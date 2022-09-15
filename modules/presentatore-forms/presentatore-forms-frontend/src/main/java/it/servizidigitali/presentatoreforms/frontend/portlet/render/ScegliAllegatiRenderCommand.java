@@ -74,52 +74,6 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 		List<DatiAllegato> allegati = AllegatoUtil.mergeDefinizioneAndData(definizioneAllegati, new ArrayList<DatiFileAllegato>());
 		
 		//FIXME Valori mock
-		for (DatiAllegato allegato : allegati) {
-			List<DatiDocumentoPersonale> datiDocPersonaleList = new ArrayList<DatiDocumentoPersonale>();
-			if ("ci".equals(allegato.getDefinizione().getCodiciTipologiaDocumento())) {
-
-				DatiDocumentoPersonale docPers = new DatiDocumentoPersonale();
-				docPers.setBytes("testo_carta_identita".getBytes());
-				docPers.setCodice("ci");
-				docPers.setCodiceFiscaleProprietario("prvprv00a00a000a");
-				docPers.setDataCreazione(new Date());
-				docPers.setDataModifica(new Date());
-				docPers.setDataScadenza(new Date(0L));
-				docPers.setDescrizione("questa � una carta di identit�");
-				docPers.setInScadenza(false);
-				docPers.setIdRepository("/opt/liferay-ce-portal-7.4.3.30-ga30/data/carta_identita.pdf");
-				docPers.setMetadati("metadati");
-				docPers.setNomeFile("carta_identita.pdf");
-				docPers.setNumero("99999");
-				docPers.setScaduto(true);
-				docPers.setTitolo("carta di identit�");
-				docPers.setVersione("1");
-				datiDocPersonaleList.add(docPers);
-				
-			}
-			if ("cf".equals(allegato.getDefinizione().getCodiciTipologiaDocumento())) {
-
-				DatiDocumentoPersonale docPers = new DatiDocumentoPersonale();
-				docPers.setBytes("testo_cod_fisc".getBytes());
-				docPers.setCodice("cf");
-				docPers.setCodiceFiscaleProprietario("prvprv00a00a000a");
-				docPers.setDataCreazione(new Date());
-				docPers.setDataModifica(new Date());
-				docPers.setDataScadenza(new Date(new Date().getTime() + 86400000));
-				docPers.setDescrizione("questo � un cod fisc");
-				docPers.setInScadenza(true);
-				docPers.setIdRepository("/opt/liferay-ce-portal-7.4.3.30-ga30/data/cod_fisc.pdf");
-				docPers.setMetadati("metadati");
-				docPers.setNomeFile("cod_fisc.pdf");
-				docPers.setNumero("99999");
-				docPers.setScaduto(false);
-				docPers.setTitolo("codice fiscale");
-				docPers.setVersione("1");
-				datiDocPersonaleList.add(docPers);
-				
-			}
-//			allegato.setDocumentiPersonali(datiDocPersonaleList);
-		}
 		
 		renderRequest.setAttribute("idServizio",1);
 		renderRequest.setAttribute("idRichiesta",1);
