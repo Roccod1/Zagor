@@ -420,7 +420,7 @@ public class GestioneProcedureMiddlewareService {
 		if (proceduraId > 0) {
 			listaTemplatePdf = new ArrayList<TemplatePdf>();
 			listaTemplatePdfNomeFile = new ArrayList<TemplatePdf>();
-			listaTemplatePdf = templatePdfLocalService.findByProceduraIdAndAttivo(proceduraId, attivo);
+			listaTemplatePdf = templatePdfLocalService.getTemplatePdfByProceduraIdAndAttivo(proceduraId, attivo);
 
 			try {
 				if (Validator.isNotNull(listaTemplatePdf) && !listaTemplatePdf.isEmpty()) {
@@ -469,7 +469,7 @@ public class GestioneProcedureMiddlewareService {
 		List<TemplatePdf> listaTemplatePdf = null;
 		if (proceduraId > 0) {
 			listaTemplatePdf = new ArrayList<TemplatePdf>();
-			listaTemplatePdf = templatePdfLocalService.findByProceduraId(proceduraId);
+			listaTemplatePdf = templatePdfLocalService.getTemplatePdfByProceduraId(proceduraId);
 		}
 
 		try {
@@ -492,7 +492,7 @@ public class GestioneProcedureMiddlewareService {
 	}
 
 	public void deleteTemplatePdfProcedura(long proceduraId) {
-		List<TemplatePdf> findByProceduraId = templatePdfLocalService.findByProceduraId(proceduraId);
+		List<TemplatePdf> findByProceduraId = templatePdfLocalService.getTemplatePdfByProceduraId(proceduraId);
 		if (findByProceduraId != null) {
 			for (TemplatePdf templatePdf : findByProceduraId) {
 				try {
@@ -512,7 +512,7 @@ public class GestioneProcedureMiddlewareService {
 
 		if (proceduraId > 0) {
 			listaTemplatePdf = new ArrayList<TemplatePdf>();
-			listaTemplatePdf = templatePdfLocalService.findByProceduraId(proceduraId);
+			listaTemplatePdf = templatePdfLocalService.getTemplatePdfByProceduraId(proceduraId);
 		}
 
 		if (Validator.isNotNull(listaTemplatePdf) && !listaTemplatePdf.isEmpty()) {
