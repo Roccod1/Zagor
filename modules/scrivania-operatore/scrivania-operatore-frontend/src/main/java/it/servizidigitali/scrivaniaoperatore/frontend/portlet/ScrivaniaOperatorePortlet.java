@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -72,7 +73,7 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 	@Override
 	public void render(RenderRequest request, RenderResponse response) throws IOException, PortletException {
 		boolean isMain = ParamUtil.getBoolean(request, "isMain", true);
-		
+
 		if (isMain) {
 			String queryTab = ParamUtil.getString(request, "queryTab", ScrivaniaOperatorePortletKeys.TAB_ARRIVO);
 			int cur = ParamUtil.getInteger(request, SearchContainer.DEFAULT_CUR_PARAM, 1);
@@ -85,8 +86,8 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 			String queryDataRichA = ParamUtil.getString(request, "queryDataRichA");
 			int queryAut = ParamUtil.getInteger(request, "queryAut");
 			String queryStato = ParamUtil.getString(request, "queryStato");
-			long queryServizio = ParamUtil.getLong(request, "queryServizio");
-			
+			long queryServizio = ParamUtil.getLong(request, "queryServizio", 0);
+
 			ServiceContext ctx;
 			try {
 				ctx = ServiceContextFactory.getInstance(request);
@@ -94,15 +95,14 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 			catch (PortalException e) {
 				throw new RuntimeException(e);
 			}
-	
+
 			int[] limits = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
 			int start = limits[0];
 			int end = limits[1];
-	
+
 			RichiestaFilters filters = new RichiestaFilters();
 			filters.setGroupId(ctx.getScopeGroupId());
 			filters.setCompanyId(ctx.getCompanyId());
-			filters.setServizioId(queryServizio == 0 ? null : queryServizio);
 			filters.setNomeCognome(queryNome.isBlank() ? null : queryNome.trim());
 			filters.setCodiceFiscale(queryCf.isBlank() ? null : queryCf.trim());
 			filters.setIdRichiesta(queryRichiestaId.isBlank() ? null : queryRichiestaId.trim());
@@ -116,9 +116,9 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 			}
 			filters.setAutenticazione(mapAutenticazione(queryAut));
 			filters.setTipo(queryStato.isBlank() ? null : queryStato);
-	
+
 			Map<String, Task> tasksMap;
-			
+
 			switch (queryTab) {
 			case ScrivaniaOperatorePortletKeys.TAB_ARRIVO: {
 				tasksMap = scrivaniaOperatoreFrontendService.getOrganizationTasks(ctx);
@@ -136,11 +136,15 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 				tasksMap = null;
 				filters.setProcedureIds(scrivaniaOperatoreFrontendService.getProcedureIds(ctx));
 				break;
-			}	
+			}
 			default:
 				throw new RuntimeException("queryTab");
 			}
-	
+
+			if (queryServizio != 0) {
+				filters.setProcedureIds(scrivaniaOperatoreFrontendService.getProcedureIds(Arrays.asList(queryServizio), ctx));
+			}
+
 			int count = richiestaLocalService.count(filters);
 			List<RichiestaDTO> elems = richiestaLocalService.search(filters, start, end).stream().map(x -> mapUtil.mapRichiesta(ctx.getCompanyId(), x)).collect(Collectors.toList());
 			if (tasksMap != null) {
@@ -151,13 +155,9 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 					}
 				}
 			}
-	
-			List<ServizioDTO> servizi = scrivaniaOperatoreFrontendService
-					.getServiziEnte(ctx)
-					.stream()
-					.map(x -> mapUtil.mapServizio(x))
-					.collect(Collectors.toList());
-			
+
+			List<ServizioDTO> servizi = scrivaniaOperatoreFrontendService.getServiziEnte(ctx).stream().map(x -> mapUtil.mapServizio(x)).collect(Collectors.toList());
+
 			request.setAttribute("servizi", servizi);
 			request.setAttribute("totale", count);
 			request.setAttribute("lista", elems);
@@ -171,9 +171,9 @@ public class ScrivaniaOperatorePortlet extends MVCPortlet {
 			request.setAttribute("queryDataRichA", queryDataRichA);
 			request.setAttribute("queryAut", queryAut);
 			request.setAttribute("queryStato", queryStato);
-			request.setAttribute("queryServizio", queryServizio);	
+			request.setAttribute("queryServizio", queryServizio);
 		}
-		
+
 		super.render(request, response);
 	}
 

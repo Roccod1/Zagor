@@ -1,6 +1,5 @@
 dependencies {
 	compile project(":modules:scrivania-operatore:scrivania-operatore-api")
-	compileOnly project(":modules:gestione-procedure:gestione-procedure-api")
 
 	compileOnly group: "com.liferay.portal", name: "release.portal.api"
 }

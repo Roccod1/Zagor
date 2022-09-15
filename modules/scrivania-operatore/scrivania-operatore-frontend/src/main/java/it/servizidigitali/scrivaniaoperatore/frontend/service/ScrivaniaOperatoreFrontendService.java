@@ -97,10 +97,20 @@ public class ScrivaniaOperatoreFrontendService {
 
 		List<Long> serviziEnteIds = serviziEnte.stream().map(ServizioEnte::getServizioId).collect(Collectors.toList());
 
+		return getProcedureIds(serviziEnteIds, serviceContext);
+
+	}
+
+	/**
+	 * @param serviceContext
+	 * @param serviziEnteIds
+	 * @return
+	 */
+	public Set<Long> getProcedureIds(List<Long> serviziEnteIds, ServiceContext serviceContext) {
+
 		List<Procedura> procedure = proceduraLocalService.getProcedureByServiziIdsGroupIdAttiva(serviziEnteIds, serviceContext.getScopeGroupId(), true);
 
 		return procedure.stream().map(Procedura::getProceduraId).collect(Collectors.toSet());
-
 	}
 
 	/**
