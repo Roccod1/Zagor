@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -42,59 +41,53 @@ public class ScrivaniaCittadinoMiddlewareService {
 
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
-	
+
 	@Reference
 	private TipologiaLocalService tipologiaLocalService;
 
-	
-	public List<Richiesta> getPagamentiUtente(String codiceFiscale, String filterOggettoNote, String stato, long companyId, long organizationId, long groupId, boolean attivo, int cur, int delta, String orderByCol, String orderByType) throws Exception {
+	public List<Richiesta> getPagamentiUtente(String codiceFiscale, String filterOggettoNote, String stato, long companyId, long organizationId, long groupId, boolean attivo, int cur, int delta,
+			String orderByCol, String orderByType) throws Exception {
 
 		try {
-			
-			List<Long> listaIdServizi = new ArrayList<Long>();
-			Set<Long> setIdProcedura = new HashSet<Long>();
-			long tipologiaIdPagamento = 0;
-			
-			List<Tipologia> listaTipologieServizio = tipologiaLocalService.getTipologias(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-			
-			List<Tipologia> listaTipologiaPagamento = listaTipologieServizio.stream().filter(x -> TipoServizio.PAGAMENTO.toString().equalsIgnoreCase(x.getNome())).collect(Collectors.toList());
-			if(Validator.isNull(listaTipologiaPagamento) || listaTipologiaPagamento.isEmpty()) {
-				throw new RuntimeException("Impossibile ottenere idTipologia per Tipologia: "+TipoServizio.PAGAMENTO);
-			}
-			tipologiaIdPagamento = listaTipologiaPagamento.get(0).getTipologiaId();
-			
-			List<Servizio> listServiziByTupologia = servizioLocalService.getTipologiaServizios(tipologiaIdPagamento);
-			listServiziByTupologia.stream().forEach(servizio -> listaIdServizi.add(servizio.getServizioId()));
-			List<Procedura> listaProcedure = proceduraLocalService.getProcedureByServiziIdsGroupIdAttiva(listaIdServizi, groupId, attivo);
-			
-			if(Validator.isNull(listaProcedure) || listaProcedure.isEmpty()) {
+
+			List<Long> serviziIds = new ArrayList<Long>();
+			Set<Long> procedureIds = new HashSet<Long>();
+
+			// FIXME trovare un modo x caricare la tipologia
+			Tipologia tipologia = tipologiaLocalService.getTipologia(69332);
+
+			List<Servizio> listServiziByTupologia = servizioLocalService.getTipologiaServizios(tipologia.getTipologiaId());
+			listServiziByTupologia.stream().forEach(servizio -> serviziIds.add(servizio.getServizioId()));
+			List<Procedura> listaProcedure = proceduraLocalService.getProcedureByServiziIdsGroupIdAttiva(serviziIds, groupId, attivo);
+
+			if (Validator.isNull(listaProcedure) || listaProcedure.isEmpty()) {
 				throw new RuntimeException("Nessuna procedura legata a servizi di pagamento");
 			}
-			
-			listaProcedure.stream().forEach(procedura -> setIdProcedura.add(procedura.getProceduraId()));
+
+			listaProcedure.stream().forEach(procedura -> procedureIds.add(procedura.getProceduraId()));
 
 			RichiestaFilters richiestaFilter = new RichiestaFilters();
-			richiestaFilter.setProcedureIds(setIdProcedura);
+			richiestaFilter.setProcedureIds(procedureIds);
 			richiestaFilter.setCodiceFiscale(codiceFiscale);
 			richiestaFilter.setCompanyId(companyId);
 			richiestaFilter.setGroupId(groupId);
-			
-			if(Validator.isNotNull(filterOggettoNote)) {
+
+			if (Validator.isNotNull(filterOggettoNote)) {
 				richiestaFilter.setOggettoNote(filterOggettoNote);
 			}
-			
-			if(Validator.isNotNull(stato)) {
-				richiestaFilter.setTipo(stato);				
-			}
-			
-			if(Validator.isNotNull(orderByCol)) {
-				richiestaFilter.setOrderByCol(orderByCol);				
+
+			if (Validator.isNotNull(stato)) {
+				richiestaFilter.setTipo(stato);
 			}
 
-			if(Validator.isNotNull(orderByType)) {
-				richiestaFilter.setOrderByType(orderByType);				
-			}			
-			
+			if (Validator.isNotNull(orderByCol)) {
+				richiestaFilter.setOrderByCol(orderByCol);
+			}
+
+			if (Validator.isNotNull(orderByType)) {
+				richiestaFilter.setOrderByType(orderByType);
+			}
+
 			int startEnd[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
 			int start = startEnd[0];
 			int end = startEnd[1];
@@ -105,14 +98,9 @@ public class ScrivaniaCittadinoMiddlewareService {
 
 			return richiestaLocalService.search(richiestaFilter, start, end);
 
-		} catch (Exception e) {
-			throw new Exception(e);
+		}
+		catch (Exception e) {
+			throw e;
 		}
 	}
-}
-
-enum TipoServizio {
-
-	DICHIARAZIONE, AUTO_DICHIARAZIONE, CERTIFICATO, VISURA, PAGAMENTO, CONCORSO;
-
 }
