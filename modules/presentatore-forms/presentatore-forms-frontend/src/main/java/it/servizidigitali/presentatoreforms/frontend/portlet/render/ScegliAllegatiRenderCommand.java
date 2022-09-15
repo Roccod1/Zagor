@@ -3,6 +3,8 @@ package it.servizidigitali.presentatoreforms.frontend.portlet.render;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +23,9 @@ import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneforms.service.TipoDocumentoLocalService;
+import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
+import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AllegatoUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.DatiAllegato;
 import it.servizidigitali.presentatoreforms.frontend.util.model.DatiDocumentoPersonale;
@@ -53,6 +57,9 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 	@Reference
 	private TipoDocumentoLocalService tipoDocumentoLocalService;
 	
+	@Reference
+	private PresentatoreFormFrontendService presentatoreFormFrontendService;
+	
 	private Map<String, String> attachmentFileTypesMap;
 	private String attachmentFileTypes = "PDF,P7M,JPG,PNG,DOC,DOCX,XLS,ZIP";
 
@@ -61,65 +68,24 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 		
 		_log.info("render scegliAllegati");
 		
-		Long idFormMock = 52402L;
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
 		Form form = null;
+		Procedura procedura = null;
+		
+		
 		try {
-		form = formLocalService.getForm(idFormMock);
+			procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
+			form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 		} catch (Exception e) {
-			_log.error("errore nel recupero del form: " + idFormMock + " :: ERORR MESSAGE: " + e.getMessage());
+			_log.error("errore nel recupero del form: " + form.getFormId() + " :: ERORR MESSAGE: " + e.getMessage());
 		}
 		
-		List<DefinizioneAllegato> definizioneAllegati = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idFormMock);
+		List<DefinizioneAllegato> definizioneAllegati = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(form.getFormId());
 		
 		List<DatiAllegato> allegati = AllegatoUtil.mergeDefinizioneAndData(definizioneAllegati, new ArrayList<DatiFileAllegato>());
 		
 		//FIXME Valori mock
-		for (DatiAllegato allegato : allegati) {
-			List<DatiDocumentoPersonale> datiDocPersonaleList = new ArrayList<DatiDocumentoPersonale>();
-			if ("ci".equals(allegato.getDefinizione().getCodiciTipologiaDocumento())) {
-
-				DatiDocumentoPersonale docPers = new DatiDocumentoPersonale();
-				docPers.setBytes("testo_carta_identita".getBytes());
-				docPers.setCodice("ci");
-				docPers.setCodiceFiscaleProprietario("prvprv00a00a000a");
-				docPers.setDataCreazione(new Date());
-				docPers.setDataModifica(new Date());
-				docPers.setDataScadenza(new Date(0L));
-				docPers.setDescrizione("questa � una carta di identit�");
-				docPers.setInScadenza(false);
-				docPers.setIdRepository("/opt/liferay-ce-portal-7.4.3.30-ga30/data/carta_identita.pdf");
-				docPers.setMetadati("metadati");
-				docPers.setNomeFile("carta_identita.pdf");
-				docPers.setNumero("99999");
-				docPers.setScaduto(true);
-				docPers.setTitolo("carta di identit�");
-				docPers.setVersione("1");
-				datiDocPersonaleList.add(docPers);
-				
-			}
-			if ("cf".equals(allegato.getDefinizione().getCodiciTipologiaDocumento())) {
-
-				DatiDocumentoPersonale docPers = new DatiDocumentoPersonale();
-				docPers.setBytes("testo_cod_fisc".getBytes());
-				docPers.setCodice("cf");
-				docPers.setCodiceFiscaleProprietario("prvprv00a00a000a");
-				docPers.setDataCreazione(new Date());
-				docPers.setDataModifica(new Date());
-				docPers.setDataScadenza(new Date(new Date().getTime() + 86400000));
-				docPers.setDescrizione("questo � un cod fisc");
-				docPers.setInScadenza(true);
-				docPers.setIdRepository("/opt/liferay-ce-portal-7.4.3.30-ga30/data/cod_fisc.pdf");
-				docPers.setMetadati("metadati");
-				docPers.setNomeFile("cod_fisc.pdf");
-				docPers.setNumero("99999");
-				docPers.setScaduto(false);
-				docPers.setTitolo("codice fiscale");
-				docPers.setVersione("1");
-				datiDocPersonaleList.add(docPers);
-				
-			}
-//			allegato.setDocumentiPersonali(datiDocPersonaleList);
-		}
 		
 		renderRequest.setAttribute("idServizio",1);
 		renderRequest.setAttribute("idRichiesta",1);

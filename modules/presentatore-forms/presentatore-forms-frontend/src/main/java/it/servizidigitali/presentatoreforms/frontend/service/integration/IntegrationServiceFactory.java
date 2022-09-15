@@ -19,7 +19,11 @@ import it.servizidigitali.backoffice.integration.enums.TipoIntegrazioneBackoffic
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.BackofficeIntegrationService;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.IntegrationService;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.NucleoFamiliareIntegrationService;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.JsonEnrich;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.implementation.backoffice.DatiAnagraficiGeneraliJsonEnrich;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.implementation.backoffice.DatiAnagraficiJsonEnrich;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.implementation.backoffice.DatiElettoraliJsonEnrich;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.implementation.backoffice.DatiVariazioneDomicilioJsonEnrich;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.implementation.backoffice.TributiJsonEnrich;
 
 /**
  * @author pindi
@@ -43,7 +47,19 @@ public class IntegrationServiceFactory {
 	private volatile List<NucleoFamiliareIntegrationService> inputNucleoFamiliareIntegrationServices;
 
 	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-	private volatile List<JsonEnrich> jsonEnrichs;
+	private volatile List<DatiAnagraficiJsonEnrich> datiAnagraficiJsonEnrichs;
+
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+	private volatile List<DatiAnagraficiGeneraliJsonEnrich> datiAnagraficiGeneraliJsonEnrichs;
+
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+	private volatile List<DatiElettoraliJsonEnrich> datiElettoraliJsonEnrichs;
+
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+	private volatile List<DatiVariazioneDomicilioJsonEnrich> datiVariazioneDomicilioJsonEnrichs;
+
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+	private volatile List<TributiJsonEnrich> tributiJsonEnrichs;
 
 	/**
 	 * Mappa servizi di integrazione di input raggruppati per chiave "TipoIntegrazione".
@@ -144,10 +160,38 @@ public class IntegrationServiceFactory {
 	}
 
 	/**
-	 * @return the jsonEnrichs
+	 * @return the datiAnagraficiJsonEnrichs
 	 */
-	public List<JsonEnrich> getJsonEnrichs() {
-		return jsonEnrichs;
+	public List<DatiAnagraficiJsonEnrich> getDatiAnagraficiJsonEnrichs() {
+		return datiAnagraficiJsonEnrichs;
+	}
+
+	/**
+	 * @return the datiAnagraficiGeneraliJsonEnrichs
+	 */
+	public List<DatiAnagraficiGeneraliJsonEnrich> getDatiAnagraficiGeneraliJsonEnrichs() {
+		return datiAnagraficiGeneraliJsonEnrichs;
+	}
+
+	/**
+	 * @return the elettoraliJsonEnrichs
+	 */
+	public List<DatiElettoraliJsonEnrich> getDatiElettoraliJsonEnrichs() {
+		return datiElettoraliJsonEnrichs;
+	}
+
+	/**
+	 * @return the datiVariazioneDomicilioJsonEnrichs
+	 */
+	public List<DatiVariazioneDomicilioJsonEnrich> getDatiVariazioneDomicilioJsonEnrichs() {
+		return datiVariazioneDomicilioJsonEnrichs;
+	}
+
+	/**
+	 * @return the tributiJsonEnrichs
+	 */
+	public List<TributiJsonEnrich> getTributiJsonEnrichs() {
+		return tributiJsonEnrichs;
 	}
 
 }

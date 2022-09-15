@@ -12,14 +12,14 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.backoffice.integration.enums.TipoIntegrazione;
 import it.servizidigitali.backoffice.integration.enums.TipoIntegrazioneBackoffice;
-import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici;
+import it.servizidigitali.backoffice.integration.model.anagrafe.DatiVariazioniDomicilio;
 import it.servizidigitali.backoffice.integration.model.commmon.IntegrationPreferences;
 import it.servizidigitali.backoffice.integration.service.AnagrafeIntegrationService;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.IntegrationServiceFactory;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.exception.BackofficeServiceException;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.BackofficeIntegrationService;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.JsonEnrich;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.implementation.backoffice.DatiAnagraficiJsonEnrich;
+import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.implementation.backoffice.DatiVariazioneDomicilioJsonEnrich;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.EnrichmentModel;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonOptionsStructure;
@@ -28,10 +28,10 @@ import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonOption
  * @author pindi
  *
  */
-@Component(name = "datiAnagraficiIntegrationServiceImpl", immediate = true, service = BackofficeIntegrationService.class)
-public class DatiAnagraficiIntegrationServiceImpl implements BackofficeIntegrationService {
+@Component(name = "datiVariazioniDomicilioIntegrationServiceImpl", immediate = true, service = BackofficeIntegrationService.class)
+public class DatiVariazioniDomicilioIntegrationServiceImpl implements BackofficeIntegrationService {
 
-	private static final Log log = LogFactoryUtil.getLog(DatiAnagraficiIntegrationServiceImpl.class.getName());
+	private static final Log log = LogFactoryUtil.getLog(DatiVariazioniDomicilioIntegrationServiceImpl.class.getName());
 
 	@Reference(target = "(component.name=anagrafeBackofficeIntegrationService)")
 	private AnagrafeIntegrationService anagrafeBackofficeIntegrationService;
@@ -48,34 +48,34 @@ public class DatiAnagraficiIntegrationServiceImpl implements BackofficeIntegrati
 
 		String codiceFiscale = userPreferences.getCodiceFiscaleRichiedente();
 
-		DatiAnagrafici datiAnagrafici = getDatiAnagrafici(codiceFiscale, organizationId, integrationPreferences);
-		if (datiAnagrafici != null) {
-			List<DatiAnagraficiJsonEnrich> jsonEnrichs = integrationServiceFactory.getDatiAnagraficiJsonEnrichs();
+		DatiVariazioniDomicilio datiVariazioniDomicilio = getDatiVariazioniDomicilio(codiceFiscale, organizationId, integrationPreferences);
+		if (datiVariazioniDomicilio != null) {
+			List<DatiVariazioneDomicilioJsonEnrich> jsonEnrichs = integrationServiceFactory.getDatiVariazioneDomicilioJsonEnrichs();
 			if (jsonEnrichs != null) {
 				for (JsonEnrich jsonEnrich : jsonEnrichs) {
-					EnrichmentModel<?> enrichmentModel = new EnrichmentModel<>(alpacaJsonOptionsStructure, jsonObject, datiAnagrafici, organizationId, servizioId, userPreferences);
+					EnrichmentModel<?> enrichmentModel = new EnrichmentModel<>(alpacaJsonOptionsStructure, jsonObject, datiVariazioniDomicilio, organizationId, servizioId, userPreferences);
 					jsonEnrich.enrich(enrichmentModel);
 				}
 			}
 		}
 	}
 
-	private DatiAnagrafici getDatiAnagrafici(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) {
+	private DatiVariazioniDomicilio getDatiVariazioniDomicilio(String codiceFiscale, long organizationId, IntegrationPreferences integrationPreferences) {
 
-		DatiAnagrafici datiAnagrafici = null;
+		DatiVariazioniDomicilio datiVariazioniDomicilio = null;
 		try {
-			datiAnagrafici = anagrafeBackofficeIntegrationService.getDatiAnagrafici(codiceFiscale, organizationId, integrationPreferences);
+			datiVariazioniDomicilio = anagrafeBackofficeIntegrationService.getDatiVariazioniDomicilio(codiceFiscale, organizationId, integrationPreferences);
 		}
 		catch (Exception e) {
-			log.error("getDatiAnagrafici :: " + e.getMessage(), e);
-			throw new BackofficeServiceException("getDatiAnagrafici :: " + e.getMessage(), e);
+			log.error("getDatiElettorali :: " + e.getMessage(), e);
+			throw new BackofficeServiceException("getDatiVariazioniDomicilio :: " + e.getMessage(), e);
 		}
 
-		if (datiAnagrafici == null || datiAnagrafici.getComponentiNucleoFamiliare() == null || datiAnagrafici.getComponentiNucleoFamiliare().isEmpty()) {
-			throw new BackofficeServiceException("getDatiAnagrafici :: lista componenti nucleo familiare vuota");
+		if (datiVariazioniDomicilio == null || datiVariazioniDomicilio.getVariazioniDomicilio() == null || datiVariazioniDomicilio.getVariazioniDomicilio().isEmpty()) {
+			throw new BackofficeServiceException("getDatiVariazioniDomicilio :: lista variazioni domicilio vuota");
 		}
 
-		return datiAnagrafici;
+		return datiVariazioniDomicilio;
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class DatiAnagraficiIntegrationServiceImpl implements BackofficeIntegrati
 
 	@Override
 	public TipoIntegrazioneBackoffice getBackofficeIntegrationType() {
-		return TipoIntegrazioneBackoffice.VISURA_ANAGRAFICA;
+		return TipoIntegrazioneBackoffice.VISURA_VARIAZIONI_DOMICILIARI;
 	}
 
 }

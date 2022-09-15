@@ -154,23 +154,48 @@
 						<aui:row>
 							<aui:col span="12" id="container-upload-allegati">
 							
-									<c:forEach items="${listaTemplatePdf}" var="templatePdf" varStatus="loop">
-										<div class="lfr-form-row lfr-form-row-inline">
-											<aui:input type="hidden" name="idAllegatoJasper${loop.index}" value="${templatePdf.templatePdfId}"/>
-											 <c:set var = "nomeFile" scope = "session" value = "${templatePdf.nomeFile}"/>
-											<aui:input type="file" name="jasperReportFile${loop.index}" label="allegato-jasper-report" value="${nomeFile}" />
-											<c:choose>
-												<c:when test="${templatePdf.templatePdfParentId > 0}">
-													<aui:input label="principale" type="checkbox" id="allegatoPrincipale${loop.index}" name="allegatoPrincipale${loop.index}" cssClass="checkboxPrincipaleAllegati" onClick="checkboxJasperReport(this);" checked="true"/>
-												</c:when>
+									<c:choose>
+									
+										<c:when test="${not empty listaTemplatePdf}">
+											<c:forEach items="${listaTemplatePdf}" var="templatePdf" varStatus="loop">
+												<div class="lfr-form-row lfr-form-row-inline">
+													<aui:input type="hidden" name="idAllegatoJasper${loop.index}" value="${templatePdf.templatePdfId}"/>
+													<p>${templatePdf.nomeFile}</p>
+													<aui:input type="file" name="jasperReportFile${loop.index}" label="allegato-jasper-report">
+													<aui:validator name="acceptFiles">
+													'jrxml'
+													</aui:validator>	
+													</aui:input>
+													<c:choose>
+														<c:when test="${templatePdf.templatePdfParentId==0}">
+															<aui:input label="principale" type="checkbox" id="allegatoPrincipale${loop.index}" name="allegatoPrincipale${loop.index}" cssClass="checkboxPrincipaleAllegati" onClick="checkboxJasperReport(this);" checked="true"/>
+														</c:when>
 												
-												<c:otherwise>
-													<aui:input label="principale" type="checkbox" id="allegatoPrincipale${loop.index}" name="allegatoPrincipale${loop.index}" cssClass="checkboxPrincipaleAllegati" onClick="checkboxJasperReport(this);"/>
-												</c:otherwise>
+														<c:otherwise>
+															<aui:input label="principale" type="checkbox" id="allegatoPrincipale${loop.index}" name="allegatoPrincipale${loop.index}" cssClass="checkboxPrincipaleAllegati" onClick="checkboxJasperReport(this);"/>
+														</c:otherwise>
 											
-											</c:choose>
-										</div>
-									</c:forEach>
+													</c:choose>
+												</div>
+											</c:forEach>
+										
+										</c:when>
+										
+										<c:otherwise>
+											<div class="lfr-form-row lfr-form-row-inline">
+													<aui:input type="hidden" name="idAllegatoJasper0" value="0"/>
+													<aui:input type="file" name="jasperReportFile0" label="allegato-jasper-report">
+													<aui:validator name="acceptFiles">
+													'jrxml'
+													</aui:validator>	
+													</aui:input>
+													<aui:input label="principale" type="checkbox" id="allegatoPrincipale0" name="allegatoPrincipale0" cssClass="checkboxPrincipaleAllegati" onClick="checkboxJasperReport(this);"/>
+											</div>
+										</c:otherwise>
+									
+									</c:choose>
+							
+									
 
 							</aui:col>
 						</aui:row>
@@ -195,7 +220,9 @@ new Liferay.AutoFields({
 	 on: {
        		'clone': function(event) {
        			var ultimoInputFile = $("#container-allegati-template").find('input[type=file]:last');
+       			var nomeFile = $("#container-allegati-template").find('p:last');
        			$(ultimoInputFile).val("");
+       			nomeFile.remove();
        		},
        		'delete': function(event) {
        			 console.log(event);

@@ -134,23 +134,6 @@ console.log("dentro scegli allegati");
 													<liferay-ui:message key="conferma-caricamento-dell-allegato"/>
 												</div>			
 											</div>	
-														
-											<c:if test="${not empty pdfFirmato}">
-												<div id="allegatodocumentale-container-${nomeFileFirmato}"
-													class="alert alert-info">
-													<liferay-ui:message key="file.gia.archiviato.1" />
-													<portlet:resourceURL id="downloadFile" var="downloadFilePrincipaleUrl">
-														<portlet:param name="idServizio" value="${idServizio}" />
-														<portlet:param name="idDocumentale" value="${pdfFirmato.idDocumentale}" />
-														<portlet:param name="filename" value="${pdfFirmato.fileName}" />
-													</portlet:resourceURL>
-													(<a target="_BLANK" class="" href="${downloadFilePrincipaleUrl}" title='<liferay-ui:message key="label.download" />'>
-														<c:out value="${pdfFirmato.fileName}"/> 
-													</a>).
-													<liferay-ui:message key="file.gia.archiviato.2" />.
-													<input type="hidden" name="allegatodocumentale-${nomeFileFirmato}" value="${pdfFirmato.idDocumentale}">
-												</div>
-											</c:if>
 										</div>
 										
 				        			</c:when>
@@ -198,20 +181,6 @@ console.log("dentro scegli allegati");
 									<c:forEach items="${allegati}" var="allegato" varStatus="loop">
 										<div class="control-group margintop10 alpaca-field-object">
 											<label class="control-label" for="allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}">${allegato.definizione.denominazione}<c:if test="${allegato.definizione.obbligatorio}">*</c:if> (<liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione" arguments="${uploadFileMaxSizeLabel}"/>):</label>
-											<c:if test="${not empty allegato.datiFile}">
-												<div id="allegatodocumentale-container-${loop.index}-${allegato.definizione.definizioneAllegatoId}" class="alert alert-info">
-													<liferay-ui:message key="file.gia.archiviato.1" arguments="${allegato.definizione.denominazione}" />
-													<portlet:resourceURL id="downloadFile" var="downloadFileUrl">
-														<portlet:param name="idDocumentale" value="${allegato.datiFile.idDocumentale}" />
-														<portlet:param name="filename" value="${allegato.datiFile.fileName}" />
-														<portlet:param name="idServizio" value="${idServizio}" />
-													</portlet:resourceURL>
-													(<a target="_BLANK" class="" href="${downloadFileUrl}" title='<liferay-ui:message key="label.download" />'>
-														<c:out value="${allegato.datiFile.fileName}"/>
-													</a>).
-													<input type="hidden" name="allegatodocumentale-${loop.index}-${allegato.definizione.definizioneAllegatoId}" value="${allegato.datiFile.idDocumentale}">
-												</div>
-											</c:if>
 											
 											<c:if test="${not empty allegato.definizione.filenameModello }">
 												<span class="help-block"> 
@@ -253,41 +222,6 @@ console.log("dentro scegli allegati");
 																</c:if>
 															</c:otherwise>
 														</c:choose>
-														<!-- Scelta documenti personali, se presenti -->
-														<c:if test="${not empty allegato.documentiPersonali}">
-															<div id="allegati-documenti-personali">
-																<c:forEach items="${allegato.documentiPersonali}" var="documentoPersonale">
-																	<label for="allegato-personale-${documentoPersonale.idRepository}" class="radio">
-																		<input type="radio" class="allegato allegato-personale-class" id="allegato-personale-${documentoPersonale.idRepository}" 
-																			name="allegatodocumentale-personale-${loop.index}-${allegato.definizione.definizioneAllegatoId}" 
-																			value="${documentoPersonale.codice}">
-																		<c:out value="${documentoPersonale.titolo}"/> 
-																		<portlet:resourceURL id="downloadDocumentoPersonale" var="downloadDocumentoPersonaleUrl">
-																			<portlet:param name="codice" value="${documentoPersonale.codice}" />
-																			<portlet:param name="idServizio" value="${idServizio}" />
-																		</portlet:resourceURL>
-																		(<a target="_BLANK" class="" href="${downloadDocumentoPersonaleUrl}">
-																			<c:out value="${documentoPersonale.nomeFile}"/> 
-																		</a>)
-																		&nbsp;
-																		<c:choose>
-																			<c:when test="${documentoPersonale.inScadenza}">
-																				<span style="color: orange;"><liferay-ui:message key="label.documentiPersonali.stato.in.scadenza" /></span>
-																			</c:when>
-																			<c:when test="${documentoPersonale.scaduto}">
-																				<span style="color: red;"><liferay-ui:message key="label.documentiPersonali.stato.scaduto" /></span>
-																			</c:when>
-																		</c:choose>
-																	</label>
-																</c:forEach>
-															</div>
-														</c:if>
-														<c:if test="${not empty allegato.documentiPersonali}">
-															<div>
-																<liferay-ui:message key="file.da.documenti.personali.2" />
-																<a class="toggleUploadFileLink" data-param1="${loop.index}-${allegato.definizione.definizioneAllegatoId}" href="#"><liferay-ui:message key="file.da.documenti.personali.3" /></a>.
-															</div>
-														</c:if>
 														
 														<%-- +++ MODIFICATO --%>
 														<div id="div-allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" <c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>>					
@@ -456,27 +390,18 @@ console.log("aui script");
 			console.log("salva e invia");
 			e.preventDefault();
 			
-			// QUI CONTROLLO ALLEGATI: se manca un allegato e non è stato checkato il relativo allegato documentale personale, segnalo all'utente
+			// QUI CONTROLLO ALLEGATI: se manca un allegato segnalo all'utente
 			var confirmSubmit = true;
 			$("input[type='file']").each(function(){
 				if (!this.value && this.id) {
-							var allDocName = "allegatodocumentale-personale" + this.id.split("_allegato")[1];						if (!$("[name='"+allDocName+"']").is(":checked")) {
-							alert("ATTENZIONE: alcuni allegati non risultano caricati correttamente. Si prega di correggere e riprovare. ")
-							confirmSubmit = false;
-							return false;
-						}
+					alert("ATTENZIONE: alcuni allegati non risultano caricati correttamente. Si prega di correggere e riprovare. ")
+					confirmSubmit = false;
+						
 				}
 			});
 			if (confirmSubmit) {
 				$('#salva-invia-modal').modal('show');
 			}
-		});
-
-		$('.toggleUploadFileLink').click(function(e){
-			e.preventDefault();
-			var param1 = this.dataset['param1'];
-			$("input[name='allegatodocumentale-personale-" + param1 + "']").prop('checked', false);
-			$('#div-allegato-' + param1).toggle();
 		});
 		
 		//Lancia la richiesta
@@ -490,7 +415,6 @@ console.log("aui script");
 			$("#<portlet:namespace />salva-form").submit();
 		});
 	
-		
 		
 		<%-- GESTIONE UPLOAD FILE FIRMATO --%>	
 	$('.save-attachment-uploadFileFirmato').on('click', function(){	
@@ -514,9 +438,7 @@ console.log("aui script");
 		    		success: function(data){	
 		    			if(data.status==='ok'){
 		    				console.log("Successo in upload del file!");
-		    				$("#allegatodocumentale-container-${nomeFileFirmato}").remove();
 		    				$("input[name='${nomeFileFirmato}']").val(data.fileName);
-		    	        	$("input[name='allegatodocumentale-${nomeFileFirmato}']").val('');
 		    	        	
 		    				$('#alertUplaodAllegato-uploadFileFirmato').addClass('hidden');
 		    				$('#successUplaodAllegato-uploadFileFirmato').removeClass('hidden');
@@ -524,8 +446,6 @@ console.log("aui script");
 	 	    				
 		    			}else if(data.status==='error'){
 		    	        	$("input[name='${nomeFileFirmato}']").val('');
-		    	        	$("input[name='allegatodocumentale-${nomeFileFirmato}']").val('');
-		    	        	$("#allegatodocumentale-container-${nomeFileFirmato}").remove();
 		    	    
 		    				$('#alertUplaodAllegato-uploadFileFirmato').removeClass('hidden');
 		    				$('#successUplaodAllegato-uploadFileFirmato').addClass('hidden');
@@ -566,17 +486,13 @@ console.log("aui script");
 		    		success: function(data){	
 		    			if(data.status==='ok'){
 		    				console.log("Successo in upload del file!");
-		    				$("#allegatodocumentale-container-${loop.index}-${allegato.definizione.definizioneAllegatoId}").remove();
 		    				$("input[name='allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}']").val(data.fileName);
-		    	        	$("input[name='allegatodocumentale-personale-${loop.index}-${allegato.definizione.definizioneAllegatoId}']").prop('checked', false);
 		    	        	
 		    				$('#alertUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').addClass('hidden');
 		    				$('#successUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').removeClass('hidden');
 		    				idAllegatoTemporaneoValue = data.idAllegatoTemporaneo;
 		    			}else if(data.status==='error'){
 		    	        	$("input[name='allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}']").val('');
-		    	        	$("input[name='allegatodocumentale-${loop.index}-${allegato.definizione.definizioneAllegatoId}']").val('');
-		    	        	$("#allegatodocumentale-container-${loop.index}-${allegato.definizione.definizioneAllegatoId}").remove();
 		    	    	
 		    				$('#alertUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').removeClass('hidden');
 		    				$('#successUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').addClass('hidden');

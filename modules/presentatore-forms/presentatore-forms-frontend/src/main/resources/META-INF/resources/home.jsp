@@ -1,5 +1,10 @@
 <%@ include file="./init.jsp" %>
 
+<portlet:renderURL var="caricaCompilaIstanzaUrl">
+		<portlet:param name="mvcRenderCommandName" value="/caricaCompilaIstanza" />
+		<portlet:param name="richiestaId" value="${richiestaId}" />
+</portlet:renderURL>
+
 <aui:row>
 	<aui:col span="12">
 		<div class="page-header">
@@ -26,14 +31,10 @@
 				<liferay-ui:message key="bozza.isPresent"/>
 			</aui:col>
 		</aui:row>
-		
+				
 		<aui:button-row cssClass="text-right">
-			<c:if test="${bozzaPresente}">
-				<aui:button href="" value="button.caricaBozza"/>
-<%-- 				<a class="btn btn-default" href="${renderizzaFormJsonUrl}&caricaBozza=true&idRichiestaServizio=${idRichiestaServizio}"><spring:message code="button.caricaBozza" /></a> --%>
-			</c:if>
-			<aui:button href="" value="button.compilaIstanza"/>
-<%-- 			<a class="btn btn-custom" href="${home}&caricaBozza=false&idRichiestaServizio=${idRichiestaServizio}"><spring:message code="button.compilaIstanza" /></a> --%>
+			<aui:button id="caricaBozza" href="${caricaCompilaIstanzaUrl}&isBozza=true" value="button.caricaBozza"/>
+			<aui:button id="compilaIstanza" href="${caricaCompilaIstanzaUrl}&isBozza=false" value="button.compilaIstanza"/>
 		</aui:button-row>
 	
 	</aui:col>

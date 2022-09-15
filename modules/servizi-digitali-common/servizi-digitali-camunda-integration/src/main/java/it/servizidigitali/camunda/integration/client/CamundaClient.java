@@ -32,7 +32,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	List<VariableInstance> getVariablesByTaskId(String tenantId, String taskId) throws CamundaClientException;
+	List<VariableInstance> getVariablesByExecutionId(String tenantId, String taskId) throws CamundaClientException;
 
 	/**
 	 *

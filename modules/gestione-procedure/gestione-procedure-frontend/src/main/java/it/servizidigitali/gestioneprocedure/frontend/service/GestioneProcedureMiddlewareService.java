@@ -1,27 +1,41 @@
 package it.servizidigitali.gestioneprocedure.frontend.service;
 
+import com.liferay.counter.kernel.service.CounterLocalService;
+import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
 import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.file.utility.service.FileService;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
+import it.servizidigitali.gestioneprocedure.model.TemplatePdf;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
+import it.servizidigitali.gestioneprocedure.service.TemplatePdfLocalService;
 import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFormPK;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
@@ -45,6 +59,18 @@ public class GestioneProcedureMiddlewareService {
 
 	@Reference
 	private ProceduraFormLocalService proceduraFormLocalService;
+	
+	@Reference
+	private TemplatePdfLocalService templatePdfLocalService;
+	
+	@Reference
+	private CounterLocalService counterLocalService;
+	
+	@Reference
+	private FileService fileService;
+	
+	@Reference
+	private DLAppService dlAppService;
 
 	public Procedura getProcedura(long groupId, long servizioId, boolean attiva) {
 		Procedura procedura = null;
@@ -263,4 +289,226 @@ public class GestioneProcedureMiddlewareService {
 		
 		return listaServiziAssociabili;
 	}
+	
+	public TemplatePdf caricaTemplatePdf(File file, String nomeFile, boolean principale, long proceduraId, long templatePdfId, int indice, String userFullName, long userId, long groupId, long companyId) {
+
+        InputStream fileCaricato = null;
+        
+        String nomeFileNuovo = "";
+        long fileEntryId = 0;
+        
+        if(Validator.isNotNull(file)) {
+            nomeFile = nomeFile + "_" + String.valueOf(proceduraId) + nowToString();
+        }
+		
+		try {
+			if(templatePdfId>0 && Validator.isNotNull(file)) {
+				byte[] fileAggiornato = FileUtil.getBytes(file);
+				FileEntry fileRecuperato = getFileEntryTemplatePdf(templatePdfId);
+				fileEntryId = fileService.updateFileEntry(fileRecuperato, fileAggiornato, nomeFile, groupId, userId);
+			}else {
+             	fileCaricato = new DataInputStream(new FileInputStream(file));
+             	fileEntryId = fileService.saveJasperReport(nomeFile, nomeFile, nomeFile, proceduraId, fileCaricato, null, userId, groupId);
+			}
+		}catch(Exception e) {
+			_log.error("Errore durante l'aggiornamento del file del template con ID : " + templatePdfId);
+		}
+
+		TemplatePdf templatePdf = aggiornaCreaTemplatePdf(templatePdfId, proceduraId, principale, userId, companyId, userFullName, fileEntryId);
+		
+		return templatePdf;
+	}
+	
+	public TemplatePdf aggiornaCreaTemplatePdf(long templatePdfId, long proceduraId, boolean principale, long userId, long companyId, String userFullName, long fileEntryId) {
+		TemplatePdf templatePdf = null;
+		long idTemplatePdfPrincipale = 0;
+		
+		try {
+			if(templatePdfId>0) {
+				templatePdf = templatePdfLocalService.getTemplatePdf(templatePdfId);
+			}else {
+				templatePdf = templatePdfLocalService.createTemplatePdf(counterLocalService.increment());
+			}
+			
+			
+            templatePdf.setUserId(userId);
+            templatePdf.setCompanyId(companyId);
+            templatePdf.setUserName(userFullName);
+            
+            if(fileEntryId>0) {
+         		templatePdf.setFileEntryId(fileEntryId);
+         	}
+            
+            templatePdf.setProceduraId(proceduraId);
+            templatePdf.setAttivo(Boolean.TRUE);
+            
+            if(principale && idTemplatePdfPrincipale==0) {
+              	 idTemplatePdfPrincipale = templatePdf.getTemplatePdfId();
+            }
+               
+            if(!principale && idTemplatePdfPrincipale>0) {
+             	 templatePdf.setTemplatePdfParentId(idTemplatePdfPrincipale);
+            }
+            
+            if(!principale && idTemplatePdfPrincipale==0) {
+            	TemplatePdf templatePrincipale = recuperaTemplatePdfPrincipale(proceduraId);
+            	
+            	if(Validator.isNotNull(templatePrincipale)) {
+            		templatePdf.setTemplatePdfParentId(templatePrincipale.getTemplatePdfId());
+            	}
+            }
+               
+            templatePdfLocalService.updateTemplatePdf(templatePdf);
+            return templatePdf;
+
+		}catch(Exception e) {
+			_log.error("Errore durante il salvataggio/aggiornamento del templatePdf! : " + e.getMessage());
+		}
+		
+		return templatePdf;
+		
+	}
+	
+	public void aggiornaPrincipaleTemplatePdf(TemplatePdf templatePrincipale, long templatePdfId) {
+
+		List<TemplatePdf> listaTemplateProcedura = recuperaTemplatePdfProceduraAttivo(templatePrincipale.getProceduraId(),true);
+		
+		try {
+			
+			if(Validator.isNotNull(listaTemplateProcedura) && !listaTemplateProcedura.isEmpty()) {
+								
+				// Aggiorno tutti i figli
+				
+				for(TemplatePdf templatePdf : listaTemplateProcedura) {
+					if(templatePdf.getTemplatePdfParentId()==templatePrincipale.getTemplatePdfId()) {
+						templatePdf.setTemplatePdfParentId(templatePdfId);
+						templatePdfLocalService.updateTemplatePdf(templatePdf);
+					}
+				}
+				
+				templatePrincipale.setTemplatePdfParentId(templatePdfId);
+				templatePdfLocalService.updateTemplatePdf(templatePrincipale);
+				
+				// Aggiorno il nuovo principale
+				
+				TemplatePdf templatePdfNuovoPrincipale = templatePdfLocalService.getTemplatePdf(templatePdfId);
+				
+				if(Validator.isNotNull(templatePdfNuovoPrincipale)) {
+					templatePdfNuovoPrincipale.setTemplatePdfParentId(0);
+					templatePdfLocalService.updateTemplatePdf(templatePdfNuovoPrincipale);
+				}
+			}		
+
+		}catch(Exception e) {
+			_log.error("Errore durante l'aggiornamento del report principale!");
+		}
+
+	}
+	
+	
+	public List<TemplatePdf> recuperaTemplatePdfProceduraAttivo(long proceduraId, boolean attivo){
+		List<TemplatePdf> listaTemplatePdf = null;
+		List<TemplatePdf> listaTemplatePdfNomeFile = null;
+		
+		if(proceduraId>0) {
+			listaTemplatePdf = new ArrayList<TemplatePdf>();
+			listaTemplatePdfNomeFile = new ArrayList<TemplatePdf>();
+			listaTemplatePdf = templatePdfLocalService.findByProceduraIdAndAttivo(proceduraId, attivo);
+			
+			try {
+				if(Validator.isNotNull(listaTemplatePdf) && !listaTemplatePdf.isEmpty()) {
+					for(TemplatePdf pdf : listaTemplatePdf) {
+						
+						if(Validator.isNotNull(pdf)) {
+							FileEntry file = dlAppService.getFileEntry(pdf.getFileEntryId());
+							
+							if(Validator.isNotNull(file)) {
+								pdf.setNomeFile(file.getFileName());
+							}
+							listaTemplatePdfNomeFile.add(pdf);
+						}
+					}
+				}
+			} catch (Exception e) {
+				_log.error("Errore durante il recupero del file da sistema!" + e.getMessage());
+			}
+			
+			
+		}
+		
+		return listaTemplatePdfNomeFile;
+	}
+	
+	public FileEntry getFileEntryTemplatePdf(long templatePdfId) {
+		FileEntry file = null;
+		TemplatePdf templatePdf = null;
+		
+		try {
+			if(templatePdfId>0) {
+				templatePdf = templatePdfLocalService.getTemplatePdf(templatePdfId);
+				if(Validator.isNotNull(templatePdf)) {
+					file = dlAppService.getFileEntry(templatePdf.getFileEntryId());
+				}
+			}
+		}catch(Exception e) {
+			_log.error("Errore durante il recupero del file: " + e.getMessage());
+		}
+		
+		return file;
+	}
+	
+	public void cancellaTemplatePdf(List<Long> listaReportDaMantenere, long proceduraId) {
+		List<TemplatePdf> listaTemplatePdf = null;
+		if(proceduraId>0) {
+			listaTemplatePdf = new ArrayList<TemplatePdf>();
+			listaTemplatePdf = templatePdfLocalService.findByProceduraId(proceduraId);
+		}
+				
+		try {
+			for(TemplatePdf template : listaTemplatePdf) {
+				if(!listaReportDaMantenere.contains(template.getTemplatePdfId())) {
+					if(template.getTemplatePdfParentId()>0) {
+						template.setAttivo(false);
+						templatePdfLocalService.updateTemplatePdf(template);
+					}else {
+						_log.error("Impossibile eliminare l'allegato jasper con ID : " + template.getTemplatePdfId() + "perché è principale");
+					}
+				}
+			}
+		}catch(Exception e) {
+			_log.error("Errore durante la cancellazione del template: " + e.getMessage());
+		}
+
+	}
+	
+	
+	public TemplatePdf recuperaTemplatePdfPrincipale (long proceduraId) {
+		TemplatePdf template = null;
+		List<TemplatePdf> listaTemplatePdf = null;
+		
+		if(proceduraId>0) {
+			listaTemplatePdf = new ArrayList<TemplatePdf>();
+			listaTemplatePdf = templatePdfLocalService.findByProceduraId(proceduraId);
+		}
+		
+		if(Validator.isNotNull(listaTemplatePdf) && !listaTemplatePdf.isEmpty()) {
+			for(TemplatePdf templatePdf : listaTemplatePdf) {
+				if(templatePdf.getTemplatePdfParentId()==0) {
+					template = templatePdf;
+				}
+			}
+		}
+		
+		return template;
+	}
+	
+	
+
+	
+	public static String nowToString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+		return sdf.format(new Date());
+	}
+	
+	
 }

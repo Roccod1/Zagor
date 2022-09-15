@@ -13,10 +13,10 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -97,10 +97,20 @@ public class ScrivaniaOperatoreFrontendService {
 
 		List<Long> serviziEnteIds = serviziEnte.stream().map(ServizioEnte::getServizioId).collect(Collectors.toList());
 
+		return getProcedureIds(serviziEnteIds, serviceContext);
+
+	}
+
+	/**
+	 * @param serviceContext
+	 * @param serviziEnteIds
+	 * @return
+	 */
+	public Set<Long> getProcedureIds(List<Long> serviziEnteIds, ServiceContext serviceContext) {
+
 		List<Procedura> procedure = proceduraLocalService.getProcedureByServiziIdsGroupIdAttiva(serviziEnteIds, serviceContext.getScopeGroupId(), true);
 
 		return procedure.stream().map(Procedura::getProceduraId).collect(Collectors.toSet());
-
 	}
 
 	/**
@@ -113,7 +123,7 @@ public class ScrivaniaOperatoreFrontendService {
 			long userId = serviceContext.getUserId();
 			User currentUser = userLocalService.getUser(userId);
 
-			List<Task> searchTasks = camundaClient.searchTasks(String.valueOf(serviceContext.getScopeGroup().getOrganizationId()), currentUser.getScreenName().toUpperCase(), null);
+			List<Task> searchTasks = camundaClient.searchTasks(String.valueOf(serviceContext.getScopeGroup().getOrganizationId()), currentUser.getScreenName(), null);
 			Map<String, Task> map = new HashMap<>();
 			for (Task task : searchTasks) {
 				map.put(task.getProcessInstanceId(), task);
@@ -214,11 +224,12 @@ public class ScrivaniaOperatoreFrontendService {
 			User currentUser = userLocalService.getUser(userId);
 
 			String tenantId = String.valueOf(serviceContext.getScopeGroup().getOrganizationId());
-			List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(idRichiesta), true);
+			List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(idRichiesta), false);
 			if (tasksByBusinessKey != null) {
 				for (Task task : tasksByBusinessKey) {
-					if (task.getAssignee().contentEquals(currentUser.getScreenName().toUpperCase())) {
-						List<VariableInstance> variablesByTaskId = camundaClient.getVariablesByTaskId(tenantId, task.getId());
+					String assignee = task.getAssignee();
+					if (assignee != null && assignee.contentEquals(currentUser.getScreenName())) {
+						List<VariableInstance> variablesByTaskId = camundaClient.getVariablesByExecutionId(tenantId, task.getExecutionId());
 						if (variablesByTaskId != null) {
 							for (VariableInstance variableInstance : variablesByTaskId) {
 								azioniUtente.addAll(getActionByVariable(variableInstance));
@@ -290,8 +301,7 @@ public class ScrivaniaOperatoreFrontendService {
 		try {
 
 			if (CamundaActionsVariable.VAR_IMPOSTAZIONE_VARIABILI.getValue().equalsIgnoreCase(variable.getName())) {
-
-				LinkedHashMap mapVal = (LinkedHashMap) variable.getValue();
+				AbstractMap mapVal = (AbstractMap) variable.getValue();
 				if (mapVal == null && mapVal.isEmpty()) {
 					return retVal;
 				}
@@ -313,7 +323,7 @@ public class ScrivaniaOperatoreFrontendService {
 			}
 			if (CamundaActionsVariable.VAR_ASSEGNAZIONE_RESPONSABILE.getValue().equalsIgnoreCase(variable.getName())) {
 
-				LinkedHashMap mapVal = (LinkedHashMap) variable.getValue();
+				AbstractMap mapVal = (AbstractMap) variable.getValue();
 				if (mapVal == null && mapVal.isEmpty()) {
 					return retVal;
 				}
@@ -346,7 +356,7 @@ public class ScrivaniaOperatoreFrontendService {
 			}
 			if (CamundaActionsVariable.VAR_RILASCIA_TASK.getValue().equalsIgnoreCase(variable.getName())) {
 
-				LinkedHashMap mapVal = (LinkedHashMap) variable.getValue();
+				AbstractMap mapVal = (AbstractMap) variable.getValue();
 				if (mapVal == null && mapVal.isEmpty()) {
 					return retVal;
 				}

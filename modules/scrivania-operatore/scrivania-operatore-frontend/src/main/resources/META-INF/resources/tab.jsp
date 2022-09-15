@@ -103,10 +103,10 @@
 		<liferay-ui:search-container-column-text name="accesso">
 			<c:choose>
 				<c:when test="${elem.accesso}">
-					<clay:icon symbol="lock" />
+					<i class="fas fa-lock" title="<liferay-ui:message key="accesso-con-autenticazione" />"></i>
 				</c:when>
 				<c:otherwise>
-					<clay:icon symbol="unlock" />
+					<i class="fas fa-lock-open" title="<liferay-ui:message key="accesso-senza-autenticazione" />"></i>
 				</c:otherwise>
 			</c:choose>
 		</liferay-ui:search-container-column-text>
