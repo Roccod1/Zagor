@@ -15,8 +15,7 @@
 package it.servizidigitali.gestioneprocedure.service.impl;
 
 import com.liferay.portal.aop.AopService;
-
-
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,4 +53,5 @@ public class TemplatePdfLocalServiceImpl
 		
 		return listaTemplatePdf;
 	}
+
 }

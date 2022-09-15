@@ -1,10 +1,8 @@
 <%@ include file="./init.jsp" %>
 
-<portlet:renderURL var="renderHomeURL">
-	<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.HOME_RENDER_COMMAND %>" />
-	<portlet:param name="richiestaId" value="${richiestaId}" />
-	<portlet:param name="servizioId" value="${servizioId}" />
-</portlet:renderURL>
+<portlet:actionURL var="scegliComponenteActionURL" name="<%=PresentatoreFormsPortletKeys.SCEGLI_COMPONENTE_ACTION_COMMAND %>">
+</portlet:actionURL>
+
 
 <div class="row-fluid">
 	<div class="page-header">
@@ -22,26 +20,26 @@
 	<div class="span12 formpresenter-portlet">
 		<div class="alpaca-wizard">
 			<div class="alpaca-wizard-nav">
-		           <nav class="navbar navbar-default" role="navigation">
-		               <div class="container-fluid alpaca-wizard-back">
-		                   <ul class="nav navbar-nav">
-		                       <li class="active visited" data-alpaca-wizard-step-index="0" >
-		                           <div class="holder">
-		                               <div class="title"><liferay-ui:message key="label.step.primoStep"/></div>
-		                               <div class="description"><liferay-ui:message key="label.selezionaFamiliare"/></div>
-		                           </div>
-		                           <div class="chevron"></div> 
-		                       </li>
-		                       <li  data-alpaca-wizard-step-index="1" class="disabled">
-		                           <div class="holder">
-		                               <div class="title">...</div>
-		                               <div class="description"></div>
-		                           </div>
-		                           <div class="chevron"></div>
-		                       </li>
-		                   </ul>
-		               </div>
-		           </nav>
+	           <nav class="navbar navbar-default" role="navigation">
+	               <div class="container-fluid alpaca-wizard-back">
+	                   <ul class="nav navbar-nav">
+	                       <li class="active visited" data-alpaca-wizard-step-index="0" >
+	                           <div class="holder">
+	                               <div class="title"><liferay-ui:message key="label.step.primoStep"/></div>
+	                               <div class="description"><liferay-ui:message key="label.selezionaFamiliare"/></div>
+	                           </div>
+	                           <div class="chevron"></div> 
+	                       </li>
+	                       <li  data-alpaca-wizard-step-index="1" class="disabled">
+	                           <div class="holder">
+	                               <div class="title">...</div>
+	                               <div class="description"></div>
+	                           </div>
+	                           <div class="chevron"></div>
+	                       </li>
+	                   </ul>
+	               </div>
+	           </nav>
 			</div>
 		</div>
 		
@@ -51,7 +49,7 @@
 			</div>
 		</div>
 		
-		<aui:form method="post" action="${salvaURL}">		
+		<aui:form method="post" action="${scegliComponenteActionURL}" name="formScegliComponentiNucleo">		
 			<aui:fieldset>		
 				<aui:container>			
 					<aui:row cssClass="justify-content-center">	
@@ -66,7 +64,7 @@
 				</aui:container>			
 			</aui:fieldset>
 			
-			<aui:button cssClass="pull-right" type="submit" href="${renderHomeURL}" value="button.componenteNucleoFamiliare.avanti" />
+			<aui:button cssClass="pull-right" type="submit" value="button.componenteNucleoFamiliare.avanti" />
 			
 		</aui:form>
 	</div>

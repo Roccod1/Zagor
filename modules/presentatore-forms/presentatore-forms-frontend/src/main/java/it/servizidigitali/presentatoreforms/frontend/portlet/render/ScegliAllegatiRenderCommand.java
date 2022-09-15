@@ -3,6 +3,8 @@ package it.servizidigitali.presentatoreforms.frontend.portlet.render;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +23,9 @@ import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneforms.service.TipoDocumentoLocalService;
+import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
+import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AllegatoUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.DatiAllegato;
 import it.servizidigitali.presentatoreforms.frontend.util.model.DatiDocumentoPersonale;
@@ -53,6 +57,9 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 	@Reference
 	private TipoDocumentoLocalService tipoDocumentoLocalService;
 	
+	@Reference
+	private PresentatoreFormFrontendService presentatoreFormFrontendService;
+	
 	private Map<String, String> attachmentFileTypesMap;
 	private String attachmentFileTypes = "PDF,P7M,JPG,PNG,DOC,DOCX,XLS,ZIP";
 
@@ -61,15 +68,20 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 		
 		_log.info("render scegliAllegati");
 		
-		Long idFormMock = 52402L;
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
 		Form form = null;
+		Procedura procedura = null;
+		
+		
 		try {
-		form = formLocalService.getForm(idFormMock);
+			procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
+			form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 		} catch (Exception e) {
-			_log.error("errore nel recupero del form: " + idFormMock + " :: ERORR MESSAGE: " + e.getMessage());
+			_log.error("errore nel recupero del form: " + form.getFormId() + " :: ERORR MESSAGE: " + e.getMessage());
 		}
 		
-		List<DefinizioneAllegato> definizioneAllegati = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(idFormMock);
+		List<DefinizioneAllegato> definizioneAllegati = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(form.getFormId());
 		
 		List<DatiAllegato> allegati = AllegatoUtil.mergeDefinizioneAndData(definizioneAllegati, new ArrayList<DatiFileAllegato>());
 		

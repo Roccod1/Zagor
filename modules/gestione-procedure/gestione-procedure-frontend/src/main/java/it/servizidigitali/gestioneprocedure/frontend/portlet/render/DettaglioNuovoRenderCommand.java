@@ -90,6 +90,7 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand {
 				procedura = proceduraLocalService.getProcedura(idProcedura);
 				listaFormIntegrativiProcedura = gestioneProcedureMiddlewareService.getFormIntegrativiProcedura(idProcedura);
 				formPrincipale = gestioneProcedureMiddlewareService.getFormPrincipaleProcedura(idProcedura);
+				listaTemplatePdf = gestioneProcedureMiddlewareService.recuperaTemplatePdfProceduraAttivo(idProcedura, true);
 				String tipiIntegrazioneBackoffice = null;
 
 				if (Validator.isNotNull(formPrincipale) && formPrincipale.getFormId() > 0) {

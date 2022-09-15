@@ -5,11 +5,15 @@ import com.google.gson.JsonObject;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
@@ -17,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.portlet.Portlet;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -40,6 +45,9 @@ import it.servizidigitali.presentatoreforms.frontend.service.integration.input.j
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
+import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalServiceUtil;
 
 /**
  * @author pindi
@@ -101,19 +109,23 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
 				return;
 			}
-
+			
+			// TODO: Recuperare richiesta bozza per l'utente
+			
+			Richiesta richiesta = RichiestaLocalServiceUtil.createRichiesta(14);
+			richiesta.setStato(StatoRichiesta.BOZZA.name());
 			boolean stepComponentiFamiliari = procedura.getStep1Attivo();
 			String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
 
-			boolean bozza = false;
-
-			if (bozza) {
+			if (Validator.isNotNull(richiesta) && richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
+				renderRequest.setAttribute("richiestaId", richiesta.getRichiestaId());
 				include("/home.jsp", renderRequest, renderResponse);
+				presentatoreFormFrontendService.deleteRichiesteBozzaUtente(themeDisplay.getUser().getScreenName(), procedura.getProceduraId());
 			}
 			else {
-				if (!PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND.equals(ParamUtil.getString(renderRequest, "mvcRenderCommandName"))
-						&& !PresentatoreFormsPortletKeys.HOME_RENDER_COMMAND.equals(ParamUtil.getString(renderRequest, "mvcRenderCommandName"))) {
-
+				String mvcRenderCommandName = ParamUtil.getString(renderRequest, "mvcRenderCommandName");
+				String mvcPath = ParamUtil.getString(renderRequest, "mvcPath");
+				if (Validator.isNull(mvcRenderCommandName) && Validator.isNull(mvcPath)) {
 					try {
 
 						if (stepComponentiFamiliari) {
@@ -129,7 +141,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 							renderRequest.setAttribute("codiceFiscaleManuale", codiceFiscale);
 							renderRequest.setAttribute("filtroComponentiFamiliari", filtroComponentiFamiliari);
 
-							include("/scegliComponentiNucleoFamiliare.jsp", renderRequest, renderResponse);
+							include(PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO, renderRequest, renderResponse);
 
 						}
 						else {
@@ -176,7 +188,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 							alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
 
 							renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
-							include("/compilaForm.jsp", renderRequest, renderResponse);
+							include(PresentatoreFormsPortletKeys.JSP_COMPILA_FORM, renderRequest, renderResponse);
 
 						}
 
@@ -191,6 +203,10 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 		catch (PortalException e) {
 			log.error("render :: " + e.getMessage(), e);
 		}
+
+		PortletConfig portletConfig = (PortletConfig) renderRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		LiferayPortletConfig liferayPortletConfig = (LiferayPortletConfig) portletConfig;
+		SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
 
 		super.render(renderRequest, renderResponse);
 

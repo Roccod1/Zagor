@@ -1,12 +1,17 @@
 package it.servizidigitali.presentatoreforms.frontend.service;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -20,6 +25,10 @@ import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
+import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
+import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
  * @author pindi
@@ -44,6 +53,9 @@ public class PresentatoreFormFrontendService {
 
 	@Reference
 	private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
+	
+	@Reference
+	private RichiestaLocalService richiestaLocalService;
 
 	public ServizioEnte getServizioEnteByPage(ThemeDisplay themeDisplay) {
 
@@ -88,5 +100,32 @@ public class PresentatoreFormFrontendService {
 		}
 		return null;
 	}
+	
+	public void deleteRichiesteBozzaUtente(String codiceFiscale, long proceduraId) {
+		RichiestaFilters richiestaFilters = new RichiestaFilters();
+		List<Richiesta> listaRichiesteBozza = new ArrayList<Richiesta>();
+
+		//TODO: Ottimizzare utilizzando il nuovo metodo per recuperare le richieste
+		Set<Long> procedureIds = new HashSet<>();
+		procedureIds.add(proceduraId);
+		richiestaFilters.setCodiceFiscale(codiceFiscale);
+		richiestaFilters.setProcedureIds(procedureIds);
+		richiestaFilters.setTipo(StatoRichiesta.BOZZA.name());
+		
+		listaRichiesteBozza = richiestaLocalService.search(richiestaFilters, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		
+		if(Validator.isNotNull(listaRichiesteBozza) && !listaRichiesteBozza.isEmpty()) {
+			for(Richiesta richiesta : listaRichiesteBozza) {
+				
+				try {
+					richiestaLocalService.deleteRichiesta(richiesta.getRichiestaId());
+				}catch(Exception e) {
+					log.error("Impossibile eliminare la richiesta con ID : " + richiesta.getRichiestaId());
+				}
+
+			}
+		}
+	}
+
 
 }
