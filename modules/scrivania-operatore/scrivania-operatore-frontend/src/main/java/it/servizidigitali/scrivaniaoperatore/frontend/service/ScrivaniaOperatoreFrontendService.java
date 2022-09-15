@@ -13,10 +13,10 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -291,8 +291,7 @@ public class ScrivaniaOperatoreFrontendService {
 		try {
 
 			if (CamundaActionsVariable.VAR_IMPOSTAZIONE_VARIABILI.getValue().equalsIgnoreCase(variable.getName())) {
-
-				LinkedHashMap mapVal = (LinkedHashMap) variable.getValue();
+				AbstractMap mapVal = (AbstractMap) variable.getValue();
 				if (mapVal == null && mapVal.isEmpty()) {
 					return retVal;
 				}
@@ -314,7 +313,7 @@ public class ScrivaniaOperatoreFrontendService {
 			}
 			if (CamundaActionsVariable.VAR_ASSEGNAZIONE_RESPONSABILE.getValue().equalsIgnoreCase(variable.getName())) {
 
-				LinkedHashMap mapVal = (LinkedHashMap) variable.getValue();
+				AbstractMap mapVal = (AbstractMap) variable.getValue();
 				if (mapVal == null && mapVal.isEmpty()) {
 					return retVal;
 				}
@@ -347,7 +346,7 @@ public class ScrivaniaOperatoreFrontendService {
 			}
 			if (CamundaActionsVariable.VAR_RILASCIA_TASK.getValue().equalsIgnoreCase(variable.getName())) {
 
-				LinkedHashMap mapVal = (LinkedHashMap) variable.getValue();
+				AbstractMap mapVal = (AbstractMap) variable.getValue();
 				if (mapVal == null && mapVal.isEmpty()) {
 					return retVal;
 				}
