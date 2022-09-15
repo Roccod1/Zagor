@@ -11,11 +11,19 @@ import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import freemarker.cache.ClassTemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import it.servizidigitali.file.utility.converter.pdf.PDFConverter;
 import it.servizidigitali.file.utility.exception.FileConverterException;
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
@@ -62,6 +70,16 @@ public class AlpacaPDFService implements PDFService {
 		try {
 
 			Gson gson = new Gson();
+			
+			String templateLocation = "/META-INF/resources/freemarker/template.ftl";
+			Map<String,Object> data= new HashMap<String,Object>();
+			ByteArrayOutputStream os =new ByteArrayOutputStream();
+			
+			Configuration config = new Configuration(Configuration.VERSION_2_3_29);
+			config.setTemplateLoader(new ClassTemplateLoader(getClass(), "/"));
+			Template template = null;
+			String htmlContent = null;
+			
 
 			long proceduraId = richiesta.getProceduraId();
 			Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
@@ -76,8 +94,14 @@ public class AlpacaPDFService implements PDFService {
 			alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), definizioneAllegati, true));
 			alpacaStructure.setData(new JsonParser().parse(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
 
-			// TODO generare HTML con template freemarker (da configurazioni sito?)
-			String htmlContent = null;
+			try {
+				template = config.getTemplate(templateLocation);
+				template.process(data, new OutputStreamWriter(os));
+			} catch (Exception e) {
+				log.error("generaPDFCertificato :: " + e.getMessage(), e);
+			}
+			
+			htmlContent = os.toString(StandardCharsets.UTF_8);
 			pdfContent = pdfConverter.generatePDF(htmlContent);
 		}
 		catch (JsonSyntaxException e) {

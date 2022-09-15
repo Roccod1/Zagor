@@ -7,6 +7,20 @@ Export-Package: \
 	it.servizidigitali.presentatoreforms.frontend.constants
 
 Import-Package: \
+  	!com.sun.org.apache.xml.internal.utils,\
+  	!com.sun.org.apache.xpath.internal,\
+  	!com.sun.org.apache.xpath.internal.objects,\
+  	!org.apache.log,\
+  	!org.apache.tools.ant.*,\
+  	!org.apache.xml.utils,\
+  	!org.apache.xpath.*,\
+  	!org.jdom.*,\
+  	!org.mozilla.javascript,\
+  	!org.python.core,\
+  	!org.python.util,\
+  	!org.zeroturnaround.javarebel,\
+  	\
   	*
+  	
   	
  -fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning
