@@ -14,6 +14,8 @@ package it.servizidigitali.common.service.impl;
 
 import com.liferay.portal.aop.AopService;
 
+import java.util.List;
+
 import org.osgi.service.component.annotations.Component;
 
 import it.servizidigitali.common.exception.NoSuchComuneEsteroException;
@@ -26,6 +28,7 @@ import it.servizidigitali.common.service.base.ComuneEsteroLocalServiceBaseImpl;
 @Component(property = "model.class.name=it.servizidigitali.common.model.ComuneEstero", service = AopService.class)
 public class ComuneEsteroLocalServiceImpl extends ComuneEsteroLocalServiceBaseImpl {
 
+	@Override
 	public ComuneEstero getComuneEsteroByCodice(int codice) {
 		ComuneEstero comuneEstero = null;
 		try {
@@ -36,4 +39,13 @@ public class ComuneEsteroLocalServiceImpl extends ComuneEsteroLocalServiceBaseIm
 
 		return comuneEstero;
 	}
+
+	public ComuneEstero getComuneEsteroByDenominazione(String denominazione) {
+		List<ComuneEstero> comuniEsteri = comuneEsteroPersistence.findByDenominazioneLike(denominazione);
+		if (comuniEsteri != null && !comuniEsteri.isEmpty()) {
+			return comuniEsteri.get(0);
+		}
+		return null;
+	}
+
 }

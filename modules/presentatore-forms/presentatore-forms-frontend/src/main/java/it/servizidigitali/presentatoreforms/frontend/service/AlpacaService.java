@@ -6,9 +6,11 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,7 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.backoffice.integration.enums.TipoIntegrazione;
 import it.servizidigitali.backoffice.integration.enums.TipoIntegrazioneBackoffice;
 import it.servizidigitali.backoffice.integration.model.commmon.IntegrationPreferences;
+import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
@@ -48,6 +51,9 @@ public class AlpacaService {
 
 	@Reference
 	private ServizioLocalService servizioLocalService;
+
+	@Reference
+	private GroupLocalService groupLocalService;
 
 	/**
 	 * Carica i dati relativi al form di Alpaca.
@@ -85,14 +91,14 @@ public class AlpacaService {
 		long groupId = procedura.getGroupId();
 		Servizio servizio = servizioLocalService.getServizio(procedura.getServizioId());
 
-		// TODO da groupId
-		long organizationId = 0;
+		long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
 
 		Organization organization = organizationLocalService.getOrganization(organizationId);
 		if (organization != null && organization.isRoot()) {
-			Serializable tipoIntegrazioneSerializable = organization.getExpandoBridge().getAttribute("tipoIntegrazione");
+			Serializable tipoIntegrazioneSerializable = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.TIPO_INTEGRAZIONE.getNomeAttributo());
+			String[] tipoIntegrazioneSerializableStrings = (String[]) tipoIntegrazioneSerializable;
 
-			TipoIntegrazione tipoIntegrazione = TipoIntegrazione.valueOf(tipoIntegrazioneSerializable.toString());
+			TipoIntegrazione tipoIntegrazione = TipoIntegrazione.valueOf(tipoIntegrazioneSerializableStrings[0].toString());
 
 			Map<TipoIntegrazione, Map<String, it.servizidigitali.presentatoreforms.frontend.service.integration.output.IntegrationService>> outputBackofficeIntegrationServicesMap = integrationServiceFactory
 					.getOutputBackofficeIntegrationServicesMap();
@@ -114,8 +120,7 @@ public class AlpacaService {
 		long servizioId = procedura.getServizioId();
 		long groupId = procedura.getGroupId();
 
-		// TODO da groupId
-		long organizationId = 0;
+		long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
 
 		IntegrationPreferences integrationPreferences = getIntegrationPreferences(procedura);
 
@@ -134,16 +139,16 @@ public class AlpacaService {
 		// Enrichment sulla base del tipo di integrazione previsto dal Comune e sul tipo
 		// di TipoIntegrazioneBackoffice
 		if (organization != null && organization.isRoot()) {
-			Serializable anprSerializable = organization.getExpandoBridge().getAttribute("anpr");
-			Serializable tipoIntegrazioneSerializable = organization.getExpandoBridge().getAttribute("tipoIntegrazione");
+			Serializable anprSerializable = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.ANPR.getNomeAttributo());
+			Serializable tipoIntegrazioneSerializable = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.TIPO_INTEGRAZIONE.getNomeAttributo());
+			String[] tipoIntegrazioneSerializableStrings = (String[]) tipoIntegrazioneSerializable;
 
-			TipoIntegrazione tipoIntegrazione = TipoIntegrazione.valueOf(tipoIntegrazioneSerializable.toString());
+			TipoIntegrazione tipoIntegrazione = TipoIntegrazione.valueOf(tipoIntegrazioneSerializableStrings[0].toString());
 
 			// Verifica integrazione ANPR (che deve vincere sui servizi di Backoffice Anagrafici)
 			boolean usaANPR = Boolean.parseBoolean(anprSerializable.toString());
 			if (usaANPR) {
-				// TODO caricare da procedura
-				List<TipoIntegrazioneBackoffice> tipiIntegrazioneBackoffice = null;
+				List<TipoIntegrazioneBackoffice> tipiIntegrazioneBackoffice = getTipiIntegrazioneBackofficeList(procedura.getStep2TipiIntegrazioneBackoffice());
 				if (tipiIntegrazioneBackoffice != null) {
 					for (TipoIntegrazioneBackoffice tipoIntegrazioneBackoffice : tipiIntegrazioneBackoffice) {
 						if (tipoIntegrazioneBackoffice.equals(TipoIntegrazioneBackoffice.VISURA_ANAGRAFICA)
@@ -161,8 +166,7 @@ public class AlpacaService {
 					.getInputBackofficeIntegrationServicesMap();
 
 			Map<TipoIntegrazioneBackoffice, List<BackofficeIntegrationService>> integrationServiceMap = inputBackofficeIntegrationServicesMap.get(tipoIntegrazione);
-			// TODO caricare da procedura
-			List<TipoIntegrazioneBackoffice> tipiIntegrazioneBackoffice = null;
+			List<TipoIntegrazioneBackoffice> tipiIntegrazioneBackoffice = getTipiIntegrazioneBackofficeList(procedura.getStep2TipiIntegrazioneBackoffice());
 			if (integrationServiceMap != null && !integrationServiceMap.isEmpty() && tipiIntegrazioneBackoffice != null) {
 				for (TipoIntegrazioneBackoffice tipoIntegrazioneBackoffice : tipiIntegrazioneBackoffice) {
 					List<BackofficeIntegrationService> backofficeIntegrationServices = integrationServiceMap.get(tipoIntegrazioneBackoffice);
@@ -177,6 +181,28 @@ public class AlpacaService {
 	}
 
 	/**
+	 * @param step2TipiIntegrazioneBackoffice
+	 * @return
+	 */
+	private List<TipoIntegrazioneBackoffice> getTipiIntegrazioneBackofficeList(String step2TipiIntegrazioneBackoffice) {
+		String[] step2TipiIntegrazioneBackofficeSplit = step2TipiIntegrazioneBackoffice.split(",");
+		if (step2TipiIntegrazioneBackofficeSplit != null) {
+			List<TipoIntegrazioneBackoffice> tipoIntegrazioneBackoffices = new ArrayList<TipoIntegrazioneBackoffice>();
+			for (String tipoIntegrazioneBackoffice : step2TipiIntegrazioneBackofficeSplit) {
+				try {
+					tipoIntegrazioneBackoffices.add(TipoIntegrazioneBackoffice.valueOf(tipoIntegrazioneBackoffice));
+				}
+				catch (Exception e) {
+					log.warn("getTipiIntegrazioneBackofficeList :: " + e.getMessage());
+				}
+			}
+			return tipoIntegrazioneBackoffices;
+
+		}
+		return null;
+	}
+
+	/**
 	 *
 	 * @param procedura
 	 * @return
@@ -188,8 +214,8 @@ public class AlpacaService {
 		if (procedura != null) {
 			integrationPreferences = new IntegrationPreferences();
 			String codiceServizio = servizioLocalService.getServizio(procedura.getServizioId()).getCodice();
-			// TODO sistemare da procedura
-			// integrationPreferences.setUsaCache(procedura.getUsaCache());
+			integrationPreferences.setUsaCache(procedura.isAbilitaCacheIntegrazioneBackoffice());
+			integrationPreferences.setCodiceServizio(codiceServizio);
 		}
 
 		return integrationPreferences;

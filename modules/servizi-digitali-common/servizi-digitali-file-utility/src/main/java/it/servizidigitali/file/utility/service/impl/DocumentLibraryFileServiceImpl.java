@@ -216,4 +216,77 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 		}
 		return null;
 	}
+	
+	@Override
+	public long saveJasperReport(String nomeFile, String titolo, String descrizione, long proceduraId, InputStream inputStream, String mimeType, long userId, long groupId)
+			throws FileServiceException {
+
+		try {
+			long defaultRepoId = DLFolderConstants.getDataRepositoryId(groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
+			ServiceContext serviceContext = new ServiceContext();
+			serviceContext.setScopeGroupId(groupId);
+			serviceContext.setUserId(userId);
+			serviceContext.setAddGroupPermissions(true);
+
+			Folder configurazioneProceduraFolder = null;
+			Folder procedure = null;
+			Folder procedura = null;
+			
+			try {
+				configurazioneProceduraFolder = dlAppService.getFolder(defaultRepoId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Procedura");
+			}
+			catch (NoSuchFolderException e) {
+				log.warn("saveRequestFile :: folder Configurazione Procedura non esistente: " + e.getMessage() + ". Creazione folder: " + "Configurazione Procedura");
+				configurazioneProceduraFolder = dlAppService.addFolder(defaultRepoId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Procedura", null, serviceContext);
+			}
+			
+			try {
+				procedure = dlAppService.getFolder(defaultRepoId, configurazioneProceduraFolder.getFolderId(), "Procedure");
+			}
+			catch (NoSuchFolderException e) {
+				log.warn("saveRequestFile :: folder Configurazione Procedura non esistente: " + e.getMessage() + ". Creazione folder: " + "Procedure");
+				procedure = dlAppService.addFolder(defaultRepoId, configurazioneProceduraFolder.getFolderId(), "Procedure", null, serviceContext);
+			}
+			
+			try {
+				procedura = dlAppService.getFolder(defaultRepoId, procedure.getFolderId(), String.valueOf(proceduraId));
+			}
+			catch (NoSuchFolderException e) {
+				log.warn("saveRequestFile :: folder per la Procedura con ID " + proceduraId + "non esistente: " + e.getMessage() + ". Creazione folder");
+				procedura = dlAppService.addFolder(defaultRepoId, procedure.getFolderId(), String.valueOf(proceduraId), null, serviceContext);
+			}
+			
+			if (Validator.isNotNull(inputStream)) {
+				FileEntry addFileEntry = dlAppService.addFileEntry(null, defaultRepoId, procedura.getFolderId(), nomeFile, mimeType, titolo, null, descrizione, null, inputStream,
+						inputStream.available(), null, null, serviceContext);
+				return addFileEntry.getFileEntryId();
+			}
+			
+		}
+		catch (Exception e) {
+			log.error("saveRequestFile :: " + e.getMessage(), e);
+			throw new FileServiceException("saveJasperReport :: errore durante il salvataggio del file '" + nomeFile + "' : " + e.getMessage(), e);
+		}
+		return 0;
+	}
+	
+	@Override
+	public long updateFileEntry (FileEntry file, byte[] fileNuovo, String fileName, long groupId, long userId) {
+		
+		ServiceContext serviceContext = new ServiceContext();
+		serviceContext.setScopeGroupId(groupId);
+		serviceContext.setUserId(userId);
+		
+		try {
+			if(Validator.isNotNull(file) && Validator.isNotNull(fileNuovo)) {
+				file = dlAppService.updateFileEntry(file.getFileEntryId(), fileName, null, fileName, null, fileName, null, 
+						null, fileNuovo, null, null, serviceContext);
+				return file.getFileEntryId();
+			}
+		}catch(Exception e) {
+			log.error("updateFileEntry :: errore durante l'aggiornamento del file : " + fileName + " : " + e.getMessage());
+		}
+	
+		return 0;
+	}
 }

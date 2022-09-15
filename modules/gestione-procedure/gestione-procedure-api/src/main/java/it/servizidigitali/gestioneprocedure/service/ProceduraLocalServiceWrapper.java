@@ -308,6 +308,16 @@ public class ProceduraLocalServiceWrapper
 		return _proceduraLocalService.getProcedura(proceduraId);
 	}
 
+	@Override
+	public it.servizidigitali.gestioneprocedure.model.Procedura
+			getProceduraByServizioIdGroupIdAttiva(
+				long servizioId, long groupId, boolean attiva)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _proceduraLocalService.getProceduraByServizioIdGroupIdAttiva(
+			servizioId, groupId, attiva);
+	}
+
 	/**
 	 * Returns the procedura matching the UUID and group.
 	 *

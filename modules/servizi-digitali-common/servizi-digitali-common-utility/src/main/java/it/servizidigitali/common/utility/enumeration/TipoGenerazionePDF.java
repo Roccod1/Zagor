@@ -1,4 +1,4 @@
-package it.servizidigitali.gestioneprocedure.frontend.enumeration;
+package it.servizidigitali.common.utility.enumeration;
 
 /**
  * @author pindi
