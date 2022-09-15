@@ -309,6 +309,35 @@ public interface RichiestaModel
 	public void setDataProtocollo(Date dataProtocollo);
 
 	/**
+	 * Returns the numero protocollo esterno of this richiesta.
+	 *
+	 * @return the numero protocollo esterno of this richiesta
+	 */
+	@AutoEscape
+	public String getNumeroProtocolloEsterno();
+
+	/**
+	 * Sets the numero protocollo esterno of this richiesta.
+	 *
+	 * @param numeroProtocolloEsterno the numero protocollo esterno of this richiesta
+	 */
+	public void setNumeroProtocolloEsterno(String numeroProtocolloEsterno);
+
+	/**
+	 * Returns the data protocollo esterno of this richiesta.
+	 *
+	 * @return the data protocollo esterno of this richiesta
+	 */
+	public Date getDataProtocolloEsterno();
+
+	/**
+	 * Sets the data protocollo esterno of this richiesta.
+	 *
+	 * @param dataProtocolloEsterno the data protocollo esterno of this richiesta
+	 */
+	public void setDataProtocolloEsterno(Date dataProtocolloEsterno);
+
+	/**
 	 * Returns the oggetto of this richiesta.
 	 *
 	 * @return the oggetto of this richiesta
@@ -403,6 +432,21 @@ public interface RichiestaModel
 	 * @param delegaId the delega ID of this richiesta
 	 */
 	public void setDelegaId(Long delegaId);
+
+	/**
+	 * Returns the process instance ID of this richiesta.
+	 *
+	 * @return the process instance ID of this richiesta
+	 */
+	@AutoEscape
+	public String getProcessInstanceId();
+
+	/**
+	 * Sets the process instance ID of this richiesta.
+	 *
+	 * @param processInstanceId the process instance ID of this richiesta
+	 */
+	public void setProcessInstanceId(String processInstanceId);
 
 	/**
 	 * Returns the procedura ID of this richiesta.

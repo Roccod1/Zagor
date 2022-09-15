@@ -27,10 +27,18 @@
 	</div>
 	<div class="row">
 		<div class="col-3">
-			<aui:input name="queryDataRichDa" label="data-richiesta-da" value="${queryDataRichDa}" />
+			<label><liferay-ui:message key="data-richiesta-da" /></label>
+			<input type="datetime-local"
+		           id="<portlet:namespace/>queryDataRichDa"
+		           name="<portlet:namespace/>queryDataRichDa"
+		           value="${queryDataRichDa}">
 		</div>
 		<div class="col-3">
-			<aui:input name="queryDataRichA" label="data-richiesta-a" value="${queryDataRichA}" />
+			<label><liferay-ui:message key="data-richiesta-a" /></label>
+			<input type="datetime-local"
+		           id="<portlet:namespace/>queryDataRichA"
+		           name="<portlet:namespace/>queryDataRichA"
+		           value="${queryDataRichA}">
 		</div>
 		<div class="col-3">
 			<aui:select name="queryAut" label="tipo-autenticazione" value="${queryAut}">
@@ -48,8 +56,18 @@
 			</aui:select>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-3">
+			<aui:select name="queryServizio" label="servizio" value="${queryServizio}">
+				<aui:option value="0"><liferay-ui:message key="tutti" /></aui:option>
+				<c:forEach items="${servizi}" var="servizio">
+					<aui:option value="${servizio.id}"><c:out value="${servizio.nome}" /></aui:option>
+				</c:forEach>
+			</aui:select>
+		</div>
+	</div>
 	<div class="d-flex justify-content-end">
-		<a href="${resetURL}" class="btn btn-secondary mr-1"><liferay-ui:message key="annulla" /></a>
+		<a href="${resetURL}" class="btn btn-secondary mr-1"><liferay-ui:message key="reset" /></a>
 		<aui:button type="submit" value="cerca" />
 	</div>
 </aui:form>
@@ -64,22 +82,35 @@
 	<portlet:param name="queryDataRichA" value="${queryDataRichA}" />
 	<portlet:param name="queryAut" value="${queryAut}" />
 	<portlet:param name="queryStato" value="${queryStato}" />
+	<portlet:param name="queryServizio" value="${queryServizio}" />
 </liferay-portlet:renderURL>
 
 <liferay-ui:search-container total="${totale}"
                              iteratorURL="${iteratorURL}"
-                             emptyResultsMessage=""
+                             emptyResultsMessage="nessuna-richiesta"
                              delta="10">
 	<liferay-ui:search-container-results results="${lista}" />
 	
-	<liferay-ui:search-container-row className="a" modelVar="elem">
-		<liferay-ui:search-container-column-text name="id" value="1" />
-		<liferay-ui:search-container-column-text name="n-protocollo" value="1" />
-		<liferay-ui:search-container-column-text name="richiedente" value="1" />
-		<liferay-ui:search-container-column-text name="cf-piva" value="1" />
-		<liferay-ui:search-container-column-text name="data-ultimo-aggiornamento" value="1" />
-		<liferay-ui:search-container-column-text name="accesso" value="1" />
-		<liferay-ui:search-container-column-text name="stato" value="1" />
+	<liferay-ui:search-container-row className="it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO" 
+	                                 modelVar="elem">
+		<liferay-ui:search-container-column-text name="id" value="${elem.id}" />
+		<liferay-ui:search-container-column-text name="n-protocollo" value="${elem.numeroProtocollo}" />
+		<liferay-ui:search-container-column-text name="richiedente" value="${elem.richiedente}" />
+		<liferay-ui:search-container-column-text name="cf-piva" value="${elem.cf}" />
+		<fmt:formatDate value="${elem.dataUltimoAggiornamento}" pattern="dd/MM/yyyy" var="elemData" />
+		<liferay-ui:search-container-column-text name="data-ultimo-aggiornamento" value="${elemData}" />
+		<liferay-ui:search-container-column-text name="servizio" value="${elem.servizio}" />
+		<liferay-ui:search-container-column-text name="accesso">
+			<c:choose>
+				<c:when test="${elem.accesso}">
+					<i class="fas fa-lock" title="<liferay-ui:message key="accesso-con-autenticazione" />"></i>
+				</c:when>
+				<c:otherwise>
+					<i class="fas fa-lock-open" title="<liferay-ui:message key="accesso-senza-autenticazione" />"></i>
+				</c:otherwise>
+			</c:choose>
+		</liferay-ui:search-container-column-text>
+		<liferay-ui:search-container-column-text name="stato" value="stato-richiesta-${elem.stato}" translate="true" />
 		<liferay-ui:search-container-column-jsp name="azioni" path="/azioni.jsp" />
 	</liferay-ui:search-container-row>
 	

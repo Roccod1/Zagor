@@ -4875,6 +4875,253 @@ public class RichiestaPersistenceImpl
 	private static final String _FINDER_COLUMN_PROCEDURAID_PROCEDURAID_2 =
 		"richiesta.proceduraId = ?";
 
+	private FinderPath _finderPathFetchByProcessInstanceId;
+	private FinderPath _finderPathCountByProcessInstanceId;
+
+	/**
+	 * Returns the richiesta where processInstanceId = &#63; or throws a <code>NoSuchRichiestaException</code> if it could not be found.
+	 *
+	 * @param processInstanceId the process instance ID
+	 * @return the matching richiesta
+	 * @throws NoSuchRichiestaException if a matching richiesta could not be found
+	 */
+	@Override
+	public Richiesta findByProcessInstanceId(String processInstanceId)
+		throws NoSuchRichiestaException {
+
+		Richiesta richiesta = fetchByProcessInstanceId(processInstanceId);
+
+		if (richiesta == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("processInstanceId=");
+			sb.append(processInstanceId);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchRichiestaException(sb.toString());
+		}
+
+		return richiesta;
+	}
+
+	/**
+	 * Returns the richiesta where processInstanceId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param processInstanceId the process instance ID
+	 * @return the matching richiesta, or <code>null</code> if a matching richiesta could not be found
+	 */
+	@Override
+	public Richiesta fetchByProcessInstanceId(String processInstanceId) {
+		return fetchByProcessInstanceId(processInstanceId, true);
+	}
+
+	/**
+	 * Returns the richiesta where processInstanceId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param processInstanceId the process instance ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching richiesta, or <code>null</code> if a matching richiesta could not be found
+	 */
+	@Override
+	public Richiesta fetchByProcessInstanceId(
+		String processInstanceId, boolean useFinderCache) {
+
+		processInstanceId = Objects.toString(processInstanceId, "");
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {processInstanceId};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByProcessInstanceId, finderArgs);
+		}
+
+		if (result instanceof Richiesta) {
+			Richiesta richiesta = (Richiesta)result;
+
+			if (!Objects.equals(
+					processInstanceId, richiesta.getProcessInstanceId())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_SELECT_RICHIESTA_WHERE);
+
+			boolean bindProcessInstanceId = false;
+
+			if (processInstanceId.isEmpty()) {
+				sb.append(_FINDER_COLUMN_PROCESSINSTANCEID_PROCESSINSTANCEID_3);
+			}
+			else {
+				bindProcessInstanceId = true;
+
+				sb.append(_FINDER_COLUMN_PROCESSINSTANCEID_PROCESSINSTANCEID_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindProcessInstanceId) {
+					queryPos.add(processInstanceId);
+				}
+
+				List<Richiesta> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByProcessInstanceId, finderArgs,
+							list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {processInstanceId};
+							}
+
+							_log.warn(
+								"RichiestaPersistenceImpl.fetchByProcessInstanceId(String, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					Richiesta richiesta = list.get(0);
+
+					result = richiesta;
+
+					cacheResult(richiesta);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (Richiesta)result;
+		}
+	}
+
+	/**
+	 * Removes the richiesta where processInstanceId = &#63; from the database.
+	 *
+	 * @param processInstanceId the process instance ID
+	 * @return the richiesta that was removed
+	 */
+	@Override
+	public Richiesta removeByProcessInstanceId(String processInstanceId)
+		throws NoSuchRichiestaException {
+
+		Richiesta richiesta = findByProcessInstanceId(processInstanceId);
+
+		return remove(richiesta);
+	}
+
+	/**
+	 * Returns the number of richiestas where processInstanceId = &#63;.
+	 *
+	 * @param processInstanceId the process instance ID
+	 * @return the number of matching richiestas
+	 */
+	@Override
+	public int countByProcessInstanceId(String processInstanceId) {
+		processInstanceId = Objects.toString(processInstanceId, "");
+
+		FinderPath finderPath = _finderPathCountByProcessInstanceId;
+
+		Object[] finderArgs = new Object[] {processInstanceId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_RICHIESTA_WHERE);
+
+			boolean bindProcessInstanceId = false;
+
+			if (processInstanceId.isEmpty()) {
+				sb.append(_FINDER_COLUMN_PROCESSINSTANCEID_PROCESSINSTANCEID_3);
+			}
+			else {
+				bindProcessInstanceId = true;
+
+				sb.append(_FINDER_COLUMN_PROCESSINSTANCEID_PROCESSINSTANCEID_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindProcessInstanceId) {
+					queryPos.add(processInstanceId);
+				}
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_PROCESSINSTANCEID_PROCESSINSTANCEID_2 =
+			"richiesta.processInstanceId = ?";
+
+	private static final String
+		_FINDER_COLUMN_PROCESSINSTANCEID_PROCESSINSTANCEID_3 =
+			"(richiesta.processInstanceId IS NULL OR richiesta.processInstanceId = '')";
+
 	public RichiestaPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -4908,6 +5155,10 @@ public class RichiestaPersistenceImpl
 		finderCache.putResult(
 			_finderPathFetchByTokenVisualizzazione,
 			new Object[] {richiesta.getTokenVisualizzazione()}, richiesta);
+
+		finderCache.putResult(
+			_finderPathFetchByProcessInstanceId,
+			new Object[] {richiesta.getProcessInstanceId()}, richiesta);
 	}
 
 	private int _valueObjectFinderCacheListThreshold;
@@ -4994,6 +5245,13 @@ public class RichiestaPersistenceImpl
 			_finderPathCountByTokenVisualizzazione, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByTokenVisualizzazione, args, richiestaModelImpl);
+
+		args = new Object[] {richiestaModelImpl.getProcessInstanceId()};
+
+		finderCache.putResult(
+			_finderPathCountByProcessInstanceId, args, Long.valueOf(1));
+		finderCache.putResult(
+			_finderPathFetchByProcessInstanceId, args, richiestaModelImpl);
 	}
 
 	/**
@@ -5628,6 +5886,16 @@ public class RichiestaPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByProceduraId",
 			new String[] {Long.class.getName()}, new String[] {"proceduraId"},
 			false);
+
+		_finderPathFetchByProcessInstanceId = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByProcessInstanceId",
+			new String[] {String.class.getName()},
+			new String[] {"processInstanceId"}, true);
+
+		_finderPathCountByProcessInstanceId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByProcessInstanceId", new String[] {String.class.getName()},
+			new String[] {"processInstanceId"}, false);
 
 		_setRichiestaUtilPersistence(this);
 	}

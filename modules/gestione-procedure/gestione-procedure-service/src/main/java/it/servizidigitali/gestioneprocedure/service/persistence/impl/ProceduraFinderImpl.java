@@ -17,55 +17,73 @@ import org.osgi.service.component.annotations.Component;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFinder;
 
-
 @Component(service = ProceduraFinder.class)
-public class ProceduraFinderImpl extends ProceduraFinderBaseImpl implements ProceduraFinder{
+public class ProceduraFinderImpl extends ProceduraFinderBaseImpl implements ProceduraFinder {
 
-	
-	
-	public List<Procedura> findByFilters(String denominazione, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId, int cur, int delta, OrderByComparator<Procedura> ordine){
+	@Override
+	public List<Procedura> findByFilters(String denominazione, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId, int cur, int delta,
+			OrderByComparator<Procedura> ordine) {
 		List<Procedura> listaProcedure = new ArrayList<>();
-		
+
 		ClassLoader classLoader = getClass().getClassLoader();
-		
+
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Procedura.class, classLoader);
-		
-		if(Validator.isNotNull(denominazione)) {
+
+		if (Validator.isNotNull(denominazione)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + denominazione + StringPool.PERCENT));
 		}
-		
-		if(Validator.isNotNull(attiva) && !attiva.equalsIgnoreCase("-1")) {
-			
-			if(attiva.equalsIgnoreCase("1")) {
+
+		if (Validator.isNotNull(attiva) && !attiva.equalsIgnoreCase("-1")) {
+
+			if (attiva.equalsIgnoreCase("1")) {
 				dynamicQuery.add(RestrictionsFactoryUtil.eq("attiva", true));
-			}else {
+			}
+			else {
 				dynamicQuery.add(RestrictionsFactoryUtil.eq("attiva", Boolean.parseBoolean(attiva)));
 			}
-			
+
 		}
-		
-		if(Validator.isNotNull(siteGroupId)) {
+
+		if (Validator.isNotNull(siteGroupId)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.eq("groupId", siteGroupId));
 		}
-		
-		
-		if(Validator.isNotNull(dataInserimentoDa)) {
+
+		if (Validator.isNotNull(dataInserimentoDa)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.ge("createDate", dataInserimentoDa));
 		}
-		
-		if(Validator.isNotNull(dataInserimentoA)) {
+
+		if (Validator.isNotNull(dataInserimentoA)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.le("createDate", dataInserimentoA));
 		}
-		
+
 		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
-		
+
 		int inizio = posizioni[0];
 		int fine = posizioni[1];
-		
-		listaProcedure = proceduraPersistence.findWithDynamicQuery(dynamicQuery,inizio,fine,ordine);
-		
+
+		listaProcedure = proceduraPersistence.findWithDynamicQuery(dynamicQuery, inizio, fine, ordine);
+
 		return listaProcedure;
 	}
-	
-	
+
+	@Override
+	public List<Procedura> findByServiziIdsGroupIdAttiva(List<Long> serviziIds, long groupId, Boolean attiva) {
+
+		ClassLoader classLoader = getClass().getClassLoader();
+
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Procedura.class, classLoader);
+		dynamicQuery.add(RestrictionsFactoryUtil.eq("groupId", groupId));
+
+		if (serviziIds != null) {
+			dynamicQuery.add(RestrictionsFactoryUtil.in("servizioId", serviziIds));
+		}
+
+		if (attiva != null) {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("attiva", attiva));
+		}
+
+		return proceduraPersistence.findWithDynamicQuery(dynamicQuery);
+
+	}
+
 }

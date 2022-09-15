@@ -1,6 +1,7 @@
 package it.servizidigitali.gestioneprocedure.frontend.portlet;
 
 import it.servizidigitali.gestioneprocedure.frontend.constants.GestioneProcedurePortletKeys;
+import it.servizidigitali.gestioneprocedure.frontend.service.GestioneProcedureMiddlewareService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 
@@ -55,6 +56,9 @@ public class GestioneProcedurePortlet extends MVCPortlet {
 	@Reference
 	private ProceduraLocalService proceduraLocalService;
 	
+	@Reference
+	private GestioneProcedureMiddlewareService gestioneProcedureMiddlewareService;
+	
 	public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	
@@ -64,6 +68,8 @@ public class GestioneProcedurePortlet extends MVCPortlet {
 
 		
 		List<Procedura> listaProcedure = (List<Procedura>) renderRequest.getAttribute(GestioneProcedurePortletKeys.LISTA_PROCEDURE);
+		
+		Procedura procedura = gestioneProcedureMiddlewareService.getProcedura(themeDisplay.getSiteGroupId(), 45101, true);
 		
 		int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM,GestioneProcedurePortletKeys.DEFAULT_CUR);
 		int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,GestioneProcedurePortletKeys.DEFAULT_DELTA);

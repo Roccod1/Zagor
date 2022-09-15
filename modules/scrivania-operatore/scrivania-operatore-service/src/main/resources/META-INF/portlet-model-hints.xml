@@ -45,12 +45,15 @@
 		<field name="stato" type="String" />
 		<field name="numeroProtocollo" type="String" />
 		<field name="dataProtocollo" type="Date" />
+		<field name="numeroProtocolloEsterno" type="String" />
+		<field name="dataProtocolloEsterno" type="Date" />
 		<field name="oggetto" type="String" />
 		<field name="note" type="String" />
 		<field name="invioGuest" type="boolean" />
 		<field name="tokenVisualizzazione" type="String" />
 		<field name="chiaveAssociazioneBackoffice" type="String" />
 		<field name="delegaId" type="Long" />
+		<field name="processInstanceId" type="String" />
 		<field name="proceduraId" type="long" />
 	</model>
 </model-hints>

@@ -223,6 +223,10 @@ public interface AllegatoRichiestaLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<AllegatoRichiesta> getAllegatiRichiesta(
+		long richiestaId, long groupId);
+
 	/**
 	 * Returns the allegato richiesta with the primary key.
 	 *
@@ -234,6 +238,10 @@ public interface AllegatoRichiestaLocalService
 	public AllegatoRichiesta getAllegatoRichiesta(
 			AllegatoRichiestaPK allegatoRichiestaPK)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public AllegatoRichiesta getAllegatoRichiesta(
+		long richiestaId, boolean principale, long groupId);
 
 	/**
 	 * Returns the allegato richiesta matching the UUID and group.

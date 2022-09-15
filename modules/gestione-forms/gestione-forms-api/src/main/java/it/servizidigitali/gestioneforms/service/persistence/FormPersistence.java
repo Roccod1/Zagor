@@ -573,6 +573,161 @@ public interface FormPersistence extends BasePersistence<Form> {
 	public int countByPrincipale(boolean principale);
 
 	/**
+	 * Returns all the forms where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @return the matching forms
+	 */
+	public java.util.List<Form> findByprincipaleAndGroupId(
+		boolean principale, long groupId);
+
+	/**
+	 * Returns a range of all the forms where principale = &#63; and groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>FormModelImpl</code>.
+	 * </p>
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of forms
+	 * @param end the upper bound of the range of forms (not inclusive)
+	 * @return the range of matching forms
+	 */
+	public java.util.List<Form> findByprincipaleAndGroupId(
+		boolean principale, long groupId, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the forms where principale = &#63; and groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>FormModelImpl</code>.
+	 * </p>
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of forms
+	 * @param end the upper bound of the range of forms (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching forms
+	 */
+	public java.util.List<Form> findByprincipaleAndGroupId(
+		boolean principale, long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<Form>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the forms where principale = &#63; and groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>FormModelImpl</code>.
+	 * </p>
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of forms
+	 * @param end the upper bound of the range of forms (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching forms
+	 */
+	public java.util.List<Form> findByprincipaleAndGroupId(
+		boolean principale, long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<Form>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first form in the ordered set where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching form
+	 * @throws NoSuchFormException if a matching form could not be found
+	 */
+	public Form findByprincipaleAndGroupId_First(
+			boolean principale, long groupId,
+			com.liferay.portal.kernel.util.OrderByComparator<Form>
+				orderByComparator)
+		throws NoSuchFormException;
+
+	/**
+	 * Returns the first form in the ordered set where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching form, or <code>null</code> if a matching form could not be found
+	 */
+	public Form fetchByprincipaleAndGroupId_First(
+		boolean principale, long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator<Form>
+			orderByComparator);
+
+	/**
+	 * Returns the last form in the ordered set where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching form
+	 * @throws NoSuchFormException if a matching form could not be found
+	 */
+	public Form findByprincipaleAndGroupId_Last(
+			boolean principale, long groupId,
+			com.liferay.portal.kernel.util.OrderByComparator<Form>
+				orderByComparator)
+		throws NoSuchFormException;
+
+	/**
+	 * Returns the last form in the ordered set where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching form, or <code>null</code> if a matching form could not be found
+	 */
+	public Form fetchByprincipaleAndGroupId_Last(
+		boolean principale, long groupId,
+		com.liferay.portal.kernel.util.OrderByComparator<Form>
+			orderByComparator);
+
+	/**
+	 * Returns the forms before and after the current form in the ordered set where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param formId the primary key of the current form
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next form
+	 * @throws NoSuchFormException if a form with the primary key could not be found
+	 */
+	public Form[] findByprincipaleAndGroupId_PrevAndNext(
+			long formId, boolean principale, long groupId,
+			com.liferay.portal.kernel.util.OrderByComparator<Form>
+				orderByComparator)
+		throws NoSuchFormException;
+
+	/**
+	 * Removes all the forms where principale = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 */
+	public void removeByprincipaleAndGroupId(boolean principale, long groupId);
+
+	/**
+	 * Returns the number of forms where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @return the number of matching forms
+	 */
+	public int countByprincipaleAndGroupId(boolean principale, long groupId);
+
+	/**
 	 * Caches the form in the entity cache if it is enabled.
 	 *
 	 * @param form the form

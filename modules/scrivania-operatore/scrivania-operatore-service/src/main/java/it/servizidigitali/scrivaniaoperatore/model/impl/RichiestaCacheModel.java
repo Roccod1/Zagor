@@ -62,7 +62,7 @@ public class RichiestaCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(45);
+		StringBundler sb = new StringBundler(51);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -94,6 +94,10 @@ public class RichiestaCacheModel
 		sb.append(numeroProtocollo);
 		sb.append(", dataProtocollo=");
 		sb.append(dataProtocollo);
+		sb.append(", numeroProtocolloEsterno=");
+		sb.append(numeroProtocolloEsterno);
+		sb.append(", dataProtocolloEsterno=");
+		sb.append(dataProtocolloEsterno);
 		sb.append(", oggetto=");
 		sb.append(oggetto);
 		sb.append(", note=");
@@ -106,6 +110,8 @@ public class RichiestaCacheModel
 		sb.append(chiaveAssociazioneBackoffice);
 		sb.append(", delegaId=");
 		sb.append(delegaId);
+		sb.append(", processInstanceId=");
+		sb.append(processInstanceId);
 		sb.append(", proceduraId=");
 		sb.append(proceduraId);
 		sb.append("}");
@@ -199,6 +205,21 @@ public class RichiestaCacheModel
 			richiestaImpl.setDataProtocollo(new Date(dataProtocollo));
 		}
 
+		if (numeroProtocolloEsterno == null) {
+			richiestaImpl.setNumeroProtocolloEsterno("");
+		}
+		else {
+			richiestaImpl.setNumeroProtocolloEsterno(numeroProtocolloEsterno);
+		}
+
+		if (dataProtocolloEsterno == Long.MIN_VALUE) {
+			richiestaImpl.setDataProtocolloEsterno(null);
+		}
+		else {
+			richiestaImpl.setDataProtocolloEsterno(
+				new Date(dataProtocolloEsterno));
+		}
+
 		if (oggetto == null) {
 			richiestaImpl.setOggetto("");
 		}
@@ -231,6 +252,14 @@ public class RichiestaCacheModel
 		}
 
 		richiestaImpl.setDelegaId(delegaId);
+
+		if (processInstanceId == null) {
+			richiestaImpl.setProcessInstanceId("");
+		}
+		else {
+			richiestaImpl.setProcessInstanceId(processInstanceId);
+		}
+
 		richiestaImpl.setProceduraId(proceduraId);
 
 		richiestaImpl.resetOriginalValues();
@@ -259,6 +288,8 @@ public class RichiestaCacheModel
 		stato = objectInput.readUTF();
 		numeroProtocollo = objectInput.readUTF();
 		dataProtocollo = objectInput.readLong();
+		numeroProtocolloEsterno = objectInput.readUTF();
+		dataProtocolloEsterno = objectInput.readLong();
 		oggetto = objectInput.readUTF();
 		note = objectInput.readUTF();
 
@@ -267,6 +298,7 @@ public class RichiestaCacheModel
 		chiaveAssociazioneBackoffice = objectInput.readUTF();
 
 		delegaId = objectInput.readLong();
+		processInstanceId = objectInput.readUTF();
 
 		proceduraId = objectInput.readLong();
 	}
@@ -342,6 +374,15 @@ public class RichiestaCacheModel
 
 		objectOutput.writeLong(dataProtocollo);
 
+		if (numeroProtocolloEsterno == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(numeroProtocolloEsterno);
+		}
+
+		objectOutput.writeLong(dataProtocolloEsterno);
+
 		if (oggetto == null) {
 			objectOutput.writeUTF("");
 		}
@@ -374,6 +415,13 @@ public class RichiestaCacheModel
 
 		objectOutput.writeLong(delegaId);
 
+		if (processInstanceId == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(processInstanceId);
+		}
+
 		objectOutput.writeLong(proceduraId);
 	}
 
@@ -392,12 +440,15 @@ public class RichiestaCacheModel
 	public String stato;
 	public String numeroProtocollo;
 	public long dataProtocollo;
+	public String numeroProtocolloEsterno;
+	public long dataProtocolloEsterno;
 	public String oggetto;
 	public String note;
 	public boolean invioGuest;
 	public String tokenVisualizzazione;
 	public String chiaveAssociazioneBackoffice;
 	public long delegaId;
+	public String processInstanceId;
 	public long proceduraId;
 
 }

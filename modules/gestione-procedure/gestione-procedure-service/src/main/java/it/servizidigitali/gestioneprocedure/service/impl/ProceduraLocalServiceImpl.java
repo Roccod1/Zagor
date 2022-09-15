@@ -15,15 +15,13 @@
 package it.servizidigitali.gestioneprocedure.service.impl;
 
 import com.liferay.portal.aop.AopService;
-import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONException;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -59,13 +57,29 @@ public class ProceduraLocalServiceImpl extends ProceduraLocalServiceBaseImpl {
 		return listaProcedure;
 	}
 	
-	
-	public String getStringSelectMultipla (String string) throws JSONException {
-		string = "[" + string + "]";
-		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(string);
-		String jsonArrayString = JSONFactoryUtil.createJSONSerializer().serialize(jsonArray);
+	public List<Procedura> getProcedureByGroupIdServizioIdAttiva(long groupId, long servizioId, boolean attiva){
+		List<Procedura> listaProcedure = null;
 		
-		return jsonArrayString;
+		if(groupId>0 && servizioId>0) {
+			listaProcedure = new ArrayList<Procedura>();
+			listaProcedure = proceduraPersistence.findByGroupIdServizioIdAttiva(groupId, servizioId, attiva);
+		}
+		
+		return listaProcedure;
+	}
+	
+	public List<Procedura> getProcedureByGroupIdAttiva(long groupId, boolean attiva){
+		List<Procedura> listaProcedure = null;
+		
+		if(groupId>0) {
+			listaProcedure = proceduraPersistence.findByGroupIdAttiva(groupId, attiva);
+		}
+		
+		return listaProcedure;
+	}
+	@Override
+	public List<Procedura> getProcedureByServiziIdsGroupIdAttiva(List<Long> serviziIds, long groupId, Boolean attiva) {
+		return proceduraFinder.findByServiziIdsGroupIdAttiva(serviziIds, groupId, attiva);
 	}
 
 }

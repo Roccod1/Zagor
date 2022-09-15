@@ -1957,6 +1957,812 @@ public class AllegatoRichiestaPersistenceImpl
 	private static final String _FINDER_COLUMN_URL_URL_3 =
 		"(allegatoRichiesta.url IS NULL OR allegatoRichiesta.url = '')";
 
+	private FinderPath _finderPathFetchByR_P_G;
+	private FinderPath _finderPathCountByR_P_G;
+
+	/**
+	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; and groupId = &#63; or throws a <code>NoSuchAllegatoRichiestaException</code> if it could not be found.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @return the matching allegato richiesta
+	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
+	 */
+	@Override
+	public AllegatoRichiesta findByR_P_G(
+			long richiestaId, boolean principale, long groupId)
+		throws NoSuchAllegatoRichiestaException {
+
+		AllegatoRichiesta allegatoRichiesta = fetchByR_P_G(
+			richiestaId, principale, groupId);
+
+		if (allegatoRichiesta == null) {
+			StringBundler sb = new StringBundler(8);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("richiestaId=");
+			sb.append(richiestaId);
+
+			sb.append(", principale=");
+			sb.append(principale);
+
+			sb.append(", groupId=");
+			sb.append(groupId);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchAllegatoRichiestaException(sb.toString());
+		}
+
+		return allegatoRichiesta;
+	}
+
+	/**
+	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @return the matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
+	 */
+	@Override
+	public AllegatoRichiesta fetchByR_P_G(
+		long richiestaId, boolean principale, long groupId) {
+
+		return fetchByR_P_G(richiestaId, principale, groupId, true);
+	}
+
+	/**
+	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
+	 */
+	@Override
+	public AllegatoRichiesta fetchByR_P_G(
+		long richiestaId, boolean principale, long groupId,
+		boolean useFinderCache) {
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {richiestaId, principale, groupId};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(_finderPathFetchByR_P_G, finderArgs);
+		}
+
+		if (result instanceof AllegatoRichiesta) {
+			AllegatoRichiesta allegatoRichiesta = (AllegatoRichiesta)result;
+
+			if ((richiestaId != allegatoRichiesta.getRichiestaId()) ||
+				(principale != allegatoRichiesta.isPrincipale()) ||
+				(groupId != allegatoRichiesta.getGroupId())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(5);
+
+			sb.append(_SQL_SELECT_ALLEGATORICHIESTA_WHERE);
+
+			sb.append(_FINDER_COLUMN_R_P_G_RICHIESTAID_2);
+
+			sb.append(_FINDER_COLUMN_R_P_G_PRINCIPALE_2);
+
+			sb.append(_FINDER_COLUMN_R_P_G_GROUPID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(richiestaId);
+
+				queryPos.add(principale);
+
+				queryPos.add(groupId);
+
+				List<AllegatoRichiesta> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByR_P_G, finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {
+									richiestaId, principale, groupId
+								};
+							}
+
+							_log.warn(
+								"AllegatoRichiestaPersistenceImpl.fetchByR_P_G(long, boolean, long, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					AllegatoRichiesta allegatoRichiesta = list.get(0);
+
+					result = allegatoRichiesta;
+
+					cacheResult(allegatoRichiesta);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (AllegatoRichiesta)result;
+		}
+	}
+
+	/**
+	 * Removes the allegato richiesta where richiestaId = &#63; and principale = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @return the allegato richiesta that was removed
+	 */
+	@Override
+	public AllegatoRichiesta removeByR_P_G(
+			long richiestaId, boolean principale, long groupId)
+		throws NoSuchAllegatoRichiestaException {
+
+		AllegatoRichiesta allegatoRichiesta = findByR_P_G(
+			richiestaId, principale, groupId);
+
+		return remove(allegatoRichiesta);
+	}
+
+	/**
+	 * Returns the number of allegato richiestas where richiestaId = &#63; and principale = &#63; and groupId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @return the number of matching allegato richiestas
+	 */
+	@Override
+	public int countByR_P_G(
+		long richiestaId, boolean principale, long groupId) {
+
+		FinderPath finderPath = _finderPathCountByR_P_G;
+
+		Object[] finderArgs = new Object[] {richiestaId, principale, groupId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_COUNT_ALLEGATORICHIESTA_WHERE);
+
+			sb.append(_FINDER_COLUMN_R_P_G_RICHIESTAID_2);
+
+			sb.append(_FINDER_COLUMN_R_P_G_PRINCIPALE_2);
+
+			sb.append(_FINDER_COLUMN_R_P_G_GROUPID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(richiestaId);
+
+				queryPos.add(principale);
+
+				queryPos.add(groupId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_R_P_G_RICHIESTAID_2 =
+		"allegatoRichiesta.id.richiestaId = ? AND ";
+
+	private static final String _FINDER_COLUMN_R_P_G_PRINCIPALE_2 =
+		"allegatoRichiesta.principale = ? AND ";
+
+	private static final String _FINDER_COLUMN_R_P_G_GROUPID_2 =
+		"allegatoRichiesta.groupId = ?";
+
+	private FinderPath _finderPathWithPaginationFindByR_G;
+	private FinderPath _finderPathWithoutPaginationFindByR_G;
+	private FinderPath _finderPathCountByR_G;
+
+	/**
+	 * Returns all the allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param groupId the group ID
+	 * @return the matching allegato richiestas
+	 */
+	@Override
+	public List<AllegatoRichiesta> findByR_G(long richiestaId, long groupId) {
+		return findByR_G(
+			richiestaId, groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of allegato richiestas
+	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
+	 * @return the range of matching allegato richiestas
+	 */
+	@Override
+	public List<AllegatoRichiesta> findByR_G(
+		long richiestaId, long groupId, int start, int end) {
+
+		return findByR_G(richiestaId, groupId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of allegato richiestas
+	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching allegato richiestas
+	 */
+	@Override
+	public List<AllegatoRichiesta> findByR_G(
+		long richiestaId, long groupId, int start, int end,
+		OrderByComparator<AllegatoRichiesta> orderByComparator) {
+
+		return findByR_G(
+			richiestaId, groupId, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of allegato richiestas
+	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching allegato richiestas
+	 */
+	@Override
+	public List<AllegatoRichiesta> findByR_G(
+		long richiestaId, long groupId, int start, int end,
+		OrderByComparator<AllegatoRichiesta> orderByComparator,
+		boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByR_G;
+				finderArgs = new Object[] {richiestaId, groupId};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByR_G;
+			finderArgs = new Object[] {
+				richiestaId, groupId, start, end, orderByComparator
+			};
+		}
+
+		List<AllegatoRichiesta> list = null;
+
+		if (useFinderCache) {
+			list = (List<AllegatoRichiesta>)finderCache.getResult(
+				finderPath, finderArgs);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (AllegatoRichiesta allegatoRichiesta : list) {
+					if ((richiestaId != allegatoRichiesta.getRichiestaId()) ||
+						(groupId != allegatoRichiesta.getGroupId())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(4);
+			}
+
+			sb.append(_SQL_SELECT_ALLEGATORICHIESTA_WHERE);
+
+			sb.append(_FINDER_COLUMN_R_G_RICHIESTAID_2);
+
+			sb.append(_FINDER_COLUMN_R_G_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(AllegatoRichiestaModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(richiestaId);
+
+				queryPos.add(groupId);
+
+				list = (List<AllegatoRichiesta>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching allegato richiesta
+	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
+	 */
+	@Override
+	public AllegatoRichiesta findByR_G_First(
+			long richiestaId, long groupId,
+			OrderByComparator<AllegatoRichiesta> orderByComparator)
+		throws NoSuchAllegatoRichiestaException {
+
+		AllegatoRichiesta allegatoRichiesta = fetchByR_G_First(
+			richiestaId, groupId, orderByComparator);
+
+		if (allegatoRichiesta != null) {
+			return allegatoRichiesta;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("richiestaId=");
+		sb.append(richiestaId);
+
+		sb.append(", groupId=");
+		sb.append(groupId);
+
+		sb.append("}");
+
+		throw new NoSuchAllegatoRichiestaException(sb.toString());
+	}
+
+	/**
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
+	 */
+	@Override
+	public AllegatoRichiesta fetchByR_G_First(
+		long richiestaId, long groupId,
+		OrderByComparator<AllegatoRichiesta> orderByComparator) {
+
+		List<AllegatoRichiesta> list = findByR_G(
+			richiestaId, groupId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching allegato richiesta
+	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
+	 */
+	@Override
+	public AllegatoRichiesta findByR_G_Last(
+			long richiestaId, long groupId,
+			OrderByComparator<AllegatoRichiesta> orderByComparator)
+		throws NoSuchAllegatoRichiestaException {
+
+		AllegatoRichiesta allegatoRichiesta = fetchByR_G_Last(
+			richiestaId, groupId, orderByComparator);
+
+		if (allegatoRichiesta != null) {
+			return allegatoRichiesta;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("richiestaId=");
+		sb.append(richiestaId);
+
+		sb.append(", groupId=");
+		sb.append(groupId);
+
+		sb.append("}");
+
+		throw new NoSuchAllegatoRichiestaException(sb.toString());
+	}
+
+	/**
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
+	 */
+	@Override
+	public AllegatoRichiesta fetchByR_G_Last(
+		long richiestaId, long groupId,
+		OrderByComparator<AllegatoRichiesta> orderByComparator) {
+
+		int count = countByR_G(richiestaId, groupId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<AllegatoRichiesta> list = findByR_G(
+			richiestaId, groupId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 *
+	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param richiestaId the richiesta ID
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next allegato richiesta
+	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
+	 */
+	@Override
+	public AllegatoRichiesta[] findByR_G_PrevAndNext(
+			AllegatoRichiestaPK allegatoRichiestaPK, long richiestaId,
+			long groupId,
+			OrderByComparator<AllegatoRichiesta> orderByComparator)
+		throws NoSuchAllegatoRichiestaException {
+
+		AllegatoRichiesta allegatoRichiesta = findByPrimaryKey(
+			allegatoRichiestaPK);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			AllegatoRichiesta[] array = new AllegatoRichiestaImpl[3];
+
+			array[0] = getByR_G_PrevAndNext(
+				session, allegatoRichiesta, richiestaId, groupId,
+				orderByComparator, true);
+
+			array[1] = allegatoRichiesta;
+
+			array[2] = getByR_G_PrevAndNext(
+				session, allegatoRichiesta, richiestaId, groupId,
+				orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected AllegatoRichiesta getByR_G_PrevAndNext(
+		Session session, AllegatoRichiesta allegatoRichiesta, long richiestaId,
+		long groupId, OrderByComparator<AllegatoRichiesta> orderByComparator,
+		boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(4);
+		}
+
+		sb.append(_SQL_SELECT_ALLEGATORICHIESTA_WHERE);
+
+		sb.append(_FINDER_COLUMN_R_G_RICHIESTAID_2);
+
+		sb.append(_FINDER_COLUMN_R_G_GROUPID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(AllegatoRichiestaModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(richiestaId);
+
+		queryPos.add(groupId);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						allegatoRichiesta)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<AllegatoRichiesta> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the allegato richiestas where richiestaId = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param groupId the group ID
+	 */
+	@Override
+	public void removeByR_G(long richiestaId, long groupId) {
+		for (AllegatoRichiesta allegatoRichiesta :
+				findByR_G(
+					richiestaId, groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+					null)) {
+
+			remove(allegatoRichiesta);
+		}
+	}
+
+	/**
+	 * Returns the number of allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param groupId the group ID
+	 * @return the number of matching allegato richiestas
+	 */
+	@Override
+	public int countByR_G(long richiestaId, long groupId) {
+		FinderPath finderPath = _finderPathCountByR_G;
+
+		Object[] finderArgs = new Object[] {richiestaId, groupId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_ALLEGATORICHIESTA_WHERE);
+
+			sb.append(_FINDER_COLUMN_R_G_RICHIESTAID_2);
+
+			sb.append(_FINDER_COLUMN_R_G_GROUPID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(richiestaId);
+
+				queryPos.add(groupId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_R_G_RICHIESTAID_2 =
+		"allegatoRichiesta.id.richiestaId = ? AND ";
+
+	private static final String _FINDER_COLUMN_R_G_GROUPID_2 =
+		"allegatoRichiesta.groupId = ?";
+
 	public AllegatoRichiestaPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -1997,6 +2803,14 @@ public class AllegatoRichiestaPersistenceImpl
 
 		finderCache.putResult(
 			_finderPathFetchByUrl, new Object[] {allegatoRichiesta.getUrl()},
+			allegatoRichiesta);
+
+		finderCache.putResult(
+			_finderPathFetchByR_P_G,
+			new Object[] {
+				allegatoRichiesta.getRichiestaId(),
+				allegatoRichiesta.isPrincipale(), allegatoRichiesta.getGroupId()
+			},
 			allegatoRichiesta);
 	}
 
@@ -2095,6 +2909,16 @@ public class AllegatoRichiestaPersistenceImpl
 		finderCache.putResult(_finderPathCountByUrl, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUrl, args, allegatoRichiestaModelImpl);
+
+		args = new Object[] {
+			allegatoRichiestaModelImpl.getRichiestaId(),
+			allegatoRichiestaModelImpl.isPrincipale(),
+			allegatoRichiestaModelImpl.getGroupId()
+		};
+
+		finderCache.putResult(_finderPathCountByR_P_G, args, Long.valueOf(1));
+		finderCache.putResult(
+			_finderPathFetchByR_P_G, args, allegatoRichiestaModelImpl);
 	}
 
 	/**
@@ -2646,6 +3470,41 @@ public class AllegatoRichiestaPersistenceImpl
 		_finderPathCountByUrl = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUrl",
 			new String[] {String.class.getName()}, new String[] {"url"}, false);
+
+		_finderPathFetchByR_P_G = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByR_P_G",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				Long.class.getName()
+			},
+			new String[] {"richiestaId", "principale", "groupId"}, true);
+
+		_finderPathCountByR_P_G = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_P_G",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				Long.class.getName()
+			},
+			new String[] {"richiestaId", "principale", "groupId"}, false);
+
+		_finderPathWithPaginationFindByR_G = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_G",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			},
+			new String[] {"richiestaId", "groupId"}, true);
+
+		_finderPathWithoutPaginationFindByR_G = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_G",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"richiestaId", "groupId"}, true);
+
+		_finderPathCountByR_G = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_G",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"richiestaId", "groupId"}, false);
 
 		_setAllegatoRichiestaUtilPersistence(this);
 	}

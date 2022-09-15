@@ -259,6 +259,12 @@ public interface ServizioEnteLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ServizioEnte> getServiziEnte(long organizationId);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<ServizioEnte>
+		getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(
+			long organizationId, List<Long> subOrganizationIds, Boolean attivo,
+			long groupId, long companyId);
+
 	/**
 	 * Returns the servizio ente with the primary key.
 	 *
@@ -269,6 +275,10 @@ public interface ServizioEnteLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ServizioEnte getServizioEnte(ServizioEntePK servizioEntePK)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public ServizioEnte getServizioEnteByOrganizationIdLayoutId(
+		long organizationId, long layoutId);
 
 	/**
 	 * Returns the servizio ente matching the UUID and group.

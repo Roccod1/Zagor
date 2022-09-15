@@ -928,6 +928,82 @@ public class ProcessoUtil {
 	}
 
 	/**
+	 * Returns the processo where deploymentId = &#63; and resourceId = &#63; or throws a <code>NoSuchProcessoException</code> if it could not be found.
+	 *
+	 * @param deploymentId the deployment ID
+	 * @param resourceId the resource ID
+	 * @return the matching processo
+	 * @throws NoSuchProcessoException if a matching processo could not be found
+	 */
+	public static Processo findByDeploymentIdResourceId(
+			String deploymentId, String resourceId)
+		throws it.servizidigitali.gestioneprocessi.exception.
+			NoSuchProcessoException {
+
+		return getPersistence().findByDeploymentIdResourceId(
+			deploymentId, resourceId);
+	}
+
+	/**
+	 * Returns the processo where deploymentId = &#63; and resourceId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param deploymentId the deployment ID
+	 * @param resourceId the resource ID
+	 * @return the matching processo, or <code>null</code> if a matching processo could not be found
+	 */
+	public static Processo fetchByDeploymentIdResourceId(
+		String deploymentId, String resourceId) {
+
+		return getPersistence().fetchByDeploymentIdResourceId(
+			deploymentId, resourceId);
+	}
+
+	/**
+	 * Returns the processo where deploymentId = &#63; and resourceId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param deploymentId the deployment ID
+	 * @param resourceId the resource ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching processo, or <code>null</code> if a matching processo could not be found
+	 */
+	public static Processo fetchByDeploymentIdResourceId(
+		String deploymentId, String resourceId, boolean useFinderCache) {
+
+		return getPersistence().fetchByDeploymentIdResourceId(
+			deploymentId, resourceId, useFinderCache);
+	}
+
+	/**
+	 * Removes the processo where deploymentId = &#63; and resourceId = &#63; from the database.
+	 *
+	 * @param deploymentId the deployment ID
+	 * @param resourceId the resource ID
+	 * @return the processo that was removed
+	 */
+	public static Processo removeByDeploymentIdResourceId(
+			String deploymentId, String resourceId)
+		throws it.servizidigitali.gestioneprocessi.exception.
+			NoSuchProcessoException {
+
+		return getPersistence().removeByDeploymentIdResourceId(
+			deploymentId, resourceId);
+	}
+
+	/**
+	 * Returns the number of processos where deploymentId = &#63; and resourceId = &#63;.
+	 *
+	 * @param deploymentId the deployment ID
+	 * @param resourceId the resource ID
+	 * @return the number of matching processos
+	 */
+	public static int countByDeploymentIdResourceId(
+		String deploymentId, String resourceId) {
+
+		return getPersistence().countByDeploymentIdResourceId(
+			deploymentId, resourceId);
+	}
+
+	/**
 	 * Caches the processo in the entity cache if it is enabled.
 	 *
 	 * @param processo the processo

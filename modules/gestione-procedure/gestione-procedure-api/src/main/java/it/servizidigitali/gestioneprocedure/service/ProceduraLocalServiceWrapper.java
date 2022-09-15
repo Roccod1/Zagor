@@ -391,22 +391,41 @@ public class ProceduraLocalServiceWrapper
 	}
 
 	@Override
-	public String getStringSelectMultipla(String string)
-		throws com.liferay.portal.kernel.json.JSONException {
+	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
+		getProcedureByGroupIdAttiva(long groupId, boolean attiva) {
 
-		return _proceduraLocalService.getStringSelectMultipla(string);
+		return _proceduraLocalService.getProcedureByGroupIdAttiva(
+			groupId, attiva);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
+		getProcedureByGroupIdServizioIdAttiva(
+			long groupId, long servizioId, boolean attiva) {
+
+		return _proceduraLocalService.getProcedureByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
+		getProcedureByServiziIdsGroupIdAttiva(
+			java.util.List<Long> serviziIds, long groupId, Boolean attiva) {
+
+		return _proceduraLocalService.getProcedureByServiziIdsGroupIdAttiva(
+			serviziIds, groupId, attiva);
 	}
 
 	@Override
 	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
 		search(
 			String nome, String attiva, java.util.Date dataInserimentoDa,
-			java.util.Date dataInserimentoA, long siteGroupId, int delta,
-			int cur, String orderByCol, String orderByType) {
+			java.util.Date dataInserimentoA, long groupId, int delta, int cur,
+			String orderByCol, String orderByType) {
 
 		return _proceduraLocalService.search(
-			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId,
-			delta, cur, orderByCol, orderByType);
+			nome, attiva, dataInserimentoDa, dataInserimentoA, groupId, delta,
+			cur, orderByCol, orderByType);
 	}
 
 	/**

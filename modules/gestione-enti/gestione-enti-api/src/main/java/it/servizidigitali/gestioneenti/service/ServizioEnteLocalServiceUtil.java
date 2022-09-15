@@ -300,6 +300,16 @@ public class ServizioEnteLocalServiceUtil {
 		return getService().getServiziEnte(organizationId);
 	}
 
+	public static List<ServizioEnte>
+		getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(
+			long organizationId, List<Long> subOrganizationIds, Boolean attivo,
+			long groupId, long companyId) {
+
+		return getService().
+			getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(
+				organizationId, subOrganizationIds, attivo, groupId, companyId);
+	}
+
 	/**
 	 * Returns the servizio ente with the primary key.
 	 *
@@ -313,6 +323,13 @@ public class ServizioEnteLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getServizioEnte(servizioEntePK);
+	}
+
+	public static ServizioEnte getServizioEnteByOrganizationIdLayoutId(
+		long organizationId, long layoutId) {
+
+		return getService().getServizioEnteByOrganizationIdLayoutId(
+			organizationId, layoutId);
 	}
 
 	/**
