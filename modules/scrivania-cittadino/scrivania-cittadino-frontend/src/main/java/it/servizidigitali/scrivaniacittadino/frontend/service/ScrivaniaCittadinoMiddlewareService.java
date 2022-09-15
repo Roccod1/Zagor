@@ -56,13 +56,9 @@ public class ScrivaniaCittadinoMiddlewareService {
 			// FIXME trovare un modo x caricare la tipologia
 			Tipologia tipologia = tipologiaLocalService.getTipologia(69332);
 
-			List<Servizio> listServiziByTupologia = servizioLocalService.getTipologiaServizios(tipologia.getTipologiaId());
-			listServiziByTupologia.stream().forEach(servizio -> serviziIds.add(servizio.getServizioId()));
+			List<Servizio> listServiziByTipologia = servizioLocalService.getTipologiaServizios(tipologia.getTipologiaId());
+			listServiziByTipologia.stream().forEach(servizio -> serviziIds.add(servizio.getServizioId()));
 			List<Procedura> listaProcedure = proceduraLocalService.getProcedureByServiziIdsGroupIdAttiva(serviziIds, groupId, attivo);
-
-			if (Validator.isNull(listaProcedure) || listaProcedure.isEmpty()) {
-				throw new RuntimeException("Nessuna procedura legata a servizi di pagamento");
-			}
 
 			listaProcedure.stream().forEach(procedura -> procedureIds.add(procedura.getProceduraId()));
 
