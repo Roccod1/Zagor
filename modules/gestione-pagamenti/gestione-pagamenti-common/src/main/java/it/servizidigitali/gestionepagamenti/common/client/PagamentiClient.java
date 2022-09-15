@@ -1,8 +1,8 @@
 package it.servizidigitali.gestionepagamenti.common.client;
 
 import it.servizidigitali.gestionepagamenti.common.client.exeption.PagamentiClientException;
-import it.servizidigitali.gestionepagamenti.common.client.model.InviaPagamentoRichiesta;
 import it.servizidigitali.gestionepagamenti.common.client.model.InvioPagamentoRisposta;
+import it.servizidigitali.gestionepagamenti.common.client.model.Pagamento;
 
 /**
  * @author pindi
@@ -12,10 +12,14 @@ public interface PagamentiClient {
 
 	/**
 	 *
-	 * @param inviaPagamentoRichiesta
+	 * @param pagamento
+	 * @param username
+	 * @param password
+	 * @param wsdlUrl
+	 * @param rispostaPagamentoUrl
 	 * @return
 	 * @throws PagamentiClientException
 	 */
-	InvioPagamentoRisposta inviaPagamento(InviaPagamentoRichiesta inviaPagamentoRichiesta) throws PagamentiClientException;
+	InvioPagamentoRisposta inviaPagamento(Pagamento pagamento, String username, String password, String wsdlUrl, String rispostaPagamentoUrl) throws PagamentiClientException;
 
 }
