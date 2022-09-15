@@ -1,6 +1,31 @@
 <%@ include file="init.jsp" %>
 
-<h1><liferay-ui:message key="dati-richiedente" /></h1>
+<h2>
+	<liferay-ui:message key="dati-dettaglio-pratica" arguments="${titleArgs}" />
+</h2>
+
+<div class="d-flex justify-content-start">
+	<h3><liferay-ui:message key="dati-richiedente" /></h3>
+	<c:choose>
+		<c:when test="${richiesta.accesso}">
+			<i class="fas fa-lock ml-2 mt-2" title="<liferay-ui:message key="invio-con-autenticazione" />"></i>
+		</c:when>
+		<c:otherwise>
+			<i class="fas fa-lock-open ml-2 mt-2" title="<liferay-ui:message key="invio-senza-autenticazione" />"></i>
+		</c:otherwise>
+	</c:choose>
+</div>
+
+<c:if test="${inCarico}">
+	<div class="row">
+		<button class="btn btn-primary mr-1 mt-1"><liferay-ui:message key="assegna-altro-responsabile" /></button>
+		<button class="btn btn-primary mr-1 mt-1"><liferay-ui:message key="assegna-responsabile" /></button>
+		<button class="btn btn-primary mr-1 mt-1"><liferay-ui:message key="chiudi-esito-positivo" /></button>
+		<button class="btn btn-primary mr-1 mt-1"><liferay-ui:message key="chiudi-esito-negativo" /></button>
+		<button class="btn btn-primary mr-1 mt-1"><liferay-ui:message key="richiedi-modifiche-integrazioni-richiedente" /></button>
+		<button class="btn btn-primary mr-1 mt-1"><liferay-ui:message key="rilascia" /></button>
+	</div>
+</c:if>
 
 <div class="row">
 	<div class="col-6">
@@ -41,7 +66,7 @@
 	</div>
 </div>
 
-<h1><liferay-ui:message key="dati-richiesta" /></h1>
+<h3><liferay-ui:message key="dati-richiesta" /></h3>
 
 <div class="row">
 	<div class="col-6">
@@ -102,4 +127,15 @@
 		<aui:input name="data-protocollo-esito" value="${richiestaDataProtocolloEsterno}" readonly="true" />
 	</div>
 </div>
+
+<div class="row d-flex justify-content-end">
+	<button class="btn btn-primary mr-1">
+		<i class="fas fa-download"></i>
+		<liferay-ui:message key="scarica-visualizza-modello-compilato-cittadino" arguments="${modelloArgs}" />
+	</button>
+	<button class="btn btn-primary">
+		<liferay-ui:message key="salva-dati-protocollo" />
+	</button>
+</div>
+
 

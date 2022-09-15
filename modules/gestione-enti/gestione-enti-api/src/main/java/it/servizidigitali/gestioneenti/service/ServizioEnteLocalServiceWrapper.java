@@ -364,6 +364,15 @@ public class ServizioEnteLocalServiceWrapper
 		return _servizioEnteLocalService.getServizioEnte(servizioEntePK);
 	}
 
+	@Override
+	public it.servizidigitali.gestioneenti.model.ServizioEnte
+		getServizioEnteByOrganizationIdLayoutId(
+			long organizationId, long layoutId) {
+
+		return _servizioEnteLocalService.
+			getServizioEnteByOrganizationIdLayoutId(organizationId, layoutId);
+	}
+
 	/**
 	 * Returns the servizio ente matching the UUID and group.
 	 *

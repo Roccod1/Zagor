@@ -56,6 +56,16 @@
 			</aui:select>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-3">
+			<aui:select name="queryServizio" label="servizio" value="${queryServizio}">
+				<aui:option value="0"><liferay-ui:message key="tutti" /></aui:option>
+				<c:forEach items="${servizi}" var="servizio">
+					<aui:option value="${servizio.id}"><c:out value="${servizio.nome}" /></aui:option>
+				</c:forEach>
+			</aui:select>
+		</div>
+	</div>
 	<div class="d-flex justify-content-end">
 		<a href="${resetURL}" class="btn btn-secondary mr-1"><liferay-ui:message key="reset" /></a>
 		<aui:button type="submit" value="cerca" />
@@ -72,6 +82,7 @@
 	<portlet:param name="queryDataRichA" value="${queryDataRichA}" />
 	<portlet:param name="queryAut" value="${queryAut}" />
 	<portlet:param name="queryStato" value="${queryStato}" />
+	<portlet:param name="queryServizio" value="${queryServizio}" />
 </liferay-portlet:renderURL>
 
 <liferay-ui:search-container total="${totale}"
@@ -88,13 +99,14 @@
 		<liferay-ui:search-container-column-text name="cf-piva" value="${elem.cf}" />
 		<fmt:formatDate value="${elem.dataUltimoAggiornamento}" pattern="dd/MM/yyyy" var="elemData" />
 		<liferay-ui:search-container-column-text name="data-ultimo-aggiornamento" value="${elemData}" />
+		<liferay-ui:search-container-column-text name="servizio" value="${elem.servizio}" />
 		<liferay-ui:search-container-column-text name="accesso">
 			<c:choose>
 				<c:when test="${elem.accesso}">
-					<clay:icon symbol="lock" />
+					<i class="fas fa-lock" title="<liferay-ui:message key="accesso-con-autenticazione" />"></i>
 				</c:when>
 				<c:otherwise>
-					<clay:icon symbol="unlock" />
+					<i class="fas fa-lock-open" title="<liferay-ui:message key="accesso-senza-autenticazione" />"></i>
 				</c:otherwise>
 			</c:choose>
 		</liferay-ui:search-container-column-text>

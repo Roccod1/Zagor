@@ -52,4 +52,8 @@ public interface FileService {
 	 * @throws FileServiceException
 	 */
 	List<File> getFolderFiles(long folderId, long groupId) throws FileServiceException;
+
+
+	long saveTemplateAllegato(InputStream fileCaricato, String fileNameModello, long formId, long userId, long groupId)
+			throws Exception;
 }

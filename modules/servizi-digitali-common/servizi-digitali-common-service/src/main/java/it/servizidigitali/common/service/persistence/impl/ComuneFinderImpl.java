@@ -21,6 +21,8 @@ public class ComuneFinderImpl extends ComuneFinderBaseImpl implements ComuneFind
 
 	@Override
 	public Comune findComuneByCodiceISTAT(String codiceISTAT) {
+		
+		Comune comune = null;
 
 		ClassLoader classLoader = getClass().getClassLoader();
 		Criterion crit = null;
@@ -35,7 +37,11 @@ public class ComuneFinderImpl extends ComuneFinderBaseImpl implements ComuneFind
 
 		query.add(crit);
 		List<Comune> comuni = comunePersistence.findWithDynamicQuery(query);
-
-		return comuni.get(0);
+		
+		if(comuni != null && comuni.size()>0) {
+			comune = comuni.get(0);
+		}
+		
+		return comune;
 	}
 }

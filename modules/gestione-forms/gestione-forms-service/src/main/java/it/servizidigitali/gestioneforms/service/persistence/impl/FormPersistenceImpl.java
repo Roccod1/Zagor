@@ -2173,6 +2173,545 @@ public class FormPersistenceImpl
 	private static final String _FINDER_COLUMN_PRINCIPALE_PRINCIPALE_2 =
 		"form.principale = ?";
 
+	private FinderPath _finderPathWithPaginationFindByprincipaleAndGroupId;
+	private FinderPath _finderPathWithoutPaginationFindByprincipaleAndGroupId;
+	private FinderPath _finderPathCountByprincipaleAndGroupId;
+
+	/**
+	 * Returns all the forms where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @return the matching forms
+	 */
+	@Override
+	public List<Form> findByprincipaleAndGroupId(
+		boolean principale, long groupId) {
+
+		return findByprincipaleAndGroupId(
+			principale, groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the forms where principale = &#63; and groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>FormModelImpl</code>.
+	 * </p>
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of forms
+	 * @param end the upper bound of the range of forms (not inclusive)
+	 * @return the range of matching forms
+	 */
+	@Override
+	public List<Form> findByprincipaleAndGroupId(
+		boolean principale, long groupId, int start, int end) {
+
+		return findByprincipaleAndGroupId(
+			principale, groupId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the forms where principale = &#63; and groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>FormModelImpl</code>.
+	 * </p>
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of forms
+	 * @param end the upper bound of the range of forms (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching forms
+	 */
+	@Override
+	public List<Form> findByprincipaleAndGroupId(
+		boolean principale, long groupId, int start, int end,
+		OrderByComparator<Form> orderByComparator) {
+
+		return findByprincipaleAndGroupId(
+			principale, groupId, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the forms where principale = &#63; and groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>FormModelImpl</code>.
+	 * </p>
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of forms
+	 * @param end the upper bound of the range of forms (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching forms
+	 */
+	@Override
+	public List<Form> findByprincipaleAndGroupId(
+		boolean principale, long groupId, int start, int end,
+		OrderByComparator<Form> orderByComparator, boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath =
+					_finderPathWithoutPaginationFindByprincipaleAndGroupId;
+				finderArgs = new Object[] {principale, groupId};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByprincipaleAndGroupId;
+			finderArgs = new Object[] {
+				principale, groupId, start, end, orderByComparator
+			};
+		}
+
+		List<Form> list = null;
+
+		if (useFinderCache) {
+			list = (List<Form>)finderCache.getResult(finderPath, finderArgs);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (Form form : list) {
+					if ((principale != form.isPrincipale()) ||
+						(groupId != form.getGroupId())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(4);
+			}
+
+			sb.append(_SQL_SELECT_FORM_WHERE);
+
+			sb.append(_FINDER_COLUMN_PRINCIPALEANDGROUPID_PRINCIPALE_2);
+
+			sb.append(_FINDER_COLUMN_PRINCIPALEANDGROUPID_GROUPID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(FormModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(principale);
+
+				queryPos.add(groupId);
+
+				list = (List<Form>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first form in the ordered set where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching form
+	 * @throws NoSuchFormException if a matching form could not be found
+	 */
+	@Override
+	public Form findByprincipaleAndGroupId_First(
+			boolean principale, long groupId,
+			OrderByComparator<Form> orderByComparator)
+		throws NoSuchFormException {
+
+		Form form = fetchByprincipaleAndGroupId_First(
+			principale, groupId, orderByComparator);
+
+		if (form != null) {
+			return form;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("principale=");
+		sb.append(principale);
+
+		sb.append(", groupId=");
+		sb.append(groupId);
+
+		sb.append("}");
+
+		throw new NoSuchFormException(sb.toString());
+	}
+
+	/**
+	 * Returns the first form in the ordered set where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching form, or <code>null</code> if a matching form could not be found
+	 */
+	@Override
+	public Form fetchByprincipaleAndGroupId_First(
+		boolean principale, long groupId,
+		OrderByComparator<Form> orderByComparator) {
+
+		List<Form> list = findByprincipaleAndGroupId(
+			principale, groupId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last form in the ordered set where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching form
+	 * @throws NoSuchFormException if a matching form could not be found
+	 */
+	@Override
+	public Form findByprincipaleAndGroupId_Last(
+			boolean principale, long groupId,
+			OrderByComparator<Form> orderByComparator)
+		throws NoSuchFormException {
+
+		Form form = fetchByprincipaleAndGroupId_Last(
+			principale, groupId, orderByComparator);
+
+		if (form != null) {
+			return form;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("principale=");
+		sb.append(principale);
+
+		sb.append(", groupId=");
+		sb.append(groupId);
+
+		sb.append("}");
+
+		throw new NoSuchFormException(sb.toString());
+	}
+
+	/**
+	 * Returns the last form in the ordered set where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching form, or <code>null</code> if a matching form could not be found
+	 */
+	@Override
+	public Form fetchByprincipaleAndGroupId_Last(
+		boolean principale, long groupId,
+		OrderByComparator<Form> orderByComparator) {
+
+		int count = countByprincipaleAndGroupId(principale, groupId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Form> list = findByprincipaleAndGroupId(
+			principale, groupId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the forms before and after the current form in the ordered set where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param formId the primary key of the current form
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next form
+	 * @throws NoSuchFormException if a form with the primary key could not be found
+	 */
+	@Override
+	public Form[] findByprincipaleAndGroupId_PrevAndNext(
+			long formId, boolean principale, long groupId,
+			OrderByComparator<Form> orderByComparator)
+		throws NoSuchFormException {
+
+		Form form = findByPrimaryKey(formId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Form[] array = new FormImpl[3];
+
+			array[0] = getByprincipaleAndGroupId_PrevAndNext(
+				session, form, principale, groupId, orderByComparator, true);
+
+			array[1] = form;
+
+			array[2] = getByprincipaleAndGroupId_PrevAndNext(
+				session, form, principale, groupId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Form getByprincipaleAndGroupId_PrevAndNext(
+		Session session, Form form, boolean principale, long groupId,
+		OrderByComparator<Form> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(4);
+		}
+
+		sb.append(_SQL_SELECT_FORM_WHERE);
+
+		sb.append(_FINDER_COLUMN_PRINCIPALEANDGROUPID_PRINCIPALE_2);
+
+		sb.append(_FINDER_COLUMN_PRINCIPALEANDGROUPID_GROUPID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(FormModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(principale);
+
+		queryPos.add(groupId);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(form)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<Form> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the forms where principale = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 */
+	@Override
+	public void removeByprincipaleAndGroupId(boolean principale, long groupId) {
+		for (Form form :
+				findByprincipaleAndGroupId(
+					principale, groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+					null)) {
+
+			remove(form);
+		}
+	}
+
+	/**
+	 * Returns the number of forms where principale = &#63; and groupId = &#63;.
+	 *
+	 * @param principale the principale
+	 * @param groupId the group ID
+	 * @return the number of matching forms
+	 */
+	@Override
+	public int countByprincipaleAndGroupId(boolean principale, long groupId) {
+		FinderPath finderPath = _finderPathCountByprincipaleAndGroupId;
+
+		Object[] finderArgs = new Object[] {principale, groupId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_FORM_WHERE);
+
+			sb.append(_FINDER_COLUMN_PRINCIPALEANDGROUPID_PRINCIPALE_2);
+
+			sb.append(_FINDER_COLUMN_PRINCIPALEANDGROUPID_GROUPID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(principale);
+
+				queryPos.add(groupId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_PRINCIPALEANDGROUPID_PRINCIPALE_2 =
+			"form.principale = ? AND ";
+
+	private static final String _FINDER_COLUMN_PRINCIPALEANDGROUPID_GROUPID_2 =
+		"form.groupId = ?";
+
 	public FormPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -2816,6 +3355,28 @@ public class FormPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByPrincipale",
 			new String[] {Boolean.class.getName()}, new String[] {"principale"},
 			false);
+
+		_finderPathWithPaginationFindByprincipaleAndGroupId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByprincipaleAndGroupId",
+			new String[] {
+				Boolean.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			},
+			new String[] {"principale", "groupId"}, true);
+
+		_finderPathWithoutPaginationFindByprincipaleAndGroupId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByprincipaleAndGroupId",
+			new String[] {Boolean.class.getName(), Long.class.getName()},
+			new String[] {"principale", "groupId"}, true);
+
+		_finderPathCountByprincipaleAndGroupId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByprincipaleAndGroupId",
+			new String[] {Boolean.class.getName(), Long.class.getName()},
+			new String[] {"principale", "groupId"}, false);
 
 		_setFormUtilPersistence(this);
 	}

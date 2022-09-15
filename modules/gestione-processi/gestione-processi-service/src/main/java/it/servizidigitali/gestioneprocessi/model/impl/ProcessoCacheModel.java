@@ -62,7 +62,7 @@ public class ProcessoCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -88,6 +88,10 @@ public class ProcessoCacheModel
 		sb.append(stato);
 		sb.append(", deploymentId=");
 		sb.append(deploymentId);
+		sb.append(", resourceId=");
+		sb.append(resourceId);
+		sb.append(", modificabile=");
+		sb.append(modificabile);
 		sb.append(", attivo=");
 		sb.append(attivo);
 		sb.append("}");
@@ -160,6 +164,14 @@ public class ProcessoCacheModel
 			processoImpl.setDeploymentId(deploymentId);
 		}
 
+		if (resourceId == null) {
+			processoImpl.setResourceId("");
+		}
+		else {
+			processoImpl.setResourceId(resourceId);
+		}
+
+		processoImpl.setModificabile(modificabile);
 		processoImpl.setAttivo(attivo);
 
 		processoImpl.resetOriginalValues();
@@ -185,6 +197,9 @@ public class ProcessoCacheModel
 		nome = objectInput.readUTF();
 		stato = objectInput.readUTF();
 		deploymentId = objectInput.readUTF();
+		resourceId = objectInput.readUTF();
+
+		modificabile = objectInput.readBoolean();
 
 		attivo = objectInput.readBoolean();
 	}
@@ -244,6 +259,15 @@ public class ProcessoCacheModel
 			objectOutput.writeUTF(deploymentId);
 		}
 
+		if (resourceId == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(resourceId);
+		}
+
+		objectOutput.writeBoolean(modificabile);
+
 		objectOutput.writeBoolean(attivo);
 	}
 
@@ -259,6 +283,8 @@ public class ProcessoCacheModel
 	public String nome;
 	public String stato;
 	public String deploymentId;
+	public String resourceId;
+	public boolean modificabile;
 	public boolean attivo;
 
 }

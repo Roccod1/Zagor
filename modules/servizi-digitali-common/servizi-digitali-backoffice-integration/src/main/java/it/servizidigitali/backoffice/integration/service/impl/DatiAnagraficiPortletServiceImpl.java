@@ -44,7 +44,7 @@ public class DatiAnagraficiPortletServiceImpl implements DatiAnagraficiPortletSe
 	@Reference
 	private OrganizationLocalService organizationLocalService;
 
-	@Reference
+	@Reference(target = "(component.name=anagrafeBackofficeIntegrationService)")
 	private AnagrafeIntegrationService anagrafeIntegrationService;
 
 	@Reference
@@ -83,8 +83,14 @@ public class DatiAnagraficiPortletServiceImpl implements DatiAnagraficiPortletSe
 		List<ComponenteNucleoFamiliare> componentiNucleoFamiliare = null;
 		if (organization != null) {
 
+			String[] tipoIntegrazioneExpandoArray = (String[]) organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.TIPO_INTEGRAZIONE.getNomeAttributo());
 			String anpr = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.ANPR.getNomeAttributo()).toString();
-			String tipoIntegrazioneExpando = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.TIPO_INTEGRAZIONE.getNomeAttributo()).toString();
+
+			String tipoIntegrazioneExpando = "";
+
+			if (tipoIntegrazioneExpandoArray.length > 0) {
+				tipoIntegrazioneExpando = tipoIntegrazioneExpandoArray[0];
+			}
 
 			TipoIntegrazione tipoIntegrazione = TipoIntegrazione.valueOf(tipoIntegrazioneExpando);
 			if (Boolean.parseBoolean(anpr)) {

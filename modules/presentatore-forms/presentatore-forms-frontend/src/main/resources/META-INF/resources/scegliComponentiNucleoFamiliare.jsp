@@ -1,0 +1,73 @@
+<%@ include file="./init.jsp" %>
+
+<portlet:renderURL var="renderHomeURL">
+	<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.HOME_RENDER_COMMAND %>" />
+	<portlet:param name="richiestaId" value="${richiestaId}" />
+	<portlet:param name="servizioId" value="${servizioId}" />
+</portlet:renderURL>
+
+<div class="row-fluid">
+	<div class="page-header">
+		<h2 class="noMargin">${titoloPortletServizio}<c:if test="${not empty denominazioneComuneServizio}"> - ${denominazioneComuneServizio}</c:if></h2>
+	</div>
+	<%-- <c:if test="${not empty concorsoAttivo}">
+		<div class="row-fluid">
+			<div class="span12 text-right">
+				<spring:message code="label.concorso.validita" />:&nbsp;
+				<spring:message code="label.concorso.validita.da" />&nbsp;<fmt:formatDate value="${concorsoAttivo.dataApertura}" pattern="dd/MM/yyyy HH:mm"/>&nbsp;
+				<spring:message code="label.concorso.validita.a" />&nbsp;<fmt:formatDate value="${concorsoAttivo.dataChiusura}" pattern="dd/MM/yyyy HH:mm"/>
+			</div>
+		</div>
+	</c:if> --%>
+	<div class="span12 formpresenter-portlet">
+		<div class="alpaca-wizard">
+			<div class="alpaca-wizard-nav">
+		           <nav class="navbar navbar-default" role="navigation">
+		               <div class="container-fluid alpaca-wizard-back">
+		                   <ul class="nav navbar-nav">
+		                       <li class="active visited" data-alpaca-wizard-step-index="0" >
+		                           <div class="holder">
+		                               <div class="title"><liferay-ui:message key="label.step.primoStep"/></div>
+		                               <div class="description"><liferay-ui:message key="label.selezionaFamiliare"/></div>
+		                           </div>
+		                           <div class="chevron"></div> 
+		                       </li>
+		                       <li  data-alpaca-wizard-step-index="1" class="disabled">
+		                           <div class="holder">
+		                               <div class="title">...</div>
+		                               <div class="description"></div>
+		                           </div>
+		                           <div class="chevron"></div>
+		                       </li>
+		                   </ul>
+		               </div>
+		           </nav>
+			</div>
+		</div>
+		
+		<div class="alpaca-wizard-progress-bar">
+			<div class="progress">
+				<div class="progress-bar" role="progressbar" style="width: 10%;" aria-valuemax="10" aria-valuenow="10" aria-valuemin="10"></div>
+			</div>
+		</div>
+		
+		<aui:form method="post" action="${salvaURL}">		
+			<aui:fieldset>		
+				<aui:container>			
+					<aui:row cssClass="justify-content-center">	
+						<aui:col md="6">						
+							<aui:select name="<%=PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE %>" cssClass="ml-2" inlineLabel="left" showEmptyOption="true" label="${filtroComponentiFamiliari eq 'FIGLI' ? 'label.componenteNucleoFamiliare.figli.seleziona' : 'label.componenteNucleoFamiliare.seleziona'}">
+								<c:forEach items="${componentiNucleoFamiliare}" var="componenteNucleoFamiliare">
+									<aui:option value="${componenteNucleoFamiliare.codiceFiscale}" label="${componenteNucleoFamiliare.nome} ${componenteNucleoFamiliare.cognome}"/>
+								</c:forEach>								
+							</aui:select>					
+						</aui:col>					
+					</aui:row>	
+				</aui:container>			
+			</aui:fieldset>
+			
+			<aui:button cssClass="pull-right" type="submit" href="${renderHomeURL}" value="button.componenteNucleoFamiliare.avanti" />
+			
+		</aui:form>
+	</div>
+</div>

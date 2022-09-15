@@ -28,7 +28,7 @@ import it.servizidigitali.gestioneprocedure.frontend.enumeration.TipoGenerazione
 import it.servizidigitali.gestioneprocedure.frontend.enumeration.TipoServizio;
 import it.servizidigitali.gestioneprocedure.frontend.service.GestioneProcedureMiddlewareService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
-import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
+import it.servizidigitali.gestioneprocedure.model.TemplatePdf;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneprocessi.model.Processo;
 import it.servizidigitali.gestioneprocessi.service.ProcessoLocalService;
@@ -58,9 +58,6 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 	
 	@Reference
 	private ProceduraLocalService proceduraLocalService;
-	
-	@Reference
-	private ProceduraFormLocalService proceduraFormLocalService;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -73,57 +70,36 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 		List<Processo> listaProcessi = new ArrayList<Processo>();
 		List<Form> listaFormPrincipali = new ArrayList<Form>();
 		List<Form> listaFormIntegrativi = new ArrayList<Form>();
+		List<TemplatePdf> listaTemplatePdf = new ArrayList<TemplatePdf>();
 		
 		
 		Procedura procedura = null;
 		String listaFormIntegrativiProcedura = null;
-		long idFormPrincipale = 0;
+		Form formPrincipale = null;
 		
 		try {
-			listaServizi = gestioneProcedureMiddlewareService.getServiziByOrganizationAttivo(themeDisplay.getSiteGroup().getOrganizationId());
-		} catch (Exception e) {
-			_log.error("Impossibile recuperare la lista dei servizi!" + e.getMessage());
-			SessionErrors.add(renderRequest, GestioneProcedurePortletKeys.SESSION_ERROR_IMPOSSIBILE_RECUPERARE_SERVIZI);
-			return GestioneProcedurePortletKeys.JSP_AGGIUNGI_MODIFICA_PROCEDURA;
-		}
-		
-		try {
+			listaServizi = gestioneProcedureMiddlewareService.getListaServiziAssociabiliProcedura(themeDisplay.getSiteGroup().getOrganizationId(), themeDisplay.getSiteGroupId(), idProcedura);
 			listaProcessi = processoLocalService.getListaProcessiByOrganizationAttivo(themeDisplay.getSiteGroupId(), true);
-		}catch(Exception e) {
-			_log.error("Impossibile recuperare la lista dei processi attivi!" + e.getMessage());
-			SessionErrors.add(renderRequest, GestioneProcedurePortletKeys.SESSION_ERROR_IMPOSSIBILE_RECUPERARE_PROCESSI);
-			return GestioneProcedurePortletKeys.JSP_AGGIUNGI_MODIFICA_PROCEDURA;
-		}
-		
-		try {
 			listaFormPrincipali = formLocalService.getListaFormByOrganizationPrincipale(themeDisplay.getSiteGroupId(), true);			
-		}catch(Exception e) {
-			_log.error("Impossibile recuperare la lista dei form principali!" + e.getMessage());
-			SessionErrors.add(renderRequest, GestioneProcedurePortletKeys.SESSION_ERROR_IMPOSSIBILE_RECUPERARE_FORM_PRINCIPALI);
-			return GestioneProcedurePortletKeys.JSP_AGGIUNGI_MODIFICA_PROCEDURA;
-		}
-
-		try {
 			listaFormIntegrativi = formLocalService.getListaFormByOrganizationPrincipale(themeDisplay.getSiteGroupId(), false);
 		}catch(Exception e) {
-			_log.error("Impossibile recuperare la lista dei form integrativi!" + e.getMessage());
-			SessionErrors.add(renderRequest, GestioneProcedurePortletKeys.SESSION_ERROR_IMPOSSIBILE_RECUPERARE_FORM_INTEGRATIVI);
-			return GestioneProcedurePortletKeys.JSP_AGGIUNGI_MODIFICA_PROCEDURA;
+			_log.error(e.getMessage());
 		}
+		
 
 		if(idProcedura>0) {
 			try {
 				procedura = proceduraLocalService.getProcedura(idProcedura);
-				listaFormIntegrativiProcedura = proceduraFormLocalService.getFormIntegrativiProcedura(idProcedura);
-				idFormPrincipale = proceduraFormLocalService.getFormPrincipaleProcedura(idProcedura);
+				listaFormIntegrativiProcedura = gestioneProcedureMiddlewareService.getFormIntegrativiProcedura(idProcedura);
+				formPrincipale = gestioneProcedureMiddlewareService.getFormPrincipaleProcedura(idProcedura);
 				String tipiIntegrazioneBackoffice = null;
 				
-				if(idFormPrincipale>0) {
-					renderRequest.setAttribute(GestioneProcedurePortletKeys.ID_FORM_PRINCIPALE, idFormPrincipale);
+				if(Validator.isNotNull(formPrincipale) && formPrincipale.getFormId()>0) {
+					renderRequest.setAttribute(GestioneProcedurePortletKeys.ID_FORM_PRINCIPALE, formPrincipale.getFormId());
 				}
 				
 				if(Validator.isNotNull(procedura.getStep2TipiIntegrazioneBackoffice())) {
-					tipiIntegrazioneBackoffice = proceduraLocalService.getStringSelectMultipla(procedura.getStep2TipiIntegrazioneBackoffice());
+					tipiIntegrazioneBackoffice = gestioneProcedureMiddlewareService.getStringSelectMultipla(procedura.getStep2TipiIntegrazioneBackoffice());
 					renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_TIPO_INTEGRAZIONE_BACKOFFICE_PROCEDURA, tipiIntegrazioneBackoffice);
 				}else {
 					renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_TIPO_INTEGRAZIONE_BACKOFFICE_PROCEDURA, GestioneProcedurePortletKeys.LISTA_VUOTA);
@@ -133,6 +109,10 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand{
 					renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_FORM_INTEGRATIVI_PROCEDURA, listaFormIntegrativiProcedura);
 				}else {
 					renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_FORM_INTEGRATIVI_PROCEDURA, GestioneProcedurePortletKeys.LISTA_VUOTA);
+				}
+				
+				if(Validator.isNotNull(listaTemplatePdf)) {
+					renderRequest.setAttribute("listaTemplatePdf", listaTemplatePdf);
 				}
 				
 				renderRequest.setAttribute(GestioneProcedurePortletKeys.PROCEDURA, procedura);

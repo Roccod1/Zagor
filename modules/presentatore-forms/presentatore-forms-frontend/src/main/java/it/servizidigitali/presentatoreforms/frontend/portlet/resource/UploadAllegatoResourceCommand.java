@@ -1,4 +1,4 @@
-package it.servizidigitali.gestioneforms.frontend.portlet.resource;
+package it.servizidigitali.presentatoreforms.frontend.portlet.resource;
 
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -19,13 +19,13 @@ import javax.portlet.ResourceResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import it.servizidigitali.gestioneforms.frontend.constants.GestioneFormsPortletKeys;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
+import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 
 @Component(immediate = true, 
 property = { 
-			"javax.portlet.name=" + GestioneFormsPortletKeys.GESTIONEFORMS,
-			"mvc.command.name=" + GestioneFormsPortletKeys.UPLOAD_ALLEGATO_RESOURCE_COMMAND
+			"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS,
+			"mvc.command.name=" + PresentatoreFormsPortletKeys.UPLOAD_ALLEGATO_RESOURCE_COMMAND
 		}, 
 service = { MVCResourceCommand.class }
 )
@@ -35,7 +35,7 @@ public class UploadAllegatoResourceCommand extends BaseMVCResourceCommand{
 	
 	@Reference
     private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
-
+	
 	@Override
 	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws Exception {
@@ -46,21 +46,20 @@ public class UploadAllegatoResourceCommand extends BaseMVCResourceCommand{
 		
 		try {
 			if(Validator.isNotNull(file)) {
-				long idTemporaneoAllegato = definizioneAllegatoLocalService.uploadAllegatoTemporaneo(file);
+				long idTemporaneoAllegato = 10;
 				
 				if(Validator.isNotNull(idTemporaneoAllegato)) {
-					json.put(GestioneFormsPortletKeys.DEFINIZIONE_ALLEGATO_ID_TEMPORANEO, idTemporaneoAllegato);
-					json.put(GestioneFormsPortletKeys.STATUS, GestioneFormsPortletKeys.STATUS_OK);
+					json.put(PresentatoreFormsPortletKeys.DEFINIZIONE_ALLEGATO_ID_TEMPORANEO, idTemporaneoAllegato);
+					json.put(PresentatoreFormsPortletKeys.STATUS, PresentatoreFormsPortletKeys.STATUS_OK);
 				}
 			}
 		}catch(Exception e) {
 			_log.error("GestioneForms :: uploadAllegatoResourceCommand :: " + e.getMessage());
-			json.put(GestioneFormsPortletKeys.STATUS, GestioneFormsPortletKeys.STATUS_ERROR);
+			json.put(PresentatoreFormsPortletKeys.STATUS, PresentatoreFormsPortletKeys.STATUS_ERROR);
 		}
 		
 		resourceResponse.setContentType(ContentTypes.APPLICATION_JSON);
 		resourceResponse.getWriter().print(json.toString());
-		
 		
 		
 	}

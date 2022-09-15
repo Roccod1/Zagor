@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import it.servizidigitali.camunda.integration.client.exception.CamundaClientException;
+import it.servizidigitali.camunda.integration.client.model.DeploymentResource;
 import it.servizidigitali.camunda.integration.client.model.ProcessDefinition;
 import it.servizidigitali.camunda.integration.client.model.ProcessInstance;
 import it.servizidigitali.camunda.integration.client.model.Task;
@@ -31,7 +32,7 @@ public interface CamundaClient {
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	List<VariableInstance> getVariablesByTaskId(String tenantId, String taskId) throws CamundaClientException;
+	List<VariableInstance> getVariablesByExecutionId(String tenantId, String taskId) throws CamundaClientException;
 
 	/**
 	 *
@@ -223,10 +224,26 @@ public interface CamundaClient {
 	/**
 	 *
 	 * @param id
+	 * @param resourceId
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	File getDeploymentFile(String id) throws CamundaClientException;
+	File getDeploymentFile(String id, String resourceId) throws CamundaClientException;
+
+	/**
+	 *
+	 * @return
+	 * @throws CamundaClientException
+	 */
+	List<DeploymentResource> getDefaultDeploymentResources() throws CamundaClientException;
+
+	/**
+	 *
+	 * @param deploymentId
+	 * @return
+	 * @throws CamundaClientException
+	 */
+	List<DeploymentResource> getDeploymentResources(String deploymentId) throws CamundaClientException;
 
 	/**
 	 *

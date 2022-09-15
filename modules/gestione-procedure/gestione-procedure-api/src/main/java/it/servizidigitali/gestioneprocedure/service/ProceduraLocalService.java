@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
@@ -310,11 +309,16 @@ public interface ProceduraLocalService
 	public int getProcedurasCount();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<Procedura> getProcedureByServiziIdsGroupIdAttiva(
-		List<Long> serviziIds, long groupId, Boolean attiva);
+	public List<Procedura> getProcedureByGroupIdAttiva(
+		long groupId, boolean attiva);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public String getStringSelectMultipla(String string) throws JSONException;
+	public List<Procedura> getProcedureByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Procedura> getProcedureByServiziIdsGroupIdAttiva(
+		List<Long> serviziIds, long groupId, Boolean attiva);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Procedura> search(

@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -117,12 +118,17 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 			ObjectMapper objectMapper = new ObjectMapper();
 			for (Richiesta richiesta : richieste) {
 
+				long businessKey = richiesta.getRichiestaId();
+				if (Validator.isNotNull(richiesta.getProcessInstanceId())) {
+					_log.debug("Esiste già una istanza di processo assegnata alla richiesta: " + businessKey);
+					continue;
+				}
+
 				// verifica processo già avviato
 				long groupId = richiesta.getGroupId();
 				long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
 
 				String tenantId = String.valueOf(organizationId);
-				long businessKey = richiesta.getRichiestaId();
 				boolean existProcessByBusinessKey = camundaClient.existProcessByBusinessKey(tenantId, String.valueOf(businessKey));
 
 				if (existProcessByBusinessKey) {

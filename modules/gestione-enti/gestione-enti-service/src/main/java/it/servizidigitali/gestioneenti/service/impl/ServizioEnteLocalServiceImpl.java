@@ -194,4 +194,9 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 		return servizioEnteFinder.findServizioEnteByFilters(organizationId, subOrganizationIds, attivo, groupId, companyId);
 	}
 
+	@Override
+	public ServizioEnte getServizioEnteByOrganizationIdLayoutId(long organizationId, long layoutId) {
+		ServizioEnte servizioEnte = servizioEnteFinder.findServizioEnteByOrganizationIdLayoutId(organizationId, layoutId);
+		return servizioEnte;
+	}
 }

@@ -57,5 +57,15 @@
 		<finder name="ServizioId" return-type="Collection">
 			<finder-column name="servizioId" />
 		</finder>
+
+		<finder name="GroupIdPrivateLayoutId" return-type="ServizioEnte">
+			<finder-column name="groupId" />
+			<finder-column name="privateLayoutId" />
+		</finder>
+
+		<finder name="GroupIdPublicLayoutId" return-type="ServizioEnte">
+			<finder-column name="groupId" />
+			<finder-column name="publicLayoutId" />
+		</finder>
 	</entity>
 </service-builder>

@@ -1107,6 +1107,405 @@ public class ProceduraUtil {
 	}
 
 	/**
+	 * Returns all the proceduras where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @return the matching proceduras
+	 */
+	public static List<Procedura> findByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva) {
+
+		return getPersistence().findByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva);
+	}
+
+	/**
+	 * Returns a range of all the proceduras where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param start the lower bound of the range of proceduras
+	 * @param end the upper bound of the range of proceduras (not inclusive)
+	 * @return the range of matching proceduras
+	 */
+	public static List<Procedura> findByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva, int start, int end) {
+
+		return getPersistence().findByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the proceduras where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param start the lower bound of the range of proceduras
+	 * @param end the upper bound of the range of proceduras (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching proceduras
+	 */
+	public static List<Procedura> findByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva, int start, int end,
+		OrderByComparator<Procedura> orderByComparator) {
+
+		return getPersistence().findByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the proceduras where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param start the lower bound of the range of proceduras
+	 * @param end the upper bound of the range of proceduras (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching proceduras
+	 */
+	public static List<Procedura> findByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva, int start, int end,
+		OrderByComparator<Procedura> orderByComparator,
+		boolean useFinderCache) {
+
+		return getPersistence().findByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva, start, end, orderByComparator,
+			useFinderCache);
+	}
+
+	/**
+	 * Returns the first procedura in the ordered set where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching procedura
+	 * @throws NoSuchProceduraException if a matching procedura could not be found
+	 */
+	public static Procedura findByGroupIdServizioIdAttiva_First(
+			long groupId, long servizioId, boolean attiva,
+			OrderByComparator<Procedura> orderByComparator)
+		throws it.servizidigitali.gestioneprocedure.exception.
+			NoSuchProceduraException {
+
+		return getPersistence().findByGroupIdServizioIdAttiva_First(
+			groupId, servizioId, attiva, orderByComparator);
+	}
+
+	/**
+	 * Returns the first procedura in the ordered set where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching procedura, or <code>null</code> if a matching procedura could not be found
+	 */
+	public static Procedura fetchByGroupIdServizioIdAttiva_First(
+		long groupId, long servizioId, boolean attiva,
+		OrderByComparator<Procedura> orderByComparator) {
+
+		return getPersistence().fetchByGroupIdServizioIdAttiva_First(
+			groupId, servizioId, attiva, orderByComparator);
+	}
+
+	/**
+	 * Returns the last procedura in the ordered set where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching procedura
+	 * @throws NoSuchProceduraException if a matching procedura could not be found
+	 */
+	public static Procedura findByGroupIdServizioIdAttiva_Last(
+			long groupId, long servizioId, boolean attiva,
+			OrderByComparator<Procedura> orderByComparator)
+		throws it.servizidigitali.gestioneprocedure.exception.
+			NoSuchProceduraException {
+
+		return getPersistence().findByGroupIdServizioIdAttiva_Last(
+			groupId, servizioId, attiva, orderByComparator);
+	}
+
+	/**
+	 * Returns the last procedura in the ordered set where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching procedura, or <code>null</code> if a matching procedura could not be found
+	 */
+	public static Procedura fetchByGroupIdServizioIdAttiva_Last(
+		long groupId, long servizioId, boolean attiva,
+		OrderByComparator<Procedura> orderByComparator) {
+
+		return getPersistence().fetchByGroupIdServizioIdAttiva_Last(
+			groupId, servizioId, attiva, orderByComparator);
+	}
+
+	/**
+	 * Returns the proceduras before and after the current procedura in the ordered set where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param proceduraId the primary key of the current procedura
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next procedura
+	 * @throws NoSuchProceduraException if a procedura with the primary key could not be found
+	 */
+	public static Procedura[] findByGroupIdServizioIdAttiva_PrevAndNext(
+			long proceduraId, long groupId, long servizioId, boolean attiva,
+			OrderByComparator<Procedura> orderByComparator)
+		throws it.servizidigitali.gestioneprocedure.exception.
+			NoSuchProceduraException {
+
+		return getPersistence().findByGroupIdServizioIdAttiva_PrevAndNext(
+			proceduraId, groupId, servizioId, attiva, orderByComparator);
+	}
+
+	/**
+	 * Removes all the proceduras where groupId = &#63; and servizioId = &#63; and attiva = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 */
+	public static void removeByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva) {
+
+		getPersistence().removeByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva);
+	}
+
+	/**
+	 * Returns the number of proceduras where groupId = &#63; and servizioId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param servizioId the servizio ID
+	 * @param attiva the attiva
+	 * @return the number of matching proceduras
+	 */
+	public static int countByGroupIdServizioIdAttiva(
+		long groupId, long servizioId, boolean attiva) {
+
+		return getPersistence().countByGroupIdServizioIdAttiva(
+			groupId, servizioId, attiva);
+	}
+
+	/**
+	 * Returns all the proceduras where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @return the matching proceduras
+	 */
+	public static List<Procedura> findByGroupIdAttiva(
+		long groupId, boolean attiva) {
+
+		return getPersistence().findByGroupIdAttiva(groupId, attiva);
+	}
+
+	/**
+	 * Returns a range of all the proceduras where groupId = &#63; and attiva = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param start the lower bound of the range of proceduras
+	 * @param end the upper bound of the range of proceduras (not inclusive)
+	 * @return the range of matching proceduras
+	 */
+	public static List<Procedura> findByGroupIdAttiva(
+		long groupId, boolean attiva, int start, int end) {
+
+		return getPersistence().findByGroupIdAttiva(
+			groupId, attiva, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the proceduras where groupId = &#63; and attiva = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param start the lower bound of the range of proceduras
+	 * @param end the upper bound of the range of proceduras (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching proceduras
+	 */
+	public static List<Procedura> findByGroupIdAttiva(
+		long groupId, boolean attiva, int start, int end,
+		OrderByComparator<Procedura> orderByComparator) {
+
+		return getPersistence().findByGroupIdAttiva(
+			groupId, attiva, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the proceduras where groupId = &#63; and attiva = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProceduraModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param start the lower bound of the range of proceduras
+	 * @param end the upper bound of the range of proceduras (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching proceduras
+	 */
+	public static List<Procedura> findByGroupIdAttiva(
+		long groupId, boolean attiva, int start, int end,
+		OrderByComparator<Procedura> orderByComparator,
+		boolean useFinderCache) {
+
+		return getPersistence().findByGroupIdAttiva(
+			groupId, attiva, start, end, orderByComparator, useFinderCache);
+	}
+
+	/**
+	 * Returns the first procedura in the ordered set where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching procedura
+	 * @throws NoSuchProceduraException if a matching procedura could not be found
+	 */
+	public static Procedura findByGroupIdAttiva_First(
+			long groupId, boolean attiva,
+			OrderByComparator<Procedura> orderByComparator)
+		throws it.servizidigitali.gestioneprocedure.exception.
+			NoSuchProceduraException {
+
+		return getPersistence().findByGroupIdAttiva_First(
+			groupId, attiva, orderByComparator);
+	}
+
+	/**
+	 * Returns the first procedura in the ordered set where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching procedura, or <code>null</code> if a matching procedura could not be found
+	 */
+	public static Procedura fetchByGroupIdAttiva_First(
+		long groupId, boolean attiva,
+		OrderByComparator<Procedura> orderByComparator) {
+
+		return getPersistence().fetchByGroupIdAttiva_First(
+			groupId, attiva, orderByComparator);
+	}
+
+	/**
+	 * Returns the last procedura in the ordered set where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching procedura
+	 * @throws NoSuchProceduraException if a matching procedura could not be found
+	 */
+	public static Procedura findByGroupIdAttiva_Last(
+			long groupId, boolean attiva,
+			OrderByComparator<Procedura> orderByComparator)
+		throws it.servizidigitali.gestioneprocedure.exception.
+			NoSuchProceduraException {
+
+		return getPersistence().findByGroupIdAttiva_Last(
+			groupId, attiva, orderByComparator);
+	}
+
+	/**
+	 * Returns the last procedura in the ordered set where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching procedura, or <code>null</code> if a matching procedura could not be found
+	 */
+	public static Procedura fetchByGroupIdAttiva_Last(
+		long groupId, boolean attiva,
+		OrderByComparator<Procedura> orderByComparator) {
+
+		return getPersistence().fetchByGroupIdAttiva_Last(
+			groupId, attiva, orderByComparator);
+	}
+
+	/**
+	 * Returns the proceduras before and after the current procedura in the ordered set where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param proceduraId the primary key of the current procedura
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next procedura
+	 * @throws NoSuchProceduraException if a procedura with the primary key could not be found
+	 */
+	public static Procedura[] findByGroupIdAttiva_PrevAndNext(
+			long proceduraId, long groupId, boolean attiva,
+			OrderByComparator<Procedura> orderByComparator)
+		throws it.servizidigitali.gestioneprocedure.exception.
+			NoSuchProceduraException {
+
+		return getPersistence().findByGroupIdAttiva_PrevAndNext(
+			proceduraId, groupId, attiva, orderByComparator);
+	}
+
+	/**
+	 * Removes all the proceduras where groupId = &#63; and attiva = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 */
+	public static void removeByGroupIdAttiva(long groupId, boolean attiva) {
+		getPersistence().removeByGroupIdAttiva(groupId, attiva);
+	}
+
+	/**
+	 * Returns the number of proceduras where groupId = &#63; and attiva = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param attiva the attiva
+	 * @return the number of matching proceduras
+	 */
+	public static int countByGroupIdAttiva(long groupId, boolean attiva) {
+		return getPersistence().countByGroupIdAttiva(groupId, attiva);
+	}
+
+	/**
 	 * Caches the procedura in the entity cache if it is enabled.
 	 *
 	 * @param procedura the procedura

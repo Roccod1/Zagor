@@ -1,6 +1,7 @@
 package it.servizidigitali.camunda.integration.client.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author pindi
@@ -28,6 +29,7 @@ public class Task {
 	private Boolean suspended;
 	private String formKey;
 	private String tenantId;
+	private List<String> candidateGroups;
 
 	/**
 	 * @return the id
@@ -307,5 +309,19 @@ public class Task {
 	 */
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
+	}
+
+	/**
+	 * @return the candidateGroups
+	 */
+	public List<String> getCandidateGroups() {
+		return candidateGroups;
+	}
+
+	/**
+	 * @param candidateGroups the candidateGroups to set
+	 */
+	public void setCandidateGroups(List<String> candidateGroups) {
+		this.candidateGroups = candidateGroups;
 	}
 }

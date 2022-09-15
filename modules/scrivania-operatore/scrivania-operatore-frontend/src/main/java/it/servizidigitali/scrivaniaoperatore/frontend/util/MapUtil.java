@@ -9,11 +9,13 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.common.utility.UtenteUtility;
 import it.servizidigitali.common.utility.enumeration.UserCustomAttributes;
 import it.servizidigitali.common.utility.model.IndirizzoResidenza;
+import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.ServizioDTO;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 
 @Component(immediate = true, service = MapUtil.class)
@@ -65,7 +67,17 @@ public class MapUtil {
 		Procedura procedura = proceduraLocalService.fetchProcedura(richiesta.getProceduraId());
 		Servizio servizio = servizioLocalService.fetchServizio(procedura.getServizioId());
 		dto.setServizio(servizio.getNome());
+		dto.setProcessInstanceId(richiesta.getProcessInstanceId());
 		
+		return dto;
+	}
+	
+	public ServizioDTO mapServizio(ServizioEnte se) {
+		Servizio servizio = servizioLocalService.fetchServizio(se.getServizioId());
+		
+		ServizioDTO dto = new ServizioDTO();
+		dto.setId(servizio.getServizioId());
+		dto.setNome(servizio.getNome());
 		return dto;
 	}
 }

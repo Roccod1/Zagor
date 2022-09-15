@@ -162,13 +162,25 @@ public class ServizioEnteModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long SERVIZIOID_COLUMN_BITMASK = 8L;
+	public static final long PRIVATELAYOUTID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 16L;
+	public static final long PUBLICLAYOUTID_COLUMN_BITMASK = 16L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long SERVIZIOID_COLUMN_BITMASK = 32L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 64L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -666,6 +678,16 @@ public class ServizioEnteModelImpl
 		_privateLayoutId = privateLayoutId;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalPrivateLayoutId() {
+		return GetterUtil.getLong(
+			this.<Long>getColumnOriginalValue("privateLayoutId"));
+	}
+
 	@Override
 	public long getPublicLayoutId() {
 		return _publicLayoutId;
@@ -678,6 +700,16 @@ public class ServizioEnteModelImpl
 		}
 
 		_publicLayoutId = publicLayoutId;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalPublicLayoutId() {
+		return GetterUtil.getLong(
+			this.<Long>getColumnOriginalValue("publicLayoutId"));
 	}
 
 	@Override

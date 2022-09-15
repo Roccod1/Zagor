@@ -28,4 +28,8 @@ public interface ServizioEnteFinder {
 			long organizationId, java.util.List<Long> subOrganizationIds,
 			Boolean attivo, long groupId, long companyId);
 
+	public it.servizidigitali.gestioneenti.model.ServizioEnte
+		findServizioEnteByOrganizationIdLayoutId(
+			long organizationId, long layoutId);
+
 }
