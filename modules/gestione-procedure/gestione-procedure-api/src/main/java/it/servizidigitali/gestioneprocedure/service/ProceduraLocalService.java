@@ -248,6 +248,11 @@ public interface ProceduraLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Procedura getProcedura(long proceduraId) throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Procedura getProceduraByServizioIdGroupIdAttiva(
+			long servizioId, long groupId, boolean attiva)
+		throws PortalException;
+
 	/**
 	 * Returns the procedura matching the UUID and group.
 	 *

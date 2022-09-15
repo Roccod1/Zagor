@@ -9,13 +9,15 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
-import com.liferay.portal.kernel.upload.FileItem;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.util.Map;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -23,9 +25,11 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.TipoGenerazionePDF;
 import it.servizidigitali.gestioneprocedure.frontend.constants.GestioneProcedurePortletKeys;
 import it.servizidigitali.gestioneprocedure.frontend.service.GestioneProcedureMiddlewareService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.gestioneprocedure.model.TemplatePdf;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneprocedure.service.TemplatePdfLocalService;
 
@@ -56,9 +60,14 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
+		ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
+		String userFullName = themeDisplay.getUser().getFullName();
+		long userId = themeDisplay.getUserId();
+		long siteGroupId = themeDisplay.getSiteGroupId();
+		long companyGroupId = themeDisplay.getCompanyGroupId();
+
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
-		Map<String, FileItem[]> files= uploadPortletRequest.getMultipartParameterMap();
 		String[] rowIndexes = ParamUtil.getStringValues(actionRequest, "rowIndexes");
 		
 		long idProcedura = ParamUtil.getLong(actionRequest, GestioneProcedurePortletKeys.ID_PROCEDURA);
@@ -145,6 +154,52 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 				
 		gestioneProcedureMiddlewareService.salvaProceduraFormPrincipale(idFormPrincipale, procedura.getProceduraId());
 		gestioneProcedureMiddlewareService.salvaListaFormIntegrativi(idFormIntegrativi, procedura.getProceduraId());
+		
+		if(Validator.isNotNull(tipoGenerazioneTemplate) && tipoGenerazioneTemplate.equalsIgnoreCase(TipoGenerazionePDF.JASPER_REPORT.name())) {
+			List<Long> listaReportDaMantenere = new ArrayList<Long>();
+			TemplatePdf templateCaricato = null;
+			TemplatePdf templatePrincipaleProcedura = null;
+			if(Validator.isNotNull(rowIndexes)) {
+				long reportIdNuovoPrincipale = 0;
+			   	
+				if(idProcedura>0) {
+			   		templatePrincipaleProcedura = gestioneProcedureMiddlewareService.recuperaTemplatePdfPrincipale(idProcedura);
+			   	}
+				
+				for (int i = 0; i < rowIndexes.length; i++) {
+			             boolean principale = ParamUtil.getBoolean(actionRequest, "allegatoPrincipale" + rowIndexes[i]);
+			             long reportId = ParamUtil.getLong(actionRequest, "idAllegatoJasper" + rowIndexes[i]);
+			             File file = uploadPortletRequest.getFile("jasperReportFile" + i);
+			             String nomeFile = uploadPortletRequest.getFileName("jasperReportFile" + i);
+			             
+			             if(reportId>0) {
+			            	 listaReportDaMantenere.add(reportId);
+			             }
+			             
+			             if(Validator.isNotNull(templatePrincipaleProcedura)) {
+			            	 if(principale && templatePrincipaleProcedura.getTemplatePdfId()!=reportId) {
+			            		 reportIdNuovoPrincipale = reportId;
+			            	 }
+			             }
+			             
+			             if(Validator.isNotNull(file)) {
+			            	 templateCaricato = gestioneProcedureMiddlewareService.caricaTemplatePdf(file, nomeFile, principale, procedura.getProceduraId(), reportId, i, userFullName, 
+				            		 userId, siteGroupId, companyGroupId); 
+			            	 
+			            	 if(Validator.isNotNull(templateCaricato)) {
+			            		 listaReportDaMantenere.add(templateCaricato.getTemplatePdfId());
+			            	 }
+			             }
+			              
+			   	}
+			   	
+			   	if(reportIdNuovoPrincipale>0) {
+			   		gestioneProcedureMiddlewareService.aggiornaPrincipaleTemplatePdf(templatePrincipaleProcedura, reportIdNuovoPrincipale);
+			   	}
+			   	
+	             gestioneProcedureMiddlewareService.cancellaTemplatePdf(listaReportDaMantenere, procedura.getProceduraId());
+			}
+		}
 
 
 	}

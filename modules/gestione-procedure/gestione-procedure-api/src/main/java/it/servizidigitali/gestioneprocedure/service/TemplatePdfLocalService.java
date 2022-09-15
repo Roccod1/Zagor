@@ -214,6 +214,11 @@ public interface TemplatePdfLocalService
 	public TemplatePdf fetchTemplatePdfByUuidAndCompanyId(
 		String uuid, long companyId);
 
+	public List<TemplatePdf> findByProceduraId(long proceduraId);
+
+	public List<TemplatePdf> findByProceduraIdAndAttivo(
+		long proceduraId, boolean attivo);
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 

@@ -6,6 +6,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,11 +64,13 @@ public class DatiDichiaranteJsonEnrich implements DatiAnagraficiJsonEnrich {
 				throw new RuntimeException(e);
 			}
 			List<DatiAnagrafici.ComponenteNucleoFamiliare> componentiList = null;
-			if (enrichmentModel.getUserPreferences().getCodiceFiscaleComponente() != null) {
-				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equals(enrichmentModel.getUserPreferences().getCodiceFiscaleComponente())).collect(Collectors.toList());
+			String codiceFiscaleComponente = enrichmentModel.getUserPreferences().getCodiceFiscaleComponente();
+			if (Validator.isNotNull(codiceFiscaleComponente)) {
+				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equalsIgnoreCase(codiceFiscaleComponente)).collect(Collectors.toList());
 			}
 			else {
-				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equals(enrichmentModel.getUserPreferences().getCodiceFiscaleRichiedente())).collect(Collectors.toList());
+				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equalsIgnoreCase(enrichmentModel.getUserPreferences().getCodiceFiscaleRichiedente()))
+						.collect(Collectors.toList());
 			}
 			if (componentiList.size() == 1) {
 				DatiAnagrafici.ComponenteNucleoFamiliare componente = componentiList.get(0);
