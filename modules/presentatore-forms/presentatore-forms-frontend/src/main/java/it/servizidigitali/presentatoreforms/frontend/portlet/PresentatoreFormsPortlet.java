@@ -34,8 +34,6 @@ import it.servizidigitali.backoffice.integration.model.commmon.IntegrationPrefer
 import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletService;
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
-import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
-import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
@@ -47,7 +45,6 @@ import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStruct
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
-import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalServiceUtil;
 
 /**
  * @author pindi
@@ -81,12 +78,6 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 	public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Reference
-	private FormLocalService formLocalService;
-
-	@Reference
-	private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
-
-	@Reference
 	private AlpacaService alpacaService;
 
 	@Reference
@@ -109,18 +100,18 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
 				return;
 			}
-			
-			// TODO: Recuperare richiesta bozza per l'utente
-			
-			Richiesta richiesta = RichiestaLocalServiceUtil.createRichiesta(14);
-			richiesta.setStato(StatoRichiesta.BOZZA.name());
+
+			String screenName = themeDisplay.getUser().getScreenName();
+
+			Richiesta richiesta = presentatoreFormFrontendService.getRichiestaBozza(screenName, procedura.getProceduraId());
+
 			boolean stepComponentiFamiliari = procedura.getStep1Attivo();
 			String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
 
 			if (Validator.isNotNull(richiesta) && richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
 				renderRequest.setAttribute("richiestaId", richiesta.getRichiestaId());
-				include("/home.jsp", renderRequest, renderResponse);
-				presentatoreFormFrontendService.deleteRichiesteBozzaUtente(themeDisplay.getUser().getScreenName(), procedura.getProceduraId());
+				include(PresentatoreFormsPortletKeys.JSP_HOME, renderRequest, renderResponse);
+				presentatoreFormFrontendService.deleteRichiesteBozzaUtente(screenName, procedura.getProceduraId());
 			}
 			else {
 				String mvcRenderCommandName = ParamUtil.getString(renderRequest, "mvcRenderCommandName");
@@ -130,7 +121,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 
 						if (stepComponentiFamiliari) {
 							Long organizationId = themeDisplay.getSiteGroup().getOrganizationId();
-							String codiceFiscale = themeDisplay.getUser().getScreenName();
+							String codiceFiscale = screenName;
 
 							IntegrationPreferences integrationPreferences = new IntegrationPreferences();
 							integrationPreferences.setUsaCache(procedura.isAbilitaCacheIntegrazioneBackoffice());
@@ -152,7 +143,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 							AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
 
 							UserPreferences userPreferences = new UserPreferences();
-							userPreferences.setCodiceFiscaleRichiedente(themeDisplay.getUser().getScreenName());
+							userPreferences.setCodiceFiscaleRichiedente(screenName);
 
 							if (PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME) != null) {
 								userPreferences = (UserPreferences) PortalUtil.getHttpServletRequest(renderRequest).getSession()
