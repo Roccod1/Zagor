@@ -223,16 +223,6 @@ public class TemplatePdfLocalServiceUtil {
 		return getService().fetchTemplatePdfByUuidAndCompanyId(uuid, companyId);
 	}
 
-	public static List<TemplatePdf> findByProceduraId(long proceduraId) {
-		return getService().findByProceduraId(proceduraId);
-	}
-
-	public static List<TemplatePdf> findByProceduraIdAndAttivo(
-		long proceduraId, boolean attivo) {
-
-		return getService().findByProceduraIdAndAttivo(proceduraId, attivo);
-	}
-
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -283,6 +273,19 @@ public class TemplatePdfLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getTemplatePdf(templatePdfId);
+	}
+
+	public static List<TemplatePdf> getTemplatePdfByProceduraId(
+		long proceduraId) {
+
+		return getService().getTemplatePdfByProceduraId(proceduraId);
+	}
+
+	public static List<TemplatePdf> getTemplatePdfByProceduraIdAndAttivo(
+		long proceduraId, boolean attivo) {
+
+		return getService().getTemplatePdfByProceduraIdAndAttivo(
+			proceduraId, attivo);
 	}
 
 	/**

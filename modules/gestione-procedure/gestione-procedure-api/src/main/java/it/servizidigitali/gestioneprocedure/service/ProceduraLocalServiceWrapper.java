@@ -430,12 +430,12 @@ public class ProceduraLocalServiceWrapper
 	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
 		search(
 			String nome, String attiva, java.util.Date dataInserimentoDa,
-			java.util.Date dataInserimentoA, long groupId, int delta, int cur,
-			String orderByCol, String orderByType) {
+			java.util.Date dataInserimentoA, long siteGroupId, int delta,
+			int cur, String orderByCol, String orderByType) {
 
 		return _proceduraLocalService.search(
-			nome, attiva, dataInserimentoDa, dataInserimentoA, groupId, delta,
-			cur, orderByCol, orderByType);
+			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId,
+			delta, cur, orderByCol, orderByType);
 	}
 
 	/**

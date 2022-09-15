@@ -328,7 +328,7 @@ public interface ProceduraLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Procedura> search(
 		String nome, String attiva, Date dataInserimentoDa,
-		Date dataInserimentoA, long groupId, int delta, int cur,
+		Date dataInserimentoA, long siteGroupId, int delta, int cur,
 		String orderByCol, String orderByType);
 
 	/**

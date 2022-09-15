@@ -254,23 +254,6 @@ public class TemplatePdfLocalServiceWrapper
 	}
 
 	@Override
-	public java.util.List
-		<it.servizidigitali.gestioneprocedure.model.TemplatePdf>
-			findByProceduraId(long proceduraId) {
-
-		return _templatePdfLocalService.findByProceduraId(proceduraId);
-	}
-
-	@Override
-	public java.util.List
-		<it.servizidigitali.gestioneprocedure.model.TemplatePdf>
-			findByProceduraIdAndAttivo(long proceduraId, boolean attivo) {
-
-		return _templatePdfLocalService.findByProceduraIdAndAttivo(
-			proceduraId, attivo);
-	}
-
-	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -328,6 +311,25 @@ public class TemplatePdfLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _templatePdfLocalService.getTemplatePdf(templatePdfId);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.gestioneprocedure.model.TemplatePdf>
+			getTemplatePdfByProceduraId(long proceduraId) {
+
+		return _templatePdfLocalService.getTemplatePdfByProceduraId(
+			proceduraId);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.gestioneprocedure.model.TemplatePdf>
+			getTemplatePdfByProceduraIdAndAttivo(
+				long proceduraId, boolean attivo) {
+
+		return _templatePdfLocalService.getTemplatePdfByProceduraIdAndAttivo(
+			proceduraId, attivo);
 	}
 
 	/**
