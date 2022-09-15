@@ -62,17 +62,19 @@ public class MyPayConverter {
 
 		Map<String, Object> infoAggiuntive = pagamento.getInfoAggiuntive();
 
-		boolean isPagamentoBollo = infoAggiuntive.containsKey(MyPayConstants.INFO_AGGIUNTIVE_MARCA_BOLLO_DIGITALE_HASH_DOCUMENTO_KEY)
-				&& infoAggiuntive.containsKey(MyPayConstants.INFO_AGGIUNTIVE_MARCA_BOLLO_DIGITALE_PROVINCIA_RESIDENZA_KEY);
-		if (isPagamentoBollo) {
-			CtDatiMarcaBolloDigitale datiMarcaBolloDigitale = CtDatiMarcaBolloDigitale.Factory.newInstance();
-			datiMarcaBolloDigitale.setTipoBollo(StTipoBollo.X_01);
-			datiMarcaBolloDigitale.setHashDocumento((String) infoAggiuntive.get(MyPayConstants.INFO_AGGIUNTIVE_MARCA_BOLLO_DIGITALE_HASH_DOCUMENTO_KEY));
-			datiMarcaBolloDigitale.setProvinciaResidenza((String) infoAggiuntive.get(MyPayConstants.INFO_AGGIUNTIVE_MARCA_BOLLO_DIGITALE_PROVINCIA_RESIDENZA_KEY));
-			datiSingoloVersamento.setDatiMarcaBolloDigitale(datiMarcaBolloDigitale);
+		if (infoAggiuntive != null) {
+			boolean isPagamentoBollo = infoAggiuntive.containsKey(MyPayConstants.INFO_AGGIUNTIVE_MARCA_BOLLO_DIGITALE_HASH_DOCUMENTO_KEY)
+					&& infoAggiuntive.containsKey(MyPayConstants.INFO_AGGIUNTIVE_MARCA_BOLLO_DIGITALE_PROVINCIA_RESIDENZA_KEY);
+			if (isPagamentoBollo) {
+				CtDatiMarcaBolloDigitale datiMarcaBolloDigitale = CtDatiMarcaBolloDigitale.Factory.newInstance();
+				datiMarcaBolloDigitale.setTipoBollo(StTipoBollo.X_01);
+				datiMarcaBolloDigitale.setHashDocumento((String) infoAggiuntive.get(MyPayConstants.INFO_AGGIUNTIVE_MARCA_BOLLO_DIGITALE_HASH_DOCUMENTO_KEY));
+				datiMarcaBolloDigitale.setProvinciaResidenza((String) infoAggiuntive.get(MyPayConstants.INFO_AGGIUNTIVE_MARCA_BOLLO_DIGITALE_PROVINCIA_RESIDENZA_KEY));
+				datiSingoloVersamento.setDatiMarcaBolloDigitale(datiMarcaBolloDigitale);
 
-			datiVersamentoDovuti.setTipoVersamento("PO");
-			datiSingoloVersamento.setDatiSpecificiRiscossione("0/" + pagamento.getCodiceIdentificativoOrganizzazione());
+				datiVersamentoDovuti.setTipoVersamento("PO");
+				datiSingoloVersamento.setDatiSpecificiRiscossione("0/" + pagamento.getCodiceIdentificativoOrganizzazione());
+			}
 		}
 		// Codice per la contabilita
 		// richPagamento.getCodiceCategoriaServizio()

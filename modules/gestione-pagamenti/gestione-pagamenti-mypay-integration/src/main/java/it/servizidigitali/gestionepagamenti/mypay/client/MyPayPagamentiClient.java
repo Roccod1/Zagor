@@ -5,6 +5,9 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import java.net.URL;
 
+import javax.xml.namespace.QName;
+
+import org.apache.xmlbeans.XmlOptions;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -53,8 +56,11 @@ public class MyPayPagamentiClient implements PagamentiClient {
 
 		try {
 			CtDovuti dovuti = myPayConverter.generaDovuti(pagamento);
-			// Base64.encode()
-			bodyrichiesta.setDovuti(dovuti.xmlText().getBytes());
+			XmlOptions opts = new XmlOptions();
+			opts.setSavePrettyPrint();
+			opts.setSaveSyntheticDocumentElement(new QName("http://www.regione.veneto.it/schemas/2012/Pagamenti/Ente/", "Dovuti"));
+			String xmlText = dovuti.xmlText(opts);
+			bodyrichiesta.setDovuti(xmlText.getBytes());
 		}
 		catch (Exception ex) {
 			log.error("Errore nella serializzazione dei dovuti.", ex);
