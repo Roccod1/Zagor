@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
-import freemarker.cache.ClassTemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import it.servizidigitali.file.utility.converter.pdf.PDFConverter;
 import it.servizidigitali.file.utility.exception.FileConverterException;
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
@@ -84,12 +86,9 @@ public class AlpacaPDFService implements PDFService {
 
 			Gson gson = new Gson();
 
-			String templateLocation = "/META-INF/resources/freemarker/template.ftl";
 			Map<String, Object> data = new HashMap<String, Object>();
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			Configuration config = new Configuration(Configuration.VERSION_2_3_29);
-			config.setTemplateLoader(new ClassTemplateLoader(getClass(), "/"));
-			Template template = null;
+
 			String htmlContent = null;
 
 			long proceduraId = richiesta.getProceduraId();
@@ -105,8 +104,9 @@ public class AlpacaPDFService implements PDFService {
 			alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), definizioneAllegati, true));
 			alpacaStructure.setData(new JsonParser().parse(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
 
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			try {
-				template = config.getTemplate(templateLocation);
+				Template template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.certificatiAlpacaTemplate()), config);
 				template.process(data, new OutputStreamWriter(os));
 			}
 			catch (Exception e) {
