@@ -277,32 +277,32 @@ public class AllegatoRichiestaLocalServiceWrapper
 	@Override
 	public java.util.List
 		<it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta>
-			getAllegatiRichiesta(long richiestaId, long groupId) {
+			getAllegatiRichiestaByRichiestaId(long richiestaId) {
 
-		return _allegatoRichiestaLocalService.getAllegatiRichiesta(
-			richiestaId, groupId);
+		return _allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaId(
+			richiestaId);
 	}
 
 	@Override
 	public java.util.List
 		<it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta>
 			getAllegatiRichiestaByRichiestaIdGroupIdInterno(
-				long richiestaId, long groupId, boolean interno) {
+				long richiestaId, boolean interno) {
 
 		return _allegatoRichiestaLocalService.
 			getAllegatiRichiestaByRichiestaIdGroupIdInterno(
-				richiestaId, groupId, interno);
+				richiestaId, interno);
 	}
 
 	@Override
 	public java.util.List
 		<it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta>
 			getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
-				long richiestaId, long groupId, boolean visibile) {
+				long richiestaId, boolean visibile) {
 
 		return _allegatoRichiestaLocalService.
 			getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
-				richiestaId, groupId, visibile);
+				richiestaId, visibile);
 	}
 
 	/**
@@ -325,11 +325,12 @@ public class AllegatoRichiestaLocalServiceWrapper
 
 	@Override
 	public it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta
-		getAllegatoRichiesta(
-			long richiestaId, boolean principale, long groupId) {
+		getAllegatoRichiestaByRichiestaIdPrincipale(
+			long richiestaId, boolean principale) {
 
-		return _allegatoRichiestaLocalService.getAllegatoRichiesta(
-			richiestaId, principale, groupId);
+		return _allegatoRichiestaLocalService.
+			getAllegatoRichiestaByRichiestaIdPrincipale(
+				richiestaId, principale);
 	}
 
 	/**

@@ -486,278 +486,258 @@ public interface AllegatoRichiestaPersistence
 	public int countByUrl(String url);
 
 	/**
-	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; and groupId = &#63; or throws a <code>NoSuchAllegatoRichiestaException</code> if it could not be found.
+	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; or throws a <code>NoSuchAllegatoRichiestaException</code> if it could not be found.
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
-	 * @param groupId the group ID
 	 * @return the matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta findByR_P_G(
-			long richiestaId, boolean principale, long groupId)
+	public AllegatoRichiesta findByRichiestaIdPrincipale(
+			long richiestaId, boolean principale)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
-	 * @param groupId the group ID
 	 * @return the matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta fetchByR_P_G(
-		long richiestaId, boolean principale, long groupId);
+	public AllegatoRichiesta fetchByRichiestaIdPrincipale(
+		long richiestaId, boolean principale);
 
 	/**
-	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
-	 * @param groupId the group ID
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta fetchByR_P_G(
-		long richiestaId, boolean principale, long groupId,
-		boolean useFinderCache);
+	public AllegatoRichiesta fetchByRichiestaIdPrincipale(
+		long richiestaId, boolean principale, boolean useFinderCache);
 
 	/**
-	 * Removes the allegato richiesta where richiestaId = &#63; and principale = &#63; and groupId = &#63; from the database.
+	 * Removes the allegato richiesta where richiestaId = &#63; and principale = &#63; from the database.
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
-	 * @param groupId the group ID
 	 * @return the allegato richiesta that was removed
 	 */
-	public AllegatoRichiesta removeByR_P_G(
-			long richiestaId, boolean principale, long groupId)
+	public AllegatoRichiesta removeByRichiestaIdPrincipale(
+			long richiestaId, boolean principale)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Returns the number of allegato richiestas where richiestaId = &#63; and principale = &#63; and groupId = &#63;.
+	 * Returns the number of allegato richiestas where richiestaId = &#63; and principale = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
-	 * @param groupId the group ID
 	 * @return the number of matching allegato richiestas
 	 */
-	public int countByR_P_G(long richiestaId, boolean principale, long groupId);
+	public int countByRichiestaIdPrincipale(
+		long richiestaId, boolean principale);
 
 	/**
-	 * Returns all the allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 * Returns all the allegato richiestas where richiestaId = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @return the matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G(
-		long richiestaId, long groupId);
+	public java.util.List<AllegatoRichiesta> findByRichiestaId(
+		long richiestaId);
 
 	/**
-	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 * Returns a range of all the allegato richiestas where richiestaId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @return the range of matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G(
-		long richiestaId, long groupId, int start, int end);
+	public java.util.List<AllegatoRichiesta> findByRichiestaId(
+		long richiestaId, int start, int end);
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G(
-		long richiestaId, long groupId, int start, int end,
+	public java.util.List<AllegatoRichiesta> findByRichiestaId(
+		long richiestaId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator);
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G(
-		long richiestaId, long groupId, int start, int end,
+	public java.util.List<AllegatoRichiesta> findByRichiestaId(
+		long richiestaId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator,
 		boolean useFinderCache);
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta findByR_G_First(
-			long richiestaId, long groupId,
+	public AllegatoRichiesta findByRichiestaId_First(
+			long richiestaId,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta fetchByR_G_First(
-		long richiestaId, long groupId,
+	public AllegatoRichiesta fetchByRichiestaId_First(
+		long richiestaId,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator);
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta findByR_G_Last(
-			long richiestaId, long groupId,
+	public AllegatoRichiesta findByRichiestaId_Last(
+			long richiestaId,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta fetchByR_G_Last(
-		long richiestaId, long groupId,
+	public AllegatoRichiesta fetchByRichiestaId_Last(
+		long richiestaId,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator);
 
 	/**
-	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63;.
 	 *
 	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
-	public AllegatoRichiesta[] findByR_G_PrevAndNext(
+	public AllegatoRichiesta[] findByRichiestaId_PrevAndNext(
 			it.servizidigitali.scrivaniaoperatore.service.persistence.
 				AllegatoRichiestaPK allegatoRichiestaPK,
-			long richiestaId, long groupId,
+			long richiestaId,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Removes all the allegato richiestas where richiestaId = &#63; and groupId = &#63; from the database.
+	 * Removes all the allegato richiestas where richiestaId = &#63; from the database.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 */
-	public void removeByR_G(long richiestaId, long groupId);
+	public void removeByRichiestaId(long richiestaId);
 
 	/**
-	 * Returns the number of allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 * Returns the number of allegato richiestas where richiestaId = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @return the number of matching allegato richiestas
 	 */
-	public int countByR_G(long richiestaId, long groupId);
+	public int countByRichiestaId(long richiestaId);
 
 	/**
-	 * Returns all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns all the allegato richiestas where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @return the matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G_I(
-		long richiestaId, long groupId, boolean interno);
+	public java.util.List<AllegatoRichiesta> findByRichiestaIdInterno(
+		long richiestaId, boolean interno);
 
 	/**
-	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @return the range of matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G_I(
-		long richiestaId, long groupId, boolean interno, int start, int end);
+	public java.util.List<AllegatoRichiesta> findByRichiestaIdInterno(
+		long richiestaId, boolean interno, int start, int end);
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G_I(
-		long richiestaId, long groupId, boolean interno, int start, int end,
+	public java.util.List<AllegatoRichiesta> findByRichiestaIdInterno(
+		long richiestaId, boolean interno, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator);
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
@@ -765,167 +745,156 @@ public interface AllegatoRichiestaPersistence
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G_I(
-		long richiestaId, long groupId, boolean interno, int start, int end,
+	public java.util.List<AllegatoRichiesta> findByRichiestaIdInterno(
+		long richiestaId, boolean interno, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator,
 		boolean useFinderCache);
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta findByR_G_I_First(
-			long richiestaId, long groupId, boolean interno,
+	public AllegatoRichiesta findByRichiestaIdInterno_First(
+			long richiestaId, boolean interno,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta fetchByR_G_I_First(
-		long richiestaId, long groupId, boolean interno,
+	public AllegatoRichiesta fetchByRichiestaIdInterno_First(
+		long richiestaId, boolean interno,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator);
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta findByR_G_I_Last(
-			long richiestaId, long groupId, boolean interno,
+	public AllegatoRichiesta findByRichiestaIdInterno_Last(
+			long richiestaId, boolean interno,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta fetchByR_G_I_Last(
-		long richiestaId, long groupId, boolean interno,
+	public AllegatoRichiesta fetchByRichiestaIdInterno_Last(
+		long richiestaId, boolean interno,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator);
 
 	/**
-	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
-	public AllegatoRichiesta[] findByR_G_I_PrevAndNext(
+	public AllegatoRichiesta[] findByRichiestaIdInterno_PrevAndNext(
 			it.servizidigitali.scrivaniaoperatore.service.persistence.
 				AllegatoRichiestaPK allegatoRichiestaPK,
-			long richiestaId, long groupId, boolean interno,
+			long richiestaId, boolean interno,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Removes all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; from the database.
+	 * Removes all the allegato richiestas where richiestaId = &#63; and interno = &#63; from the database.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 */
-	public void removeByR_G_I(long richiestaId, long groupId, boolean interno);
+	public void removeByRichiestaIdInterno(long richiestaId, boolean interno);
 
 	/**
-	 * Returns the number of allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns the number of allegato richiestas where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @return the number of matching allegato richiestas
 	 */
-	public int countByR_G_I(long richiestaId, long groupId, boolean interno);
+	public int countByRichiestaIdInterno(long richiestaId, boolean interno);
 
 	/**
-	 * Returns all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns all the allegato richiestas where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param visibile the visibile
 	 * @return the matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G_V(
-		long richiestaId, long groupId, boolean visibile);
+	public java.util.List<AllegatoRichiesta> findByRichiestaIdVisibile(
+		long richiestaId, boolean visibile);
 
 	/**
-	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param visibile the visibile
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @return the range of matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G_V(
-		long richiestaId, long groupId, boolean visibile, int start, int end);
+	public java.util.List<AllegatoRichiesta> findByRichiestaIdVisibile(
+		long richiestaId, boolean visibile, int start, int end);
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param visibile the visibile
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G_V(
-		long richiestaId, long groupId, boolean visibile, int start, int end,
+	public java.util.List<AllegatoRichiesta> findByRichiestaIdVisibile(
+		long richiestaId, boolean visibile, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator);
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param visibile the visibile
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
@@ -933,150 +902,140 @@ public interface AllegatoRichiestaPersistence
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G_V(
-		long richiestaId, long groupId, boolean visibile, int start, int end,
+	public java.util.List<AllegatoRichiesta> findByRichiestaIdVisibile(
+		long richiestaId, boolean visibile, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator,
 		boolean useFinderCache);
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta findByR_G_V_First(
-			long richiestaId, long groupId, boolean visibile,
+	public AllegatoRichiesta findByRichiestaIdVisibile_First(
+			long richiestaId, boolean visibile,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta fetchByR_G_V_First(
-		long richiestaId, long groupId, boolean visibile,
+	public AllegatoRichiesta fetchByRichiestaIdVisibile_First(
+		long richiestaId, boolean visibile,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator);
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta findByR_G_V_Last(
-			long richiestaId, long groupId, boolean visibile,
+	public AllegatoRichiesta findByRichiestaIdVisibile_Last(
+			long richiestaId, boolean visibile,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta fetchByR_G_V_Last(
-		long richiestaId, long groupId, boolean visibile,
+	public AllegatoRichiesta fetchByRichiestaIdVisibile_Last(
+		long richiestaId, boolean visibile,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator);
 
 	/**
-	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
-	public AllegatoRichiesta[] findByR_G_V_PrevAndNext(
+	public AllegatoRichiesta[] findByRichiestaIdVisibile_PrevAndNext(
 			it.servizidigitali.scrivaniaoperatore.service.persistence.
 				AllegatoRichiestaPK allegatoRichiestaPK,
-			long richiestaId, long groupId, boolean visibile,
+			long richiestaId, boolean visibile,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Removes all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and visibile = &#63; from the database.
+	 * Removes all the allegato richiestas where richiestaId = &#63; and visibile = &#63; from the database.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param visibile the visibile
 	 */
-	public void removeByR_G_V(long richiestaId, long groupId, boolean visibile);
+	public void removeByRichiestaIdVisibile(long richiestaId, boolean visibile);
 
 	/**
-	 * Returns the number of allegato richiestas where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns the number of allegato richiestas where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param visibile the visibile
 	 * @return the number of matching allegato richiestas
 	 */
-	public int countByR_G_V(long richiestaId, long groupId, boolean visibile);
+	public int countByRichiestaIdVisibile(long richiestaId, boolean visibile);
 
 	/**
-	 * Returns all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns all the allegato richiestas where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @return the matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G_I_V(
-		long richiestaId, long groupId, boolean interno, boolean visibile);
+	public java.util.List<AllegatoRichiesta> findByRichiestaIdInternoVisibile(
+		long richiestaId, boolean interno, boolean visibile);
 
 	/**
-	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @return the range of matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G_I_V(
-		long richiestaId, long groupId, boolean interno, boolean visibile,
-		int start, int end);
+	public java.util.List<AllegatoRichiesta> findByRichiestaIdInternoVisibile(
+		long richiestaId, boolean interno, boolean visibile, int start,
+		int end);
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param start the lower bound of the range of allegato richiestas
@@ -1084,21 +1043,19 @@ public interface AllegatoRichiestaPersistence
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G_I_V(
-		long richiestaId, long groupId, boolean interno, boolean visibile,
-		int start, int end,
+	public java.util.List<AllegatoRichiesta> findByRichiestaIdInternoVisibile(
+		long richiestaId, boolean interno, boolean visibile, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator);
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param start the lower bound of the range of allegato richiestas
@@ -1107,119 +1064,111 @@ public interface AllegatoRichiestaPersistence
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public java.util.List<AllegatoRichiesta> findByR_G_I_V(
-		long richiestaId, long groupId, boolean interno, boolean visibile,
-		int start, int end,
+	public java.util.List<AllegatoRichiesta> findByRichiestaIdInternoVisibile(
+		long richiestaId, boolean interno, boolean visibile, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator,
 		boolean useFinderCache);
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta findByR_G_I_V_First(
-			long richiestaId, long groupId, boolean interno, boolean visibile,
+	public AllegatoRichiesta findByRichiestaIdInternoVisibile_First(
+			long richiestaId, boolean interno, boolean visibile,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta fetchByR_G_I_V_First(
-		long richiestaId, long groupId, boolean interno, boolean visibile,
+	public AllegatoRichiesta fetchByRichiestaIdInternoVisibile_First(
+		long richiestaId, boolean interno, boolean visibile,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator);
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta findByR_G_I_V_Last(
-			long richiestaId, long groupId, boolean interno, boolean visibile,
+	public AllegatoRichiesta findByRichiestaIdInternoVisibile_Last(
+			long richiestaId, boolean interno, boolean visibile,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public AllegatoRichiesta fetchByR_G_I_V_Last(
-		long richiestaId, long groupId, boolean interno, boolean visibile,
+	public AllegatoRichiesta fetchByRichiestaIdInternoVisibile_Last(
+		long richiestaId, boolean interno, boolean visibile,
 		com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 			orderByComparator);
 
 	/**
-	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
-	public AllegatoRichiesta[] findByR_G_I_V_PrevAndNext(
+	public AllegatoRichiesta[] findByRichiestaIdInternoVisibile_PrevAndNext(
 			it.servizidigitali.scrivaniaoperatore.service.persistence.
 				AllegatoRichiestaPK allegatoRichiestaPK,
-			long richiestaId, long groupId, boolean interno, boolean visibile,
+			long richiestaId, boolean interno, boolean visibile,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
-	 * Removes all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63; from the database.
+	 * Removes all the allegato richiestas where richiestaId = &#63; and interno = &#63; and visibile = &#63; from the database.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 */
-	public void removeByR_G_I_V(
-		long richiestaId, long groupId, boolean interno, boolean visibile);
+	public void removeByRichiestaIdInternoVisibile(
+		long richiestaId, boolean interno, boolean visibile);
 
 	/**
-	 * Returns the number of allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns the number of allegato richiestas where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @return the number of matching allegato richiestas
 	 */
-	public int countByR_G_I_V(
-		long richiestaId, long groupId, boolean interno, boolean visibile);
+	public int countByRichiestaIdInternoVisibile(
+		long richiestaId, boolean interno, boolean visibile);
 
 	/**
 	 * Caches the allegato richiesta in the entity cache if it is enabled.

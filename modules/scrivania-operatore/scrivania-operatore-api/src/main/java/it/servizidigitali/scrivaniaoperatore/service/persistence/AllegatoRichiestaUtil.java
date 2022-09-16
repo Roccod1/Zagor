@@ -668,551 +668,724 @@ public class AllegatoRichiestaUtil {
 	}
 
 	/**
-	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; and groupId = &#63; or throws a <code>NoSuchAllegatoRichiestaException</code> if it could not be found.
+	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; or throws a <code>NoSuchAllegatoRichiestaException</code> if it could not be found.
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
-	 * @param groupId the group ID
 	 * @return the matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta findByR_P_G(
-			long richiestaId, boolean principale, long groupId)
+	public static AllegatoRichiesta findByRichiestaIdPrincipale(
+			long richiestaId, boolean principale)
 		throws it.servizidigitali.scrivaniaoperatore.exception.
 			NoSuchAllegatoRichiestaException {
 
-		return getPersistence().findByR_P_G(richiestaId, principale, groupId);
+		return getPersistence().findByRichiestaIdPrincipale(
+			richiestaId, principale);
 	}
 
 	/**
-	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
-	 * @param groupId the group ID
 	 * @return the matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta fetchByR_P_G(
-		long richiestaId, boolean principale, long groupId) {
+	public static AllegatoRichiesta fetchByRichiestaIdPrincipale(
+		long richiestaId, boolean principale) {
 
-		return getPersistence().fetchByR_P_G(richiestaId, principale, groupId);
+		return getPersistence().fetchByRichiestaIdPrincipale(
+			richiestaId, principale);
 	}
 
 	/**
-	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
-	 * @param groupId the group ID
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta fetchByR_P_G(
-		long richiestaId, boolean principale, long groupId,
-		boolean useFinderCache) {
+	public static AllegatoRichiesta fetchByRichiestaIdPrincipale(
+		long richiestaId, boolean principale, boolean useFinderCache) {
 
-		return getPersistence().fetchByR_P_G(
-			richiestaId, principale, groupId, useFinderCache);
+		return getPersistence().fetchByRichiestaIdPrincipale(
+			richiestaId, principale, useFinderCache);
 	}
 
 	/**
-	 * Removes the allegato richiesta where richiestaId = &#63; and principale = &#63; and groupId = &#63; from the database.
+	 * Removes the allegato richiesta where richiestaId = &#63; and principale = &#63; from the database.
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
-	 * @param groupId the group ID
 	 * @return the allegato richiesta that was removed
 	 */
-	public static AllegatoRichiesta removeByR_P_G(
-			long richiestaId, boolean principale, long groupId)
+	public static AllegatoRichiesta removeByRichiestaIdPrincipale(
+			long richiestaId, boolean principale)
 		throws it.servizidigitali.scrivaniaoperatore.exception.
 			NoSuchAllegatoRichiestaException {
 
-		return getPersistence().removeByR_P_G(richiestaId, principale, groupId);
+		return getPersistence().removeByRichiestaIdPrincipale(
+			richiestaId, principale);
 	}
 
 	/**
-	 * Returns the number of allegato richiestas where richiestaId = &#63; and principale = &#63; and groupId = &#63;.
+	 * Returns the number of allegato richiestas where richiestaId = &#63; and principale = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
-	 * @param groupId the group ID
 	 * @return the number of matching allegato richiestas
 	 */
-	public static int countByR_P_G(
-		long richiestaId, boolean principale, long groupId) {
+	public static int countByRichiestaIdPrincipale(
+		long richiestaId, boolean principale) {
 
-		return getPersistence().countByR_P_G(richiestaId, principale, groupId);
+		return getPersistence().countByRichiestaIdPrincipale(
+			richiestaId, principale);
 	}
 
 	/**
-	 * Returns all the allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 * Returns all the allegato richiestas where richiestaId = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @return the matching allegato richiestas
 	 */
-	public static List<AllegatoRichiesta> findByR_G(
-		long richiestaId, long groupId) {
-
-		return getPersistence().findByR_G(richiestaId, groupId);
+	public static List<AllegatoRichiesta> findByRichiestaId(long richiestaId) {
+		return getPersistence().findByRichiestaId(richiestaId);
 	}
 
 	/**
-	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 * Returns a range of all the allegato richiestas where richiestaId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @return the range of matching allegato richiestas
 	 */
-	public static List<AllegatoRichiesta> findByR_G(
-		long richiestaId, long groupId, int start, int end) {
+	public static List<AllegatoRichiesta> findByRichiestaId(
+		long richiestaId, int start, int end) {
 
-		return getPersistence().findByR_G(richiestaId, groupId, start, end);
+		return getPersistence().findByRichiestaId(richiestaId, start, end);
 	}
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public static List<AllegatoRichiesta> findByR_G(
-		long richiestaId, long groupId, int start, int end,
+	public static List<AllegatoRichiesta> findByRichiestaId(
+		long richiestaId, int start, int end,
 		OrderByComparator<AllegatoRichiesta> orderByComparator) {
 
-		return getPersistence().findByR_G(
-			richiestaId, groupId, start, end, orderByComparator);
+		return getPersistence().findByRichiestaId(
+			richiestaId, start, end, orderByComparator);
 	}
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public static List<AllegatoRichiesta> findByR_G(
-		long richiestaId, long groupId, int start, int end,
+	public static List<AllegatoRichiesta> findByRichiestaId(
+		long richiestaId, int start, int end,
 		OrderByComparator<AllegatoRichiesta> orderByComparator,
 		boolean useFinderCache) {
 
-		return getPersistence().findByR_G(
-			richiestaId, groupId, start, end, orderByComparator,
+		return getPersistence().findByRichiestaId(
+			richiestaId, start, end, orderByComparator, useFinderCache);
+	}
+
+	/**
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching allegato richiesta
+	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
+	 */
+	public static AllegatoRichiesta findByRichiestaId_First(
+			long richiestaId,
+			OrderByComparator<AllegatoRichiesta> orderByComparator)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchAllegatoRichiestaException {
+
+		return getPersistence().findByRichiestaId_First(
+			richiestaId, orderByComparator);
+	}
+
+	/**
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
+	 */
+	public static AllegatoRichiesta fetchByRichiestaId_First(
+		long richiestaId,
+		OrderByComparator<AllegatoRichiesta> orderByComparator) {
+
+		return getPersistence().fetchByRichiestaId_First(
+			richiestaId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching allegato richiesta
+	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
+	 */
+	public static AllegatoRichiesta findByRichiestaId_Last(
+			long richiestaId,
+			OrderByComparator<AllegatoRichiesta> orderByComparator)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchAllegatoRichiestaException {
+
+		return getPersistence().findByRichiestaId_Last(
+			richiestaId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
+	 */
+	public static AllegatoRichiesta fetchByRichiestaId_Last(
+		long richiestaId,
+		OrderByComparator<AllegatoRichiesta> orderByComparator) {
+
+		return getPersistence().fetchByRichiestaId_Last(
+			richiestaId, orderByComparator);
+	}
+
+	/**
+	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next allegato richiesta
+	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
+	 */
+	public static AllegatoRichiesta[] findByRichiestaId_PrevAndNext(
+			it.servizidigitali.scrivaniaoperatore.service.persistence.
+				AllegatoRichiestaPK allegatoRichiestaPK,
+			long richiestaId,
+			OrderByComparator<AllegatoRichiesta> orderByComparator)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchAllegatoRichiestaException {
+
+		return getPersistence().findByRichiestaId_PrevAndNext(
+			allegatoRichiestaPK, richiestaId, orderByComparator);
+	}
+
+	/**
+	 * Removes all the allegato richiestas where richiestaId = &#63; from the database.
+	 *
+	 * @param richiestaId the richiesta ID
+	 */
+	public static void removeByRichiestaId(long richiestaId) {
+		getPersistence().removeByRichiestaId(richiestaId);
+	}
+
+	/**
+	 * Returns the number of allegato richiestas where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @return the number of matching allegato richiestas
+	 */
+	public static int countByRichiestaId(long richiestaId) {
+		return getPersistence().countByRichiestaId(richiestaId);
+	}
+
+	/**
+	 * Returns all the allegato richiestas where richiestaId = &#63; and interno = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param interno the interno
+	 * @return the matching allegato richiestas
+	 */
+	public static List<AllegatoRichiesta> findByRichiestaIdInterno(
+		long richiestaId, boolean interno) {
+
+		return getPersistence().findByRichiestaIdInterno(richiestaId, interno);
+	}
+
+	/**
+	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and interno = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param interno the interno
+	 * @param start the lower bound of the range of allegato richiestas
+	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
+	 * @return the range of matching allegato richiestas
+	 */
+	public static List<AllegatoRichiesta> findByRichiestaIdInterno(
+		long richiestaId, boolean interno, int start, int end) {
+
+		return getPersistence().findByRichiestaIdInterno(
+			richiestaId, interno, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and interno = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param interno the interno
+	 * @param start the lower bound of the range of allegato richiestas
+	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching allegato richiestas
+	 */
+	public static List<AllegatoRichiesta> findByRichiestaIdInterno(
+		long richiestaId, boolean interno, int start, int end,
+		OrderByComparator<AllegatoRichiesta> orderByComparator) {
+
+		return getPersistence().findByRichiestaIdInterno(
+			richiestaId, interno, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and interno = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param interno the interno
+	 * @param start the lower bound of the range of allegato richiestas
+	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching allegato richiestas
+	 */
+	public static List<AllegatoRichiesta> findByRichiestaIdInterno(
+		long richiestaId, boolean interno, int start, int end,
+		OrderByComparator<AllegatoRichiesta> orderByComparator,
+		boolean useFinderCache) {
+
+		return getPersistence().findByRichiestaIdInterno(
+			richiestaId, interno, start, end, orderByComparator,
 			useFinderCache);
 	}
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
+	 * @param interno the interno
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta findByR_G_First(
-			long richiestaId, long groupId,
+	public static AllegatoRichiesta findByRichiestaIdInterno_First(
+			long richiestaId, boolean interno,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws it.servizidigitali.scrivaniaoperatore.exception.
 			NoSuchAllegatoRichiestaException {
 
-		return getPersistence().findByR_G_First(
-			richiestaId, groupId, orderByComparator);
+		return getPersistence().findByRichiestaIdInterno_First(
+			richiestaId, interno, orderByComparator);
 	}
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
+	 * @param interno the interno
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta fetchByR_G_First(
-		long richiestaId, long groupId,
+	public static AllegatoRichiesta fetchByRichiestaIdInterno_First(
+		long richiestaId, boolean interno,
 		OrderByComparator<AllegatoRichiesta> orderByComparator) {
 
-		return getPersistence().fetchByR_G_First(
-			richiestaId, groupId, orderByComparator);
+		return getPersistence().fetchByRichiestaIdInterno_First(
+			richiestaId, interno, orderByComparator);
 	}
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
+	 * @param interno the interno
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta findByR_G_Last(
-			long richiestaId, long groupId,
+	public static AllegatoRichiesta findByRichiestaIdInterno_Last(
+			long richiestaId, boolean interno,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws it.servizidigitali.scrivaniaoperatore.exception.
 			NoSuchAllegatoRichiestaException {
 
-		return getPersistence().findByR_G_Last(
-			richiestaId, groupId, orderByComparator);
+		return getPersistence().findByRichiestaIdInterno_Last(
+			richiestaId, interno, orderByComparator);
 	}
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
+	 * @param interno the interno
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta fetchByR_G_Last(
-		long richiestaId, long groupId,
+	public static AllegatoRichiesta fetchByRichiestaIdInterno_Last(
+		long richiestaId, boolean interno,
 		OrderByComparator<AllegatoRichiesta> orderByComparator) {
 
-		return getPersistence().fetchByR_G_Last(
-			richiestaId, groupId, orderByComparator);
+		return getPersistence().fetchByRichiestaIdInterno_Last(
+			richiestaId, interno, orderByComparator);
 	}
 
 	/**
-	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63;.
+	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
+	 * @param interno the interno
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
-	public static AllegatoRichiesta[] findByR_G_PrevAndNext(
+	public static AllegatoRichiesta[] findByRichiestaIdInterno_PrevAndNext(
 			it.servizidigitali.scrivaniaoperatore.service.persistence.
 				AllegatoRichiestaPK allegatoRichiestaPK,
-			long richiestaId, long groupId,
+			long richiestaId, boolean interno,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws it.servizidigitali.scrivaniaoperatore.exception.
 			NoSuchAllegatoRichiestaException {
 
-		return getPersistence().findByR_G_PrevAndNext(
-			allegatoRichiestaPK, richiestaId, groupId, orderByComparator);
+		return getPersistence().findByRichiestaIdInterno_PrevAndNext(
+			allegatoRichiestaPK, richiestaId, interno, orderByComparator);
 	}
 
 	/**
-	 * Removes all the allegato richiestas where richiestaId = &#63; and groupId = &#63; from the database.
+	 * Removes all the allegato richiestas where richiestaId = &#63; and interno = &#63; from the database.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
+	 * @param interno the interno
 	 */
-	public static void removeByR_G(long richiestaId, long groupId) {
-		getPersistence().removeByR_G(richiestaId, groupId);
+	public static void removeByRichiestaIdInterno(
+		long richiestaId, boolean interno) {
+
+		getPersistence().removeByRichiestaIdInterno(richiestaId, interno);
 	}
 
 	/**
-	 * Returns the number of allegato richiestas where richiestaId = &#63; and groupId = &#63;.
+	 * Returns the number of allegato richiestas where richiestaId = &#63; and interno = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
+	 * @param interno the interno
 	 * @return the number of matching allegato richiestas
 	 */
-	public static int countByR_G(long richiestaId, long groupId) {
-		return getPersistence().countByR_G(richiestaId, groupId);
+	public static int countByRichiestaIdInterno(
+		long richiestaId, boolean interno) {
+
+		return getPersistence().countByRichiestaIdInterno(richiestaId, interno);
 	}
 
 	/**
-	 * Returns all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns all the allegato richiestas where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
+	 * @param visibile the visibile
 	 * @return the matching allegato richiestas
 	 */
-	public static List<AllegatoRichiesta> findByR_G_I(
-		long richiestaId, long groupId, boolean interno) {
+	public static List<AllegatoRichiesta> findByRichiestaIdVisibile(
+		long richiestaId, boolean visibile) {
 
-		return getPersistence().findByR_G_I(richiestaId, groupId, interno);
+		return getPersistence().findByRichiestaIdVisibile(
+			richiestaId, visibile);
 	}
 
 	/**
-	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
+	 * @param visibile the visibile
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @return the range of matching allegato richiestas
 	 */
-	public static List<AllegatoRichiesta> findByR_G_I(
-		long richiestaId, long groupId, boolean interno, int start, int end) {
+	public static List<AllegatoRichiesta> findByRichiestaIdVisibile(
+		long richiestaId, boolean visibile, int start, int end) {
 
-		return getPersistence().findByR_G_I(
-			richiestaId, groupId, interno, start, end);
+		return getPersistence().findByRichiestaIdVisibile(
+			richiestaId, visibile, start, end);
 	}
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
+	 * @param visibile the visibile
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public static List<AllegatoRichiesta> findByR_G_I(
-		long richiestaId, long groupId, boolean interno, int start, int end,
+	public static List<AllegatoRichiesta> findByRichiestaIdVisibile(
+		long richiestaId, boolean visibile, int start, int end,
 		OrderByComparator<AllegatoRichiesta> orderByComparator) {
 
-		return getPersistence().findByR_G_I(
-			richiestaId, groupId, interno, start, end, orderByComparator);
+		return getPersistence().findByRichiestaIdVisibile(
+			richiestaId, visibile, start, end, orderByComparator);
 	}
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
+	 * @param visibile the visibile
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public static List<AllegatoRichiesta> findByR_G_I(
-		long richiestaId, long groupId, boolean interno, int start, int end,
+	public static List<AllegatoRichiesta> findByRichiestaIdVisibile(
+		long richiestaId, boolean visibile, int start, int end,
 		OrderByComparator<AllegatoRichiesta> orderByComparator,
 		boolean useFinderCache) {
 
-		return getPersistence().findByR_G_I(
-			richiestaId, groupId, interno, start, end, orderByComparator,
+		return getPersistence().findByRichiestaIdVisibile(
+			richiestaId, visibile, start, end, orderByComparator,
 			useFinderCache);
 	}
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
+	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta findByR_G_I_First(
-			long richiestaId, long groupId, boolean interno,
+	public static AllegatoRichiesta findByRichiestaIdVisibile_First(
+			long richiestaId, boolean visibile,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws it.servizidigitali.scrivaniaoperatore.exception.
 			NoSuchAllegatoRichiestaException {
 
-		return getPersistence().findByR_G_I_First(
-			richiestaId, groupId, interno, orderByComparator);
+		return getPersistence().findByRichiestaIdVisibile_First(
+			richiestaId, visibile, orderByComparator);
 	}
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
+	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta fetchByR_G_I_First(
-		long richiestaId, long groupId, boolean interno,
+	public static AllegatoRichiesta fetchByRichiestaIdVisibile_First(
+		long richiestaId, boolean visibile,
 		OrderByComparator<AllegatoRichiesta> orderByComparator) {
 
-		return getPersistence().fetchByR_G_I_First(
-			richiestaId, groupId, interno, orderByComparator);
+		return getPersistence().fetchByRichiestaIdVisibile_First(
+			richiestaId, visibile, orderByComparator);
 	}
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
+	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta findByR_G_I_Last(
-			long richiestaId, long groupId, boolean interno,
+	public static AllegatoRichiesta findByRichiestaIdVisibile_Last(
+			long richiestaId, boolean visibile,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws it.servizidigitali.scrivaniaoperatore.exception.
 			NoSuchAllegatoRichiestaException {
 
-		return getPersistence().findByR_G_I_Last(
-			richiestaId, groupId, interno, orderByComparator);
+		return getPersistence().findByRichiestaIdVisibile_Last(
+			richiestaId, visibile, orderByComparator);
 	}
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
+	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta fetchByR_G_I_Last(
-		long richiestaId, long groupId, boolean interno,
+	public static AllegatoRichiesta fetchByRichiestaIdVisibile_Last(
+		long richiestaId, boolean visibile,
 		OrderByComparator<AllegatoRichiesta> orderByComparator) {
 
-		return getPersistence().fetchByR_G_I_Last(
-			richiestaId, groupId, interno, orderByComparator);
+		return getPersistence().fetchByRichiestaIdVisibile_Last(
+			richiestaId, visibile, orderByComparator);
 	}
 
 	/**
-	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
+	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
-	public static AllegatoRichiesta[] findByR_G_I_PrevAndNext(
+	public static AllegatoRichiesta[] findByRichiestaIdVisibile_PrevAndNext(
 			it.servizidigitali.scrivaniaoperatore.service.persistence.
 				AllegatoRichiestaPK allegatoRichiestaPK,
-			long richiestaId, long groupId, boolean interno,
+			long richiestaId, boolean visibile,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws it.servizidigitali.scrivaniaoperatore.exception.
 			NoSuchAllegatoRichiestaException {
 
-		return getPersistence().findByR_G_I_PrevAndNext(
-			allegatoRichiestaPK, richiestaId, groupId, interno,
-			orderByComparator);
+		return getPersistence().findByRichiestaIdVisibile_PrevAndNext(
+			allegatoRichiestaPK, richiestaId, visibile, orderByComparator);
 	}
 
 	/**
-	 * Removes all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; from the database.
+	 * Removes all the allegato richiestas where richiestaId = &#63; and visibile = &#63; from the database.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
+	 * @param visibile the visibile
 	 */
-	public static void removeByR_G_I(
-		long richiestaId, long groupId, boolean interno) {
+	public static void removeByRichiestaIdVisibile(
+		long richiestaId, boolean visibile) {
 
-		getPersistence().removeByR_G_I(richiestaId, groupId, interno);
+		getPersistence().removeByRichiestaIdVisibile(richiestaId, visibile);
 	}
 
 	/**
-	 * Returns the number of allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63;.
+	 * Returns the number of allegato richiestas where richiestaId = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
+	 * @param visibile the visibile
 	 * @return the number of matching allegato richiestas
 	 */
-	public static int countByR_G_I(
-		long richiestaId, long groupId, boolean interno) {
+	public static int countByRichiestaIdVisibile(
+		long richiestaId, boolean visibile) {
 
-		return getPersistence().countByR_G_I(richiestaId, groupId, interno);
+		return getPersistence().countByRichiestaIdVisibile(
+			richiestaId, visibile);
 	}
 
 	/**
-	 * Returns all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns all the allegato richiestas where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
+	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @return the matching allegato richiestas
 	 */
-	public static List<AllegatoRichiesta> findByR_G_V(
-		long richiestaId, long groupId, boolean visibile) {
+	public static List<AllegatoRichiesta> findByRichiestaIdInternoVisibile(
+		long richiestaId, boolean interno, boolean visibile) {
 
-		return getPersistence().findByR_G_V(richiestaId, groupId, visibile);
+		return getPersistence().findByRichiestaIdInternoVisibile(
+			richiestaId, interno, visibile);
 	}
 
 	/**
-	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
+	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @return the range of matching allegato richiestas
 	 */
-	public static List<AllegatoRichiesta> findByR_G_V(
-		long richiestaId, long groupId, boolean visibile, int start, int end) {
+	public static List<AllegatoRichiesta> findByRichiestaIdInternoVisibile(
+		long richiestaId, boolean interno, boolean visibile, int start,
+		int end) {
 
-		return getPersistence().findByR_G_V(
-			richiestaId, groupId, visibile, start, end);
+		return getPersistence().findByRichiestaIdInternoVisibile(
+			richiestaId, interno, visibile, start, end);
 	}
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
+	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public static List<AllegatoRichiesta> findByR_G_V(
-		long richiestaId, long groupId, boolean visibile, int start, int end,
+	public static List<AllegatoRichiesta> findByRichiestaIdInternoVisibile(
+		long richiestaId, boolean interno, boolean visibile, int start, int end,
 		OrderByComparator<AllegatoRichiesta> orderByComparator) {
 
-		return getPersistence().findByR_G_V(
-			richiestaId, groupId, visibile, start, end, orderByComparator);
+		return getPersistence().findByRichiestaIdInternoVisibile(
+			richiestaId, interno, visibile, start, end, orderByComparator);
 	}
 
 	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
 	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
+	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param start the lower bound of the range of allegato richiestas
 	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
@@ -1220,366 +1393,142 @@ public class AllegatoRichiestaUtil {
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching allegato richiestas
 	 */
-	public static List<AllegatoRichiesta> findByR_G_V(
-		long richiestaId, long groupId, boolean visibile, int start, int end,
+	public static List<AllegatoRichiesta> findByRichiestaIdInternoVisibile(
+		long richiestaId, boolean interno, boolean visibile, int start, int end,
 		OrderByComparator<AllegatoRichiesta> orderByComparator,
 		boolean useFinderCache) {
 
-		return getPersistence().findByR_G_V(
-			richiestaId, groupId, visibile, start, end, orderByComparator,
+		return getPersistence().findByRichiestaIdInternoVisibile(
+			richiestaId, interno, visibile, start, end, orderByComparator,
 			useFinderCache);
 	}
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param visibile the visibile
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching allegato richiesta
-	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
-	 */
-	public static AllegatoRichiesta findByR_G_V_First(
-			long richiestaId, long groupId, boolean visibile,
-			OrderByComparator<AllegatoRichiesta> orderByComparator)
-		throws it.servizidigitali.scrivaniaoperatore.exception.
-			NoSuchAllegatoRichiestaException {
-
-		return getPersistence().findByR_G_V_First(
-			richiestaId, groupId, visibile, orderByComparator);
-	}
-
-	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
-	 *
-	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param visibile the visibile
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
-	 */
-	public static AllegatoRichiesta fetchByR_G_V_First(
-		long richiestaId, long groupId, boolean visibile,
-		OrderByComparator<AllegatoRichiesta> orderByComparator) {
-
-		return getPersistence().fetchByR_G_V_First(
-			richiestaId, groupId, visibile, orderByComparator);
-	}
-
-	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
-	 *
-	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param visibile the visibile
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching allegato richiesta
-	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
-	 */
-	public static AllegatoRichiesta findByR_G_V_Last(
-			long richiestaId, long groupId, boolean visibile,
-			OrderByComparator<AllegatoRichiesta> orderByComparator)
-		throws it.servizidigitali.scrivaniaoperatore.exception.
-			NoSuchAllegatoRichiestaException {
-
-		return getPersistence().findByR_G_V_Last(
-			richiestaId, groupId, visibile, orderByComparator);
-	}
-
-	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
-	 *
-	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param visibile the visibile
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
-	 */
-	public static AllegatoRichiesta fetchByR_G_V_Last(
-		long richiestaId, long groupId, boolean visibile,
-		OrderByComparator<AllegatoRichiesta> orderByComparator) {
-
-		return getPersistence().fetchByR_G_V_Last(
-			richiestaId, groupId, visibile, orderByComparator);
-	}
-
-	/**
-	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
-	 *
-	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
-	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param visibile the visibile
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next allegato richiesta
-	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
-	 */
-	public static AllegatoRichiesta[] findByR_G_V_PrevAndNext(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK,
-			long richiestaId, long groupId, boolean visibile,
-			OrderByComparator<AllegatoRichiesta> orderByComparator)
-		throws it.servizidigitali.scrivaniaoperatore.exception.
-			NoSuchAllegatoRichiestaException {
-
-		return getPersistence().findByR_G_V_PrevAndNext(
-			allegatoRichiestaPK, richiestaId, groupId, visibile,
-			orderByComparator);
-	}
-
-	/**
-	 * Removes all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and visibile = &#63; from the database.
-	 *
-	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param visibile the visibile
-	 */
-	public static void removeByR_G_V(
-		long richiestaId, long groupId, boolean visibile) {
-
-		getPersistence().removeByR_G_V(richiestaId, groupId, visibile);
-	}
-
-	/**
-	 * Returns the number of allegato richiestas where richiestaId = &#63; and groupId = &#63; and visibile = &#63;.
-	 *
-	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param visibile the visibile
-	 * @return the number of matching allegato richiestas
-	 */
-	public static int countByR_G_V(
-		long richiestaId, long groupId, boolean visibile) {
-
-		return getPersistence().countByR_G_V(richiestaId, groupId, visibile);
-	}
-
-	/**
-	 * Returns all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
-	 *
-	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
-	 * @param visibile the visibile
-	 * @return the matching allegato richiestas
-	 */
-	public static List<AllegatoRichiesta> findByR_G_I_V(
-		long richiestaId, long groupId, boolean interno, boolean visibile) {
-
-		return getPersistence().findByR_G_I_V(
-			richiestaId, groupId, interno, visibile);
-	}
-
-	/**
-	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
-	 * </p>
-	 *
-	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
-	 * @param visibile the visibile
-	 * @param start the lower bound of the range of allegato richiestas
-	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
-	 * @return the range of matching allegato richiestas
-	 */
-	public static List<AllegatoRichiesta> findByR_G_I_V(
-		long richiestaId, long groupId, boolean interno, boolean visibile,
-		int start, int end) {
-
-		return getPersistence().findByR_G_I_V(
-			richiestaId, groupId, interno, visibile, start, end);
-	}
-
-	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
-	 * </p>
-	 *
-	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
-	 * @param visibile the visibile
-	 * @param start the lower bound of the range of allegato richiestas
-	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching allegato richiestas
-	 */
-	public static List<AllegatoRichiesta> findByR_G_I_V(
-		long richiestaId, long groupId, boolean interno, boolean visibile,
-		int start, int end,
-		OrderByComparator<AllegatoRichiesta> orderByComparator) {
-
-		return getPersistence().findByR_G_I_V(
-			richiestaId, groupId, interno, visibile, start, end,
-			orderByComparator);
-	}
-
-	/**
-	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
-	 * </p>
-	 *
-	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
-	 * @param interno the interno
-	 * @param visibile the visibile
-	 * @param start the lower bound of the range of allegato richiestas
-	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param useFinderCache whether to use the finder cache
-	 * @return the ordered range of matching allegato richiestas
-	 */
-	public static List<AllegatoRichiesta> findByR_G_I_V(
-		long richiestaId, long groupId, boolean interno, boolean visibile,
-		int start, int end,
-		OrderByComparator<AllegatoRichiesta> orderByComparator,
-		boolean useFinderCache) {
-
-		return getPersistence().findByR_G_I_V(
-			richiestaId, groupId, interno, visibile, start, end,
-			orderByComparator, useFinderCache);
-	}
-
-	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
-	 *
-	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta findByR_G_I_V_First(
-			long richiestaId, long groupId, boolean interno, boolean visibile,
+	public static AllegatoRichiesta findByRichiestaIdInternoVisibile_First(
+			long richiestaId, boolean interno, boolean visibile,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws it.servizidigitali.scrivaniaoperatore.exception.
 			NoSuchAllegatoRichiestaException {
 
-		return getPersistence().findByR_G_I_V_First(
-			richiestaId, groupId, interno, visibile, orderByComparator);
+		return getPersistence().findByRichiestaIdInternoVisibile_First(
+			richiestaId, interno, visibile, orderByComparator);
 	}
 
 	/**
-	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta fetchByR_G_I_V_First(
-		long richiestaId, long groupId, boolean interno, boolean visibile,
+	public static AllegatoRichiesta fetchByRichiestaIdInternoVisibile_First(
+		long richiestaId, boolean interno, boolean visibile,
 		OrderByComparator<AllegatoRichiesta> orderByComparator) {
 
-		return getPersistence().fetchByR_G_I_V_First(
-			richiestaId, groupId, interno, visibile, orderByComparator);
+		return getPersistence().fetchByRichiestaIdInternoVisibile_First(
+			richiestaId, interno, visibile, orderByComparator);
 	}
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta findByR_G_I_V_Last(
-			long richiestaId, long groupId, boolean interno, boolean visibile,
+	public static AllegatoRichiesta findByRichiestaIdInternoVisibile_Last(
+			long richiestaId, boolean interno, boolean visibile,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws it.servizidigitali.scrivaniaoperatore.exception.
 			NoSuchAllegatoRichiestaException {
 
-		return getPersistence().findByR_G_I_V_Last(
-			richiestaId, groupId, interno, visibile, orderByComparator);
+		return getPersistence().findByRichiestaIdInternoVisibile_Last(
+			richiestaId, interno, visibile, orderByComparator);
 	}
 
 	/**
-	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta fetchByR_G_I_V_Last(
-		long richiestaId, long groupId, boolean interno, boolean visibile,
+	public static AllegatoRichiesta fetchByRichiestaIdInternoVisibile_Last(
+		long richiestaId, boolean interno, boolean visibile,
 		OrderByComparator<AllegatoRichiesta> orderByComparator) {
 
-		return getPersistence().fetchByR_G_I_V_Last(
-			richiestaId, groupId, interno, visibile, orderByComparator);
+		return getPersistence().fetchByRichiestaIdInternoVisibile_Last(
+			richiestaId, interno, visibile, orderByComparator);
 	}
 
 	/**
-	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
-	public static AllegatoRichiesta[] findByR_G_I_V_PrevAndNext(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK,
-			long richiestaId, long groupId, boolean interno, boolean visibile,
-			OrderByComparator<AllegatoRichiesta> orderByComparator)
+	public static AllegatoRichiesta[]
+			findByRichiestaIdInternoVisibile_PrevAndNext(
+				it.servizidigitali.scrivaniaoperatore.service.persistence.
+					AllegatoRichiestaPK allegatoRichiestaPK,
+				long richiestaId, boolean interno, boolean visibile,
+				OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws it.servizidigitali.scrivaniaoperatore.exception.
 			NoSuchAllegatoRichiestaException {
 
-		return getPersistence().findByR_G_I_V_PrevAndNext(
-			allegatoRichiestaPK, richiestaId, groupId, interno, visibile,
+		return getPersistence().findByRichiestaIdInternoVisibile_PrevAndNext(
+			allegatoRichiestaPK, richiestaId, interno, visibile,
 			orderByComparator);
 	}
 
 	/**
-	 * Removes all the allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63; from the database.
+	 * Removes all the allegato richiestas where richiestaId = &#63; and interno = &#63; and visibile = &#63; from the database.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 */
-	public static void removeByR_G_I_V(
-		long richiestaId, long groupId, boolean interno, boolean visibile) {
+	public static void removeByRichiestaIdInternoVisibile(
+		long richiestaId, boolean interno, boolean visibile) {
 
-		getPersistence().removeByR_G_I_V(
-			richiestaId, groupId, interno, visibile);
+		getPersistence().removeByRichiestaIdInternoVisibile(
+			richiestaId, interno, visibile);
 	}
 
 	/**
-	 * Returns the number of allegato richiestas where richiestaId = &#63; and groupId = &#63; and interno = &#63; and visibile = &#63;.
+	 * Returns the number of allegato richiestas where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @param groupId the group ID
 	 * @param interno the interno
 	 * @param visibile the visibile
 	 * @return the number of matching allegato richiestas
 	 */
-	public static int countByR_G_I_V(
-		long richiestaId, long groupId, boolean interno, boolean visibile) {
+	public static int countByRichiestaIdInternoVisibile(
+		long richiestaId, boolean interno, boolean visibile) {
 
-		return getPersistence().countByR_G_I_V(
-			richiestaId, groupId, interno, visibile);
+		return getPersistence().countByRichiestaIdInternoVisibile(
+			richiestaId, interno, visibile);
 	}
 
 	/**

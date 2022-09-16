@@ -242,26 +242,26 @@ public class AllegatoRichiestaLocalServiceUtil {
 		return getService().getActionableDynamicQuery();
 	}
 
-	public static List<AllegatoRichiesta> getAllegatiRichiesta(
-		long richiestaId, long groupId) {
+	public static List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaId(
+		long richiestaId) {
 
-		return getService().getAllegatiRichiesta(richiestaId, groupId);
+		return getService().getAllegatiRichiestaByRichiestaId(richiestaId);
 	}
 
 	public static List<AllegatoRichiesta>
 		getAllegatiRichiestaByRichiestaIdGroupIdInterno(
-			long richiestaId, long groupId, boolean interno) {
+			long richiestaId, boolean interno) {
 
 		return getService().getAllegatiRichiestaByRichiestaIdGroupIdInterno(
-			richiestaId, groupId, interno);
+			richiestaId, interno);
 	}
 
 	public static List<AllegatoRichiesta>
 		getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
-			long richiestaId, long groupId, boolean visibile) {
+			long richiestaId, boolean visibile) {
 
 		return getService().getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
-			richiestaId, groupId, visibile);
+			richiestaId, visibile);
 	}
 
 	/**
@@ -279,11 +279,11 @@ public class AllegatoRichiestaLocalServiceUtil {
 		return getService().getAllegatoRichiesta(allegatoRichiestaPK);
 	}
 
-	public static AllegatoRichiesta getAllegatoRichiesta(
-		long richiestaId, boolean principale, long groupId) {
+	public static AllegatoRichiesta getAllegatoRichiestaByRichiestaIdPrincipale(
+		long richiestaId, boolean principale) {
 
-		return getService().getAllegatoRichiesta(
-			richiestaId, principale, groupId);
+		return getService().getAllegatoRichiestaByRichiestaIdPrincipale(
+			richiestaId, principale);
 	}
 
 	/**
