@@ -3,13 +3,15 @@ package it.servizidigitali.presentatoreforms.frontend.service.impl;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
@@ -18,31 +20,42 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
+import org.graalvm.compiler.lir.CompositeValue.Component;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Modified;
 
 import freemarker.cache.ClassTemplateLoader;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 import it.servizidigitali.file.utility.converter.pdf.PDFConverter;
 import it.servizidigitali.file.utility.exception.FileConverterException;
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
+import it.servizidigitali.presentatoreforms.frontend.configuration.FreemarkerTemplateEnteConfiguration;
 import it.servizidigitali.presentatoreforms.frontend.exception.PDFServiceException;
 import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import jdk.nashorn.internal.ir.annotations.Reference;
 
 /**
  * @author pindi
  *
  */
-@Component(name = "alpacaPDFService", immediate = true, service = PDFService.class)
+@Component(name = "alpacaPDFService", immediate = true, service = PDFService.class, configurationPid = "it.servizidigitali.presentatoreforms.frontend.configuration.FreemarkerTemplateEnteConfiguration")
 public class AlpacaPDFService implements PDFService {
 
 	private static final Log log = LogFactoryUtil.getLog(AlpacaPDFService.class.getName());
+
+	private ConfigurationProvider configurationProvider;
+
+	private volatile FreemarkerTemplateEnteConfiguration freemarkerTemplateEnteConfiguration;
+
+	@Activate
+	@Modified
+	private void activate(Map<String, Object> props) {
+		freemarkerTemplateEnteConfiguration = ConfigurableUtil.createConfigurable(FreemarkerTemplateEnteConfiguration.class, props);
+	}
 
 	@Reference
 	private OrganizationLocalService organizationLocalService;
@@ -70,16 +83,14 @@ public class AlpacaPDFService implements PDFService {
 		try {
 
 			Gson gson = new Gson();
-			
+
 			String templateLocation = "/META-INF/resources/freemarker/template.ftl";
-			Map<String,Object> data= new HashMap<String,Object>();
-			ByteArrayOutputStream os =new ByteArrayOutputStream();
-			
+			Map<String, Object> data = new HashMap<String, Object>();
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			Configuration config = new Configuration(Configuration.VERSION_2_3_29);
 			config.setTemplateLoader(new ClassTemplateLoader(getClass(), "/"));
 			Template template = null;
 			String htmlContent = null;
-			
 
 			long proceduraId = richiesta.getProceduraId();
 			Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
@@ -97,10 +108,11 @@ public class AlpacaPDFService implements PDFService {
 			try {
 				template = config.getTemplate(templateLocation);
 				template.process(data, new OutputStreamWriter(os));
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				log.error("generaPDFCertificato :: " + e.getMessage(), e);
 			}
-			
+
 			htmlContent = os.toString(StandardCharsets.UTF_8);
 			pdfContent = pdfConverter.generatePDF(htmlContent);
 		}
