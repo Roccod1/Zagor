@@ -1457,91 +1457,140 @@ public class IstanzaFormPersistenceImpl
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 =
 		"istanzaForm.companyId = ?";
 
-	private FinderPath _finderPathFetchByRichiestaId;
+	private FinderPath _finderPathWithPaginationFindByRichiestaId;
+	private FinderPath _finderPathWithoutPaginationFindByRichiestaId;
 	private FinderPath _finderPathCountByRichiestaId;
 
 	/**
-	 * Returns the istanza form where richiestaId = &#63; or throws a <code>NoSuchIstanzaFormException</code> if it could not be found.
+	 * Returns all the istanza forms where richiestaId = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @return the matching istanza form
-	 * @throws NoSuchIstanzaFormException if a matching istanza form could not be found
+	 * @return the matching istanza forms
 	 */
 	@Override
-	public IstanzaForm findByRichiestaId(long richiestaId)
-		throws NoSuchIstanzaFormException {
-
-		IstanzaForm istanzaForm = fetchByRichiestaId(richiestaId);
-
-		if (istanzaForm == null) {
-			StringBundler sb = new StringBundler(4);
-
-			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			sb.append("richiestaId=");
-			sb.append(richiestaId);
-
-			sb.append("}");
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(sb.toString());
-			}
-
-			throw new NoSuchIstanzaFormException(sb.toString());
-		}
-
-		return istanzaForm;
+	public List<IstanzaForm> findByRichiestaId(long richiestaId) {
+		return findByRichiestaId(
+			richiestaId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns the istanza form where richiestaId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 * Returns a range of all the istanza forms where richiestaId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>IstanzaFormModelImpl</code>.
+	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @return the matching istanza form, or <code>null</code> if a matching istanza form could not be found
+	 * @param start the lower bound of the range of istanza forms
+	 * @param end the upper bound of the range of istanza forms (not inclusive)
+	 * @return the range of matching istanza forms
 	 */
 	@Override
-	public IstanzaForm fetchByRichiestaId(long richiestaId) {
-		return fetchByRichiestaId(richiestaId, true);
+	public List<IstanzaForm> findByRichiestaId(
+		long richiestaId, int start, int end) {
+
+		return findByRichiestaId(richiestaId, start, end, null);
 	}
 
 	/**
-	 * Returns the istanza form where richiestaId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns an ordered range of all the istanza forms where richiestaId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>IstanzaFormModelImpl</code>.
+	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
+	 * @param start the lower bound of the range of istanza forms
+	 * @param end the upper bound of the range of istanza forms (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching istanza forms
+	 */
+	@Override
+	public List<IstanzaForm> findByRichiestaId(
+		long richiestaId, int start, int end,
+		OrderByComparator<IstanzaForm> orderByComparator) {
+
+		return findByRichiestaId(
+			richiestaId, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the istanza forms where richiestaId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>IstanzaFormModelImpl</code>.
+	 * </p>
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param start the lower bound of the range of istanza forms
+	 * @param end the upper bound of the range of istanza forms (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @param useFinderCache whether to use the finder cache
-	 * @return the matching istanza form, or <code>null</code> if a matching istanza form could not be found
+	 * @return the ordered range of matching istanza forms
 	 */
 	@Override
-	public IstanzaForm fetchByRichiestaId(
-		long richiestaId, boolean useFinderCache) {
+	public List<IstanzaForm> findByRichiestaId(
+		long richiestaId, int start, int end,
+		OrderByComparator<IstanzaForm> orderByComparator,
+		boolean useFinderCache) {
 
+		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
-		if (useFinderCache) {
-			finderArgs = new Object[] {richiestaId};
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByRichiestaId;
+				finderArgs = new Object[] {richiestaId};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByRichiestaId;
+			finderArgs = new Object[] {
+				richiestaId, start, end, orderByComparator
+			};
 		}
 
-		Object result = null;
+		List<IstanzaForm> list = null;
 
 		if (useFinderCache) {
-			result = finderCache.getResult(
-				_finderPathFetchByRichiestaId, finderArgs);
-		}
+			list = (List<IstanzaForm>)finderCache.getResult(
+				finderPath, finderArgs);
 
-		if (result instanceof IstanzaForm) {
-			IstanzaForm istanzaForm = (IstanzaForm)result;
+			if ((list != null) && !list.isEmpty()) {
+				for (IstanzaForm istanzaForm : list) {
+					if (richiestaId != istanzaForm.getRichiestaId()) {
+						list = null;
 
-			if (richiestaId != istanzaForm.getRichiestaId()) {
-				result = null;
+						break;
+					}
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler sb = new StringBundler(3);
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(3);
+			}
 
 			sb.append(_SQL_SELECT_ISTANZAFORM_WHERE);
 
 			sb.append(_FINDER_COLUMN_RICHIESTAID_RICHIESTAID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(IstanzaFormModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = sb.toString();
 
@@ -1556,35 +1605,13 @@ public class IstanzaFormPersistenceImpl
 
 				queryPos.add(richiestaId);
 
-				List<IstanzaForm> list = query.list();
+				list = (List<IstanzaForm>)QueryUtil.list(
+					query, getDialect(), start, end);
 
-				if (list.isEmpty()) {
-					if (useFinderCache) {
-						finderCache.putResult(
-							_finderPathFetchByRichiestaId, finderArgs, list);
-					}
-				}
-				else {
-					if (list.size() > 1) {
-						Collections.sort(list, Collections.reverseOrder());
+				cacheResult(list);
 
-						if (_log.isWarnEnabled()) {
-							if (!useFinderCache) {
-								finderArgs = new Object[] {richiestaId};
-							}
-
-							_log.warn(
-								"IstanzaFormPersistenceImpl.fetchByRichiestaId(long, boolean) with parameters (" +
-									StringUtil.merge(finderArgs) +
-										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
-						}
-					}
-
-					IstanzaForm istanzaForm = list.get(0);
-
-					result = istanzaForm;
-
-					cacheResult(istanzaForm);
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
 				}
 			}
 			catch (Exception exception) {
@@ -1595,27 +1622,284 @@ public class IstanzaFormPersistenceImpl
 			}
 		}
 
-		if (result instanceof List<?>) {
+		return list;
+	}
+
+	/**
+	 * Returns the first istanza form in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching istanza form
+	 * @throws NoSuchIstanzaFormException if a matching istanza form could not be found
+	 */
+	@Override
+	public IstanzaForm findByRichiestaId_First(
+			long richiestaId, OrderByComparator<IstanzaForm> orderByComparator)
+		throws NoSuchIstanzaFormException {
+
+		IstanzaForm istanzaForm = fetchByRichiestaId_First(
+			richiestaId, orderByComparator);
+
+		if (istanzaForm != null) {
+			return istanzaForm;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("richiestaId=");
+		sb.append(richiestaId);
+
+		sb.append("}");
+
+		throw new NoSuchIstanzaFormException(sb.toString());
+	}
+
+	/**
+	 * Returns the first istanza form in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching istanza form, or <code>null</code> if a matching istanza form could not be found
+	 */
+	@Override
+	public IstanzaForm fetchByRichiestaId_First(
+		long richiestaId, OrderByComparator<IstanzaForm> orderByComparator) {
+
+		List<IstanzaForm> list = findByRichiestaId(
+			richiestaId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last istanza form in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching istanza form
+	 * @throws NoSuchIstanzaFormException if a matching istanza form could not be found
+	 */
+	@Override
+	public IstanzaForm findByRichiestaId_Last(
+			long richiestaId, OrderByComparator<IstanzaForm> orderByComparator)
+		throws NoSuchIstanzaFormException {
+
+		IstanzaForm istanzaForm = fetchByRichiestaId_Last(
+			richiestaId, orderByComparator);
+
+		if (istanzaForm != null) {
+			return istanzaForm;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("richiestaId=");
+		sb.append(richiestaId);
+
+		sb.append("}");
+
+		throw new NoSuchIstanzaFormException(sb.toString());
+	}
+
+	/**
+	 * Returns the last istanza form in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching istanza form, or <code>null</code> if a matching istanza form could not be found
+	 */
+	@Override
+	public IstanzaForm fetchByRichiestaId_Last(
+		long richiestaId, OrderByComparator<IstanzaForm> orderByComparator) {
+
+		int count = countByRichiestaId(richiestaId);
+
+		if (count == 0) {
 			return null;
 		}
+
+		List<IstanzaForm> list = findByRichiestaId(
+			richiestaId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the istanza forms before and after the current istanza form in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param istanzaFormId the primary key of the current istanza form
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next istanza form
+	 * @throws NoSuchIstanzaFormException if a istanza form with the primary key could not be found
+	 */
+	@Override
+	public IstanzaForm[] findByRichiestaId_PrevAndNext(
+			long istanzaFormId, long richiestaId,
+			OrderByComparator<IstanzaForm> orderByComparator)
+		throws NoSuchIstanzaFormException {
+
+		IstanzaForm istanzaForm = findByPrimaryKey(istanzaFormId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			IstanzaForm[] array = new IstanzaFormImpl[3];
+
+			array[0] = getByRichiestaId_PrevAndNext(
+				session, istanzaForm, richiestaId, orderByComparator, true);
+
+			array[1] = istanzaForm;
+
+			array[2] = getByRichiestaId_PrevAndNext(
+				session, istanzaForm, richiestaId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected IstanzaForm getByRichiestaId_PrevAndNext(
+		Session session, IstanzaForm istanzaForm, long richiestaId,
+		OrderByComparator<IstanzaForm> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
 		else {
-			return (IstanzaForm)result;
+			sb = new StringBundler(3);
+		}
+
+		sb.append(_SQL_SELECT_ISTANZAFORM_WHERE);
+
+		sb.append(_FINDER_COLUMN_RICHIESTAID_RICHIESTAID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(IstanzaFormModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(richiestaId);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(istanzaForm)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<IstanzaForm> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
 		}
 	}
 
 	/**
-	 * Removes the istanza form where richiestaId = &#63; from the database.
+	 * Removes all the istanza forms where richiestaId = &#63; from the database.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @return the istanza form that was removed
 	 */
 	@Override
-	public IstanzaForm removeByRichiestaId(long richiestaId)
-		throws NoSuchIstanzaFormException {
+	public void removeByRichiestaId(long richiestaId) {
+		for (IstanzaForm istanzaForm :
+				findByRichiestaId(
+					richiestaId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 
-		IstanzaForm istanzaForm = findByRichiestaId(richiestaId);
-
-		return remove(istanzaForm);
+			remove(istanzaForm);
+		}
 	}
 
 	/**
@@ -1669,6 +1953,241 @@ public class IstanzaFormPersistenceImpl
 
 	private static final String _FINDER_COLUMN_RICHIESTAID_RICHIESTAID_2 =
 		"istanzaForm.richiestaId = ?";
+
+	private FinderPath _finderPathFetchByRichiestaIdFormId;
+	private FinderPath _finderPathCountByRichiestaIdFormId;
+
+	/**
+	 * Returns the istanza form where richiestaId = &#63; and formId = &#63; or throws a <code>NoSuchIstanzaFormException</code> if it could not be found.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param formId the form ID
+	 * @return the matching istanza form
+	 * @throws NoSuchIstanzaFormException if a matching istanza form could not be found
+	 */
+	@Override
+	public IstanzaForm findByRichiestaIdFormId(long richiestaId, long formId)
+		throws NoSuchIstanzaFormException {
+
+		IstanzaForm istanzaForm = fetchByRichiestaIdFormId(richiestaId, formId);
+
+		if (istanzaForm == null) {
+			StringBundler sb = new StringBundler(6);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("richiestaId=");
+			sb.append(richiestaId);
+
+			sb.append(", formId=");
+			sb.append(formId);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchIstanzaFormException(sb.toString());
+		}
+
+		return istanzaForm;
+	}
+
+	/**
+	 * Returns the istanza form where richiestaId = &#63; and formId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param formId the form ID
+	 * @return the matching istanza form, or <code>null</code> if a matching istanza form could not be found
+	 */
+	@Override
+	public IstanzaForm fetchByRichiestaIdFormId(long richiestaId, long formId) {
+		return fetchByRichiestaIdFormId(richiestaId, formId, true);
+	}
+
+	/**
+	 * Returns the istanza form where richiestaId = &#63; and formId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param formId the form ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching istanza form, or <code>null</code> if a matching istanza form could not be found
+	 */
+	@Override
+	public IstanzaForm fetchByRichiestaIdFormId(
+		long richiestaId, long formId, boolean useFinderCache) {
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {richiestaId, formId};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByRichiestaIdFormId, finderArgs);
+		}
+
+		if (result instanceof IstanzaForm) {
+			IstanzaForm istanzaForm = (IstanzaForm)result;
+
+			if ((richiestaId != istanzaForm.getRichiestaId()) ||
+				(formId != istanzaForm.getFormId())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_SELECT_ISTANZAFORM_WHERE);
+
+			sb.append(_FINDER_COLUMN_RICHIESTAIDFORMID_RICHIESTAID_2);
+
+			sb.append(_FINDER_COLUMN_RICHIESTAIDFORMID_FORMID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(richiestaId);
+
+				queryPos.add(formId);
+
+				List<IstanzaForm> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByRichiestaIdFormId, finderArgs,
+							list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {richiestaId, formId};
+							}
+
+							_log.warn(
+								"IstanzaFormPersistenceImpl.fetchByRichiestaIdFormId(long, long, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					IstanzaForm istanzaForm = list.get(0);
+
+					result = istanzaForm;
+
+					cacheResult(istanzaForm);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (IstanzaForm)result;
+		}
+	}
+
+	/**
+	 * Removes the istanza form where richiestaId = &#63; and formId = &#63; from the database.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param formId the form ID
+	 * @return the istanza form that was removed
+	 */
+	@Override
+	public IstanzaForm removeByRichiestaIdFormId(long richiestaId, long formId)
+		throws NoSuchIstanzaFormException {
+
+		IstanzaForm istanzaForm = findByRichiestaIdFormId(richiestaId, formId);
+
+		return remove(istanzaForm);
+	}
+
+	/**
+	 * Returns the number of istanza forms where richiestaId = &#63; and formId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param formId the form ID
+	 * @return the number of matching istanza forms
+	 */
+	@Override
+	public int countByRichiestaIdFormId(long richiestaId, long formId) {
+		FinderPath finderPath = _finderPathCountByRichiestaIdFormId;
+
+		Object[] finderArgs = new Object[] {richiestaId, formId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_ISTANZAFORM_WHERE);
+
+			sb.append(_FINDER_COLUMN_RICHIESTAIDFORMID_RICHIESTAID_2);
+
+			sb.append(_FINDER_COLUMN_RICHIESTAIDFORMID_FORMID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(richiestaId);
+
+				queryPos.add(formId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_RICHIESTAIDFORMID_RICHIESTAID_2 =
+		"istanzaForm.richiestaId = ? AND ";
+
+	private static final String _FINDER_COLUMN_RICHIESTAIDFORMID_FORMID_2 =
+		"istanzaForm.formId = ?";
 
 	private FinderPath _finderPathWithPaginationFindByFormId;
 	private FinderPath _finderPathWithoutPaginationFindByFormId;
@@ -2190,8 +2709,11 @@ public class IstanzaFormPersistenceImpl
 			istanzaForm);
 
 		finderCache.putResult(
-			_finderPathFetchByRichiestaId,
-			new Object[] {istanzaForm.getRichiestaId()}, istanzaForm);
+			_finderPathFetchByRichiestaIdFormId,
+			new Object[] {
+				istanzaForm.getRichiestaId(), istanzaForm.getFormId()
+			},
+			istanzaForm);
 	}
 
 	private int _valueObjectFinderCacheListThreshold;
@@ -2273,12 +2795,15 @@ public class IstanzaFormPersistenceImpl
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, istanzaFormModelImpl);
 
-		args = new Object[] {istanzaFormModelImpl.getRichiestaId()};
+		args = new Object[] {
+			istanzaFormModelImpl.getRichiestaId(),
+			istanzaFormModelImpl.getFormId()
+		};
 
 		finderCache.putResult(
-			_finderPathCountByRichiestaId, args, Long.valueOf(1));
+			_finderPathCountByRichiestaIdFormId, args, Long.valueOf(1));
 		finderCache.putResult(
-			_finderPathFetchByRichiestaId, args, istanzaFormModelImpl);
+			_finderPathFetchByRichiestaIdFormId, args, istanzaFormModelImpl);
 	}
 
 	/**
@@ -2795,8 +3320,16 @@ public class IstanzaFormPersistenceImpl
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "companyId"}, false);
 
-		_finderPathFetchByRichiestaId = new FinderPath(
-			FINDER_CLASS_NAME_ENTITY, "fetchByRichiestaId",
+		_finderPathWithPaginationFindByRichiestaId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByRichiestaId",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {"richiestaId"}, true);
+
+		_finderPathWithoutPaginationFindByRichiestaId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByRichiestaId",
 			new String[] {Long.class.getName()}, new String[] {"richiestaId"},
 			true);
 
@@ -2804,6 +3337,17 @@ public class IstanzaFormPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByRichiestaId",
 			new String[] {Long.class.getName()}, new String[] {"richiestaId"},
 			false);
+
+		_finderPathFetchByRichiestaIdFormId = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByRichiestaIdFormId",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"richiestaId", "formId"}, true);
+
+		_finderPathCountByRichiestaIdFormId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByRichiestaIdFormId",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"richiestaId", "formId"}, false);
 
 		_finderPathWithPaginationFindByFormId = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByFormId",

@@ -235,6 +235,10 @@ public interface IstanzaFormLocalService
 	public IstanzaForm getIstanzaForm(long istanzaFormId)
 		throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public IstanzaForm getIstanzaFormByRichiestaIdFormId(
+		long richiestaId, long formId);
+
 	/**
 	 * Returns the istanza form matching the UUID and group.
 	 *

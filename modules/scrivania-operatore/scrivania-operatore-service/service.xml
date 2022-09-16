@@ -109,8 +109,14 @@
 		<column name="richiestaId" type="long" />
 		
 		<!-- Finder methods -->
-		<finder name="RichiestaId" return-type="IstanzaForm">
+		<finder name="RichiestaId" return-type="Collection">
 			<finder-column name="richiestaId" />
+		</finder>
+
+		<!-- Finder methods -->
+		<finder name="RichiestaIdFormId" return-type="IstanzaForm">
+			<finder-column name="richiestaId" />
+			<finder-column name="formId" />
 		</finder>
 
 		<finder name="FormId" return-type="Collection">

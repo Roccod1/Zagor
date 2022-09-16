@@ -292,6 +292,14 @@ public class IstanzaFormLocalServiceWrapper
 		return _istanzaFormLocalService.getIstanzaForm(istanzaFormId);
 	}
 
+	@Override
+	public it.servizidigitali.scrivaniaoperatore.model.IstanzaForm
+		getIstanzaFormByRichiestaIdFormId(long richiestaId, long formId) {
+
+		return _istanzaFormLocalService.getIstanzaFormByRichiestaIdFormId(
+			richiestaId, formId);
+	}
+
 	/**
 	 * Returns the istanza form matching the UUID and group.
 	 *
