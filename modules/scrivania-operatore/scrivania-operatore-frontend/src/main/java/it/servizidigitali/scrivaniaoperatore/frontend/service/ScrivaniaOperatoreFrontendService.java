@@ -38,7 +38,9 @@ import it.servizidigitali.scrivaniaoperatore.frontend.dto.AzioneUtente;
 import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaActionsVariable;
 import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaCodiciOperazioniUtente;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
+import it.servizidigitali.scrivaniaoperatore.service.CommentoRichiestaLocalService;
 
 /**
  * @author pindi
@@ -72,6 +74,9 @@ public class ScrivaniaOperatoreFrontendService {
 
 	@Reference
 	private AllegatoRichiestaLocalService allegatoRichiestaLocalService;
+
+	@Reference
+	private CommentoRichiestaLocalService commentoRichiestaLocalService;
 
 	/**
 	 *
@@ -392,23 +397,32 @@ public class ScrivaniaOperatoreFrontendService {
 
 	/**
 	 *
-	 * @param idRichiesta
+	 * @param richiestaId
 	 * @return
 	 */
-	public List<AllegatoRichiesta> getAllegatiRichiesta(long richiestaId, long groupId) {
-		List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiesta(richiestaId, groupId);
+	public List<AllegatoRichiesta> getAllegatiRichiesta(long richiestaId) {
+		List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaId(richiestaId);
 		return allegatiRichiesta;
 	}
 
 	/**
 	 *
 	 * @param richiestaId
-	 * @param groupId
 	 * @return
 	 */
-	public List<AllegatoRichiesta> getAllegatiRichiestaInterni(long richiestaId, long groupId) {
-		List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdGroupIdInterno(richiestaId, groupId, true);
+	public List<AllegatoRichiesta> getAllegatiRichiestaInterni(long richiestaId) {
+		List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdGroupIdInterno(richiestaId, true);
 		return allegatiRichiesta;
+	}
+
+	/**
+	 *
+	 * @param richiestaId
+	 * @return
+	 */
+	public List<CommentoRichiesta> getCommentiRichiesta(long richiestaId) {
+		List<CommentoRichiesta> commentiRichiestaByRichiestaId = commentoRichiestaLocalService.getCommentiRichiestaByRichiestaId(richiestaId);
+		return commentiRichiestaByRichiestaId;
 	}
 
 }
