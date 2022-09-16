@@ -15,6 +15,7 @@ import it.servizidigitali.gestionepagamenti.common.client.PagamentiClient;
 import it.servizidigitali.gestionepagamenti.common.client.exeption.PagamentiClientException;
 import it.servizidigitali.gestionepagamenti.common.client.model.InvioPagamentoRisposta;
 import it.servizidigitali.gestionepagamenti.common.client.model.Pagamento;
+import it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient;
 import it.servizidigitali.gestionepagamenti.mypay.converter.MyPayConverter;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.CtDovuti;
 import it.veneto.regione.www.pagamenti.ente.PaaSILInviaDovuti;
@@ -98,6 +99,11 @@ public class MyPayPagamentiClient implements PagamentiClient {
 		PagamentiTelematiciDovutiPagatiServiceLocator pagamentiTelematiciDovutiPagatiServiceLocator = new PagamentiTelematiciDovutiPagatiServiceLocator();
 
 		return pagamentiTelematiciDovutiPagatiServiceLocator.getPagamentiTelematiciDovutiPagatiPort(url);
+	}
+
+	@Override
+	public TipoPagamentiClient getTipoPagamentiClient() {
+		return TipoPagamentiClient.MYPAY;
 	}
 
 }
