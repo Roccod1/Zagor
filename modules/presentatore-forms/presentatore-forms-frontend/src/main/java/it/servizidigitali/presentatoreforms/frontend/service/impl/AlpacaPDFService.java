@@ -5,13 +5,13 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
@@ -20,9 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.graalvm.compiler.lir.CompositeValue.Component;
 import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
 
 import freemarker.cache.ClassTemplateLoader;
 import it.servizidigitali.file.utility.converter.pdf.PDFConverter;
@@ -36,7 +37,6 @@ import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
-import jdk.nashorn.internal.ir.annotations.Reference;
 
 /**
  * @author pindi
