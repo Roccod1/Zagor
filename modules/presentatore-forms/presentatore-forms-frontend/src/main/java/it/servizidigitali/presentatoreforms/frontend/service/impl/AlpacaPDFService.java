@@ -3,7 +3,6 @@ package it.servizidigitali.presentatoreforms.frontend.service.impl;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -21,9 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 import freemarker.template.Configuration;
@@ -53,10 +50,9 @@ public class AlpacaPDFService implements PDFService {
 
 	private volatile FreemarkerTemplateEnteConfiguration freemarkerTemplateEnteConfiguration;
 
-	@Activate
-	@Modified
-	private void activate(Map<String, Object> props) {
-		freemarkerTemplateEnteConfiguration = ConfigurableUtil.createConfigurable(FreemarkerTemplateEnteConfiguration.class, props);
+	@Reference
+	protected void setConfigurationProvider(ConfigurationProvider configurationProvider) {
+		this.configurationProvider = configurationProvider;
 	}
 
 	@Reference
@@ -83,6 +79,8 @@ public class AlpacaPDFService implements PDFService {
 
 		byte[] pdfContent = null;
 		try {
+
+			freemarkerTemplateEnteConfiguration = configurationProvider.getGroupConfiguration(FreemarkerTemplateEnteConfiguration.class, themeDisplay.getScopeGroupId());
 
 			Gson gson = new Gson();
 
