@@ -13,5 +13,9 @@ public class ScrivaniaOperatorePortletKeys {
 	public static final int AUT_TUTTI = 0;
 	public static final int AUT_AUTH = 1;
 	public static final int AUT_GUEST = 2;
+	public static final String DETTAGLIO_TAB_DATI = "dati-identificativi";
+	public static final String DETTAGLIO_TAB_ALLEGATI = "allegati";
+	public static final String DETTAGLIO_TAB_COMMENTI = "commenti";
+	public static final String DETTAGLIO_TAB_ATTIVITA = "attivita";	
 	
 }

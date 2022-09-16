@@ -49,7 +49,8 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 	@Override
 	public String render(RenderRequest request, RenderResponse response) throws PortletException {
 		long id = ParamUtil.getLong(request, "id");
-
+		String dettaglioTab = ParamUtil.getString(request, "dettaglioTab", ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_DATI);
+		
 		ServiceContext ctx;
 		try {
 			ctx = ServiceContextFactory.getInstance(request);
@@ -59,11 +60,6 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 		}
 
 		RichiestaDTO richiesta = mapUtil.mapRichiesta(ctx.getCompanyId(), richiestaLocalService.fetchRichiesta(id));
-		Map<String, Task> userTasks = scrivaniaOperatoreFrontendService.getUserTasks(ctx);
-		boolean inCarico = userTasks.containsKey(richiesta.getProcessInstanceId());
-				
-		List<AzioneUtente> azioni = scrivaniaOperatoreFrontendService.getAzioniUtenteDettaglioRichiesta(id, ctx);
-		Map<CamundaCodiciOperazioniUtente, Boolean> azioniMask = getAzioniMask(azioni);
 		
 		// TODO caricamento responsabili ed altri responsabili per modale
 		// List<User> responsabili =
@@ -72,23 +68,51 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 		// List<User> altriResponsabili =
 		// scrivaniaOperatoreFrontendService.getOrganizationUsersByRole(servizio.getSubOrganizationId(),
 		// OrganizationRole.ALTRO_RESPONSABILE, ctx.getCompanyId());
-		
+
+		List<AzioneUtente> azioni = scrivaniaOperatoreFrontendService.getAzioniUtenteDettaglioRichiesta(id, ctx);
+		Map<CamundaCodiciOperazioniUtente, Boolean> azioniMask = getAzioniMask(azioni);
 		request.setAttribute("hasAssegnaAltroResponsabile", azioniMask.get(CamundaCodiciOperazioniUtente.ASSEGNA_ALTRO_RESPONSABILE));
 		request.setAttribute("hasAssegnaResponsabile", azioniMask.get(CamundaCodiciOperazioniUtente.ASSEGNA_RESPONSABILE));
 		request.setAttribute("hasEsitoPositivo", azioniMask.get(CamundaCodiciOperazioniUtente.ESITO_PROCEDIMENTO_POSITIVO));
 		request.setAttribute("hasEsitoNegativo", azioniMask.get(CamundaCodiciOperazioniUtente.ESITO_PROCEDIMENTO_NEGATIVO));
 		request.setAttribute("hasRichiediModificheRichiedente", azioniMask.get(CamundaCodiciOperazioniUtente.RICHIESTA_INTEGRAZIONE));
 		request.setAttribute("hasRilascia", azioniMask.get(CamundaCodiciOperazioniUtente.RILASCIA_TASK));
-		
-		request.setAttribute("richiesta", richiesta);
+
+		Map<String, Task> userTasks = scrivaniaOperatoreFrontendService.getUserTasks(ctx);
+		boolean inCarico = userTasks.containsKey(richiesta.getProcessInstanceId());
 		request.setAttribute("inCarico", inCarico);
+		
+		request.setAttribute("dettaglioTab", dettaglioTab);
+		request.setAttribute("richiesta", richiesta);
 		request.setAttribute("titleArgs", new String[] { String.valueOf(richiesta.getId()), richiesta.getServizio() });
-		//TODO dimensione modello compilato dal cittadino
-		request.setAttribute("modelloArgs", "100 MB");
+		
+		switch (dettaglioTab) {
+		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_DATI:
+			//TODO dimensione modello compilato dal cittadino
+			request.setAttribute("modelloArgs", "100 MB");
+				
+			break;
+		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_ALLEGATI:
+			//TODO aggancia servizio
+			request.setAttribute("allegatiRichiedenteCount", 0);
+			request.setAttribute("allegatiOperatoreCount", 0);
+			
+			break;
+		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_COMMENTI:
+			request.setAttribute("commentiCount", 0);
+			
+			break;
+		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_ATTIVITA:
+			request.setAttribute("attivitaCount", 0);
+			break;
+		default:
+			throw new RuntimeException("dettaglioTab");
+		}
+		
 		
 		return "/dettaglio.jsp";
 	}
-	
+
 	private Map<CamundaCodiciOperazioniUtente, Boolean> getAzioniMask(List<AzioneUtente> azioni) {
 		List<CamundaCodiciOperazioniUtente> azioniKeys = azioni.stream()
 				.map(x -> x.getCodiceAzioneUtente())
