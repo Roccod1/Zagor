@@ -26,8 +26,10 @@ import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
+import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
@@ -56,6 +58,9 @@ public class PresentatoreFormFrontendService {
 
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
+
+	@Reference
+	private IstanzaFormLocalService istanzaFormLocalService;
 
 	/**
 	 * Ritorna il servizio attuale sulla base della pagina in cui è in esecuzione la portlet.
@@ -161,22 +166,21 @@ public class PresentatoreFormFrontendService {
 	 * @return
 	 */
 	public Richiesta getRichiestaBozza(String screenName, long proceduraId) {
-
-		// TODO: Recuperare richiesta bozza per l'utente
-
+		List<Richiesta> listaRichieste = richiestaLocalService.getRichiesteByCodiceFiscaleStatoProceduraId(screenName, StatoRichiesta.BOZZA.name(), proceduraId);
+		if (Validator.isNotNull(listaRichieste) && !listaRichieste.isEmpty()) {
+			return listaRichieste.get(0);
+		}
 		return null;
 
 	}
-	
-	public Richiesta getRichiesta(String codiceFiscale, String stato, long proceduraId) {
-		Richiesta richiesta = null;	
-		List<Richiesta> listaRichieste = richiestaLocalService.getRichiesteByCodiceFiscaleStatoProceduraId(codiceFiscale, stato, proceduraId);
-		
-		if(Validator.isNotNull(listaRichieste) && !listaRichieste.isEmpty()) {
-			richiesta = listaRichieste.get(0);
-		}
-		
-		return richiesta;
-	}
 
+	/**
+	 *
+	 * @param richiestaId
+	 * @param formId
+	 * @return
+	 */
+	public IstanzaForm getIstanzaFormRichiesta(long richiestaId, long formId) {
+		return istanzaFormLocalService.getIstanzaFormByRichiestaIdFormId(richiestaId, formId);
+	}
 }

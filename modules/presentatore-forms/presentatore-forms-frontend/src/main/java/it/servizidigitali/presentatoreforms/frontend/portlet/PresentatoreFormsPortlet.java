@@ -108,15 +108,15 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 			boolean stepComponentiFamiliari = procedura.getStep1Attivo();
 			String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
 
-			if (Validator.isNotNull(richiesta) && richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
-				renderRequest.setAttribute("richiestaId", richiesta.getRichiestaId());
-				include(PresentatoreFormsPortletKeys.JSP_HOME, renderRequest, renderResponse);
-				presentatoreFormFrontendService.deleteRichiesteBozzaUtente(screenName, procedura.getProceduraId());
-			}
-			else {
-				String mvcRenderCommandName = ParamUtil.getString(renderRequest, "mvcRenderCommandName");
-				String mvcPath = ParamUtil.getString(renderRequest, "mvcPath");
-				if (Validator.isNull(mvcRenderCommandName) && Validator.isNull(mvcPath)) {
+			String mvcRenderCommandName = ParamUtil.getString(renderRequest, "mvcRenderCommandName");
+			String mvcPath = ParamUtil.getString(renderRequest, "mvcPath");
+			if (Validator.isNull(mvcRenderCommandName) && Validator.isNull(mvcPath)) {
+				if (Validator.isNotNull(richiesta) && richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
+					renderRequest.setAttribute("richiestaId", richiesta.getRichiestaId());
+					include(PresentatoreFormsPortletKeys.JSP_HOME, renderRequest, renderResponse);
+					presentatoreFormFrontendService.deleteRichiesteBozzaUtente(screenName, procedura.getProceduraId());
+				}
+				else {
 					try {
 
 						if (stepComponentiFamiliari) {

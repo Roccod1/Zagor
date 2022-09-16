@@ -1,5 +1,6 @@
 package it.servizidigitali.presentatoreforms.frontend.portlet.resource;
 
+import com.google.gson.Gson;
 import com.liferay.portal.kernel.json.JSONDeserializer;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -9,7 +10,6 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
-import com.liferay.portal.kernel.util.Validator;
 
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
@@ -21,34 +21,32 @@ import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreForms
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 
-
-@Component(immediate = true, 
-property = { 
-			"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS,
-			"mvc.command.name=" + PresentatoreFormsPortletKeys.SUBMIT_FORM_RESOURCE_COMMAND
-		}, 
-service = { MVCResourceCommand.class }
-)
-public class SubmitFormResourceCommand  extends BaseMVCResourceCommand{
+@Component(immediate = true, property = { "javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS,
+		"mvc.command.name=" + PresentatoreFormsPortletKeys.SUBMIT_FORM_RESOURCE_COMMAND }, service = { MVCResourceCommand.class })
+public class SubmitFormResourceCommand extends BaseMVCResourceCommand {
 
 	@Override
-	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
-			throws Exception {
-		
+	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
+
 		HttpServletRequest request = PortalUtil.getHttpServletRequest(resourceRequest);
 		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(resourceRequest);
 		String dataForm = ParamUtil.getString(uploadRequest, "dataForm");
-		//FIXME inserito false per di default per il caricaBozza param non ancora implementato
+		// FIXME inserito false per di default per il caricaBozza param non ancora implementato
 		boolean caricaBozza = ParamUtil.getBoolean(resourceRequest, "caricaBozza", false);
-		
+
 		String status = null;
-		
+
 		JSONObject json = JSONFactoryUtil.createJSONObject();
-		
+
 		JSONDeserializer<AlpacaJsonStructure> des = JSONFactoryUtil.createJSONDeserializer();
-		
-		AlpacaJsonStructure alpacaStructure = des.deserialize(dataForm,AlpacaJsonStructure.class);
-		
+
+		AlpacaJsonStructure alpacaStructure = des.deserialize(dataForm, AlpacaJsonStructure.class);
+
+		FormData formData = new FormData();
+		formData.setAlpaca(alpacaStructure);
+
+		Gson gson = new Gson();
+		String jsonToSave = gson.toJson(formData);
 
 		// mock gz
 		JSONObject richiesta = JSONFactoryUtil.createJSONObject();
@@ -58,7 +56,7 @@ public class SubmitFormResourceCommand  extends BaseMVCResourceCommand{
 		json.put("richiesta", richiesta);
 		resourceResponse.setContentType(ContentTypes.APPLICATION_JSON);
 		resourceResponse.getWriter().print(json.toString());
-		
+
 	}
 
 }
