@@ -167,5 +167,16 @@ public class PresentatoreFormFrontendService {
 		return null;
 
 	}
+	
+	public Richiesta getRichiesta(String codiceFiscale, String stato, long proceduraId) {
+		Richiesta richiesta = null;	
+		List<Richiesta> listaRichieste = richiestaLocalService.getRichiesteByCodiceFiscaleStatoProceduraId(codiceFiscale, stato, proceduraId);
+		
+		if(Validator.isNotNull(listaRichieste) && !listaRichieste.isEmpty()) {
+			richiesta = listaRichieste.get(0);
+		}
+		
+		return richiesta;
+	}
 
 }
