@@ -1,7 +1,6 @@
 Bundle-Name: presentatore-forms-frontend
 Bundle-SymbolicName: it.servizidigitali.presentatoreforms.frontend
 Bundle-Version: 1.0.0
-Export-Package: it.servizidigitali.presentatoreforms.frontend.constants
 
 Export-Package: \
 	it.servizidigitali.presentatoreforms.frontend.constants
