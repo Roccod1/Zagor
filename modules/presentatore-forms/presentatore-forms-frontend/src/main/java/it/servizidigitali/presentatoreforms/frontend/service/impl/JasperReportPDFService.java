@@ -2,6 +2,8 @@ package it.servizidigitali.presentatoreforms.frontend.service.impl;
 
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 
+import javax.portlet.PortletRequest;
+
 import org.osgi.service.component.annotations.Component;
 
 import it.servizidigitali.presentatoreforms.frontend.exception.PDFServiceException;
@@ -41,14 +43,14 @@ public class JasperReportPDFService implements PDFService {
 
 	@Override
 	public byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName,
-			Long idDestinazioneUso, String numeroBollo, ThemeDisplay themeDisplay) throws PDFServiceException {
+			Long idDestinazioneUso, String numeroBollo, PortletRequest portletRequest) throws PDFServiceException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName,
-			Long idDestinazioneUso, String numeroBollo, boolean isDelega, String dettagliRichiesta, ThemeDisplay themeDisplay) throws PDFServiceException {
+			Long idDestinazioneUso, String numeroBollo, boolean isDelega, String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
 		// TODO Auto-generated method stub
 		return null;
 	}

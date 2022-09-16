@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
@@ -19,6 +20,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.portlet.PortletRequest;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -31,6 +34,7 @@ import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.presentatoreforms.frontend.configuration.FreemarkerTemplateEnteConfiguration;
+import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.exception.PDFServiceException;
 import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
@@ -75,8 +79,10 @@ public class AlpacaPDFService implements PDFService {
 
 	@Override
 	public byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName,
-			Long idDestinazioneUso, String numeroBollo, ThemeDisplay themeDisplay) throws PDFServiceException {
+			Long idDestinazioneUso, String numeroBollo, PortletRequest portletRequest) throws PDFServiceException {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
 		byte[] pdfContent = null;
 		try {
 
@@ -94,7 +100,7 @@ public class AlpacaPDFService implements PDFService {
 			long groupId = procedura.getGroupId();
 
 			long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
-
+			
 			Organization organization = organizationLocalService.getOrganization(organizationId);
 
 			List<DefinizioneAllegato> definizioneAllegati = null;
@@ -102,6 +108,24 @@ public class AlpacaPDFService implements PDFService {
 			alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), definizioneAllegati, true));
 			alpacaStructure.setData(new JsonParser().parse(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
 
+			// TODO: Sistemare provenienza attributi
+			
+			data.put("comune","Bari");
+			data.put("pagamentoBollo","false");
+			data.put("showDescrizioneEsenzioneBollo", "false");
+			data.put("timbraCertificato", "false");
+			data.put("certificatoId", 400);
+			data.put("delega", "false");
+			data.put("numeroBollo", 400);
+			data.put("defaultThemeUrl", themeDisplay.getPathThemeRoot());
+			data.put("url", portletRequest.getContextPath());
+			data.put("portalUrl", themeDisplay.getPortalURL());
+			data.put("logoComune", "");
+			data.put("descrizioneDestinazioneUso", "");
+			data.put(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE,alpacaStructure);
+			
+			
+			
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			try {
 				Template template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.certificatiAlpacaTemplate()), config);
@@ -129,7 +153,7 @@ public class AlpacaPDFService implements PDFService {
 
 	@Override
 	public byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName,
-			Long idDestinazioneUso, String numeroBollo, boolean isDelega, String dettagliRichiesta, ThemeDisplay themeDisplay) throws PDFServiceException {
+			Long idDestinazioneUso, String numeroBollo, boolean isDelega, String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
 
 		byte[] pdfContent = null;
 		try {
