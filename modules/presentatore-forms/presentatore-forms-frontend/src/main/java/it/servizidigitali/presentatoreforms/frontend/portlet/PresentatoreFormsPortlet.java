@@ -185,7 +185,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 
 					}
 					catch (Exception e) {
-						log.error(e.getMessage());
+						log.error(e.getMessage(), e);
 						// TODO gestire errori in pagina
 					}
 				}
