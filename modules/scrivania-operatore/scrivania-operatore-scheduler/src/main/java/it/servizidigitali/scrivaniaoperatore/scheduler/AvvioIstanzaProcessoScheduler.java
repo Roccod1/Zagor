@@ -183,14 +183,14 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 
 						// Allegati
 						String allegatiJson = "";
-						List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiesta(richiesta.getRichiestaId(), groupId);
+						List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaId(richiesta.getRichiestaId());
 						if (allegatiRichiesta != null) {
 							allegatiJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(allegatiRichiesta);
 						}
 
 						// PDF principale
 						String pdfFirmatoJson = "";
-						AllegatoRichiesta allegatoPrincipaleRichiesta = allegatoRichiestaLocalService.getAllegatoRichiesta(richiesta.getRichiestaId(), true, groupId);
+						AllegatoRichiesta allegatoPrincipaleRichiesta = allegatoRichiestaLocalService.getAllegatoRichiestaByRichiestaIdPrincipale(richiesta.getRichiestaId(), true);
 						if (allegatoPrincipaleRichiesta != null) {
 							pdfFirmatoJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(allegatoPrincipaleRichiesta);
 						}
