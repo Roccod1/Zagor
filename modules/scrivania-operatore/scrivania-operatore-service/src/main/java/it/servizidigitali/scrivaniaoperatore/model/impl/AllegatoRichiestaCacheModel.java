@@ -66,7 +66,7 @@ public class AllegatoRichiestaCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -94,6 +94,10 @@ public class AllegatoRichiestaCacheModel
 		sb.append(url);
 		sb.append(", principale=");
 		sb.append(principale);
+		sb.append(", interno=");
+		sb.append(interno);
+		sb.append(", visibile=");
+		sb.append(visibile);
 		sb.append("}");
 
 		return sb.toString();
@@ -160,6 +164,8 @@ public class AllegatoRichiestaCacheModel
 		}
 
 		allegatoRichiestaImpl.setPrincipale(principale);
+		allegatoRichiestaImpl.setInterno(interno);
+		allegatoRichiestaImpl.setVisibile(visibile);
 
 		allegatoRichiestaImpl.resetOriginalValues();
 
@@ -187,6 +193,10 @@ public class AllegatoRichiestaCacheModel
 		url = objectInput.readUTF();
 
 		principale = objectInput.readBoolean();
+
+		interno = objectInput.readBoolean();
+
+		visibile = objectInput.readBoolean();
 
 		allegatoRichiestaPK = new AllegatoRichiestaPK(richiestaId, fileEntryId);
 	}
@@ -242,6 +252,10 @@ public class AllegatoRichiestaCacheModel
 		}
 
 		objectOutput.writeBoolean(principale);
+
+		objectOutput.writeBoolean(interno);
+
+		objectOutput.writeBoolean(visibile);
 	}
 
 	public String uuid;
@@ -257,6 +271,8 @@ public class AllegatoRichiestaCacheModel
 	public String idDocumentale;
 	public String url;
 	public boolean principale;
+	public boolean interno;
+	public boolean visibile;
 	public transient AllegatoRichiestaPK allegatoRichiestaPK;
 
 }

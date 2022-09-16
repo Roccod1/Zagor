@@ -56,6 +56,8 @@ public class AllegatoRichiestaWrapper
 		attributes.put("idDocumentale", getIdDocumentale());
 		attributes.put("url", getUrl());
 		attributes.put("principale", isPrincipale());
+		attributes.put("interno", isInterno());
+		attributes.put("visibile", isVisibile());
 
 		return attributes;
 	}
@@ -139,6 +141,18 @@ public class AllegatoRichiestaWrapper
 		if (principale != null) {
 			setPrincipale(principale);
 		}
+
+		Boolean interno = (Boolean)attributes.get("interno");
+
+		if (interno != null) {
+			setInterno(interno);
+		}
+
+		Boolean visibile = (Boolean)attributes.get("visibile");
+
+		if (visibile != null) {
+			setVisibile(visibile);
+		}
 	}
 
 	@Override
@@ -194,6 +208,16 @@ public class AllegatoRichiestaWrapper
 	@Override
 	public String getIdDocumentale() {
 		return model.getIdDocumentale();
+	}
+
+	/**
+	 * Returns the interno of this allegato richiesta.
+	 *
+	 * @return the interno of this allegato richiesta
+	 */
+	@Override
+	public boolean getInterno() {
+		return model.getInterno();
 	}
 
 	/**
@@ -299,6 +323,26 @@ public class AllegatoRichiestaWrapper
 	}
 
 	/**
+	 * Returns the visibile of this allegato richiesta.
+	 *
+	 * @return the visibile of this allegato richiesta
+	 */
+	@Override
+	public boolean getVisibile() {
+		return model.getVisibile();
+	}
+
+	/**
+	 * Returns <code>true</code> if this allegato richiesta is interno.
+	 *
+	 * @return <code>true</code> if this allegato richiesta is interno; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isInterno() {
+		return model.isInterno();
+	}
+
+	/**
 	 * Returns <code>true</code> if this allegato richiesta is principale.
 	 *
 	 * @return <code>true</code> if this allegato richiesta is principale; <code>false</code> otherwise
@@ -306,6 +350,16 @@ public class AllegatoRichiestaWrapper
 	@Override
 	public boolean isPrincipale() {
 		return model.isPrincipale();
+	}
+
+	/**
+	 * Returns <code>true</code> if this allegato richiesta is visibile.
+	 *
+	 * @return <code>true</code> if this allegato richiesta is visibile; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isVisibile() {
+		return model.isVisibile();
 	}
 
 	@Override
@@ -361,6 +415,16 @@ public class AllegatoRichiestaWrapper
 	@Override
 	public void setIdDocumentale(String idDocumentale) {
 		model.setIdDocumentale(idDocumentale);
+	}
+
+	/**
+	 * Sets whether this allegato richiesta is interno.
+	 *
+	 * @param interno the interno of this allegato richiesta
+	 */
+	@Override
+	public void setInterno(boolean interno) {
+		model.setInterno(interno);
 	}
 
 	/**
@@ -464,6 +528,16 @@ public class AllegatoRichiestaWrapper
 	@Override
 	public void setUuid(String uuid) {
 		model.setUuid(uuid);
+	}
+
+	/**
+	 * Sets whether this allegato richiesta is visibile.
+	 *
+	 * @param visibile the visibile of this allegato richiesta
+	 */
+	@Override
+	public void setVisibile(boolean visibile) {
+		model.setVisibile(visibile);
 	}
 
 	@Override

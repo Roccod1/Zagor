@@ -147,6 +147,8 @@
 		<column name="idDocumentale" type="String" />
 		<column name="url" type="String" />
 		<column name="principale" type="boolean" />
+		<column name="interno" type="boolean" />
+		<column name="visibile" type="boolean" />
 		
 		<!-- Finder methods -->
 		<finder name="IdDocumentale" return-type="AllegatoRichiesta">
@@ -166,6 +168,25 @@
 		<finder name="R_G" return-type="Collection">
 			<finder-column name="richiestaId" />
 			<finder-column name="groupId" />
+		</finder>
+
+		<finder name="R_G_I" return-type="Collection">
+			<finder-column name="richiestaId" />
+			<finder-column name="groupId" />
+			<finder-column name="interno" />
+		</finder>
+
+		<finder name="R_G_V" return-type="Collection">
+			<finder-column name="richiestaId" />
+			<finder-column name="groupId" />
+			<finder-column name="visibile" />
+		</finder>
+
+		<finder name="R_G_I_V" return-type="Collection">
+			<finder-column name="richiestaId" />
+			<finder-column name="groupId" />
+			<finder-column name="interno" />
+			<finder-column name="visibile" />
 		</finder>
 	</entity>
 </service-builder>
