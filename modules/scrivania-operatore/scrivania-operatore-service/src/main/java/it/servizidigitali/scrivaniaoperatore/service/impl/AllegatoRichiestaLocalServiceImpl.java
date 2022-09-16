@@ -43,4 +43,15 @@ public class AllegatoRichiestaLocalServiceImpl extends AllegatoRichiestaLocalSer
 		return allegatoRichiestaPersistence.findByR_G(richiestaId, groupId);
 
 	}
+
+	@Override
+	public List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaIdGroupIdInterno(long richiestaId, long groupId, boolean interno) {
+		return allegatoRichiestaPersistence.findByR_G_I(richiestaId, groupId, interno);
+	}
+
+	@Override
+	public List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaIdGroupIdVisibile(long richiestaId, long groupId, boolean visibile) {
+		return allegatoRichiestaPersistence.findByR_G_V(richiestaId, groupId, visibile);
+	}
+
 }

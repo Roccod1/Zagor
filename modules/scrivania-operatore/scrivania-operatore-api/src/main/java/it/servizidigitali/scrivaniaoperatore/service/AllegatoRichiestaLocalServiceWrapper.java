@@ -283,6 +283,28 @@ public class AllegatoRichiestaLocalServiceWrapper
 			richiestaId, groupId);
 	}
 
+	@Override
+	public java.util.List
+		<it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta>
+			getAllegatiRichiestaByRichiestaIdGroupIdInterno(
+				long richiestaId, long groupId, boolean interno) {
+
+		return _allegatoRichiestaLocalService.
+			getAllegatiRichiestaByRichiestaIdGroupIdInterno(
+				richiestaId, groupId, interno);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta>
+			getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
+				long richiestaId, long groupId, boolean visibile) {
+
+		return _allegatoRichiestaLocalService.
+			getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
+				richiestaId, groupId, visibile);
+	}
+
 	/**
 	 * Returns the allegato richiesta with the primary key.
 	 *

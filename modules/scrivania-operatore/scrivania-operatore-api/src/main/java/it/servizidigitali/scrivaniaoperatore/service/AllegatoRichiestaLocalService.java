@@ -227,6 +227,16 @@ public interface AllegatoRichiestaLocalService
 	public List<AllegatoRichiesta> getAllegatiRichiesta(
 		long richiestaId, long groupId);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<AllegatoRichiesta>
+		getAllegatiRichiestaByRichiestaIdGroupIdInterno(
+			long richiestaId, long groupId, boolean interno);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<AllegatoRichiesta>
+		getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
+			long richiestaId, long groupId, boolean visibile);
+
 	/**
 	 * Returns the allegato richiesta with the primary key.
 	 *

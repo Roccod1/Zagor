@@ -15,6 +15,8 @@
 		<field name="idDocumentale" type="String" />
 		<field name="url" type="String" />
 		<field name="principale" type="boolean" />
+		<field name="interno" type="boolean" />
+		<field name="visibile" type="boolean" />
 	</model>
 	<model name="it.servizidigitali.scrivaniaoperatore.model.IstanzaForm">
 		<field name="uuid" type="String" />

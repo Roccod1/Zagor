@@ -64,6 +64,11 @@ public class AllegatoRichiestaTable extends BaseTable<AllegatoRichiestaTable> {
 	public final Column<AllegatoRichiestaTable, Boolean> principale =
 		createColumn(
 			"principale", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
+	public final Column<AllegatoRichiestaTable, Boolean> interno = createColumn(
+		"interno", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
+	public final Column<AllegatoRichiestaTable, Boolean> visibile =
+		createColumn(
+			"visibile", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 
 	private AllegatoRichiestaTable() {
 		super("allegato_richiesta", AllegatoRichiestaTable::new);

@@ -248,6 +248,22 @@ public class AllegatoRichiestaLocalServiceUtil {
 		return getService().getAllegatiRichiesta(richiestaId, groupId);
 	}
 
+	public static List<AllegatoRichiesta>
+		getAllegatiRichiestaByRichiestaIdGroupIdInterno(
+			long richiestaId, long groupId, boolean interno) {
+
+		return getService().getAllegatiRichiestaByRichiestaIdGroupIdInterno(
+			richiestaId, groupId, interno);
+	}
+
+	public static List<AllegatoRichiesta>
+		getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
+			long richiestaId, long groupId, boolean visibile) {
+
+		return getService().getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
+			richiestaId, groupId, visibile);
+	}
+
 	/**
 	 * Returns the allegato richiesta with the primary key.
 	 *

@@ -77,7 +77,8 @@ public class AllegatoRichiestaModelImpl
 		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
 		{"modifiedDate", Types.TIMESTAMP}, {"nome", Types.VARCHAR},
 		{"idDocumentale", Types.VARCHAR}, {"url", Types.VARCHAR},
-		{"principale", Types.BOOLEAN}
+		{"principale", Types.BOOLEAN}, {"interno", Types.BOOLEAN},
+		{"visibile", Types.BOOLEAN}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -97,10 +98,12 @@ public class AllegatoRichiestaModelImpl
 		TABLE_COLUMNS_MAP.put("idDocumentale", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("url", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("principale", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("interno", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("visibile", Types.BOOLEAN);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table allegato_richiesta (uuid_ VARCHAR(75) null,richiestaId LONG not null,fileEntryId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,idDocumentale VARCHAR(75) null,url VARCHAR(75) null,principale BOOLEAN,primary key (richiestaId, fileEntryId))";
+		"create table allegato_richiesta (uuid_ VARCHAR(75) null,richiestaId LONG not null,fileEntryId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,idDocumentale VARCHAR(75) null,url VARCHAR(75) null,principale BOOLEAN,interno BOOLEAN,visibile BOOLEAN,primary key (richiestaId, fileEntryId))";
 
 	public static final String TABLE_SQL_DROP = "drop table allegato_richiesta";
 
@@ -138,32 +141,44 @@ public class AllegatoRichiestaModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long PRINCIPALE_COLUMN_BITMASK = 8L;
+	public static final long INTERNO_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long RICHIESTAID_COLUMN_BITMASK = 16L;
+	public static final long PRINCIPALE_COLUMN_BITMASK = 16L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long URL_COLUMN_BITMASK = 32L;
+	public static final long RICHIESTAID_COLUMN_BITMASK = 32L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 64L;
+	public static final long URL_COLUMN_BITMASK = 64L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 128L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long VISIBILE_COLUMN_BITMASK = 256L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long FILEENTRYID_COLUMN_BITMASK = 128L;
+	public static final long FILEENTRYID_COLUMN_BITMASK = 512L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -375,6 +390,17 @@ public class AllegatoRichiestaModelImpl
 			"principale",
 			(BiConsumer<AllegatoRichiesta, Boolean>)
 				AllegatoRichiesta::setPrincipale);
+		attributeGetterFunctions.put("interno", AllegatoRichiesta::getInterno);
+		attributeSetterBiConsumers.put(
+			"interno",
+			(BiConsumer<AllegatoRichiesta, Boolean>)
+				AllegatoRichiesta::setInterno);
+		attributeGetterFunctions.put(
+			"visibile", AllegatoRichiesta::getVisibile);
+		attributeSetterBiConsumers.put(
+			"visibile",
+			(BiConsumer<AllegatoRichiesta, Boolean>)
+				AllegatoRichiesta::setVisibile);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -683,6 +709,64 @@ public class AllegatoRichiestaModelImpl
 	}
 
 	@Override
+	public boolean getInterno() {
+		return _interno;
+	}
+
+	@Override
+	public boolean isInterno() {
+		return _interno;
+	}
+
+	@Override
+	public void setInterno(boolean interno) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_interno = interno;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public boolean getOriginalInterno() {
+		return GetterUtil.getBoolean(
+			this.<Boolean>getColumnOriginalValue("interno"));
+	}
+
+	@Override
+	public boolean getVisibile() {
+		return _visibile;
+	}
+
+	@Override
+	public boolean isVisibile() {
+		return _visibile;
+	}
+
+	@Override
+	public void setVisibile(boolean visibile) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_visibile = visibile;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public boolean getOriginalVisibile() {
+		return GetterUtil.getBoolean(
+			this.<Boolean>getColumnOriginalValue("visibile"));
+	}
+
+	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
 			PortalUtil.getClassNameId(AllegatoRichiesta.class.getName()));
@@ -745,6 +829,8 @@ public class AllegatoRichiestaModelImpl
 		allegatoRichiestaImpl.setIdDocumentale(getIdDocumentale());
 		allegatoRichiestaImpl.setUrl(getUrl());
 		allegatoRichiestaImpl.setPrincipale(isPrincipale());
+		allegatoRichiestaImpl.setInterno(isInterno());
+		allegatoRichiestaImpl.setVisibile(isVisibile());
 
 		allegatoRichiestaImpl.resetOriginalValues();
 
@@ -782,6 +868,10 @@ public class AllegatoRichiestaModelImpl
 			this.<String>getColumnOriginalValue("url"));
 		allegatoRichiestaImpl.setPrincipale(
 			this.<Boolean>getColumnOriginalValue("principale"));
+		allegatoRichiestaImpl.setInterno(
+			this.<Boolean>getColumnOriginalValue("interno"));
+		allegatoRichiestaImpl.setVisibile(
+			this.<Boolean>getColumnOriginalValue("visibile"));
 
 		return allegatoRichiestaImpl;
 	}
@@ -924,6 +1014,10 @@ public class AllegatoRichiestaModelImpl
 
 		allegatoRichiestaCacheModel.principale = isPrincipale();
 
+		allegatoRichiestaCacheModel.interno = isInterno();
+
+		allegatoRichiestaCacheModel.visibile = isVisibile();
+
 		return allegatoRichiestaCacheModel;
 	}
 
@@ -1029,6 +1123,8 @@ public class AllegatoRichiestaModelImpl
 	private String _idDocumentale;
 	private String _url;
 	private boolean _principale;
+	private boolean _interno;
+	private boolean _visibile;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1072,6 +1168,8 @@ public class AllegatoRichiestaModelImpl
 		_columnOriginalValues.put("idDocumentale", _idDocumentale);
 		_columnOriginalValues.put("url", _url);
 		_columnOriginalValues.put("principale", _principale);
+		_columnOriginalValues.put("interno", _interno);
+		_columnOriginalValues.put("visibile", _visibile);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1120,6 +1218,10 @@ public class AllegatoRichiestaModelImpl
 		columnBitmasks.put("url", 2048L);
 
 		columnBitmasks.put("principale", 4096L);
+
+		columnBitmasks.put("interno", 8192L);
+
+		columnBitmasks.put("visibile", 16384L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

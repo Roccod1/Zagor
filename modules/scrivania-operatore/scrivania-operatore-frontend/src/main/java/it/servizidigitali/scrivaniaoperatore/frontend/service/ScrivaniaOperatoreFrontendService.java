@@ -37,6 +37,8 @@ import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AzioneUtente;
 import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaActionsVariable;
 import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaCodiciOperazioniUtente;
+import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
 
 /**
  * @author pindi
@@ -67,6 +69,9 @@ public class ScrivaniaOperatoreFrontendService {
 
 	@Reference
 	private UserGroupRoleLocalService userGroupRoleLocalService;
+
+	@Reference
+	private AllegatoRichiestaLocalService allegatoRichiestaLocalService;
 
 	/**
 	 *
@@ -383,6 +388,27 @@ public class ScrivaniaOperatoreFrontendService {
 		}
 
 		return retVal;
+	}
+
+	/**
+	 *
+	 * @param idRichiesta
+	 * @return
+	 */
+	public List<AllegatoRichiesta> getAllegatiRichiesta(long richiestaId, long groupId) {
+		List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiesta(richiestaId, groupId);
+		return allegatiRichiesta;
+	}
+
+	/**
+	 *
+	 * @param richiestaId
+	 * @param groupId
+	 * @return
+	 */
+	public List<AllegatoRichiesta> getAllegatiRichiestaInterni(long richiestaId, long groupId) {
+		List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdGroupIdInterno(richiestaId, groupId, true);
+		return allegatiRichiesta;
 	}
 
 }
