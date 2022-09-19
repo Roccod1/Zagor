@@ -18,7 +18,26 @@ Import-Package: \
   	!org.python.core,\
   	!org.python.util,\
   	!org.zeroturnaround.javarebel,\
-  	\
+  	!antlr.*, \
+  	!com.adobe.*, \
+  	!com.drew.*, \
+  	!com.github.*, \
+  	!com.google.zxing.*, \
+  	!com.ibm.*, \
+  	!groovy.*, \
+  	!junit.*, \
+  	!mondrian.*, \
+  	!net.sf.jasperreports.annotations.*, \
+  	!net.sf.jasperreports.metadata.*, \
+  	!net.sourceforge.*, \
+  	!org.apache.*, \
+  	!org.codehaus.*, \
+  	!org.eclipse.jdt.*, \
+  	!org.kohsuke.*, \
+  	!org.krysalis.*, \
+  	!org.mozilla.javascript.*, \
+  	!org.olap4j.*, \
+  	!org.w3c.*, \
   	*
   	
   	
