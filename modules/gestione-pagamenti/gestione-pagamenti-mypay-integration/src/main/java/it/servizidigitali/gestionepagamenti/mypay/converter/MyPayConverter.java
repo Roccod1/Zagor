@@ -1,12 +1,9 @@
 package it.servizidigitali.gestionepagamenti.mypay.converter;
 
-import java.util.Map;
-
 import org.osgi.service.component.annotations.Component;
 
-import it.servizidigitali.gestionepagamenti.common.client.model.Pagamento;
-import it.servizidigitali.gestionepagamenti.mypay.constant.MyPayConstants;
-import it.servizidigitali.gestionepagamenti.mypay.util.GatewayUtil;
+import it.servizidigitali.gestionepagamenti.common.client.model.Dovuto;
+import it.servizidigitali.gestionepagamenti.common.client.model.MarcaDaBollo;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.CtDatiMarcaBolloDigitale;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.CtDatiSingoloVersamentoDovuti;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.CtDatiVersamentoDovuti;
@@ -25,22 +22,22 @@ public class MyPayConverter {
 
 	/**
 	 *
-	 * @param pagamento
+	 * @param dovuto
 	 * @return
 	 */
-	public CtDovuti generaDovuti(Pagamento pagamento) {
+	public CtDovuti generaCtDovuti(Dovuto dovuto) {
 
 		CtDovuti dovuti = CtDovuti.Factory.newInstance();
 
 		CtSoggettoPagatore pagatore = CtSoggettoPagatore.Factory.newInstance();
 
 		CtIdentificativoUnivocoPersonaFG idPagatore = CtIdentificativoUnivocoPersonaFG.Factory.newInstance();
-		idPagatore.setCodiceIdentificativoUnivoco(pagamento.getIdFiscaleCliente());
+		idPagatore.setCodiceIdentificativoUnivoco(dovuto.getIdFiscaleCliente());
 		idPagatore.setTipoIdentificativoUnivoco(StTipoIdentificativoUnivocoPersFG.F);
 
 		pagatore.setIdentificativoUnivocoPagatore(idPagatore);
-		pagatore.setAnagraficaPagatore(pagamento.getDenominazioneCliente());
-		pagatore.setEMailPagatore(pagamento.getEmailQuietanza());
+		pagatore.setAnagraficaPagatore(dovuto.getDenominazioneCliente());
+		pagatore.setEMailPagatore(dovuto.getEmailQuietanza());
 
 		dovuti.setSoggettoPagatore(pagatore);
 
@@ -50,31 +47,26 @@ public class MyPayConverter {
 		datiVersamentoDovuti.setTipoVersamento("ALL");
 
 		CtDatiSingoloVersamentoDovuti datiSingoloVersamento = CtDatiSingoloVersamentoDovuti.Factory.newInstance();
-		datiSingoloVersamento.setImportoSingoloVersamento(pagamento.getImportoTotale());
-		datiSingoloVersamento.setCausaleVersamento(pagamento.getCausale());
+		datiSingoloVersamento.setImportoSingoloVersamento(dovuto.getImporto());
+		datiSingoloVersamento.setCausaleVersamento(dovuto.getCausale());
 
 		// Calcolo IUD
-		String iud = GatewayUtil.getIudByIdentificativoPagamento(pagamento.getIdPagamento());
+		String iud = dovuto.getIud();
 
 		datiSingoloVersamento.setIdentificativoUnivocoDovuto(iud);
-		datiSingoloVersamento.setIdentificativoTipoDovuto(pagamento.getCodiceCategoriaServizio());
-		datiSingoloVersamento.setDatiSpecificiRiscossione("9/" + pagamento.getCodiceIdentificativoOrganizzazione());
+		datiSingoloVersamento.setIdentificativoTipoDovuto(dovuto.getCodiceDovuto());
+		datiSingoloVersamento.setDatiSpecificiRiscossione("9/" + dovuto.getCodiceOrganizzazione());
 
-		Map<String, Object> infoAggiuntive = pagamento.getInfoAggiuntive();
+		if (dovuto instanceof MarcaDaBollo) {
+			MarcaDaBollo marcaDaBollo = (MarcaDaBollo) dovuto;
+			CtDatiMarcaBolloDigitale datiMarcaBolloDigitale = CtDatiMarcaBolloDigitale.Factory.newInstance();
+			datiMarcaBolloDigitale.setTipoBollo(StTipoBollo.X_01);
+			datiMarcaBolloDigitale.setHashDocumento(marcaDaBollo.getHashDocumento());
+			datiMarcaBolloDigitale.setProvinciaResidenza(marcaDaBollo.getProvinciaResidenza());
+			datiSingoloVersamento.setDatiMarcaBolloDigitale(datiMarcaBolloDigitale);
 
-		if (infoAggiuntive != null) {
-			boolean isPagamentoBollo = infoAggiuntive.containsKey(MyPayConstants.INFO_AGGIUNTIVE_MARCA_BOLLO_DIGITALE_HASH_DOCUMENTO_KEY)
-					&& infoAggiuntive.containsKey(MyPayConstants.INFO_AGGIUNTIVE_MARCA_BOLLO_DIGITALE_PROVINCIA_RESIDENZA_KEY);
-			if (isPagamentoBollo) {
-				CtDatiMarcaBolloDigitale datiMarcaBolloDigitale = CtDatiMarcaBolloDigitale.Factory.newInstance();
-				datiMarcaBolloDigitale.setTipoBollo(StTipoBollo.X_01);
-				datiMarcaBolloDigitale.setHashDocumento((String) infoAggiuntive.get(MyPayConstants.INFO_AGGIUNTIVE_MARCA_BOLLO_DIGITALE_HASH_DOCUMENTO_KEY));
-				datiMarcaBolloDigitale.setProvinciaResidenza((String) infoAggiuntive.get(MyPayConstants.INFO_AGGIUNTIVE_MARCA_BOLLO_DIGITALE_PROVINCIA_RESIDENZA_KEY));
-				datiSingoloVersamento.setDatiMarcaBolloDigitale(datiMarcaBolloDigitale);
-
-				datiVersamentoDovuti.setTipoVersamento("PO");
-				datiSingoloVersamento.setDatiSpecificiRiscossione("0/" + pagamento.getCodiceIdentificativoOrganizzazione());
-			}
+			datiVersamentoDovuti.setTipoVersamento("PO");
+			datiSingoloVersamento.setDatiSpecificiRiscossione("0/" + dovuto.getCodiceOrganizzazione());
 		}
 		// Codice per la contabilita
 		// richPagamento.getCodiceCategoriaServizio()

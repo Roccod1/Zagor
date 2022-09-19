@@ -13,8 +13,8 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestionepagamenti.common.client.PagamentiClient;
 import it.servizidigitali.gestionepagamenti.common.client.exeption.PagamentiClientException;
-import it.servizidigitali.gestionepagamenti.common.client.model.InvioPagamentoRisposta;
-import it.servizidigitali.gestionepagamenti.common.client.model.Pagamento;
+import it.servizidigitali.gestionepagamenti.common.client.model.PagamentoDovutoRisposta;
+import it.servizidigitali.gestionepagamenti.common.client.model.Dovuto;
 import it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient;
 import it.servizidigitali.gestionepagamenti.mypay.converter.MyPayConverter;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.CtDovuti;
@@ -37,7 +37,7 @@ public class MyPayPagamentiClient implements PagamentiClient {
 	private MyPayConverter myPayConverter;
 
 	@Override
-	public InvioPagamentoRisposta inviaPagamento(Pagamento pagamento, String username, String password, String wsdlUrl, String rispostaPagamentoUrl) throws PagamentiClientException {
+	public PagamentoDovutoRisposta pagaDovuto(Dovuto dovuto, String username, String password, String wsdlUrl, String rispostaPagamentoUrl) throws PagamentiClientException {
 
 		PagamentiTelematiciDovutiPagati pagamentiServicePort = null;
 		try {
@@ -56,7 +56,7 @@ public class MyPayPagamentiClient implements PagamentiClient {
 		bodyrichiesta.setEnteSILInviaRispostaPagamentoUrl(rispostaPagamentoUrl);
 
 		try {
-			CtDovuti dovuti = myPayConverter.generaDovuti(pagamento);
+			CtDovuti dovuti = myPayConverter.generaCtDovuti(dovuto);
 			XmlOptions opts = new XmlOptions();
 			opts.setSavePrettyPrint();
 			opts.setSaveSyntheticDocumentElement(new QName("http://www.regione.veneto.it/schemas/2012/Pagamenti/Ente/", "Dovuti"));
@@ -78,7 +78,7 @@ public class MyPayPagamentiClient implements PagamentiClient {
 		}
 
 		if ((paaSILInviaDovuti.getEsito() != null) && paaSILInviaDovuti.getEsito().equalsIgnoreCase("OK")) {
-			InvioPagamentoRisposta invioPagamentoRisposta = new InvioPagamentoRisposta();
+			PagamentoDovutoRisposta invioPagamentoRisposta = new PagamentoDovutoRisposta();
 			invioPagamentoRisposta.setIdSessione(paaSILInviaDovuti.getIdSession());
 			invioPagamentoRisposta.setRedirectUrl(paaSILInviaDovuti.getUrl());
 			return invioPagamentoRisposta;

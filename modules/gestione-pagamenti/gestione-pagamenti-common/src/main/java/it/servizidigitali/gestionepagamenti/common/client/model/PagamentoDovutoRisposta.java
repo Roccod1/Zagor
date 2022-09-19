@@ -4,7 +4,7 @@ package it.servizidigitali.gestionepagamenti.common.client.model;
  * @author pindi
  *
  */
-public class InvioPagamentoRisposta {
+public class PagamentoDovutoRisposta {
 
 	private String redirectUrl;
 	private String idSessione;
