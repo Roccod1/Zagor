@@ -2,8 +2,7 @@
 
 import org.apache.tools.ant.taskdefs.condition.Os
 
-// allprojects {
-configure(subprojects.findAll {it.name != 'chatbot-frontend'}) {
+allprojects {
     plugins.withId("com.liferay.node") {
         node.nodeVersion = "16.16.0"
         node.global = true
