@@ -298,12 +298,7 @@ public class GestioneProcedureMiddlewareService {
 
 		InputStream fileCaricato = null;
 
-		String nomeFileNuovo = "";
 		long fileEntryId = 0;
-
-		if (Validator.isNotNull(file)) {
-			nomeFile = nomeFile + "_" + String.valueOf(proceduraId) + nowToString();
-		}
 
 		try {
 			if (templatePdfId > 0 && Validator.isNotNull(file)) {
