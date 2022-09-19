@@ -17,6 +17,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +31,7 @@ import org.osgi.service.component.annotations.Reference;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.file.utility.converter.pdf.PDFConverter;
 import it.servizidigitali.file.utility.exception.FileConverterException;
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
@@ -88,7 +92,6 @@ public class AlpacaPDFService implements PDFService {
 
 			freemarkerTemplateEnteConfiguration = configurationProvider.getGroupConfiguration(FreemarkerTemplateEnteConfiguration.class, themeDisplay.getScopeGroupId());
 
-			Gson gson = new Gson();
 
 			Map<String, Object> data = new HashMap<String, Object>();
 			Configuration config = new Configuration(Configuration.VERSION_2_3_29);
@@ -102,12 +105,7 @@ public class AlpacaPDFService implements PDFService {
 			long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
 			
 			Organization organization = organizationLocalService.getOrganization(organizationId);
-
-			List<DefinizioneAllegato> definizioneAllegati = null;
-			alpacaStructure.setSchema(AlpacaUtil.addAttachmentsToSchema(gson.toJson(alpacaStructure.getSchema()), definizioneAllegati));
-			alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), definizioneAllegati, true));
-			alpacaStructure.setData(new JsonParser().parse(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
-
+			
 			// TODO: Sistemare provenienza attributi
 			
 			data.put("comune","Bari");
@@ -155,10 +153,21 @@ public class AlpacaPDFService implements PDFService {
 	public byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName,
 			Long idDestinazioneUso, String numeroBollo, boolean isDelega, String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
 
-		byte[] pdfContent = null;
-		try {
-			Gson gson = new Gson();
+		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
+		
+		byte[] pdfContent = null;
+		
+		try {
+			
+			freemarkerTemplateEnteConfiguration = configurationProvider.getGroupConfiguration(FreemarkerTemplateEnteConfiguration.class, themeDisplay.getScopeGroupId());
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+			Map<String, Object> data = new HashMap<String, Object>();
+			Configuration config = new Configuration(Configuration.VERSION_2_3_29);
+
+			String htmlContent = null;
+			
 			long proceduraId = richiesta.getProceduraId();
 			Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
 			long groupId = procedura.getGroupId();
@@ -167,14 +176,40 @@ public class AlpacaPDFService implements PDFService {
 
 			Organization organization = organizationLocalService.getOrganization(organizationId);
 
-			List<DefinizioneAllegato> definizioneAllegati = null;
-			alpacaStructure.setSchema(AlpacaUtil.addAttachmentsToSchema(gson.toJson(alpacaStructure.getSchema()), definizioneAllegati));
-			alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), definizioneAllegati, true));
-			alpacaStructure.setData(new JsonParser().parse(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
+			// TODO: Sistemare provenienza attributi
+			
+			data.put("comune","Bari");
 
-			// TODO generare HTML con template freemarker (da configurazioni sito?)
-			String htmlContent = null;
-			pdfContent = pdfConverter.generatePDF(htmlContent);
+			data.put("defaultThemeUrl", themeDisplay.getPathThemeRoot());
+			data.put("url", portletRequest.getContextPath());
+			data.put("portalUrl", themeDisplay.getPortalURL());
+			data.put("logoComune", "");
+			data.put("delega", "false");
+			data.put("dataCorrente", sdf.format(new Date()));
+			data.put("dettagliRichiesta", "dettaglio richiesta");
+			data.put(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE,alpacaStructure);
+			
+			
+			
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			try {
+				Template template = null;
+				
+				if(procedura.getStep2TipoServizio().equalsIgnoreCase(TipoServizio.AUTO_DICHIARAZIONE.name())) {
+					template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.autoDichiarazioniAlpacaTemplate()), config);
+				}else {
+					template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.defaultAlpacaTemplate()), config);
+				}
+				
+				
+				template.process(data, new OutputStreamWriter(os));
+			}
+			catch (Exception e) {
+				log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);
+			}
+
+			htmlContent = os.toString(StandardCharsets.UTF_8);
+			pdfContent = pdfConverter.generatePDF(htmlContent);			
 		}
 		catch (JsonSyntaxException e) {
 			log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);

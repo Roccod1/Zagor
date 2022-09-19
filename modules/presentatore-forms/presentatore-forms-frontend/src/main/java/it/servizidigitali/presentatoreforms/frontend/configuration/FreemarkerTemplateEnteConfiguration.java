@@ -13,5 +13,8 @@ public interface FreemarkerTemplateEnteConfiguration {
 
 	@Meta.AD(deflt = "", required = false, name = "Template certificati")
 	public String certificatiAlpacaTemplate();
+	
+	@Meta.AD(deflt = "", required = false, name = "Template autodichiarazioni")
+	public String autoDichiarazioniAlpacaTemplate();
 
 }

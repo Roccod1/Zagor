@@ -1,5 +1,8 @@
 package it.servizidigitali.presentatoreforms.frontend.portlet.resource;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCResourceCommand;
@@ -24,13 +27,11 @@ import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
-import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 
 @Component(immediate = true, 
 property = { 
@@ -64,7 +65,8 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand{
 		
 		String screenName = themeDisplay.getUser().getScreenName();
 
-		
+		Gson gson = new Gson();
+
 		
 		
 		try {
@@ -82,27 +84,33 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand{
 			FormData formData = AlpacaUtil.loadFormData(form, istanzaForm.getJson(), true);
 			AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
 			
+			alpacaStructure.setSchema(AlpacaUtil.addAttachmentsToSchema(gson.toJson(alpacaStructure.getSchema()), form.getListaDefinizioneAllegato()));
+			alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), form.getListaDefinizioneAllegato(), true));
+			alpacaStructure.setData(new JsonParser().parse(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
+			
+			// TODO: Gestire metodo deprecato
+			
 			String fileName = "allegato-" + String.valueOf(richiesta.getRichiestaId());
 
+			
 
 			switch (procedura.getStep2TipoServizio()) {
 			case "CERTIFICATO":
 				pdf = pdfService.generaPDFCertificato(screenName, null, alpacaStructure, richiesta, fileName, null, null, resourceRequest);
 				break;
 			default:
-				pdf = pdfService.generaPDFAlpacaForm(screenName, null, alpacaStructure, 
-						null, fileName, null, null, false, null, resourceRequest);
+				pdf = pdfService.generaPDFAlpacaForm(screenName, null, alpacaStructure, richiesta, fileName, null, null, false, null, resourceRequest);
 				break;
 			}
 			
 			// TODO: Capire se isDelega viene utilizzato
 			
-			resourceResponse.setContentType(ContentTypes.APPLICATION_OCTET_STREAM);
+			resourceResponse.setContentType(ContentTypes.APPLICATION_PDF);
 			os = resourceResponse.getPortletOutputStream();
 			os.write(pdf);
 			
 		}catch(Exception e) {
-			log.error("downloadIstanzaPDFResourceCommand :: " + e.getMessage());
+			log.error("downloadIstanzaPDFResourceCommand :: " + e.getMessage(), e);
 		}
 		finally {
 			os.close();
