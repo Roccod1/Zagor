@@ -56,4 +56,6 @@ public interface FileService {
 
 	long saveTemplateAllegato(InputStream fileCaricato, String fileNameModello, long formId, long userId, long groupId)
 			throws Exception;
+	
+	String getHumanReadableSize(long size);
 }

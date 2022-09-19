@@ -7,6 +7,8 @@ dependencies {
 	compileOnly project(":modules:gestione-servizi:gestione-servizi-api")
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-richieste-common")
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-utility")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-file-utility")
+	
 	compile project(":modules:servizi-digitali-common:servizi-digitali-camunda-integration")
 	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.0.2"
 }

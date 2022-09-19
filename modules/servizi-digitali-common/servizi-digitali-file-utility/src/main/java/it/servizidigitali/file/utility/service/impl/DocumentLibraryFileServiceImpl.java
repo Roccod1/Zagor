@@ -35,6 +35,11 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 	private static final Log log = LogFactoryUtil.getLog(DocumentLibraryFileServiceImpl.class.getName());
 
 	private static final String DL_SITE_REQUEST_MAIN_FOLDER_NAME = "RICHIESTE_SERVIZIO";
+	
+	private static final long SIZE_MUL = 1000;
+	private static final long KILOBYTE = SIZE_MUL;
+	private static final long MEGABYTE = SIZE_MUL * KILOBYTE;
+	private static final long GIGABYTE = SIZE_MUL * MEGABYTE;
 
 	@Reference
 	private DLAppService dlAppService;
@@ -215,5 +220,19 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 			throw new FileServiceException("getFolderFiles :: errore durante il caricamento dei file della folder '" + folderId + "' : " + e.getMessage(), e);
 		}
 		return null;
+	}
+
+
+	@Override
+	public String getHumanReadableSize(long size) {
+		if (size >= GIGABYTE) {
+			return String.format("%.1f GB", (float) size / GIGABYTE);
+		} else if (size >= MEGABYTE) {
+			return String.format("%.1f MB", (float) size / MEGABYTE);
+		} else if (size >= KILOBYTE) {
+			return String.format("%.1f kB", (float) size / KILOBYTE);
+		} else {
+			return size + " B";
+		}
 	}
 }

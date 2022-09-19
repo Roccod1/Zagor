@@ -1,5 +1,8 @@
 package it.servizidigitali.scrivaniaoperatore.frontend.util;
 
+import com.liferay.document.library.kernel.model.DLFileEntry;
+import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 
@@ -9,13 +12,16 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.common.utility.UtenteUtility;
 import it.servizidigitali.common.utility.enumeration.UserCustomAttributes;
 import it.servizidigitali.common.utility.model.IndirizzoResidenza;
+import it.servizidigitali.file.utility.service.FileService;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.ServizioDTO;
+import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 
 @Component(immediate = true, service = MapUtil.class)
@@ -27,6 +33,10 @@ public class MapUtil {
 	private ProceduraLocalService proceduraLocalService;
 	@Reference
 	private ServizioLocalService servizioLocalService;
+	@Reference
+	private DLFileEntryLocalService dlFileEntryLocalService;
+	@Reference
+	private FileService fileService;
 	
 	public RichiestaDTO mapRichiesta(long companyId, Richiesta richiesta) {
 		RichiestaDTO dto = new RichiestaDTO();
@@ -79,5 +89,21 @@ public class MapUtil {
 		dto.setId(servizio.getServizioId());
 		dto.setNome(servizio.getNome());
 		return dto;
+	}
+	
+	public AllegatoDTO mapAllegato(AllegatoRichiesta ar) {
+		long fileEntryId = ar.getFileEntryId();
+		DLFileEntry fileEntry;
+		try {
+			fileEntry = dlFileEntryLocalService.getFileEntry(fileEntryId);
+		} catch (PortalException e) {
+			throw new RuntimeException(e);
+		}
+		
+		AllegatoDTO allegato = new AllegatoDTO();
+		allegato.setNomeFile(fileEntry.getFileName());
+		allegato.setDescrizione(fileEntry.getDescription());
+		allegato.setDimensione(fileService.getHumanReadableSize(fileEntry.getSize()));
+		return allegato;
 	}
 }
