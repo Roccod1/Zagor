@@ -1,0 +1,8 @@
+<div id="buttons-in-message">
+  <div *ngFor="let button of buttons" class="div-button">
+      <!-- <div class="alt">{{button.value}}</div> -->
+      <div *ngIf="button.type === 'text'" class="button-in-msg {{button.class}}" (click)="actionButton(button.value)" title="{{button.value}}">{{button.value}}</div> 
+  </div>
+</div>
+
+

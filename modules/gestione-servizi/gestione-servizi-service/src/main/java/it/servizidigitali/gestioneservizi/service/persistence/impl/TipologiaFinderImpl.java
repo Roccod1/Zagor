@@ -7,6 +7,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.persistence.TipologiaFinder;
@@ -18,7 +19,7 @@ import it.servizidigitali.gestioneservizi.service.persistence.TipologiaFinder;
 
 @Component(service = TipologiaFinder.class)
 public class TipologiaFinderImpl extends TipologiaFinderBaseImpl implements TipologiaFinder {
-
+	
 	public List<Tipologia> getListaTipologiaOrdinata(int inizio, int fine, OrderByComparator<Tipologia> ordine){
 		
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -29,4 +30,5 @@ public class TipologiaFinderImpl extends TipologiaFinderBaseImpl implements Tipo
 		
 		return listaTipologiaOrdinata;
 	}
+	
 }

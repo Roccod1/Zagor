@@ -74,7 +74,7 @@ public class ProceduraFinderImpl extends ProceduraFinderBaseImpl implements Proc
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Procedura.class, classLoader);
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("groupId", groupId));
 
-		if (serviziIds != null && !serviziIds.isEmpty()) {
+		if (serviziIds != null) {
 			dynamicQuery.add(RestrictionsFactoryUtil.in("servizioId", serviziIds));
 		}
 
