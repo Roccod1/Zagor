@@ -19,9 +19,11 @@ import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.CommentoDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.ServizioDTO;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 
 @Component(immediate = true, service = MapUtil.class)
@@ -105,5 +107,15 @@ public class MapUtil {
 		allegato.setDescrizione(fileEntry.getDescription());
 		allegato.setDimensione(fileService.getHumanReadableSize(fileEntry.getSize()));
 		return allegato;
+	}
+	
+	public CommentoDTO mapCommento(CommentoRichiesta cr) {
+		CommentoDTO commento = new CommentoDTO();
+		commento.setData(cr.getCreateDate());
+		commento.setOperatore(cr.getUserName());
+		commento.setTesto(cr.getTesto());
+		commento.setVisibileAlCittadino(cr.isVisibile());
+		commento.setDataVisibilita(cr.getModifiedDate());
+		return commento;
 	}
 }

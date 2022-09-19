@@ -23,11 +23,13 @@ import it.servizidigitali.camunda.integration.client.model.Task;
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AzioneUtente;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.CommentoDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaCodiciOperazioniUtente;
 import it.servizidigitali.scrivaniaoperatore.frontend.service.ScrivaniaOperatoreFrontendService;
 import it.servizidigitali.scrivaniaoperatore.frontend.util.MapUtil;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 @Component(//
@@ -113,8 +115,14 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 			request.setAttribute("allegatiOperatoreCount", allegatiRichiestaOperatore.size());
 			break;
 		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_COMMENTI:
-			request.setAttribute("commentiCount", 0);
-			request.setAttribute("commentiList", Collections.emptyList());
+			List<CommentoDTO> commenti = scrivaniaOperatoreFrontendService
+				.getCommentiRichiesta(richiesta.getId())
+				.stream()
+				.map(x -> mapUtil.mapCommento(x))
+				.collect(Collectors.toList());
+			
+			request.setAttribute("commentiCount", commenti.size());
+			request.setAttribute("commentiList", commenti);
 			break;
 		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_ATTIVITA:
 			request.setAttribute("attivitaCount", 0);

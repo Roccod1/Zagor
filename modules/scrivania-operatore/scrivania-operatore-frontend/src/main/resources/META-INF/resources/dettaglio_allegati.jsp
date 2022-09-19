@@ -14,7 +14,7 @@
 	<liferay-ui:search-container-row className="it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO" 
 	                                 modelVar="elem"
 	                                 indexVar="i">
-    	<liferay-ui:search-container-column-text name="#" value="${i}" />
+    	<liferay-ui:search-container-column-text name="#" value="${i + 1}" />
     	<liferay-ui:search-container-column-text name="descrizione" value="${elem.descrizione}" />
     	<liferay-ui:search-container-column-text name="nome-file" value="${elem.nomeFile}" />
     	<liferay-ui:search-container-column-text name="dimensione" value="${elem.dimensione}" />
@@ -34,7 +34,7 @@
 	<liferay-ui:search-container-row className="it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO" 
 	                                 modelVar="elem"
 	                                 indexVar="i">
-    	<liferay-ui:search-container-column-text name="#" value="${i}" />
+    	<liferay-ui:search-container-column-text name="#" value="${i + 1}" />
     	<liferay-ui:search-container-column-text name="descrizione" value="${elem.descrizione}" />
     	<liferay-ui:search-container-column-text name="nome-file" value="${elem.nomeFile}" />
     	<liferay-ui:search-container-column-text name="dimensione" value="${elem.dimensione}" />
