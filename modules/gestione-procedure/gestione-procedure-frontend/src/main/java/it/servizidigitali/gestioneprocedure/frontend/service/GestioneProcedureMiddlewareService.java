@@ -1,7 +1,6 @@
 package it.servizidigitali.gestioneprocedure.frontend.service;
 
 import com.liferay.counter.kernel.service.CounterLocalService;
-import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
@@ -20,12 +19,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import it.servizidigitali.file.utility.service.FileService;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
@@ -66,10 +65,7 @@ public class GestioneProcedureMiddlewareService {
 	private CounterLocalService counterLocalService;
 
 	@Reference
-	private FileService fileService;
-
-	@Reference
-	private DLAppService dlAppService;
+	private TemplatePdfFileService templatePdfFileService;
 
 	public Procedura getProcedura(long groupId, long servizioId, boolean attiva) {
 		Procedura procedura = null;
@@ -304,11 +300,11 @@ public class GestioneProcedureMiddlewareService {
 			if (templatePdfId > 0 && Validator.isNotNull(file)) {
 				byte[] fileAggiornato = FileUtil.getBytes(file);
 				FileEntry fileRecuperato = getFileEntryTemplatePdf(templatePdfId);
-				fileEntryId = fileService.updateFileEntry(fileRecuperato, fileAggiornato, nomeFile, groupId, userId);
+				fileEntryId = templatePdfFileService.updateFileEntry(fileRecuperato, fileAggiornato, nomeFile, groupId, userId);
 			}
 			else {
 				fileCaricato = new DataInputStream(new FileInputStream(file));
-				fileEntryId = fileService.saveJasperReport(nomeFile, nomeFile, nomeFile, proceduraId, fileCaricato, null, userId, groupId);
+				fileEntryId = templatePdfFileService.saveJasperReport(nomeFile, nomeFile, nomeFile, proceduraId, fileCaricato, null, userId, groupId);
 			}
 		}
 		catch (Exception e) {
@@ -371,7 +367,7 @@ public class GestioneProcedureMiddlewareService {
 
 	}
 
-	public void aggiornaPrincipaleTemplatePdf(TemplatePdf templatePrincipale, long templatePdfId) {
+	public void aggiornaPrincipaleTemplatePdf(TemplatePdf templatePrincipale, long templatePdfId) throws Exception {
 
 		List<TemplatePdf> listaTemplateProcedura = recuperaTemplatePdfProceduraAttivo(templatePrincipale.getProceduraId(), true);
 
@@ -408,53 +404,39 @@ public class GestioneProcedureMiddlewareService {
 
 	}
 
-	public List<TemplatePdf> recuperaTemplatePdfProceduraAttivo(long proceduraId, boolean attivo) {
-		List<TemplatePdf> listaTemplatePdf = null;
+	public List<TemplatePdf> recuperaTemplatePdfProceduraAttivo(long proceduraId, boolean attivo) throws Exception {
 		List<TemplatePdf> listaTemplatePdfNomeFile = null;
 
-		if (proceduraId > 0) {
-			listaTemplatePdf = new ArrayList<TemplatePdf>();
-			listaTemplatePdfNomeFile = new ArrayList<TemplatePdf>();
-			listaTemplatePdf = templatePdfLocalService.getTemplatePdfByProceduraIdAndAttivo(proceduraId, attivo);
-
-			try {
-				if (Validator.isNotNull(listaTemplatePdf) && !listaTemplatePdf.isEmpty()) {
-					for (TemplatePdf pdf : listaTemplatePdf) {
-
-						if (Validator.isNotNull(pdf)) {
-							FileEntry file = dlAppService.getFileEntry(pdf.getFileEntryId());
-
-							if (Validator.isNotNull(file)) {
-								pdf.setNomeFile(file.getFileName());
-							}
-							listaTemplatePdfNomeFile.add(pdf);
-						}
-					}
+		try {
+			if (proceduraId > 0) {
+				listaTemplatePdfNomeFile = new ArrayList<TemplatePdf>();
+				List<TemplatePdf> listaTemplatePdf = templatePdfLocalService.getTemplatePdfByProceduraIdAndAttivo(proceduraId, attivo);
+				Map<Long, FileEntry> templatePdfFileEntriesMap = templatePdfFileService.getTemplatePdfFileEntriesMap(listaTemplatePdf);
+				listaTemplatePdfNomeFile = new ArrayList<TemplatePdf>();
+				for (TemplatePdf templatePdf : listaTemplatePdf) {
+					FileEntry fileEntry = templatePdfFileEntriesMap.get(templatePdf.getTemplatePdfId());
+					templatePdf.setNomeFile(fileEntry.getFileName());
+					listaTemplatePdfNomeFile.add(templatePdf);
 				}
 			}
-			catch (Exception e) {
-				_log.error("Errore durante il recupero del file da sistema!" + e.getMessage());
-			}
-
+		}
+		catch (Exception e) {
+			_log.error("recuperaTemplatePdfProceduraAttivo :: " + e.getMessage(), e);
+			throw e;
 		}
 
 		return listaTemplatePdfNomeFile;
 	}
 
-	public FileEntry getFileEntryTemplatePdf(long templatePdfId) {
+	public FileEntry getFileEntryTemplatePdf(long templatePdfId) throws Exception {
 		FileEntry file = null;
 		TemplatePdf templatePdf = null;
 
-		try {
-			if (templatePdfId > 0) {
-				templatePdf = templatePdfLocalService.getTemplatePdf(templatePdfId);
-				if (Validator.isNotNull(templatePdf)) {
-					file = dlAppService.getFileEntry(templatePdf.getFileEntryId());
-				}
+		if (templatePdfId > 0) {
+			templatePdf = templatePdfLocalService.getTemplatePdf(templatePdfId);
+			if (Validator.isNotNull(templatePdf)) {
+				file = templatePdfFileService.getTemplatePdfFileEntry(templatePdf);
 			}
-		}
-		catch (Exception e) {
-			_log.error("Errore durante il recupero del file: " + e.getMessage());
 		}
 
 		return file;
@@ -486,16 +468,17 @@ public class GestioneProcedureMiddlewareService {
 
 	}
 
-	public void deleteTemplatePdfProcedura(long proceduraId) {
+	public void deleteTemplatePdfProcedura(long proceduraId) throws Exception {
 		List<TemplatePdf> findByProceduraId = templatePdfLocalService.getTemplatePdfByProceduraId(proceduraId);
 		if (findByProceduraId != null) {
 			for (TemplatePdf templatePdf : findByProceduraId) {
 				try {
-					fileService.deleteRequestFile(templatePdf.getFileEntryId());
+					templatePdfFileService.deleteTemplatePdfFileEntry(templatePdf);
 					templatePdfLocalService.deleteTemplatePdf(templatePdf.getTemplatePdfId());
 				}
-				catch (PortalException e) {
+				catch (Exception e) {
 					_log.error("deleteTemplatePdfProcedura :: " + e.getMessage(), e);
+					throw e;
 				}
 			}
 		}
