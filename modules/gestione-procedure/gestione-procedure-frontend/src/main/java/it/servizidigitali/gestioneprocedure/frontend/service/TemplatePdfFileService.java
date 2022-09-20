@@ -27,6 +27,9 @@ import it.servizidigitali.gestioneprocedure.model.TemplatePdf;
 @Component(name = "templatePdfFileService", immediate = true, service = TemplatePdfFileService.class)
 public class TemplatePdfFileService {
 
+	private static final String CONFIGURAZIONI_FOLDER = "Configurazioni Sito";
+	private static final String CONFIGURAZIONE_PROCEDURA_MAIN_FOLDER = "Gestione procedure";
+
 	private static final Log log = LogFactoryUtil.getLog(TemplatePdfFileService.class.getName());
 
 	@Reference
@@ -54,36 +57,36 @@ public class TemplatePdfFileService {
 			serviceContext.setUserId(userId);
 			serviceContext.setAddGroupPermissions(true);
 
-			Folder configurazioneProceduraFolder = null;
-			Folder procedure = null;
-			Folder procedura = null;
+			Folder configurazioniSitoFolder = null;
+			Folder gestioneProcedureFolder = null;
+			Folder proceduraFolder = null;
 
 			try {
-				configurazioneProceduraFolder = dlAppService.getFolder(defaultRepoId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Procedura");
+				configurazioniSitoFolder = dlAppService.getFolder(defaultRepoId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, CONFIGURAZIONI_FOLDER);
 			}
 			catch (NoSuchFolderException e) {
-				log.warn("saveRequestFile :: folder Configurazione Procedura non esistente: " + e.getMessage() + ". Creazione folder: " + "Configurazione Procedura");
-				configurazioneProceduraFolder = dlAppService.addFolder(defaultRepoId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Procedura", null, serviceContext);
-			}
-
-			try {
-				procedure = dlAppService.getFolder(defaultRepoId, configurazioneProceduraFolder.getFolderId(), "Procedure");
-			}
-			catch (NoSuchFolderException e) {
-				log.warn("saveRequestFile :: folder Configurazione Procedura non esistente: " + e.getMessage() + ". Creazione folder: " + "Procedure");
-				procedure = dlAppService.addFolder(defaultRepoId, configurazioneProceduraFolder.getFolderId(), "Procedure", null, serviceContext);
+				log.warn("saveRequestFile :: folder non esistente: " + e.getMessage() + ". Creazione folder: " + CONFIGURAZIONI_FOLDER);
+				configurazioniSitoFolder = dlAppService.addFolder(defaultRepoId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, CONFIGURAZIONI_FOLDER, null, serviceContext);
 			}
 
 			try {
-				procedura = dlAppService.getFolder(defaultRepoId, procedure.getFolderId(), String.valueOf(proceduraId));
+				gestioneProcedureFolder = dlAppService.getFolder(defaultRepoId, configurazioniSitoFolder.getFolderId(), CONFIGURAZIONE_PROCEDURA_MAIN_FOLDER);
 			}
 			catch (NoSuchFolderException e) {
-				log.warn("saveRequestFile :: folder per la Procedura con ID " + proceduraId + "non esistente: " + e.getMessage() + ". Creazione folder");
-				procedura = dlAppService.addFolder(defaultRepoId, procedure.getFolderId(), String.valueOf(proceduraId), null, serviceContext);
+				log.warn("saveRequestFile :: folder non esistente: " + e.getMessage() + ". Creazione folder: " + CONFIGURAZIONE_PROCEDURA_MAIN_FOLDER);
+				gestioneProcedureFolder = dlAppService.addFolder(defaultRepoId, configurazioniSitoFolder.getFolderId(), CONFIGURAZIONE_PROCEDURA_MAIN_FOLDER, null, serviceContext);
+			}
+
+			try {
+				proceduraFolder = dlAppService.getFolder(defaultRepoId, gestioneProcedureFolder.getFolderId(), String.valueOf(proceduraId));
+			}
+			catch (NoSuchFolderException e) {
+				log.warn("saveRequestFile :: folder per la Procedura con ID " + proceduraId + " non esistente: " + e.getMessage() + ". Creazione folder");
+				proceduraFolder = dlAppService.addFolder(defaultRepoId, gestioneProcedureFolder.getFolderId(), String.valueOf(proceduraId), null, serviceContext);
 			}
 
 			if (Validator.isNotNull(inputStream)) {
-				FileEntry addFileEntry = dlAppService.addFileEntry(null, defaultRepoId, procedura.getFolderId(), nomeFile, mimeType, titolo, null, descrizione, null, inputStream,
+				FileEntry addFileEntry = dlAppService.addFileEntry(null, defaultRepoId, proceduraFolder.getFolderId(), nomeFile, mimeType, titolo, null, descrizione, null, inputStream,
 						inputStream.available(), null, null, serviceContext);
 				return addFileEntry.getFileEntryId();
 			}
@@ -122,85 +125,6 @@ public class TemplatePdfFileService {
 		}
 
 		return 0;
-	}
-
-	/**
-	 *
-	 * @param fileCaricato
-	 * @param fileNameModello
-	 * @param formId
-	 * @param userId
-	 * @param groupId
-	 * @return
-	 * @throws Exception
-	 */
-	public long saveTemplateAllegato(InputStream fileCaricato, String fileNameModello, long formId, long userId, long groupId) throws Exception {
-
-		long defaultRepoId = DLFolderConstants.getDataRepositoryId(groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
-
-		Folder cartellaAllegatiForm = null;
-		long idAllegatoCaricato = 0;
-		long folderTemplateId = 0;
-		long folderTemplateRepositoryId = 0;
-
-		Folder folderConfigurazionePiattaforma = null;
-		Folder folderForm = null;
-		Folder folderTemplate = null;
-
-		Folder folderTemplateNuova = null;
-
-		ServiceContext serviceContext = new ServiceContext();
-		serviceContext.setScopeGroupId(groupId);
-		serviceContext.setUserId(userId);
-		serviceContext.setAddGroupPermissions(true);
-
-		if (Validator.isNotNull(fileCaricato)) {
-
-			try {
-				folderConfigurazionePiattaforma = dlAppService.getFolder(groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Piattaforma");
-
-				folderForm = dlAppService.getFolder(defaultRepoId, folderConfigurazionePiattaforma.getFolderId(), "Form");
-
-				folderTemplate = dlAppService.getFolder(defaultRepoId, folderForm.getFolderId(), "Template");
-
-			}
-			catch (NoSuchFolderException e) {
-				log.info("Cartella di configurazione form non presente, creazione!");
-
-				Folder folderConfigurazionePiattaformaNuova = dlAppService.addFolder(defaultRepoId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Piattaforma",
-						"Configurazione Piattaforma", serviceContext);
-
-				Folder folderFormNuova = dlAppService.addFolder(defaultRepoId, folderConfigurazionePiattaformaNuova.getFolderId(), "Form", "Form", serviceContext);
-
-				folderTemplateNuova = dlAppService.addFolder(defaultRepoId, folderFormNuova.getFolderId(), "Template", "Template", serviceContext);
-			}
-
-			if (Validator.isNull(folderTemplate)) {
-				folderTemplateId = folderTemplateNuova.getFolderId();
-				folderTemplateRepositoryId = folderTemplateNuova.getRepositoryId();
-			}
-			else {
-				folderTemplateId = folderTemplate.getFolderId();
-				folderTemplateRepositoryId = folderTemplate.getRepositoryId();
-			}
-
-			try {
-				Folder cartellaForm = dlAppService.getFolder(defaultRepoId, folderTemplateId, String.valueOf(formId));
-				FileEntry allegatoCaricato = dlAppService.addFileEntry(null, defaultRepoId, cartellaForm.getFolderId(), fileNameModello, null, fileNameModello, null, String.valueOf(formId), null,
-						fileCaricato, fileCaricato.available(), null, null, serviceContext);
-				idAllegatoCaricato = allegatoCaricato.getFileEntryId();
-			}
-			catch (NoSuchFolderException e) {
-				log.info("Cartella allegati per form con ID " + formId + " non presente a sistema,creazione");
-				cartellaAllegatiForm = dlAppService.addFolder(folderTemplateRepositoryId, folderTemplateId, String.valueOf(formId), String.valueOf(formId), serviceContext);
-				FileEntry allegatoCaricato = dlAppService.addFileEntry(null, groupId, cartellaAllegatiForm.getFolderId(), fileNameModello, null, fileNameModello, null, String.valueOf(formId), null,
-						fileCaricato, fileCaricato.available(), null, null, serviceContext);
-				idAllegatoCaricato = allegatoCaricato.getFileEntryId();
-			}
-
-		}
-
-		return idAllegatoCaricato;
 	}
 
 	/**
