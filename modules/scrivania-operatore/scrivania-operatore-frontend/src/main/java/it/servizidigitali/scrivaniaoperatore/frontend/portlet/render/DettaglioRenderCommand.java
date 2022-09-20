@@ -97,13 +97,13 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 			break;
 		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_ALLEGATI:
 			List<AllegatoDTO> allegatiRichiesta = scrivaniaOperatoreFrontendService
-				.getAllegatiRichiesta(richiesta.getId())
+				.getAllegatiRichiestaRichiedente(richiesta.getId())
 				.stream()
-				.map(x -> mapUtil.mapAllegato(x))
+				.map(x -> mapUtil.mapAllegato(ctx, x))
 				.collect(Collectors.toList());
 			List<AllegatoDTO> allegatiRichiestaOperatore = scrivaniaOperatoreFrontendService
 				.getAllegatiRichiestaInterni(richiesta.getId()).stream()
-				.map(x -> mapUtil.mapAllegato(x))
+				.map(x -> mapUtil.mapAllegato(ctx, x))
 				.collect(Collectors.toList());
 			
 			

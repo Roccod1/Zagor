@@ -1,13 +1,16 @@
 package it.servizidigitali.scrivaniaoperatore.frontend.util;
 
-import com.liferay.document.library.kernel.model.DLFileEntry;
-import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
+import com.liferay.document.library.kernel.model.DLFileEntry;
+import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
+import com.liferay.document.library.util.DLURLHelper;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 
 import it.servizidigitali.common.utility.UtenteUtility;
 import it.servizidigitali.common.utility.enumeration.UserCustomAttributes;
@@ -39,6 +42,8 @@ public class MapUtil {
 	private DLFileEntryLocalService dlFileEntryLocalService;
 	@Reference
 	private FileService fileService;
+	@Reference
+	private DLURLHelper dlUrlHelper;
 	
 	public RichiestaDTO mapRichiesta(long companyId, Richiesta richiesta) {
 		RichiestaDTO dto = new RichiestaDTO();
@@ -93,7 +98,7 @@ public class MapUtil {
 		return dto;
 	}
 	
-	public AllegatoDTO mapAllegato(AllegatoRichiesta ar) {
+	public AllegatoDTO mapAllegato(ServiceContext context, AllegatoRichiesta ar) {
 		long fileEntryId = ar.getFileEntryId();
 		DLFileEntry fileEntry;
 		try {
@@ -106,6 +111,7 @@ public class MapUtil {
 		allegato.setNomeFile(fileEntry.getFileName());
 		allegato.setDescrizione(fileEntry.getDescription());
 		allegato.setDimensione(fileService.getHumanReadableSize(fileEntry.getSize()));
+		allegato.setUrl("https://example.com/");
 		return allegato;
 	}
 	

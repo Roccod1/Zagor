@@ -400,8 +400,8 @@ public class ScrivaniaOperatoreFrontendService {
 	 * @param richiestaId
 	 * @return
 	 */
-	public List<AllegatoRichiesta> getAllegatiRichiesta(long richiestaId) {
-		List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaId(richiestaId);
+	public List<AllegatoRichiesta> getAllegatiRichiestaRichiedente(long richiestaId) {
+		List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdGroupIdInterno(richiestaId, false);
 		return allegatiRichiesta;
 	}
 

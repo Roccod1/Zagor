@@ -4,6 +4,7 @@ public class AllegatoDTO {
 	private String descrizione;
 	private String nomeFile;
 	private String dimensione;
+	private String url;
 	
 	public String getDescrizione() {
 		return descrizione;
@@ -22,6 +23,12 @@ public class AllegatoDTO {
 	}
 	public void setDimensione(String dimensione) {
 		this.dimensione = dimensione;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 }
