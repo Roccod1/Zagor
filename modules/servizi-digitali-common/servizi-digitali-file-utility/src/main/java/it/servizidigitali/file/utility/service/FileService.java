@@ -1,7 +1,5 @@
 package it.servizidigitali.file.utility.service;
 
-import com.liferay.portal.kernel.repository.model.FileEntry;
-
 import java.io.InputStream;
 import java.util.List;
 
@@ -55,12 +53,4 @@ public interface FileService {
 	 */
 	List<File> getFolderFiles(long folderId, long groupId) throws FileServiceException;
 
-
-	long saveTemplateAllegato(InputStream fileCaricato, String fileNameModello, long formId, long userId, long groupId)
-			throws Exception;
-
-	long saveJasperReport(String nomeFile, String titolo, String descrizione, long proceduraId, InputStream inputStream,
-			String mimeType, long userId, long groupId) throws FileServiceException;
-
-	long updateFileEntry(FileEntry file, byte[] fileNuovo, String fileName, long groupId, long userId);
 }
