@@ -4,6 +4,8 @@
 	<liferay-ui:message key="dati-dettaglio-pratica" arguments="${titleArgs}" />
 </h2>
 
+<%@ include file="dettaglio_azioni_carico.jsp" %>
+
 <h3><liferay-ui:message key="allegati-richiedente" /></h3>
 
 <liferay-ui:search-container total="${allegatiRichiedenteCount}"
@@ -50,3 +52,5 @@
 		<liferay-ui:message key="aggiungi-allegato" />
 	</button>
 </div>
+
+<%@ include file="dettaglio_azioni_carico.jsp" %>

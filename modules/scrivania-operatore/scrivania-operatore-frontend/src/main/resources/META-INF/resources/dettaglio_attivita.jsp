@@ -4,6 +4,10 @@
 	<liferay-ui:message key="dati-dettaglio-pratica" arguments="${titleArgs}" />
 </h2>
 
+<%@ include file="dettaglio_azioni_carico.jsp" %>
+
+<h3><liferay-ui:message key="attivita" /></h3>
+
 <liferay-ui:search-container total="${attivitaCount}"
                              emptyResultsMessage="nessuna-attivita"
                              delta="10">
@@ -15,3 +19,5 @@
 	
 	<liferay-ui:search-iterator markupView="lexicon" />
 </liferay-ui:search-container>
+
+<%@ include file="dettaglio_azioni_carico.jsp" %>

@@ -4,6 +4,16 @@
 	<liferay-ui:message key="dati-dettaglio-pratica" arguments="${titleArgs}" />
 </h2>
 
+<%@ include file="dettaglio_azioni_carico.jsp" %>
+
+<c:if test="${inCarico}">
+	<div class="row">
+		<button class="btn btn-primary">
+			<liferay-ui:message key="aggiungi-commento" />
+		</button>
+	</div>
+</c:if>
+
 <liferay-ui:search-container total="${commentiCount}"
                              emptyResultsMessage="nessun-commento"
                              delta="10">
@@ -22,3 +32,5 @@
 	
 	<liferay-ui:search-iterator markupView="lexicon" />
 </liferay-ui:search-container>
+
+<%@ include file="dettaglio_azioni_carico.jsp" %>
