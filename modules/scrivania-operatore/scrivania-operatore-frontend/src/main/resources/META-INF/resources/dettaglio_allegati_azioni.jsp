@@ -5,6 +5,6 @@
 	AllegatoDTO allegato = (AllegatoDTO) row.getObject();
 %>
 
-<a href="#">
+<a href="<%= allegato.getUrl() %>">
 	<i class="fas fa-download"></i>
 </a>

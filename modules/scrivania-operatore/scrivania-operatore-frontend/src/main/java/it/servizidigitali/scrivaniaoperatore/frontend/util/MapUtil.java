@@ -5,8 +5,6 @@ import org.osgi.service.component.annotations.Reference;
 
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
-import com.liferay.document.library.util.DLURLHelper;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -42,8 +40,6 @@ public class MapUtil {
 	private DLFileEntryLocalService dlFileEntryLocalService;
 	@Reference
 	private FileService fileService;
-	@Reference
-	private DLURLHelper dlUrlHelper;
 	
 	public RichiestaDTO mapRichiesta(long companyId, Richiesta richiesta) {
 		RichiestaDTO dto = new RichiestaDTO();
@@ -111,7 +107,14 @@ public class MapUtil {
 		allegato.setNomeFile(fileEntry.getFileName());
 		allegato.setDescrizione(fileEntry.getDescription());
 		allegato.setDimensione(fileService.getHumanReadableSize(fileEntry.getSize()));
-		allegato.setUrl("https://example.com/");
+		
+		//TODO usare service o spostare in un nostro service?
+		String url = "/documents/" + fileEntry.getRepositoryId() + 
+				"/" + fileEntry.getFolderId() + 
+				"/" + fileEntry.getFileName() + 
+				"/" + fileEntry.getUuid() + 
+				"?download=true";
+		allegato.setUrl(url);
 		return allegato;
 	}
 	
