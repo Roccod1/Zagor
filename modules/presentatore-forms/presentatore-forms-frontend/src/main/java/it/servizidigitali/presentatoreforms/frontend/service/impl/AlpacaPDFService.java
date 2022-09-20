@@ -1,16 +1,20 @@
 package it.servizidigitali.presentatoreforms.frontend.service.impl;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Image;
+import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.ImageLocalServiceUtil;
+import com.liferay.portal.kernel.service.LayoutSetLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.ByteArrayOutputStream;
@@ -18,11 +22,12 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.portlet.PortletRequest;
 
@@ -31,17 +36,26 @@ import org.osgi.service.component.annotations.Reference;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import it.servizidigitali.backoffice.integration.enums.RelazioneParentela;
+import it.servizidigitali.backoffice.integration.enums.StatoCivile;
+import it.servizidigitali.backoffice.integration.enums.TitoloStudio;
+import it.servizidigitali.common.model.Comune;
+import it.servizidigitali.common.model.ComuneEstero;
+import it.servizidigitali.common.model.Provincia;
+import it.servizidigitali.common.model.StatoEstero;
+import it.servizidigitali.common.service.ComuneEsteroLocalService;
+import it.servizidigitali.common.service.ComuneLocalService;
+import it.servizidigitali.common.service.ProvinciaLocalService;
+import it.servizidigitali.common.service.StatoEsteroLocalService;
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.file.utility.converter.pdf.PDFConverter;
 import it.servizidigitali.file.utility.exception.FileConverterException;
-import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.presentatoreforms.frontend.configuration.FreemarkerTemplateEnteConfiguration;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.exception.PDFServiceException;
 import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
-import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 
@@ -71,6 +85,21 @@ public class AlpacaPDFService implements PDFService {
 
 	@Reference
 	private ProceduraLocalService proceduraLocalService;
+	
+	@Reference
+	private StatoEsteroLocalService statoEsteroLocalService;
+
+	@Reference
+	private ProvinciaLocalService provinciaLocalService;
+
+	@Reference
+	private ComuneLocalService comuneLocalService;
+
+	@Reference
+	private ComuneEsteroLocalService comuneEsteroLocalService;
+	
+	@Reference
+	private LayoutSetLocalService layoutSetLocalService;
 
 	// @Autowired
 	// private JwtTokenUtil jwtTokenUtil;
@@ -106,23 +135,36 @@ public class AlpacaPDFService implements PDFService {
 			
 			Organization organization = organizationLocalService.getOrganization(organizationId);
 			
-			// TODO: Sistemare provenienza attributi
+			LayoutSet layout = layoutSetLocalService.getLayoutSet(themeDisplay.getSiteGroupId(), true);
 			
-			data.put("comune","Bari");
-			data.put("pagamentoBollo","false");
-			data.put("showDescrizioneEsenzioneBollo", "false");
-			data.put("timbraCertificato", "false");
-			data.put("certificatoId", 400);
-			data.put("delega", "false");
-			data.put("numeroBollo", 400);
+			String numeroBolloDescrizione = "";
+			
+			data.put("comune",organization.getName());
+
 			data.put("defaultThemeUrl", themeDisplay.getPathThemeRoot());
 			data.put("url", portletRequest.getContextPath());
 			data.put("portalUrl", themeDisplay.getPortalURL());
-			data.put("logoComune", "");
-			data.put("descrizioneDestinazioneUso", "");
 			data.put(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE,alpacaStructure);
 			
+			// Attributi impostati attraverso le destinazioni uso
 			
+			data.put("certificatoId", richiesta.getRichiestaId());
+			data.put("descrizioneDestinazioneUso", "");
+			data.put("pagamentoBollo","false");
+			data.put("timbraCertificato", "false");
+			data.put("showDescrizioneEsenzioneBollo", "false");
+
+			if(Validator.isNotNull(numeroBollo)) {
+				numeroBolloDescrizione = "Identificativo Bollo: " + numeroBollo;
+			}
+			
+			long logoId = layout.getLogoId();
+			data.put("logoId", logoId);
+			
+			data.put("numeroBollo", numeroBolloDescrizione);
+			
+			addParametriAggiuntivi(data);
+
 			
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			try {
@@ -151,9 +193,10 @@ public class AlpacaPDFService implements PDFService {
 
 	@Override
 	public byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName,
-			Long idDestinazioneUso, String numeroBollo, boolean isDelega, String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
+			String numeroBollo, boolean isDelega, String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
 
 		
 		byte[] pdfContent = null;
@@ -175,21 +218,23 @@ public class AlpacaPDFService implements PDFService {
 			long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
 
 			Organization organization = organizationLocalService.getOrganization(organizationId);
-
-			// TODO: Sistemare provenienza attributi
 			
-			data.put("comune","Bari");
+			LayoutSet layout = layoutSetLocalService.getLayoutSet(themeDisplay.getSiteGroupId(), true);
+			long logoId = layout.getLogoId();
+			data.put("logoId", logoId);
+
+			
+			data.put("comune",organization.getName());
 
 			data.put("defaultThemeUrl", themeDisplay.getPathThemeRoot());
 			data.put("url", portletRequest.getContextPath());
 			data.put("portalUrl", themeDisplay.getPortalURL());
-			data.put("logoComune", "");
-			data.put("delega", "false");
+			data.put("delega", isDelega);
 			data.put("dataCorrente", sdf.format(new Date()));
-			data.put("dettagliRichiesta", "dettaglio richiesta");
+			data.put("dettagliRichiesta", dettagliRichiesta);
 			data.put(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE,alpacaStructure);
 			
-			
+			addParametriAggiuntivi(data);
 			
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			try {
@@ -222,5 +267,28 @@ public class AlpacaPDFService implements PDFService {
 		}
 
 		return pdfContent;
+	}
+	
+	private void addParametriAggiuntivi(Map<String, Object> data) {
+		List<StatoEstero> allStati = statoEsteroLocalService.getStatoEsteros(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		data.put("listaStatiEsteri", allStati);
+
+		List<Provincia> allProvince = provinciaLocalService.getProvincias(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		data.put("listaProvince", allProvince);
+
+		List<Comune> allComuni = comuneLocalService.getComunes(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		data.put("listaComuni", allComuni);
+
+		List<ComuneEstero> allComuniEsteri = comuneEsteroLocalService.getComuneEsteros(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		Map<String, String> comuniEsteri = allComuniEsteri.stream().collect(Collectors.toMap(comune -> Integer.toString(comune.getCodice()), ComuneEstero::getDenominazione));
+		data.put("listaComuniEsteri", comuniEsteri);
+		
+		Map<String, String> titoliStudio = Arrays.stream(TitoloStudio.values()).collect(Collectors.toMap(TitoloStudio::getCodice, TitoloStudio::getDescrizione));
+		data.put("titoliStudio", titoliStudio);
+		Map<String, String> statiCivili = Arrays.stream(StatoCivile.values()).collect(Collectors.toMap(titoloStudio -> Integer.toString(titoloStudio.getCodice()), StatoCivile::getDescrizione));
+		data.put("statiCivili", statiCivili);
+		Map<String, String> relazioniParentela = Arrays.stream(RelazioneParentela.values())
+				.collect(Collectors.toMap(relazioneParentele -> Integer.toString(relazioneParentele.getCodice()), RelazioneParentela::getDescrizione));
+		data.put("relazioniParentela", relazioniParentela);
 	}
 }

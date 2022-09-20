@@ -61,7 +61,9 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 
 		FormData formData = null;
 		AlpacaJsonStructure alpacaStructure = null;
-
+		String jsonDataBozza = null;
+		
+		Gson gson = new Gson();
 		try {
 			User currentUser = themeDisplay.getUser();
 
@@ -74,13 +76,13 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 			userPreferences.setCodiceFiscaleRichiedente(richiestaBozza.getCodiceFiscale());
 
 			if (Boolean.valueOf(isBozza) && istanzaFormRichiesta != null) {
-				formData = AlpacaUtil.loadFormData(form, istanzaFormRichiesta.getJson(), true);
+				jsonDataBozza = gson.toJson(gson.fromJson(istanzaFormRichiesta.getJson(), FormData.class));
+				formData = AlpacaUtil.loadFormData(form, jsonDataBozza, true);
 				alpacaStructure = formData.getAlpaca();
 			}
 			else {
 				formData = AlpacaUtil.loadFormData(form, null, true);
 				alpacaStructure = formData.getAlpaca();
-				Gson gson = new Gson();
 				JsonObject data = gson.fromJson(gson.toJson(alpacaStructure.getData()), JsonObject.class);
 
 				try {
@@ -103,6 +105,16 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 				}
 
 			}
+			
+			// Sostituzione valore di data
+			String data = gson.toJson(alpacaStructure.getData());
+			JsonObject jsonData = gson.fromJson(data, JsonObject.class);
+			alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
+			
+			AlpacaUtil.convertiComponentiAlpacaStructure(alpacaStructure);
+			// Carica la view se presente
+			AlpacaUtil.loadView(alpacaStructure);
+			
 			renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 
 			return PresentatoreFormsPortletKeys.JSP_COMPILA_FORM;

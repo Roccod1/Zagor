@@ -99,7 +99,7 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand{
 				pdf = pdfService.generaPDFCertificato(screenName, null, alpacaStructure, richiesta, fileName, null, null, resourceRequest);
 				break;
 			default:
-				pdf = pdfService.generaPDFAlpacaForm(screenName, null, alpacaStructure, richiesta, fileName, null, null, false, null, resourceRequest);
+				pdf = pdfService.generaPDFAlpacaForm(screenName, null, alpacaStructure, richiesta, fileName, null, false, null, resourceRequest);
 				break;
 			}
 			
