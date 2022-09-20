@@ -34,6 +34,7 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 	private static final Log log = LogFactoryUtil.getLog(DocumentLibraryFileServiceImpl.class.getName());
 
 	private static final String DL_SITE_REQUEST_MAIN_FOLDER_NAME = "RICHIESTE_SERVIZIO";
+	private static final String DL_SITE_PRIVATE_USER_MAIN_FOLDER_NAME = "FILE_PRIVATI_UTENTE";
 
 	@Reference
 	private DLAppService dlAppService;
@@ -42,7 +43,7 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 	private UserLocalService userLocalService;
 
 	@Override
-	public long saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, InputStream inputStream, String mimeType, long userId, long groupId)
+	public String saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, InputStream inputStream, String mimeType, long userId, long groupId)
 			throws FileServiceException {
 
 		try {
@@ -79,7 +80,7 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 				if (codiceServizioFolder != null) {
 					FileEntry addFileEntry = dlAppService.addFileEntry(null, defaultRepoId, codiceServizioFolder.getFolderId(), nomeFile, mimeType, titolo, null, descrizione, null, inputStream,
 							inputStream.available(), null, null, serviceContext);
-					return addFileEntry.getFileEntryId();
+					return String.valueOf(addFileEntry.getFileEntryId());
 				}
 			}
 		}
@@ -87,25 +88,25 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 			log.error("saveRequestFile :: " + e.getMessage(), e);
 			throw new FileServiceException("saveRequestFile :: errore durante il salvataggio del file '" + nomeFile + "' : " + e.getMessage(), e);
 		}
-		return 0;
+		return null;
 	}
 
 	@Override
-	public InputStream getRequestFileContent(String nomeFile, long folderId, long groupId) throws FileServiceException {
+	public InputStream getRequestFileContent(String fileId, long groupId) throws FileServiceException {
 		try {
-			FileEntry fileEntry = dlAppService.getFileEntry(groupId, folderId, nomeFile);
+			FileEntry fileEntry = dlAppService.getFileEntry(Long.parseLong(fileId));
 			return fileEntry.getContentStream();
 		}
 		catch (PortalException e) {
 			log.error("getRequestFileContent :: " + e.getMessage(), e);
-			throw new FileServiceException("getRequestFileContent :: errore durante il caricamento del file '" + nomeFile + "' : " + e.getMessage(), e);
+			throw new FileServiceException("getRequestFileContent :: errore durante il caricamento del file '" + fileId + "' : " + e.getMessage(), e);
 		}
 	}
 
 	@Override
-	public void deleteRequestFile(long fileEntryId) throws FileServiceException {
+	public void deleteRequestFile(String fileId, long groupId) throws FileServiceException {
 		try {
-			dlAppService.deleteFileEntry(fileEntryId);
+			dlAppService.deleteFileEntry(Long.parseLong(fileId));
 		}
 		catch (PortalException e) {
 			log.error("deleteRequestFile :: " + e.getMessage(), e);
@@ -114,29 +115,72 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 	}
 
 	@Override
-	public List<File> getFolderFiles(long folderId, long groupId) throws FileServiceException {
+	public List<File> getUserFolderFiles(long userId, long groupId) throws FileServiceException {
 		try {
-			List<FileEntry> fileEntries = dlAppService.getFileEntries(groupId, folderId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+			long defaultRepoId = DLFolderConstants.getDataRepositoryId(groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
+
+			ServiceContext serviceContext = new ServiceContext();
+			serviceContext.setScopeGroupId(groupId);
+			serviceContext.setUserId(userId);
+			serviceContext.setAddGroupPermissions(true);
+
+			User user = userLocalService.getUser(userId);
+
+			Folder filePrivatiUtenteFolder = dlAppService.getFolder(defaultRepoId, 0L, DL_SITE_PRIVATE_USER_MAIN_FOLDER_NAME);
+
+			Folder codiceFiscaleFolder = null;
+			try {
+				codiceFiscaleFolder = dlAppService.getFolder(defaultRepoId, filePrivatiUtenteFolder.getFolderId(), user.getScreenName().toUpperCase());
+			}
+			catch (NoSuchFolderException e) {
+				log.warn("getUserFolderFiles :: folder CF non esistente: " + e.getMessage());
+			}
+			if (codiceFiscaleFolder == null) {
+				return null;
+			}
+
+			List<FileEntry> fileEntries = dlAppService.getFileEntries(groupId, codiceFiscaleFolder.getFolderId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 			if (fileEntries != null && !fileEntries.isEmpty()) {
 				List<File> files = new ArrayList<File>();
 				for (FileEntry fileEntry : fileEntries) {
-
-					File file = new File();
-					file.setNome(fileEntry.getFileName());
-					file.setInputStream(fileEntry.getContentStream());
-					file.setDescrizione(fileEntry.getDescription());
-					file.setEstensione(fileEntry.getExtension());
-					file.setMimeType(fileEntry.getMimeType());
+					File file = getFile(fileEntry);
 					files.add(file);
 				}
 				return files;
 			}
 		}
 		catch (PortalException e) {
-			log.error("getFolderFiles :: " + e.getMessage(), e);
-			throw new FileServiceException("getFolderFiles :: errore durante il caricamento dei file della folder '" + folderId + "' : " + e.getMessage(), e);
+			log.error("getUserFolderFiles :: " + e.getMessage(), e);
+			throw new FileServiceException("getUserFolderFiles :: errore durante il caricamento dei file privati per l'utente '" + userId + ", groupId: " + groupId + " :: " + e.getMessage(), e);
 		}
 		return null;
 	}
 
+	@Override
+	public File getRequestFile(String fileId, long groupId) throws FileServiceException {
+		try {
+			FileEntry fileEntry = dlAppService.getFileEntry(Long.parseLong(fileId));
+			return getFile(fileEntry);
+		}
+		catch (PortalException e) {
+			log.error("getRequestFile :: " + e.getMessage(), e);
+			throw new FileServiceException("getRequestFile :: errore durante il caricamento del file '" + fileId + "' : " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * @param fileEntry
+	 * @return
+	 * @throws PortalException
+	 */
+	private File getFile(FileEntry fileEntry) throws PortalException {
+		File file = new File();
+		file.setId(String.valueOf(fileEntry.getFileEntryId()));
+		file.setNome(fileEntry.getFileName());
+		file.setInputStream(fileEntry.getContentStream());
+		file.setDescrizione(fileEntry.getDescription());
+		file.setEstensione(fileEntry.getExtension());
+		file.setMimeType(fileEntry.getMimeType());
+		return file;
+	}
 }

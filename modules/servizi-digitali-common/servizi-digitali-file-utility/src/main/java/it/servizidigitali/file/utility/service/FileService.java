@@ -12,6 +12,9 @@ import it.servizidigitali.file.utility.model.File;
  */
 public interface FileService {
 
+	static final String PRIVATE_FOLDER_NAME = "private";
+	static final String PUBLIC_FOLDER_NAME = "public";
+
 	/**
 	 *
 	 * @param nomeFile
@@ -25,32 +28,41 @@ public interface FileService {
 	 * @return
 	 * @throws FileServiceException
 	 */
-	long saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, InputStream inputStream, String mimeType, long userId, long groupId) throws FileServiceException;
+	String saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, InputStream inputStream, String mimeType, long userId, long groupId) throws FileServiceException;
 
 	/**
 	 *
-	 * @param nomeFile
-	 * @param folderId
+	 * @param fileId
 	 * @param groupId
 	 * @return
 	 * @throws FileServiceException
 	 */
-	InputStream getRequestFileContent(String nomeFile, long folderId, long groupId) throws FileServiceException;
+	InputStream getRequestFileContent(String fileId, long groupId) throws FileServiceException;
 
 	/**
 	 *
-	 * @param fileEntryId
-	 * @throws FileServiceException
-	 */
-	void deleteRequestFile(long fileEntryId) throws FileServiceException;
-
-	/**
-	 *
-	 * @param folderId
+	 * @param fileId
 	 * @param groupId
 	 * @return
 	 * @throws FileServiceException
 	 */
-	List<File> getFolderFiles(long folderId, long groupId) throws FileServiceException;
+	File getRequestFile(String fileId, long groupId) throws FileServiceException;
+
+	/**
+	 *
+	 * @param fileId
+	 * @param groupId
+	 * @throws FileServiceException
+	 */
+	void deleteRequestFile(String fileId, long groupId) throws FileServiceException;
+
+	/**
+	 *
+	 * @param userId
+	 * @param groupId
+	 * @return
+	 * @throws FileServiceException
+	 */
+	List<File> getUserFolderFiles(long userId, long groupId) throws FileServiceException;
 
 }
