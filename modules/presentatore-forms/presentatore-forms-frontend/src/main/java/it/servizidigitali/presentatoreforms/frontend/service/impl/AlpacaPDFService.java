@@ -5,6 +5,8 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
+import com.liferay.portal.kernel.portlet.LiferayPortletURL;
+import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutSetLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
@@ -24,6 +26,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
+import javax.portlet.PortletURL;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -104,6 +108,8 @@ public class AlpacaPDFService implements PDFService {
 			String numeroBollo, PortletRequest portletRequest) throws PDFServiceException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		LiferayPortletURL resourceUrl =  PortletURLFactoryUtil.create(portletRequest, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RESOURCE_PHASE);
+		
 
 		byte[] pdfContent = null;
 		try {
@@ -151,7 +157,7 @@ public class AlpacaPDFService implements PDFService {
 
 			data.put("numeroBollo", numeroBolloDescrizione);
 
-			addParametriAggiuntivi(data);
+			addParametriAggiuntivi(data,resourceUrl);
 
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			Template template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.certificatiAlpacaTemplate()), config);
@@ -173,9 +179,11 @@ public class AlpacaPDFService implements PDFService {
 			String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		LiferayPortletURL resourceUrl =  PortletURLFactoryUtil.create(portletRequest, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RESOURCE_PHASE);
 
+		
 		byte[] pdfContent = null;
-
+		
 		try {
 
 			freemarkerTemplateEnteConfiguration = configurationProvider.getGroupConfiguration(FreemarkerTemplateEnteConfiguration.class, themeDisplay.getScopeGroupId());
@@ -208,7 +216,7 @@ public class AlpacaPDFService implements PDFService {
 			data.put("dettagliRichiesta", dettagliRichiesta);
 			data.put(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 
-			addParametriAggiuntivi(data);
+			addParametriAggiuntivi(data,resourceUrl);
 
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			Template template = null;
@@ -233,24 +241,35 @@ public class AlpacaPDFService implements PDFService {
 		return pdfContent;
 	}
 
-	private void addParametriAggiuntivi(Map<String, Object> data) {
+	private void addParametriAggiuntivi(Map<String, Object> data, LiferayPortletURL renderUrl) {
+		
+		renderUrl.setResourceID("/statiEsteri");
+		String url = renderUrl.toString();
+		data.put("listaStatiEsteriUrlKey", url);
+		
+		renderUrl.setResourceID("/province");
+		url = renderUrl.toString();
+		data.put("listaProvinceUrlKey", url);
+		
+		renderUrl.setResourceID("/comuni");
+		url = renderUrl.toString();
+		data.put("listaComuniUrlKey", url);
+		
+		renderUrl.setResourceID("/comuniEsteri");
+		url = renderUrl.toString();
+		data.put("listaComuniEsteriSelUrlKey", url);
 
-		data.put("listaStatiEsteri", "");
+		renderUrl.setResourceID("/titoliStudio");
+		url = renderUrl.toString();
+		data.put("listaTitoliStudioUrlKey", url);
 
-		data.put("listaProvince", "");
-
-		data.put("listaComuni", "");
-
-		data.put("listaComuniEsteri", "");
-
-		Map<String, String> titoliStudio = Arrays.stream(TitoloStudio.values()).collect(Collectors.toMap(TitoloStudio::getCodice, TitoloStudio::getDescrizione));
-		data.put("titoliStudio", "");
-		Map<String, String> statiCivili = Arrays.stream(StatoCivile.values()).collect(Collectors.toMap(titoloStudio -> Integer.toString(titoloStudio.getCodice()), StatoCivile::getDescrizione));
-		data.put("statiCivili", "");
-		Map<String, String> relazioniParentela = Arrays.stream(RelazioneParentela.values())
-				.collect(Collectors.toMap(relazioneParentele -> Integer.toString(relazioneParentele.getCodice()), RelazioneParentela::getDescrizione));
-
-		data.put("relazioniParentela", "");
+		renderUrl.setResourceID("/statiCivili");
+		url = renderUrl.toString();
+		data.put("listaStatiCiviliUrlKey", url);
+		
+		renderUrl.setResourceID("/relazioniParentela");
+		url = renderUrl.toString();
+		data.put("listaRelazioniParentelaUrlKey", url);
 	}
 
 }

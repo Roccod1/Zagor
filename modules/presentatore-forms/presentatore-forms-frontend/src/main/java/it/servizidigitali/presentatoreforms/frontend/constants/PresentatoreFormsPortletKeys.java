@@ -19,6 +19,13 @@ public class PresentatoreFormsPortletKeys {
 	public static final String SALVA_INVIA_ACTION_COMMAND = "/salvaInvia";
 	public static final String SCEGLI_COMPONENTE_ACTION_COMMAND = "/scegliComponente";
 	public static final String DOWNLOAD_ISTANZA_PDF_RESOURCE_COMMAND = "/downloadIstanza";
+	public static final String COMUNE_RESOURCE_COMMAND = "/listaComuni";
+	public static final String COMUNI_ESTERI_RESOURCE_COMMAND = "/listaComuniEsteri";
+	public static final String PROVINCE_RESOURCE_COMMAND = "/listaProvince";
+	public static final String RELAZIONI_PARENTELA_RESOURCE_COMMAND = "/listaRelazioniParentele";
+	public static final String STATI_CIVILI_RESOURCE_COMMAND = "/listaStatiCivili";
+	public static final String STATI_ESTERI_RESOURCE_COMMAND = "/listaStatiEsteri";
+	public static final String TITOLI_STUDIO_RESOURCE_COMMAND = "/listaTitoliStudio";
 
 	// JSP
 	public static final String JSP_SCEGLI_ALLEGATI = "/scegliAllegati.jsp";
