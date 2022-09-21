@@ -45,7 +45,7 @@ import it.servizidigitali.file.utility.service.FileService;
 @Component(name = "alfrescoFileServiceImpl", immediate = true, service = FileService.class, configurationPid = "it.servizidigitali.file.utility.configuration.AlfrescoCMISConfiguration")
 public class AlfrescoFileServiceImpl implements FileService {
 
-	private static final String ALFRESCO_CMIS_ATOM_REPOSITORY_ROOT_PATH_FORMAT = "/Sites/%s/documentLibrary";
+	private static final String ALFRESCO_CMIS_ATOM_REPOSITORY_ROOT_PATH_FORMAT = "/Siti/%s/documentLibrary";
 
 	private static final Log log = LogFactoryUtil.getLog(AlfrescoFileServiceImpl.class.getName());
 
@@ -62,9 +62,10 @@ public class AlfrescoFileServiceImpl implements FileService {
 		parameters.put(SessionParameter.USER, alfrescoCMISConfiguration.alfrescoCmisAtomUser());
 		parameters.put(SessionParameter.PASSWORD, alfrescoCMISConfiguration.alfrescoCmisAtomPassword());
 
-		// ECM connection settings, the following ATOMPUB_URL is for Alfresco 4.0 and 4.1
 		parameters.put(SessionParameter.ATOMPUB_URL, alfrescoCMISConfiguration.alfrescoCmisAtomUrl());
 		parameters.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
+		parameters.put(SessionParameter.COMPRESSION, "true");
+		parameters.put(SessionParameter.CACHE_TTL_OBJECTS, "0");
 	}
 
 	@Reference
