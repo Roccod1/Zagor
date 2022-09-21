@@ -32,6 +32,7 @@ public class PresentatoreFormsPortletKeys {
 	public static final String IMPOSSIBILE_RECUPERARE_RICHIESTA = "impossibile-recuperare-richiesta";
 	public static final String IMPOSSIBILE_RECUPERARE_SERVIZIO = "impossibile-recuperare-servizio";
 	public static final String IMPOSSIBILE_RECUPERARE_PROCEDURA = "impossibile-recuperare-procedura";
+	public static final String ERRORE_GENERICO = "error.generico";
 
 	// ATTRIBUTI
 	public static final String SELECT_COMPONENTI_NUCLEO_FAMILIARE = "selectComponentiNucleoFamiliare";

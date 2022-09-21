@@ -114,21 +114,19 @@ public class JasperReportPDFService implements PDFService {
 
 	@Reference
 	private VocabolariService vocabolariService;
-	
+
 	@Reference
 	private ImageLocalService imageLocalService;
 
 	@Override
-	public byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName,
-			Long idDestinazioneUso, String numeroBollo, PortletRequest portletRequest) throws PDFServiceException {
+	public byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, Long idDestinazioneUso,
+			String numeroBollo, PortletRequest portletRequest) throws PDFServiceException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		Image image = imageLocalService.getCompanyLogo(themeDisplay.getCompany().getLogoId());
 
-		
 		try {
-			
-			
+
 			long proceduraId = richiesta.getProceduraId();
 
 			List<TemplatePdf> templatesPdf = templatePdfLocalService.getTemplatePdfByProceduraId(proceduraId);
@@ -170,9 +168,9 @@ public class JasperReportPDFService implements PDFService {
 			addParametriAggiuntivi(param);
 
 			if (Validator.isNotNull(image)) {
-				 param.put(JR_PARAMETER_LOGO_COMUNE, image.getTextObj());
+				param.put(JR_PARAMETER_LOGO_COMUNE, image.getTextObj());
 			}
-			
+
 			// TODO destinazione uso
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(reportPrincipaleJasperReport, param, jsonDataSource);
@@ -198,13 +196,12 @@ public class JasperReportPDFService implements PDFService {
 	}
 
 	@Override
-	public byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName,
-			String numeroBollo, boolean isDelega, String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
-		
+	public byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, boolean isDelega,
+			String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
+
 		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		Image image = imageLocalService.getCompanyLogo(themeDisplay.getCompany().getLogoId());
 
-		
 		try {
 			long proceduraId = richiesta.getProceduraId();
 
@@ -246,11 +243,9 @@ public class JasperReportPDFService implements PDFService {
 
 			addParametriAggiuntivi(param);
 
-
-			 if (Validator.isNotNull(image)) {
-				 param.put(JR_PARAMETER_LOGO_COMUNE, image.getTextObj());
-			 }
-			
+			if (Validator.isNotNull(image)) {
+				param.put(JR_PARAMETER_LOGO_COMUNE, image.getTextObj());
+			}
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(reportPrincipaleJasperReport, param, jsonDataSource);
 

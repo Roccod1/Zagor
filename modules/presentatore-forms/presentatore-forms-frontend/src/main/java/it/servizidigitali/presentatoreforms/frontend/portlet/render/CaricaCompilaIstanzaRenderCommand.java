@@ -62,7 +62,7 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 		FormData formData = null;
 		AlpacaJsonStructure alpacaStructure = null;
 		String jsonDataBozza = null;
-		
+
 		Gson gson = new Gson();
 		try {
 			User currentUser = themeDisplay.getUser();
@@ -105,16 +105,16 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 				}
 
 			}
-			
+
 			// Sostituzione valore di data
 			String data = gson.toJson(alpacaStructure.getData());
 			JsonObject jsonData = gson.fromJson(data, JsonObject.class);
 			alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
-			
+
 			AlpacaUtil.convertiComponentiAlpacaStructure(alpacaStructure);
 			// Carica la view se presente
 			AlpacaUtil.loadView(alpacaStructure);
-			
+
 			renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 
 			return PresentatoreFormsPortletKeys.JSP_COMPILA_FORM;

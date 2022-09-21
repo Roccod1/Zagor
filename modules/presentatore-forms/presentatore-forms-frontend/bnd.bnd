@@ -37,7 +37,7 @@ Import-Package: \
   	!org.krysalis.*, \
   	!org.mozilla.javascript.*, \
   	!org.olap4j.*, \
-  	!org.w3c.*, \
+  	!org.w3c.dom.svg.*, \
   	*
   	
   	
