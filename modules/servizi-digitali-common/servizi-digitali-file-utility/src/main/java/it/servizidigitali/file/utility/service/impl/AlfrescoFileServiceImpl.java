@@ -1,5 +1,6 @@
 package it.servizidigitali.file.utility.service.impl;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -231,7 +232,9 @@ public class AlfrescoFileServiceImpl implements FileService {
 	}
 
 	private Folder getRootFolder(Organization organization, Session session) throws Exception {
-		String alfrescoCmisAtomRepositoryRootPath = String.format(ALFRESCO_CMIS_ATOM_REPOSITORY_ROOT_PATH_FORMAT, organization.getName());
+		String nomeOrganizzazione = organization.getName().toLowerCase();
+		nomeOrganizzazione = nomeOrganizzazione.replace(StringPool.SPACE, StringPool.DASH);
+		String alfrescoCmisAtomRepositoryRootPath = String.format(ALFRESCO_CMIS_ATOM_REPOSITORY_ROOT_PATH_FORMAT, nomeOrganizzazione);
 		return (Folder) session.getObjectByPath(alfrescoCmisAtomRepositoryRootPath);
 	}
 
