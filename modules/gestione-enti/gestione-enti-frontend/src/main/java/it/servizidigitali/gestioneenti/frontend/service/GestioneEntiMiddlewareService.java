@@ -16,7 +16,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -56,12 +56,17 @@ public class GestioneEntiMiddlewareService {
 	@Reference
 	private OrganizationLocalService organizationLocalService;
 
+	@Reference
+	private UserLocalService userLocalService;
+
 	private static final Log _log = LogFactoryUtil.getLog(GestioneEntiMiddlewareService.class);
 
-	// ritorna le pagine che e' possibile utilizzare per URI pubblica o URI guest
+	/**
+	 * Ritorna le pagine che e' possibile utilizzare per URI pubblica o URI guest
+	 */
 	public Map<String, List<Layout>> getListaPagineUtilizzabili(long organizationId, long servizioId, long companyId) throws Exception {
 
-		User defaultUser = UserLocalServiceUtil.getDefaultUser(companyId);
+		User defaultUser = userLocalService.getDefaultUser(companyId);
 		Organization organization = organizationLocalService.getOrganization(organizationId);
 		long groupId = organization.getGroup().getGroupId();
 
@@ -82,7 +87,7 @@ public class GestioneEntiMiddlewareService {
 		}
 
 		// ottengo la pagina parent
-		Layout parentLayout = layoutLocalService.fetchLayoutByFriendlyURL(groupId, false, GestioneEntiPortletKeys.SERVIZI_FRIENDLY_URL);
+		Layout parentLayout = layoutLocalService.getLayoutByFriendlyURL(groupId, false, GestioneEntiPortletKeys.SERVIZI_FRIENDLY_URL);
 
 		if (Validator.isNotNull(parentLayout)) {
 			// ottengo tutte le pagine dei servizi
