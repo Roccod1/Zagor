@@ -163,9 +163,6 @@ public class AlpacaPDFService implements PDFService {
 			
 			data.put("numeroBollo", numeroBolloDescrizione);
 			
-			addParametriAggiuntivi(data);
-
-			
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			try {
 				Template template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.certificatiAlpacaTemplate()), config);
@@ -234,7 +231,6 @@ public class AlpacaPDFService implements PDFService {
 			data.put("dettagliRichiesta", dettagliRichiesta);
 			data.put(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE,alpacaStructure);
 			
-			addParametriAggiuntivi(data);
 			
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			try {
@@ -269,26 +265,4 @@ public class AlpacaPDFService implements PDFService {
 		return pdfContent;
 	}
 	
-	private void addParametriAggiuntivi(Map<String, Object> data) {
-		List<StatoEstero> allStati = statoEsteroLocalService.getStatoEsteros(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-		data.put("listaStatiEsteri", allStati);
-
-		List<Provincia> allProvince = provinciaLocalService.getProvincias(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-		data.put("listaProvince", allProvince);
-
-		List<Comune> allComuni = comuneLocalService.getComunes(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-		data.put("listaComuni", allComuni);
-
-		List<ComuneEstero> allComuniEsteri = comuneEsteroLocalService.getComuneEsteros(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-		Map<String, String> comuniEsteri = allComuniEsteri.stream().collect(Collectors.toMap(comune -> Integer.toString(comune.getCodice()), ComuneEstero::getDenominazione));
-		data.put("listaComuniEsteri", comuniEsteri);
-		
-		Map<String, String> titoliStudio = Arrays.stream(TitoloStudio.values()).collect(Collectors.toMap(TitoloStudio::getCodice, TitoloStudio::getDescrizione));
-		data.put("titoliStudio", titoliStudio);
-		Map<String, String> statiCivili = Arrays.stream(StatoCivile.values()).collect(Collectors.toMap(titoloStudio -> Integer.toString(titoloStudio.getCodice()), StatoCivile::getDescrizione));
-		data.put("statiCivili", statiCivili);
-		Map<String, String> relazioniParentela = Arrays.stream(RelazioneParentela.values())
-				.collect(Collectors.toMap(relazioneParentele -> Integer.toString(relazioneParentele.getCodice()), RelazioneParentela::getDescrizione));
-		data.put("relazioniParentela", relazioniParentela);
-	}
 }
