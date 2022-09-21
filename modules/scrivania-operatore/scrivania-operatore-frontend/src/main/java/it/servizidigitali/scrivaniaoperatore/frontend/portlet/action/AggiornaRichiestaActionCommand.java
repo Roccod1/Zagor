@@ -42,6 +42,7 @@ public class AggiornaRichiestaActionCommand extends BaseMVCActionCommand {
 		MutableRenderParameters renderParameters = response.getRenderParameters();
 		renderParameters.setValue("mvcRenderCommandName", "/render/dettaglio");
 		renderParameters.setValue("id", String.valueOf(id));
+		renderParameters.setValue("isMain", String.valueOf(false));
 	}
 
 }
