@@ -51,6 +51,7 @@ dependencies {
 	compileOnly group: "xml-apis", name: "xml-apis", version: "1.4.01"
 	compileOnly project(":modules:saml:saml-api")
 	compileOnly project(":modules:saml:saml-persistence-api")
+	compileOnly project(":modules:gestione-enti:gestione-enti-api")
 }
 
 liferayOSGi {
