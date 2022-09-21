@@ -8,9 +8,11 @@
 
 <c:if test="${inCarico}">
 	<div class="row">
-		<button class="btn btn-primary">
-			<liferay-ui:message key="aggiungi-commento" />
-		</button>
+		<div class="col-12">
+			<button class="btn btn-primary">
+				<liferay-ui:message key="aggiungi-commento" />
+			</button>
+		</div>
 	</div>
 </c:if>
 
