@@ -540,53 +540,165 @@ public class IstanzaFormUtil {
 	}
 
 	/**
-	 * Returns the istanza form where richiestaId = &#63; or throws a <code>NoSuchIstanzaFormException</code> if it could not be found.
+	 * Returns all the istanza forms where richiestaId = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @return the matching istanza form
-	 * @throws NoSuchIstanzaFormException if a matching istanza form could not be found
+	 * @return the matching istanza forms
 	 */
-	public static IstanzaForm findByRichiestaId(long richiestaId)
-		throws it.servizidigitali.scrivaniaoperatore.exception.
-			NoSuchIstanzaFormException {
-
+	public static List<IstanzaForm> findByRichiestaId(long richiestaId) {
 		return getPersistence().findByRichiestaId(richiestaId);
 	}
 
 	/**
-	 * Returns the istanza form where richiestaId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 * Returns a range of all the istanza forms where richiestaId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>IstanzaFormModelImpl</code>.
+	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @return the matching istanza form, or <code>null</code> if a matching istanza form could not be found
+	 * @param start the lower bound of the range of istanza forms
+	 * @param end the upper bound of the range of istanza forms (not inclusive)
+	 * @return the range of matching istanza forms
 	 */
-	public static IstanzaForm fetchByRichiestaId(long richiestaId) {
-		return getPersistence().fetchByRichiestaId(richiestaId);
+	public static List<IstanzaForm> findByRichiestaId(
+		long richiestaId, int start, int end) {
+
+		return getPersistence().findByRichiestaId(richiestaId, start, end);
 	}
 
 	/**
-	 * Returns the istanza form where richiestaId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns an ordered range of all the istanza forms where richiestaId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>IstanzaFormModelImpl</code>.
+	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
+	 * @param start the lower bound of the range of istanza forms
+	 * @param end the upper bound of the range of istanza forms (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching istanza forms
+	 */
+	public static List<IstanzaForm> findByRichiestaId(
+		long richiestaId, int start, int end,
+		OrderByComparator<IstanzaForm> orderByComparator) {
+
+		return getPersistence().findByRichiestaId(
+			richiestaId, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the istanza forms where richiestaId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>IstanzaFormModelImpl</code>.
+	 * </p>
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param start the lower bound of the range of istanza forms
+	 * @param end the upper bound of the range of istanza forms (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @param useFinderCache whether to use the finder cache
-	 * @return the matching istanza form, or <code>null</code> if a matching istanza form could not be found
+	 * @return the ordered range of matching istanza forms
 	 */
-	public static IstanzaForm fetchByRichiestaId(
-		long richiestaId, boolean useFinderCache) {
+	public static List<IstanzaForm> findByRichiestaId(
+		long richiestaId, int start, int end,
+		OrderByComparator<IstanzaForm> orderByComparator,
+		boolean useFinderCache) {
 
-		return getPersistence().fetchByRichiestaId(richiestaId, useFinderCache);
+		return getPersistence().findByRichiestaId(
+			richiestaId, start, end, orderByComparator, useFinderCache);
 	}
 
 	/**
-	 * Removes the istanza form where richiestaId = &#63; from the database.
+	 * Returns the first istanza form in the ordered set where richiestaId = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
-	 * @return the istanza form that was removed
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching istanza form
+	 * @throws NoSuchIstanzaFormException if a matching istanza form could not be found
 	 */
-	public static IstanzaForm removeByRichiestaId(long richiestaId)
+	public static IstanzaForm findByRichiestaId_First(
+			long richiestaId, OrderByComparator<IstanzaForm> orderByComparator)
 		throws it.servizidigitali.scrivaniaoperatore.exception.
 			NoSuchIstanzaFormException {
 
-		return getPersistence().removeByRichiestaId(richiestaId);
+		return getPersistence().findByRichiestaId_First(
+			richiestaId, orderByComparator);
+	}
+
+	/**
+	 * Returns the first istanza form in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching istanza form, or <code>null</code> if a matching istanza form could not be found
+	 */
+	public static IstanzaForm fetchByRichiestaId_First(
+		long richiestaId, OrderByComparator<IstanzaForm> orderByComparator) {
+
+		return getPersistence().fetchByRichiestaId_First(
+			richiestaId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last istanza form in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching istanza form
+	 * @throws NoSuchIstanzaFormException if a matching istanza form could not be found
+	 */
+	public static IstanzaForm findByRichiestaId_Last(
+			long richiestaId, OrderByComparator<IstanzaForm> orderByComparator)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchIstanzaFormException {
+
+		return getPersistence().findByRichiestaId_Last(
+			richiestaId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last istanza form in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching istanza form, or <code>null</code> if a matching istanza form could not be found
+	 */
+	public static IstanzaForm fetchByRichiestaId_Last(
+		long richiestaId, OrderByComparator<IstanzaForm> orderByComparator) {
+
+		return getPersistence().fetchByRichiestaId_Last(
+			richiestaId, orderByComparator);
+	}
+
+	/**
+	 * Returns the istanza forms before and after the current istanza form in the ordered set where richiestaId = &#63;.
+	 *
+	 * @param istanzaFormId the primary key of the current istanza form
+	 * @param richiestaId the richiesta ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next istanza form
+	 * @throws NoSuchIstanzaFormException if a istanza form with the primary key could not be found
+	 */
+	public static IstanzaForm[] findByRichiestaId_PrevAndNext(
+			long istanzaFormId, long richiestaId,
+			OrderByComparator<IstanzaForm> orderByComparator)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchIstanzaFormException {
+
+		return getPersistence().findByRichiestaId_PrevAndNext(
+			istanzaFormId, richiestaId, orderByComparator);
+	}
+
+	/**
+	 * Removes all the istanza forms where richiestaId = &#63; from the database.
+	 *
+	 * @param richiestaId the richiesta ID
+	 */
+	public static void removeByRichiestaId(long richiestaId) {
+		getPersistence().removeByRichiestaId(richiestaId);
 	}
 
 	/**
@@ -597,6 +709,76 @@ public class IstanzaFormUtil {
 	 */
 	public static int countByRichiestaId(long richiestaId) {
 		return getPersistence().countByRichiestaId(richiestaId);
+	}
+
+	/**
+	 * Returns the istanza form where richiestaId = &#63; and formId = &#63; or throws a <code>NoSuchIstanzaFormException</code> if it could not be found.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param formId the form ID
+	 * @return the matching istanza form
+	 * @throws NoSuchIstanzaFormException if a matching istanza form could not be found
+	 */
+	public static IstanzaForm findByRichiestaIdFormId(
+			long richiestaId, long formId)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchIstanzaFormException {
+
+		return getPersistence().findByRichiestaIdFormId(richiestaId, formId);
+	}
+
+	/**
+	 * Returns the istanza form where richiestaId = &#63; and formId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param formId the form ID
+	 * @return the matching istanza form, or <code>null</code> if a matching istanza form could not be found
+	 */
+	public static IstanzaForm fetchByRichiestaIdFormId(
+		long richiestaId, long formId) {
+
+		return getPersistence().fetchByRichiestaIdFormId(richiestaId, formId);
+	}
+
+	/**
+	 * Returns the istanza form where richiestaId = &#63; and formId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param formId the form ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching istanza form, or <code>null</code> if a matching istanza form could not be found
+	 */
+	public static IstanzaForm fetchByRichiestaIdFormId(
+		long richiestaId, long formId, boolean useFinderCache) {
+
+		return getPersistence().fetchByRichiestaIdFormId(
+			richiestaId, formId, useFinderCache);
+	}
+
+	/**
+	 * Removes the istanza form where richiestaId = &#63; and formId = &#63; from the database.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param formId the form ID
+	 * @return the istanza form that was removed
+	 */
+	public static IstanzaForm removeByRichiestaIdFormId(
+			long richiestaId, long formId)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchIstanzaFormException {
+
+		return getPersistence().removeByRichiestaIdFormId(richiestaId, formId);
+	}
+
+	/**
+	 * Returns the number of istanza forms where richiestaId = &#63; and formId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param formId the form ID
+	 * @return the number of matching istanza forms
+	 */
+	public static int countByRichiestaIdFormId(long richiestaId, long formId) {
+		return getPersistence().countByRichiestaIdFormId(richiestaId, formId);
 	}
 
 	/**

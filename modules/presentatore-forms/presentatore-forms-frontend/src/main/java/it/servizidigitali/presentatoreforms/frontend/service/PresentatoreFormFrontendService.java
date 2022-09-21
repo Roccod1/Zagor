@@ -26,8 +26,10 @@ import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
+import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
@@ -53,10 +55,19 @@ public class PresentatoreFormFrontendService {
 
 	@Reference
 	private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
-	
+
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
 
+	@Reference
+	private IstanzaFormLocalService istanzaFormLocalService;
+
+	/**
+	 * Ritorna il servizio attuale sulla base della pagina in cui è in esecuzione la portlet.
+	 *
+	 * @param themeDisplay
+	 * @return
+	 */
 	public ServizioEnte getServizioEnteByPage(ThemeDisplay themeDisplay) {
 
 		Layout layout = themeDisplay.getLayout();
@@ -69,6 +80,13 @@ public class PresentatoreFormFrontendService {
 		return servizioEnte;
 	}
 
+	/**
+	 * Carica la procedura corrente (associata al servizio corrente).
+	 *
+	 * @param themeDisplay
+	 * @return
+	 * @throws PortalException
+	 */
 	public Procedura getCurrentProcedura(ThemeDisplay themeDisplay) throws PortalException {
 
 		Layout layout = themeDisplay.getLayout();
@@ -81,6 +99,12 @@ public class PresentatoreFormFrontendService {
 		return proceduraLocalService.getProceduraByServizioIdGroupIdAttiva(servizioEnte.getServizioId(), servizioEnte.getGroupId(), true);
 	}
 
+	/**
+	 * Ritorna il form principale associato alla procedura passata in input.
+	 *
+	 * @param proceduraId
+	 * @return
+	 */
 	public Form getFormPrincipaleProcedura(long proceduraId) {
 		try {
 			List<ProceduraForm> listaProceduraFormProcedura = proceduraFormLocalService.getListaProceduraFormProcedura(proceduraId);
@@ -100,26 +124,33 @@ public class PresentatoreFormFrontendService {
 		}
 		return null;
 	}
-	
-	public void deleteRichiesteBozzaUtente(String codiceFiscale, long proceduraId) {
+
+	/**
+	 * Elimina la richiesta in bozza associata all'utente.
+	 *
+	 * @param screenName
+	 * @param proceduraId
+	 */
+	public void deleteRichiesteBozzaUtente(String screenName, long proceduraId) {
 		RichiestaFilters richiestaFilters = new RichiestaFilters();
 		List<Richiesta> listaRichiesteBozza = new ArrayList<Richiesta>();
 
-		//TODO: Ottimizzare utilizzando il nuovo metodo per recuperare le richieste
+		// TODO: Ottimizzare utilizzando il nuovo metodo per recuperare le richieste
 		Set<Long> procedureIds = new HashSet<>();
 		procedureIds.add(proceduraId);
-		richiestaFilters.setCodiceFiscale(codiceFiscale);
+		richiestaFilters.setCodiceFiscale(screenName);
 		richiestaFilters.setProcedureIds(procedureIds);
 		richiestaFilters.setTipo(StatoRichiesta.BOZZA.name());
-		
+
 		listaRichiesteBozza = richiestaLocalService.search(richiestaFilters, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-		
-		if(Validator.isNotNull(listaRichiesteBozza) && !listaRichiesteBozza.isEmpty()) {
-			for(Richiesta richiesta : listaRichiesteBozza) {
-				
+
+		if (Validator.isNotNull(listaRichiesteBozza) && !listaRichiesteBozza.isEmpty()) {
+			for (Richiesta richiesta : listaRichiesteBozza) {
+
 				try {
 					richiestaLocalService.deleteRichiesta(richiesta.getRichiestaId());
-				}catch(Exception e) {
+				}
+				catch (Exception e) {
 					log.error("Impossibile eliminare la richiesta con ID : " + richiesta.getRichiestaId());
 				}
 
@@ -127,5 +158,29 @@ public class PresentatoreFormFrontendService {
 		}
 	}
 
+	/**
+	 * Ritorna la richiesta in bozza associata all'utente, se esiste.
+	 *
+	 * @param screenName
+	 * @param proceduraId
+	 * @return
+	 */
+	public Richiesta getRichiestaBozza(String screenName, long proceduraId) {
+		List<Richiesta> listaRichieste = richiestaLocalService.getRichiesteByCodiceFiscaleStatoProceduraId(screenName, StatoRichiesta.BOZZA.name(), proceduraId);
+		if (Validator.isNotNull(listaRichieste) && !listaRichieste.isEmpty()) {
+			return listaRichieste.get(0);
+		}
+		return null;
 
+	}
+
+	/**
+	 *
+	 * @param richiestaId
+	 * @param formId
+	 * @return
+	 */
+	public IstanzaForm getIstanzaFormRichiesta(long richiestaId, long formId) {
+		return istanzaFormLocalService.getIstanzaFormByRichiestaIdFormId(richiestaId, formId);
+	}
 }

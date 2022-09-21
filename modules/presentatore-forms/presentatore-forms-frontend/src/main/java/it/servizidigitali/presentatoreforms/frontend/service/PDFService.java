@@ -1,6 +1,7 @@
 package it.servizidigitali.presentatoreforms.frontend.service;
 
-import com.liferay.portal.kernel.theme.ThemeDisplay;
+
+import javax.portlet.PortletRequest;
 
 import it.servizidigitali.presentatoreforms.frontend.exception.PDFServiceException;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
@@ -26,7 +27,7 @@ public interface PDFService {
 	 * @throws PDFServiceException
 	 */
 	byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName, Long idDestinazioneUso,
-			String numeroBollo, ThemeDisplay themeDisplay) throws PDFServiceException;
+			String numeroBollo, PortletRequest portletRequest) throws PDFServiceException;
 
 	/**
 	 *
@@ -43,7 +44,7 @@ public interface PDFService {
 	 * @return
 	 * @throws PDFServiceException
 	 */
-	byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName, Long idDestinazioneUso,
-			String numeroBollo, boolean isDelega, String dettagliRichiesta, ThemeDisplay themeDisplay) throws PDFServiceException;
+	byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName,
+			String numeroBollo, boolean isDelega, String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException;
 
 }

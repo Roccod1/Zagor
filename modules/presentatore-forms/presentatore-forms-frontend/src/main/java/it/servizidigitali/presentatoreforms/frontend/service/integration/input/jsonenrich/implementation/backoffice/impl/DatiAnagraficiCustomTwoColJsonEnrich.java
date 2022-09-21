@@ -22,6 +22,7 @@ import it.servizidigitali.common.model.StatoEstero;
 import it.servizidigitali.common.service.ComuneEsteroLocalService;
 import it.servizidigitali.common.service.ComuneLocalService;
 import it.servizidigitali.common.service.StatoEsteroLocalService;
+import it.servizidigitali.common.service.StatoEsteroLocalServiceUtil;
 import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.implementation.backoffice.DatiAnagraficiJsonEnrich;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.EnrichmentModel;
@@ -144,6 +145,7 @@ public class DatiAnagraficiCustomTwoColJsonEnrich implements DatiAnagraficiJsonE
 								// la
 								// descrizione che mi arriva dal BO
 								if (statoEsteroByCodiceOrDenominazione == null || Validator.isNotNull(statoEsteroByCodiceOrDenominazione.getDenominazione())) {
+									statoEsteroByCodiceOrDenominazione = StatoEsteroLocalServiceUtil.createStatoEstero(0);
 									statoEsteroByCodiceOrDenominazione.setDenominazione(componente.getDescrizioneStatoEsteroNascita());
 								}
 

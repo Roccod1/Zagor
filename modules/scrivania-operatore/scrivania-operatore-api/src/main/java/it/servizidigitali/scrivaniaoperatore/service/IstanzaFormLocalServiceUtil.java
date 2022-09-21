@@ -257,6 +257,13 @@ public class IstanzaFormLocalServiceUtil {
 		return getService().getIstanzaForm(istanzaFormId);
 	}
 
+	public static IstanzaForm getIstanzaFormByRichiestaIdFormId(
+		long richiestaId, long formId) {
+
+		return getService().getIstanzaFormByRichiestaIdFormId(
+			richiestaId, formId);
+	}
+
 	/**
 	 * Returns the istanza form matching the UUID and group.
 	 *

@@ -97,14 +97,12 @@ console.log("dentro scegli allegati");
 										<%-- FIXME <liferay-journal:journal-article articleId="${scegliAllegatiDescription}" languageId="<%=themeDisplay.getLanguageId()%>" groupId="<%=themeDisplay.getScopeGroup().getGroupId()%>"/> --%>
 										
 										<div class="form-actions text-center">
-											<portlet:resourceURL id="downloadIstanza" var="downloadIstanzaUrl">
-												<portlet:param name="idServizio" value="${idServizio}" />
-												<portlet:param name="idIstanzaForm" value="${idRichiesta}" />
-											</portlet:resourceURL>
-											<button class="btn btn-primary" type="button" onclick="location.href='${downloadIstanzaUrl}'">
-												<i class="fa fa-download marginright10" aria-hidden="true"></i>
-												<liferay-ui:message key="download.istanza.dafirmare" />
-											</button>
+											<portlet:resourceURL id="/downloadIstanza" var="downloadIstanzaUrl"/>
+											<a href="${downloadIstanzaUrl }" >Download</a>
+<%-- 											<button class="btn btn-primary" type="button" href="${downloadIstanzaUrl}"> --%>
+<!-- 												<i class="fa fa-download marginright10" aria-hidden="true"></i> -->
+<%-- 												<liferay-ui:message key="download.istanza.dafirmare" /> --%>
+<!-- 											</button> -->
 										</div>
 										
 										<label class="control-label" for="uploadFileFirmato"><liferay-ui:message key="upload.documento.firmato" /> (<liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione" arguments="${uploadFileMaxSizeLabel}"/>): </label>
