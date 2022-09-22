@@ -9,10 +9,13 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import java.util.ArrayList;
 
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.Context;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.pagination.Page;
 
 /**
@@ -32,6 +35,10 @@ extends BaseRichiesteServizioResourceImpl {
 		for(int i = 0; i < 10; i++) {
 			RichiestaServizio r = new RichiestaServizio();
 			r.setId(Long.valueOf(i));
+			
+			if(Validator.isNotNull(user)) {
+				r.setStato(user.getScreenName());
+			}
 			
 			l.add(r);
 		}
@@ -77,5 +84,8 @@ extends BaseRichiesteServizioResourceImpl {
 		r.setStato(updateRichiestaServizioRequest.getStato());
 		return r;
 	}
+	
+	@Context
+	private User user;
 
 }

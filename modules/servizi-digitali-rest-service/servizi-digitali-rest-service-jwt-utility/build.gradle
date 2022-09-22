@@ -1,0 +1,6 @@
+dependencies {
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+	
+	compileInclude group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '8.14.1'
+	
+}

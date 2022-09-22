@@ -1,5 +1,21 @@
 package it.servizidigitali.chatbot.frontend.portlet;
 
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+import javax.portlet.Portlet;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletException;
+import javax.portlet.PortletSession;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import javax.servlet.http.HttpServletRequest;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,23 +29,10 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
-
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
-
-import javax.portlet.Portlet;
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletException;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.chatbot.frontend.configuration.ChatbotEnteConfiguration;
 import it.servizidigitali.chatbot.frontend.constants.ChatbotFrontendPortletKeys;
@@ -37,11 +40,12 @@ import it.servizidigitali.chatbot.frontend.constants.CustomAttribute;
 import it.servizidigitali.chatbot.frontend.model.ChatbotConfigurationModel;
 import it.servizidigitali.chatbot.frontend.service.ChatbotFrontendService;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
+import it.servizidigitali.restservice.jwt.utility.api.JwtUtilityService;
 
 /**
  * @author pindi
  */
-@Component(//
+@Component(
 		configurationPid = "it.servizidigitali.chatbot.frontend.configuration.ChatbotEnteConfiguration", //
 		immediate = true, //
 		property = { //
@@ -54,13 +58,15 @@ import it.servizidigitali.gestioneenti.model.ServizioEnte;
 				"javax.portlet.name=" + ChatbotFrontendPortletKeys.CHATBOTFRONTEND, //
 				"javax.portlet.resource-bundle=content.Language", //
 				"javax.portlet.security-role-ref=power-user,user",//
-		}, //
+		}, 
 		service = Portlet.class//
-) //
+) 
 public class ChatbotFrontendPortlet extends MVCPortlet {
 
 	public static final String NODEJS_SERVER_PATH = "/node";
 
+	public static final String USER_TOKEN_SESSION_ATTRIBUTE_NAME = "userToken";
+	
 	private final static Log log = LogFactoryUtil.getLog(ChatbotFrontendPortlet.class);
 
 	@Reference
@@ -254,27 +260,33 @@ public class ChatbotFrontendPortlet extends MVCPortlet {
 			// }
 			// }
 
+			
+			HttpServletRequest httpServletRequest = PortalUtil.getHttpServletRequest(renderRequest);
+			
 			// Calcolo e setting User-Token come custom attributes
 			if (themeDisplay.isSignedIn()) {
-				// PortletSession portletSession = renderRequest.getPortletSession();
-				// if (portletSession.getAttribute(USER_TOKEN_SESSION_ATTRIBUTE_NAME) != null) {
-				// userToken = (String)
-				// portletSession.getAttribute(USER_TOKEN_SESSION_ATTRIBUTE_NAME);
-				// }
-				//
-				// if (jwtTokenUtil.isTokenExpired(userToken)) {
-				// try {
-				// List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-				// User userForJwtAccessToken = new User(themeDisplay.getUser().getScreenName(), "",
-				// showPopup, showPopup, showPopup, showPopup, authorities);
-				// // Aggiunta User-Token
-				// userToken = jwtTokenUtil.generateToken(userForJwtAccessToken);
-				// portletSession.setAttribute(USER_TOKEN_SESSION_ATTRIBUTE_NAME, userToken);
-				// }
-				// catch (Exception e) {
-				// log.error("getChatbotConfigurationModel :: " + e.getMessage(), e);
-				// }
-				// }
+				
+//					RichiesteServizioResource richiesteServizioResource = RichiesteServizioResource.builder()
+//							.header("Authorization", "Bearer " + jwtToken)
+//							.build();
+				
+				PortletSession portletSession = renderRequest.getPortletSession();
+				if (portletSession.getAttribute(USER_TOKEN_SESSION_ATTRIBUTE_NAME) != null) {
+					userToken = (String) portletSession.getAttribute(USER_TOKEN_SESSION_ATTRIBUTE_NAME);
+				}
+				
+				if(Validator.isNotNull(userToken)) {
+					try {
+						_jwtUtilityService.verifyJwt(userToken);
+					}catch (Exception e) {
+						userToken = _jwtUtilityService.getJWTUserToken(httpServletRequest);
+					}
+				} else {
+					userToken = _jwtUtilityService.getJWTUserToken(httpServletRequest);
+				}
+				
+				portletSession.setAttribute(USER_TOKEN_SESSION_ATTRIBUTE_NAME, userToken);
+				
 			}
 
 			chatbotConfigurationModel.setActive(chatbotEnable);
@@ -351,6 +363,10 @@ public class ChatbotFrontendPortlet extends MVCPortlet {
 		_configurationProvider = configurationProvider;
 	}
 
+	@Reference(unbind = "-")
+	private JwtUtilityService _jwtUtilityService;
+	
+	
 	private ConfigurationProvider _configurationProvider;
 
 }

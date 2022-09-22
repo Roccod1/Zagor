@@ -1,0 +1,10 @@
+Bundle-Name: servizi-digitali-rest-service-jwt-utility
+Bundle-SymbolicName: it.servizidigitali.restservice.jwt.utility
+Bundle-Version: 1.0.0
+Import-Package: \
+	!com.google.crypto.tink.*,\
+	!org.bouncycastle.*,\
+	*
+-fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning
+Export-Package: it.servizidigitali.restservice.jwt.utility.api,\
+	it.servizidigitali.restservice.jwt.utility.exception
