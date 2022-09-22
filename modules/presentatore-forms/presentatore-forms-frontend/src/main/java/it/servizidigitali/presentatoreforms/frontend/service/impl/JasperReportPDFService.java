@@ -168,7 +168,8 @@ public class JasperReportPDFService implements PDFService {
 			addParametriAggiuntivi(param);
 
 			if (Validator.isNotNull(image)) {
-				param.put(JR_PARAMETER_LOGO_COMUNE, image.getTextObj());
+				ByteArrayInputStream logoComune = new ByteArrayInputStream(image.getTextObj());
+				param.put(JR_PARAMETER_LOGO_COMUNE, logoComune);
 			}
 
 			// TODO destinazione uso
@@ -244,7 +245,8 @@ public class JasperReportPDFService implements PDFService {
 			addParametriAggiuntivi(param);
 
 			if (Validator.isNotNull(image)) {
-				param.put(JR_PARAMETER_LOGO_COMUNE, image.getTextObj());
+				ByteArrayInputStream logoComune = new ByteArrayInputStream(image.getTextObj());
+				param.put(JR_PARAMETER_LOGO_COMUNE, logoComune);
 			}
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(reportPrincipaleJasperReport, param, jsonDataSource);

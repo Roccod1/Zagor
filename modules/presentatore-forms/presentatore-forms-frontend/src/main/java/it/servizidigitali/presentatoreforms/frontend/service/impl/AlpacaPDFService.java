@@ -19,24 +19,17 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
-import javax.portlet.PortletURL;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import it.servizidigitali.backoffice.integration.enums.RelazioneParentela;
-import it.servizidigitali.backoffice.integration.enums.StatoCivile;
-import it.servizidigitali.backoffice.integration.enums.TitoloStudio;
 import it.servizidigitali.common.service.ComuneEsteroLocalService;
 import it.servizidigitali.common.service.ComuneLocalService;
 import it.servizidigitali.common.service.ProvinciaLocalService;
