@@ -29,6 +29,7 @@ import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonOption
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonSchemaStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
+import it.servizidigitali.presentatoreforms.frontend.util.model.Placeholders;
 
 public class AlpacaUtil {
 
@@ -174,7 +175,7 @@ public class AlpacaUtil {
 		}
 		return gson.toJsonTree(jsonSchema).getAsJsonObject();
 	}
-	
+
 	/**
 	 * Converte i componenti dell'AlpacaJsonStructure in JsonObject
 	 *
@@ -314,13 +315,15 @@ public class AlpacaUtil {
 	 * @throws JSONException
 	 */
 	public static AlpacaJsonStructure loadView(final AlpacaJsonStructure alpacaStructure) throws JSONException {
+
+		Gson gson = new Gson();
 		/* se la view è null, setto la view di default ovvero "locale": "it_IT"; */
 		if (alpacaStructure.getView() == null || (alpacaStructure.getView() != null && "".equals(alpacaStructure.getView()))) {
 			LinkedHashMap<String, String> view = new LinkedHashMap<>();
 			view.put("locale", "it_IT");
 			alpacaStructure.setView(view);
 		}
-		alpacaStructure.setView(AlpacaUtil.parseView(JSONFactoryUtil.createJSONSerializer().serialize(alpacaStructure.getView())));
+		alpacaStructure.setView(AlpacaUtil.parseView(gson.toJson(alpacaStructure.getView())));
 		return alpacaStructure;
 	}
 
