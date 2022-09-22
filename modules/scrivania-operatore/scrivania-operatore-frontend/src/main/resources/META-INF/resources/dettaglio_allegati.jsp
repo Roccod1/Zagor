@@ -39,6 +39,8 @@
     	<liferay-ui:search-container-column-text name="#" value="${i + 1}" />
     	<liferay-ui:search-container-column-text name="descrizione" value="${elem.descrizione}" />
     	<liferay-ui:search-container-column-text name="nome-file" value="${elem.nomeFile}" />
+    	<liferay-ui:search-container-column-text name="inserito-da" value="${elem.nomeOperatore}" />
+    	<liferay-ui:search-container-column-text name="vis-richied" value="${elem.visibileAlCittadino}" translate="true" />
     	<liferay-ui:search-container-column-text name="dimensione" value="${elem.dimensione}" />
     	<liferay-ui:search-container-column-jsp name="azioni" path="/dettaglio_allegati_azioni.jsp" />
 	</liferay-ui:search-container-row>

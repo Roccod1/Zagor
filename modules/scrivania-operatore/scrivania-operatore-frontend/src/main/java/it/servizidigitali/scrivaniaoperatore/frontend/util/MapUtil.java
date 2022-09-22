@@ -8,6 +8,7 @@ import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 
 import it.servizidigitali.common.utility.UtenteUtility;
@@ -40,6 +41,8 @@ public class MapUtil {
 	private DLFileEntryLocalService dlFileEntryLocalService;
 	@Reference
 	private FileService fileService;
+	@Reference
+	private UserLocalService userLocalService;
 	
 	public RichiestaDTO mapRichiesta(long companyId, Richiesta richiesta) {
 		RichiestaDTO dto = new RichiestaDTO();
@@ -107,6 +110,8 @@ public class MapUtil {
 		allegato.setNomeFile(fileEntry.getFileName());
 		allegato.setDescrizione(fileEntry.getDescription());
 		allegato.setDimensione(fileService.getHumanReadableSize(fileEntry.getSize()));
+		allegato.setVisibileAlCittadino(ar.getVisibile());
+		allegato.setNomeOperatore(userLocalService.fetchUser(ar.getUserId()).getFullName());
 		
 		//TODO usare service o spostare in un nostro service?
 		String url = "/documents/" + fileEntry.getRepositoryId() + 
