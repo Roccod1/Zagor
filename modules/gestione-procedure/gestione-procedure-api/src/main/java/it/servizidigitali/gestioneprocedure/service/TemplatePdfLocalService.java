@@ -214,11 +214,6 @@ public interface TemplatePdfLocalService
 	public TemplatePdf fetchTemplatePdfByUuidAndCompanyId(
 		String uuid, long companyId);
 
-	public List<TemplatePdf> findByProceduraId(long proceduraId);
-
-	public List<TemplatePdf> findByProceduraIdAndAttivo(
-		long proceduraId, boolean attivo);
-
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
@@ -254,6 +249,13 @@ public interface TemplatePdfLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public TemplatePdf getTemplatePdf(long templatePdfId)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<TemplatePdf> getTemplatePdfByProceduraId(long proceduraId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<TemplatePdf> getTemplatePdfByProceduraIdAndAttivo(
+		long proceduraId, boolean attivo);
 
 	/**
 	 * Returns the template pdf with the matching UUID and company.

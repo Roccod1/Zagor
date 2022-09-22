@@ -65,6 +65,10 @@
 		<finder name="Attivo" return-type="Collection">
 			<finder-column name="attivo" />
 		</finder>
+		
+<!-- 		<finder name="Tipologia" return-type="Collection"> -->
+<!-- 			<finder-column name="tipologiaId" /> -->
+<!-- 		</finder> -->
 	</entity>
 
 	<entity 

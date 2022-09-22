@@ -2,7 +2,10 @@ package it.servizidigitali.gestioneprocedure.frontend.portlet.render;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -11,6 +14,8 @@ import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -58,6 +63,9 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand {
 	@Reference
 	private ProceduraLocalService proceduraLocalService;
 
+	@Reference
+	private GroupLocalService groupLocalService;
+
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
@@ -76,13 +84,27 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand {
 		Form formPrincipale = null;
 
 		try {
-			listaServizi = gestioneProcedureMiddlewareService.getListaServiziAssociabiliProcedura(themeDisplay.getSiteGroup().getOrganizationId(), themeDisplay.getSiteGroupId(), idProcedura);
-			listaProcessi = processoLocalService.getListaProcessiByOrganizationAttivo(themeDisplay.getSiteGroupId(), true);
-			listaFormPrincipali = formLocalService.getListaFormByOrganizationPrincipale(themeDisplay.getSiteGroupId(), true);
-			listaFormIntegrativi = formLocalService.getListaFormByOrganizationPrincipale(themeDisplay.getSiteGroupId(), false);
+			long siteGroupId = themeDisplay.getSiteGroupId();
+
+			// Caricamento liste oggetti propri del sito corrente
+			listaServizi = gestioneProcedureMiddlewareService.getListaServiziAssociabiliProcedura(themeDisplay.getSiteGroup().getOrganizationId(), siteGroupId, idProcedura);
+			List<Processo> listaProcessiOrganization = processoLocalService.getListaProcessiByOrganizationAttivo(siteGroupId, true);
+			List<Form> listaFormPrincipaliOrganization = formLocalService.getListaFormByOrganizationPrincipale(siteGroupId, true);
+			List<Form> listaFormIntegrativiOrganization = formLocalService.getListaFormByOrganizationPrincipale(siteGroupId, false);
+
+			// Caricamento liste oggetti sito principale
+			Group globalGroup = groupLocalService.getGroup(themeDisplay.getCompanyId(), GroupConstants.GUEST);
+			long globalGroupId = globalGroup.getGroupId();
+			List<Processo> listaProcessiGlobal = processoLocalService.getListaProcessiByOrganizationAttivo(globalGroupId, true);
+			List<Form> listaFormPrincipaliGlobal = formLocalService.getListaFormByOrganizationPrincipale(globalGroupId, true);
+			List<Form> listaFormIntegrativiGlobal = formLocalService.getListaFormByOrganizationPrincipale(globalGroupId, false);
+
+			listaProcessi = Stream.concat(listaProcessiOrganization.stream(), listaProcessiGlobal.stream()).collect(Collectors.toList());
+			listaFormPrincipali = Stream.concat(listaFormPrincipaliOrganization.stream(), listaFormPrincipaliGlobal.stream()).collect(Collectors.toList());
+			listaFormIntegrativi = Stream.concat(listaFormIntegrativiOrganization.stream(), listaFormIntegrativiGlobal.stream()).collect(Collectors.toList());
 		}
 		catch (Exception e) {
-			_log.error(e.getMessage());
+			_log.error(e.getMessage(), e);
 		}
 
 		if (idProcedura > 0) {

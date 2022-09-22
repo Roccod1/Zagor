@@ -2,7 +2,6 @@
 
 <portlet:renderURL var="caricaCompilaIstanzaUrl">
 		<portlet:param name="mvcRenderCommandName" value="/caricaCompilaIstanza" />
-		<portlet:param name="richiestaId" value="${richiestaId}" />
 </portlet:renderURL>
 
 <aui:row>

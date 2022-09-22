@@ -12,7 +12,6 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -35,6 +34,7 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 	private static final Log log = LogFactoryUtil.getLog(DocumentLibraryFileServiceImpl.class.getName());
 
 	private static final String DL_SITE_REQUEST_MAIN_FOLDER_NAME = "RICHIESTE_SERVIZIO";
+	private static final String DL_SITE_PRIVATE_USER_MAIN_FOLDER_NAME = "FILE_PRIVATI_UTENTE";
 
 	@Reference
 	private DLAppService dlAppService;
@@ -43,7 +43,7 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 	private UserLocalService userLocalService;
 
 	@Override
-	public long saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, InputStream inputStream, String mimeType, long userId, long groupId)
+	public String saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, InputStream inputStream, String mimeType, long userId, long groupId)
 			throws FileServiceException {
 
 		try {
@@ -80,7 +80,7 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 				if (codiceServizioFolder != null) {
 					FileEntry addFileEntry = dlAppService.addFileEntry(null, defaultRepoId, codiceServizioFolder.getFolderId(), nomeFile, mimeType, titolo, null, descrizione, null, inputStream,
 							inputStream.available(), null, null, serviceContext);
-					return addFileEntry.getFileEntryId();
+					return String.valueOf(addFileEntry.getFileEntryId());
 				}
 			}
 		}
@@ -88,102 +88,25 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 			log.error("saveRequestFile :: " + e.getMessage(), e);
 			throw new FileServiceException("saveRequestFile :: errore durante il salvataggio del file '" + nomeFile + "' : " + e.getMessage(), e);
 		}
-		return 0;
-	}
-	
-	
-	@Override
-	public long saveTemplateAllegato(InputStream fileCaricato, String fileNameModello, long formId, long userId, long groupId) throws Exception{
-		
-		long defaultRepoId = DLFolderConstants.getDataRepositoryId(groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
-		
-		Folder cartellaAllegatiForm = null;
-		long idAllegatoCaricato = 0;
-		long folderTemplateId = 0;
-		long folderTemplateRepositoryId = 0;
-		
-		Folder folderConfigurazionePiattaforma = null;
-		Folder folderForm = null;
-		Folder folderTemplate = null;
-		
-		Folder folderTemplateNuova = null;
-		
-		ServiceContext serviceContext = new ServiceContext();
-		serviceContext.setScopeGroupId(groupId);
-		serviceContext.setUserId(userId);
-		serviceContext.setAddGroupPermissions(true);
-		
-		
-		if(Validator.isNotNull(fileCaricato)) {
-						
-			try {
-				folderConfigurazionePiattaforma = dlAppService.getFolder(groupId,
-						DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
-						"Configurazione Piattaforma");
-				
-				folderForm = dlAppService.getFolder(defaultRepoId, folderConfigurazionePiattaforma.getFolderId(),
-						"Form");
-				
-				folderTemplate = dlAppService.getFolder(defaultRepoId, folderForm.getFolderId(),"Template");
-				
-			}catch(NoSuchFolderException e) {
-				log.info("Cartella di configurazione form non presente, creazione!");
-				
-				Folder folderConfigurazionePiattaformaNuova = dlAppService.addFolder(defaultRepoId,
-						DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Piattaforma",
-						"Configurazione Piattaforma", serviceContext);
-				
-				Folder folderFormNuova = dlAppService.addFolder(defaultRepoId, folderConfigurazionePiattaformaNuova.getFolderId(), "Form", "Form", serviceContext);
-				
-				folderTemplateNuova = dlAppService.addFolder(defaultRepoId,
-						folderFormNuova.getFolderId(), "Template",
-						"Template", serviceContext);
-			}
-			
-			if(Validator.isNull(folderTemplate)) {
-				folderTemplateId = folderTemplateNuova.getFolderId();
-				folderTemplateRepositoryId = folderTemplateNuova.getRepositoryId();
-			}else {
-				folderTemplateId = folderTemplate.getFolderId();
-				folderTemplateRepositoryId = folderTemplate.getRepositoryId();
-			}
-			
-			try {
-				Folder cartellaForm = dlAppService.getFolder(defaultRepoId, folderTemplateId, String.valueOf(formId));		
-				FileEntry allegatoCaricato = dlAppService.addFileEntry(null, defaultRepoId, cartellaForm.getFolderId(), fileNameModello , null, fileNameModello, null, String.valueOf(formId), null, fileCaricato, fileCaricato.available(), null, null, serviceContext);
-				idAllegatoCaricato = allegatoCaricato.getFileEntryId();
-			}catch(NoSuchFolderException e) {
-				log.info("Cartella allegati per form con ID " + formId + " non presente a sistema,creazione");
-				cartellaAllegatiForm = dlAppService.addFolder(
-						folderTemplateRepositoryId, folderTemplateId, String.valueOf(formId),
-						String.valueOf(formId), serviceContext);
-				FileEntry allegatoCaricato = dlAppService.addFileEntry(null, groupId, cartellaAllegatiForm.getFolderId(), fileNameModello , null, fileNameModello, null, String.valueOf(formId), null, fileCaricato, fileCaricato.available(), null, null, serviceContext);
-				idAllegatoCaricato = allegatoCaricato.getFileEntryId();
-			}
-			
-		}
-		
-		
-		
-		return idAllegatoCaricato;
+		return null;
 	}
 
 	@Override
-	public InputStream getRequestFileContent(String nomeFile, long folderId, long groupId) throws FileServiceException {
+	public InputStream getRequestFileContent(String fileId, long groupId) throws FileServiceException {
 		try {
-			FileEntry fileEntry = dlAppService.getFileEntry(groupId, folderId, nomeFile);
+			FileEntry fileEntry = dlAppService.getFileEntry(Long.parseLong(fileId));
 			return fileEntry.getContentStream();
 		}
 		catch (PortalException e) {
 			log.error("getRequestFileContent :: " + e.getMessage(), e);
-			throw new FileServiceException("getRequestFileContent :: errore durante il caricamento del file '" + nomeFile + "' : " + e.getMessage(), e);
+			throw new FileServiceException("getRequestFileContent :: errore durante il caricamento del file '" + fileId + "' : " + e.getMessage(), e);
 		}
 	}
 
 	@Override
-	public void deleteRequestFile(long fileEntryId) throws FileServiceException {
+	public void deleteRequestFile(String fileId, long groupId) throws FileServiceException {
 		try {
-			dlAppService.deleteFileEntry(fileEntryId);
+			dlAppService.deleteFileEntry(Long.parseLong(fileId));
 		}
 		catch (PortalException e) {
 			log.error("deleteRequestFile :: " + e.getMessage(), e);
@@ -192,101 +115,72 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 	}
 
 	@Override
-	public List<File> getFolderFiles(long folderId, long groupId) throws FileServiceException {
+	public List<File> getUserFolderFiles(long userId, long groupId) throws FileServiceException {
 		try {
-			List<FileEntry> fileEntries = dlAppService.getFileEntries(groupId, folderId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+			long defaultRepoId = DLFolderConstants.getDataRepositoryId(groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
+
+			ServiceContext serviceContext = new ServiceContext();
+			serviceContext.setScopeGroupId(groupId);
+			serviceContext.setUserId(userId);
+			serviceContext.setAddGroupPermissions(true);
+
+			User user = userLocalService.getUser(userId);
+
+			Folder filePrivatiUtenteFolder = dlAppService.getFolder(defaultRepoId, 0L, DL_SITE_PRIVATE_USER_MAIN_FOLDER_NAME);
+
+			Folder codiceFiscaleFolder = null;
+			try {
+				codiceFiscaleFolder = dlAppService.getFolder(defaultRepoId, filePrivatiUtenteFolder.getFolderId(), user.getScreenName().toUpperCase());
+			}
+			catch (NoSuchFolderException e) {
+				log.warn("getUserFolderFiles :: folder CF non esistente: " + e.getMessage());
+			}
+			if (codiceFiscaleFolder == null) {
+				return null;
+			}
+
+			List<FileEntry> fileEntries = dlAppService.getFileEntries(groupId, codiceFiscaleFolder.getFolderId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 			if (fileEntries != null && !fileEntries.isEmpty()) {
 				List<File> files = new ArrayList<File>();
 				for (FileEntry fileEntry : fileEntries) {
-
-					File file = new File();
-					file.setNome(fileEntry.getFileName());
-					file.setInputStream(fileEntry.getContentStream());
-					file.setDescrizione(fileEntry.getDescription());
-					file.setEstensione(fileEntry.getExtension());
-					file.setMimeType(fileEntry.getMimeType());
+					File file = getFile(fileEntry);
 					files.add(file);
 				}
 				return files;
 			}
 		}
 		catch (PortalException e) {
-			log.error("getFolderFiles :: " + e.getMessage(), e);
-			throw new FileServiceException("getFolderFiles :: errore durante il caricamento dei file della folder '" + folderId + "' : " + e.getMessage(), e);
+			log.error("getUserFolderFiles :: " + e.getMessage(), e);
+			throw new FileServiceException("getUserFolderFiles :: errore durante il caricamento dei file privati per l'utente '" + userId + ", groupId: " + groupId + " :: " + e.getMessage(), e);
 		}
 		return null;
 	}
-	
+
 	@Override
-	public long saveJasperReport(String nomeFile, String titolo, String descrizione, long proceduraId, InputStream inputStream, String mimeType, long userId, long groupId)
-			throws FileServiceException {
-
+	public File getRequestFile(String fileId, long groupId) throws FileServiceException {
 		try {
-			long defaultRepoId = DLFolderConstants.getDataRepositoryId(groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
-			ServiceContext serviceContext = new ServiceContext();
-			serviceContext.setScopeGroupId(groupId);
-			serviceContext.setUserId(userId);
-			serviceContext.setAddGroupPermissions(true);
-
-			Folder configurazioneProceduraFolder = null;
-			Folder procedure = null;
-			Folder procedura = null;
-			
-			try {
-				configurazioneProceduraFolder = dlAppService.getFolder(defaultRepoId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Procedura");
-			}
-			catch (NoSuchFolderException e) {
-				log.warn("saveRequestFile :: folder Configurazione Procedura non esistente: " + e.getMessage() + ". Creazione folder: " + "Configurazione Procedura");
-				configurazioneProceduraFolder = dlAppService.addFolder(defaultRepoId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Procedura", null, serviceContext);
-			}
-			
-			try {
-				procedure = dlAppService.getFolder(defaultRepoId, configurazioneProceduraFolder.getFolderId(), "Procedure");
-			}
-			catch (NoSuchFolderException e) {
-				log.warn("saveRequestFile :: folder Configurazione Procedura non esistente: " + e.getMessage() + ". Creazione folder: " + "Procedure");
-				procedure = dlAppService.addFolder(defaultRepoId, configurazioneProceduraFolder.getFolderId(), "Procedure", null, serviceContext);
-			}
-			
-			try {
-				procedura = dlAppService.getFolder(defaultRepoId, procedure.getFolderId(), String.valueOf(proceduraId));
-			}
-			catch (NoSuchFolderException e) {
-				log.warn("saveRequestFile :: folder per la Procedura con ID " + proceduraId + "non esistente: " + e.getMessage() + ". Creazione folder");
-				procedura = dlAppService.addFolder(defaultRepoId, procedure.getFolderId(), String.valueOf(proceduraId), null, serviceContext);
-			}
-			
-			if (Validator.isNotNull(inputStream)) {
-				FileEntry addFileEntry = dlAppService.addFileEntry(null, defaultRepoId, procedura.getFolderId(), nomeFile, mimeType, titolo, null, descrizione, null, inputStream,
-						inputStream.available(), null, null, serviceContext);
-				return addFileEntry.getFileEntryId();
-			}
-			
+			FileEntry fileEntry = dlAppService.getFileEntry(Long.parseLong(fileId));
+			return getFile(fileEntry);
 		}
-		catch (Exception e) {
-			log.error("saveRequestFile :: " + e.getMessage(), e);
-			throw new FileServiceException("saveJasperReport :: errore durante il salvataggio del file '" + nomeFile + "' : " + e.getMessage(), e);
+		catch (PortalException e) {
+			log.error("getRequestFile :: " + e.getMessage(), e);
+			throw new FileServiceException("getRequestFile :: errore durante il caricamento del file '" + fileId + "' : " + e.getMessage(), e);
 		}
-		return 0;
 	}
-	
-	@Override
-	public long updateFileEntry (FileEntry file, byte[] fileNuovo, String fileName, long groupId, long userId) {
-		
-		ServiceContext serviceContext = new ServiceContext();
-		serviceContext.setScopeGroupId(groupId);
-		serviceContext.setUserId(userId);
-		
-		try {
-			if(Validator.isNotNull(file) && Validator.isNotNull(fileNuovo)) {
-				file = dlAppService.updateFileEntry(file.getFileEntryId(), fileName, null, fileName, null, fileName, null, 
-						null, fileNuovo, null, null, serviceContext);
-				return file.getFileEntryId();
-			}
-		}catch(Exception e) {
-			log.error("updateFileEntry :: errore durante l'aggiornamento del file : " + fileName + " : " + e.getMessage());
-		}
-	
-		return 0;
+
+	/**
+	 * @param fileEntry
+	 * @return
+	 * @throws PortalException
+	 */
+	private File getFile(FileEntry fileEntry) throws PortalException {
+		File file = new File();
+		file.setId(String.valueOf(fileEntry.getFileEntryId()));
+		file.setNome(fileEntry.getFileName());
+		file.setInputStream(fileEntry.getContentStream());
+		file.setDescrizione(fileEntry.getDescription());
+		file.setEstensione(fileEntry.getExtension());
+		file.setMimeType(fileEntry.getMimeType());
+		return file;
 	}
 }

@@ -19,3 +19,35 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <liferay-theme:defineObjects />
 
 <portlet:defineObjects />
+
+
+<script id="alertTemplate" type="text/x-jsrender">
+	<div class="alert alert-{{>tipo}}" role="alert">
+ 		{{>message}}
+ 	</div>
+</script>
+
+<script type="text/javascript">
+	var messages = {
+			noResult:	"<liferay-ui:message key='nessun-risultato-da-visualizzare'/>"
+	}
+	
+	//registro template
+ 	$.templates({			
+			alert: "#alertTemplate"
+		}
+	);
+	
+	$.views.converters(
+		{
+			localDate: function(date){
+// 				, hour: 'numeric', minute: 'numeric' 
+				const options = { year: 'numeric', month: 'numeric', day: 'numeric'};
+				var date = new Date(date);
+				var formatted = date.toLocaleDateString(navigator.language, options);
+				return formatted;			
+			}
+		}
+	);
+
+</script>

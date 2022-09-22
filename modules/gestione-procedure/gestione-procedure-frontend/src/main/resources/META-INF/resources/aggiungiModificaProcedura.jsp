@@ -214,10 +214,10 @@
 </aui:row>
 
 <aui:script use="liferay-auto-fields">
-new Liferay.AutoFields({
-	contentBox: '#<portlet:namespace />container-upload-allegati',
-	fieldIndexes: '<portlet:namespace />rowIndexes',
-	 on: {
+	new Liferay.AutoFields({
+		contentBox: '#<portlet:namespace />container-upload-allegati',
+		fieldIndexes: '<portlet:namespace />rowIndexes',
+		 on: {
        		'clone': function(event) {
        			var ultimoInputFile = $("#container-allegati-template").find('input[type=file]:last');
        			var nomeFile = $("#container-allegati-template").find('p:last');
@@ -231,61 +231,61 @@ new Liferay.AutoFields({
 	       		 console.log("Riga eliminata: " + rowEliminata);
        		}
        	}
-}).render();
+	}).render();
 </aui:script>
 
 <script>
 
-var listaFormIdIntegrativi = ${listaFormIntegrativiProcedura};
-var listaTipiIntegrazioneBackoffice = ${listaTipoIntegrazioneBackofficeProcedura};
-var valueSelectAllegati = $('#<portlet:namespace />tipiGenerazioneTemplate').val();
-
-$( document ).ready(function() {
-	
-	    if(valueSelectAllegati=="JASPER_REPORT"){
- 			$('#container-allegati-template').removeClass("invisible");
-	    }
-   
-});
+	var listaFormIdIntegrativi = ${listaFormIntegrativiProcedura};
+	var listaTipiIntegrazioneBackoffice = ${listaTipoIntegrazioneBackofficeProcedura};
+	var valueSelectAllegati = $('#<portlet:namespace />tipiGenerazioneTemplate').val();
 
 
-function checkboxJasperReport(checkbox){
-	
-	var idCheckboxSelezionata=$(checkbox).attr('id');
-	$(checkbox).prop("checked",true);
-	
-	$('.checkboxPrincipaleAllegati').each(function () {
-		if(idCheckboxSelezionata!=$(this).attr('id')){
-			$(this).prop("checked", false);
+	$(document).ready(function() {
+		if (valueSelectAllegati == "JASPER_REPORT") {
+			$('#container-allegati-template').removeClass("invisible");
 		}
 	});
-	
-	return false;
-}
 
-function handleAttachments(selectObj) {
-	if (selectObj.value === "JASPER_REPORT") {
-		$('#container-allegati-template').removeClass("invisible");
-		$('#<portlet:namespace />allegatoPrincipale0').prop("checked",true);
-	} else {
-		$('#container-allegati-template').addClass("invisible");
+	function checkboxJasperReport(checkbox) {
+
+		var idCheckboxSelezionata = $(checkbox).attr('id');
+		$(checkbox).prop("checked", true);
+
+		$('.checkboxPrincipaleAllegati').each(function() {
+			if (idCheckboxSelezionata != $(this).attr('id')) {
+				$(this).prop("checked", false);
+			}
+		});
+
+		return false;
 	}
-}
 
+	function handleAttachments(selectObj) {
+		if (selectObj.value === "JASPER_REPORT") {
+			$('#container-allegati-template').removeClass("invisible");
+			$('#<portlet:namespace />allegatoPrincipale0')
+					.prop("checked", true);
+		} else {
+			$('#container-allegati-template').addClass("invisible");
+		}
+	}
 
+	if (listaFormIdIntegrativi !== "listaVuota") {
+		var arrayIdFormString = JSON.stringify(listaFormIdIntegrativi);
+		var jsonArray = JSON.parse(arrayIdFormString);
+		$('#<portlet:namespace />listaFormIntegrativiProcedura').val(jsonArray);
+	}
 
-if(listaFormIdIntegrativi!=="listaVuota"){
-	var arrayIdFormString = JSON.stringify(listaFormIdIntegrativi); 
-	var jsonArray = JSON.parse(arrayIdFormString);
-	$('#<portlet:namespace />listaFormIntegrativiProcedura').val(jsonArray);
-}
-
-if(listaTipiIntegrazioneBackoffice!=="listaVuota"){
-	var arrayTipiIntegrazioneBackoffice = JSON.stringify(listaTipiIntegrazioneBackoffice);
-	var tipiIntegrazioneBackoffice = JSON.parse(arrayTipiIntegrazioneBackoffice);
-	console.log("tipiIntegrazioneBackoffice: " + tipiIntegrazioneBackoffice);
-	$('#<portlet:namespace />tipiIntegrazioneBackoffice').val(tipiIntegrazioneBackoffice);
-}
-
-
+	if (listaTipiIntegrazioneBackoffice !== "listaVuota") {
+		var arrayTipiIntegrazioneBackoffice = JSON
+				.stringify(listaTipiIntegrazioneBackoffice);
+		var tipiIntegrazioneBackoffice = JSON
+				.parse(arrayTipiIntegrazioneBackoffice);
+		console
+				.log("tipiIntegrazioneBackoffice: "
+						+ tipiIntegrazioneBackoffice);
+		$('#<portlet:namespace />tipiIntegrazioneBackoffice').val(
+				tipiIntegrazioneBackoffice);
+	}
 </script>

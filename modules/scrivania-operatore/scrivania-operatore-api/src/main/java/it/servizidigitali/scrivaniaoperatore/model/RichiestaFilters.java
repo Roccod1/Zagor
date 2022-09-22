@@ -15,9 +15,13 @@ public class RichiestaFilters {
 	private String tipo;
 	private Set<Long> procedureIds;
 	private Set<String> processInstanceIds;
+	private String oggettoNote;
 
 	private long groupId;
 	private long companyId;
+	
+	private String orderByCol;
+	private String orderByType;
 
 	/**
 	 * @return the nomeCognome
@@ -185,5 +189,29 @@ public class RichiestaFilters {
 	 */
 	public void setCompanyId(long companyId) {
 		this.companyId = companyId;
+	}
+
+	public String getOrderByCol() {
+		return orderByCol;
+	}
+
+	public void setOrderByCol(String orderByCol) {
+		this.orderByCol = orderByCol;
+	}
+
+	public String getOrderByType() {
+		return orderByType;
+	}
+
+	public void setOrderByType(String orderByType) {
+		this.orderByType = orderByType;
+	}
+
+	public String getOggettoNote() {
+		return oggettoNote;
+	}
+
+	public void setOggettoNote(String oggettoNote) {
+		this.oggettoNote = oggettoNote;
 	}
 }

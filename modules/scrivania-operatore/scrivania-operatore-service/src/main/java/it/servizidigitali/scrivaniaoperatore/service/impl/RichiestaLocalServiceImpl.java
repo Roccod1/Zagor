@@ -78,4 +78,10 @@ public class RichiestaLocalServiceImpl extends RichiestaLocalServiceBaseImpl {
 		richiesta.setProcessInstanceId(processInstanceId);
 		richiestaPersistence.update(richiesta);
 	}
+	
+	public List<Richiesta> getRichiesteByCodiceFiscaleStatoProceduraId(String codiceFiscale, String stato, long proceduraId){		
+		List<Richiesta> listaRichieste = new ArrayList<Richiesta>();
+		listaRichieste = richiestaFinder.findRichiestaByCodiceFiscaleStatoProceduraId(codiceFiscale, stato, proceduraId);
+		return listaRichieste;	
+	}
 }

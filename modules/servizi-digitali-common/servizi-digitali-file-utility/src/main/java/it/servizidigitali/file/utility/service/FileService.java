@@ -1,7 +1,5 @@
 package it.servizidigitali.file.utility.service;
 
-import com.liferay.portal.kernel.repository.model.FileEntry;
-
 import java.io.InputStream;
 import java.util.List;
 
@@ -13,6 +11,9 @@ import it.servizidigitali.file.utility.model.File;
  *
  */
 public interface FileService {
+
+	static final String PRIVATE_FOLDER_NAME = "private";
+	static final String PUBLIC_FOLDER_NAME = "public";
 
 	/**
 	 *
@@ -27,40 +28,41 @@ public interface FileService {
 	 * @return
 	 * @throws FileServiceException
 	 */
-	long saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, InputStream inputStream, String mimeType, long userId, long groupId) throws FileServiceException;
+	String saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, InputStream inputStream, String mimeType, long userId, long groupId) throws FileServiceException;
 
 	/**
 	 *
-	 * @param nomeFile
-	 * @param folderId
+	 * @param fileId
 	 * @param groupId
 	 * @return
 	 * @throws FileServiceException
 	 */
-	InputStream getRequestFileContent(String nomeFile, long folderId, long groupId) throws FileServiceException;
+	InputStream getRequestFileContent(String fileId, long groupId) throws FileServiceException;
 
 	/**
 	 *
-	 * @param fileEntryId
-	 * @throws FileServiceException
-	 */
-	void deleteRequestFile(long fileEntryId) throws FileServiceException;
-
-	/**
-	 *
-	 * @param folderId
+	 * @param fileId
 	 * @param groupId
 	 * @return
 	 * @throws FileServiceException
 	 */
-	List<File> getFolderFiles(long folderId, long groupId) throws FileServiceException;
+	File getRequestFile(String fileId, long groupId) throws FileServiceException;
 
+	/**
+	 *
+	 * @param fileId
+	 * @param groupId
+	 * @throws FileServiceException
+	 */
+	void deleteRequestFile(String fileId, long groupId) throws FileServiceException;
 
-	long saveTemplateAllegato(InputStream fileCaricato, String fileNameModello, long formId, long userId, long groupId)
-			throws Exception;
+	/**
+	 *
+	 * @param userId
+	 * @param groupId
+	 * @return
+	 * @throws FileServiceException
+	 */
+	List<File> getUserFolderFiles(long userId, long groupId) throws FileServiceException;
 
-	long saveJasperReport(String nomeFile, String titolo, String descrizione, long proceduraId, InputStream inputStream,
-			String mimeType, long userId, long groupId) throws FileServiceException;
-
-	long updateFileEntry(FileEntry file, byte[] fileNuovo, String fileName, long groupId, long userId);
 }

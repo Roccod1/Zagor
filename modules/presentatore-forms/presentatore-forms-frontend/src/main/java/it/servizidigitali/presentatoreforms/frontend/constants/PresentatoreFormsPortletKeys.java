@@ -14,10 +14,11 @@ public class PresentatoreFormsPortletKeys {
 	public static final String SUBMIT_FORM_RESOURCE_COMMAND = "/submitForm";
 	public static final String UPLOAD_ALLEGATO_RESOURCE_COMMAND = "/uploadFile";
 	public static final String SALVA_DATI_FORM_ACTION_COMMAND = "/salvaDatiForm";
-	public static final String HOME_RENDER_COMMAND = "/home";
+	public static final String CARICA_COMPILA_ISTANZA_RENDER_COMMAND = "/caricaCompilaIstanza";
 	public static final String SCEGLI_MODALITA_PAGAMENTO_RENDER_COMMAND = "/scegliModalitaPagamento";
 	public static final String SALVA_INVIA_ACTION_COMMAND = "/salvaInvia";
 	public static final String SCEGLI_COMPONENTE_ACTION_COMMAND = "/scegliComponente";
+	public static final String DOWNLOAD_ISTANZA_PDF_RESOURCE_COMMAND = "/downloadIstanza";
 
 	// JSP
 	public static final String JSP_SCEGLI_ALLEGATI = "/scegliAllegati.jsp";

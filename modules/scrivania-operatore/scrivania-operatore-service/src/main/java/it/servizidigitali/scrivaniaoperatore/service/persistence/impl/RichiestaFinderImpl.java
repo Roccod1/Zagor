@@ -3,6 +3,7 @@ package it.servizidigitali.scrivaniaoperatore.service.persistence.impl;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
@@ -38,7 +39,13 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 	@Override
 	public List<Richiesta> findByFilters(RichiestaFilters filters, int start, int end) {
 		DynamicQuery dq = createQuery(filters);
-		return richiestaPersistence.findWithDynamicQuery(dq, start, end);
+		
+		if(Validator.isNotNull(filters.getOrderByCol())){
+			boolean orderByType = "asc".equals(filters.getOrderByType()) ? true : false;
+			OrderByComparator<Richiesta> orderByComparator = OrderByComparatorFactoryUtil.create(Richiesta.class.getSimpleName(), Validator.isNotNull(filters.getOrderByCol()) ? filters.getOrderByCol() : "createDate", orderByType);
+			return richiestaPersistence.findWithDynamicQuery(dq, start, end, orderByComparator);			
+		}
+		return richiestaPersistence.findWithDynamicQuery(dq, start, end);			
 	}
 
 	@Override
@@ -105,6 +112,12 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 		if (filters.getProcedureIds() != null) {
 			dq.add(RestrictionsFactoryUtil.in("proceduraId", filters.getProcedureIds()));
 		}
+		
+		if(Validator.isNotNull(filters.getOggettoNote())) {
+			String pattern = StringPool.PERCENT + filters.getOggettoNote() + StringPool.PERCENT;
+			
+			dq.add(RestrictionsFactoryUtil.or(RestrictionsFactoryUtil.ilike("oggetto", pattern), RestrictionsFactoryUtil.ilike("note", pattern)));	
+		}
 
 		return dq;
 	}
@@ -144,6 +157,28 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 		}
 
 		return richiestaPersistence.findWithDynamicQuery(dynamicQuery, start, end, comparator);
+	}
+	
+	public List<Richiesta> findRichiestaByCodiceFiscaleStatoProceduraId(String codiceFiscale, String stato, long proceduraId){
+		
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Richiesta.class, getClassLoader());
+
+		if (Validator.isNotNull(codiceFiscale)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("codiceFiscale", codiceFiscale));
+		}
+
+		if (Validator.isNotNull(stato)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("stato", stato));
+		}
+		
+		if (proceduraId > 0) {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("proceduraId", proceduraId));
+		}
+		
+		dynamicQuery.addOrder(OrderFactoryUtil.desc("modifiedDate"));
+				
+		return richiestaPersistence.findWithDynamicQuery(dynamicQuery);	
+		
 	}
 
 }

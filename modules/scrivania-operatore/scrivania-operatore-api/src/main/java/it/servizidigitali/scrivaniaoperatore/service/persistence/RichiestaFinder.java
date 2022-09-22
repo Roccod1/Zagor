@@ -37,4 +37,8 @@ public interface RichiestaFinder {
 			String cf, long groupId, int cur, int delta, String orderByCol,
 			String orderByType);
 
+	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
+		findRichiestaByCodiceFiscaleStatoProceduraId(
+			String codiceFiscale, String stato, long proceduraId);
+
 }

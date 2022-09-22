@@ -13,7 +13,7 @@ public interface CommunicationConfiguration {
 	@Meta.AD(deflt = "false", required = false, description = "Abilita/disabilita l'invio dei messagi tramite Communication Engine")
 	boolean communicationEngineSendEnabled();
 
-	@Meta.AD(deflt = "http://localhost:8081", required = false, description = "Base path servizi REST Communication Engine")
+	@Meta.AD(deflt = "http://localhost:8082", required = false, description = "Base path servizi REST Communication Engine")
 	String communicationEngineBasePath();
 
 }

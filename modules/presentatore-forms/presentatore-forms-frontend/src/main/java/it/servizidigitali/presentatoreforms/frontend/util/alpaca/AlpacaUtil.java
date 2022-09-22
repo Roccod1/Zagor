@@ -174,6 +174,24 @@ public class AlpacaUtil {
 		}
 		return gson.toJsonTree(jsonSchema).getAsJsonObject();
 	}
+	
+	/**
+	 * Converte i componenti dell'AlpacaJsonStructure in JsonObject
+	 *
+	 * @param placeholders L'oggetto {@link Placeholders} da utilizzare per la sostituzione.
+	 * @param alpacaStructure La struttura JSON da utilizzare e sostituire.
+	 * @return Restituisce la stringa con i placeholder sostituiti.
+	 */
+	public static AlpacaJsonStructure convertiComponentiAlpacaStructure(final AlpacaJsonStructure alpacaStructure) {
+		Gson gson = new Gson();
+		String options = gson.toJson(alpacaStructure.getOptions());
+		String schema = gson.toJson(alpacaStructure.getSchema());
+		JsonObject jsonOptions = gson.fromJson(options, JsonObject.class);
+		JsonObject jsonSchema = gson.fromJson(schema, JsonObject.class);
+		alpacaStructure.setSchema(gson.toJsonTree(jsonSchema).getAsJsonObject());
+		alpacaStructure.setOptions(gson.toJsonTree(jsonOptions).getAsJsonObject());
+		return alpacaStructure;
+	}
 
 	/**
 	 * Carica il campo data con i valori passati.
