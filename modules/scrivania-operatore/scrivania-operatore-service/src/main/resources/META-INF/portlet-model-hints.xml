@@ -18,6 +18,19 @@
 		<field name="interno" type="boolean" />
 		<field name="visibile" type="boolean" />
 	</model>
+	<model name="it.servizidigitali.scrivaniaoperatore.model.AttivitaRichiesta">
+		<field name="uuid" type="String" />
+		<field name="attivitaRichiestaId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="note" type="String" />
+		<field name="stato" type="String" />
+		<field name="richiestaId" type="long" />
+	</model>
 	<model name="it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta">
 		<field name="uuid" type="String" />
 		<field name="commentoRichiestaId" type="long" />

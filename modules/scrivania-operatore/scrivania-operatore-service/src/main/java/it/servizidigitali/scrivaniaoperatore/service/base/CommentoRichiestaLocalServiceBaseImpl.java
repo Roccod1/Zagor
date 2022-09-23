@@ -49,6 +49,7 @@ import it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.service.CommentoRichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.CommentoRichiestaLocalServiceUtil;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPersistence;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.AttivitaRichiestaPersistence;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.CommentoRichiestaPersistence;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.IstanzaFormPersistence;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.RichiestaFinder;
@@ -613,6 +614,9 @@ public abstract class CommentoRichiestaLocalServiceBaseImpl
 
 	@Reference
 	protected AllegatoRichiestaPersistence allegatoRichiestaPersistence;
+
+	@Reference
+	protected AttivitaRichiestaPersistence attivitaRichiestaPersistence;
 
 	protected CommentoRichiestaLocalService commentoRichiestaLocalService;
 

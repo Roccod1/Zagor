@@ -228,6 +228,40 @@
 		<finder name="TaskId" return-type="Collection">
 			<finder-column name="taskId" />
 		</finder>
+	</entity>
+	
+	<entity 
+		name="AttivitaRichiesta"
+		table="attivita_richiesta"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="attivitaRichiestaId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="note" type="String" />
+		<column name="stato" type="String" />
 		
+		<column name="richiestaId" type="long" />
+		
+		<!-- Finder methods -->
+		<finder name="RichiestaId" return-type="Collection">
+			<finder-column name="richiestaId" />
+		</finder>
 	</entity>
 </service-builder>
