@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.Portal;
 import com.nimbusds.jose.JOSEException;
@@ -51,43 +52,32 @@ public class JwtUtilityServiceImpl implements JwtUtilityService {
 
 	@Override
 	public  String getJWTUserToken(HttpServletRequest request) {
-		SignedJWT  signedJWT = null;
+		
 		try {
 			User user = _portal.getUser(request);
-			if (user != null) {
-				
-				JWTClaimsSet.Builder claimsSet = new JWTClaimsSet.Builder();
-				Date now = new Date();
-				claimsSet.issueTime(now);
-				long validityInSeconds = _configuration.tokenValidity();
-				if (validityInSeconds > 0) {
-					claimsSet.expirationTime(new Date(now.getTime() + (validityInSeconds * 1000)));
-				} else {
-					claimsSet.expirationTime(new Date(now.getTime()));
-				}
-				claimsSet.notBeforeTime(now);
-				claimsSet.claim(JWTUtilityConstant.CLAIM_USERNAME, user.getScreenName());
-				claimsSet.claim(JWTUtilityConstant.CLAIM_USERID, user.getUserId());
-				
-				JWSSigner signer = new MACSigner(getSharedSecret());
-				
-				JWSAlgorithm algorithm = JWSAlgorithm.HS256;
-				JWSHeader jwsHeader = new JWSHeader.Builder(algorithm).build();
-				
-				signedJWT = new SignedJWT(jwsHeader, claimsSet.build());
-				signedJWT.sign(signer);
-			}
+			return getJWTUserToken(user);
 		} catch (PortalException e) {
-			_log.error(e);
-		} catch (KeyLengthException e) {
-			_log.error(e);
-		} catch (JOSEException e) {
 			_log.error(e);
 		}catch (Exception e) {
 			_log.error(e);
 		}
 
-		return signedJWT!=null ? signedJWT.serialize() : null;
+		return null;
+	}
+	
+	@Override
+	public String getJWTUserToken(Long companyId, String screenName) {
+		
+		try {
+			User user = _userLocalService.getUserByScreenName(companyId, screenName);
+			return getJWTUserToken(user);
+		} catch (PortalException e) {
+			_log.error(e);
+		}catch (Exception e) {
+			_log.error(e);
+		}
+
+		return null;
 	}
 	
 	@Override
@@ -131,6 +121,45 @@ public class JwtUtilityServiceImpl implements JwtUtilityService {
 		}
 	}
 	
+	private String getJWTUserToken(User user) {
+		SignedJWT  signedJWT = null;
+		try {
+			if (user != null) {
+				
+				JWTClaimsSet.Builder claimsSet = new JWTClaimsSet.Builder();
+				Date now = new Date();
+				claimsSet.issueTime(now);
+				long validityInSeconds = _configuration.tokenValidity();
+				if (validityInSeconds > 0) {
+					claimsSet.expirationTime(new Date(now.getTime() + (validityInSeconds * 1000)));
+				} else {
+					claimsSet.expirationTime(new Date(now.getTime()));
+				}
+				claimsSet.notBeforeTime(now);
+				claimsSet.claim(JWTUtilityConstant.CLAIM_USERNAME, user.getScreenName());
+				claimsSet.claim(JWTUtilityConstant.CLAIM_USERID, user.getUserId());
+				
+				JWSSigner signer = new MACSigner(getSharedSecret());
+				
+				JWSAlgorithm algorithm = JWSAlgorithm.HS256;
+				JWSHeader jwsHeader = new JWSHeader.Builder(algorithm).build();
+				
+				signedJWT = new SignedJWT(jwsHeader, claimsSet.build());
+				signedJWT.sign(signer);
+			}
+		} catch (PortalException e) {
+			_log.error(e);
+		} catch (KeyLengthException e) {
+			_log.error(e);
+		} catch (JOSEException e) {
+			_log.error(e);
+		}catch (Exception e) {
+			_log.error(e);
+		}
+
+		return signedJWT!=null ? signedJWT.serialize() : null;
+	}
+	
 	private byte[] getSharedSecret() throws Exception {
 		String jwtSecret = Base64.encode(_configuration.jwtSecret().getBytes());
 		
@@ -152,6 +181,9 @@ public class JwtUtilityServiceImpl implements JwtUtilityService {
 	
 	@Reference
 	private Portal _portal;
+	
+	@Reference
+	private UserLocalService _userLocalService;
 	
 	private final static Log _log = LogFactoryUtil.getLog(JwtUtilityServiceImpl.class);
 	
