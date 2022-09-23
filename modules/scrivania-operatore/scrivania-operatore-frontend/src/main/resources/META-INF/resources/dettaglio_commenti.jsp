@@ -53,8 +53,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<label><liferay-ui:message key="testo" /></label>
-						<textarea class="form-control" name="<portlet:namespace />testo">
-						</textarea>
+						<textarea class="form-control" name="<portlet:namespace />testo"></textarea>
 					</div>
 					<div class="form-group form-check">
 						<label class="form-check-label"><liferay-ui:message key="visibile-al-cittadino" /></label>
