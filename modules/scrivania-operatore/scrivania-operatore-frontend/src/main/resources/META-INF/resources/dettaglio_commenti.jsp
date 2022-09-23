@@ -61,7 +61,7 @@
 					</div>
 				</div>
 				<div class="modal-footer d-flex justify-content-end">		
-					<button type="submit" class="btn btn-primary mr-1">
+					<button type="button" class="btn btn-primary mr-1" id="<portlet:namespace />salvaCommentoBtn">
 						<liferay-ui:message key="salva-commento" />
 					</button>
 					
@@ -73,3 +73,9 @@
 		</div>
 	</aui:form>
 </div>
+
+<script>
+	$("#<portlet:namespace />salvaCommentoBtn").on("click", function() {
+		$(this).parents("form").submit();
+	});
+</script>
