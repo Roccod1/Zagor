@@ -11,6 +11,8 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
+import java.util.List;
+
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -19,6 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.backoffice.integration.model.commmon.ComponenteNucleoFamiliare;
+import it.servizidigitali.backoffice.integration.model.commmon.IntegrationPreferences;
+import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletService;
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
@@ -53,6 +58,9 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 
 	@Reference
 	private AlpacaService alpacaService;
+	
+	@Reference
+	private DatiAnagraficiPortletService datiAnagraficiPortletService;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -65,6 +73,7 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 		FormData formData = null;
 		AlpacaJsonStructure alpacaStructure = null;
 		String jsonDataBozza = null;
+		String screenName = themeDisplay.getUser().getScreenName();
 
 		Gson gson = new Gson();
 		try {
@@ -75,36 +84,69 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 			Richiesta richiestaBozza = presentatoreFormFrontendService.getRichiestaBozza(currentUser.getScreenName(), procedura.getProceduraId());
 			IstanzaForm istanzaFormRichiesta = presentatoreFormFrontendService.getIstanzaFormRichiesta(richiestaBozza.getRichiestaId(), form.getFormId());
 
-			UserPreferences userPreferences = new UserPreferences();
-			userPreferences.setCodiceFiscaleRichiedente(richiestaBozza.getCodiceFiscale());
-
+			boolean stepComponentiFamiliari = procedura.getStep1Attivo();
+			String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
+			
 			if (Boolean.valueOf(isBozza) && istanzaFormRichiesta != null) {
 				jsonDataBozza = gson.toJson(gson.fromJson(istanzaFormRichiesta.getJson(), FormData.class));
 				formData = AlpacaUtil.loadFormData(form, jsonDataBozza, true);
 				alpacaStructure = formData.getAlpaca();
 			}
 			else {
-				formData = AlpacaUtil.loadFormData(form, null, true);
-				alpacaStructure = formData.getAlpaca();
-				JsonObject data = gson.fromJson(gson.toJson(alpacaStructure.getData()), JsonObject.class);
-
+				
 				try {
-					alpacaService.loadData(data, gson.toJson(alpacaStructure.getSchema()), gson.toJson(alpacaStructure.getOptions()), procedura, userPreferences);
-					alpacaStructure.setData(data);
-				}
-				catch (BackofficeServiceException e) {
-					log.error("render :: " + e.getMessage(), e);
-					alpacaStructure.setData(data);
+					
+					if (stepComponentiFamiliari) {
+						Long organizationId = themeDisplay.getSiteGroup().getOrganizationId();
+						String codiceFiscale = screenName;
 
-					if (e.getConditionCode() != 0) {
-						throw e;
+						IntegrationPreferences integrationPreferences = new IntegrationPreferences();
+						integrationPreferences.setUsaCache(procedura.isAbilitaCacheIntegrazioneBackoffice());
+
+						List<ComponenteNucleoFamiliare> componentiNucleoFamiliare = datiAnagraficiPortletService.getComponentiNucleoFamiliare(codiceFiscale, organizationId,
+								integrationPreferences);
+						renderRequest.setAttribute("componentiNucleoFamiliare", componentiNucleoFamiliare);
+						renderRequest.setAttribute("codiceFiscaleManuale", codiceFiscale);
+						renderRequest.setAttribute("filtroComponentiFamiliari", filtroComponentiFamiliari);
+
+						return PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO;
+
+					}else {
+						formData = AlpacaUtil.loadFormData(form, null, true);
+						alpacaStructure = formData.getAlpaca();
+
+						UserPreferences userPreferences = new UserPreferences();
+						userPreferences.setCodiceFiscaleRichiedente(screenName);
+
+						if (PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME) != null) {
+							userPreferences = (UserPreferences) PortalUtil.getHttpServletRequest(renderRequest).getSession()
+									.getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME);
+						}
+
+						JsonObject data = gson.fromJson(gson.toJson(alpacaStructure.getData()), JsonObject.class);
+
+						try {
+							alpacaService.loadData(data, gson.toJson(alpacaStructure.getSchema()), gson.toJson(alpacaStructure.getOptions()), procedura, userPreferences);
+							alpacaStructure.setData(data);
+						}
+						catch (BackofficeServiceException e) {
+							log.error("render :: " + e.getMessage(), e);
+							alpacaStructure.setData(data);
+
+							if (e.getConditionCode() != 0) {
+								throw e;
+							}
+							String step2TipoServizio = procedura.getStep2TipoServizio();
+							TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
+							if (tipoServizio != null && tipoServizio.equals(TipoServizio.VISURA) || tipoServizio.equals(TipoServizio.CERTIFICATO)) {
+								log.error("renderizzaAlpacaForm :: impossibile caricare le informazioni dal backoffice per il Comune : " + themeDisplay.getScopeGroup().getName() + " :: "
+										+ e.getMessage(), e);
+								throw e;
+							}
+						}
 					}
-					String step2TipoServizio = procedura.getStep2TipoServizio();
-					TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
-					if (tipoServizio != null && tipoServizio.equals(TipoServizio.VISURA) || tipoServizio.equals(TipoServizio.CERTIFICATO)) {
-						log.error("renderizzaAlpacaForm :: impossibile caricare le informazioni dal backoffice per il Comune : " + themeDisplay.getScopeGroup().getName() + " :: " + e.getMessage(), e);
-						throw e;
-					}
+				}catch(Exception e) {
+					log.error(e.getMessage(), e);
 				}
 
 			}
