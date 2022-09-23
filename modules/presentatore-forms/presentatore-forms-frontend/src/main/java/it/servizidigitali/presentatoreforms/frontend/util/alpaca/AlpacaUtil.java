@@ -29,6 +29,7 @@ import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonOption
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonSchemaStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
+import it.servizidigitali.presentatoreforms.frontend.util.model.Placeholders;
 
 public class AlpacaUtil {
 
@@ -176,6 +177,24 @@ public class AlpacaUtil {
 	}
 
 	/**
+	 * Converte i componenti dell'AlpacaJsonStructure in JsonObject
+	 *
+	 * @param placeholders L'oggetto {@link Placeholders} da utilizzare per la sostituzione.
+	 * @param alpacaStructure La struttura JSON da utilizzare e sostituire.
+	 * @return Restituisce la stringa con i placeholder sostituiti.
+	 */
+	public static AlpacaJsonStructure convertiComponentiAlpacaStructure(final AlpacaJsonStructure alpacaStructure) {
+		Gson gson = new Gson();
+		String options = gson.toJson(alpacaStructure.getOptions());
+		String schema = gson.toJson(alpacaStructure.getSchema());
+		JsonObject jsonOptions = gson.fromJson(options, JsonObject.class);
+		JsonObject jsonSchema = gson.fromJson(schema, JsonObject.class);
+		alpacaStructure.setSchema(gson.toJsonTree(jsonSchema).getAsJsonObject());
+		alpacaStructure.setOptions(gson.toJsonTree(jsonOptions).getAsJsonObject());
+		return alpacaStructure;
+	}
+
+	/**
 	 * Carica il campo data con i valori passati.
 	 *
 	 * @param data I dati da caricare nel {@link JsonObject}.
@@ -296,13 +315,15 @@ public class AlpacaUtil {
 	 * @throws JSONException
 	 */
 	public static AlpacaJsonStructure loadView(final AlpacaJsonStructure alpacaStructure) throws JSONException {
+
+		Gson gson = new Gson();
 		/* se la view è null, setto la view di default ovvero "locale": "it_IT"; */
 		if (alpacaStructure.getView() == null || (alpacaStructure.getView() != null && "".equals(alpacaStructure.getView()))) {
 			LinkedHashMap<String, String> view = new LinkedHashMap<>();
 			view.put("locale", "it_IT");
 			alpacaStructure.setView(view);
 		}
-		alpacaStructure.setView(AlpacaUtil.parseView(JSONFactoryUtil.createJSONSerializer().serialize(alpacaStructure.getView())));
+		alpacaStructure.setView(AlpacaUtil.parseView(gson.toJson(alpacaStructure.getView())));
 		return alpacaStructure;
 	}
 

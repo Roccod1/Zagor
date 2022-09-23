@@ -3,6 +3,27 @@
 <portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.SUBMIT_FORM_RESOURCE_COMMAND %>" var="submitFormUrl">
 </portlet:resourceURL>
 
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.COMUNE_RESOURCE_COMMAND %>" var="getComuniUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.COMUNI_ESTERI_RESOURCE_COMMAND %>" var="searchListaComuniEsteriSelUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.PROVINCE_RESOURCE_COMMAND %>" var="getProvinceUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.RELAZIONI_PARENTELA_RESOURCE_COMMAND %>" var="getRelazioniParentelaUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.STATI_CIVILI_RESOURCE_COMMAND %>" var="getStatiCiviliUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.STATI_ESTERI_RESOURCE_COMMAND %>" var="getStatiEsteriUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.TITOLI_STUDIO_RESOURCE_COMMAND %>" var="getTitoliStudioUrl">
+</portlet:resourceURL>
+
 <portlet:renderURL var="scegliAllegatiUrl">
 		<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND %>" />
 </portlet:renderURL>
@@ -21,7 +42,7 @@ var logoInpsInnerUrl = '${pageContext.request.contextPath}' + '/images/INPS_logo
 var cfLoggedUser='${sessionScope.userPreferences.codiceFiscaleServizio}';
 var userToken = '${userToken}';
 var listaProvinceUrl = '${getProvinceUrl}';
-var listaComuniUrl = '${getComuniByProvinciaUrl}';
+var listaComuniUrl = '${getComuniUrl}';
 var listaYearsUrl = '${getYearsUrl}';
 var listaFiveYearsUrl = '${getFiveYearsUrl}';
 var listaTitoliStudioUrl = '${getTitoliStudioUrl}';

@@ -6,7 +6,12 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Image;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.service.ImageLocalService;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -110,9 +115,93 @@ public class JasperReportPDFService implements PDFService {
 	@Reference
 	private VocabolariService vocabolariService;
 
+	@Reference
+	private ImageLocalService imageLocalService;
+
 	@Override
-	public byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName,
-			Long idDestinazioneUso, String numeroBollo, PortletRequest portletRequest) throws PDFServiceException {
+	public byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, Long idDestinazioneUso,
+			String numeroBollo, PortletRequest portletRequest) throws PDFServiceException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		Image image = imageLocalService.getCompanyLogo(themeDisplay.getCompany().getLogoId());
+
+		try {
+
+			long proceduraId = richiesta.getProceduraId();
+
+			List<TemplatePdf> templatesPdf = templatePdfLocalService.getTemplatePdfByProceduraId(proceduraId);
+
+			TemplatePdf templatePdfPrincipale = getTemplatePdfPrincipale(templatesPdf);
+
+			List<TemplatePdf> templatesPdfFigli = getTemplatesPdfFigli(templatesPdf);
+
+			if (templatePdfPrincipale == null) {
+				throw new PDFServiceException("Report JRXML principale non presente.");
+			}
+
+			Map<String, Object> param = new HashMap<String, Object>();
+
+			FormData formData = (FormData) alpacaStructure.getData();
+			Object data = formData.getAlpaca().getData();
+
+			Gson gson = new Gson();
+			InputStream stream = new ByteArrayInputStream(gson.toJson(data).getBytes("UTF-8"));
+
+			JRDataSource jsonDataSource = new JsonDataSource(stream);
+
+			long fileEntryId = templatePdfPrincipale.getFileEntryId();
+			FileEntry documentoPrincipalefileEntry = dlAppService.getFileEntry(fileEntryId);
+
+			InputStream reportPrincipaleInputStream = new ByteArrayInputStream(documentoPrincipalefileEntry.getContentStream().readAllBytes());
+			JasperReport reportPrincipaleJasperReport = JasperCompileManager.compileReport(reportPrincipaleInputStream);
+
+			// Sottoreport, se presenti
+			if (templatesPdfFigli != null) {
+				for (TemplatePdf templatePdfFiglio : templatesPdfFigli) {
+					FileEntry documentoFiglioEntry = dlAppService.getFileEntry(templatePdfFiglio.getFileEntryId());
+					InputStream subReportInputStream = new ByteArrayInputStream(documentoFiglioEntry.getContentStream().readAllBytes());
+					JasperReport subJasperReport = JasperCompileManager.compileReport(subReportInputStream);
+					param.put(templatePdfFiglio.getNomeFile(), subJasperReport);
+				}
+			}
+
+			addParametriAggiuntivi(param);
+
+			if (Validator.isNotNull(image)) {
+				ByteArrayInputStream logoComune = new ByteArrayInputStream(image.getTextObj());
+				param.put(JR_PARAMETER_LOGO_COMUNE, logoComune);
+			}
+
+			// TODO destinazione uso
+
+			JasperPrint jasperPrint = JasperFillManager.fillReport(reportPrincipaleJasperReport, param, jsonDataSource);
+
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+			return out.toByteArray();
+		}
+		catch (PortalException e) {
+			log.error("generaPDFCertificato :: " + e.getMessage(), e);
+		}
+		catch (UnsupportedEncodingException e) {
+			log.error("generaPDFCertificato :: " + e.getMessage(), e);
+		}
+		catch (JRException e) {
+			log.error("generaPDFCertificato :: " + e.getMessage(), e);
+		}
+		catch (IOException e) {
+			log.error("generaPDFCertificato :: " + e.getMessage(), e);
+		}
+
+		return null;
+	}
+
+	@Override
+	public byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, boolean isDelega,
+			String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		Image image = imageLocalService.getCompanyLogo(themeDisplay.getCompany().getLogoId());
 
 		try {
 			long proceduraId = richiesta.getProceduraId();
@@ -155,10 +244,10 @@ public class JasperReportPDFService implements PDFService {
 
 			addParametriAggiuntivi(param);
 
-			// TODO trovare il modo di caricare il logo dal site Liferay (array di byte)
-			// if (logo != null) {
-			// param.put(JR_PARAMETER_LOGO_COMUNE, logo);
-			// }
+			if (Validator.isNotNull(image)) {
+				ByteArrayInputStream logoComune = new ByteArrayInputStream(image.getTextObj());
+				param.put(JR_PARAMETER_LOGO_COMUNE, logoComune);
+			}
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(reportPrincipaleJasperReport, param, jsonDataSource);
 
@@ -167,25 +256,18 @@ public class JasperReportPDFService implements PDFService {
 			return out.toByteArray();
 		}
 		catch (PortalException e) {
-			log.error("generaPDFCertificato :: " + e.getMessage(), e);
+			log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);
 		}
 		catch (UnsupportedEncodingException e) {
-			log.error("generaPDFCertificato :: " + e.getMessage(), e);
+			log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);
 		}
 		catch (JRException e) {
-			log.error("generaPDFCertificato :: " + e.getMessage(), e);
+			log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);
 		}
 		catch (IOException e) {
-			log.error("generaPDFCertificato :: " + e.getMessage(), e);
+			log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);
 		}
 
-		return null;
-	}
-
-	@Override
-	public byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName,
-			Long idDestinazioneUso, String numeroBollo, boolean isDelega, String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
