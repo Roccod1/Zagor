@@ -10,15 +10,19 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import com.liferay.counter.kernel.service.CounterLocalService;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
 import it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.service.CommentoRichiestaLocalService;
+import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 @Component(immediate = true, service = MVCActionCommand.class, property = {
 		"javax.portlet.name=" + ScrivaniaOperatorePortletKeys.SCRIVANIAOPERATORE,
@@ -30,6 +34,10 @@ public class AggiungiCommentoActionCommand extends BaseMVCActionCommand {
 	private CommentoRichiestaLocalService commentoRichiestaLocalService;
 	@Reference
 	private CounterLocalService counterLocalService;
+	@Reference
+	private UserLocalService userLocalService;
+	@Reference
+	private RichiestaLocalService richiestaLocalService;
 	
 	@Override
 	protected void doProcessAction(ActionRequest request, ActionResponse response) throws Exception {
@@ -51,6 +59,12 @@ public class AggiungiCommentoActionCommand extends BaseMVCActionCommand {
 		commentoRichiesta.setTesto(testo);
 		commentoRichiesta.setVisibile(visibile);
 		commentoRichiesta.setRichiestaId(richiestaId);
+		
+		User user = userLocalService.fetchUser(context.getUserId());
+		commentoRichiesta.setUserName(user.getFullName());
+		
+		Richiesta richiesta = richiestaLocalService.fetchRichiesta(richiestaId);
+		commentoRichiesta.setTaskId(richiesta.getProcessInstanceId());
 		
 		commentoRichiestaLocalService.updateCommentoRichiesta(commentoRichiesta);
 		

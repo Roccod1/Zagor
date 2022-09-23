@@ -7,7 +7,6 @@ public class CommentoDTO {
 	private String operatore;
 	private String testo;
 	private boolean visibileAlCittadino;
-	private Date dataVisibilita;
 	
 	public Date getData() {
 		return data;
@@ -32,12 +31,6 @@ public class CommentoDTO {
 	}
 	public void setVisibileAlCittadino(boolean visibileAlCittadino) {
 		this.visibileAlCittadino = visibileAlCittadino;
-	}
-	public Date getDataVisibilita() {
-		return dataVisibilita;
-	}
-	public void setDataVisibilita(Date dataVisibilita) {
-		this.dataVisibilita = dataVisibilita;
 	}
 	
 }

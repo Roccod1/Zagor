@@ -129,7 +129,6 @@ public class MapUtil {
 		commento.setOperatore(cr.getUserName());
 		commento.setTesto(cr.getTesto());
 		commento.setVisibileAlCittadino(cr.isVisibile());
-		commento.setDataVisibilita(cr.getModifiedDate());
 		return commento;
 	}
 }
