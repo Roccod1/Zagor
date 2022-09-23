@@ -36,6 +36,7 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 @Component(//
 		immediate = true, //
 		property = { //
+				
 				"com.liferay.portlet.instanceable=true", "javax.portlet.display-name=PresentatoreForms", //
 				"javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp", //
 				"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
