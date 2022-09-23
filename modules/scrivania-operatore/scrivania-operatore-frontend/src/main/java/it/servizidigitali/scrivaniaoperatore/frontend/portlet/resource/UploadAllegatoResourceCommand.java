@@ -1,6 +1,8 @@
 package it.servizidigitali.scrivaniaoperatore.frontend.portlet.resource;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
@@ -25,6 +27,8 @@ import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperato
 })
 public class UploadAllegatoResourceCommand extends BaseMVCResourceCommand {
 
+	private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("-yyyy-MM-dd-HH-mm-ss");
+	
 	@Reference
 	private Portal portal;
 	@Reference
@@ -41,10 +45,12 @@ public class UploadAllegatoResourceCommand extends BaseMVCResourceCommand {
 			String fileName = upr.getFileName("allegato");
 			String contentType = upr.getContentType("allegato");
 			
+			fileName = generateFilename(fileName);
+			
 			//TODO rimpiazzare con service adeguato
 			FileEntry fileEntry = dlAppService.addFileEntry(
 					"", 
-					context.getScopeGroupId(), 
+					context.getScopeGroupId(),  
 					0, 
 					fileName, 
 					contentType, 
@@ -62,6 +68,20 @@ public class UploadAllegatoResourceCommand extends BaseMVCResourceCommand {
 			response.getWriter().write("{ \"fileId\": " + fileId + " }");
 		} catch (Exception e) {
 			response.getWriter().write("{ \"error\": \"error\" }");
+		}
+	}
+
+	private String generateFilename(String fileName) {
+		Date now = new Date();
+		String datePart = FORMATTER.format(now);
+		int pos = fileName.lastIndexOf('.');
+		
+		if (pos < 0) {
+			return fileName + datePart;
+		} else {
+			String extension = fileName.substring(pos + 1);
+			String name = fileName.substring(0, pos);
+			return name + datePart + "." + extension;
 		}
 	}
 
