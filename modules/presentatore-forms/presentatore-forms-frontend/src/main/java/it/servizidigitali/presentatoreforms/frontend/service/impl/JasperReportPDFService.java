@@ -3,7 +3,6 @@ package it.servizidigitali.presentatoreforms.frontend.service.impl;
 import com.google.gson.Gson;
 import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Image;
@@ -15,9 +14,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -51,7 +48,6 @@ import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStruct
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -180,20 +176,10 @@ public class JasperReportPDFService implements PDFService {
 			JasperExportManager.exportReportToPdfStream(jasperPrint, out);
 			return out.toByteArray();
 		}
-		catch (PortalException e) {
+		catch (Exception e) {
 			log.error("generaPDFCertificato :: " + e.getMessage(), e);
+			throw new PDFServiceException("Errore durante il processo di generazione del PDF :: " + e.getMessage(), e);
 		}
-		catch (UnsupportedEncodingException e) {
-			log.error("generaPDFCertificato :: " + e.getMessage(), e);
-		}
-		catch (JRException e) {
-			log.error("generaPDFCertificato :: " + e.getMessage(), e);
-		}
-		catch (IOException e) {
-			log.error("generaPDFCertificato :: " + e.getMessage(), e);
-		}
-
-		return null;
 	}
 
 	@Override
@@ -255,20 +241,10 @@ public class JasperReportPDFService implements PDFService {
 			JasperExportManager.exportReportToPdfStream(jasperPrint, out);
 			return out.toByteArray();
 		}
-		catch (PortalException e) {
+		catch (Exception e) {
 			log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);
+			throw new PDFServiceException("Errore durante il processo di generazione del PDF :: " + e.getMessage(), e);
 		}
-		catch (UnsupportedEncodingException e) {
-			log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);
-		}
-		catch (JRException e) {
-			log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);
-		}
-		catch (IOException e) {
-			log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);
-		}
-
-		return null;
 	}
 
 	/**
