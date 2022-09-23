@@ -27,4 +27,12 @@ dependencies {
 	testIntegrationCompile group: "org.slf4j", name: "slf4j-api"
 	testIntegrationCompile project(":modules:servizi-digitali-rest-service:servizi-digitali-rest-service-api")
 	testIntegrationCompile project(":modules:servizi-digitali-rest-service:servizi-digitali-rest-service-client")
+	compileOnly project(":modules:scrivania-operatore:scrivania-operatore-api")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-backoffice-integration")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-api")	
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-utility")
+}
+
+test {
+    exclude 'it/servizidigitali/restservice/**'
 }

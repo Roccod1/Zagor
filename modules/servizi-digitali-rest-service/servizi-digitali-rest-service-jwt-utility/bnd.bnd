@@ -5,6 +5,8 @@ Import-Package: \
 	!com.google.crypto.tink.*,\
 	!org.bouncycastle.*,\
 	*
--fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning
-Export-Package: it.servizidigitali.restservice.jwt.utility.api,\
+Export-Package: \
+	it.servizidigitali.restservice.jwt.utility.constant,\
+	it.servizidigitali.restservice.jwt.utility.api,\
 	it.servizidigitali.restservice.jwt.utility.exception
+-fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning

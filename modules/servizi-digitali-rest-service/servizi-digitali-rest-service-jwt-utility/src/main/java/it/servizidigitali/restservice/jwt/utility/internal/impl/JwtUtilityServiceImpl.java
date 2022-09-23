@@ -28,7 +28,6 @@ import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.KeyLengthException;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
-import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
@@ -42,17 +41,17 @@ import it.servizidigitali.restservice.jwt.utility.internal.configuration.JwtUtil
  * @author pascal
  */
 @Component(
-	configurationPid = "it.servizidigitali.restservice.jwt.utility.internal.configuration.JwtUtilityServiceConfiguration",
-	immediate = true,
-	property = {
-	},
-	service = JwtUtilityService.class
-)
+		configurationPid = "it.servizidigitali.restservice.jwt.utility.internal.configuration.JwtUtilityServiceConfiguration",
+		immediate = true,
+		property = {
+		},
+		service = JwtUtilityService.class
+		)
 public class JwtUtilityServiceImpl implements JwtUtilityService {
 
 	@Override
 	public  String getJWTUserToken(HttpServletRequest request) {
-		
+
 		try {
 			User user = _portal.getUser(request);
 			return getJWTUserToken(user);
@@ -64,10 +63,10 @@ public class JwtUtilityServiceImpl implements JwtUtilityService {
 
 		return null;
 	}
-	
+
 	@Override
 	public String getJWTUserToken(Long companyId, String screenName) {
-		
+
 		try {
 			User user = _userLocalService.getUserByScreenName(companyId, screenName);
 			return getJWTUserToken(user);
@@ -79,33 +78,33 @@ public class JwtUtilityServiceImpl implements JwtUtilityService {
 
 		return null;
 	}
-	
+
 	@Override
-	public JWT verifyJwt(String token) throws JwtException {
+	public SignedJWT verifyJwt(String token) throws JwtException {
 		try {
-			
+
 			JWSAlgorithm algorithm = JWSAlgorithm.HS256;
-			
+
 			SignedJWT parsedTokenJWT = SignedJWT.parse(token);
-			
+
 			if( ! algorithm.getName().equalsIgnoreCase(parsedTokenJWT.getHeader().getAlgorithm().getName())) {
 				throw new JwtException("VERIFY_JWT_TOKEN", "Algoritmo non corretto");
 			}
 
 			JWSVerifier verifier = new MACVerifier(getSharedSecret());
-			
+
 			boolean signResult = false;
-			
+
 			try {
 				signResult = parsedTokenJWT.verify(verifier);
 			}catch (Exception e) {
 				throw new JwtException("VERIFY_JWT_TOKEN", "Impossibile verificare la firma");
 			}
-			
+
 			if(!signResult) {
 				throw new JwtException("VERIFY_JWT_TOKEN", "Firma non valida");
 			}
-			
+
 			Date now = new Date();
 
 			Date expirationTime = parsedTokenJWT.getJWTClaimsSet().getExpirationTime();
@@ -115,17 +114,32 @@ public class JwtUtilityServiceImpl implements JwtUtilityService {
 			}
 
 			return parsedTokenJWT;
+
 		}catch (Exception e) {
 			_log.error("Impossibile effettuare il parsing del token jwt", e);
 			throw new JwtException("VERIFY_JWT_TOKEN", e.getMessage());
 		}
 	}
-	
+
+	@Override
+	public Map<String, Object> verifyJwtAndGetClaims(String token) throws JwtException {
+		SignedJWT jwt = verifyJwt(token);
+		
+		try {
+			return jwt.getJWTClaimsSet().getClaims();
+		}catch (Exception e) {
+			_log.error("Impossibile recuperare claims", e);
+			return null;
+		}
+
+	}
+
+
 	private String getJWTUserToken(User user) {
 		SignedJWT  signedJWT = null;
 		try {
 			if (user != null) {
-				
+
 				JWTClaimsSet.Builder claimsSet = new JWTClaimsSet.Builder();
 				Date now = new Date();
 				claimsSet.issueTime(now);
@@ -138,12 +152,12 @@ public class JwtUtilityServiceImpl implements JwtUtilityService {
 				claimsSet.notBeforeTime(now);
 				claimsSet.claim(JWTUtilityConstant.CLAIM_USERNAME, user.getScreenName());
 				claimsSet.claim(JWTUtilityConstant.CLAIM_USERID, user.getUserId());
-				
+
 				JWSSigner signer = new MACSigner(getSharedSecret());
-				
+
 				JWSAlgorithm algorithm = JWSAlgorithm.HS256;
 				JWSHeader jwsHeader = new JWSHeader.Builder(algorithm).build();
-				
+
 				signedJWT = new SignedJWT(jwsHeader, claimsSet.build());
 				signedJWT.sign(signer);
 			}
@@ -159,32 +173,32 @@ public class JwtUtilityServiceImpl implements JwtUtilityService {
 
 		return signedJWT!=null ? signedJWT.serialize() : null;
 	}
-	
+
 	private byte[] getSharedSecret() throws Exception {
 		String jwtSecret = Base64.encode(_configuration.jwtSecret().getBytes());
-		
+
 		Mac sha256HMAC = Mac.getInstance(JWTUtilityConstant.SIGN_ALGORITHM_INSTANCE_NAME);
 		SecretKeySpec secretKey = new SecretKeySpec(jwtSecret.getBytes(StringPool.UTF8), JWTUtilityConstant.SIGN_ALGORITHM_INSTANCE_NAME);
 		sha256HMAC.init(secretKey);
-		
+
 		String sharedSecret = Base64.encode(sha256HMAC.doFinal(jwtSecret.getBytes(StringPool.UTF8)));
 		return sharedSecret.getBytes();
 	}
 
 	@Activate
-    @Modified
-    protected void activate(Map<String, Object> properties) {
+	@Modified
+	protected void activate(Map<String, Object> properties) {
 		_configuration = Configurable.createConfigurable(JwtUtilityServiceConfiguration.class, properties);
 	}
-	
+
 	private JwtUtilityServiceConfiguration _configuration;
-	
+
 	@Reference
 	private Portal _portal;
-	
+
 	@Reference
 	private UserLocalService _userLocalService;
-	
+
 	private final static Log _log = LogFactoryUtil.getLog(JwtUtilityServiceImpl.class);
-	
+
 }

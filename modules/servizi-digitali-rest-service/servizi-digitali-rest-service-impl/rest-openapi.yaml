@@ -7,7 +7,14 @@ info:
     version: v1.0
 openapi: 3.0.1
 components:
+    securitySchemes:
+    
+      BearerAuth:
+        type: http
+        scheme: bearer
+        
     parameters:
+    
         pageParam:
           name: page
           in: query
@@ -17,6 +24,7 @@ components:
             type: integer
             default: 0
             format: int32
+            
         sizeParam:
           name: size
           in: query
@@ -26,6 +34,7 @@ components:
             type: integer
             default: 10
             format: int32
+            
         qParam:
           name: q
           in: query
@@ -34,7 +43,22 @@ components:
           schema:
             type: string
             
+        queryNomeComune:
+          name: nomeComune
+          in: query
+          required: true
+          schema:
+            type: string
+
+        headerUserToken:
+            name: userToken
+            in: header
+            required: true
+            schema:
+              type: string
+            
     schemas:
+    
         RichiestaServizio:
             type: object
             properties:
@@ -45,12 +69,14 @@ components:
               stato:
                 description: Stato
                 type: string
+                
         InsertRichiestaServizioRequest:
             type: object
             properties:
                 stato:
                   description: Stato
                   type: string
+                  
         UpdateRichiestaServizioRequest:
             type: object
             properties:
@@ -61,11 +87,33 @@ components:
                 stato:
                   description: Stato
                   type: string
+                  
+        ComponenteNucleoFamiliareLight:
+            type: object
+            properties:
+              codiceFiscale:
+                  description: Codice fiscale
+                  type: string
+              cognome:
+                description: Cognome
+                type: string
+              nome:
+                description: Nome
+                type: string
+              sesso:
+                description: Sesso
+                type: string
+              dataNascita:
+                description: Data di nascita
+                type: string
+                format: date
 paths:
     "/richieste-servizio":
         get:
             operationId: searchRichiesteServizio
             tags: ["RichiesteServizio"]
+            security:
+            - BearerAuth: []
             parameters:
               - $ref: '#/components/parameters/pageParam'
               - $ref: '#/components/parameters/sizeParam'
@@ -188,5 +236,29 @@ paths:
                         application/xml:
                           schema: 
                               $ref: '#/components/schemas/RichiestaServizio'
-          
-                      
+
+    "/dati-anagrafici/componenti-nucleo-familiare":
+      get:
+        operationId: getComponentiNucleoFamiliare
+        description: Recupera i componenti del nucle familiare
+        security:
+          - BearerAuth: []
+        tags: ['DatiAnagrafici']
+        parameters:
+          - $ref: '#/components/parameters/headerUserToken'
+          - $ref: '#/components/parameters/queryNomeComune'
+        responses:
+          200:
+            description: Componenti nucleo familiare
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items: 
+                    $ref: '#/components/schemas/ComponenteNucleoFamiliareLight'
+              application/xml:
+                schema:
+                  type: array
+                  items: 
+                    $ref: '#/components/schemas/ComponenteNucleoFamiliareLight'
+                    
