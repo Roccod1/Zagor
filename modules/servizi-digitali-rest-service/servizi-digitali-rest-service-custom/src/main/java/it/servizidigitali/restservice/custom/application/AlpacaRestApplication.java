@@ -68,7 +68,7 @@ public class AlpacaRestApplication extends Application {
 
 		List<StatoEstero> statiEsteri = statoEsteroLocalService.getStatoEsteros(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 		for (StatoEstero statoEstero : statiEsteri) {
-			alpacaDatasources.add(new AlpacaDatasource(statoEstero.getDenominazione(), String.valueOf(statoEstero.getStatoEsteroId())));
+			alpacaDatasources.add(new AlpacaDatasource(statoEstero.getDenominazione(), String.valueOf(statoEstero.getCodiceStato())));
 		}
 
 		return alpacaDatasources;
@@ -98,7 +98,9 @@ public class AlpacaRestApplication extends Application {
 
 		List<Comune> comuni = comuneLocalService.getComunes(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 		for (Comune comune : comuni) {
-			alpacaDatasources.add(new AlpacaDatasource(comune.getDenominazione(), String.valueOf(comune.getComuneId())));
+			if (comune.getComuneId() > 0) {
+				alpacaDatasources.add(new AlpacaDatasource(comune.getDenominazione(), String.valueOf(comune.getComuneId())));
+			}
 		}
 
 		return alpacaDatasources;
