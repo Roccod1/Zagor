@@ -96,7 +96,7 @@
 		
 		<!-- Order -->
 		<order by="asc">
-			<order-column name="denominazioneRegione" />
+			<order-column name="sigla" />
 		</order>
 
 		<!-- Finder methods -->

@@ -102,11 +102,9 @@ public class ProvinciaModelImpl
 
 	public static final String TABLE_SQL_DROP = "drop table provincia";
 
-	public static final String ORDER_BY_JPQL =
-		" ORDER BY provincia.denominazioneRegione ASC";
+	public static final String ORDER_BY_JPQL = " ORDER BY provincia.sigla ASC";
 
-	public static final String ORDER_BY_SQL =
-		" ORDER BY provincia.denominazioneRegione ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY provincia.sigla ASC";
 
 	public static final String DATA_SOURCE = "servizidigitaliDataSource";
 
@@ -131,13 +129,6 @@ public class ProvinciaModelImpl
 	 */
 	@Deprecated
 	public static final long SIGLA_COLUMN_BITMASK = 4L;
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *		#getColumnBitmask(String)}
-	 */
-	@Deprecated
-	public static final long DENOMINAZIONEREGIONE_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -690,8 +681,7 @@ public class ProvinciaModelImpl
 	public int compareTo(Provincia provincia) {
 		int value = 0;
 
-		value = getDenominazioneRegione().compareTo(
-			provincia.getDenominazioneRegione());
+		value = getSigla().compareTo(provincia.getSigla());
 
 		if (value != 0) {
 			return value;
