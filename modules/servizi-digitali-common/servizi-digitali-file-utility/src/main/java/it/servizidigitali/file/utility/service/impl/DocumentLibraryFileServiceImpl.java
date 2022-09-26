@@ -35,11 +35,6 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 	private static final Log log = LogFactoryUtil.getLog(DocumentLibraryFileServiceImpl.class.getName());
 
 	private static final String DL_SITE_REQUEST_MAIN_FOLDER_NAME = "RICHIESTE_SERVIZIO";
-	
-	private static final long SIZE_MUL = 1000;
-	private static final long KILOBYTE = SIZE_MUL;
-	private static final long MEGABYTE = SIZE_MUL * KILOBYTE;
-	private static final long GIGABYTE = SIZE_MUL * MEGABYTE;
 
 	@Reference
 	private DLAppService dlAppService;
@@ -95,81 +90,74 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 		}
 		return 0;
 	}
-	
-	
+
 	@Override
-	public long saveTemplateAllegato(InputStream fileCaricato, String fileNameModello, long formId, long userId, long groupId) throws Exception{
-		
+	public long saveTemplateAllegato(InputStream fileCaricato, String fileNameModello, long formId, long userId, long groupId) throws Exception {
+
 		long defaultRepoId = DLFolderConstants.getDataRepositoryId(groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
-		
+
 		Folder cartellaAllegatiForm = null;
 		long idAllegatoCaricato = 0;
 		long folderTemplateId = 0;
 		long folderTemplateRepositoryId = 0;
-		
+
 		Folder folderConfigurazionePiattaforma = null;
 		Folder folderForm = null;
 		Folder folderTemplate = null;
-		
+
 		Folder folderTemplateNuova = null;
-		
+
 		ServiceContext serviceContext = new ServiceContext();
 		serviceContext.setScopeGroupId(groupId);
 		serviceContext.setUserId(userId);
 		serviceContext.setAddGroupPermissions(true);
-		
-		
-		if(Validator.isNotNull(fileCaricato)) {
-						
+
+		if (Validator.isNotNull(fileCaricato)) {
+
 			try {
-				folderConfigurazionePiattaforma = dlAppService.getFolder(groupId,
-						DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
-						"Configurazione Piattaforma");
-				
-				folderForm = dlAppService.getFolder(defaultRepoId, folderConfigurazionePiattaforma.getFolderId(),
-						"Form");
-				
-				folderTemplate = dlAppService.getFolder(defaultRepoId, folderForm.getFolderId(),"Template");
-				
-			}catch(NoSuchFolderException e) {
-				log.info("Cartella di configurazione form non presente, creazione!");
-				
-				Folder folderConfigurazionePiattaformaNuova = dlAppService.addFolder(defaultRepoId,
-						DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Piattaforma",
-						"Configurazione Piattaforma", serviceContext);
-				
-				Folder folderFormNuova = dlAppService.addFolder(defaultRepoId, folderConfigurazionePiattaformaNuova.getFolderId(), "Form", "Form", serviceContext);
-				
-				folderTemplateNuova = dlAppService.addFolder(defaultRepoId,
-						folderFormNuova.getFolderId(), "Template",
-						"Template", serviceContext);
+				folderConfigurazionePiattaforma = dlAppService.getFolder(groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Piattaforma");
+
+				folderForm = dlAppService.getFolder(defaultRepoId, folderConfigurazionePiattaforma.getFolderId(), "Form");
+
+				folderTemplate = dlAppService.getFolder(defaultRepoId, folderForm.getFolderId(), "Template");
+
 			}
-			
-			if(Validator.isNull(folderTemplate)) {
+			catch (NoSuchFolderException e) {
+				log.info("Cartella di configurazione form non presente, creazione!");
+
+				Folder folderConfigurazionePiattaformaNuova = dlAppService.addFolder(defaultRepoId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Configurazione Piattaforma",
+						"Configurazione Piattaforma", serviceContext);
+
+				Folder folderFormNuova = dlAppService.addFolder(defaultRepoId, folderConfigurazionePiattaformaNuova.getFolderId(), "Form", "Form", serviceContext);
+
+				folderTemplateNuova = dlAppService.addFolder(defaultRepoId, folderFormNuova.getFolderId(), "Template", "Template", serviceContext);
+			}
+
+			if (Validator.isNull(folderTemplate)) {
 				folderTemplateId = folderTemplateNuova.getFolderId();
 				folderTemplateRepositoryId = folderTemplateNuova.getRepositoryId();
-			}else {
+			}
+			else {
 				folderTemplateId = folderTemplate.getFolderId();
 				folderTemplateRepositoryId = folderTemplate.getRepositoryId();
 			}
-			
+
 			try {
-				Folder cartellaForm = dlAppService.getFolder(defaultRepoId, folderTemplateId, String.valueOf(formId));		
-				FileEntry allegatoCaricato = dlAppService.addFileEntry(null, defaultRepoId, cartellaForm.getFolderId(), fileNameModello , null, fileNameModello, null, String.valueOf(formId), null, fileCaricato, fileCaricato.available(), null, null, serviceContext);
-				idAllegatoCaricato = allegatoCaricato.getFileEntryId();
-			}catch(NoSuchFolderException e) {
-				log.info("Cartella allegati per form con ID " + formId + " non presente a sistema,creazione");
-				cartellaAllegatiForm = dlAppService.addFolder(
-						folderTemplateRepositoryId, folderTemplateId, String.valueOf(formId),
-						String.valueOf(formId), serviceContext);
-				FileEntry allegatoCaricato = dlAppService.addFileEntry(null, groupId, cartellaAllegatiForm.getFolderId(), fileNameModello , null, fileNameModello, null, String.valueOf(formId), null, fileCaricato, fileCaricato.available(), null, null, serviceContext);
+				Folder cartellaForm = dlAppService.getFolder(defaultRepoId, folderTemplateId, String.valueOf(formId));
+				FileEntry allegatoCaricato = dlAppService.addFileEntry(null, defaultRepoId, cartellaForm.getFolderId(), fileNameModello, null, fileNameModello, null, String.valueOf(formId), null,
+						fileCaricato, fileCaricato.available(), null, null, serviceContext);
 				idAllegatoCaricato = allegatoCaricato.getFileEntryId();
 			}
-			
+			catch (NoSuchFolderException e) {
+				log.info("Cartella allegati per form con ID " + formId + " non presente a sistema,creazione");
+				cartellaAllegatiForm = dlAppService.addFolder(folderTemplateRepositoryId, folderTemplateId, String.valueOf(formId), String.valueOf(formId), serviceContext);
+				FileEntry allegatoCaricato = dlAppService.addFileEntry(null, groupId, cartellaAllegatiForm.getFolderId(), fileNameModello, null, fileNameModello, null, String.valueOf(formId), null,
+						fileCaricato, fileCaricato.available(), null, null, serviceContext);
+				idAllegatoCaricato = allegatoCaricato.getFileEntryId();
+			}
+
 		}
-		
-		
-		
+
 		return idAllegatoCaricato;
 	}
 
@@ -220,19 +208,5 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 			throw new FileServiceException("getFolderFiles :: errore durante il caricamento dei file della folder '" + folderId + "' : " + e.getMessage(), e);
 		}
 		return null;
-	}
-
-
-	@Override
-	public String getHumanReadableSize(long size) {
-		if (size >= GIGABYTE) {
-			return String.format("%.1f GB", (float) size / GIGABYTE);
-		} else if (size >= MEGABYTE) {
-			return String.format("%.1f MB", (float) size / MEGABYTE);
-		} else if (size >= KILOBYTE) {
-			return String.format("%.1f kB", (float) size / KILOBYTE);
-		} else {
-			return size + " B";
-		}
 	}
 }
