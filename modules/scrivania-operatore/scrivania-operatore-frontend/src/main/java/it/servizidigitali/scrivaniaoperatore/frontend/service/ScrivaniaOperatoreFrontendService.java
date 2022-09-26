@@ -7,18 +7,24 @@ import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroupRole;
+import com.liferay.portal.kernel.resource.bundle.ResourceBundleLoaderUtil;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.ResourceBundleUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,17 +36,27 @@ import it.servizidigitali.camunda.integration.client.exception.CamundaClientExce
 import it.servizidigitali.camunda.integration.client.model.Task;
 import it.servizidigitali.camunda.integration.client.model.VariableInstance;
 import it.servizidigitali.common.utility.enumeration.OrganizationRole;
+import it.servizidigitali.communication.enumeration.Canale;
+import it.servizidigitali.communication.model.Comunicazione;
+import it.servizidigitali.communication.model.EsitoComunicazione;
+import it.servizidigitali.communication.model.Utente;
+import it.servizidigitali.communication.sender.CommunicationSender;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
+import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneCanaleComunicazioneLocalService;
+import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AzioneUtente;
 import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaActionsVariable;
 import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaCodiciOperazioniUtente;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.CommentoRichiestaLocalService;
+import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
  * @author pindi
@@ -77,6 +93,15 @@ public class ScrivaniaOperatoreFrontendService {
 
 	@Reference
 	private CommentoRichiestaLocalService commentoRichiestaLocalService;
+
+	@Reference
+	private RichiestaLocalService richiestaLocalService;
+
+	@Reference
+	private UtenteOrganizzazioneCanaleComunicazioneLocalService utenteOrganizzazioneCanaleComunicazioneLocalService;
+
+	@Reference
+	private CommunicationSender communicationSender;
 
 	/**
 	 *
@@ -425,4 +450,166 @@ public class ScrivaniaOperatoreFrontendService {
 		return commentiRichiestaByRichiestaId;
 	}
 
+	/**
+	 *
+	 * @param richiestaId
+	 * @param taskId
+	 * @param variableSet
+	 * @param variableValue
+	 * @param commento
+	 * @param fileEntryIds
+	 * @param serviceContext
+	 * @throws PortalException
+	 */
+	public void completaTask(long richiestaId, String taskId, String variableSet, String variableValue, String commento, List<Long> fileEntryIds, ServiceContext serviceContext)
+			throws PortalException {
+
+		String tenantId = String.valueOf(serviceContext.getScopeGroup().getOrganizationId());
+
+		User currentUser = userLocalService.getUser(serviceContext.getUserId());
+
+		if (fileEntryIds != null && !fileEntryIds.isEmpty()) {
+			allegatoRichiestaLocalService.updateVisibilitaAllegatiRichiesta(richiestaId, fileEntryIds, true);
+		}
+
+		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId), true);
+		if (tasksByBusinessKey != null) {
+
+			for (Task task : tasksByBusinessKey) {
+				if (taskId.equalsIgnoreCase(task.getId()) && currentUser.getScreenName().equalsIgnoreCase(task.getAssignee())) {
+					List<Entry<String, String>> variables = new ArrayList<Entry<String, String>>();
+
+					if (Validator.isNotNull(variableSet)) {
+						variables.add(new AbstractMap.SimpleEntry<String, String>(variableSet, variableValue != null ? variableValue : null));
+					}
+					camundaClient.completeTask(taskId, variables);
+				}
+			}
+		}
+
+		if (Validator.isNotNull(commento)) {
+			commentoRichiestaLocalService.createCommentoRichiesta(commento, taskId, true, richiestaId, currentUser.getUserId(), currentUser.getFullName(), serviceContext.getScopeGroupId(),
+					serviceContext.getCompanyId());
+		}
+	}
+
+	/**
+	 *
+	 * @param userIdResponsabile
+	 * @param richiestaId
+	 * @param taskId
+	 * @param variableSet
+	 * @param commento
+	 * @param serviceContext
+	 * @throws PortalException
+	 */
+	public void assegnaResponsabile(long userIdResponsabile, long richiestaId, String taskId, String variableSet, String commento, ServiceContext serviceContext) throws PortalException {
+
+		String tenantId = String.valueOf(serviceContext.getScopeGroup().getOrganizationId());
+
+		User currentUser = userLocalService.getUser(serviceContext.getUserId());
+		User responsabileUser = userLocalService.getUser(userIdResponsabile);
+
+		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId), true);
+		if (tasksByBusinessKey != null) {
+
+			for (Task task : tasksByBusinessKey) {
+				if (taskId.equalsIgnoreCase(task.getId()) && currentUser.getScreenName().equalsIgnoreCase(task.getAssignee())) {
+					List<Entry<String, String>> variables = new ArrayList<Entry<String, String>>();
+
+					if (Validator.isNotNull(variableSet)) {
+						variables.add(new AbstractMap.SimpleEntry<String, String>(variableSet, responsabileUser.getScreenName()));
+					}
+					camundaClient.completeTask(taskId, variables);
+				}
+			}
+		}
+
+		// Aggiunta commento, se presente
+		if (Validator.isNotNull(commento)) {
+			commentoRichiestaLocalService.createCommentoRichiesta(commento, taskId, false, richiestaId, currentUser.getUserId(), currentUser.getFullName(), serviceContext.getScopeGroupId(),
+					serviceContext.getCompanyId());
+		}
+
+		// Aggiornamento stato pratica con commenti
+		String note = "Pratica inoltrata a Responsabile " + responsabileUser.getFullName();
+		richiestaLocalService.updateStatoRichiesta(richiestaId, StatoRichiesta.IN_LAVORAZIONE.name(), note);
+	}
+
+	/**
+	 *
+	 * @param richiestaId
+	 * @param taskId
+	 * @param commento
+	 * @param formIntegrativiIds
+	 * @param fileEntryIds
+	 * @param serviceContext
+	 * @throws Exception
+	 */
+	public void richiediIntegrazioni(long richiestaId, String taskId, String commento, List<Long> formIntegrativiIds, List<Long> fileEntryIds, ServiceContext serviceContext) throws Exception {
+
+		if (formIntegrativiIds == null || formIntegrativiIds.isEmpty()) {
+			throw new PortalException("Nessun form integrativo selezionato per la richiesta: ID RICHIESTA " + richiestaId);
+		}
+
+		long organizationId = serviceContext.getScopeGroup().getOrganizationId();
+		String tenantId = String.valueOf(organizationId);
+
+		User currentUser = userLocalService.getUser(serviceContext.getUserId());
+
+		if (fileEntryIds != null && !fileEntryIds.isEmpty()) {
+			allegatoRichiestaLocalService.updateVisibilitaAllegatiRichiesta(richiestaId, fileEntryIds, true);
+		}
+
+		if (Validator.isNotNull(commento)) {
+			commentoRichiestaLocalService.createCommentoRichiesta(commento, taskId, true, richiestaId, currentUser.getUserId(), currentUser.getFullName(), serviceContext.getScopeGroupId(),
+					serviceContext.getCompanyId());
+		}
+
+		// Aggiornamento stato richiesta
+		richiestaLocalService.updateStatoRichiesta(richiestaId, StatoRichiesta.ATTESA_INTEGRAZIONI.name());
+
+		// invio email al cittadino
+		List<Canale> canali = utenteOrganizzazioneCanaleComunicazioneLocalService.getListaCanaleComunicazioneByUtenteOrganization(currentUser.getUserId(), organizationId).stream()
+				.map(x -> x.getCanale()).map(x -> Canale.getSupportedChannel(x.getCodice())).collect(Collectors.toList());
+
+		Richiesta richiesta = richiestaLocalService.getRichiesta(richiestaId);
+
+		String statoRichiestaLabel = getStatoRichiestaLabelValue(richiesta.getStato(), serviceContext.getLocale());
+
+		for (Canale canale : canali) {
+			Utente utente = new Utente();
+			utente.setEmail(currentUser.getEmailAddress());
+			// TODO rendere template FreeMarker con caricamento configurazione by site.
+			String subject = "Notifica Richiesta documenti integrativi per la richiesta " + richiesta.getRichiestaId();
+			String test = "Caro " + currentUser.getFullName() + ",<br/> La richiesta in oggetto, da lei inoltrata con descrizione : " + richiesta.getOggetto() + " in stato " + statoRichiestaLabel
+					+ ", necessita di documenti integrativi.<br/> Visita il sito per integrare i documenti richiesti e inoltrare la domanda.";
+
+			Comunicazione comunicazione = new Comunicazione(subject, test, Collections.singletonList(utente), null, true, null, richiesta.getCompanyId(), richiesta.getGroupId());
+			log.debug("Invio comunicazione tramite canale '" + canale.getName() + "' a '" + currentUser.getScreenName() + "'");
+			EsitoComunicazione esito = communicationSender.send(comunicazione, canale);
+			log.debug("Comunicazione tramite canale '" + canale.getName() + "' a '" + currentUser.getScreenName() + "' inviata. MessageID: " + esito.getMessageId());
+
+		}
+
+		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId), true);
+		if (tasksByBusinessKey != null) {
+
+			for (Task task : tasksByBusinessKey) {
+				if (taskId.equalsIgnoreCase(task.getId()) && currentUser.getScreenName().equalsIgnoreCase(task.getAssignee())) {
+					List<Entry<String, String>> variables = new ArrayList<Entry<String, String>>();
+					camundaClient.completeTask(taskId, variables);
+				}
+			}
+		}
+	}
+
+	private String getStatoRichiestaLabelValue(String stato, Locale locale) {
+		return getLabelValue("stato-richiesta-" + stato, locale);
+	}
+
+	private String getLabelValue(String label, Locale locale) {
+		return ResourceBundleUtil.getLocalizationMap(ResourceBundleLoaderUtil.getResourceBundleLoaderByBundleSymbolicName(ScrivaniaOperatorePortletKeys.SCRIVANIAOPERATORE_BUNDLE_SYMBOLIC_NAME), label)
+				.get(locale);
+	}
 }
