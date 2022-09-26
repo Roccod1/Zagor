@@ -63,7 +63,9 @@
 	<portlet:actionURL var="aggiungiAllegatoURL" name="/action/aggiungiAllegato">
 	</portlet:actionURL>
 	
-	<aui:form action="${aggiungiAllegatoURL}">
+	<aui:form action="${aggiungiAllegatoURL}" enctype="multipart/form-data">
+		<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
+		
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -84,31 +86,15 @@
 					
 					<div class="row">
 						<div class="col-12">
-							<label><liferay-ui:message key="seleziona-file" /></label>
-							<input type="file"
-							       id="<portlet:namespace />allegato">
-						</div>
-					</div>
-					
-					<div class="row">
-						<div class="col-12">
-							<button type="button" class="btn btn-secondary" id="<portlet:namespace />btnRimuovi">
-								<liferay-ui:message key="rimuovi" />
-							</button>
-							<button type="button" class="btn btn-secondary" id="<portlet:namespace />btnCarica">
-								<liferay-ui:message key="carica" />
-							</button>
-							<button type="button" class="btn btn-primary" id="<portlet:namespace />btnSfoglia">
-								<liferay-ui:message key="sfoglia" />...
-							</button>
+							<div class="form-group">
+								<label><liferay-ui:message key="seleziona-file" /></label>
+								<input type="file" name="<portlet:namespace />allegato" class="form-control">
+							</div>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer d-flex justify-content-end">		
 					<button type="button" class="btn btn-secondary" data-dismiss="modal"><liferay-ui:message key="annulla" /></button>
-					
-					<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
-					<aui:input type="hidden" name="fileId" />
 					
 					<button id="<portlet:namespace />btnSalva" type="button" class="btn btn-primary ml-1">
 						<liferay-ui:message key="salva-allegato" />
@@ -124,54 +110,7 @@
 </portlet:resourceURL>
 
 <script>
-	var allegatoNode = $("#<portlet:namespace />allegato");
-	var fileNode = $("#<portlet:namespace />fileId");
-	
 	$("#<portlet:namespace />btnSalva").on("click", function() {
-		console.log(1);
-		if (fileNode.val() == "") {
-			alert("carica-un-file");
-		} else {
-			$(this).parents("form").submit();
-		}
-	});
-	
-	$("#<portlet:namespace />btnRimuovi").on("click", function() {
-		fileNode.val("");
-		allegatoNode.val("");
-	});
-	$("#<portlet:namespace />btnSfoglia").on("click", function() {
-		fileNode.val("");
-		allegatoNode.click();
-	});
-	$("#<portlet:namespace />btnCarica").on("click", function() {
-		if (allegatoNode.val() == "") {
-			alert("seleziona-file-da-caricare");
-		} else if (fileNode.val() != "") {
-			alert("file-gia-caricato");
-		} else {
-			var fd = new FormData();
-			var file = allegatoNode[0].files[0];
-			
-			fd.append('<portlet:namespace />allegato', file); 	
-		
-			$.ajax({
-				url: '${uploadAllegatoURL}',
-				type: 'POST',
-				data: fd,
-				processData: false,
-				contentType: false,
-				success: function (response) {
-					var data = JSON.parse(response);
-					
-					console.log(2);
-					if (data.error != undefined) {
-						alert("errore-upload");
-					} else {
-						fileNode.val(data.fileId);
-					}
-				}
-			});
-		}
+		$(this).parents("form").submit();
 	});
 </script>
