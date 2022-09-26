@@ -72,6 +72,7 @@ public class AggiungiCommentoActionCommand extends BaseMVCActionCommand {
 		renderParameters.setValue("mvcRenderCommandName", "/render/dettaglio");
 		renderParameters.setValue("id", String.valueOf(richiestaId));
 		renderParameters.setValue("dettaglioTab", ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_COMMENTI);
+		renderParameters.setValue("isMain", String.valueOf(false));
 	}
 
 }

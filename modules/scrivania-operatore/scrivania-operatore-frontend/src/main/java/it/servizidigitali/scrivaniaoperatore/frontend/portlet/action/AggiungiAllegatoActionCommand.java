@@ -86,6 +86,7 @@ public class AggiungiAllegatoActionCommand extends BaseMVCActionCommand {
 		renderParameters.setValue("mvcRenderCommandName", "/render/dettaglio");
 		renderParameters.setValue("id", String.valueOf(richiestaId));
 		renderParameters.setValue("dettaglioTab", ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_ALLEGATI);
+		renderParameters.setValue("isMain", String.valueOf(false));
 	}
 
 	private String generateFilename(String fileName) {
