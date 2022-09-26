@@ -12,9 +12,11 @@
 
 package it.servizidigitali.scrivaniaoperatore.service.impl;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +55,25 @@ public class RichiestaLocalServiceImpl extends RichiestaLocalServiceBaseImpl {
 	public void updateStatoRichiesta(long richiestaId, String stato) throws NoSuchRichiestaException {
 		Richiesta richiesta = richiestaPersistence.findByPrimaryKey(richiestaId);
 		richiesta.setStato(stato);
+		richiestaPersistence.update(richiesta);
+	}
+
+	@Override
+	public void updateStatoRichiesta(long richiestaId, String stato, String noteToAppend) throws NoSuchRichiestaException {
+		Richiesta richiesta = richiestaPersistence.findByPrimaryKey(richiestaId);
+		richiesta.setStato(stato);
+
+		if (noteToAppend != null) {
+			String note = richiesta.getNote();
+			if (Validator.isNull(note)) {
+				richiesta.setNote(noteToAppend);
+			}
+			else {
+				note += StringPool.NEW_LINE + noteToAppend;
+				richiesta.setNote(note);
+			}
+		}
+
 		richiestaPersistence.update(richiesta);
 	}
 

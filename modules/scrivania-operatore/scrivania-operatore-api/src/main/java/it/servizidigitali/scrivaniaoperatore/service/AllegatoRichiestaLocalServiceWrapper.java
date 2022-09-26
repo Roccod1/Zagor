@@ -277,10 +277,32 @@ public class AllegatoRichiestaLocalServiceWrapper
 	@Override
 	public java.util.List
 		<it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta>
-			getAllegatiRichiesta(long richiestaId, long groupId) {
+			getAllegatiRichiestaByRichiestaId(long richiestaId) {
 
-		return _allegatoRichiestaLocalService.getAllegatiRichiesta(
-			richiestaId, groupId);
+		return _allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaId(
+			richiestaId);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta>
+			getAllegatiRichiestaByRichiestaIdGroupIdInterno(
+				long richiestaId, boolean interno) {
+
+		return _allegatoRichiestaLocalService.
+			getAllegatiRichiestaByRichiestaIdGroupIdInterno(
+				richiestaId, interno);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta>
+			getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
+				long richiestaId, boolean visibile) {
+
+		return _allegatoRichiestaLocalService.
+			getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
+				richiestaId, visibile);
 	}
 
 	/**
@@ -303,11 +325,12 @@ public class AllegatoRichiestaLocalServiceWrapper
 
 	@Override
 	public it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta
-		getAllegatoRichiesta(
-			long richiestaId, boolean principale, long groupId) {
+		getAllegatoRichiestaByRichiestaIdPrincipale(
+			long richiestaId, boolean principale) {
 
-		return _allegatoRichiestaLocalService.getAllegatoRichiesta(
-			richiestaId, principale, groupId);
+		return _allegatoRichiestaLocalService.
+			getAllegatoRichiestaByRichiestaIdPrincipale(
+				richiestaId, principale);
 	}
 
 	/**
@@ -454,6 +477,14 @@ public class AllegatoRichiestaLocalServiceWrapper
 
 		return _allegatoRichiestaLocalService.updateAllegatoRichiesta(
 			allegatoRichiesta);
+	}
+
+	@Override
+	public void updateVisibilitaAllegatiRichiesta(
+		long richiestaId, java.util.List<Long> fileEntryIds, boolean visibile) {
+
+		_allegatoRichiestaLocalService.updateVisibilitaAllegatiRichiesta(
+			richiestaId, fileEntryIds, visibile);
 	}
 
 	@Override

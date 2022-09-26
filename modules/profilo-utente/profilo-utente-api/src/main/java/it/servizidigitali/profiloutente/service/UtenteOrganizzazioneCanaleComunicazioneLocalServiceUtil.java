@@ -275,9 +275,8 @@ public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceUtil {
 	}
 
 	public static List<UtenteOrganizzazioneCanaleComunicazione>
-			getListaCanaleComunicazioneByUtenteOrganization(
-				long utenteId, long organizationId)
-		throws Exception {
+		getListaCanaleComunicazioneByUtenteOrganization(
+			long utenteId, long organizationId) {
 
 		return getService().getListaCanaleComunicazioneByUtenteOrganization(
 			utenteId, organizationId);

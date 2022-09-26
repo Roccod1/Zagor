@@ -286,6 +286,48 @@ public interface AllegatoRichiestaModel
 	 */
 	public void setPrincipale(boolean principale);
 
+	/**
+	 * Returns the interno of this allegato richiesta.
+	 *
+	 * @return the interno of this allegato richiesta
+	 */
+	public boolean getInterno();
+
+	/**
+	 * Returns <code>true</code> if this allegato richiesta is interno.
+	 *
+	 * @return <code>true</code> if this allegato richiesta is interno; <code>false</code> otherwise
+	 */
+	public boolean isInterno();
+
+	/**
+	 * Sets whether this allegato richiesta is interno.
+	 *
+	 * @param interno the interno of this allegato richiesta
+	 */
+	public void setInterno(boolean interno);
+
+	/**
+	 * Returns the visibile of this allegato richiesta.
+	 *
+	 * @return the visibile of this allegato richiesta
+	 */
+	public boolean getVisibile();
+
+	/**
+	 * Returns <code>true</code> if this allegato richiesta is visibile.
+	 *
+	 * @return <code>true</code> if this allegato richiesta is visibile; <code>false</code> otherwise
+	 */
+	public boolean isVisibile();
+
+	/**
+	 * Sets whether this allegato richiesta is visibile.
+	 *
+	 * @param visibile the visibile of this allegato richiesta
+	 */
+	public void setVisibile(boolean visibile);
+
 	@Override
 	public AllegatoRichiesta cloneWithOriginalValues();
 

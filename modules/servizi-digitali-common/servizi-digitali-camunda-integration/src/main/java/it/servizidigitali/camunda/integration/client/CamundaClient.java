@@ -190,10 +190,10 @@ public interface CamundaClient {
 	/**
 	 *
 	 * @param taskId
-	 * @param varialbles
+	 * @param variables
 	 * @throws CamundaClientException
 	 */
-	void completeTask(String taskId, List<Entry<String, String>> varialbles) throws CamundaClientException;
+	void completeTask(String taskId, List<Entry<String, String>> variables) throws CamundaClientException;
 
 	/**
 	 * @param businessKey

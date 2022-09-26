@@ -323,9 +323,8 @@ public class UtenteOrganizzazioneCanaleComunicazioneLocalServiceWrapper
 	public java.util.List
 		<it.servizidigitali.profiloutente.model.
 			UtenteOrganizzazioneCanaleComunicazione>
-					getListaCanaleComunicazioneByUtenteOrganization(
-						long utenteId, long organizationId)
-				throws Exception {
+				getListaCanaleComunicazioneByUtenteOrganization(
+					long utenteId, long organizationId) {
 
 		return _utenteOrganizzazioneCanaleComunicazioneLocalService.
 			getListaCanaleComunicazioneByUtenteOrganization(

@@ -224,8 +224,18 @@ public interface AllegatoRichiestaLocalService
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<AllegatoRichiesta> getAllegatiRichiesta(
-		long richiestaId, long groupId);
+	public List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaId(
+		long richiestaId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<AllegatoRichiesta>
+		getAllegatiRichiestaByRichiestaIdGroupIdInterno(
+			long richiestaId, boolean interno);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<AllegatoRichiesta>
+		getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
+			long richiestaId, boolean visibile);
 
 	/**
 	 * Returns the allegato richiesta with the primary key.
@@ -240,8 +250,8 @@ public interface AllegatoRichiestaLocalService
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public AllegatoRichiesta getAllegatoRichiesta(
-		long richiestaId, boolean principale, long groupId);
+	public AllegatoRichiesta getAllegatoRichiestaByRichiestaIdPrincipale(
+		long richiestaId, boolean principale);
 
 	/**
 	 * Returns the allegato richiesta matching the UUID and group.
@@ -339,5 +349,8 @@ public interface AllegatoRichiestaLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public AllegatoRichiesta updateAllegatoRichiesta(
 		AllegatoRichiesta allegatoRichiesta);
+
+	public void updateVisibilitaAllegatiRichiesta(
+		long richiestaId, List<Long> fileEntryIds, boolean visibile);
 
 }

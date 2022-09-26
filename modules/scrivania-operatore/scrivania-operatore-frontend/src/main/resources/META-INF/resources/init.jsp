@@ -9,6 +9,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@page import="it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO"%>
+<%@page import="it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO"%>
 <%@page import="com.liferay.portal.kernel.dao.search.ResultRow"%>
 <%@page import="com.liferay.portal.kernel.util.WebKeys"%>
 

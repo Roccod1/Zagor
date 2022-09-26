@@ -50,6 +50,8 @@ import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalServi
 import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalServiceUtil;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPK;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPersistence;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.AttivitaRichiestaPersistence;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.CommentoRichiestaPersistence;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.IstanzaFormPersistence;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.RichiestaFinder;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.RichiestaPersistence;
@@ -623,6 +625,12 @@ public abstract class AllegatoRichiestaLocalServiceBaseImpl
 
 	@Reference
 	protected AllegatoRichiestaPersistence allegatoRichiestaPersistence;
+
+	@Reference
+	protected AttivitaRichiestaPersistence attivitaRichiestaPersistence;
+
+	@Reference
+	protected CommentoRichiestaPersistence commentoRichiestaPersistence;
 
 	@Reference
 	protected IstanzaFormPersistence istanzaFormPersistence;

@@ -411,6 +411,14 @@ public class RichiestaLocalServiceUtil {
 		getService().updateStatoRichiesta(richiestaId, stato);
 	}
 
+	public static void updateStatoRichiesta(
+			long richiestaId, String stato, String noteToAppend)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchRichiestaException {
+
+		getService().updateStatoRichiesta(richiestaId, stato, noteToAppend);
+	}
+
 	public static RichiestaLocalService getService() {
 		return _service;
 	}

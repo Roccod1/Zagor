@@ -37,3 +37,36 @@ ADD COLUMN `dataProtocolloEsterno` TIMESTAMP NULL AFTER `numeroProtocolloEsterno
 ALTER TABLE `servizi_digitali`.`richiesta` 
 ADD COLUMN `processInstanceId` VARCHAR(75) NULL AFTER `delegaId`;
 
+-- 20220916
+ALTER TABLE `servizi_digitali`.`allegato_richiesta` 
+ADD COLUMN `interno` TINYINT(1) NOT NULL DEFAULT '0' AFTER `principale`,
+ADD COLUMN `visibile` TINYINT(1) NOT NULL DEFAULT '1' AFTER `interno`;
+
+CREATE TABLE `servizi_digitali`.`commento_richiesta` (
+  `uuid_` VARCHAR(75) NULL DEFAULT NULL,
+  `commentoRichiestaId` BIGINT NOT NULL,
+  `groupId` BIGINT NULL DEFAULT NULL,
+  `companyId` BIGINT NULL DEFAULT NULL,
+  `userId` BIGINT NULL DEFAULT NULL,
+  `userName` VARCHAR(75) NULL DEFAULT NULL,
+  `createDate` DATETIME(6) NULL DEFAULT NULL,
+  `modifiedDate` DATETIME(6) NULL DEFAULT NULL,
+  `testo` LONGTEXT NULL,
+  `taskId` VARCHAR(75) NULL,
+  `visibile` TINYINT(1) NOT NULL DEFAULT '0',
+  `richiestaId` BIGINT NOT NULL,
+  PRIMARY KEY (`commentoRichiestaId`));
+  
+-- 20220923
+CREATE TABLE `servizi_digitali`.`attivita_richiesta` (
+  `uuid_` VARCHAR(75) NULL DEFAULT NULL,
+  `attivitaRichiestaId` BIGINT NOT NULL,
+  `groupId` BIGINT NULL DEFAULT NULL,
+  `companyId` BIGINT NULL DEFAULT NULL,
+  `userId` BIGINT NULL DEFAULT NULL,
+  `userName` VARCHAR(75) NULL DEFAULT NULL,
+  `createDate` DATETIME(6) NULL DEFAULT NULL,
+  `modifiedDate` DATETIME(6) NULL DEFAULT NULL,
+  `note` LONGTEXT NULL,
+  `stato` VARCHAR(75) NOT NULL,
+  PRIMARY KEY (`attivitaRichiestaId`));

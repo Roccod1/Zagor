@@ -348,4 +348,8 @@ public interface RichiestaLocalService
 	public void updateStatoRichiesta(long richiestaId, String stato)
 		throws NoSuchRichiestaException;
 
+	public void updateStatoRichiesta(
+			long richiestaId, String stato, String noteToAppend)
+		throws NoSuchRichiestaException;
+
 }
