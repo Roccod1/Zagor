@@ -27,11 +27,29 @@ import it.servizidigitali.scrivaniaoperatore.service.base.CommentoRichiestaLocal
 @Component(property = "model.class.name=it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta", service = AopService.class)
 public class CommentoRichiestaLocalServiceImpl extends CommentoRichiestaLocalServiceBaseImpl {
 
+	@Override
 	public List<CommentoRichiesta> getCommentiRichiestaByRichiestaId(long richiestaId) {
 		return commentoRichiestaPersistence.findByRichiestaId(richiestaId);
 	}
 
+	@Override
 	public List<CommentoRichiesta> getCommentiRichiestaByRichiestaIdVisibile(long richiestaId, boolean visibile) {
 		return commentoRichiestaPersistence.findByRichiestaIdVisibile(richiestaId, visibile);
+	}
+
+	public long createCommentoRichiesta(String testo, String taskId, boolean visibile, long richiestaId, long userId, String userName, long groupId, long companyId) {
+
+		CommentoRichiesta commentoRichiesta = commentoRichiestaPersistence.create(counterLocalService.increment());
+		commentoRichiesta.setTesto(testo);
+		commentoRichiesta.setTaskId(taskId);
+		commentoRichiesta.setVisibile(visibile);
+		commentoRichiesta.setGroupId(groupId);
+		commentoRichiesta.setCompanyId(companyId);
+		commentoRichiesta.setUserId(userId);
+		commentoRichiesta.setUserName(userName);
+
+		commentoRichiesta = commentoRichiestaPersistence.update(commentoRichiesta);
+
+		return commentoRichiesta.getCommentoRichiestaId();
 	}
 }

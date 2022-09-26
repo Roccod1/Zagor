@@ -21,6 +21,7 @@ import org.osgi.service.component.annotations.Component;
 import it.servizidigitali.scrivaniaoperatore.exception.NoSuchAllegatoRichiestaException;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.service.base.AllegatoRichiestaLocalServiceBaseImpl;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPK;
 
 /**
  * @author Brian Wing Shun Chan
@@ -52,6 +53,23 @@ public class AllegatoRichiestaLocalServiceImpl extends AllegatoRichiestaLocalSer
 	@Override
 	public List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaIdGroupIdVisibile(long richiestaId, boolean visibile) {
 		return allegatoRichiestaPersistence.findByRichiestaIdVisibile(richiestaId, visibile);
+	}
+
+	public void updateVisibilitaAllegatiRichiesta(long richiestaId, List<Long> fileEntryIds, boolean visibile) {
+
+		if (fileEntryIds != null && !fileEntryIds.isEmpty()) {
+			for (Long fileEntryId : fileEntryIds) {
+				AllegatoRichiestaPK allegatoRichiestaPK = new AllegatoRichiestaPK(richiestaId, fileEntryId);
+				try {
+					AllegatoRichiesta allegatoRichiesta = allegatoRichiestaPersistence.findByPrimaryKey(allegatoRichiestaPK);
+					allegatoRichiesta.setVisibile(visibile);
+					allegatoRichiestaPersistence.update(allegatoRichiesta);
+				}
+				catch (NoSuchAllegatoRichiestaException e) {
+				}
+			}
+		}
+
 	}
 
 }

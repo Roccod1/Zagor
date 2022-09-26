@@ -480,6 +480,14 @@ public class AllegatoRichiestaLocalServiceWrapper
 	}
 
 	@Override
+	public void updateVisibilitaAllegatiRichiesta(
+		long richiestaId, java.util.List<Long> fileEntryIds, boolean visibile) {
+
+		_allegatoRichiestaLocalService.updateVisibilitaAllegatiRichiesta(
+			richiestaId, fileEntryIds, visibile);
+	}
+
+	@Override
 	public AllegatoRichiestaLocalService getWrappedService() {
 		return _allegatoRichiestaLocalService;
 	}

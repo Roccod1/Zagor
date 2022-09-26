@@ -71,6 +71,16 @@ public class CommentoRichiestaLocalServiceWrapper
 			commentoRichiestaId);
 	}
 
+	@Override
+	public long createCommentoRichiesta(
+		String testo, String taskId, boolean visibile, long richiestaId,
+		long userId, String userName, long groupId, long companyId) {
+
+		return _commentoRichiestaLocalService.createCommentoRichiesta(
+			testo, taskId, visibile, richiestaId, userId, userName, groupId,
+			companyId);
+	}
+
 	/**
 	 * @throws PortalException
 	 */

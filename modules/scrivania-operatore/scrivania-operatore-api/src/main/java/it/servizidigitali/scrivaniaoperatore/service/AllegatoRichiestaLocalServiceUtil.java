@@ -409,6 +409,13 @@ public class AllegatoRichiestaLocalServiceUtil {
 		return getService().updateAllegatoRichiesta(allegatoRichiesta);
 	}
 
+	public static void updateVisibilitaAllegatiRichiesta(
+		long richiestaId, List<Long> fileEntryIds, boolean visibile) {
+
+		getService().updateVisibilitaAllegatiRichiesta(
+			richiestaId, fileEntryIds, visibile);
+	}
+
 	public static AllegatoRichiestaLocalService getService() {
 		return _service;
 	}

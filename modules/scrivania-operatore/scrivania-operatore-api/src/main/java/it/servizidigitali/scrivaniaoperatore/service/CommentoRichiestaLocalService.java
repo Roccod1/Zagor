@@ -88,6 +88,10 @@ public interface CommentoRichiestaLocalService
 	@Transactional(enabled = false)
 	public CommentoRichiesta createCommentoRichiesta(long commentoRichiestaId);
 
+	public long createCommentoRichiesta(
+		String testo, String taskId, boolean visibile, long richiestaId,
+		long userId, String userName, long groupId, long companyId);
+
 	/**
 	 * @throws PortalException
 	 */

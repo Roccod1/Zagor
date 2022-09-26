@@ -350,4 +350,7 @@ public interface AllegatoRichiestaLocalService
 	public AllegatoRichiesta updateAllegatoRichiesta(
 		AllegatoRichiesta allegatoRichiesta);
 
+	public void updateVisibilitaAllegatiRichiesta(
+		long richiestaId, List<Long> fileEntryIds, boolean visibile);
+
 }

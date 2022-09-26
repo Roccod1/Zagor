@@ -74,6 +74,15 @@ public class CommentoRichiestaLocalServiceUtil {
 		return getService().createCommentoRichiesta(commentoRichiestaId);
 	}
 
+	public static long createCommentoRichiesta(
+		String testo, String taskId, boolean visibile, long richiestaId,
+		long userId, String userName, long groupId, long companyId) {
+
+		return getService().createCommentoRichiesta(
+			testo, taskId, visibile, richiestaId, userId, userName, groupId,
+			companyId);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
