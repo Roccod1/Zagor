@@ -243,9 +243,8 @@ public interface UtenteOrganizzazioneCanaleComunicazioneLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<UtenteOrganizzazioneCanaleComunicazione>
-			getListaCanaleComunicazioneByUtenteOrganization(
-				long utenteId, long organizationId)
-		throws Exception;
+		getListaCanaleComunicazioneByUtenteOrganization(
+			long utenteId, long organizationId);
 
 	/**
 	 * Returns the OSGi service identifier.
