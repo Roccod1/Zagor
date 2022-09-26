@@ -21,10 +21,12 @@ import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.AttivitaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.CommentoDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.ServizioDTO;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.AttivitaRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 
@@ -130,5 +132,13 @@ public class MapUtil {
 		commento.setTesto(cr.getTesto());
 		commento.setVisibileAlCittadino(cr.isVisibile());
 		return commento;
+	}
+	
+	public AttivitaDTO mapAttivita(AttivitaRichiesta ar) {
+		AttivitaDTO attivita = new AttivitaDTO();
+		attivita.setData(ar.getCreateDate());
+		attivita.setNote(ar.getNote());
+		attivita.setStato(ar.getStato());
+		return attivita;
 	}
 }

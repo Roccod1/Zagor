@@ -1,7 +1,6 @@
 package it.servizidigitali.scrivaniaoperatore.frontend.portlet.render;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,12 +21,14 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import it.servizidigitali.camunda.integration.client.model.Task;
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.AttivitaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AzioneUtente;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.CommentoDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaCodiciOperazioniUtente;
 import it.servizidigitali.scrivaniaoperatore.frontend.service.ScrivaniaOperatoreFrontendService;
 import it.servizidigitali.scrivaniaoperatore.frontend.util.MapUtil;
+import it.servizidigitali.scrivaniaoperatore.service.AttivitaRichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 @Component(//
@@ -42,10 +43,10 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
-
 	@Reference
 	private ScrivaniaOperatoreFrontendService scrivaniaOperatoreFrontendService;
-
+	@Reference
+	private AttivitaRichiestaLocalService attivitaRichiestaLocalService;
 	@Reference
 	private MapUtil mapUtil;
 
@@ -123,8 +124,14 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 			request.setAttribute("commentiList", commenti);
 			break;
 		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_ATTIVITA:
-			request.setAttribute("attivitaCount", 0);
-			request.setAttribute("attivitaList", Collections.emptyList());
+			List<AttivitaDTO> attivita = attivitaRichiestaLocalService
+				.getAttivitaRichiestaByRichiestaId(id)
+				.stream()
+				.map(x -> mapUtil.mapAttivita(x))
+				.collect(Collectors.toList());
+			
+			request.setAttribute("attivitaCount", attivita.size());
+			request.setAttribute("attivitaList", attivita);
 			break;
 		default:
 			throw new RuntimeException("dettaglioTab");
