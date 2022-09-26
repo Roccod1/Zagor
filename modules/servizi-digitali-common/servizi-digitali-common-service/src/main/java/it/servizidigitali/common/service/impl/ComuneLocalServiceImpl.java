@@ -14,6 +14,8 @@ package it.servizidigitali.common.service.impl;
 
 import com.liferay.portal.aop.AopService;
 
+import java.util.List;
+
 import org.osgi.service.component.annotations.Component;
 
 import it.servizidigitali.common.exception.NoSuchComuneException;
@@ -45,6 +47,11 @@ public class ComuneLocalServiceImpl extends ComuneLocalServiceBaseImpl {
 		Comune comune = comuneFinder.findComuneByCodiceISTAT(codiceIstat);
 		fillComune(comune);
 		return comune;
+	}
+
+	@Override
+	public List<Comune> getComuniByProvinciaId(long provinciaId) {
+		return comunePersistence.findByIdProvincia(provinciaId);
 	}
 
 	/**

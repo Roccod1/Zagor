@@ -254,6 +254,10 @@ public class ProvinciaLocalServiceUtil {
 		return getService().getProvincia(provinciaId);
 	}
 
+	public static Provincia getProvinciaBySigla(String sigla) {
+		return getService().getProvinciaBySigla(sigla);
+	}
+
 	/**
 	 * Returns a range of all the provincias.
 	 *

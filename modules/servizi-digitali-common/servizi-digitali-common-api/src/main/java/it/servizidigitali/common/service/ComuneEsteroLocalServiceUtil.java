@@ -263,6 +263,12 @@ public class ComuneEsteroLocalServiceUtil {
 		return getService().getComuneEsterosCount();
 	}
 
+	public static List<ComuneEstero> getComuniEsteriByDenominazione(
+		String denominazione) {
+
+		return getService().getComuniEsteriByDenominazione(denominazione);
+	}
+
 	public static
 		com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery
 			getIndexableActionableDynamicQuery() {

@@ -1040,505 +1040,14 @@ public class ComunePersistenceImpl
 	private FinderPath _finderPathCountByidRegione;
 
 	/**
-	 * Returns all the comunes where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @return the matching comunes
-	 */
-	@Override
-	public List<Comune> findByidRegione(long idProvincia) {
-		return findByidRegione(
-			idProvincia, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the comunes where idProvincia = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
-	 * </p>
-	 *
-	 * @param idProvincia the id provincia
-	 * @param start the lower bound of the range of comunes
-	 * @param end the upper bound of the range of comunes (not inclusive)
-	 * @return the range of matching comunes
-	 */
-	@Override
-	public List<Comune> findByidRegione(long idProvincia, int start, int end) {
-		return findByidRegione(idProvincia, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the comunes where idProvincia = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
-	 * </p>
-	 *
-	 * @param idProvincia the id provincia
-	 * @param start the lower bound of the range of comunes
-	 * @param end the upper bound of the range of comunes (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching comunes
-	 */
-	@Override
-	public List<Comune> findByidRegione(
-		long idProvincia, int start, int end,
-		OrderByComparator<Comune> orderByComparator) {
-
-		return findByidRegione(
-			idProvincia, start, end, orderByComparator, true);
-	}
-
-	/**
-	 * Returns an ordered range of all the comunes where idProvincia = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
-	 * </p>
-	 *
-	 * @param idProvincia the id provincia
-	 * @param start the lower bound of the range of comunes
-	 * @param end the upper bound of the range of comunes (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param useFinderCache whether to use the finder cache
-	 * @return the ordered range of matching comunes
-	 */
-	@Override
-	public List<Comune> findByidRegione(
-		long idProvincia, int start, int end,
-		OrderByComparator<Comune> orderByComparator, boolean useFinderCache) {
-
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-			(orderByComparator == null)) {
-
-			if (useFinderCache) {
-				finderPath = _finderPathWithoutPaginationFindByidRegione;
-				finderArgs = new Object[] {idProvincia};
-			}
-		}
-		else if (useFinderCache) {
-			finderPath = _finderPathWithPaginationFindByidRegione;
-			finderArgs = new Object[] {
-				idProvincia, start, end, orderByComparator
-			};
-		}
-
-		List<Comune> list = null;
-
-		if (useFinderCache) {
-			list = (List<Comune>)finderCache.getResult(finderPath, finderArgs);
-
-			if ((list != null) && !list.isEmpty()) {
-				for (Comune comune : list) {
-					if (idProvincia != comune.getIdProvincia()) {
-						list = null;
-
-						break;
-					}
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler sb = null;
-
-			if (orderByComparator != null) {
-				sb = new StringBundler(
-					3 + (orderByComparator.getOrderByFields().length * 2));
-			}
-			else {
-				sb = new StringBundler(3);
-			}
-
-			sb.append(_SQL_SELECT_COMUNE_WHERE);
-
-			sb.append(_FINDER_COLUMN_IDREGIONE_IDPROVINCIA_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(
-					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
-			}
-			else {
-				sb.append(ComuneModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				queryPos.add(idProvincia);
-
-				list = (List<Comune>)QueryUtil.list(
-					query, getDialect(), start, end);
-
-				cacheResult(list);
-
-				if (useFinderCache) {
-					finderCache.putResult(finderPath, finderArgs, list);
-				}
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching comune
-	 * @throws NoSuchComuneException if a matching comune could not be found
-	 */
-	@Override
-	public Comune findByidRegione_First(
-			long idProvincia, OrderByComparator<Comune> orderByComparator)
-		throws NoSuchComuneException {
-
-		Comune comune = fetchByidRegione_First(idProvincia, orderByComparator);
-
-		if (comune != null) {
-			return comune;
-		}
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		sb.append("idProvincia=");
-		sb.append(idProvincia);
-
-		sb.append("}");
-
-		throw new NoSuchComuneException(sb.toString());
-	}
-
-	/**
-	 * Returns the first comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching comune, or <code>null</code> if a matching comune could not be found
-	 */
-	@Override
-	public Comune fetchByidRegione_First(
-		long idProvincia, OrderByComparator<Comune> orderByComparator) {
-
-		List<Comune> list = findByidRegione(
-			idProvincia, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching comune
-	 * @throws NoSuchComuneException if a matching comune could not be found
-	 */
-	@Override
-	public Comune findByidRegione_Last(
-			long idProvincia, OrderByComparator<Comune> orderByComparator)
-		throws NoSuchComuneException {
-
-		Comune comune = fetchByidRegione_Last(idProvincia, orderByComparator);
-
-		if (comune != null) {
-			return comune;
-		}
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		sb.append("idProvincia=");
-		sb.append(idProvincia);
-
-		sb.append("}");
-
-		throw new NoSuchComuneException(sb.toString());
-	}
-
-	/**
-	 * Returns the last comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching comune, or <code>null</code> if a matching comune could not be found
-	 */
-	@Override
-	public Comune fetchByidRegione_Last(
-		long idProvincia, OrderByComparator<Comune> orderByComparator) {
-
-		int count = countByidRegione(idProvincia);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<Comune> list = findByidRegione(
-			idProvincia, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the comunes before and after the current comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param comuneId the primary key of the current comune
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next comune
-	 * @throws NoSuchComuneException if a comune with the primary key could not be found
-	 */
-	@Override
-	public Comune[] findByidRegione_PrevAndNext(
-			long comuneId, long idProvincia,
-			OrderByComparator<Comune> orderByComparator)
-		throws NoSuchComuneException {
-
-		Comune comune = findByPrimaryKey(comuneId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			Comune[] array = new ComuneImpl[3];
-
-			array[0] = getByidRegione_PrevAndNext(
-				session, comune, idProvincia, orderByComparator, true);
-
-			array[1] = comune;
-
-			array[2] = getByidRegione_PrevAndNext(
-				session, comune, idProvincia, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception exception) {
-			throw processException(exception);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected Comune getByidRegione_PrevAndNext(
-		Session session, Comune comune, long idProvincia,
-		OrderByComparator<Comune> orderByComparator, boolean previous) {
-
-		StringBundler sb = null;
-
-		if (orderByComparator != null) {
-			sb = new StringBundler(
-				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
-					(orderByComparator.getOrderByFields().length * 3));
-		}
-		else {
-			sb = new StringBundler(3);
-		}
-
-		sb.append(_SQL_SELECT_COMUNE_WHERE);
-
-		sb.append(_FINDER_COLUMN_IDREGIONE_IDPROVINCIA_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields =
-				orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				sb.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				sb.append(_ORDER_BY_ENTITY_ALIAS);
-				sb.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						sb.append(WHERE_GREATER_THAN);
-					}
-					else {
-						sb.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			sb.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				sb.append(_ORDER_BY_ENTITY_ALIAS);
-				sb.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						sb.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						sb.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						sb.append(ORDER_BY_ASC);
-					}
-					else {
-						sb.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			sb.append(ComuneModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = sb.toString();
-
-		Query query = session.createQuery(sql);
-
-		query.setFirstResult(0);
-		query.setMaxResults(2);
-
-		QueryPos queryPos = QueryPos.getInstance(query);
-
-		queryPos.add(idProvincia);
-
-		if (orderByComparator != null) {
-			for (Object orderByConditionValue :
-					orderByComparator.getOrderByConditionValues(comune)) {
-
-				queryPos.add(orderByConditionValue);
-			}
-		}
-
-		List<Comune> list = query.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the comunes where idProvincia = &#63; from the database.
-	 *
-	 * @param idProvincia the id provincia
-	 */
-	@Override
-	public void removeByidRegione(long idProvincia) {
-		for (Comune comune :
-				findByidRegione(
-					idProvincia, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-
-			remove(comune);
-		}
-	}
-
-	/**
-	 * Returns the number of comunes where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @return the number of matching comunes
-	 */
-	@Override
-	public int countByidRegione(long idProvincia) {
-		FinderPath finderPath = _finderPathCountByidRegione;
-
-		Object[] finderArgs = new Object[] {idProvincia};
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
-
-		if (count == null) {
-			StringBundler sb = new StringBundler(2);
-
-			sb.append(_SQL_COUNT_COMUNE_WHERE);
-
-			sb.append(_FINDER_COLUMN_IDREGIONE_IDPROVINCIA_2);
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				queryPos.add(idProvincia);
-
-				count = (Long)query.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_IDREGIONE_IDPROVINCIA_2 =
-		"comune.idProvincia = ?";
-
-	private FinderPath _finderPathWithPaginationFindByIdProvincia;
-	private FinderPath _finderPathWithoutPaginationFindByIdProvincia;
-	private FinderPath _finderPathCountByIdProvincia;
-
-	/**
 	 * Returns all the comunes where idRegione = &#63;.
 	 *
 	 * @param idRegione the id regione
 	 * @return the matching comunes
 	 */
 	@Override
-	public List<Comune> findByIdProvincia(long idRegione) {
-		return findByIdProvincia(
+	public List<Comune> findByidRegione(long idRegione) {
+		return findByidRegione(
 			idRegione, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
@@ -1555,8 +1064,8 @@ public class ComunePersistenceImpl
 	 * @return the range of matching comunes
 	 */
 	@Override
-	public List<Comune> findByIdProvincia(long idRegione, int start, int end) {
-		return findByIdProvincia(idRegione, start, end, null);
+	public List<Comune> findByidRegione(long idRegione, int start, int end) {
+		return findByidRegione(idRegione, start, end, null);
 	}
 
 	/**
@@ -1573,12 +1082,11 @@ public class ComunePersistenceImpl
 	 * @return the ordered range of matching comunes
 	 */
 	@Override
-	public List<Comune> findByIdProvincia(
+	public List<Comune> findByidRegione(
 		long idRegione, int start, int end,
 		OrderByComparator<Comune> orderByComparator) {
 
-		return findByIdProvincia(
-			idRegione, start, end, orderByComparator, true);
+		return findByidRegione(idRegione, start, end, orderByComparator, true);
 	}
 
 	/**
@@ -1596,7 +1104,7 @@ public class ComunePersistenceImpl
 	 * @return the ordered range of matching comunes
 	 */
 	@Override
-	public List<Comune> findByIdProvincia(
+	public List<Comune> findByidRegione(
 		long idRegione, int start, int end,
 		OrderByComparator<Comune> orderByComparator, boolean useFinderCache) {
 
@@ -1607,12 +1115,12 @@ public class ComunePersistenceImpl
 			(orderByComparator == null)) {
 
 			if (useFinderCache) {
-				finderPath = _finderPathWithoutPaginationFindByIdProvincia;
+				finderPath = _finderPathWithoutPaginationFindByidRegione;
 				finderArgs = new Object[] {idRegione};
 			}
 		}
 		else if (useFinderCache) {
-			finderPath = _finderPathWithPaginationFindByIdProvincia;
+			finderPath = _finderPathWithPaginationFindByidRegione;
 			finderArgs = new Object[] {
 				idRegione, start, end, orderByComparator
 			};
@@ -1647,7 +1155,7 @@ public class ComunePersistenceImpl
 
 			sb.append(_SQL_SELECT_COMUNE_WHERE);
 
-			sb.append(_FINDER_COLUMN_IDPROVINCIA_IDREGIONE_2);
+			sb.append(_FINDER_COLUMN_IDREGIONE_IDREGIONE_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(
@@ -1699,11 +1207,11 @@ public class ComunePersistenceImpl
 	 * @throws NoSuchComuneException if a matching comune could not be found
 	 */
 	@Override
-	public Comune findByIdProvincia_First(
+	public Comune findByidRegione_First(
 			long idRegione, OrderByComparator<Comune> orderByComparator)
 		throws NoSuchComuneException {
 
-		Comune comune = fetchByIdProvincia_First(idRegione, orderByComparator);
+		Comune comune = fetchByidRegione_First(idRegione, orderByComparator);
 
 		if (comune != null) {
 			return comune;
@@ -1729,11 +1237,10 @@ public class ComunePersistenceImpl
 	 * @return the first matching comune, or <code>null</code> if a matching comune could not be found
 	 */
 	@Override
-	public Comune fetchByIdProvincia_First(
+	public Comune fetchByidRegione_First(
 		long idRegione, OrderByComparator<Comune> orderByComparator) {
 
-		List<Comune> list = findByIdProvincia(
-			idRegione, 0, 1, orderByComparator);
+		List<Comune> list = findByidRegione(idRegione, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1751,11 +1258,11 @@ public class ComunePersistenceImpl
 	 * @throws NoSuchComuneException if a matching comune could not be found
 	 */
 	@Override
-	public Comune findByIdProvincia_Last(
+	public Comune findByidRegione_Last(
 			long idRegione, OrderByComparator<Comune> orderByComparator)
 		throws NoSuchComuneException {
 
-		Comune comune = fetchByIdProvincia_Last(idRegione, orderByComparator);
+		Comune comune = fetchByidRegione_Last(idRegione, orderByComparator);
 
 		if (comune != null) {
 			return comune;
@@ -1781,16 +1288,16 @@ public class ComunePersistenceImpl
 	 * @return the last matching comune, or <code>null</code> if a matching comune could not be found
 	 */
 	@Override
-	public Comune fetchByIdProvincia_Last(
+	public Comune fetchByidRegione_Last(
 		long idRegione, OrderByComparator<Comune> orderByComparator) {
 
-		int count = countByIdProvincia(idRegione);
+		int count = countByidRegione(idRegione);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<Comune> list = findByIdProvincia(
+		List<Comune> list = findByidRegione(
 			idRegione, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -1810,7 +1317,7 @@ public class ComunePersistenceImpl
 	 * @throws NoSuchComuneException if a comune with the primary key could not be found
 	 */
 	@Override
-	public Comune[] findByIdProvincia_PrevAndNext(
+	public Comune[] findByidRegione_PrevAndNext(
 			long comuneId, long idRegione,
 			OrderByComparator<Comune> orderByComparator)
 		throws NoSuchComuneException {
@@ -1824,12 +1331,12 @@ public class ComunePersistenceImpl
 
 			Comune[] array = new ComuneImpl[3];
 
-			array[0] = getByIdProvincia_PrevAndNext(
+			array[0] = getByidRegione_PrevAndNext(
 				session, comune, idRegione, orderByComparator, true);
 
 			array[1] = comune;
 
-			array[2] = getByIdProvincia_PrevAndNext(
+			array[2] = getByidRegione_PrevAndNext(
 				session, comune, idRegione, orderByComparator, false);
 
 			return array;
@@ -1842,7 +1349,7 @@ public class ComunePersistenceImpl
 		}
 	}
 
-	protected Comune getByIdProvincia_PrevAndNext(
+	protected Comune getByidRegione_PrevAndNext(
 		Session session, Comune comune, long idRegione,
 		OrderByComparator<Comune> orderByComparator, boolean previous) {
 
@@ -1859,7 +1366,7 @@ public class ComunePersistenceImpl
 
 		sb.append(_SQL_SELECT_COMUNE_WHERE);
 
-		sb.append(_FINDER_COLUMN_IDPROVINCIA_IDREGIONE_2);
+		sb.append(_FINDER_COLUMN_IDREGIONE_IDREGIONE_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields =
@@ -1956,9 +1463,9 @@ public class ComunePersistenceImpl
 	 * @param idRegione the id regione
 	 */
 	@Override
-	public void removeByIdProvincia(long idRegione) {
+	public void removeByidRegione(long idRegione) {
 		for (Comune comune :
-				findByIdProvincia(
+				findByidRegione(
 					idRegione, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 
 			remove(comune);
@@ -1972,8 +1479,8 @@ public class ComunePersistenceImpl
 	 * @return the number of matching comunes
 	 */
 	@Override
-	public int countByIdProvincia(long idRegione) {
-		FinderPath finderPath = _finderPathCountByIdProvincia;
+	public int countByidRegione(long idRegione) {
+		FinderPath finderPath = _finderPathCountByidRegione;
 
 		Object[] finderArgs = new Object[] {idRegione};
 
@@ -1984,7 +1491,7 @@ public class ComunePersistenceImpl
 
 			sb.append(_SQL_COUNT_COMUNE_WHERE);
 
-			sb.append(_FINDER_COLUMN_IDPROVINCIA_IDREGIONE_2);
+			sb.append(_FINDER_COLUMN_IDREGIONE_IDREGIONE_2);
 
 			String sql = sb.toString();
 
@@ -2014,8 +1521,502 @@ public class ComunePersistenceImpl
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_IDPROVINCIA_IDREGIONE_2 =
+	private static final String _FINDER_COLUMN_IDREGIONE_IDREGIONE_2 =
 		"comune.idRegione = ?";
+
+	private FinderPath _finderPathWithPaginationFindByIdProvincia;
+	private FinderPath _finderPathWithoutPaginationFindByIdProvincia;
+	private FinderPath _finderPathCountByIdProvincia;
+
+	/**
+	 * Returns all the comunes where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @return the matching comunes
+	 */
+	@Override
+	public List<Comune> findByIdProvincia(long idProvincia) {
+		return findByIdProvincia(
+			idProvincia, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the comunes where idProvincia = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param idProvincia the id provincia
+	 * @param start the lower bound of the range of comunes
+	 * @param end the upper bound of the range of comunes (not inclusive)
+	 * @return the range of matching comunes
+	 */
+	@Override
+	public List<Comune> findByIdProvincia(
+		long idProvincia, int start, int end) {
+
+		return findByIdProvincia(idProvincia, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the comunes where idProvincia = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param idProvincia the id provincia
+	 * @param start the lower bound of the range of comunes
+	 * @param end the upper bound of the range of comunes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching comunes
+	 */
+	@Override
+	public List<Comune> findByIdProvincia(
+		long idProvincia, int start, int end,
+		OrderByComparator<Comune> orderByComparator) {
+
+		return findByIdProvincia(
+			idProvincia, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the comunes where idProvincia = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param idProvincia the id provincia
+	 * @param start the lower bound of the range of comunes
+	 * @param end the upper bound of the range of comunes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching comunes
+	 */
+	@Override
+	public List<Comune> findByIdProvincia(
+		long idProvincia, int start, int end,
+		OrderByComparator<Comune> orderByComparator, boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByIdProvincia;
+				finderArgs = new Object[] {idProvincia};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByIdProvincia;
+			finderArgs = new Object[] {
+				idProvincia, start, end, orderByComparator
+			};
+		}
+
+		List<Comune> list = null;
+
+		if (useFinderCache) {
+			list = (List<Comune>)finderCache.getResult(finderPath, finderArgs);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (Comune comune : list) {
+					if (idProvincia != comune.getIdProvincia()) {
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(3);
+			}
+
+			sb.append(_SQL_SELECT_COMUNE_WHERE);
+
+			sb.append(_FINDER_COLUMN_IDPROVINCIA_IDPROVINCIA_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(ComuneModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(idProvincia);
+
+				list = (List<Comune>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching comune
+	 * @throws NoSuchComuneException if a matching comune could not be found
+	 */
+	@Override
+	public Comune findByIdProvincia_First(
+			long idProvincia, OrderByComparator<Comune> orderByComparator)
+		throws NoSuchComuneException {
+
+		Comune comune = fetchByIdProvincia_First(
+			idProvincia, orderByComparator);
+
+		if (comune != null) {
+			return comune;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("idProvincia=");
+		sb.append(idProvincia);
+
+		sb.append("}");
+
+		throw new NoSuchComuneException(sb.toString());
+	}
+
+	/**
+	 * Returns the first comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching comune, or <code>null</code> if a matching comune could not be found
+	 */
+	@Override
+	public Comune fetchByIdProvincia_First(
+		long idProvincia, OrderByComparator<Comune> orderByComparator) {
+
+		List<Comune> list = findByIdProvincia(
+			idProvincia, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching comune
+	 * @throws NoSuchComuneException if a matching comune could not be found
+	 */
+	@Override
+	public Comune findByIdProvincia_Last(
+			long idProvincia, OrderByComparator<Comune> orderByComparator)
+		throws NoSuchComuneException {
+
+		Comune comune = fetchByIdProvincia_Last(idProvincia, orderByComparator);
+
+		if (comune != null) {
+			return comune;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("idProvincia=");
+		sb.append(idProvincia);
+
+		sb.append("}");
+
+		throw new NoSuchComuneException(sb.toString());
+	}
+
+	/**
+	 * Returns the last comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching comune, or <code>null</code> if a matching comune could not be found
+	 */
+	@Override
+	public Comune fetchByIdProvincia_Last(
+		long idProvincia, OrderByComparator<Comune> orderByComparator) {
+
+		int count = countByIdProvincia(idProvincia);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Comune> list = findByIdProvincia(
+			idProvincia, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the comunes before and after the current comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param comuneId the primary key of the current comune
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next comune
+	 * @throws NoSuchComuneException if a comune with the primary key could not be found
+	 */
+	@Override
+	public Comune[] findByIdProvincia_PrevAndNext(
+			long comuneId, long idProvincia,
+			OrderByComparator<Comune> orderByComparator)
+		throws NoSuchComuneException {
+
+		Comune comune = findByPrimaryKey(comuneId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Comune[] array = new ComuneImpl[3];
+
+			array[0] = getByIdProvincia_PrevAndNext(
+				session, comune, idProvincia, orderByComparator, true);
+
+			array[1] = comune;
+
+			array[2] = getByIdProvincia_PrevAndNext(
+				session, comune, idProvincia, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Comune getByIdProvincia_PrevAndNext(
+		Session session, Comune comune, long idProvincia,
+		OrderByComparator<Comune> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(3);
+		}
+
+		sb.append(_SQL_SELECT_COMUNE_WHERE);
+
+		sb.append(_FINDER_COLUMN_IDPROVINCIA_IDPROVINCIA_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(ComuneModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(idProvincia);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(comune)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<Comune> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the comunes where idProvincia = &#63; from the database.
+	 *
+	 * @param idProvincia the id provincia
+	 */
+	@Override
+	public void removeByIdProvincia(long idProvincia) {
+		for (Comune comune :
+				findByIdProvincia(
+					idProvincia, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
+			remove(comune);
+		}
+	}
+
+	/**
+	 * Returns the number of comunes where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @return the number of matching comunes
+	 */
+	@Override
+	public int countByIdProvincia(long idProvincia) {
+		FinderPath finderPath = _finderPathCountByIdProvincia;
+
+		Object[] finderArgs = new Object[] {idProvincia};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_COMUNE_WHERE);
+
+			sb.append(_FINDER_COLUMN_IDPROVINCIA_IDPROVINCIA_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(idProvincia);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_IDPROVINCIA_IDPROVINCIA_2 =
+		"comune.idProvincia = ?";
 
 	public ComunePersistenceImpl() {
 		setModelClass(Comune.class);
@@ -2611,16 +2612,16 @@ public class ComunePersistenceImpl
 				Long.class.getName(), Integer.class.getName(),
 				Integer.class.getName(), OrderByComparator.class.getName()
 			},
-			new String[] {"idProvincia"}, true);
+			new String[] {"idRegione"}, true);
 
 		_finderPathWithoutPaginationFindByidRegione = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByidRegione",
-			new String[] {Long.class.getName()}, new String[] {"idProvincia"},
+			new String[] {Long.class.getName()}, new String[] {"idRegione"},
 			true);
 
 		_finderPathCountByidRegione = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByidRegione",
-			new String[] {Long.class.getName()}, new String[] {"idProvincia"},
+			new String[] {Long.class.getName()}, new String[] {"idRegione"},
 			false);
 
 		_finderPathWithPaginationFindByIdProvincia = new FinderPath(
@@ -2629,16 +2630,16 @@ public class ComunePersistenceImpl
 				Long.class.getName(), Integer.class.getName(),
 				Integer.class.getName(), OrderByComparator.class.getName()
 			},
-			new String[] {"idRegione"}, true);
+			new String[] {"idProvincia"}, true);
 
 		_finderPathWithoutPaginationFindByIdProvincia = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByIdProvincia",
-			new String[] {Long.class.getName()}, new String[] {"idRegione"},
+			new String[] {Long.class.getName()}, new String[] {"idProvincia"},
 			true);
 
 		_finderPathCountByIdProvincia = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByIdProvincia",
-			new String[] {Long.class.getName()}, new String[] {"idRegione"},
+			new String[] {Long.class.getName()}, new String[] {"idProvincia"},
 			false);
 
 		_setComuneUtilPersistence(this);

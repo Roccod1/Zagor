@@ -353,181 +353,13 @@ public class ComuneUtil {
 	}
 
 	/**
-	 * Returns all the comunes where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @return the matching comunes
-	 */
-	public static List<Comune> findByidRegione(long idProvincia) {
-		return getPersistence().findByidRegione(idProvincia);
-	}
-
-	/**
-	 * Returns a range of all the comunes where idProvincia = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
-	 * </p>
-	 *
-	 * @param idProvincia the id provincia
-	 * @param start the lower bound of the range of comunes
-	 * @param end the upper bound of the range of comunes (not inclusive)
-	 * @return the range of matching comunes
-	 */
-	public static List<Comune> findByidRegione(
-		long idProvincia, int start, int end) {
-
-		return getPersistence().findByidRegione(idProvincia, start, end);
-	}
-
-	/**
-	 * Returns an ordered range of all the comunes where idProvincia = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
-	 * </p>
-	 *
-	 * @param idProvincia the id provincia
-	 * @param start the lower bound of the range of comunes
-	 * @param end the upper bound of the range of comunes (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching comunes
-	 */
-	public static List<Comune> findByidRegione(
-		long idProvincia, int start, int end,
-		OrderByComparator<Comune> orderByComparator) {
-
-		return getPersistence().findByidRegione(
-			idProvincia, start, end, orderByComparator);
-	}
-
-	/**
-	 * Returns an ordered range of all the comunes where idProvincia = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
-	 * </p>
-	 *
-	 * @param idProvincia the id provincia
-	 * @param start the lower bound of the range of comunes
-	 * @param end the upper bound of the range of comunes (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param useFinderCache whether to use the finder cache
-	 * @return the ordered range of matching comunes
-	 */
-	public static List<Comune> findByidRegione(
-		long idProvincia, int start, int end,
-		OrderByComparator<Comune> orderByComparator, boolean useFinderCache) {
-
-		return getPersistence().findByidRegione(
-			idProvincia, start, end, orderByComparator, useFinderCache);
-	}
-
-	/**
-	 * Returns the first comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching comune
-	 * @throws NoSuchComuneException if a matching comune could not be found
-	 */
-	public static Comune findByidRegione_First(
-			long idProvincia, OrderByComparator<Comune> orderByComparator)
-		throws it.servizidigitali.common.exception.NoSuchComuneException {
-
-		return getPersistence().findByidRegione_First(
-			idProvincia, orderByComparator);
-	}
-
-	/**
-	 * Returns the first comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching comune, or <code>null</code> if a matching comune could not be found
-	 */
-	public static Comune fetchByidRegione_First(
-		long idProvincia, OrderByComparator<Comune> orderByComparator) {
-
-		return getPersistence().fetchByidRegione_First(
-			idProvincia, orderByComparator);
-	}
-
-	/**
-	 * Returns the last comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching comune
-	 * @throws NoSuchComuneException if a matching comune could not be found
-	 */
-	public static Comune findByidRegione_Last(
-			long idProvincia, OrderByComparator<Comune> orderByComparator)
-		throws it.servizidigitali.common.exception.NoSuchComuneException {
-
-		return getPersistence().findByidRegione_Last(
-			idProvincia, orderByComparator);
-	}
-
-	/**
-	 * Returns the last comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching comune, or <code>null</code> if a matching comune could not be found
-	 */
-	public static Comune fetchByidRegione_Last(
-		long idProvincia, OrderByComparator<Comune> orderByComparator) {
-
-		return getPersistence().fetchByidRegione_Last(
-			idProvincia, orderByComparator);
-	}
-
-	/**
-	 * Returns the comunes before and after the current comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param comuneId the primary key of the current comune
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next comune
-	 * @throws NoSuchComuneException if a comune with the primary key could not be found
-	 */
-	public static Comune[] findByidRegione_PrevAndNext(
-			long comuneId, long idProvincia,
-			OrderByComparator<Comune> orderByComparator)
-		throws it.servizidigitali.common.exception.NoSuchComuneException {
-
-		return getPersistence().findByidRegione_PrevAndNext(
-			comuneId, idProvincia, orderByComparator);
-	}
-
-	/**
-	 * Removes all the comunes where idProvincia = &#63; from the database.
-	 *
-	 * @param idProvincia the id provincia
-	 */
-	public static void removeByidRegione(long idProvincia) {
-		getPersistence().removeByidRegione(idProvincia);
-	}
-
-	/**
-	 * Returns the number of comunes where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @return the number of matching comunes
-	 */
-	public static int countByidRegione(long idProvincia) {
-		return getPersistence().countByidRegione(idProvincia);
-	}
-
-	/**
 	 * Returns all the comunes where idRegione = &#63;.
 	 *
 	 * @param idRegione the id regione
 	 * @return the matching comunes
 	 */
-	public static List<Comune> findByIdProvincia(long idRegione) {
-		return getPersistence().findByIdProvincia(idRegione);
+	public static List<Comune> findByidRegione(long idRegione) {
+		return getPersistence().findByidRegione(idRegione);
 	}
 
 	/**
@@ -542,10 +374,10 @@ public class ComuneUtil {
 	 * @param end the upper bound of the range of comunes (not inclusive)
 	 * @return the range of matching comunes
 	 */
-	public static List<Comune> findByIdProvincia(
+	public static List<Comune> findByidRegione(
 		long idRegione, int start, int end) {
 
-		return getPersistence().findByIdProvincia(idRegione, start, end);
+		return getPersistence().findByidRegione(idRegione, start, end);
 	}
 
 	/**
@@ -561,11 +393,11 @@ public class ComuneUtil {
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching comunes
 	 */
-	public static List<Comune> findByIdProvincia(
+	public static List<Comune> findByidRegione(
 		long idRegione, int start, int end,
 		OrderByComparator<Comune> orderByComparator) {
 
-		return getPersistence().findByIdProvincia(
+		return getPersistence().findByidRegione(
 			idRegione, start, end, orderByComparator);
 	}
 
@@ -583,11 +415,11 @@ public class ComuneUtil {
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching comunes
 	 */
-	public static List<Comune> findByIdProvincia(
+	public static List<Comune> findByidRegione(
 		long idRegione, int start, int end,
 		OrderByComparator<Comune> orderByComparator, boolean useFinderCache) {
 
-		return getPersistence().findByIdProvincia(
+		return getPersistence().findByidRegione(
 			idRegione, start, end, orderByComparator, useFinderCache);
 	}
 
@@ -599,11 +431,11 @@ public class ComuneUtil {
 	 * @return the first matching comune
 	 * @throws NoSuchComuneException if a matching comune could not be found
 	 */
-	public static Comune findByIdProvincia_First(
+	public static Comune findByidRegione_First(
 			long idRegione, OrderByComparator<Comune> orderByComparator)
 		throws it.servizidigitali.common.exception.NoSuchComuneException {
 
-		return getPersistence().findByIdProvincia_First(
+		return getPersistence().findByidRegione_First(
 			idRegione, orderByComparator);
 	}
 
@@ -614,10 +446,10 @@ public class ComuneUtil {
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching comune, or <code>null</code> if a matching comune could not be found
 	 */
-	public static Comune fetchByIdProvincia_First(
+	public static Comune fetchByidRegione_First(
 		long idRegione, OrderByComparator<Comune> orderByComparator) {
 
-		return getPersistence().fetchByIdProvincia_First(
+		return getPersistence().fetchByidRegione_First(
 			idRegione, orderByComparator);
 	}
 
@@ -629,11 +461,11 @@ public class ComuneUtil {
 	 * @return the last matching comune
 	 * @throws NoSuchComuneException if a matching comune could not be found
 	 */
-	public static Comune findByIdProvincia_Last(
+	public static Comune findByidRegione_Last(
 			long idRegione, OrderByComparator<Comune> orderByComparator)
 		throws it.servizidigitali.common.exception.NoSuchComuneException {
 
-		return getPersistence().findByIdProvincia_Last(
+		return getPersistence().findByidRegione_Last(
 			idRegione, orderByComparator);
 	}
 
@@ -644,10 +476,10 @@ public class ComuneUtil {
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching comune, or <code>null</code> if a matching comune could not be found
 	 */
-	public static Comune fetchByIdProvincia_Last(
+	public static Comune fetchByidRegione_Last(
 		long idRegione, OrderByComparator<Comune> orderByComparator) {
 
-		return getPersistence().fetchByIdProvincia_Last(
+		return getPersistence().fetchByidRegione_Last(
 			idRegione, orderByComparator);
 	}
 
@@ -660,12 +492,12 @@ public class ComuneUtil {
 	 * @return the previous, current, and next comune
 	 * @throws NoSuchComuneException if a comune with the primary key could not be found
 	 */
-	public static Comune[] findByIdProvincia_PrevAndNext(
+	public static Comune[] findByidRegione_PrevAndNext(
 			long comuneId, long idRegione,
 			OrderByComparator<Comune> orderByComparator)
 		throws it.servizidigitali.common.exception.NoSuchComuneException {
 
-		return getPersistence().findByIdProvincia_PrevAndNext(
+		return getPersistence().findByidRegione_PrevAndNext(
 			comuneId, idRegione, orderByComparator);
 	}
 
@@ -674,8 +506,8 @@ public class ComuneUtil {
 	 *
 	 * @param idRegione the id regione
 	 */
-	public static void removeByIdProvincia(long idRegione) {
-		getPersistence().removeByIdProvincia(idRegione);
+	public static void removeByidRegione(long idRegione) {
+		getPersistence().removeByidRegione(idRegione);
 	}
 
 	/**
@@ -684,8 +516,176 @@ public class ComuneUtil {
 	 * @param idRegione the id regione
 	 * @return the number of matching comunes
 	 */
-	public static int countByIdProvincia(long idRegione) {
-		return getPersistence().countByIdProvincia(idRegione);
+	public static int countByidRegione(long idRegione) {
+		return getPersistence().countByidRegione(idRegione);
+	}
+
+	/**
+	 * Returns all the comunes where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @return the matching comunes
+	 */
+	public static List<Comune> findByIdProvincia(long idProvincia) {
+		return getPersistence().findByIdProvincia(idProvincia);
+	}
+
+	/**
+	 * Returns a range of all the comunes where idProvincia = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param idProvincia the id provincia
+	 * @param start the lower bound of the range of comunes
+	 * @param end the upper bound of the range of comunes (not inclusive)
+	 * @return the range of matching comunes
+	 */
+	public static List<Comune> findByIdProvincia(
+		long idProvincia, int start, int end) {
+
+		return getPersistence().findByIdProvincia(idProvincia, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the comunes where idProvincia = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param idProvincia the id provincia
+	 * @param start the lower bound of the range of comunes
+	 * @param end the upper bound of the range of comunes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching comunes
+	 */
+	public static List<Comune> findByIdProvincia(
+		long idProvincia, int start, int end,
+		OrderByComparator<Comune> orderByComparator) {
+
+		return getPersistence().findByIdProvincia(
+			idProvincia, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the comunes where idProvincia = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param idProvincia the id provincia
+	 * @param start the lower bound of the range of comunes
+	 * @param end the upper bound of the range of comunes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching comunes
+	 */
+	public static List<Comune> findByIdProvincia(
+		long idProvincia, int start, int end,
+		OrderByComparator<Comune> orderByComparator, boolean useFinderCache) {
+
+		return getPersistence().findByIdProvincia(
+			idProvincia, start, end, orderByComparator, useFinderCache);
+	}
+
+	/**
+	 * Returns the first comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching comune
+	 * @throws NoSuchComuneException if a matching comune could not be found
+	 */
+	public static Comune findByIdProvincia_First(
+			long idProvincia, OrderByComparator<Comune> orderByComparator)
+		throws it.servizidigitali.common.exception.NoSuchComuneException {
+
+		return getPersistence().findByIdProvincia_First(
+			idProvincia, orderByComparator);
+	}
+
+	/**
+	 * Returns the first comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching comune, or <code>null</code> if a matching comune could not be found
+	 */
+	public static Comune fetchByIdProvincia_First(
+		long idProvincia, OrderByComparator<Comune> orderByComparator) {
+
+		return getPersistence().fetchByIdProvincia_First(
+			idProvincia, orderByComparator);
+	}
+
+	/**
+	 * Returns the last comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching comune
+	 * @throws NoSuchComuneException if a matching comune could not be found
+	 */
+	public static Comune findByIdProvincia_Last(
+			long idProvincia, OrderByComparator<Comune> orderByComparator)
+		throws it.servizidigitali.common.exception.NoSuchComuneException {
+
+		return getPersistence().findByIdProvincia_Last(
+			idProvincia, orderByComparator);
+	}
+
+	/**
+	 * Returns the last comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching comune, or <code>null</code> if a matching comune could not be found
+	 */
+	public static Comune fetchByIdProvincia_Last(
+		long idProvincia, OrderByComparator<Comune> orderByComparator) {
+
+		return getPersistence().fetchByIdProvincia_Last(
+			idProvincia, orderByComparator);
+	}
+
+	/**
+	 * Returns the comunes before and after the current comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param comuneId the primary key of the current comune
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next comune
+	 * @throws NoSuchComuneException if a comune with the primary key could not be found
+	 */
+	public static Comune[] findByIdProvincia_PrevAndNext(
+			long comuneId, long idProvincia,
+			OrderByComparator<Comune> orderByComparator)
+		throws it.servizidigitali.common.exception.NoSuchComuneException {
+
+		return getPersistence().findByIdProvincia_PrevAndNext(
+			comuneId, idProvincia, orderByComparator);
+	}
+
+	/**
+	 * Removes all the comunes where idProvincia = &#63; from the database.
+	 *
+	 * @param idProvincia the id provincia
+	 */
+	public static void removeByIdProvincia(long idProvincia) {
+		getPersistence().removeByIdProvincia(idProvincia);
+	}
+
+	/**
+	 * Returns the number of comunes where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @return the number of matching comunes
+	 */
+	public static int countByIdProvincia(long idProvincia) {
+		return getPersistence().countByIdProvincia(idProvincia);
 	}
 
 	/**

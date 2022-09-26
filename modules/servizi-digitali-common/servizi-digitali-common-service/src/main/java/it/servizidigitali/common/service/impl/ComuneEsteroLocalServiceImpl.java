@@ -40,12 +40,18 @@ public class ComuneEsteroLocalServiceImpl extends ComuneEsteroLocalServiceBaseIm
 		return comuneEstero;
 	}
 
+	@Override
 	public ComuneEstero getComuneEsteroByDenominazione(String denominazione) {
 		List<ComuneEstero> comuniEsteri = comuneEsteroPersistence.findByDenominazioneLike(denominazione);
 		if (comuniEsteri != null && !comuniEsteri.isEmpty()) {
 			return comuniEsteri.get(0);
 		}
 		return null;
+	}
+
+	public List<ComuneEstero> getComuniEsteriByDenominazione(String denominazione) {
+		List<ComuneEstero> comuniEsteri = comuneEsteroPersistence.findByDenominazioneLike(denominazione);
+		return comuniEsteri;
 	}
 
 }

@@ -300,6 +300,14 @@ public class ComuneEsteroLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<it.servizidigitali.common.model.ComuneEstero>
+		getComuniEsteriByDenominazione(String denominazione) {
+
+		return _comuneEsteroLocalService.getComuniEsteriByDenominazione(
+			denominazione);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery
 		getIndexableActionableDynamicQuery() {
 

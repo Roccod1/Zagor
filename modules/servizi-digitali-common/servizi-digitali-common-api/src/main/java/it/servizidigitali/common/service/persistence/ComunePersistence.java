@@ -221,155 +221,12 @@ public interface ComunePersistence extends BasePersistence<Comune> {
 	public int countByDenominazione(String denominazione);
 
 	/**
-	 * Returns all the comunes where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @return the matching comunes
-	 */
-	public java.util.List<Comune> findByidRegione(long idProvincia);
-
-	/**
-	 * Returns a range of all the comunes where idProvincia = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
-	 * </p>
-	 *
-	 * @param idProvincia the id provincia
-	 * @param start the lower bound of the range of comunes
-	 * @param end the upper bound of the range of comunes (not inclusive)
-	 * @return the range of matching comunes
-	 */
-	public java.util.List<Comune> findByidRegione(
-		long idProvincia, int start, int end);
-
-	/**
-	 * Returns an ordered range of all the comunes where idProvincia = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
-	 * </p>
-	 *
-	 * @param idProvincia the id provincia
-	 * @param start the lower bound of the range of comunes
-	 * @param end the upper bound of the range of comunes (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching comunes
-	 */
-	public java.util.List<Comune> findByidRegione(
-		long idProvincia, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator<Comune>
-			orderByComparator);
-
-	/**
-	 * Returns an ordered range of all the comunes where idProvincia = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
-	 * </p>
-	 *
-	 * @param idProvincia the id provincia
-	 * @param start the lower bound of the range of comunes
-	 * @param end the upper bound of the range of comunes (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param useFinderCache whether to use the finder cache
-	 * @return the ordered range of matching comunes
-	 */
-	public java.util.List<Comune> findByidRegione(
-		long idProvincia, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator<Comune>
-			orderByComparator,
-		boolean useFinderCache);
-
-	/**
-	 * Returns the first comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching comune
-	 * @throws NoSuchComuneException if a matching comune could not be found
-	 */
-	public Comune findByidRegione_First(
-			long idProvincia,
-			com.liferay.portal.kernel.util.OrderByComparator<Comune>
-				orderByComparator)
-		throws NoSuchComuneException;
-
-	/**
-	 * Returns the first comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching comune, or <code>null</code> if a matching comune could not be found
-	 */
-	public Comune fetchByidRegione_First(
-		long idProvincia,
-		com.liferay.portal.kernel.util.OrderByComparator<Comune>
-			orderByComparator);
-
-	/**
-	 * Returns the last comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching comune
-	 * @throws NoSuchComuneException if a matching comune could not be found
-	 */
-	public Comune findByidRegione_Last(
-			long idProvincia,
-			com.liferay.portal.kernel.util.OrderByComparator<Comune>
-				orderByComparator)
-		throws NoSuchComuneException;
-
-	/**
-	 * Returns the last comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching comune, or <code>null</code> if a matching comune could not be found
-	 */
-	public Comune fetchByidRegione_Last(
-		long idProvincia,
-		com.liferay.portal.kernel.util.OrderByComparator<Comune>
-			orderByComparator);
-
-	/**
-	 * Returns the comunes before and after the current comune in the ordered set where idProvincia = &#63;.
-	 *
-	 * @param comuneId the primary key of the current comune
-	 * @param idProvincia the id provincia
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next comune
-	 * @throws NoSuchComuneException if a comune with the primary key could not be found
-	 */
-	public Comune[] findByidRegione_PrevAndNext(
-			long comuneId, long idProvincia,
-			com.liferay.portal.kernel.util.OrderByComparator<Comune>
-				orderByComparator)
-		throws NoSuchComuneException;
-
-	/**
-	 * Removes all the comunes where idProvincia = &#63; from the database.
-	 *
-	 * @param idProvincia the id provincia
-	 */
-	public void removeByidRegione(long idProvincia);
-
-	/**
-	 * Returns the number of comunes where idProvincia = &#63;.
-	 *
-	 * @param idProvincia the id provincia
-	 * @return the number of matching comunes
-	 */
-	public int countByidRegione(long idProvincia);
-
-	/**
 	 * Returns all the comunes where idRegione = &#63;.
 	 *
 	 * @param idRegione the id regione
 	 * @return the matching comunes
 	 */
-	public java.util.List<Comune> findByIdProvincia(long idRegione);
+	public java.util.List<Comune> findByidRegione(long idRegione);
 
 	/**
 	 * Returns a range of all the comunes where idRegione = &#63;.
@@ -383,7 +240,7 @@ public interface ComunePersistence extends BasePersistence<Comune> {
 	 * @param end the upper bound of the range of comunes (not inclusive)
 	 * @return the range of matching comunes
 	 */
-	public java.util.List<Comune> findByIdProvincia(
+	public java.util.List<Comune> findByidRegione(
 		long idRegione, int start, int end);
 
 	/**
@@ -399,7 +256,7 @@ public interface ComunePersistence extends BasePersistence<Comune> {
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching comunes
 	 */
-	public java.util.List<Comune> findByIdProvincia(
+	public java.util.List<Comune> findByidRegione(
 		long idRegione, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<Comune>
 			orderByComparator);
@@ -418,7 +275,7 @@ public interface ComunePersistence extends BasePersistence<Comune> {
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching comunes
 	 */
-	public java.util.List<Comune> findByIdProvincia(
+	public java.util.List<Comune> findByidRegione(
 		long idRegione, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<Comune>
 			orderByComparator,
@@ -432,7 +289,7 @@ public interface ComunePersistence extends BasePersistence<Comune> {
 	 * @return the first matching comune
 	 * @throws NoSuchComuneException if a matching comune could not be found
 	 */
-	public Comune findByIdProvincia_First(
+	public Comune findByidRegione_First(
 			long idRegione,
 			com.liferay.portal.kernel.util.OrderByComparator<Comune>
 				orderByComparator)
@@ -445,7 +302,7 @@ public interface ComunePersistence extends BasePersistence<Comune> {
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching comune, or <code>null</code> if a matching comune could not be found
 	 */
-	public Comune fetchByIdProvincia_First(
+	public Comune fetchByidRegione_First(
 		long idRegione,
 		com.liferay.portal.kernel.util.OrderByComparator<Comune>
 			orderByComparator);
@@ -458,7 +315,7 @@ public interface ComunePersistence extends BasePersistence<Comune> {
 	 * @return the last matching comune
 	 * @throws NoSuchComuneException if a matching comune could not be found
 	 */
-	public Comune findByIdProvincia_Last(
+	public Comune findByidRegione_Last(
 			long idRegione,
 			com.liferay.portal.kernel.util.OrderByComparator<Comune>
 				orderByComparator)
@@ -471,7 +328,7 @@ public interface ComunePersistence extends BasePersistence<Comune> {
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching comune, or <code>null</code> if a matching comune could not be found
 	 */
-	public Comune fetchByIdProvincia_Last(
+	public Comune fetchByidRegione_Last(
 		long idRegione,
 		com.liferay.portal.kernel.util.OrderByComparator<Comune>
 			orderByComparator);
@@ -485,7 +342,7 @@ public interface ComunePersistence extends BasePersistence<Comune> {
 	 * @return the previous, current, and next comune
 	 * @throws NoSuchComuneException if a comune with the primary key could not be found
 	 */
-	public Comune[] findByIdProvincia_PrevAndNext(
+	public Comune[] findByidRegione_PrevAndNext(
 			long comuneId, long idRegione,
 			com.liferay.portal.kernel.util.OrderByComparator<Comune>
 				orderByComparator)
@@ -496,7 +353,7 @@ public interface ComunePersistence extends BasePersistence<Comune> {
 	 *
 	 * @param idRegione the id regione
 	 */
-	public void removeByIdProvincia(long idRegione);
+	public void removeByidRegione(long idRegione);
 
 	/**
 	 * Returns the number of comunes where idRegione = &#63;.
@@ -504,7 +361,150 @@ public interface ComunePersistence extends BasePersistence<Comune> {
 	 * @param idRegione the id regione
 	 * @return the number of matching comunes
 	 */
-	public int countByIdProvincia(long idRegione);
+	public int countByidRegione(long idRegione);
+
+	/**
+	 * Returns all the comunes where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @return the matching comunes
+	 */
+	public java.util.List<Comune> findByIdProvincia(long idProvincia);
+
+	/**
+	 * Returns a range of all the comunes where idProvincia = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param idProvincia the id provincia
+	 * @param start the lower bound of the range of comunes
+	 * @param end the upper bound of the range of comunes (not inclusive)
+	 * @return the range of matching comunes
+	 */
+	public java.util.List<Comune> findByIdProvincia(
+		long idProvincia, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the comunes where idProvincia = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param idProvincia the id provincia
+	 * @param start the lower bound of the range of comunes
+	 * @param end the upper bound of the range of comunes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching comunes
+	 */
+	public java.util.List<Comune> findByIdProvincia(
+		long idProvincia, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<Comune>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the comunes where idProvincia = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ComuneModelImpl</code>.
+	 * </p>
+	 *
+	 * @param idProvincia the id provincia
+	 * @param start the lower bound of the range of comunes
+	 * @param end the upper bound of the range of comunes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching comunes
+	 */
+	public java.util.List<Comune> findByIdProvincia(
+		long idProvincia, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<Comune>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching comune
+	 * @throws NoSuchComuneException if a matching comune could not be found
+	 */
+	public Comune findByIdProvincia_First(
+			long idProvincia,
+			com.liferay.portal.kernel.util.OrderByComparator<Comune>
+				orderByComparator)
+		throws NoSuchComuneException;
+
+	/**
+	 * Returns the first comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching comune, or <code>null</code> if a matching comune could not be found
+	 */
+	public Comune fetchByIdProvincia_First(
+		long idProvincia,
+		com.liferay.portal.kernel.util.OrderByComparator<Comune>
+			orderByComparator);
+
+	/**
+	 * Returns the last comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching comune
+	 * @throws NoSuchComuneException if a matching comune could not be found
+	 */
+	public Comune findByIdProvincia_Last(
+			long idProvincia,
+			com.liferay.portal.kernel.util.OrderByComparator<Comune>
+				orderByComparator)
+		throws NoSuchComuneException;
+
+	/**
+	 * Returns the last comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching comune, or <code>null</code> if a matching comune could not be found
+	 */
+	public Comune fetchByIdProvincia_Last(
+		long idProvincia,
+		com.liferay.portal.kernel.util.OrderByComparator<Comune>
+			orderByComparator);
+
+	/**
+	 * Returns the comunes before and after the current comune in the ordered set where idProvincia = &#63;.
+	 *
+	 * @param comuneId the primary key of the current comune
+	 * @param idProvincia the id provincia
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next comune
+	 * @throws NoSuchComuneException if a comune with the primary key could not be found
+	 */
+	public Comune[] findByIdProvincia_PrevAndNext(
+			long comuneId, long idProvincia,
+			com.liferay.portal.kernel.util.OrderByComparator<Comune>
+				orderByComparator)
+		throws NoSuchComuneException;
+
+	/**
+	 * Removes all the comunes where idProvincia = &#63; from the database.
+	 *
+	 * @param idProvincia the id provincia
+	 */
+	public void removeByIdProvincia(long idProvincia);
+
+	/**
+	 * Returns the number of comunes where idProvincia = &#63;.
+	 *
+	 * @param idProvincia the id provincia
+	 * @return the number of matching comunes
+	 */
+	public int countByIdProvincia(long idProvincia);
 
 	/**
 	 * Caches the comune in the entity cache if it is enabled.
