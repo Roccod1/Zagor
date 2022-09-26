@@ -1,0 +1,4 @@
+Bundle-Name: servizi-digitali-rest-service-custom
+Bundle-SymbolicName: it.servizidigitali.restservice.custom
+Bundle-Version: 1.0.0
+Liferay-Configuration-Path: /configuration
