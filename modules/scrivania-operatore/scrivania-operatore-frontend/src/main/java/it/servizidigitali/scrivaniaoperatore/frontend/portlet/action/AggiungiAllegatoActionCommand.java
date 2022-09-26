@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.MutableRenderParameters;
+import javax.portlet.PortletException;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -50,9 +51,14 @@ public class AggiungiAllegatoActionCommand extends BaseMVCActionCommand {
 		boolean visibileAlCittadino = ParamUtil.getBoolean(request, "visibileAlCittadino");
 		
 		File file = upr.getFile("allegato");
-		String fileName = generateFilename(upr.getFileName("allegato"));
-		String contentType = upr.getContentType("allegato");
+		String name = upr.getFileName("allegato");
+		if (name.isEmpty()) {
+			throw new PortletException("allegato vuoto");
+		}
 		
+		String fileName = generateFilename(name);
+		String contentType = upr.getContentType("allegato");
+
 		FileEntry fileEntry = dlAppService.addFileEntry(
 				"", 
 				context.getScopeGroupId(),  
