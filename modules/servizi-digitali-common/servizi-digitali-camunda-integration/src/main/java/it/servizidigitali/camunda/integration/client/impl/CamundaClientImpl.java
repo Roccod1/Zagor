@@ -571,20 +571,20 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public void completeTask(String taskId, List<Entry<String, String>> varialbles) throws CamundaClientException {
+	public void completeTask(String taskId, List<Entry<String, String>> variables) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
 			CompleteTaskDto d = new CompleteTaskDto();
 
-			if (null != varialbles) {
-				for (Entry<String, String> entry : varialbles) {
+			if (null != variables) {
+				for (Entry<String, String> entry : variables) {
 
 					VariableValueDto value = new VariableValueDto();
 					value.setValue(entry.getValue());
 					value.setType("string");
 
-					d.putVariablesItem( /* trim */ entry.getKey(), value);
+					d.putVariablesItem(entry.getKey(), value);
 				}
 			}
 
