@@ -45,6 +45,8 @@ import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
+import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneCanaleComunicazioneLocalService;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
@@ -102,6 +104,9 @@ public class ScrivaniaOperatoreFrontendService {
 
 	@Reference
 	private CommunicationSender communicationSender;
+
+	@Reference
+	private ServizioLocalService servizioLocalService;
 
 	/**
 	 *
@@ -461,7 +466,7 @@ public class ScrivaniaOperatoreFrontendService {
 	 * @param serviceContext
 	 * @throws PortalException
 	 */
-	public void completaTask(long richiestaId, String taskId, String variableSet, String variableValue, String commento, List<Long> fileEntryIds, ServiceContext serviceContext)
+	public void completaTask(long richiestaId, String taskId, String variableSet, String variableValue, String commento, List<String> fileEntryIds, ServiceContext serviceContext)
 			throws PortalException {
 
 		String tenantId = String.valueOf(serviceContext.getScopeGroup().getOrganizationId());
@@ -469,7 +474,7 @@ public class ScrivaniaOperatoreFrontendService {
 		User currentUser = userLocalService.getUser(serviceContext.getUserId());
 
 		if (fileEntryIds != null && !fileEntryIds.isEmpty()) {
-			allegatoRichiestaLocalService.updateVisibilitaAllegatiRichiesta(richiestaId, fileEntryIds, true);
+			allegatoRichiestaLocalService.updateVisibilitaAllegatiRichiesta(fileEntryIds, true);
 		}
 
 		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId), true);
@@ -546,7 +551,7 @@ public class ScrivaniaOperatoreFrontendService {
 	 * @param serviceContext
 	 * @throws Exception
 	 */
-	public void richiediIntegrazioni(long richiestaId, String taskId, String commento, List<Long> formIntegrativiIds, List<Long> fileEntryIds, ServiceContext serviceContext) throws Exception {
+	public void richiediIntegrazioni(long richiestaId, String taskId, String commento, List<Long> formIntegrativiIds, List<String> fileEntryIds, ServiceContext serviceContext) throws Exception {
 
 		if (formIntegrativiIds == null || formIntegrativiIds.isEmpty()) {
 			throw new PortalException("Nessun form integrativo selezionato per la richiesta: ID RICHIESTA " + richiestaId);
@@ -558,7 +563,7 @@ public class ScrivaniaOperatoreFrontendService {
 		User currentUser = userLocalService.getUser(serviceContext.getUserId());
 
 		if (fileEntryIds != null && !fileEntryIds.isEmpty()) {
-			allegatoRichiestaLocalService.updateVisibilitaAllegatiRichiesta(richiestaId, fileEntryIds, true);
+			allegatoRichiestaLocalService.updateVisibilitaAllegatiRichiesta(fileEntryIds, true);
 		}
 
 		if (Validator.isNotNull(commento)) {
@@ -602,6 +607,12 @@ public class ScrivaniaOperatoreFrontendService {
 				}
 			}
 		}
+	}
+
+	public Servizio getServizioByProceduraId(long proceduraId) throws PortalException {
+		Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
+		long servizioId = procedura.getServizioId();
+		return servizioLocalService.getServizio(servizioId);
 	}
 
 	private String getStatoRichiestaLabelValue(String stato, Locale locale) {

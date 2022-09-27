@@ -1,8 +1,7 @@
 package it.servizidigitali.scrivaniaoperatore.frontend.util;
 
-import com.liferay.document.library.kernel.model.DLFileEntry;
-import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
-import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
@@ -15,6 +14,8 @@ import it.servizidigitali.common.utility.UtenteUtility;
 import it.servizidigitali.common.utility.enumeration.UserCustomAttributes;
 import it.servizidigitali.common.utility.model.IndirizzoResidenza;
 import it.servizidigitali.file.utility.FileUtility;
+import it.servizidigitali.file.utility.factory.FileServiceFactory;
+import it.servizidigitali.file.utility.model.File;
 import it.servizidigitali.file.utility.service.FileService;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
@@ -34,6 +35,8 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 @Component(immediate = true, service = MapUtil.class)
 public class MapUtil {
 
+	private static final Log log = LogFactoryUtil.getLog(MapUtil.class.getName());
+
 	@Reference
 	private UtenteUtility utenteUtility;
 
@@ -44,10 +47,7 @@ public class MapUtil {
 	private ServizioLocalService servizioLocalService;
 
 	@Reference
-	private DLFileEntryLocalService dlFileEntryLocalService;
-
-	@Reference
-	private FileService fileService;
+	private FileServiceFactory fileServiceFactory;
 
 	@Reference
 	private UserLocalService userLocalService;
@@ -108,26 +108,30 @@ public class MapUtil {
 		return dto;
 	}
 
-	public AllegatoDTO mapAllegato(ServiceContext context, AllegatoRichiesta ar) {
-		long fileEntryId = ar.getFileEntryId();
-		DLFileEntry fileEntry;
+	public AllegatoDTO mapAllegato(ServiceContext context, AllegatoRichiesta allegatoRichiesta) throws RuntimeException {
+		AllegatoDTO allegato;
 		try {
-			fileEntry = dlFileEntryLocalService.getFileEntry(fileEntryId);
+			String idDocumentale = allegatoRichiesta.getIdDocumentale();
+			long groupId = allegatoRichiesta.getGroupId();
+
+			FileService fileService = fileServiceFactory.getActiveFileService();
+			File requestFile = fileService.getRequestFile(idDocumentale, groupId);
+
+			allegato = new AllegatoDTO();
+			allegato.setId(allegatoRichiesta.getAllegatoRichiestaId());
+			allegato.setNomeFile(requestFile.getNome());
+			allegato.setDescrizione(requestFile.getDescrizione());
+			allegato.setTitolo(requestFile.getTitolo());
+			allegato.setDimensione(fileUtility.getHumanReadableSize(requestFile.getInputStream().available()));
+			allegato.setVisibileAlCittadino(allegatoRichiesta.getVisibile());
+			allegato.setNomeOperatore(userLocalService.fetchUser(allegatoRichiesta.getUserId()).getFullName());
+			allegato.setContenuto(requestFile.getInputStream().readAllBytes());
+			allegato.setIdDocumentale(requestFile.getId());
 		}
-		catch (PortalException e) {
+		catch (Exception e) {
+			log.error("mapAllegato :: " + e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
-
-		AllegatoDTO allegato = new AllegatoDTO();
-		allegato.setNomeFile(fileEntry.getFileName());
-		allegato.setDescrizione(fileEntry.getDescription());
-		allegato.setDimensione(fileUtility.getHumanReadableSize(fileEntry.getSize()));
-		allegato.setVisibileAlCittadino(ar.getVisibile());
-		allegato.setNomeOperatore(userLocalService.fetchUser(ar.getUserId()).getFullName());
-
-		// TODO usare service o spostare in un nostro service?
-		String url = "/documents/" + fileEntry.getRepositoryId() + "/" + fileEntry.getFolderId() + "/" + fileEntry.getFileName() + "/" + fileEntry.getUuid() + "?download=true";
-		allegato.setUrl(url);
 		return allegato;
 	}
 

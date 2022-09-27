@@ -5,6 +5,10 @@
 	AllegatoDTO allegato = (AllegatoDTO) row.getObject();
 %>
 
-<a href="<%= allegato.getUrl() %>">
+<portlet:resourceURL id="/downloadFile" var="downloadFileUrl">
+	<portlet:param name="idDocumentale" value="<%= allegato.getIdDocumentale()%>"/>
+</portlet:resourceURL>
+
+<a href="${downloadFileUrl}" target="_blank">
 	<i class="fas fa-download"></i>
 </a>
