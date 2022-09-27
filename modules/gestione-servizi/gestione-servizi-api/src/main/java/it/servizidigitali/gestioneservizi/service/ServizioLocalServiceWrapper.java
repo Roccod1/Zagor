@@ -386,6 +386,13 @@ public class ServizioLocalServiceWrapper
 	}
 
 	@Override
+	public it.servizidigitali.gestioneservizi.model.Servizio
+		getServizioByCodice(String codice) {
+
+		return _servizioLocalService.getServizioByCodice(codice);
+	}
+
+	@Override
 	public it.servizidigitali.gestioneservizi.model.Servizio getServizioById(
 			Long servizioId)
 		throws Exception {

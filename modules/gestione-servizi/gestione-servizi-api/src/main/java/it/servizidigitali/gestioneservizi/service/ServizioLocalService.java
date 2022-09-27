@@ -274,6 +274,9 @@ public interface ServizioLocalService
 	public Servizio getServizio(long servizioId) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Servizio getServizioByCodice(String codice);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Servizio getServizioById(Long servizioId) throws Exception;
 
 	/**
