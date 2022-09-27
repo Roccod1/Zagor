@@ -1,16 +1,13 @@
 package it.servizidigitali.presentatoreforms.frontend.service.impl;
 
-import com.google.gson.JsonSyntaxException;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Image;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
+import com.liferay.portal.kernel.portlet.LiferayPortletURL;
+import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.service.GroupLocalService;
-import com.liferay.portal.kernel.service.ImageLocalServiceUtil;
 import com.liferay.portal.kernel.service.LayoutSetLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -22,12 +19,9 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.portlet.PortletRequest;
 
@@ -36,20 +30,12 @@ import org.osgi.service.component.annotations.Reference;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import it.servizidigitali.backoffice.integration.enums.RelazioneParentela;
-import it.servizidigitali.backoffice.integration.enums.StatoCivile;
-import it.servizidigitali.backoffice.integration.enums.TitoloStudio;
-import it.servizidigitali.common.model.Comune;
-import it.servizidigitali.common.model.ComuneEstero;
-import it.servizidigitali.common.model.Provincia;
-import it.servizidigitali.common.model.StatoEstero;
 import it.servizidigitali.common.service.ComuneEsteroLocalService;
 import it.servizidigitali.common.service.ComuneLocalService;
 import it.servizidigitali.common.service.ProvinciaLocalService;
 import it.servizidigitali.common.service.StatoEsteroLocalService;
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.file.utility.converter.pdf.PDFConverter;
-import it.servizidigitali.file.utility.exception.FileConverterException;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.presentatoreforms.frontend.configuration.FreemarkerTemplateEnteConfiguration;
@@ -85,7 +71,7 @@ public class AlpacaPDFService implements PDFService {
 
 	@Reference
 	private ProceduraLocalService proceduraLocalService;
-	
+
 	@Reference
 	private StatoEsteroLocalService statoEsteroLocalService;
 
@@ -97,7 +83,7 @@ public class AlpacaPDFService implements PDFService {
 
 	@Reference
 	private ComuneEsteroLocalService comuneEsteroLocalService;
-	
+
 	@Reference
 	private LayoutSetLocalService layoutSetLocalService;
 
@@ -111,16 +97,17 @@ public class AlpacaPDFService implements PDFService {
 	private PDFConverter pdfConverter;
 
 	@Override
-	public byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName,
-			Long idDestinazioneUso, String numeroBollo, PortletRequest portletRequest) throws PDFServiceException {
+	public byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, Long idDestinazioneUso,
+			String numeroBollo, PortletRequest portletRequest) throws PDFServiceException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		LiferayPortletURL resourceUrl =  PortletURLFactoryUtil.create(portletRequest, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RESOURCE_PHASE);
 		
+
 		byte[] pdfContent = null;
 		try {
 
 			freemarkerTemplateEnteConfiguration = configurationProvider.getGroupConfiguration(FreemarkerTemplateEnteConfiguration.class, themeDisplay.getScopeGroupId());
-
 
 			Map<String, Object> data = new HashMap<String, Object>();
 			Configuration config = new Configuration(Configuration.VERSION_2_3_29);
@@ -132,77 +119,66 @@ public class AlpacaPDFService implements PDFService {
 			long groupId = procedura.getGroupId();
 
 			long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
-			
+
 			Organization organization = organizationLocalService.getOrganization(organizationId);
-			
+
 			LayoutSet layout = layoutSetLocalService.getLayoutSet(themeDisplay.getSiteGroupId(), true);
-			
+
 			String numeroBolloDescrizione = "";
-			
-			data.put("comune",organization.getName());
+
+			data.put("comune", organization.getName());
 
 			data.put("defaultThemeUrl", themeDisplay.getPathThemeRoot());
 			data.put("url", portletRequest.getContextPath());
 			data.put("portalUrl", themeDisplay.getPortalURL());
-			data.put(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE,alpacaStructure);
-			
+			data.put(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+
 			// Attributi impostati attraverso le destinazioni uso
-			
+
 			data.put("certificatoId", richiesta.getRichiestaId());
 			data.put("descrizioneDestinazioneUso", "");
-			data.put("pagamentoBollo","false");
+			data.put("pagamentoBollo", "false");
 			data.put("timbraCertificato", "false");
 			data.put("showDescrizioneEsenzioneBollo", "false");
 
-			if(Validator.isNotNull(numeroBollo)) {
+			if (Validator.isNotNull(numeroBollo)) {
 				numeroBolloDescrizione = "Identificativo Bollo: " + numeroBollo;
 			}
-			
+
 			long logoId = layout.getLogoId();
 			data.put("logoId", logoId);
-			
-			data.put("numeroBollo", numeroBolloDescrizione);
-			
-			addParametriAggiuntivi(data);
 
-			
+			data.put("numeroBollo", numeroBolloDescrizione);
+
+			addParametriAggiuntivi(data,resourceUrl);
+
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			try {
-				Template template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.certificatiAlpacaTemplate()), config);
-				template.process(data, new OutputStreamWriter(os));
-			}
-			catch (Exception e) {
-				log.error("generaPDFCertificato :: " + e.getMessage(), e);
-			}
+			Template template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.certificatiAlpacaTemplate()), config);
+			template.process(data, new OutputStreamWriter(os));
 
 			htmlContent = os.toString(StandardCharsets.UTF_8);
 			pdfContent = pdfConverter.generatePDF(htmlContent);
 		}
-		catch (JsonSyntaxException e) {
+		catch (Exception e) {
 			log.error("generaPDFCertificato :: " + e.getMessage(), e);
-		}
-		catch (PortalException e) {
-			log.error("generaPDFCertificato :: " + e.getMessage(), e);
-		}
-		catch (FileConverterException e) {
-			log.error("generaPDFCertificato :: " + e.getMessage(), e);
+			throw new PDFServiceException("Errore durante il processo di generazione del PDF :: " + e.getMessage(), e);
 		}
 
 		return pdfContent;
 	}
 
 	@Override
-	public byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, String fileName,
-			String numeroBollo, boolean isDelega, String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
+	public byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, boolean isDelega,
+			String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		
+		LiferayPortletURL resourceUrl =  PortletURLFactoryUtil.create(portletRequest, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RESOURCE_PHASE);
 
 		
 		byte[] pdfContent = null;
 		
 		try {
-			
+
 			freemarkerTemplateEnteConfiguration = configurationProvider.getGroupConfiguration(FreemarkerTemplateEnteConfiguration.class, themeDisplay.getScopeGroupId());
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -210,7 +186,7 @@ public class AlpacaPDFService implements PDFService {
 			Configuration config = new Configuration(Configuration.VERSION_2_3_29);
 
 			String htmlContent = null;
-			
+
 			long proceduraId = richiesta.getProceduraId();
 			Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
 			long groupId = procedura.getGroupId();
@@ -218,77 +194,75 @@ public class AlpacaPDFService implements PDFService {
 			long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
 
 			Organization organization = organizationLocalService.getOrganization(organizationId);
-			
+
 			LayoutSet layout = layoutSetLocalService.getLayoutSet(themeDisplay.getSiteGroupId(), true);
 			long logoId = layout.getLogoId();
 			data.put("logoId", logoId);
 
-			
-			data.put("comune",organization.getName());
+			data.put("comune", organization.getName());
 
 			data.put("defaultThemeUrl", themeDisplay.getPathThemeRoot());
 			data.put("url", portletRequest.getContextPath());
 			data.put("portalUrl", themeDisplay.getPortalURL());
-			data.put("delega", isDelega);
+			data.put("delega", Boolean.toString(isDelega));
 			data.put("dataCorrente", sdf.format(new Date()));
 			data.put("dettagliRichiesta", dettagliRichiesta);
-			data.put(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE,alpacaStructure);
-			
-			addParametriAggiuntivi(data);
-			
+			data.put(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+
+			addParametriAggiuntivi(data,resourceUrl);
+
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			try {
-				Template template = null;
-				
-				if(procedura.getStep2TipoServizio().equalsIgnoreCase(TipoServizio.AUTO_DICHIARAZIONE.name())) {
-					template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.autoDichiarazioniAlpacaTemplate()), config);
-				}else {
-					template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.defaultAlpacaTemplate()), config);
-				}
-				
-				
-				template.process(data, new OutputStreamWriter(os));
+			Template template = null;
+
+			if (procedura.getStep2TipoServizio().equalsIgnoreCase(TipoServizio.AUTO_DICHIARAZIONE.name())) {
+				template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.autoDichiarazioniAlpacaTemplate()), config);
 			}
-			catch (Exception e) {
-				log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);
+			else {
+				template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.defaultAlpacaTemplate()), config);
 			}
 
+			template.process(data, new OutputStreamWriter(os));
+
 			htmlContent = os.toString(StandardCharsets.UTF_8);
-			pdfContent = pdfConverter.generatePDF(htmlContent);			
+			pdfContent = pdfConverter.generatePDF(htmlContent);
 		}
-		catch (JsonSyntaxException e) {
+		catch (Exception e) {
 			log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);
-		}
-		catch (PortalException e) {
-			log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);
-		}
-		catch (FileConverterException e) {
-			log.error("generaPDFAlpacaForm :: " + e.getMessage(), e);
+			throw new PDFServiceException("Errore durante il processo di generazione del PDF :: " + e.getMessage(), e);
 		}
 
 		return pdfContent;
 	}
-	
-	private void addParametriAggiuntivi(Map<String, Object> data) {
-		List<StatoEstero> allStati = statoEsteroLocalService.getStatoEsteros(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-		data.put("listaStatiEsteri", allStati);
 
-		List<Provincia> allProvince = provinciaLocalService.getProvincias(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-		data.put("listaProvince", allProvince);
-
-		List<Comune> allComuni = comuneLocalService.getComunes(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-		data.put("listaComuni", allComuni);
-
-		List<ComuneEstero> allComuniEsteri = comuneEsteroLocalService.getComuneEsteros(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-		Map<String, String> comuniEsteri = allComuniEsteri.stream().collect(Collectors.toMap(comune -> Integer.toString(comune.getCodice()), ComuneEstero::getDenominazione));
-		data.put("listaComuniEsteri", comuniEsteri);
+	private void addParametriAggiuntivi(Map<String, Object> data, LiferayPortletURL renderUrl) {
 		
-		Map<String, String> titoliStudio = Arrays.stream(TitoloStudio.values()).collect(Collectors.toMap(TitoloStudio::getCodice, TitoloStudio::getDescrizione));
-		data.put("titoliStudio", titoliStudio);
-		Map<String, String> statiCivili = Arrays.stream(StatoCivile.values()).collect(Collectors.toMap(titoloStudio -> Integer.toString(titoloStudio.getCodice()), StatoCivile::getDescrizione));
-		data.put("statiCivili", statiCivili);
-		Map<String, String> relazioniParentela = Arrays.stream(RelazioneParentela.values())
-				.collect(Collectors.toMap(relazioneParentele -> Integer.toString(relazioneParentele.getCodice()), RelazioneParentela::getDescrizione));
-		data.put("relazioniParentela", relazioniParentela);
+		renderUrl.setResourceID("/statiEsteri");
+		String url = renderUrl.toString();
+		data.put("listaStatiEsteriUrlKey", url);
+		
+		renderUrl.setResourceID("/province");
+		url = renderUrl.toString();
+		data.put("listaProvinceUrlKey", url);
+		
+		renderUrl.setResourceID("/comuni");
+		url = renderUrl.toString();
+		data.put("listaComuniUrlKey", url);
+		
+		renderUrl.setResourceID("/comuniEsteri");
+		url = renderUrl.toString();
+		data.put("listaComuniEsteriSelUrlKey", url);
+
+		renderUrl.setResourceID("/titoliStudio");
+		url = renderUrl.toString();
+		data.put("listaTitoliStudioUrlKey", url);
+
+		renderUrl.setResourceID("/statiCivili");
+		url = renderUrl.toString();
+		data.put("listaStatiCiviliUrlKey", url);
+		
+		renderUrl.setResourceID("/relazioniParentela");
+		url = renderUrl.toString();
+		data.put("listaRelazioniParentelaUrlKey", url);
 	}
+
 }

@@ -3,6 +3,27 @@
 <portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.SUBMIT_FORM_RESOURCE_COMMAND %>" var="submitFormUrl">
 </portlet:resourceURL>
 
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.COMUNE_RESOURCE_COMMAND %>" var="getComuniUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.COMUNI_ESTERI_RESOURCE_COMMAND %>" var="searchListaComuniEsteriSelUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.PROVINCE_RESOURCE_COMMAND %>" var="getProvinceUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.RELAZIONI_PARENTELA_RESOURCE_COMMAND %>" var="getRelazioniParentelaUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.STATI_CIVILI_RESOURCE_COMMAND %>" var="getStatiCiviliUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.STATI_ESTERI_RESOURCE_COMMAND %>" var="getStatiEsteriUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.TITOLI_STUDIO_RESOURCE_COMMAND %>" var="getTitoliStudioUrl">
+</portlet:resourceURL>
+
 <portlet:renderURL var="scegliAllegatiUrl">
 		<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND %>" />
 </portlet:renderURL>
@@ -21,7 +42,7 @@ var logoInpsInnerUrl = '${pageContext.request.contextPath}' + '/images/INPS_logo
 var cfLoggedUser='${sessionScope.userPreferences.codiceFiscaleServizio}';
 var userToken = '${userToken}';
 var listaProvinceUrl = '${getProvinceUrl}';
-var listaComuniUrl = '${getComuniByProvinciaUrl}';
+var listaComuniUrl = '${getComuniUrl}';
 var listaYearsUrl = '${getYearsUrl}';
 var listaFiveYearsUrl = '${getFiveYearsUrl}';
 var listaTitoliStudioUrl = '${getTitoliStudioUrl}';
@@ -75,6 +96,7 @@ function mainScript() {
 	var datiAnagrafici = "";
 	var invioFormIscrizioneUrl = '';
 	var submitFormUrl = '${submitFormUrl}';
+
 	
 	<%--
 	if(submitFormUrl.indexOf("idServizio") == -1){
@@ -291,92 +313,94 @@ function mainScript() {
 			   	           		});
 			   	            	
 			   	            	var submitForm = true;
+			   	            	console.log("pre urlRedirect");
+			   	            	urlRedirect = step3Url + '&idRichiesta=' + idRichiesta + '&success=ok&idServizio=${idServizio}';
+			   	            	window.location.href = urlRedirect;
+
 			   	            	
-			   	            	if(submitForm){
-			   	            		var submitFormUrlNew = submitFormUrl;
-			   	            		if (destinazioneUsoId != null) {
-			   	            			submitFormUrlNew = submitFormUrl + destinazioneUsoId;
-			   	            		}
-			   	            		$.ajax({
-				   	            	    url: submitFormUrlNew,
-				   	            	    cache: false,
-				   	            	    dataType: 'json',
-				   	            	    data: dataTosend,
-				   	            	    method: 'POST',
-				   	            	    async: true,
-				   	            	    success: function(data){
-					   	     				if (downloadFile && data.status === "ok" && (data.daPagare == null || data.daPagare == false)) {
-												/*se non c'è da pagare, lascio tutto come sta, abilito il pulsante per la generazione (da creare)
-	 				   	     					if(submitFormUrl.indexOf("idServizio") == -1){
-	 				   	     						submitFormUrl += '&idServizio=${idServizio}';
-	 				   	     					}*/
+// 			   	            	if(submitForm){
+// 			   	            		var submitFormUrlNew = submitFormUrl;
+// 			   	            		if (destinazioneUsoId != null) {
+// 			   	            			submitFormUrlNew = submitFormUrl + destinazioneUsoId;
+// 			   	            		}
+// 			   	            		$.ajax({
+// 			   	            		    url : '${submitFormUrl}',
+// 			   	            			data : dataTosend,
+// 			   	            			type: 'POST',
+// 			   	            	 		dataType : "json",
+// 				   	            	    success: function(data){
+// 					   	     				if (downloadFile && data.status === "ok" && (data.daPagare == null || data.daPagare == false)) {
+// 												/*se non c'è da pagare, lascio tutto come sta, abilito il pulsante per la generazione (da creare)
+// 	 				   	     					if(submitFormUrl.indexOf("idServizio") == -1){
+// 	 				   	     						submitFormUrl += '&idServizio=${idServizio}';
+// 	 				   	     					}*/
 					   	     					
-	 				   	     				/*
-	 				   	     					nomeFile = data.nomeFile;
-					   	     					$("button[data-key='scaricaCertificatoButton']").show();
-					   	     					$("button[data-key='pagaButton']").hide();
-					   	     					$("button[data-key='submitButton']").attr('disabled', 'disabled');
-					   	     				*/
-												/*window.location.href = step3Url + '&nomeFile=' + data.nomeFile + '&idServizio=${idServizio}';*/
+// 	 				   	     				/*
+// 	 				   	     					nomeFile = data.nomeFile;
+// 					   	     					$("button[data-key='scaricaCertificatoButton']").show();
+// 					   	     					$("button[data-key='pagaButton']").hide();
+// 					   	     					$("button[data-key='submitButton']").attr('disabled', 'disabled');
+// 					   	     				*/
+// 												/*window.location.href = step3Url + '&nomeFile=' + data.nomeFile + '&idServizio=${idServizio}';*/
 												
 												
-												/*se non c'è da pagare, porto sulla pagina di dowload del certificato*/
-												$("button[data-key='scaricaCertificatoButton']").hide();
-												$("button[data-key='pagaButton']").html("Genera Certificato");
-												$("button[data-key='pagaButton']").hide();
+// 												/*se non c'è da pagare, porto sulla pagina di dowload del certificato*/
+// 												$("button[data-key='scaricaCertificatoButton']").hide();
+// 												$("button[data-key='pagaButton']").html("Genera Certificato");
+// 												$("button[data-key='pagaButton']").hide();
 												
-							   	            	var dataTosend = {"dataForm": 
-							   	            		JSON.stringify({"schema": ${alpacaStructure.schema}, "options": ${alpacaStructure.options}, "data": userData, "view": ${alpacaStructure.view}})
-							   	            	};
-							   	            	if (isDebugEnabled) {
-							   	            		console.log("dataTosend: ", JSON.parse(dataTosend.dataForm));
-							   	            	}
-							   	            	$.blockUI({ 
-						   	                 		message: "<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '> Attendere...</div>",
-							   	                 	baseZ:2000,
-							   	                  	css: { 
-							   	                         border: 'none', 
-							   	                         fontFamily: "'Titillium Web',sans-serif",
-							   	                         opacity: .7, 
-							   	                         color: '#ae1d3f',
-							   	                     } 
-							   	               	});
-							   	            	idRichiesta = data.richiesta.id;
-					     						window.location.href = step3DaPagareUrl + '&idRichiesta=' + idRichiesta + '&success=ok&idServizio=${idServizio}' + destinazioneUsoId;
+// 							   	            	var dataTosend = {"dataForm": 
+// 							   	            		JSON.stringify({"schema": ${alpacaStructure.schema}, "options": ${alpacaStructure.options}, "data": userData, "view": ${alpacaStructure.view}})
+// 							   	            	};
+// 							   	            	if (isDebugEnabled) {
+// 							   	            		console.log("dataTosend: ", JSON.parse(dataTosend.dataForm));
+// 							   	            	}
+// 							   	            	$.blockUI({ 
+// 						   	                 		message: "<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '> Attendere...</div>",
+// 							   	                 	baseZ:2000,
+// 							   	                  	css: { 
+// 							   	                         border: 'none', 
+// 							   	                         fontFamily: "'Titillium Web',sans-serif",
+// 							   	                         opacity: .7, 
+// 							   	                         color: '#ae1d3f',
+// 							   	                     } 
+// 							   	               	});
+// 							   	            	idRichiesta = data.richiesta.id;
+// 					     						window.location.href = step3DaPagareUrl + '&idRichiesta=' + idRichiesta + '&success=ok&idServizio=${idServizio}' + destinazioneUsoId;
 												
 												
-					   	     				} else if (downloadFile && data.status === "ok" && data.daPagare == true){
-					   	     					/*se c'è da pagare, abilito un pulsante paga che fa qualcosa*/
-						   	     				$("button[data-key='scaricaCertificatoButton']").hide();
-					   	     					$("button[data-key='pagaButton']").show();
-					   	     					$("button[data-key='submitButton']").attr('disabled', 'disabled');
-					   	     					idRichiesta = data.richiesta.id;
-					   	     				} else {
-					   	     					if(data.status === "ok"){
-					   	     						$("button[data-key='pagaButton']").hide();
-					   	     						$("button[data-key='scaricaCertificatoButton']").hide();
-					   	     						idRichiesta = data.richiesta.id;
-						   	     					urlRedirect = step3Url + '&idRichiesta=' + idRichiesta + '&success=ok&idServizio=${idServizio}';
-					   	     						if (destinazioneUsoId != null) {
-					   	     							urlRedirect = urlRedirect + destinazioneUsoId;
-							   	            		}
-					   	     						window.location.href = urlRedirect;
-					   	     					}
-					   	     				}
-					   	     				if (isDebugEnabled) {
-					   	     					console.log('response data', data);
-					   	     				}
-				   	            	    },
-				   	            	    error: function (jqXHR, exception) {
-				   	            	    	if (isDebugEnabled) {
-				   	            	    		console.log('ERRORE submit: ' + exception);
-				   	            	    	}
-				   	            	    }
-				   	            	}).always(function() {
-				   	            		/*In ogni caso deve essere nascosto il loader*/
-				   	            		$.unblockUI();
-				   	            	});
-			   	            	}
+// 					   	     				} else if (downloadFile && data.status === "ok" && data.daPagare == true){
+// 					   	     					/*se c'è da pagare, abilito un pulsante paga che fa qualcosa*/
+// 						   	     				$("button[data-key='scaricaCertificatoButton']").hide();
+// 					   	     					$("button[data-key='pagaButton']").show();
+// 					   	     					$("button[data-key='submitButton']").attr('disabled', 'disabled');
+// 					   	     					idRichiesta = data.richiesta.id;
+// 					   	     				} else {
+// 					   	     					if(data.status === "ok"){
+// 					   	     						$("button[data-key='pagaButton']").hide();
+// 					   	     						$("button[data-key='scaricaCertificatoButton']").hide();
+// 					   	     						idRichiesta = data.richiesta.id;
+// 						   	     					urlRedirect = step3Url + '&idRichiesta=' + idRichiesta + '&success=ok&idServizio=${idServizio}';
+// 					   	     						if (destinazioneUsoId != null) {
+// 					   	     							urlRedirect = urlRedirect + destinazioneUsoId;
+// 							   	            		}
+// 					   	     						window.location.href = urlRedirect;
+// 					   	     					}
+// 					   	     				}
+// 					   	     				if (isDebugEnabled) {
+// 					   	     					console.log('response data', data);
+// 					   	     				}
+// 				   	            	    },
+// 				   	            	    error: function (jqXHR, exception) {
+// 				   	            	    	if (isDebugEnabled) {
+// 				   	            	    		console.log('ERRORE submit: ' + exception);
+// 				   	            	    	}
+// 				   	            	    }
+// 				   	            	}).always(function() {
+// 				   	            		/*In ogni caso deve essere nascosto il loader*/
+// 				   	            		$.unblockUI();
+// 				   	            	});
+// 			   	            	}
 
 			   	         	}
 			   	    },

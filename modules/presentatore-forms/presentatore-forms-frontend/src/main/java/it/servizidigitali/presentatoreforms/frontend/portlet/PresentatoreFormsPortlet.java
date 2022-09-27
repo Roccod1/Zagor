@@ -57,11 +57,11 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 				"com.liferay.portlet.header-portlet-css=/libs/alpaca-custom/alpaca.css", //
 				"com.liferay.portlet.header-portlet-css=/libs/jquery.handsontable/jquery.handsontable.full.css", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/handlebars/handlebars.min.js", //
+				"com.liferay.portlet.footer-portlet-javascript=/libs/moment/moment-with-locales.min.js", //
+				"com.liferay.portlet.footer-portlet-javascript=/libs/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/jquery-ui-dist/jquery-ui.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/jquery-blockui/jquery.blockUI.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/jquery.handsontable/jquery.handsontable.full.js", //
-				"com.liferay.portlet.footer-portlet-javascript=/libs/moment/moment-with-locales.min.js", //
-				"com.liferay.portlet.footer-portlet-javascript=/libs/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/alpaca-custom/alpaca.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/dist/custom-fields.min.js", //
 				"com.liferay.portlet.instanceable=true", "javax.portlet.display-name=PresentatoreForms", //
