@@ -6,7 +6,7 @@ package it.servizidigitali.common.utility.enumeration;
  */
 public enum OrganizationRole {
 
-	REFERENTE("referente"), RESPONSABILE("responsabile"), ALTRO_RESPONSABILE("altro_responsabile");
+	REFERENTE("referente"), RESPONSABILE("responsabile"), ALTRO_RESPONSABILE("altro-responsabile");
 
 	private String chiave;
 
