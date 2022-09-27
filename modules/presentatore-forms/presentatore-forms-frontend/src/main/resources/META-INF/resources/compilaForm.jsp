@@ -188,6 +188,7 @@ function mainScript() {
 		   	    	"indietro":{
 			            "title": '<liferay-ui:message key="label.annulla"/>',
 			            "id": "indietroButton",
+			            "styles": "btn btn-outline-primary",
 			            "click": function() {
 			            	window.location.href = '';
 			            }
@@ -195,6 +196,7 @@ function mainScript() {
 		   	        "salvaBozzaSubmit":{
 		   	            "title": '<liferay-ui:message key="button.salva.bozza"/>',
 		   	            "id": "salvaBozzaFormButton",
+		   	        	"styles": "btn btn-secondary",
 		   	            "click": function(e) {
 		   	            	var userData = this.getValue();
 			   	         	
