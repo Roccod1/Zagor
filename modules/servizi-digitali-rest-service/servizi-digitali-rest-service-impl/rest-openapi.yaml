@@ -124,7 +124,7 @@ components:
             message:
               type: string
 
-        InfoServizioAmministrazione:
+        InfoServizioEnte:
           type: object
           properties:
             id:
@@ -184,7 +184,7 @@ components:
             messaggio:
               type: string
 
-        CountServizioAmministrazione:
+        CountServizioEnte:
           type: object
           properties:
             id:
@@ -411,13 +411,13 @@ paths:
                   type: array
                   items: 
                     $ref: '#/components/schemas/ComponenteNucleoFamiliareLight'
-    "/servizi-amministrazione":
+    "/servizi":
       get:
-        operationId: getServiziAmministrazione
-        description: Recupera i servizi amministrazione
+        operationId: getServiziEnte
+        description: Recupera i servizi ente
         security:
           - BearerAuth: []
-        tags: ['ServiziAmministrazione']
+        tags: ['Servizi']
         parameters:
           - $ref: '#/components/parameters/queryNomeComune'
           - name: codiceTipologiaServizio
@@ -432,24 +432,24 @@ paths:
               type: string
         responses:
           200:
-            description: Servizi amministrazione
+            description: Servizi ente
             content:
               application/json:
                 schema:
                   type: array
                   items:
-                    $ref: '#/components/schemas/InfoServizioAmministrazione'
+                    $ref: '#/components/schemas/InfoServizioEnte'
               application/xml:
                 schema:
                   type: array
                   items: 
-                    $ref: '#/components/schemas/InfoServizioAmministrazione'
-    "/servizi-amministrazione/{codiceServizio}":
+                    $ref: '#/components/schemas/InfoServizioEnte'
+    "/servizi/{codiceServizio}":
       get:
-        operationId: getInfoServizioAmministrazione
+        operationId: getInfoServizioEnte
         security:
           - BearerAuth: []
-        tags: ['ServiziAmministrazione']
+        tags: ['Servizi']
         parameters:
           - name: codiceServizio
             in: path
@@ -463,21 +463,21 @@ paths:
               type: string
         responses:
           200:
-            description: Servizi amministrazione
+            description: Servizio ente
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/InfoServizioAmministrazione'
+                  $ref: '#/components/schemas/InfoServizioEnte'
               application/xml:
                 schema:
-                  $ref: '#/components/schemas/InfoServizioAmministrazione'
-    "/servizi-amministrazione/count":
+                  $ref: '#/components/schemas/InfoServizioEnte'
+    "/servizi/count":
       get:
-        operationId: getCountServizioAmministrazione
-        description: Count servizi amministrazione
+        operationId: getCountServizioEnte
+        description: Count servizi ente
         security: 
           - BearerAuth: []
-        tags: ['ServiziAmministrazione']
+        tags: ['Servizi']
         parameters:
           - name: codiceServizio
             in: query
@@ -491,12 +491,12 @@ paths:
                 schema:
                   type: array
                   items:
-                    $ref: '#/components/schemas/CountServizioAmministrazione'
+                    $ref: '#/components/schemas/CountServizioEnte'
               application/xml:
                 schema:
                   type: array
                   items: 
-                    $ref: '#/components/schemas/CountServizioAmministrazione'
+                    $ref: '#/components/schemas/CountServizioEnte'
     "/certificati/check-invio":
       get:
         operationId: checkInvioCertificato

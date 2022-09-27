@@ -31,19 +31,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @generated
  */
 @Generated("")
-@GraphQLName("InfoServizioAmministrazione")
+@GraphQLName("InfoServizioEnte")
 @JsonFilter("Liferay.Vulcan")
-@XmlRootElement(name = "InfoServizioAmministrazione")
-public class InfoServizioAmministrazione implements Serializable {
+@XmlRootElement(name = "InfoServizioEnte")
+public class InfoServizioEnte implements Serializable {
 
-	public static InfoServizioAmministrazione toDTO(String json) {
-		return ObjectMapperUtil.readValue(
-			InfoServizioAmministrazione.class, json);
+	public static InfoServizioEnte toDTO(String json) {
+		return ObjectMapperUtil.readValue(InfoServizioEnte.class, json);
 	}
 
-	public static InfoServizioAmministrazione unsafeToDTO(String json) {
-		return ObjectMapperUtil.unsafeReadValue(
-			InfoServizioAmministrazione.class, json);
+	public static InfoServizioEnte unsafeToDTO(String json) {
+		return ObjectMapperUtil.unsafeReadValue(InfoServizioEnte.class, json);
 	}
 
 	@Schema
@@ -446,15 +444,13 @@ public class InfoServizioAmministrazione implements Serializable {
 			return true;
 		}
 
-		if (!(object instanceof InfoServizioAmministrazione)) {
+		if (!(object instanceof InfoServizioEnte)) {
 			return false;
 		}
 
-		InfoServizioAmministrazione infoServizioAmministrazione =
-			(InfoServizioAmministrazione)object;
+		InfoServizioEnte infoServizioEnte = (InfoServizioEnte)object;
 
-		return Objects.equals(
-			toString(), infoServizioAmministrazione.toString());
+		return Objects.equals(toString(), infoServizioEnte.toString());
 	}
 
 	@Override
@@ -658,7 +654,7 @@ public class InfoServizioAmministrazione implements Serializable {
 
 	@Schema(
 		accessMode = Schema.AccessMode.READ_ONLY,
-		defaultValue = "it.servizidigitali.restservice.dto.v1_0.InfoServizioAmministrazione",
+		defaultValue = "it.servizidigitali.restservice.dto.v1_0.InfoServizioEnte",
 		name = "x-class-name"
 	)
 	public String xClassName;

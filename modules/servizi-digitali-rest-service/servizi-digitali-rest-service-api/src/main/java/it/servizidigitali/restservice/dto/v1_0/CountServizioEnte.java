@@ -29,19 +29,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @generated
  */
 @Generated("")
-@GraphQLName("CountServizioAmministrazione")
+@GraphQLName("CountServizioEnte")
 @JsonFilter("Liferay.Vulcan")
-@XmlRootElement(name = "CountServizioAmministrazione")
-public class CountServizioAmministrazione implements Serializable {
+@XmlRootElement(name = "CountServizioEnte")
+public class CountServizioEnte implements Serializable {
 
-	public static CountServizioAmministrazione toDTO(String json) {
-		return ObjectMapperUtil.readValue(
-			CountServizioAmministrazione.class, json);
+	public static CountServizioEnte toDTO(String json) {
+		return ObjectMapperUtil.readValue(CountServizioEnte.class, json);
 	}
 
-	public static CountServizioAmministrazione unsafeToDTO(String json) {
-		return ObjectMapperUtil.unsafeReadValue(
-			CountServizioAmministrazione.class, json);
+	public static CountServizioEnte unsafeToDTO(String json) {
+		return ObjectMapperUtil.unsafeReadValue(CountServizioEnte.class, json);
 	}
 
 	@Schema
@@ -132,15 +130,13 @@ public class CountServizioAmministrazione implements Serializable {
 			return true;
 		}
 
-		if (!(object instanceof CountServizioAmministrazione)) {
+		if (!(object instanceof CountServizioEnte)) {
 			return false;
 		}
 
-		CountServizioAmministrazione countServizioAmministrazione =
-			(CountServizioAmministrazione)object;
+		CountServizioEnte countServizioEnte = (CountServizioEnte)object;
 
-		return Objects.equals(
-			toString(), countServizioAmministrazione.toString());
+		return Objects.equals(toString(), countServizioEnte.toString());
 	}
 
 	@Override
@@ -196,7 +192,7 @@ public class CountServizioAmministrazione implements Serializable {
 
 	@Schema(
 		accessMode = Schema.AccessMode.READ_ONLY,
-		defaultValue = "it.servizidigitali.restservice.dto.v1_0.CountServizioAmministrazione",
+		defaultValue = "it.servizidigitali.restservice.dto.v1_0.CountServizioEnte",
 		name = "x-class-name"
 	)
 	public String xClassName;

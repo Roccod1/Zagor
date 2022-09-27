@@ -1,12 +1,12 @@
 package it.servizidigitali.restservice.client.resource.v1_0;
 
-import it.servizidigitali.restservice.client.dto.v1_0.CountServizioAmministrazione;
-import it.servizidigitali.restservice.client.dto.v1_0.InfoServizioAmministrazione;
+import it.servizidigitali.restservice.client.dto.v1_0.CountServizioEnte;
+import it.servizidigitali.restservice.client.dto.v1_0.InfoServizioEnte;
 import it.servizidigitali.restservice.client.http.HttpInvoker;
 import it.servizidigitali.restservice.client.pagination.Page;
 import it.servizidigitali.restservice.client.problem.Problem;
-import it.servizidigitali.restservice.client.serdes.v1_0.CountServizioAmministrazioneSerDes;
-import it.servizidigitali.restservice.client.serdes.v1_0.InfoServizioAmministrazioneSerDes;
+import it.servizidigitali.restservice.client.serdes.v1_0.CountServizioEnteSerDes;
+import it.servizidigitali.restservice.client.serdes.v1_0.InfoServizioEnteSerDes;
 
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -21,35 +21,34 @@ import javax.annotation.Generated;
  * @generated
  */
 @Generated("")
-public interface ServiziAmministrazioneResource {
+public interface ServiziResource {
 
 	public static Builder builder() {
 		return new Builder();
 	}
 
-	public Page<InfoServizioAmministrazione> getServiziAmministrazione(
+	public Page<InfoServizioEnte> getServiziEnte(
 			String nomeComune, Long codiceTipologiaServizio,
 			String amministrazione)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse getServiziAmministrazioneHttpResponse(
+	public HttpInvoker.HttpResponse getServiziEnteHttpResponse(
 			String nomeComune, Long codiceTipologiaServizio,
 			String amministrazione)
 		throws Exception;
 
-	public InfoServizioAmministrazione getInfoServizioAmministrazione(
+	public InfoServizioEnte getInfoServizioEnte(
 			String codiceServizio, String nomeComune, String amministrazione)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse getInfoServizioAmministrazioneHttpResponse(
+	public HttpInvoker.HttpResponse getInfoServizioEnteHttpResponse(
 			String codiceServizio, String nomeComune, String amministrazione)
 		throws Exception;
 
-	public Page<CountServizioAmministrazione> getCountServizioAmministrazione(
-			String codiceServizio)
+	public Page<CountServizioEnte> getCountServizioEnte(String codiceServizio)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse getCountServizioAmministrazioneHttpResponse(
+	public HttpInvoker.HttpResponse getCountServizioEnteHttpResponse(
 			String codiceServizio)
 		throws Exception;
 
@@ -62,8 +61,8 @@ public interface ServiziAmministrazioneResource {
 			return this;
 		}
 
-		public ServiziAmministrazioneResource build() {
-			return new ServiziAmministrazioneResourceImpl(this);
+		public ServiziResource build() {
+			return new ServiziResourceImpl(this);
 		}
 
 		public Builder endpoint(String host, int port, String scheme) {
@@ -122,17 +121,15 @@ public interface ServiziAmministrazioneResource {
 
 	}
 
-	public static class ServiziAmministrazioneResourceImpl
-		implements ServiziAmministrazioneResource {
+	public static class ServiziResourceImpl implements ServiziResource {
 
-		public Page<InfoServizioAmministrazione> getServiziAmministrazione(
+		public Page<InfoServizioEnte> getServiziEnte(
 				String nomeComune, Long codiceTipologiaServizio,
 				String amministrazione)
 			throws Exception {
 
-			HttpInvoker.HttpResponse httpResponse =
-				getServiziAmministrazioneHttpResponse(
-					nomeComune, codiceTipologiaServizio, amministrazione);
+			HttpInvoker.HttpResponse httpResponse = getServiziEnteHttpResponse(
+				nomeComune, codiceTipologiaServizio, amministrazione);
 
 			String content = httpResponse.getContent();
 
@@ -160,8 +157,7 @@ public interface ServiziAmministrazioneResource {
 			}
 
 			try {
-				return Page.of(
-					content, InfoServizioAmministrazioneSerDes::toDTO);
+				return Page.of(content, InfoServizioEnteSerDes::toDTO);
 			}
 			catch (Exception e) {
 				_logger.log(
@@ -172,7 +168,7 @@ public interface ServiziAmministrazioneResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse getServiziAmministrazioneHttpResponse(
+		public HttpInvoker.HttpResponse getServiziEnteHttpResponse(
 				String nomeComune, Long codiceTipologiaServizio,
 				String amministrazione)
 			throws Exception {
@@ -216,7 +212,7 @@ public interface ServiziAmministrazioneResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port +
-						"/o/servizi-digitali-rest-service/v1.0/servizi-amministrazione");
+						"/o/servizi-digitali-rest-service/v1.0/servizi");
 
 			httpInvoker.userNameAndPassword(
 				_builder._login + ":" + _builder._password);
@@ -224,13 +220,13 @@ public interface ServiziAmministrazioneResource {
 			return httpInvoker.invoke();
 		}
 
-		public InfoServizioAmministrazione getInfoServizioAmministrazione(
+		public InfoServizioEnte getInfoServizioEnte(
 				String codiceServizio, String nomeComune,
 				String amministrazione)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				getInfoServizioAmministrazioneHttpResponse(
+				getInfoServizioEnteHttpResponse(
 					codiceServizio, nomeComune, amministrazione);
 
 			String content = httpResponse.getContent();
@@ -259,7 +255,7 @@ public interface ServiziAmministrazioneResource {
 			}
 
 			try {
-				return InfoServizioAmministrazioneSerDes.toDTO(content);
+				return InfoServizioEnteSerDes.toDTO(content);
 			}
 			catch (Exception e) {
 				_logger.log(
@@ -270,10 +266,9 @@ public interface ServiziAmministrazioneResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse
-				getInfoServizioAmministrazioneHttpResponse(
-					String codiceServizio, String nomeComune,
-					String amministrazione)
+		public HttpInvoker.HttpResponse getInfoServizioEnteHttpResponse(
+				String codiceServizio, String nomeComune,
+				String amministrazione)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -309,7 +304,7 @@ public interface ServiziAmministrazioneResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port +
-						"/o/servizi-digitali-rest-service/v1.0/servizi-amministrazione/{codiceServizio}");
+						"/o/servizi-digitali-rest-service/v1.0/servizi/{codiceServizio}");
 
 			httpInvoker.path("codiceServizio", codiceServizio);
 
@@ -319,12 +314,12 @@ public interface ServiziAmministrazioneResource {
 			return httpInvoker.invoke();
 		}
 
-		public Page<CountServizioAmministrazione>
-				getCountServizioAmministrazione(String codiceServizio)
+		public Page<CountServizioEnte> getCountServizioEnte(
+				String codiceServizio)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				getCountServizioAmministrazioneHttpResponse(codiceServizio);
+				getCountServizioEnteHttpResponse(codiceServizio);
 
 			String content = httpResponse.getContent();
 
@@ -352,8 +347,7 @@ public interface ServiziAmministrazioneResource {
 			}
 
 			try {
-				return Page.of(
-					content, CountServizioAmministrazioneSerDes::toDTO);
+				return Page.of(content, CountServizioEnteSerDes::toDTO);
 			}
 			catch (Exception e) {
 				_logger.log(
@@ -364,9 +358,8 @@ public interface ServiziAmministrazioneResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse
-				getCountServizioAmministrazioneHttpResponse(
-					String codiceServizio)
+		public HttpInvoker.HttpResponse getCountServizioEnteHttpResponse(
+				String codiceServizio)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -398,7 +391,7 @@ public interface ServiziAmministrazioneResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port +
-						"/o/servizi-digitali-rest-service/v1.0/servizi-amministrazione/count");
+						"/o/servizi-digitali-rest-service/v1.0/servizi/count");
 
 			httpInvoker.userNameAndPassword(
 				_builder._login + ":" + _builder._password);
@@ -406,12 +399,12 @@ public interface ServiziAmministrazioneResource {
 			return httpInvoker.invoke();
 		}
 
-		private ServiziAmministrazioneResourceImpl(Builder builder) {
+		private ServiziResourceImpl(Builder builder) {
 			_builder = builder;
 		}
 
 		private static final Logger _logger = Logger.getLogger(
-			ServiziAmministrazioneResource.class.getName());
+			ServiziResource.class.getName());
 
 		private Builder _builder;
 

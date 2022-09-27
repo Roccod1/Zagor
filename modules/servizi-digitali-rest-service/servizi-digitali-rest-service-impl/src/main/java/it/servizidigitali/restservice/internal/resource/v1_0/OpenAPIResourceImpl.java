@@ -74,7 +74,7 @@ public class OpenAPIResourceImpl {
 
 			add(RichiesteServizioResourceImpl.class);
 
-			add(ServiziAmministrazioneResourceImpl.class);
+			add(ServiziResourceImpl.class);
 
 			add(OpenAPIResourceImpl.class);
 		}

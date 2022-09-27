@@ -20,7 +20,7 @@ import com.liferay.portal.odata.filter.ExpressionConvert;
 import com.liferay.portal.odata.filter.FilterParserProvider;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
 
-import it.servizidigitali.restservice.resource.v1_0.ServiziAmministrazioneResource;
+import it.servizidigitali.restservice.resource.v1_0.ServiziResource;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -45,35 +45,31 @@ import org.osgi.service.component.annotations.ReferenceScope;
  * @author pindi
  * @generated
  */
-@Component(
-	immediate = true, service = ServiziAmministrazioneResource.Factory.class
-)
+@Component(immediate = true, service = ServiziResource.Factory.class)
 @Generated("")
-public class ServiziAmministrazioneResourceFactoryImpl
-	implements ServiziAmministrazioneResource.Factory {
+public class ServiziResourceFactoryImpl implements ServiziResource.Factory {
 
 	@Override
-	public ServiziAmministrazioneResource.Builder create() {
-		return new ServiziAmministrazioneResource.Builder() {
+	public ServiziResource.Builder create() {
+		return new ServiziResource.Builder() {
 
 			@Override
-			public ServiziAmministrazioneResource build() {
+			public ServiziResource build() {
 				if (_user == null) {
 					throw new IllegalArgumentException("User is not set");
 				}
 
-				return (ServiziAmministrazioneResource)
-					ProxyUtil.newProxyInstance(
-						ServiziAmministrazioneResource.class.getClassLoader(),
-						new Class<?>[] {ServiziAmministrazioneResource.class},
-						(proxy, method, arguments) -> _invoke(
-							method, arguments, _checkPermissions,
-							_httpServletRequest, _httpServletResponse,
-							_preferredLocale, _user));
+				return (ServiziResource)ProxyUtil.newProxyInstance(
+					ServiziResource.class.getClassLoader(),
+					new Class<?>[] {ServiziResource.class},
+					(proxy, method, arguments) -> _invoke(
+						method, arguments, _checkPermissions,
+						_httpServletRequest, _httpServletResponse,
+						_preferredLocale, _user));
 			}
 
 			@Override
-			public ServiziAmministrazioneResource.Builder checkPermissions(
+			public ServiziResource.Builder checkPermissions(
 				boolean checkPermissions) {
 
 				_checkPermissions = checkPermissions;
@@ -82,7 +78,7 @@ public class ServiziAmministrazioneResourceFactoryImpl
 			}
 
 			@Override
-			public ServiziAmministrazioneResource.Builder httpServletRequest(
+			public ServiziResource.Builder httpServletRequest(
 				HttpServletRequest httpServletRequest) {
 
 				_httpServletRequest = httpServletRequest;
@@ -91,7 +87,7 @@ public class ServiziAmministrazioneResourceFactoryImpl
 			}
 
 			@Override
-			public ServiziAmministrazioneResource.Builder httpServletResponse(
+			public ServiziResource.Builder httpServletResponse(
 				HttpServletResponse httpServletResponse) {
 
 				_httpServletResponse = httpServletResponse;
@@ -100,7 +96,7 @@ public class ServiziAmministrazioneResourceFactoryImpl
 			}
 
 			@Override
-			public ServiziAmministrazioneResource.Builder preferredLocale(
+			public ServiziResource.Builder preferredLocale(
 				Locale preferredLocale) {
 
 				_preferredLocale = preferredLocale;
@@ -109,7 +105,7 @@ public class ServiziAmministrazioneResourceFactoryImpl
 			}
 
 			@Override
-			public ServiziAmministrazioneResource.Builder user(User user) {
+			public ServiziResource.Builder user(User user) {
 				_user = user;
 
 				return this;
@@ -126,12 +122,12 @@ public class ServiziAmministrazioneResourceFactoryImpl
 
 	@Activate
 	protected void activate() {
-		ServiziAmministrazioneResource.FactoryHolder.factory = this;
+		ServiziResource.FactoryHolder.factory = this;
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		ServiziAmministrazioneResource.FactoryHolder.factory = null;
+		ServiziResource.FactoryHolder.factory = null;
 	}
 
 	private Object _invoke(
@@ -157,40 +153,35 @@ public class ServiziAmministrazioneResourceFactoryImpl
 				_liberalPermissionCheckerFactory.create(user));
 		}
 
-		ServiziAmministrazioneResource serviziAmministrazioneResource =
-			_componentServiceObjects.getService();
+		ServiziResource serviziResource = _componentServiceObjects.getService();
 
-		serviziAmministrazioneResource.setContextAcceptLanguage(
+		serviziResource.setContextAcceptLanguage(
 			new AcceptLanguageImpl(httpServletRequest, preferredLocale, user));
 
 		Company company = _companyLocalService.getCompany(user.getCompanyId());
 
-		serviziAmministrazioneResource.setContextCompany(company);
+		serviziResource.setContextCompany(company);
 
-		serviziAmministrazioneResource.setContextHttpServletRequest(
-			httpServletRequest);
-		serviziAmministrazioneResource.setContextHttpServletResponse(
-			httpServletResponse);
-		serviziAmministrazioneResource.setContextUser(user);
-		serviziAmministrazioneResource.setExpressionConvert(_expressionConvert);
-		serviziAmministrazioneResource.setFilterParserProvider(
-			_filterParserProvider);
-		serviziAmministrazioneResource.setGroupLocalService(_groupLocalService);
-		serviziAmministrazioneResource.setResourceActionLocalService(
+		serviziResource.setContextHttpServletRequest(httpServletRequest);
+		serviziResource.setContextHttpServletResponse(httpServletResponse);
+		serviziResource.setContextUser(user);
+		serviziResource.setExpressionConvert(_expressionConvert);
+		serviziResource.setFilterParserProvider(_filterParserProvider);
+		serviziResource.setGroupLocalService(_groupLocalService);
+		serviziResource.setResourceActionLocalService(
 			_resourceActionLocalService);
-		serviziAmministrazioneResource.setResourcePermissionLocalService(
+		serviziResource.setResourcePermissionLocalService(
 			_resourcePermissionLocalService);
-		serviziAmministrazioneResource.setRoleLocalService(_roleLocalService);
+		serviziResource.setRoleLocalService(_roleLocalService);
 
 		try {
-			return method.invoke(serviziAmministrazioneResource, arguments);
+			return method.invoke(serviziResource, arguments);
 		}
 		catch (InvocationTargetException invocationTargetException) {
 			throw invocationTargetException.getTargetException();
 		}
 		finally {
-			_componentServiceObjects.ungetService(
-				serviziAmministrazioneResource);
+			_componentServiceObjects.ungetService(serviziResource);
 
 			PrincipalThreadLocal.setName(name);
 
@@ -202,8 +193,7 @@ public class ServiziAmministrazioneResourceFactoryImpl
 	private CompanyLocalService _companyLocalService;
 
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
-	private ComponentServiceObjects<ServiziAmministrazioneResource>
-		_componentServiceObjects;
+	private ComponentServiceObjects<ServiziResource> _componentServiceObjects;
 
 	@Reference
 	private PermissionCheckerFactory _defaultPermissionCheckerFactory;

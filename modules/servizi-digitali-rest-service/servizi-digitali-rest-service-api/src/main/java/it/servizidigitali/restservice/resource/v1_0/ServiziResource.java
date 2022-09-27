@@ -10,8 +10,8 @@ import com.liferay.portal.odata.filter.FilterParserProvider;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
 import com.liferay.portal.vulcan.pagination.Page;
 
-import it.servizidigitali.restservice.dto.v1_0.CountServizioAmministrazione;
-import it.servizidigitali.restservice.dto.v1_0.InfoServizioAmministrazione;
+import it.servizidigitali.restservice.dto.v1_0.CountServizioEnte;
+import it.servizidigitali.restservice.dto.v1_0.InfoServizioEnte;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,23 +37,22 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @Generated("")
 @ProviderType
-public interface ServiziAmministrazioneResource {
+public interface ServiziResource {
 
 	public static Builder builder() {
 		return FactoryHolder.factory.create();
 	}
 
-	public Page<InfoServizioAmministrazione> getServiziAmministrazione(
+	public Page<InfoServizioEnte> getServiziEnte(
 			String nomeComune, Long codiceTipologiaServizio,
 			String amministrazione)
 		throws Exception;
 
-	public InfoServizioAmministrazione getInfoServizioAmministrazione(
+	public InfoServizioEnte getInfoServizioEnte(
 			String codiceServizio, String nomeComune, String amministrazione)
 		throws Exception;
 
-	public Page<CountServizioAmministrazione> getCountServizioAmministrazione(
-			String codiceServizio)
+	public Page<CountServizioEnte> getCountServizioEnte(String codiceServizio)
 		throws Exception;
 
 	public default void setContextAcceptLanguage(
@@ -113,7 +112,7 @@ public interface ServiziAmministrazioneResource {
 	@ProviderType
 	public interface Builder {
 
-		public ServiziAmministrazioneResource build();
+		public ServiziResource build();
 
 		public Builder checkPermissions(boolean checkPermissions);
 

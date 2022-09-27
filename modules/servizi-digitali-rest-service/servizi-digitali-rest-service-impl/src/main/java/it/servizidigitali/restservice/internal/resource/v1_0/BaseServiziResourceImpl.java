@@ -16,9 +16,9 @@ import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.util.ActionUtil;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
-import it.servizidigitali.restservice.dto.v1_0.CountServizioAmministrazione;
-import it.servizidigitali.restservice.dto.v1_0.InfoServizioAmministrazione;
-import it.servizidigitali.restservice.resource.v1_0.ServiziAmministrazioneResource;
+import it.servizidigitali.restservice.dto.v1_0.CountServizioEnte;
+import it.servizidigitali.restservice.dto.v1_0.InfoServizioEnte;
+import it.servizidigitali.restservice.resource.v1_0.ServiziResource;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,16 +37,15 @@ import javax.ws.rs.core.UriInfo;
  */
 @Generated("")
 @javax.ws.rs.Path("/v1.0")
-public abstract class BaseServiziAmministrazioneResourceImpl
-	implements ServiziAmministrazioneResource {
+public abstract class BaseServiziResourceImpl implements ServiziResource {
 
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/servizi-amministrazione'  -u 'test@liferay.com:test'
+	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/servizi'  -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
-		description = "Recupera i servizi amministrazione"
+		description = "Recupera i servizi ente"
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -65,17 +64,13 @@ public abstract class BaseServiziAmministrazioneResourceImpl
 		}
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {
-			@io.swagger.v3.oas.annotations.tags.Tag(
-				name = "ServiziAmministrazione"
-			)
-		}
+		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Servizi")}
 	)
 	@javax.ws.rs.GET
-	@javax.ws.rs.Path("/servizi-amministrazione")
+	@javax.ws.rs.Path("/servizi")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Page<InfoServizioAmministrazione> getServiziAmministrazione(
+	public Page<InfoServizioEnte> getServiziEnte(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.ws.rs.QueryParam("nomeComune")
 			String nomeComune,
@@ -94,7 +89,7 @@ public abstract class BaseServiziAmministrazioneResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/servizi-amministrazione/{codiceServizio}'  -u 'test@liferay.com:test'
+	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/servizi/{codiceServizio}'  -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -113,17 +108,13 @@ public abstract class BaseServiziAmministrazioneResourceImpl
 		}
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {
-			@io.swagger.v3.oas.annotations.tags.Tag(
-				name = "ServiziAmministrazione"
-			)
-		}
+		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Servizi")}
 	)
 	@javax.ws.rs.GET
-	@javax.ws.rs.Path("/servizi-amministrazione/{codiceServizio}")
+	@javax.ws.rs.Path("/servizi/{codiceServizio}")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public InfoServizioAmministrazione getInfoServizioAmministrazione(
+	public InfoServizioEnte getInfoServizioEnte(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.PathParam("codiceServizio")
@@ -136,17 +127,15 @@ public abstract class BaseServiziAmministrazioneResourceImpl
 			String amministrazione)
 		throws Exception {
 
-		return new InfoServizioAmministrazione();
+		return new InfoServizioEnte();
 	}
 
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/servizi-amministrazione/count'  -u 'test@liferay.com:test'
+	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/servizi/count'  -u 'test@liferay.com:test'
 	 */
-	@io.swagger.v3.oas.annotations.Operation(
-		description = "Count servizi amministrazione"
-	)
+	@io.swagger.v3.oas.annotations.Operation(description = "Count servizi ente")
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -156,17 +145,13 @@ public abstract class BaseServiziAmministrazioneResourceImpl
 		}
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {
-			@io.swagger.v3.oas.annotations.tags.Tag(
-				name = "ServiziAmministrazione"
-			)
-		}
+		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Servizi")}
 	)
 	@javax.ws.rs.GET
-	@javax.ws.rs.Path("/servizi-amministrazione/count")
+	@javax.ws.rs.Path("/servizi/count")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Page<CountServizioAmministrazione> getCountServizioAmministrazione(
+	public Page<CountServizioEnte> getCountServizioEnte(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.ws.rs.QueryParam("codiceServizio")
 			String codiceServizio)
@@ -316,6 +301,6 @@ public abstract class BaseServiziAmministrazioneResourceImpl
 	protected RoleLocalService roleLocalService;
 
 	private static final com.liferay.portal.kernel.log.Log _log =
-		LogFactoryUtil.getLog(BaseServiziAmministrazioneResourceImpl.class);
+		LogFactoryUtil.getLog(BaseServiziResourceImpl.class);
 
 }

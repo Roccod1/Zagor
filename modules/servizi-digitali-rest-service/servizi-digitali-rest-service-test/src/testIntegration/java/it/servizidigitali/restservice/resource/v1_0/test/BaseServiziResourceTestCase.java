@@ -20,10 +20,10 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.vulcan.resource.EntityModelResource;
 
-import it.servizidigitali.restservice.client.dto.v1_0.InfoServizioAmministrazione;
+import it.servizidigitali.restservice.client.dto.v1_0.InfoServizioEnte;
 import it.servizidigitali.restservice.client.http.HttpInvoker;
 import it.servizidigitali.restservice.client.pagination.Page;
-import it.servizidigitali.restservice.client.resource.v1_0.ServiziAmministrazioneResource;
+import it.servizidigitali.restservice.client.resource.v1_0.ServiziResource;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -57,7 +57,7 @@ import org.junit.Test;
  * @generated
  */
 @Generated("")
-public abstract class BaseServiziAmministrazioneResourceTestCase {
+public abstract class BaseServiziResourceTestCase {
 
 	@ClassRule
 	@Rule
@@ -78,12 +78,11 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 		testCompany = CompanyLocalServiceUtil.getCompany(
 			testGroup.getCompanyId());
 
-		_serviziAmministrazioneResource.setContextCompany(testCompany);
+		_serviziResource.setContextCompany(testCompany);
 
-		ServiziAmministrazioneResource.Builder builder =
-			ServiziAmministrazioneResource.builder();
+		ServiziResource.Builder builder = ServiziResource.builder();
 
-		serviziAmministrazioneResource = builder.authentication(
+		serviziResource = builder.authentication(
 			"test@liferay.com", "test"
 		).locale(
 			LocaleUtil.getDefault()
@@ -97,39 +96,26 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 	}
 
 	@Test
-	public void testGetServiziAmministrazione() throws Exception {
-		Page<ServiziAmministrazione> page =
-			serviziAmministrazioneResource.getServiziAmministrazione(
-				RandomTestUtil.randomString(), null,
-				RandomTestUtil.randomString());
+	public void testGetServiziEnte() throws Exception {
+		Page<Servizi> page = serviziResource.getServiziEnte(
+			RandomTestUtil.randomString(), null, RandomTestUtil.randomString());
 
 		long totalCount = page.getTotalCount();
 
-		ServiziAmministrazione serviziAmministrazione1 =
-			testGetServiziAmministrazione_addServiziAmministrazione(
-				randomServiziAmministrazione());
+		Servizi servizi1 = testGetServiziEnte_addServizi(randomServizi());
 
-		ServiziAmministrazione serviziAmministrazione2 =
-			testGetServiziAmministrazione_addServiziAmministrazione(
-				randomServiziAmministrazione());
+		Servizi servizi2 = testGetServiziEnte_addServizi(randomServizi());
 
-		page = serviziAmministrazioneResource.getServiziAmministrazione(
-			null, null, null);
+		page = serviziResource.getServiziEnte(null, null, null);
 
 		Assert.assertEquals(totalCount + 2, page.getTotalCount());
 
-		assertContains(
-			serviziAmministrazione1,
-			(List<ServiziAmministrazione>)page.getItems());
-		assertContains(
-			serviziAmministrazione2,
-			(List<ServiziAmministrazione>)page.getItems());
+		assertContains(servizi1, (List<Servizi>)page.getItems());
+		assertContains(servizi2, (List<Servizi>)page.getItems());
 		assertValid(page);
 	}
 
-	protected ServiziAmministrazione
-			testGetServiziAmministrazione_addServiziAmministrazione(
-				ServiziAmministrazione serviziAmministrazione)
+	protected Servizi testGetServiziEnte_addServizi(Servizi servizi)
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -137,38 +123,26 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 	}
 
 	@Test
-	public void testGetCountServizioAmministrazione() throws Exception {
-		Page<ServiziAmministrazione> page =
-			serviziAmministrazioneResource.getCountServizioAmministrazione(
-				RandomTestUtil.randomString());
+	public void testGetCountServizioEnte() throws Exception {
+		Page<Servizi> page = serviziResource.getCountServizioEnte(
+			RandomTestUtil.randomString());
 
 		long totalCount = page.getTotalCount();
 
-		ServiziAmministrazione serviziAmministrazione1 =
-			testGetCountServizioAmministrazione_addServiziAmministrazione(
-				randomServiziAmministrazione());
+		Servizi servizi1 = testGetCountServizioEnte_addServizi(randomServizi());
 
-		ServiziAmministrazione serviziAmministrazione2 =
-			testGetCountServizioAmministrazione_addServiziAmministrazione(
-				randomServiziAmministrazione());
+		Servizi servizi2 = testGetCountServizioEnte_addServizi(randomServizi());
 
-		page = serviziAmministrazioneResource.getCountServizioAmministrazione(
-			null);
+		page = serviziResource.getCountServizioEnte(null);
 
 		Assert.assertEquals(totalCount + 2, page.getTotalCount());
 
-		assertContains(
-			serviziAmministrazione1,
-			(List<ServiziAmministrazione>)page.getItems());
-		assertContains(
-			serviziAmministrazione2,
-			(List<ServiziAmministrazione>)page.getItems());
+		assertContains(servizi1, (List<Servizi>)page.getItems());
+		assertContains(servizi2, (List<Servizi>)page.getItems());
 		assertValid(page);
 	}
 
-	protected ServiziAmministrazione
-			testGetCountServizioAmministrazione_addServiziAmministrazione(
-				ServiziAmministrazione serviziAmministrazione)
+	protected Servizi testGetCountServizioEnte_addServizi(Servizi servizi)
 		throws Exception {
 
 		throw new UnsupportedOperationException(
@@ -176,51 +150,40 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 	}
 
 	@Test
-	public void testGetInfoServizioAmministrazione() throws Exception {
-		ServiziAmministrazione postServiziAmministrazione =
-			testGetServiziAmministrazione_addServiziAmministrazione();
+	public void testGetInfoServizioEnte() throws Exception {
+		Servizi postServizi = testGetServizi_addServizi();
 
-		InfoServizioAmministrazione postInfoServizioAmministrazione =
-			testGetInfoServizioAmministrazione_addInfoServizioAmministrazione(
-				postServiziAmministrazione.getId(),
-				randomInfoServizioAmministrazione());
+		InfoServizioEnte postInfoServizioEnte =
+			testGetInfoServizioEnte_addInfoServizioEnte(
+				postServizi.getId(), randomInfoServizioEnte());
 
-		InfoServizioAmministrazione getInfoServizioAmministrazione =
-			serviziAmministrazioneResource.getInfoServizioAmministrazione(
-				postServiziAmministrazione.getId());
+		InfoServizioEnte getInfoServizioEnte =
+			serviziResource.getInfoServizioEnte(postServizi.getId());
 
-		assertEquals(
-			postInfoServizioAmministrazione, getInfoServizioAmministrazione);
-		assertValid(getInfoServizioAmministrazione);
+		assertEquals(postInfoServizioEnte, getInfoServizioEnte);
+		assertValid(getInfoServizioEnte);
 	}
 
-	protected InfoServizioAmministrazione
-			testGetInfoServizioAmministrazione_addInfoServizioAmministrazione(
-				long serviziAmministrazioneId,
-				InfoServizioAmministrazione infoServizioAmministrazione)
+	protected InfoServizioEnte testGetInfoServizioEnte_addInfoServizioEnte(
+			long serviziId, InfoServizioEnte infoServizioEnte)
 		throws Exception {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
 
-	protected void assertContains(
-		Object serviziAmministrazione, List<Object> serviziAmministraziones) {
-
+	protected void assertContains(Object servizi, List<Object> servizis) {
 		boolean contains = false;
 
-		for (Object item : serviziAmministraziones) {
-			if (equals(serviziAmministrazione, item)) {
+		for (Object item : servizis) {
+			if (equals(servizi, item)) {
 				contains = true;
 
 				break;
 			}
 		}
 
-		Assert.assertTrue(
-			serviziAmministraziones + " does not contain " +
-				serviziAmministrazione,
-			contains);
+		Assert.assertTrue(servizis + " does not contain " + servizi, contains);
 	}
 
 	protected void assertHttpResponseStatusCode(
@@ -231,52 +194,44 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			expectedHttpResponseStatusCode, actualHttpResponse.getStatusCode());
 	}
 
-	protected void assertEquals(
-		Object serviziAmministrazione1, Object serviziAmministrazione2) {
-
+	protected void assertEquals(Object servizi1, Object servizi2) {
 		Assert.assertTrue(
-			serviziAmministrazione1 + " does not equal " +
-				serviziAmministrazione2,
-			equals(serviziAmministrazione1, serviziAmministrazione2));
+			servizi1 + " does not equal " + servizi2,
+			equals(servizi1, servizi2));
 	}
 
 	protected void assertEquals(
-		List<Object> serviziAmministraziones1,
-		List<Object> serviziAmministraziones2) {
+		List<Object> servizis1, List<Object> servizis2) {
 
-		Assert.assertEquals(
-			serviziAmministraziones1.size(), serviziAmministraziones2.size());
+		Assert.assertEquals(servizis1.size(), servizis2.size());
 
-		for (int i = 0; i < serviziAmministraziones1.size(); i++) {
-			Object serviziAmministrazione1 = serviziAmministraziones1.get(i);
-			Object serviziAmministrazione2 = serviziAmministraziones2.get(i);
+		for (int i = 0; i < servizis1.size(); i++) {
+			Object servizi1 = servizis1.get(i);
+			Object servizi2 = servizis2.get(i);
 
-			assertEquals(serviziAmministrazione1, serviziAmministrazione2);
+			assertEquals(servizi1, servizi2);
 		}
 	}
 
 	protected void assertEquals(
-		InfoServizioAmministrazione infoServizioAmministrazione1,
-		InfoServizioAmministrazione infoServizioAmministrazione2) {
+		InfoServizioEnte infoServizioEnte1,
+		InfoServizioEnte infoServizioEnte2) {
 
 		Assert.assertTrue(
-			infoServizioAmministrazione1 + " does not equal " +
-				infoServizioAmministrazione2,
-			equals(infoServizioAmministrazione1, infoServizioAmministrazione2));
+			infoServizioEnte1 + " does not equal " + infoServizioEnte2,
+			equals(infoServizioEnte1, infoServizioEnte2));
 	}
 
 	protected void assertEqualsIgnoringOrder(
-		List<Object> serviziAmministraziones1,
-		List<Object> serviziAmministraziones2) {
+		List<Object> servizis1, List<Object> servizis2) {
 
-		Assert.assertEquals(
-			serviziAmministraziones1.size(), serviziAmministraziones2.size());
+		Assert.assertEquals(servizis1.size(), servizis2.size());
 
-		for (Object serviziAmministrazione1 : serviziAmministraziones1) {
+		for (Object servizi1 : servizis1) {
 			boolean contains = false;
 
-			for (Object serviziAmministrazione2 : serviziAmministraziones2) {
-				if (equals(serviziAmministrazione1, serviziAmministrazione2)) {
+			for (Object servizi2 : servizis2) {
+				if (equals(servizi1, servizi2)) {
 					contains = true;
 
 					break;
@@ -284,13 +239,11 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			}
 
 			Assert.assertTrue(
-				serviziAmministraziones2 + " does not contain " +
-					serviziAmministrazione1,
-				contains);
+				servizis2 + " does not contain " + servizi1, contains);
 		}
 	}
 
-	protected void assertValid(Object serviziAmministrazione) throws Exception {
+	protected void assertValid(Object servizi) throws Exception {
 		boolean valid = true;
 
 		for (String additionalAssertFieldName :
@@ -307,9 +260,9 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 	protected void assertValid(Page<Object> page) {
 		boolean valid = false;
 
-		java.util.Collection<Object> serviziAmministraziones = page.getItems();
+		java.util.Collection<Object> servizis = page.getItems();
 
-		int size = serviziAmministraziones.size();
+		int size = servizis.size();
 
 		if ((page.getLastPage() > 0) && (page.getPage() > 0) &&
 			(page.getPageSize() > 0) && (page.getTotalCount() > 0) &&
@@ -321,20 +274,18 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 		Assert.assertTrue(valid);
 	}
 
-	protected void assertValid(
-		InfoServizioAmministrazione infoServizioAmministrazione) {
-
+	protected void assertValid(InfoServizioEnte infoServizioEnte) {
 		boolean valid = true;
 
-		if (infoServizioAmministrazione.getId() == null) {
+		if (infoServizioEnte.getId() == null) {
 			valid = false;
 		}
 
 		for (String additionalAssertFieldName :
-				getAdditionalInfoServizioAmministrazioneAssertFieldNames()) {
+				getAdditionalInfoServizioEnteAssertFieldNames()) {
 
 			if (Objects.equals("active", additionalAssertFieldName)) {
-				if (infoServizioAmministrazione.getActive() == null) {
+				if (infoServizioEnte.getActive() == null) {
 					valid = false;
 				}
 
@@ -342,7 +293,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			}
 
 			if (Objects.equals("chatbotInline", additionalAssertFieldName)) {
-				if (infoServizioAmministrazione.getChatbotInline() == null) {
+				if (infoServizioEnte.getChatbotInline() == null) {
 					valid = false;
 				}
 
@@ -352,9 +303,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			if (Objects.equals(
 					"chatbotInlineIntent", additionalAssertFieldName)) {
 
-				if (infoServizioAmministrazione.getChatbotInlineIntent() ==
-						null) {
-
+				if (infoServizioEnte.getChatbotInlineIntent() == null) {
 					valid = false;
 				}
 
@@ -362,7 +311,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			}
 
 			if (Objects.equals("code", additionalAssertFieldName)) {
-				if (infoServizioAmministrazione.getCode() == null) {
+				if (infoServizioEnte.getCode() == null) {
 					valid = false;
 				}
 
@@ -370,7 +319,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			}
 
 			if (Objects.equals("codiceIpa", additionalAssertFieldName)) {
-				if (infoServizioAmministrazione.getCodiceIpa() == null) {
+				if (infoServizioEnte.getCodiceIpa() == null) {
 					valid = false;
 				}
 
@@ -381,8 +330,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 					"correlatedPaymentServiceCode",
 					additionalAssertFieldName)) {
 
-				if (infoServizioAmministrazione.
-						getCorrelatedPaymentServiceCode() == null) {
+				if (infoServizioEnte.getCorrelatedPaymentServiceCode() ==
+						null) {
 
 					valid = false;
 				}
@@ -391,7 +340,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			}
 
 			if (Objects.equals("description", additionalAssertFieldName)) {
-				if (infoServizioAmministrazione.getDescription() == null) {
+				if (infoServizioEnte.getDescription() == null) {
 					valid = false;
 				}
 
@@ -399,7 +348,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			}
 
 			if (Objects.equals("destinazioneUsos", additionalAssertFieldName)) {
-				if (infoServizioAmministrazione.getDestinazioneUsos() == null) {
+				if (infoServizioEnte.getDestinazioneUsos() == null) {
 					valid = false;
 				}
 
@@ -407,7 +356,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			}
 
 			if (Objects.equals("nomeComune", additionalAssertFieldName)) {
-				if (infoServizioAmministrazione.getNomeComune() == null) {
+				if (infoServizioEnte.getNomeComune() == null) {
 					valid = false;
 				}
 
@@ -415,7 +364,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			}
 
 			if (Objects.equals("serviceCardUrl", additionalAssertFieldName)) {
-				if (infoServizioAmministrazione.getServiceCardUrl() == null) {
+				if (infoServizioEnte.getServiceCardUrl() == null) {
 					valid = false;
 				}
 
@@ -423,7 +372,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			}
 
 			if (Objects.equals("serviceOnlineUrl", additionalAssertFieldName)) {
-				if (infoServizioAmministrazione.getServiceOnlineUrl() == null) {
+				if (infoServizioEnte.getServiceOnlineUrl() == null) {
 					valid = false;
 				}
 
@@ -431,7 +380,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			}
 
 			if (Objects.equals("title", additionalAssertFieldName)) {
-				if (infoServizioAmministrazione.getTitle() == null) {
+				if (infoServizioEnte.getTitle() == null) {
 					valid = false;
 				}
 
@@ -439,7 +388,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			}
 
 			if (Objects.equals("usableByChatbot", additionalAssertFieldName)) {
-				if (infoServizioAmministrazione.getUsableByChatbot() == null) {
+				if (infoServizioEnte.getUsableByChatbot() == null) {
 					valid = false;
 				}
 
@@ -458,9 +407,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 		return new String[0];
 	}
 
-	protected String[]
-		getAdditionalInfoServizioAmministrazioneAssertFieldNames() {
-
+	protected String[] getAdditionalInfoServizioEnteAssertFieldNames() {
 		return new String[0];
 	}
 
@@ -504,10 +451,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 		return new String[0];
 	}
 
-	protected boolean equals(
-		Object serviziAmministrazione1, Object serviziAmministrazione2) {
-
-		if (serviziAmministrazione1 == serviziAmministrazione2) {
+	protected boolean equals(Object servizi1, Object servizi2) {
+		if (servizi1 == servizi2) {
 			return true;
 		}
 
@@ -549,20 +494,20 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 	}
 
 	protected boolean equals(
-		InfoServizioAmministrazione infoServizioAmministrazione1,
-		InfoServizioAmministrazione infoServizioAmministrazione2) {
+		InfoServizioEnte infoServizioEnte1,
+		InfoServizioEnte infoServizioEnte2) {
 
-		if (infoServizioAmministrazione1 == infoServizioAmministrazione2) {
+		if (infoServizioEnte1 == infoServizioEnte2) {
 			return true;
 		}
 
 		for (String additionalAssertFieldName :
-				getAdditionalInfoServizioAmministrazioneAssertFieldNames()) {
+				getAdditionalInfoServizioEnteAssertFieldNames()) {
 
 			if (Objects.equals("active", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.getActive(),
-						infoServizioAmministrazione2.getActive())) {
+						infoServizioEnte1.getActive(),
+						infoServizioEnte2.getActive())) {
 
 					return false;
 				}
@@ -572,8 +517,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 
 			if (Objects.equals("chatbotInline", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.getChatbotInline(),
-						infoServizioAmministrazione2.getChatbotInline())) {
+						infoServizioEnte1.getChatbotInline(),
+						infoServizioEnte2.getChatbotInline())) {
 
 					return false;
 				}
@@ -585,9 +530,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 					"chatbotInlineIntent", additionalAssertFieldName)) {
 
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.getChatbotInlineIntent(),
-						infoServizioAmministrazione2.
-							getChatbotInlineIntent())) {
+						infoServizioEnte1.getChatbotInlineIntent(),
+						infoServizioEnte2.getChatbotInlineIntent())) {
 
 					return false;
 				}
@@ -597,8 +541,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 
 			if (Objects.equals("code", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.getCode(),
-						infoServizioAmministrazione2.getCode())) {
+						infoServizioEnte1.getCode(),
+						infoServizioEnte2.getCode())) {
 
 					return false;
 				}
@@ -608,8 +552,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 
 			if (Objects.equals("codiceIpa", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.getCodiceIpa(),
-						infoServizioAmministrazione2.getCodiceIpa())) {
+						infoServizioEnte1.getCodiceIpa(),
+						infoServizioEnte2.getCodiceIpa())) {
 
 					return false;
 				}
@@ -622,10 +566,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 					additionalAssertFieldName)) {
 
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.
-							getCorrelatedPaymentServiceCode(),
-						infoServizioAmministrazione2.
-							getCorrelatedPaymentServiceCode())) {
+						infoServizioEnte1.getCorrelatedPaymentServiceCode(),
+						infoServizioEnte2.getCorrelatedPaymentServiceCode())) {
 
 					return false;
 				}
@@ -635,8 +577,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 
 			if (Objects.equals("description", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.getDescription(),
-						infoServizioAmministrazione2.getDescription())) {
+						infoServizioEnte1.getDescription(),
+						infoServizioEnte2.getDescription())) {
 
 					return false;
 				}
@@ -646,8 +588,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 
 			if (Objects.equals("destinazioneUsos", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.getDestinazioneUsos(),
-						infoServizioAmministrazione2.getDestinazioneUsos())) {
+						infoServizioEnte1.getDestinazioneUsos(),
+						infoServizioEnte2.getDestinazioneUsos())) {
 
 					return false;
 				}
@@ -657,8 +599,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 
 			if (Objects.equals("id", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.getId(),
-						infoServizioAmministrazione2.getId())) {
+						infoServizioEnte1.getId(), infoServizioEnte2.getId())) {
 
 					return false;
 				}
@@ -668,8 +609,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 
 			if (Objects.equals("nomeComune", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.getNomeComune(),
-						infoServizioAmministrazione2.getNomeComune())) {
+						infoServizioEnte1.getNomeComune(),
+						infoServizioEnte2.getNomeComune())) {
 
 					return false;
 				}
@@ -679,8 +620,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 
 			if (Objects.equals("serviceCardUrl", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.getServiceCardUrl(),
-						infoServizioAmministrazione2.getServiceCardUrl())) {
+						infoServizioEnte1.getServiceCardUrl(),
+						infoServizioEnte2.getServiceCardUrl())) {
 
 					return false;
 				}
@@ -690,8 +631,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 
 			if (Objects.equals("serviceOnlineUrl", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.getServiceOnlineUrl(),
-						infoServizioAmministrazione2.getServiceOnlineUrl())) {
+						infoServizioEnte1.getServiceOnlineUrl(),
+						infoServizioEnte2.getServiceOnlineUrl())) {
 
 					return false;
 				}
@@ -701,8 +642,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 
 			if (Objects.equals("title", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.getTitle(),
-						infoServizioAmministrazione2.getTitle())) {
+						infoServizioEnte1.getTitle(),
+						infoServizioEnte2.getTitle())) {
 
 					return false;
 				}
@@ -712,8 +653,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 
 			if (Objects.equals("usableByChatbot", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
-						infoServizioAmministrazione1.getUsableByChatbot(),
-						infoServizioAmministrazione2.getUsableByChatbot())) {
+						infoServizioEnte1.getUsableByChatbot(),
+						infoServizioEnte2.getUsableByChatbot())) {
 
 					return false;
 				}
@@ -745,13 +686,13 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 	protected java.util.Collection<EntityField> getEntityFields()
 		throws Exception {
 
-		if (!(_serviziAmministrazioneResource instanceof EntityModelResource)) {
+		if (!(_serviziResource instanceof EntityModelResource)) {
 			throw new UnsupportedOperationException(
 				"Resource is not an instance of EntityModelResource");
 		}
 
 		EntityModelResource entityModelResource =
-			(EntityModelResource)_serviziAmministrazioneResource;
+			(EntityModelResource)_serviziResource;
 
 		EntityModel entityModel = entityModelResource.getEntityModel(
 			new MultivaluedHashMap());
@@ -780,8 +721,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 	}
 
 	protected String getFilterString(
-		EntityField entityField, String operator,
-		Object serviziAmministrazione) {
+		EntityField entityField, String operator, Object servizi) {
 
 		StringBundler sb = new StringBundler();
 
@@ -834,10 +774,8 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 			invoke(queryGraphQLField.toString()));
 	}
 
-	protected InfoServizioAmministrazione randomInfoServizioAmministrazione()
-		throws Exception {
-
-		return new InfoServizioAmministrazione() {
+	protected InfoServizioEnte randomInfoServizioEnte() throws Exception {
+		return new InfoServizioEnte() {
 			{
 				active = RandomTestUtil.randomBoolean();
 				chatbotInline = RandomTestUtil.randomBoolean();
@@ -856,7 +794,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 		};
 	}
 
-	protected ServiziAmministrazioneResource serviziAmministrazioneResource;
+	protected ServiziResource serviziResource;
 	protected Group irrelevantGroup;
 	protected Company testCompany;
 	protected Group testGroup;
@@ -933,7 +871,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 	}
 
 	private static final com.liferay.portal.kernel.log.Log _log =
-		LogFactoryUtil.getLog(BaseServiziAmministrazioneResourceTestCase.class);
+		LogFactoryUtil.getLog(BaseServiziResourceTestCase.class);
 
 	private static BeanUtilsBean _beanUtilsBean = new BeanUtilsBean() {
 
@@ -950,8 +888,7 @@ public abstract class BaseServiziAmministrazioneResourceTestCase {
 	private static DateFormat _dateFormat;
 
 	@Inject
-	private
-		it.servizidigitali.restservice.resource.v1_0.
-			ServiziAmministrazioneResource _serviziAmministrazioneResource;
+	private it.servizidigitali.restservice.resource.v1_0.ServiziResource
+		_serviziResource;
 
 }
