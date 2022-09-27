@@ -27,6 +27,7 @@ import it.servizidigitali.scrivaniaoperatore.frontend.dto.AttivitaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.CommentoDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.ServizioDTO;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.UserDTO;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.AttivitaRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta;
@@ -120,7 +121,7 @@ public class MapUtil {
 			allegato = new AllegatoDTO();
 			allegato.setId(allegatoRichiesta.getAllegatoRichiestaId());
 			allegato.setNomeFile(requestFile.getNome());
-			allegato.setDescrizione(requestFile.getDescrizione());
+			allegato.setDescrizione(requestFile.getTitolo());
 			allegato.setTitolo(requestFile.getTitolo());
 			allegato.setDimensione(fileUtility.getHumanReadableSize(requestFile.getInputStream().available()));
 			allegato.setVisibileAlCittadino(allegatoRichiesta.getVisibile());
@@ -150,5 +151,12 @@ public class MapUtil {
 		attivita.setNote(ar.getNote());
 		attivita.setStato(ar.getStato());
 		return attivita;
+	}
+	
+	public UserDTO mapUser(User user) {
+		UserDTO dto = new UserDTO();
+		dto.setUserId(user.getUserId());
+		dto.setNome(user.getFullName());
+		return dto;
 	}
 }

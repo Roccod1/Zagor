@@ -166,6 +166,3 @@
 </aui:form>
 
 <%@ include file="dettaglio_azioni_carico.jsp" %>
-
-
-
