@@ -60,17 +60,15 @@ public class AllegatoRichiestaLocalServiceWrapper
 	/**
 	 * Creates a new allegato richiesta with the primary key. Does not add the allegato richiesta to the database.
 	 *
-	 * @param allegatoRichiestaPK the primary key for the new allegato richiesta
+	 * @param allegatoRichiestaId the primary key for the new allegato richiesta
 	 * @return the new allegato richiesta
 	 */
 	@Override
 	public it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta
-		createAllegatoRichiesta(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK) {
+		createAllegatoRichiesta(long allegatoRichiestaId) {
 
 		return _allegatoRichiestaLocalService.createAllegatoRichiesta(
-			allegatoRichiestaPK);
+			allegatoRichiestaId);
 	}
 
 	/**
@@ -112,19 +110,17 @@ public class AllegatoRichiestaLocalServiceWrapper
 	 * <strong>Important:</strong> Inspect AllegatoRichiestaLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta that was removed
 	 * @throws PortalException if a allegato richiesta with the primary key could not be found
 	 */
 	@Override
 	public it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta
-			deleteAllegatoRichiesta(
-				it.servizidigitali.scrivaniaoperatore.service.persistence.
-					AllegatoRichiestaPK allegatoRichiestaPK)
+			deleteAllegatoRichiesta(long allegatoRichiestaId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _allegatoRichiestaLocalService.deleteAllegatoRichiesta(
-			allegatoRichiestaPK);
+			allegatoRichiestaId);
 	}
 
 	/**
@@ -244,12 +240,10 @@ public class AllegatoRichiestaLocalServiceWrapper
 
 	@Override
 	public it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta
-		fetchAllegatoRichiesta(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK) {
+		fetchAllegatoRichiesta(long allegatoRichiestaId) {
 
 		return _allegatoRichiestaLocalService.fetchAllegatoRichiesta(
-			allegatoRichiestaPK);
+			allegatoRichiestaId);
 	}
 
 	/**
@@ -308,19 +302,17 @@ public class AllegatoRichiestaLocalServiceWrapper
 	/**
 	 * Returns the allegato richiesta with the primary key.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta
 	 * @throws PortalException if a allegato richiesta with the primary key could not be found
 	 */
 	@Override
 	public it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta
-			getAllegatoRichiesta(
-				it.servizidigitali.scrivaniaoperatore.service.persistence.
-					AllegatoRichiestaPK allegatoRichiestaPK)
+			getAllegatoRichiesta(long allegatoRichiestaId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _allegatoRichiestaLocalService.getAllegatoRichiesta(
-			allegatoRichiestaPK);
+			allegatoRichiestaId);
 	}
 
 	@Override
@@ -481,10 +473,10 @@ public class AllegatoRichiestaLocalServiceWrapper
 
 	@Override
 	public void updateVisibilitaAllegatiRichiesta(
-		long richiestaId, java.util.List<Long> fileEntryIds, boolean visibile) {
+		java.util.List<String> ids, boolean visibile) {
 
 		_allegatoRichiestaLocalService.updateVisibilitaAllegatiRichiesta(
-			richiestaId, fileEntryIds, visibile);
+			ids, visibile);
 	}
 
 	@Override

@@ -46,7 +46,6 @@ import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiestaTable;
 import it.servizidigitali.scrivaniaoperatore.model.impl.AllegatoRichiestaImpl;
 import it.servizidigitali.scrivaniaoperatore.model.impl.AllegatoRichiestaModelImpl;
-import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPK;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPersistence;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaUtil;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.impl.constants.PersistenceConstants;
@@ -395,7 +394,7 @@ public class AllegatoRichiestaPersistenceImpl
 	/**
 	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where uuid = &#63;.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the current allegato richiesta
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next allegato richiesta
@@ -403,14 +402,14 @@ public class AllegatoRichiestaPersistenceImpl
 	 */
 	@Override
 	public AllegatoRichiesta[] findByUuid_PrevAndNext(
-			AllegatoRichiestaPK allegatoRichiestaPK, String uuid,
+			long allegatoRichiestaId, String uuid,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws NoSuchAllegatoRichiestaException {
 
 		uuid = Objects.toString(uuid, "");
 
 		AllegatoRichiesta allegatoRichiesta = findByPrimaryKey(
-			allegatoRichiestaPK);
+			allegatoRichiestaId);
 
 		Session session = null;
 
@@ -1208,7 +1207,7 @@ public class AllegatoRichiestaPersistenceImpl
 	/**
 	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where uuid = &#63; and companyId = &#63;.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the current allegato richiesta
 	 * @param uuid the uuid
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1217,15 +1216,14 @@ public class AllegatoRichiestaPersistenceImpl
 	 */
 	@Override
 	public AllegatoRichiesta[] findByUuid_C_PrevAndNext(
-			AllegatoRichiestaPK allegatoRichiestaPK, String uuid,
-			long companyId,
+			long allegatoRichiestaId, String uuid, long companyId,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws NoSuchAllegatoRichiestaException {
 
 		uuid = Objects.toString(uuid, "");
 
 		AllegatoRichiesta allegatoRichiesta = findByPrimaryKey(
-			allegatoRichiestaPK);
+			allegatoRichiestaId);
 
 		Session session = null;
 
@@ -2198,7 +2196,7 @@ public class AllegatoRichiestaPersistenceImpl
 
 	private static final String
 		_FINDER_COLUMN_RICHIESTAIDPRINCIPALE_RICHIESTAID_2 =
-			"allegatoRichiesta.id.richiestaId = ? AND ";
+			"allegatoRichiesta.richiestaId = ? AND ";
 
 	private static final String
 		_FINDER_COLUMN_RICHIESTAIDPRINCIPALE_PRINCIPALE_2 =
@@ -2491,7 +2489,7 @@ public class AllegatoRichiestaPersistenceImpl
 	/**
 	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63;.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next allegato richiesta
@@ -2499,12 +2497,12 @@ public class AllegatoRichiestaPersistenceImpl
 	 */
 	@Override
 	public AllegatoRichiesta[] findByRichiestaId_PrevAndNext(
-			AllegatoRichiestaPK allegatoRichiestaPK, long richiestaId,
+			long allegatoRichiestaId, long richiestaId,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws NoSuchAllegatoRichiestaException {
 
 		AllegatoRichiesta allegatoRichiesta = findByPrimaryKey(
-			allegatoRichiestaPK);
+			allegatoRichiestaId);
 
 		Session session = null;
 
@@ -2708,7 +2706,7 @@ public class AllegatoRichiestaPersistenceImpl
 	}
 
 	private static final String _FINDER_COLUMN_RICHIESTAID_RICHIESTAID_2 =
-		"allegatoRichiesta.id.richiestaId = ?";
+		"allegatoRichiesta.richiestaId = ?";
 
 	private FinderPath _finderPathWithPaginationFindByRichiestaIdInterno;
 	private FinderPath _finderPathWithoutPaginationFindByRichiestaIdInterno;
@@ -3020,7 +3018,7 @@ public class AllegatoRichiestaPersistenceImpl
 	/**
 	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63;.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
 	 * @param interno the interno
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -3029,13 +3027,12 @@ public class AllegatoRichiestaPersistenceImpl
 	 */
 	@Override
 	public AllegatoRichiesta[] findByRichiestaIdInterno_PrevAndNext(
-			AllegatoRichiestaPK allegatoRichiestaPK, long richiestaId,
-			boolean interno,
+			long allegatoRichiestaId, long richiestaId, boolean interno,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws NoSuchAllegatoRichiestaException {
 
 		AllegatoRichiesta allegatoRichiesta = findByPrimaryKey(
-			allegatoRichiestaPK);
+			allegatoRichiestaId);
 
 		Session session = null;
 
@@ -3251,7 +3248,7 @@ public class AllegatoRichiestaPersistenceImpl
 
 	private static final String
 		_FINDER_COLUMN_RICHIESTAIDINTERNO_RICHIESTAID_2 =
-			"allegatoRichiesta.id.richiestaId = ? AND ";
+			"allegatoRichiesta.richiestaId = ? AND ";
 
 	private static final String _FINDER_COLUMN_RICHIESTAIDINTERNO_INTERNO_2 =
 		"allegatoRichiesta.interno = ?";
@@ -3567,7 +3564,7 @@ public class AllegatoRichiestaPersistenceImpl
 	/**
 	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and visibile = &#63;.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -3576,13 +3573,12 @@ public class AllegatoRichiestaPersistenceImpl
 	 */
 	@Override
 	public AllegatoRichiesta[] findByRichiestaIdVisibile_PrevAndNext(
-			AllegatoRichiestaPK allegatoRichiestaPK, long richiestaId,
-			boolean visibile,
+			long allegatoRichiestaId, long richiestaId, boolean visibile,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws NoSuchAllegatoRichiestaException {
 
 		AllegatoRichiesta allegatoRichiesta = findByPrimaryKey(
-			allegatoRichiestaPK);
+			allegatoRichiestaId);
 
 		Session session = null;
 
@@ -3801,7 +3797,7 @@ public class AllegatoRichiestaPersistenceImpl
 
 	private static final String
 		_FINDER_COLUMN_RICHIESTAIDVISIBILE_RICHIESTAID_2 =
-			"allegatoRichiesta.id.richiestaId = ? AND ";
+			"allegatoRichiesta.richiestaId = ? AND ";
 
 	private static final String _FINDER_COLUMN_RICHIESTAIDVISIBILE_VISIBILE_2 =
 		"allegatoRichiesta.visibile = ?";
@@ -4146,7 +4142,7 @@ public class AllegatoRichiestaPersistenceImpl
 	/**
 	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
 	 * @param interno the interno
 	 * @param visibile the visibile
@@ -4156,13 +4152,13 @@ public class AllegatoRichiestaPersistenceImpl
 	 */
 	@Override
 	public AllegatoRichiesta[] findByRichiestaIdInternoVisibile_PrevAndNext(
-			AllegatoRichiestaPK allegatoRichiestaPK, long richiestaId,
-			boolean interno, boolean visibile,
+			long allegatoRichiestaId, long richiestaId, boolean interno,
+			boolean visibile,
 			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws NoSuchAllegatoRichiestaException {
 
 		AllegatoRichiesta allegatoRichiesta = findByPrimaryKey(
-			allegatoRichiestaPK);
+			allegatoRichiestaId);
 
 		Session session = null;
 
@@ -4393,7 +4389,7 @@ public class AllegatoRichiestaPersistenceImpl
 
 	private static final String
 		_FINDER_COLUMN_RICHIESTAIDINTERNOVISIBILE_RICHIESTAID_2 =
-			"allegatoRichiesta.id.richiestaId = ? AND ";
+			"allegatoRichiesta.richiestaId = ? AND ";
 
 	private static final String
 		_FINDER_COLUMN_RICHIESTAIDINTERNOVISIBILE_INTERNO_2 =
@@ -4413,7 +4409,7 @@ public class AllegatoRichiestaPersistenceImpl
 		setModelClass(AllegatoRichiesta.class);
 
 		setModelImplClass(AllegatoRichiestaImpl.class);
-		setModelPKClass(AllegatoRichiestaPK.class);
+		setModelPKClass(long.class);
 
 		setTable(AllegatoRichiestaTable.INSTANCE);
 	}
@@ -4565,15 +4561,15 @@ public class AllegatoRichiestaPersistenceImpl
 	/**
 	 * Creates a new allegato richiesta with the primary key. Does not add the allegato richiesta to the database.
 	 *
-	 * @param allegatoRichiestaPK the primary key for the new allegato richiesta
+	 * @param allegatoRichiestaId the primary key for the new allegato richiesta
 	 * @return the new allegato richiesta
 	 */
 	@Override
-	public AllegatoRichiesta create(AllegatoRichiestaPK allegatoRichiestaPK) {
+	public AllegatoRichiesta create(long allegatoRichiestaId) {
 		AllegatoRichiesta allegatoRichiesta = new AllegatoRichiestaImpl();
 
 		allegatoRichiesta.setNew(true);
-		allegatoRichiesta.setPrimaryKey(allegatoRichiestaPK);
+		allegatoRichiesta.setPrimaryKey(allegatoRichiestaId);
 
 		String uuid = PortalUUIDUtil.generate();
 
@@ -4587,15 +4583,15 @@ public class AllegatoRichiestaPersistenceImpl
 	/**
 	 * Removes the allegato richiesta with the primary key from the database. Also notifies the appropriate model listeners.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta that was removed
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
 	@Override
-	public AllegatoRichiesta remove(AllegatoRichiestaPK allegatoRichiestaPK)
+	public AllegatoRichiesta remove(long allegatoRichiestaId)
 		throws NoSuchAllegatoRichiestaException {
 
-		return remove((Serializable)allegatoRichiestaPK);
+		return remove((Serializable)allegatoRichiestaId);
 	}
 
 	/**
@@ -4791,29 +4787,26 @@ public class AllegatoRichiestaPersistenceImpl
 	/**
 	 * Returns the allegato richiesta with the primary key or throws a <code>NoSuchAllegatoRichiestaException</code> if it could not be found.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
 	@Override
-	public AllegatoRichiesta findByPrimaryKey(
-			AllegatoRichiestaPK allegatoRichiestaPK)
+	public AllegatoRichiesta findByPrimaryKey(long allegatoRichiestaId)
 		throws NoSuchAllegatoRichiestaException {
 
-		return findByPrimaryKey((Serializable)allegatoRichiestaPK);
+		return findByPrimaryKey((Serializable)allegatoRichiestaId);
 	}
 
 	/**
 	 * Returns the allegato richiesta with the primary key or returns <code>null</code> if it could not be found.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta, or <code>null</code> if a allegato richiesta with the primary key could not be found
 	 */
 	@Override
-	public AllegatoRichiesta fetchByPrimaryKey(
-		AllegatoRichiestaPK allegatoRichiestaPK) {
-
-		return fetchByPrimaryKey((Serializable)allegatoRichiestaPK);
+	public AllegatoRichiesta fetchByPrimaryKey(long allegatoRichiestaId) {
+		return fetchByPrimaryKey((Serializable)allegatoRichiestaId);
 	}
 
 	/**
@@ -5003,18 +4996,13 @@ public class AllegatoRichiestaPersistenceImpl
 	}
 
 	@Override
-	public Set<String> getCompoundPKColumnNames() {
-		return _compoundPKColumnNames;
-	}
-
-	@Override
 	protected EntityCache getEntityCache() {
 		return entityCache;
 	}
 
 	@Override
 	protected String getPKDBName() {
-		return "allegatoRichiestaPK";
+		return "allegatoRichiestaId";
 	}
 
 	@Override
@@ -5295,8 +5283,6 @@ public class AllegatoRichiestaPersistenceImpl
 
 	private static final Set<String> _badColumnNames = SetUtil.fromArray(
 		new String[] {"uuid"});
-	private static final Set<String> _compoundPKColumnNames = SetUtil.fromArray(
-		new String[] {"richiestaId", "fileEntryId"});
 
 	@Override
 	protected FinderCache getFinderCache() {

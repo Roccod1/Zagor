@@ -14,6 +14,8 @@
 
 package it.servizidigitali.scrivaniaoperatore.model.impl;
 
+import com.liferay.expando.kernel.model.ExpandoBridge;
+import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
 import com.liferay.exportimport.kernel.lar.StagedModelType;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
@@ -22,6 +24,7 @@ import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.ModelWrapper;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.impl.BaseModelImpl;
+import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -30,7 +33,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiestaModel;
-import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPK;
 
 import java.io.Serializable;
 
@@ -71,14 +73,14 @@ public class AllegatoRichiestaModelImpl
 	public static final String TABLE_NAME = "allegato_richiesta";
 
 	public static final Object[][] TABLE_COLUMNS = {
-		{"uuid_", Types.VARCHAR}, {"richiestaId", Types.BIGINT},
-		{"fileEntryId", Types.BIGINT}, {"groupId", Types.BIGINT},
-		{"companyId", Types.BIGINT}, {"userId", Types.BIGINT},
-		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
-		{"modifiedDate", Types.TIMESTAMP}, {"nome", Types.VARCHAR},
-		{"idDocumentale", Types.VARCHAR}, {"url", Types.VARCHAR},
-		{"principale", Types.BOOLEAN}, {"interno", Types.BOOLEAN},
-		{"visibile", Types.BOOLEAN}
+		{"uuid_", Types.VARCHAR}, {"allegatoRichiestaId", Types.BIGINT},
+		{"groupId", Types.BIGINT}, {"companyId", Types.BIGINT},
+		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
+		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
+		{"idDocumentale", Types.VARCHAR}, {"nome", Types.VARCHAR},
+		{"url", Types.VARCHAR}, {"principale", Types.BOOLEAN},
+		{"interno", Types.BOOLEAN}, {"visibile", Types.BOOLEAN},
+		{"richiestaId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -86,32 +88,32 @@ public class AllegatoRichiestaModelImpl
 
 	static {
 		TABLE_COLUMNS_MAP.put("uuid_", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("richiestaId", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("fileEntryId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("allegatoRichiestaId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("groupId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("companyId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("userId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("userName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
-		TABLE_COLUMNS_MAP.put("nome", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("idDocumentale", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("nome", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("url", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("principale", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("interno", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("visibile", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("richiestaId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table allegato_richiesta (uuid_ VARCHAR(75) null,richiestaId LONG not null,fileEntryId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,idDocumentale VARCHAR(75) null,url VARCHAR(75) null,principale BOOLEAN,interno BOOLEAN,visibile BOOLEAN,primary key (richiestaId, fileEntryId))";
+		"create table allegato_richiesta (uuid_ VARCHAR(75) null,allegatoRichiestaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,idDocumentale VARCHAR(75) null,nome VARCHAR(75) null,url VARCHAR(75) null,principale BOOLEAN,interno BOOLEAN,visibile BOOLEAN,richiestaId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table allegato_richiesta";
 
 	public static final String ORDER_BY_JPQL =
-		" ORDER BY allegatoRichiesta.id.richiestaId ASC, allegatoRichiesta.id.fileEntryId ASC";
+		" ORDER BY allegatoRichiesta.allegatoRichiestaId ASC";
 
 	public static final String ORDER_BY_SQL =
-		" ORDER BY allegato_richiesta.richiestaId ASC, allegato_richiesta.fileEntryId ASC";
+		" ORDER BY allegato_richiesta.allegatoRichiestaId ASC";
 
 	public static final String DATA_SOURCE = "servizidigitaliDataSource";
 
@@ -178,7 +180,7 @@ public class AllegatoRichiestaModelImpl
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long FILEENTRYID_COLUMN_BITMASK = 512L;
+	public static final long ALLEGATORICHIESTAID_COLUMN_BITMASK = 512L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -198,24 +200,23 @@ public class AllegatoRichiestaModelImpl
 	}
 
 	@Override
-	public AllegatoRichiestaPK getPrimaryKey() {
-		return new AllegatoRichiestaPK(_richiestaId, _fileEntryId);
+	public long getPrimaryKey() {
+		return _allegatoRichiestaId;
 	}
 
 	@Override
-	public void setPrimaryKey(AllegatoRichiestaPK primaryKey) {
-		setRichiestaId(primaryKey.richiestaId);
-		setFileEntryId(primaryKey.fileEntryId);
+	public void setPrimaryKey(long primaryKey) {
+		setAllegatoRichiestaId(primaryKey);
 	}
 
 	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new AllegatoRichiestaPK(_richiestaId, _fileEntryId);
+		return _allegatoRichiestaId;
 	}
 
 	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
-		setPrimaryKey((AllegatoRichiestaPK)primaryKeyObj);
+		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
 	@Override
@@ -327,17 +328,11 @@ public class AllegatoRichiestaModelImpl
 			"uuid",
 			(BiConsumer<AllegatoRichiesta, String>)AllegatoRichiesta::setUuid);
 		attributeGetterFunctions.put(
-			"richiestaId", AllegatoRichiesta::getRichiestaId);
+			"allegatoRichiestaId", AllegatoRichiesta::getAllegatoRichiestaId);
 		attributeSetterBiConsumers.put(
-			"richiestaId",
+			"allegatoRichiestaId",
 			(BiConsumer<AllegatoRichiesta, Long>)
-				AllegatoRichiesta::setRichiestaId);
-		attributeGetterFunctions.put(
-			"fileEntryId", AllegatoRichiesta::getFileEntryId);
-		attributeSetterBiConsumers.put(
-			"fileEntryId",
-			(BiConsumer<AllegatoRichiesta, Long>)
-				AllegatoRichiesta::setFileEntryId);
+				AllegatoRichiesta::setAllegatoRichiestaId);
 		attributeGetterFunctions.put("groupId", AllegatoRichiesta::getGroupId);
 		attributeSetterBiConsumers.put(
 			"groupId",
@@ -370,16 +365,16 @@ public class AllegatoRichiestaModelImpl
 			"modifiedDate",
 			(BiConsumer<AllegatoRichiesta, Date>)
 				AllegatoRichiesta::setModifiedDate);
-		attributeGetterFunctions.put("nome", AllegatoRichiesta::getNome);
-		attributeSetterBiConsumers.put(
-			"nome",
-			(BiConsumer<AllegatoRichiesta, String>)AllegatoRichiesta::setNome);
 		attributeGetterFunctions.put(
 			"idDocumentale", AllegatoRichiesta::getIdDocumentale);
 		attributeSetterBiConsumers.put(
 			"idDocumentale",
 			(BiConsumer<AllegatoRichiesta, String>)
 				AllegatoRichiesta::setIdDocumentale);
+		attributeGetterFunctions.put("nome", AllegatoRichiesta::getNome);
+		attributeSetterBiConsumers.put(
+			"nome",
+			(BiConsumer<AllegatoRichiesta, String>)AllegatoRichiesta::setNome);
 		attributeGetterFunctions.put("url", AllegatoRichiesta::getUrl);
 		attributeSetterBiConsumers.put(
 			"url",
@@ -401,6 +396,12 @@ public class AllegatoRichiestaModelImpl
 			"visibile",
 			(BiConsumer<AllegatoRichiesta, Boolean>)
 				AllegatoRichiesta::setVisibile);
+		attributeGetterFunctions.put(
+			"richiestaId", AllegatoRichiesta::getRichiestaId);
+		attributeSetterBiConsumers.put(
+			"richiestaId",
+			(BiConsumer<AllegatoRichiesta, Long>)
+				AllegatoRichiesta::setRichiestaId);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -437,41 +438,17 @@ public class AllegatoRichiestaModelImpl
 	}
 
 	@Override
-	public long getRichiestaId() {
-		return _richiestaId;
+	public long getAllegatoRichiestaId() {
+		return _allegatoRichiestaId;
 	}
 
 	@Override
-	public void setRichiestaId(long richiestaId) {
+	public void setAllegatoRichiestaId(long allegatoRichiestaId) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
 
-		_richiestaId = richiestaId;
-	}
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #getColumnOriginalValue(String)}
-	 */
-	@Deprecated
-	public long getOriginalRichiestaId() {
-		return GetterUtil.getLong(
-			this.<Long>getColumnOriginalValue("richiestaId"));
-	}
-
-	@Override
-	public long getFileEntryId() {
-		return _fileEntryId;
-	}
-
-	@Override
-	public void setFileEntryId(long fileEntryId) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_fileEntryId = fileEntryId;
+		_allegatoRichiestaId = allegatoRichiestaId;
 	}
 
 	@Override
@@ -605,25 +582,6 @@ public class AllegatoRichiestaModelImpl
 	}
 
 	@Override
-	public String getNome() {
-		if (_nome == null) {
-			return "";
-		}
-		else {
-			return _nome;
-		}
-	}
-
-	@Override
-	public void setNome(String nome) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_nome = nome;
-	}
-
-	@Override
 	public String getIdDocumentale() {
 		if (_idDocumentale == null) {
 			return "";
@@ -649,6 +607,25 @@ public class AllegatoRichiestaModelImpl
 	@Deprecated
 	public String getOriginalIdDocumentale() {
 		return getColumnOriginalValue("idDocumentale");
+	}
+
+	@Override
+	public String getNome() {
+		if (_nome == null) {
+			return "";
+		}
+		else {
+			return _nome;
+		}
+	}
+
+	@Override
+	public void setNome(String nome) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_nome = nome;
 	}
 
 	@Override
@@ -767,6 +744,30 @@ public class AllegatoRichiestaModelImpl
 	}
 
 	@Override
+	public long getRichiestaId() {
+		return _richiestaId;
+	}
+
+	@Override
+	public void setRichiestaId(long richiestaId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_richiestaId = richiestaId;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalRichiestaId() {
+		return GetterUtil.getLong(
+			this.<Long>getColumnOriginalValue("richiestaId"));
+	}
+
+	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
 			PortalUtil.getClassNameId(AllegatoRichiesta.class.getName()));
@@ -797,6 +798,19 @@ public class AllegatoRichiestaModelImpl
 	}
 
 	@Override
+	public ExpandoBridge getExpandoBridge() {
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(
+			getCompanyId(), AllegatoRichiesta.class.getName(), getPrimaryKey());
+	}
+
+	@Override
+	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
 	public AllegatoRichiesta toEscapedModel() {
 		if (_escapedModel == null) {
 			Function<InvocationHandler, AllegatoRichiesta>
@@ -817,20 +831,20 @@ public class AllegatoRichiestaModelImpl
 			new AllegatoRichiestaImpl();
 
 		allegatoRichiestaImpl.setUuid(getUuid());
-		allegatoRichiestaImpl.setRichiestaId(getRichiestaId());
-		allegatoRichiestaImpl.setFileEntryId(getFileEntryId());
+		allegatoRichiestaImpl.setAllegatoRichiestaId(getAllegatoRichiestaId());
 		allegatoRichiestaImpl.setGroupId(getGroupId());
 		allegatoRichiestaImpl.setCompanyId(getCompanyId());
 		allegatoRichiestaImpl.setUserId(getUserId());
 		allegatoRichiestaImpl.setUserName(getUserName());
 		allegatoRichiestaImpl.setCreateDate(getCreateDate());
 		allegatoRichiestaImpl.setModifiedDate(getModifiedDate());
-		allegatoRichiestaImpl.setNome(getNome());
 		allegatoRichiestaImpl.setIdDocumentale(getIdDocumentale());
+		allegatoRichiestaImpl.setNome(getNome());
 		allegatoRichiestaImpl.setUrl(getUrl());
 		allegatoRichiestaImpl.setPrincipale(isPrincipale());
 		allegatoRichiestaImpl.setInterno(isInterno());
 		allegatoRichiestaImpl.setVisibile(isVisibile());
+		allegatoRichiestaImpl.setRichiestaId(getRichiestaId());
 
 		allegatoRichiestaImpl.resetOriginalValues();
 
@@ -844,10 +858,8 @@ public class AllegatoRichiestaModelImpl
 
 		allegatoRichiestaImpl.setUuid(
 			this.<String>getColumnOriginalValue("uuid_"));
-		allegatoRichiestaImpl.setRichiestaId(
-			this.<Long>getColumnOriginalValue("richiestaId"));
-		allegatoRichiestaImpl.setFileEntryId(
-			this.<Long>getColumnOriginalValue("fileEntryId"));
+		allegatoRichiestaImpl.setAllegatoRichiestaId(
+			this.<Long>getColumnOriginalValue("allegatoRichiestaId"));
 		allegatoRichiestaImpl.setGroupId(
 			this.<Long>getColumnOriginalValue("groupId"));
 		allegatoRichiestaImpl.setCompanyId(
@@ -860,10 +872,10 @@ public class AllegatoRichiestaModelImpl
 			this.<Date>getColumnOriginalValue("createDate"));
 		allegatoRichiestaImpl.setModifiedDate(
 			this.<Date>getColumnOriginalValue("modifiedDate"));
-		allegatoRichiestaImpl.setNome(
-			this.<String>getColumnOriginalValue("nome"));
 		allegatoRichiestaImpl.setIdDocumentale(
 			this.<String>getColumnOriginalValue("idDocumentale"));
+		allegatoRichiestaImpl.setNome(
+			this.<String>getColumnOriginalValue("nome"));
 		allegatoRichiestaImpl.setUrl(
 			this.<String>getColumnOriginalValue("url"));
 		allegatoRichiestaImpl.setPrincipale(
@@ -872,15 +884,25 @@ public class AllegatoRichiestaModelImpl
 			this.<Boolean>getColumnOriginalValue("interno"));
 		allegatoRichiestaImpl.setVisibile(
 			this.<Boolean>getColumnOriginalValue("visibile"));
+		allegatoRichiestaImpl.setRichiestaId(
+			this.<Long>getColumnOriginalValue("richiestaId"));
 
 		return allegatoRichiestaImpl;
 	}
 
 	@Override
 	public int compareTo(AllegatoRichiesta allegatoRichiesta) {
-		AllegatoRichiestaPK primaryKey = allegatoRichiesta.getPrimaryKey();
+		long primaryKey = allegatoRichiesta.getPrimaryKey();
 
-		return getPrimaryKey().compareTo(primaryKey);
+		if (getPrimaryKey() < primaryKey) {
+			return -1;
+		}
+		else if (getPrimaryKey() > primaryKey) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
 	}
 
 	@Override
@@ -895,9 +917,9 @@ public class AllegatoRichiestaModelImpl
 
 		AllegatoRichiesta allegatoRichiesta = (AllegatoRichiesta)object;
 
-		AllegatoRichiestaPK primaryKey = allegatoRichiesta.getPrimaryKey();
+		long primaryKey = allegatoRichiesta.getPrimaryKey();
 
-		if (getPrimaryKey().equals(primaryKey)) {
+		if (getPrimaryKey() == primaryKey) {
 			return true;
 		}
 		else {
@@ -907,7 +929,7 @@ public class AllegatoRichiestaModelImpl
 
 	@Override
 	public int hashCode() {
-		return getPrimaryKey().hashCode();
+		return (int)getPrimaryKey();
 	}
 
 	/**
@@ -942,8 +964,6 @@ public class AllegatoRichiestaModelImpl
 		AllegatoRichiestaCacheModel allegatoRichiestaCacheModel =
 			new AllegatoRichiestaCacheModel();
 
-		allegatoRichiestaCacheModel.allegatoRichiestaPK = getPrimaryKey();
-
 		allegatoRichiestaCacheModel.uuid = getUuid();
 
 		String uuid = allegatoRichiestaCacheModel.uuid;
@@ -952,9 +972,8 @@ public class AllegatoRichiestaModelImpl
 			allegatoRichiestaCacheModel.uuid = null;
 		}
 
-		allegatoRichiestaCacheModel.richiestaId = getRichiestaId();
-
-		allegatoRichiestaCacheModel.fileEntryId = getFileEntryId();
+		allegatoRichiestaCacheModel.allegatoRichiestaId =
+			getAllegatoRichiestaId();
 
 		allegatoRichiestaCacheModel.groupId = getGroupId();
 
@@ -988,20 +1007,20 @@ public class AllegatoRichiestaModelImpl
 			allegatoRichiestaCacheModel.modifiedDate = Long.MIN_VALUE;
 		}
 
-		allegatoRichiestaCacheModel.nome = getNome();
-
-		String nome = allegatoRichiestaCacheModel.nome;
-
-		if ((nome != null) && (nome.length() == 0)) {
-			allegatoRichiestaCacheModel.nome = null;
-		}
-
 		allegatoRichiestaCacheModel.idDocumentale = getIdDocumentale();
 
 		String idDocumentale = allegatoRichiestaCacheModel.idDocumentale;
 
 		if ((idDocumentale != null) && (idDocumentale.length() == 0)) {
 			allegatoRichiestaCacheModel.idDocumentale = null;
+		}
+
+		allegatoRichiestaCacheModel.nome = getNome();
+
+		String nome = allegatoRichiestaCacheModel.nome;
+
+		if ((nome != null) && (nome.length() == 0)) {
+			allegatoRichiestaCacheModel.nome = null;
 		}
 
 		allegatoRichiestaCacheModel.url = getUrl();
@@ -1017,6 +1036,8 @@ public class AllegatoRichiestaModelImpl
 		allegatoRichiestaCacheModel.interno = isInterno();
 
 		allegatoRichiestaCacheModel.visibile = isVisibile();
+
+		allegatoRichiestaCacheModel.richiestaId = getRichiestaId();
 
 		return allegatoRichiestaCacheModel;
 	}
@@ -1110,8 +1131,7 @@ public class AllegatoRichiestaModelImpl
 	}
 
 	private String _uuid;
-	private long _richiestaId;
-	private long _fileEntryId;
+	private long _allegatoRichiestaId;
 	private long _groupId;
 	private long _companyId;
 	private long _userId;
@@ -1119,12 +1139,13 @@ public class AllegatoRichiestaModelImpl
 	private Date _createDate;
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
-	private String _nome;
 	private String _idDocumentale;
+	private String _nome;
 	private String _url;
 	private boolean _principale;
 	private boolean _interno;
 	private boolean _visibile;
+	private long _richiestaId;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1156,20 +1177,20 @@ public class AllegatoRichiestaModelImpl
 		_columnOriginalValues = new HashMap<String, Object>();
 
 		_columnOriginalValues.put("uuid_", _uuid);
-		_columnOriginalValues.put("richiestaId", _richiestaId);
-		_columnOriginalValues.put("fileEntryId", _fileEntryId);
+		_columnOriginalValues.put("allegatoRichiestaId", _allegatoRichiestaId);
 		_columnOriginalValues.put("groupId", _groupId);
 		_columnOriginalValues.put("companyId", _companyId);
 		_columnOriginalValues.put("userId", _userId);
 		_columnOriginalValues.put("userName", _userName);
 		_columnOriginalValues.put("createDate", _createDate);
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
-		_columnOriginalValues.put("nome", _nome);
 		_columnOriginalValues.put("idDocumentale", _idDocumentale);
+		_columnOriginalValues.put("nome", _nome);
 		_columnOriginalValues.put("url", _url);
 		_columnOriginalValues.put("principale", _principale);
 		_columnOriginalValues.put("interno", _interno);
 		_columnOriginalValues.put("visibile", _visibile);
+		_columnOriginalValues.put("richiestaId", _richiestaId);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1195,33 +1216,33 @@ public class AllegatoRichiestaModelImpl
 
 		columnBitmasks.put("uuid_", 1L);
 
-		columnBitmasks.put("richiestaId", 2L);
+		columnBitmasks.put("allegatoRichiestaId", 2L);
 
-		columnBitmasks.put("fileEntryId", 4L);
+		columnBitmasks.put("groupId", 4L);
 
-		columnBitmasks.put("groupId", 8L);
+		columnBitmasks.put("companyId", 8L);
 
-		columnBitmasks.put("companyId", 16L);
+		columnBitmasks.put("userId", 16L);
 
-		columnBitmasks.put("userId", 32L);
+		columnBitmasks.put("userName", 32L);
 
-		columnBitmasks.put("userName", 64L);
+		columnBitmasks.put("createDate", 64L);
 
-		columnBitmasks.put("createDate", 128L);
+		columnBitmasks.put("modifiedDate", 128L);
 
-		columnBitmasks.put("modifiedDate", 256L);
+		columnBitmasks.put("idDocumentale", 256L);
 
 		columnBitmasks.put("nome", 512L);
 
-		columnBitmasks.put("idDocumentale", 1024L);
+		columnBitmasks.put("url", 1024L);
 
-		columnBitmasks.put("url", 2048L);
+		columnBitmasks.put("principale", 2048L);
 
-		columnBitmasks.put("principale", 4096L);
+		columnBitmasks.put("interno", 4096L);
 
-		columnBitmasks.put("interno", 8192L);
+		columnBitmasks.put("visibile", 8192L);
 
-		columnBitmasks.put("visibile", 16384L);
+		columnBitmasks.put("richiestaId", 16384L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

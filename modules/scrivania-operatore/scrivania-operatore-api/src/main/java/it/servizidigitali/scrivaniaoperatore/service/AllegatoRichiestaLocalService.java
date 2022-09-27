@@ -34,7 +34,6 @@ import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
-import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPK;
 
 import java.io.Serializable;
 
@@ -83,12 +82,11 @@ public interface AllegatoRichiestaLocalService
 	/**
 	 * Creates a new allegato richiesta with the primary key. Does not add the allegato richiesta to the database.
 	 *
-	 * @param allegatoRichiestaPK the primary key for the new allegato richiesta
+	 * @param allegatoRichiestaId the primary key for the new allegato richiesta
 	 * @return the new allegato richiesta
 	 */
 	@Transactional(enabled = false)
-	public AllegatoRichiesta createAllegatoRichiesta(
-		AllegatoRichiestaPK allegatoRichiestaPK);
+	public AllegatoRichiesta createAllegatoRichiesta(long allegatoRichiestaId);
 
 	/**
 	 * @throws PortalException
@@ -117,13 +115,12 @@ public interface AllegatoRichiestaLocalService
 	 * <strong>Important:</strong> Inspect AllegatoRichiestaLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta that was removed
 	 * @throws PortalException if a allegato richiesta with the primary key could not be found
 	 */
 	@Indexable(type = IndexableType.DELETE)
-	public AllegatoRichiesta deleteAllegatoRichiesta(
-			AllegatoRichiestaPK allegatoRichiestaPK)
+	public AllegatoRichiesta deleteAllegatoRichiesta(long allegatoRichiestaId)
 		throws PortalException;
 
 	/**
@@ -206,8 +203,7 @@ public interface AllegatoRichiestaLocalService
 		DynamicQuery dynamicQuery, Projection projection);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public AllegatoRichiesta fetchAllegatoRichiesta(
-		AllegatoRichiestaPK allegatoRichiestaPK);
+	public AllegatoRichiesta fetchAllegatoRichiesta(long allegatoRichiestaId);
 
 	/**
 	 * Returns the allegato richiesta matching the UUID and group.
@@ -240,13 +236,12 @@ public interface AllegatoRichiestaLocalService
 	/**
 	 * Returns the allegato richiesta with the primary key.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta
 	 * @throws PortalException if a allegato richiesta with the primary key could not be found
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public AllegatoRichiesta getAllegatoRichiesta(
-			AllegatoRichiestaPK allegatoRichiestaPK)
+	public AllegatoRichiesta getAllegatoRichiesta(long allegatoRichiestaId)
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -351,6 +346,6 @@ public interface AllegatoRichiestaLocalService
 		AllegatoRichiesta allegatoRichiesta);
 
 	public void updateVisibilitaAllegatiRichiesta(
-		long richiestaId, List<Long> fileEntryIds, boolean visibile);
+		List<String> ids, boolean visibile);
 
 }

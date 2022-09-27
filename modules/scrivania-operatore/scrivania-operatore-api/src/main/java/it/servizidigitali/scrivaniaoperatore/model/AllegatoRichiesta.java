@@ -40,42 +40,24 @@ public interface AllegatoRichiesta
 	 * Never modify this interface directly. Add methods to <code>it.servizidigitali.scrivaniaoperatore.model.impl.AllegatoRichiestaImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 	public static final Accessor<AllegatoRichiesta, Long>
-		RICHIESTA_ID_ACCESSOR = new Accessor<AllegatoRichiesta, Long>() {
+		ALLEGATO_RICHIESTA_ID_ACCESSOR =
+			new Accessor<AllegatoRichiesta, Long>() {
 
-			@Override
-			public Long get(AllegatoRichiesta allegatoRichiesta) {
-				return allegatoRichiesta.getRichiestaId();
-			}
+				@Override
+				public Long get(AllegatoRichiesta allegatoRichiesta) {
+					return allegatoRichiesta.getAllegatoRichiestaId();
+				}
 
-			@Override
-			public Class<Long> getAttributeClass() {
-				return Long.class;
-			}
+				@Override
+				public Class<Long> getAttributeClass() {
+					return Long.class;
+				}
 
-			@Override
-			public Class<AllegatoRichiesta> getTypeClass() {
-				return AllegatoRichiesta.class;
-			}
+				@Override
+				public Class<AllegatoRichiesta> getTypeClass() {
+					return AllegatoRichiesta.class;
+				}
 
-		};
-	public static final Accessor<AllegatoRichiesta, Long>
-		FILE_ENTRY_ID_ACCESSOR = new Accessor<AllegatoRichiesta, Long>() {
-
-			@Override
-			public Long get(AllegatoRichiesta allegatoRichiesta) {
-				return allegatoRichiesta.getFileEntryId();
-			}
-
-			@Override
-			public Class<Long> getAttributeClass() {
-				return Long.class;
-			}
-
-			@Override
-			public Class<AllegatoRichiesta> getTypeClass() {
-				return AllegatoRichiesta.class;
-			}
-
-		};
+			};
 
 }

@@ -3,20 +3,20 @@
 <model-hints>
 	<model name="it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta">
 		<field name="uuid" type="String" />
-		<field name="richiestaId" type="long" />
-		<field name="fileEntryId" type="long" />
+		<field name="allegatoRichiestaId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="userId" type="long" />
 		<field name="userName" type="String" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="nome" type="String" />
 		<field name="idDocumentale" type="String" />
+		<field name="nome" type="String" />
 		<field name="url" type="String" />
 		<field name="principale" type="boolean" />
 		<field name="interno" type="boolean" />
 		<field name="visibile" type="boolean" />
+		<field name="richiestaId" type="long" />
 	</model>
 	<model name="it.servizidigitali.scrivaniaoperatore.model.AttivitaRichiesta">
 		<field name="uuid" type="String" />

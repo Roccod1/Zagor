@@ -19,8 +19,6 @@ import com.liferay.portal.kernel.service.persistence.BasePersistence;
 import it.servizidigitali.scrivaniaoperatore.exception.NoSuchAllegatoRichiestaException;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 
-import java.util.Set;
-
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -160,16 +158,14 @@ public interface AllegatoRichiestaPersistence
 	/**
 	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where uuid = &#63;.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the current allegato richiesta
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
 	public AllegatoRichiesta[] findByUuid_PrevAndNext(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK,
-			String uuid,
+			long allegatoRichiestaId, String uuid,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
@@ -364,7 +360,7 @@ public interface AllegatoRichiestaPersistence
 	/**
 	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where uuid = &#63; and companyId = &#63;.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the current allegato richiesta
 	 * @param uuid the uuid
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -372,9 +368,7 @@ public interface AllegatoRichiestaPersistence
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
 	public AllegatoRichiesta[] findByUuid_C_PrevAndNext(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK,
-			String uuid, long companyId,
+			long allegatoRichiestaId, String uuid, long companyId,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
@@ -656,16 +650,14 @@ public interface AllegatoRichiestaPersistence
 	/**
 	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63;.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
 	public AllegatoRichiesta[] findByRichiestaId_PrevAndNext(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK,
-			long richiestaId,
+			long allegatoRichiestaId, long richiestaId,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
@@ -810,7 +802,7 @@ public interface AllegatoRichiestaPersistence
 	/**
 	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63;.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
 	 * @param interno the interno
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -818,9 +810,7 @@ public interface AllegatoRichiestaPersistence
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
 	public AllegatoRichiesta[] findByRichiestaIdInterno_PrevAndNext(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK,
-			long richiestaId, boolean interno,
+			long allegatoRichiestaId, long richiestaId, boolean interno,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
@@ -967,7 +957,7 @@ public interface AllegatoRichiestaPersistence
 	/**
 	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and visibile = &#63;.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
 	 * @param visibile the visibile
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -975,9 +965,7 @@ public interface AllegatoRichiestaPersistence
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
 	public AllegatoRichiesta[] findByRichiestaIdVisibile_PrevAndNext(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK,
-			long richiestaId, boolean visibile,
+			long allegatoRichiestaId, long richiestaId, boolean visibile,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
@@ -1133,7 +1121,7 @@ public interface AllegatoRichiestaPersistence
 	/**
 	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and interno = &#63; and visibile = &#63;.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the current allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the current allegato richiesta
 	 * @param richiestaId the richiesta ID
 	 * @param interno the interno
 	 * @param visibile the visibile
@@ -1142,9 +1130,8 @@ public interface AllegatoRichiestaPersistence
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
 	public AllegatoRichiesta[] findByRichiestaIdInternoVisibile_PrevAndNext(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK,
-			long richiestaId, boolean interno, boolean visibile,
+			long allegatoRichiestaId, long richiestaId, boolean interno,
+			boolean visibile,
 			com.liferay.portal.kernel.util.OrderByComparator<AllegatoRichiesta>
 				orderByComparator)
 		throws NoSuchAllegatoRichiestaException;
@@ -1188,23 +1175,19 @@ public interface AllegatoRichiestaPersistence
 	/**
 	 * Creates a new allegato richiesta with the primary key. Does not add the allegato richiesta to the database.
 	 *
-	 * @param allegatoRichiestaPK the primary key for the new allegato richiesta
+	 * @param allegatoRichiestaId the primary key for the new allegato richiesta
 	 * @return the new allegato richiesta
 	 */
-	public AllegatoRichiesta create(
-		it.servizidigitali.scrivaniaoperatore.service.persistence.
-			AllegatoRichiestaPK allegatoRichiestaPK);
+	public AllegatoRichiesta create(long allegatoRichiestaId);
 
 	/**
 	 * Removes the allegato richiesta with the primary key from the database. Also notifies the appropriate model listeners.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta that was removed
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
-	public AllegatoRichiesta remove(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK)
+	public AllegatoRichiesta remove(long allegatoRichiestaId)
 		throws NoSuchAllegatoRichiestaException;
 
 	public AllegatoRichiesta updateImpl(AllegatoRichiesta allegatoRichiesta);
@@ -1212,24 +1195,20 @@ public interface AllegatoRichiestaPersistence
 	/**
 	 * Returns the allegato richiesta with the primary key or throws a <code>NoSuchAllegatoRichiestaException</code> if it could not be found.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta
 	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
 	 */
-	public AllegatoRichiesta findByPrimaryKey(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK)
+	public AllegatoRichiesta findByPrimaryKey(long allegatoRichiestaId)
 		throws NoSuchAllegatoRichiestaException;
 
 	/**
 	 * Returns the allegato richiesta with the primary key or returns <code>null</code> if it could not be found.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta, or <code>null</code> if a allegato richiesta with the primary key could not be found
 	 */
-	public AllegatoRichiesta fetchByPrimaryKey(
-		it.servizidigitali.scrivaniaoperatore.service.persistence.
-			AllegatoRichiestaPK allegatoRichiestaPK);
+	public AllegatoRichiesta fetchByPrimaryKey(long allegatoRichiestaId);
 
 	/**
 	 * Returns all the allegato richiestas.
@@ -1298,7 +1277,5 @@ public interface AllegatoRichiestaPersistence
 	 * @return the number of allegato richiestas
 	 */
 	public int countAll();
-
-	public Set<String> getCompoundPKColumnNames();
 
 }

@@ -70,3 +70,14 @@ CREATE TABLE `servizi_digitali`.`attivita_richiesta` (
   `note` LONGTEXT NULL,
   `stato` VARCHAR(75) NOT NULL,
   PRIMARY KEY (`attivitaRichiestaId`));
+  
+-- 20220927
+ALTER TABLE `servizi_digitali`.`allegato_richiesta` 
+DROP COLUMN `fileEntryId`,
+CHANGE COLUMN `richiestaId` `allegatoRichiestaId` BIGINT NOT NULL ,
+CHANGE COLUMN `idDocumentale` `idDocumentale` VARCHAR(255) NOT NULL ,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`allegatoRichiestaId`);
+
+ALTER TABLE `servizi_digitali`.`allegato_richiesta` 
+ADD COLUMN `richiestaId` BIGINT NOT NULL AFTER `visibile`;

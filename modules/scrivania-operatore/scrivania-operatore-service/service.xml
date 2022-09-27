@@ -135,8 +135,7 @@
 		>
 
 		<!-- PK fields -->
-		<column name="richiestaId" primary="true" type="long" />
-		<column name="fileEntryId" primary="true" type="long" />
+		<column name="allegatoRichiestaId" primary="true" type="long" />
 
 		<!-- Group instance -->
 		<column name="groupId" type="long" />
@@ -149,12 +148,13 @@
 		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
-		<column name="nome" type="String" />
 		<column name="idDocumentale" type="String" />
+		<column name="nome" type="String" />
 		<column name="url" type="String" />
 		<column name="principale" type="boolean" />
 		<column name="interno" type="boolean" />
 		<column name="visibile" type="boolean" />
+		<column name="richiestaId" type="long" />
 		
 		<!-- Finder methods -->
 		<finder name="IdDocumentale" return-type="AllegatoRichiesta">
