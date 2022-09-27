@@ -70,11 +70,11 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 			Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 			istanzaForm = presentatoreFormFrontendService.getIstanzaFormRichiesta(richiesta.getRichiestaId(), form.getFormId());
 
-			FormData formData = AlpacaUtil.loadFormData(form, istanzaForm.getJson(), true);
+			FormData formData = AlpacaUtil.loadFormData(form, istanzaForm.getJson(), true, themeDisplay.getPortalURL());
 			AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
 
 			alpacaStructure.setSchema(AlpacaUtil.addAttachmentsToSchema(gson.toJson(alpacaStructure.getSchema()), form.getListaDefinizioneAllegato()));
-			alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), form.getListaDefinizioneAllegato(), true));
+			alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), form.getListaDefinizioneAllegato(), true, themeDisplay.getPortalURL()));
 			alpacaStructure.setData(JsonParser.parseString(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
 
 			String fileName = "richiesta-" + String.valueOf(richiesta.getRichiestaId()) + ".pdf";
