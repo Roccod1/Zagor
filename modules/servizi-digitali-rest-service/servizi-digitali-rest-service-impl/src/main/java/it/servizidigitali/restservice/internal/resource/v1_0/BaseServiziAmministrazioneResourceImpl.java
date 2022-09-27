@@ -16,8 +16,9 @@ import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.util.ActionUtil;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
-import it.servizidigitali.restservice.dto.v1_0.ComponenteNucleoFamiliareLight;
-import it.servizidigitali.restservice.resource.v1_0.DatiAnagraficiResource;
+import it.servizidigitali.restservice.dto.v1_0.CountServizioAmministrazione;
+import it.servizidigitali.restservice.dto.v1_0.InfoServizioAmministrazione;
+import it.servizidigitali.restservice.resource.v1_0.ServiziAmministrazioneResource;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,46 +37,139 @@ import javax.ws.rs.core.UriInfo;
  */
 @Generated("")
 @javax.ws.rs.Path("/v1.0")
-public abstract class BaseDatiAnagraficiResourceImpl
-	implements DatiAnagraficiResource {
+public abstract class BaseServiziAmministrazioneResourceImpl
+	implements ServiziAmministrazioneResource {
 
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/dati-anagrafici/componenti-nucleo-familiare'  -u 'test@liferay.com:test'
+	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/servizi-amministrazione'  -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
-		description = "Recupera i componenti del nucle familiare"
+		description = "Recupera i servizi amministrazione"
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER,
-				name = "userToken"
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "nomeComune"
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "nomeComune"
+				name = "codiceTipologiaServizio"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "amministrazione"
 			)
 		}
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
 		value = {
-			@io.swagger.v3.oas.annotations.tags.Tag(name = "DatiAnagrafici")
+			@io.swagger.v3.oas.annotations.tags.Tag(
+				name = "ServiziAmministrazione"
+			)
 		}
 	)
 	@javax.ws.rs.GET
-	@javax.ws.rs.Path("/dati-anagrafici/componenti-nucleo-familiare")
+	@javax.ws.rs.Path("/servizi-amministrazione")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Page<ComponenteNucleoFamiliareLight> getComponentiNucleoFamiliare(
-			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-			@javax.validation.constraints.NotNull
-			@javax.ws.rs.HeaderParam("userToken")
-			String userToken,
+	public Page<InfoServizioAmministrazione> getServiziAmministrazione(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.ws.rs.QueryParam("nomeComune")
-			String nomeComune)
+			String nomeComune,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.validation.constraints.NotNull
+			@javax.ws.rs.QueryParam("codiceTipologiaServizio")
+			Long codiceTipologiaServizio,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("amministrazione")
+			String amministrazione)
+		throws Exception {
+
+		return Page.of(Collections.emptyList());
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/servizi-amministrazione/{codiceServizio}'  -u 'test@liferay.com:test'
+	 */
+	@io.swagger.v3.oas.annotations.Parameters(
+		value = {
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
+				name = "codiceServizio"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "nomeComune"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "amministrazione"
+			)
+		}
+	)
+	@io.swagger.v3.oas.annotations.tags.Tags(
+		value = {
+			@io.swagger.v3.oas.annotations.tags.Tag(
+				name = "ServiziAmministrazione"
+			)
+		}
+	)
+	@javax.ws.rs.GET
+	@javax.ws.rs.Path("/servizi-amministrazione/{codiceServizio}")
+	@javax.ws.rs.Produces({"application/json", "application/xml"})
+	@Override
+	public InfoServizioAmministrazione getInfoServizioAmministrazione(
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.validation.constraints.NotNull
+			@javax.ws.rs.PathParam("codiceServizio")
+			String codiceServizio,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("nomeComune")
+			String nomeComune,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("amministrazione")
+			String amministrazione)
+		throws Exception {
+
+		return new InfoServizioAmministrazione();
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/servizi-amministrazione/count'  -u 'test@liferay.com:test'
+	 */
+	@io.swagger.v3.oas.annotations.Operation(
+		description = "Count servizi amministrazione"
+	)
+	@io.swagger.v3.oas.annotations.Parameters(
+		value = {
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "codiceServizio"
+			)
+		}
+	)
+	@io.swagger.v3.oas.annotations.tags.Tags(
+		value = {
+			@io.swagger.v3.oas.annotations.tags.Tag(
+				name = "ServiziAmministrazione"
+			)
+		}
+	)
+	@javax.ws.rs.GET
+	@javax.ws.rs.Path("/servizi-amministrazione/count")
+	@javax.ws.rs.Produces({"application/json", "application/xml"})
+	@Override
+	public Page<CountServizioAmministrazione> getCountServizioAmministrazione(
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("codiceServizio")
+			String codiceServizio)
 		throws Exception {
 
 		return Page.of(Collections.emptyList());
@@ -222,6 +316,6 @@ public abstract class BaseDatiAnagraficiResourceImpl
 	protected RoleLocalService roleLocalService;
 
 	private static final com.liferay.portal.kernel.log.Log _log =
-		LogFactoryUtil.getLog(BaseDatiAnagraficiResourceImpl.class);
+		LogFactoryUtil.getLog(BaseServiziAmministrazioneResourceImpl.class);
 
 }

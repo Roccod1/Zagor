@@ -46,7 +46,7 @@ components:
         queryNomeComune:
           name: nomeComune
           in: query
-          required: true
+          required: false
           schema:
             type: string
 
@@ -107,6 +107,156 @@ components:
                 description: Data di nascita
                 type: string
                 format: date
+        
+        DestinazioneUso:
+          type: object
+          properties:
+            id:
+              description: Id
+              type: integer
+              format: int64
+            "description":
+              type: string
+            name:
+              type: string
+            payment:
+              type: boolean
+            message:
+              type: string
+
+        InfoServizioAmministrazione:
+          type: object
+          properties:
+            id:
+              description: Id
+              type: integer
+              format: int64
+            title:
+              description: Titolo servizio
+              type: string
+            code:
+              description: Codice del servizio
+              type: string
+            "description":
+              description: Descrizione del servizio
+              type: string
+            serviceCardUrl:
+              description: Service card url
+              type: string
+            serviceOnlineUrl:
+              description:  service online url
+              type: string
+            active:
+              type: boolean
+            usableByChatbot:
+              type: boolean
+            correlatedPaymentServiceCode:
+              type: string
+            codiceIpa:
+              type: string
+            nomeComune:
+              type: string
+            chatbotInline:
+              type: boolean
+            chatbotInlineIntent:
+              type: boolean
+            destinazioneUsos:
+              type: array
+              items:
+                $ref: '#/components/schemas/DestinazioneUso'
+        RichiestaCertificato:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            email: 
+              type: string
+              format: email
+            dataInserimento:
+              type: string
+              format: date-time
+            dataAggiornamento:
+              type: string
+              format: date-time
+            stato:
+              type: string
+            messaggio:
+              type: string
+
+        CountServizioAmministrazione:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            title:
+              type: string
+            serviceCount:
+              type: integer
+              format: int64
+        
+        ChatbotAnswer:
+          type: object
+          properties:
+            messaggio:
+              type: string
+            pathServizio:
+              type: string
+
+        ChatbotDatiSessione:
+          type: object
+          properties:
+            sessionId:
+              type: string
+            message:
+              type: string
+            intentMatched:
+              type: string
+            isMatched:
+              type: boolean
+            isNegative:
+              type: boolean
+            isPositive:
+              type: boolean
+            isFallback:
+              type: boolean
+            isReset:
+              type: boolean
+            messageDate:
+              type: string
+              format: date
+            
+        ChatbotSession:
+          type: object
+          properties:
+            sessionId:
+              type: string
+            startDate:
+              type: string
+              format: date-time
+            lastDate:
+              type: string
+              format: date-time
+            messageCount:
+              type: integer
+              format: int32
+            negativeCount:
+              type: integer
+              format: int32
+            positiveCount:
+              type: integer
+              format: int32
+            fallbackCount:
+              type: integer
+              format: int32
+            resetCount:
+              type: integer
+              format: int32
+            lastMessage:
+              type: string
+            lastIntentMatched:
+              type: string
 paths:
     "/richieste-servizio":
         get:
@@ -261,4 +411,223 @@ paths:
                   type: array
                   items: 
                     $ref: '#/components/schemas/ComponenteNucleoFamiliareLight'
-                    
+    "/servizi-amministrazione":
+      get:
+        operationId: getServiziAmministrazione
+        description: Recupera i servizi amministrazione
+        security:
+          - BearerAuth: []
+        tags: ['ServiziAmministrazione']
+        parameters:
+          - $ref: '#/components/parameters/queryNomeComune'
+          - name: codiceTipologiaServizio
+            in: query
+            required: true
+            schema:
+              type: integer
+              format: int64
+          - name: amministrazione
+            in: query
+            schema:
+              type: string
+        responses:
+          200:
+            description: Servizi amministrazione
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/InfoServizioAmministrazione'
+              application/xml:
+                schema:
+                  type: array
+                  items: 
+                    $ref: '#/components/schemas/InfoServizioAmministrazione'
+    "/servizi-amministrazione/{codiceServizio}":
+      get:
+        operationId: getInfoServizioAmministrazione
+        security:
+          - BearerAuth: []
+        tags: ['ServiziAmministrazione']
+        parameters:
+          - name: codiceServizio
+            in: path
+            required: true
+            schema:
+              type: string
+          - $ref: '#/components/parameters/queryNomeComune'
+          - name: amministrazione
+            in: query
+            schema:
+              type: string
+        responses:
+          200:
+            description: Servizi amministrazione
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/InfoServizioAmministrazione'
+              application/xml:
+                schema:
+                  $ref: '#/components/schemas/InfoServizioAmministrazione'
+    "/servizi-amministrazione/count":
+      get:
+        operationId: getCountServizioAmministrazione
+        description: Count servizi amministrazione
+        security: 
+          - BearerAuth: []
+        tags: ['ServiziAmministrazione']
+        parameters:
+          - name: codiceServizio
+            in: query
+            schema:
+              type: string
+        responses:
+          200:
+            description: Invio certificato
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/CountServizioAmministrazione'
+              application/xml:
+                schema:
+                  type: array
+                  items: 
+                    $ref: '#/components/schemas/CountServizioAmministrazione'
+    "/certificati/check-invio":
+      get:
+        operationId: checkInvioCertificato
+        description: Check invio certificato
+        security:
+          - BearerAuth: []
+        tags: ['Certificati']
+        parameters:
+          - $ref: '#/components/parameters/headerUserToken'
+          - $ref: '#/components/parameters/queryNomeComune'
+          - name: idDestinazioneUso
+            in: query
+            schema:
+              type: integer
+              format: int64
+          - name: codiceServizio
+            in: query
+            schema:
+              type: string
+          - name: amministrazione
+            in: query
+            schema:
+              type: string
+          - name: codiceFiscale
+            in: query
+            schema:
+              type: string
+        responses:
+          200:
+            description: Invio certificato
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/RichiestaCertificato'
+              application/xml:
+                schema:
+                  $ref: '#/components/schemas/RichiestaCertificato'
+    "/certificati/invio":
+      get:
+        operationId: invioCertificato
+        description: Invio certificato
+        security:
+          - BearerAuth: []
+        tags: ['Certificati']
+        parameters:
+          - $ref: '#/components/parameters/headerUserToken'
+          - $ref: '#/components/parameters/queryNomeComune'
+          - name: idDestinazioneUso
+            in: query
+            schema:
+              type: integer
+              format: int64
+          - name: codiceServizio
+            in: query
+            schema:
+              type: string
+          - name: amministrazione
+            in: query
+            schema:
+              type: string
+          - name: codiceFiscale
+            in: query
+            schema:
+              type: string
+        responses:
+            200:
+              description: Invio certificato
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/RichiestaCertificato'
+                application/xml:
+                  schema:
+                    $ref: '#/components/schemas/RichiestaCertificato'
+    "/chatbot/risposta":
+      get:
+        operationId: getRispostaChatbot
+        description: Get risposta chatbot
+        security: 
+          - BearerAuth: []
+        tags: ['Chatbot']
+        parameters:
+          - name: codiceFiscale
+            required: true
+            in: query
+            schema:
+              type: string
+          - name: codiceServizio
+            required: true
+            in: query
+            schema:
+              type: string
+          - name: amministrazione
+            in: query
+            schema:
+              type: string
+          - $ref: '#/components/parameters/queryNomeComune'
+        responses:
+          200:
+            description: Invio certificato
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ChatbotAnswer'
+              application/xml:
+                schema:
+                  $ref: '#/components/schemas/ChatbotAnswer'
+    "/chatbot/session":
+      post:
+        operationId: addChatbotSession
+        description: Add chatbot session
+        security:
+          - BearerAuth: []
+        tags: ['Chatbot']
+        parameters: 
+          - $ref: '#/components/parameters/headerUserToken'
+        requestBody:
+                content:
+                  "application/json":
+                      schema:
+                          $ref: '#/components/schemas/ChatbotDatiSessione'
+                  "application/xml":
+                      schema:
+                          $ref: '#/components/schemas/ChatbotDatiSessione'
+        responses:
+          200:
+            description: Add session
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ChatbotSession'
+              application/xml:
+                schema:
+                  $ref: '#/components/schemas/ChatbotSession'

@@ -12,14 +12,12 @@ import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.odata.filter.ExpressionConvert;
 import com.liferay.portal.odata.filter.FilterParserProvider;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
-import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.util.ActionUtil;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
-import it.servizidigitali.restservice.dto.v1_0.ComponenteNucleoFamiliareLight;
-import it.servizidigitali.restservice.resource.v1_0.DatiAnagraficiResource;
+import it.servizidigitali.restservice.dto.v1_0.RichiestaCertificato;
+import it.servizidigitali.restservice.resource.v1_0.CertificatiResource;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -36,16 +34,16 @@ import javax.ws.rs.core.UriInfo;
  */
 @Generated("")
 @javax.ws.rs.Path("/v1.0")
-public abstract class BaseDatiAnagraficiResourceImpl
-	implements DatiAnagraficiResource {
+public abstract class BaseCertificatiResourceImpl
+	implements CertificatiResource {
 
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/dati-anagrafici/componenti-nucleo-familiare'  -u 'test@liferay.com:test'
+	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/certificati/check-invio'  -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
-		description = "Recupera i componenti del nucle familiare"
+		description = "Check invio certificato"
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -56,29 +54,121 @@ public abstract class BaseDatiAnagraficiResourceImpl
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
 				name = "nomeComune"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "idDestinazioneUso"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "codiceServizio"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "amministrazione"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "codiceFiscale"
 			)
 		}
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {
-			@io.swagger.v3.oas.annotations.tags.Tag(name = "DatiAnagrafici")
-		}
+		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Certificati")}
 	)
 	@javax.ws.rs.GET
-	@javax.ws.rs.Path("/dati-anagrafici/componenti-nucleo-familiare")
+	@javax.ws.rs.Path("/certificati/check-invio")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Page<ComponenteNucleoFamiliareLight> getComponentiNucleoFamiliare(
+	public RichiestaCertificato checkInvioCertificato(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.HeaderParam("userToken")
 			String userToken,
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.ws.rs.QueryParam("nomeComune")
-			String nomeComune)
+			String nomeComune,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("idDestinazioneUso")
+			Long idDestinazioneUso,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("codiceServizio")
+			String codiceServizio,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("amministrazione")
+			String amministrazione,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("codiceFiscale")
+			String codiceFiscale)
 		throws Exception {
 
-		return Page.of(Collections.emptyList());
+		return new RichiestaCertificato();
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/certificati/invio'  -u 'test@liferay.com:test'
+	 */
+	@io.swagger.v3.oas.annotations.Operation(description = "Invio certificato")
+	@io.swagger.v3.oas.annotations.Parameters(
+		value = {
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER,
+				name = "userToken"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "nomeComune"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "idDestinazioneUso"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "codiceServizio"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "amministrazione"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "codiceFiscale"
+			)
+		}
+	)
+	@io.swagger.v3.oas.annotations.tags.Tags(
+		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Certificati")}
+	)
+	@javax.ws.rs.GET
+	@javax.ws.rs.Path("/certificati/invio")
+	@javax.ws.rs.Produces({"application/json", "application/xml"})
+	@Override
+	public RichiestaCertificato invioCertificato(
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.validation.constraints.NotNull
+			@javax.ws.rs.HeaderParam("userToken")
+			String userToken,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("nomeComune")
+			String nomeComune,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("idDestinazioneUso")
+			Long idDestinazioneUso,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("codiceServizio")
+			String codiceServizio,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("amministrazione")
+			String amministrazione,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("codiceFiscale")
+			String codiceFiscale)
+		throws Exception {
+
+		return new RichiestaCertificato();
 	}
 
 	public void setContextAcceptLanguage(AcceptLanguage contextAcceptLanguage) {
@@ -222,6 +312,6 @@ public abstract class BaseDatiAnagraficiResourceImpl
 	protected RoleLocalService roleLocalService;
 
 	private static final com.liferay.portal.kernel.log.Log _log =
-		LogFactoryUtil.getLog(BaseDatiAnagraficiResourceImpl.class);
+		LogFactoryUtil.getLog(BaseCertificatiResourceImpl.class);
 
 }
