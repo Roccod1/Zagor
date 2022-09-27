@@ -10,6 +10,7 @@ public class File {
 
 	private String id;
 	private String nome;
+	private String titolo;
 	private String descrizione;
 	private String estensione;
 	private String mimeType;
@@ -99,4 +100,17 @@ public class File {
 		this.inputStream = inputStream;
 	}
 
+	/**
+	 * @return the titolo
+	 */
+	public String getTitolo() {
+		return titolo;
+	}
+
+	/**
+	 * @param titolo the titolo to set
+	 */
+	public void setTitolo(String titolo) {
+		this.titolo = titolo;
+	}
 }

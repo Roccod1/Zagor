@@ -3,6 +3,7 @@ package it.servizidigitali.file.utility.service.impl;
 import com.liferay.document.library.kernel.exception.NoSuchFolderException;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppService;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -177,10 +178,15 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 		File file = new File();
 		file.setId(String.valueOf(fileEntry.getFileEntryId()));
 		file.setNome(fileEntry.getFileName());
+		file.setTitolo(fileEntry.getTitle());
 		file.setInputStream(fileEntry.getContentStream());
 		file.setDescrizione(fileEntry.getDescription());
 		file.setEstensione(fileEntry.getExtension());
 		file.setMimeType(fileEntry.getMimeType());
 		return file;
+	}
+
+	private String getDLFileURL(FileEntry file) {
+		return "/documents/" + file.getGroupId() + StringPool.BACK_SLASH + file.getFolderId() + StringPool.BACK_SLASH + file.getTitle() + StringPool.BACK_SLASH + file.getUuid();
 	}
 }
