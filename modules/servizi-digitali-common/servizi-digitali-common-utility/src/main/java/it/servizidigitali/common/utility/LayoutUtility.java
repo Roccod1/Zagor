@@ -55,7 +55,7 @@ public class LayoutUtility {
 				if (virtualHosts != null) {
 					VirtualHost virtualHost = virtualHosts.stream().filter(vh -> vh.getDefaultVirtualHost()).findAny().orElse(null);
 
-					String friendlyURL = layoutLocalService.getLayout(layoutId).getFriendlyURL();
+					String friendlyURL = layoutLocalService.getLayout(groupId, false, layoutId).getFriendlyURL();
 
 					String pagePath = "https://" + virtualHost.getHostname() + friendlyURL;
 					return pagePath;
