@@ -10,12 +10,15 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import com.liferay.counter.kernel.service.CounterLocalService;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
@@ -41,32 +44,38 @@ public class AggiungiCommentoActionCommand extends BaseMVCActionCommand {
 	
 	@Override
 	protected void doProcessAction(ActionRequest request, ActionResponse response) throws Exception {
-		ServiceContext context = ServiceContextFactory.getInstance(request);
-		
 		long richiestaId = ParamUtil.getLong(request, "richiestaId");
-		String testo = ParamUtil.getString(request, "testo");
-		boolean visibile = ParamUtil.getBoolean(request, "visibileAlCittadino");
-		
-		long id = counterLocalService.increment(CommentoRichiesta.class.getName());
-		CommentoRichiesta commentoRichiesta = commentoRichiestaLocalService.createCommentoRichiesta(id);
-		commentoRichiesta.setGroupId(context.getScopeGroupId());
-		commentoRichiesta.setCompanyId(context.getCompanyId());
-		commentoRichiesta.setUserId(context.getUserId());
-		commentoRichiesta.setCreateDate(new Date());
-		if (visibile) {
-			commentoRichiesta.setModifiedDate(new Date());
+
+		try {
+			ServiceContext context = ServiceContextFactory.getInstance(request);
+			
+			String testo = ParamUtil.getString(request, "testo");
+			boolean visibile = ParamUtil.getBoolean(request, "visibileAlCittadino");
+			
+			long id = counterLocalService.increment(CommentoRichiesta.class.getName());
+			CommentoRichiesta commentoRichiesta = commentoRichiestaLocalService.createCommentoRichiesta(id);
+			commentoRichiesta.setGroupId(context.getScopeGroupId());
+			commentoRichiesta.setCompanyId(context.getCompanyId());
+			commentoRichiesta.setUserId(context.getUserId());
+			commentoRichiesta.setCreateDate(new Date());
+			if (visibile) {
+				commentoRichiesta.setModifiedDate(new Date());
+			}
+			commentoRichiesta.setTesto(testo);
+			commentoRichiesta.setVisibile(visibile);
+			commentoRichiesta.setRichiestaId(richiestaId);
+			
+			User user = userLocalService.fetchUser(context.getUserId());
+			commentoRichiesta.setUserName(user.getFullName());
+			
+			Richiesta richiesta = richiestaLocalService.fetchRichiesta(richiestaId);
+			commentoRichiesta.setTaskId(richiesta.getProcessInstanceId());
+			
+			commentoRichiestaLocalService.updateCommentoRichiesta(commentoRichiesta);
+		} catch (Exception e) {
+			_log.error(e);
+			SessionErrors.add(request, "errore-generico");
 		}
-		commentoRichiesta.setTesto(testo);
-		commentoRichiesta.setVisibile(visibile);
-		commentoRichiesta.setRichiestaId(richiestaId);
-		
-		User user = userLocalService.fetchUser(context.getUserId());
-		commentoRichiesta.setUserName(user.getFullName());
-		
-		Richiesta richiesta = richiestaLocalService.fetchRichiesta(richiestaId);
-		commentoRichiesta.setTaskId(richiesta.getProcessInstanceId());
-		
-		commentoRichiestaLocalService.updateCommentoRichiesta(commentoRichiesta);
 		
 		MutableRenderParameters renderParameters = response.getRenderParameters();
 		renderParameters.setValue("mvcRenderCommandName", "/render/dettaglio");
@@ -75,4 +84,5 @@ public class AggiungiCommentoActionCommand extends BaseMVCActionCommand {
 		renderParameters.setValue("isMain", String.valueOf(false));
 	}
 
+	private static final Log _log = LogFactoryUtil.getLog(AggiungiCommentoActionCommand.class);
 }

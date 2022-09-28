@@ -6,10 +6,12 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.MutableRenderParameters;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -30,12 +32,21 @@ public class RilasciaActionCommand extends BaseMVCActionCommand {
 	protected void doProcessAction(ActionRequest request, ActionResponse response) throws Exception {
 		_log.debug("::doProcessAction");
 		
-		String taskId = ParamUtil.getString(request, "taskId");
-		
-		_log.debug("Task Id: " + taskId);
-		
-		ServiceContext context = ServiceContextFactory.getInstance(request);
-		scrivaniaOperatoreFrontendService.rilasciaTask(String.valueOf(context.getUserId()), taskId);
+		try {
+			String taskId = ParamUtil.getString(request, "taskId");
+			
+			_log.debug("Task Id: " + taskId);
+			
+			ServiceContext context = ServiceContextFactory.getInstance(request);
+			scrivaniaOperatoreFrontendService.rilasciaTask(String.valueOf(context.getUserId()), taskId);
+		} catch (Exception e) {
+			_log.error(e);
+			
+			MutableRenderParameters renderParameters = response.getRenderParameters();
+			renderParameters.setValue("queryTab", ScrivaniaOperatorePortletKeys.TAB_CARICO);
+			
+			SessionErrors.add(request, "errore-generico");
+		}
 	}
 	
 	private static final Log _log = LogFactoryUtil.getLog(RilasciaActionCommand.class);

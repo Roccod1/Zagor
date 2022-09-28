@@ -9,10 +9,13 @@ import javax.portlet.MutableRenderParameters;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import it.servizidigitali.camunda.integration.client.model.Task;
@@ -36,23 +39,29 @@ public class AssegnaResponsabileActionCommand extends BaseMVCActionCommand {
 	protected void doProcessAction(ActionRequest request, ActionResponse response) throws Exception {
 		long richiestaId = ParamUtil.getLong(request, "richiestaId");
 		String dettaglioTab = ParamUtil.getString(request, "dettaglioTab");
-		long responsabile = ParamUtil.getLong(request, "responsabile");
-		String commento = ParamUtil.getString(request, "commento");
-		String assegnaResponsabileVar = ParamUtil.getString(request, "assegnaResponsabileVar");
 		
-		ServiceContext context = ServiceContextFactory.getInstance(request);
-		Richiesta richiesta = richiestaLocalService.fetchRichiesta(richiestaId);
-		
-		Map<String, Task> tasks = scrivaniaOperatoreFrontendService.getUserTasks(context);
-		String taskId = tasks.get(richiesta.getProcessInstanceId()).getId();
-		
-		scrivaniaOperatoreFrontendService.assegnaResponsabile(
-				responsabile, 
-				richiestaId,
-				taskId,
-				assegnaResponsabileVar, 
-				commento, 
-				context);
+		try {
+			long responsabile = ParamUtil.getLong(request, "responsabile");
+			String commento = ParamUtil.getString(request, "commento");
+			String assegnaResponsabileVar = ParamUtil.getString(request, "assegnaResponsabileVar");
+			
+			ServiceContext context = ServiceContextFactory.getInstance(request);
+			Richiesta richiesta = richiestaLocalService.fetchRichiesta(richiestaId);
+			
+			Map<String, Task> tasks = scrivaniaOperatoreFrontendService.getUserTasks(context);
+			String taskId = tasks.get(richiesta.getProcessInstanceId()).getId();
+			
+			scrivaniaOperatoreFrontendService.assegnaResponsabile(
+					responsabile, 
+					richiestaId,
+					taskId,
+					assegnaResponsabileVar, 
+					commento, 
+					context);
+		} catch (Exception e) {
+			_log.error(e);
+			SessionErrors.add(request, "errore-generico");
+		}
 		
 		MutableRenderParameters renderParameters = response.getRenderParameters();
 		renderParameters.setValue("mvcRenderCommandName", "/render/dettaglio");
@@ -61,4 +70,5 @@ public class AssegnaResponsabileActionCommand extends BaseMVCActionCommand {
 		renderParameters.setValue("isMain", String.valueOf(false));
 	}
 
+	private static final Log _log = LogFactoryUtil.getLog(AssegnaResponsabileActionCommand.class);
 }

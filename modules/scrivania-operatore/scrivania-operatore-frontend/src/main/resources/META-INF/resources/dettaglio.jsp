@@ -1,5 +1,7 @@
 <%@ include file="init.jsp" %>
 
+<liferay-ui:error key="errore-generico" message="errore-generico" />
+
 <div class="modal fade" tabindex="-1" id="<portlet:namespace />assegnaResponsabileModal" style="display: none;">
 	<portlet:actionURL var="assegnaResponsabileURL" name="/action/assegnaResponsabile">
 	</portlet:actionURL>

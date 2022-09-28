@@ -1,5 +1,7 @@
 <%@ include file="init.jsp" %>
 
+<liferay-ui:error key="errore-generico" message="errore-generico" />
+
 <portlet:renderURL var="tabURL">
 </portlet:renderURL>
 
