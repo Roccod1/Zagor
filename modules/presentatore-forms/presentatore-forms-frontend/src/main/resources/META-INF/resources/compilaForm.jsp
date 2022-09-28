@@ -188,6 +188,7 @@ function mainScript() {
 		   	    	"indietro":{
 			            "title": '<liferay-ui:message key="label.annulla"/>',
 			            "id": "indietroButton",
+			            "styles": "btn btn-outline-primary",
 			            "click": function() {
 			            	window.location.href = '';
 			            }
@@ -195,6 +196,7 @@ function mainScript() {
 		   	        "salvaBozzaSubmit":{
 		   	            "title": '<liferay-ui:message key="button.salva.bozza"/>',
 		   	            "id": "salvaBozzaFormButton",
+		   	        	"styles": "btn btn-secondary",
 		   	            "click": function(e) {
 		   	            	var userData = this.getValue();
 			   	         	
@@ -236,7 +238,7 @@ function mainScript() {
 		   	            	     	$.unblockUI();
 		   	            	     	
 			   	            	    $.blockUI({ 
-			                               message: "<div style='padding:20px 20px; color: #ae1d3f; background-color: #FFF '>La bozza della tua istanza è stata salvata e potrà essere successivamente completata. Potrai in qualsiasi momento recuperarla anche nella pagina 'La mia Scrivania' nella sezione 'Le mie Pratiche'</div><button class='btn btn-primary' type='button' onclick='$.unblockUI()'><b>OK</b></button><br><br>",
+			                               message: "<div style='padding:20px 20px; color: #ae1d3f; background-color: #FFF '>La bozza della tua istanza ï¿½ stata salvata e potrï¿½ essere successivamente completata. Potrai in qualsiasi momento recuperarla anche nella pagina 'La mia Scrivania' nella sezione 'Le mie Pratiche'</div><button class='btn btn-primary' type='button' onclick='$.unblockUI()'><b>OK</b></button><br><br>",
 			                               baseZ:2000,
 			                               css: { 
 			                                    border: 'none', 
@@ -330,7 +332,7 @@ function mainScript() {
 // 			   	            	 		dataType : "json",
 // 				   	            	    success: function(data){
 // 					   	     				if (downloadFile && data.status === "ok" && (data.daPagare == null || data.daPagare == false)) {
-// 												/*se non c'è da pagare, lascio tutto come sta, abilito il pulsante per la generazione (da creare)
+// 												/*se non c'ï¿½ da pagare, lascio tutto come sta, abilito il pulsante per la generazione (da creare)
 // 	 				   	     					if(submitFormUrl.indexOf("idServizio") == -1){
 // 	 				   	     						submitFormUrl += '&idServizio=${idServizio}';
 // 	 				   	     					}*/
@@ -344,7 +346,7 @@ function mainScript() {
 // 												/*window.location.href = step3Url + '&nomeFile=' + data.nomeFile + '&idServizio=${idServizio}';*/
 												
 												
-// 												/*se non c'è da pagare, porto sulla pagina di dowload del certificato*/
+// 												/*se non c'ï¿½ da pagare, porto sulla pagina di dowload del certificato*/
 // 												$("button[data-key='scaricaCertificatoButton']").hide();
 // 												$("button[data-key='pagaButton']").html("Genera Certificato");
 // 												$("button[data-key='pagaButton']").hide();
@@ -370,7 +372,7 @@ function mainScript() {
 												
 												
 // 					   	     				} else if (downloadFile && data.status === "ok" && data.daPagare == true){
-// 					   	     					/*se c'è da pagare, abilito un pulsante paga che fa qualcosa*/
+// 					   	     					/*se c'ï¿½ da pagare, abilito un pulsante paga che fa qualcosa*/
 // 						   	     				$("button[data-key='scaricaCertificatoButton']").hide();
 // 					   	     					$("button[data-key='pagaButton']").show();
 // 					   	     					$("button[data-key='submitButton']").attr('disabled', 'disabled');
@@ -435,7 +437,7 @@ function mainScript() {
 		   	            }
 		   	        },
 		   	        "pagaButton":{
-		   	            "title": 'Scegli Modalità Pagamento',
+		   	            "title": 'Scegli Modalitï¿½ Pagamento',
 		   	            "id": "pagaButton",
 		   	            "click": function(e) {
 		   	            	var userData = this.getValue();

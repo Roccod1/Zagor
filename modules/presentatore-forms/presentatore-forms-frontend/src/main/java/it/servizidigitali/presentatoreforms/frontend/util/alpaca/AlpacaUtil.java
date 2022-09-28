@@ -36,9 +36,7 @@ public class AlpacaUtil {
 	private static final String ALLEGATI = "<div class='text-center' style='page-break-before: always'>Allegati Richiesti</div><br><br><h4 style='text-align: left;'>Gli allegati riportati di seguito con la spunta, sono obbligatori per l'invio della pratica:</h4><br>";
 	private static final String ALLEGATO_CHECKBOX = "allegato-checkbox-";
 	private static final String HTML_SPAZIO_ALLEGATI = "<div data-alpaca-wizard-role='step' data-alpaca-wizard-step-title='StepAllegati'>";
-	private static final String CUSTOM_FIELD_DATA_SOURCE = "";
-	private static final String PUBLIC_SERVER_ADDRESS = "";
-	private static final String FORM_PRESENTER_PORTLET_API_ALPACA_PATH = "";
+	private static final String SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH = "/o/api/alpaca";
 
 	public static final Log log = LogFactoryUtil.getLog(AlpacaUtil.class);
 
@@ -70,7 +68,7 @@ public class AlpacaUtil {
 	 * @param addDataSources
 	 * @return
 	 */
-	public static JsonObject loadOptions(final String json, final List<DefinizioneAllegato> definizioneAllegati, boolean addDataSources) {
+	public static JsonObject loadOptions(final String json, final List<DefinizioneAllegato> definizioneAllegati, boolean addDataSources, String portalURL) {
 		Gson gson = new Gson();
 		AlpacaJsonOptionsStructure jsonOptions = gson.fromJson(json, AlpacaJsonOptionsStructure.class);
 		JsonObject fields = jsonOptions.getFields();
@@ -103,13 +101,13 @@ public class AlpacaUtil {
 		}
 
 		if (addDataSources) {
-			aggiungiDataSource(fields);
+			aggiungiDataSource(fields, portalURL);
 		}
 
 		return gson.toJsonTree(jsonOptions).getAsJsonObject();
 	}
 
-	private static void aggiungiDataSource(final JsonObject fields) {
+	private static void aggiungiDataSource(final JsonObject fields, String portalURL) {
 
 		for (Entry<String, JsonElement> entry : fields.entrySet()) {
 
@@ -131,22 +129,22 @@ public class AlpacaUtil {
 				JsonObject fieldsObject = object.get(AlpacaKey.FIELDS.getName()).getAsJsonObject();
 
 				if (!fieldsObject.entrySet().isEmpty()) {
-					aggiungiDataSource(fieldsObject);
+					aggiungiDataSource(fieldsObject, portalURL);
 				}
 			}
 
 			if (type.equalsIgnoreCase(AlpacaOptionType.NAZIONE.getName())) {
-				String url = PUBLIC_SERVER_ADDRESS + FORM_PRESENTER_PORTLET_API_ALPACA_PATH + "/getStatiEsteri";
+				String url = portalURL + SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH + "/stati-esteri";
 				object.addProperty(AlpacaKey.DATA_SOURCE.getName(), url);
 			}
 
 			if (type.equalsIgnoreCase(AlpacaOptionType.PROVINCIA.getName())) {
-				String url = PUBLIC_SERVER_ADDRESS + FORM_PRESENTER_PORTLET_API_ALPACA_PATH + "/getProvince";
+				String url = portalURL + SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH + "/province";
 				object.addProperty(AlpacaKey.DATA_SOURCE.getName(), url);
 			}
 
 			if (type.equalsIgnoreCase(AlpacaOptionType.COMUNE.getName())) {
-				String url = PUBLIC_SERVER_ADDRESS + FORM_PRESENTER_PORTLET_API_ALPACA_PATH + "/getComuni";
+				String url = portalURL + SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH + "/comuni";
 				object.addProperty(AlpacaKey.DATA_SOURCE.getName(), url);
 			}
 		}
@@ -271,14 +269,14 @@ public class AlpacaUtil {
 	 * @return Restituisce un'istanza di {@link AlpacaJsonStructure} che contiene i dati relativi al
 	 *         form.
 	 */
-	public static FormData loadFormData(final Form form, final String savedJson, boolean addDataSources) {
+	public static FormData loadFormData(final Form form, final String savedJson, boolean addDataSources, String portalURL) {
 		log.debug("loadFormData");
 		Gson gson = new Gson();
 		FormData formData = new FormData();
 		if (savedJson == null) {
 			AlpacaJsonStructure alpacaStructure = gson.fromJson(form.getJson(), AlpacaJsonStructure.class);
 			alpacaStructure.setSchema(addAttachmentsToSchema(gson.toJson(alpacaStructure.getSchema()), form.getListaDefinizioneAllegato()));
-			alpacaStructure.setOptions(loadOptions(gson.toJson(alpacaStructure.getOptions()), form.getListaDefinizioneAllegato(), addDataSources));
+			alpacaStructure.setOptions(loadOptions(gson.toJson(alpacaStructure.getOptions()), form.getListaDefinizioneAllegato(), addDataSources, portalURL));
 			alpacaStructure.setData(loadData(gson.toJson(alpacaStructure.getData())));
 			alpacaStructure.setView(addAttachmentsToView(gson.toJson(alpacaStructure.getView()), form.getListaDefinizioneAllegato()));
 			formData.setAlpaca(alpacaStructure);
