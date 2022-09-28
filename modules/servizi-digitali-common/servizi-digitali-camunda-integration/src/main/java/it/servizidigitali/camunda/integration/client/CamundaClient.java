@@ -38,11 +38,10 @@ public interface CamundaClient {
 	 *
 	 * @param tenantId
 	 * @param businessKey
-	 * @param includeCandidateGroups
 	 * @return
 	 * @throws CamundaClientException
 	 */
-	List<Task> getTasksByBusinessKey(String tenantId, String businessKey, boolean includeCandidateGroups) throws CamundaClientException;
+	List<Task> getTasksByBusinessKey(String tenantId, String businessKey) throws CamundaClientException;
 
 	/**
 	 *
