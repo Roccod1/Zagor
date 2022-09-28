@@ -70,7 +70,11 @@ public class InfoServizioEnteSerDes {
 
 			sb.append("\"chatbotInlineIntent\": ");
 
-			sb.append(infoServizioEnte.getChatbotInlineIntent());
+			sb.append("\"");
+
+			sb.append(_escape(infoServizioEnte.getChatbotInlineIntent()));
+
+			sb.append("\"");
 		}
 
 		if (infoServizioEnte.getCode() != null) {
@@ -402,7 +406,7 @@ public class InfoServizioEnteSerDes {
 
 				if (jsonParserFieldValue != null) {
 					infoServizioEnte.setChatbotInlineIntent(
-						(Boolean)jsonParserFieldValue);
+						(String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "code")) {

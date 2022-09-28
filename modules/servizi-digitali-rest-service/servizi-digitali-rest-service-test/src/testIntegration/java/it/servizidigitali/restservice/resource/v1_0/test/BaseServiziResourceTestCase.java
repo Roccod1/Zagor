@@ -779,7 +779,7 @@ public abstract class BaseServiziResourceTestCase {
 			{
 				active = RandomTestUtil.randomBoolean();
 				chatbotInline = RandomTestUtil.randomBoolean();
-				chatbotInlineIntent = RandomTestUtil.randomBoolean();
+				chatbotInlineIntent = RandomTestUtil.randomString();
 				code = RandomTestUtil.randomString();
 				codiceIpa = RandomTestUtil.randomString();
 				correlatedPaymentServiceCode = RandomTestUtil.randomString();

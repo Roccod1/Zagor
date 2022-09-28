@@ -63,16 +63,16 @@ public class InfoServizioEnte implements Cloneable, Serializable {
 
 	protected Boolean chatbotInline;
 
-	public Boolean getChatbotInlineIntent() {
+	public String getChatbotInlineIntent() {
 		return chatbotInlineIntent;
 	}
 
-	public void setChatbotInlineIntent(Boolean chatbotInlineIntent) {
+	public void setChatbotInlineIntent(String chatbotInlineIntent) {
 		this.chatbotInlineIntent = chatbotInlineIntent;
 	}
 
 	public void setChatbotInlineIntent(
-		UnsafeSupplier<Boolean, Exception> chatbotInlineIntentUnsafeSupplier) {
+		UnsafeSupplier<String, Exception> chatbotInlineIntentUnsafeSupplier) {
 
 		try {
 			chatbotInlineIntent = chatbotInlineIntentUnsafeSupplier.get();
@@ -82,7 +82,7 @@ public class InfoServizioEnte implements Cloneable, Serializable {
 		}
 	}
 
-	protected Boolean chatbotInlineIntent;
+	protected String chatbotInlineIntent;
 
 	public String getCode() {
 		return code;

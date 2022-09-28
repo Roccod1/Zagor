@@ -190,7 +190,7 @@ components:
             chatbotInline:
               type: boolean
             chatbotInlineIntent:
-              type: boolean
+              type: string
             destinazioneUsos:
               type: array
               items:

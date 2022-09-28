@@ -101,17 +101,17 @@ public class InfoServizioEnte implements Serializable {
 	protected Boolean chatbotInline;
 
 	@Schema
-	public Boolean getChatbotInlineIntent() {
+	public String getChatbotInlineIntent() {
 		return chatbotInlineIntent;
 	}
 
-	public void setChatbotInlineIntent(Boolean chatbotInlineIntent) {
+	public void setChatbotInlineIntent(String chatbotInlineIntent) {
 		this.chatbotInlineIntent = chatbotInlineIntent;
 	}
 
 	@JsonIgnore
 	public void setChatbotInlineIntent(
-		UnsafeSupplier<Boolean, Exception> chatbotInlineIntentUnsafeSupplier) {
+		UnsafeSupplier<String, Exception> chatbotInlineIntentUnsafeSupplier) {
 
 		try {
 			chatbotInlineIntent = chatbotInlineIntentUnsafeSupplier.get();
@@ -126,7 +126,7 @@ public class InfoServizioEnte implements Serializable {
 
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected Boolean chatbotInlineIntent;
+	protected String chatbotInlineIntent;
 
 	@Schema(description = "Codice del servizio")
 	public String getCode() {
@@ -492,7 +492,11 @@ public class InfoServizioEnte implements Serializable {
 
 			sb.append("\"chatbotInlineIntent\": ");
 
-			sb.append(chatbotInlineIntent);
+			sb.append("\"");
+
+			sb.append(_escape(chatbotInlineIntent));
+
+			sb.append("\"");
 		}
 
 		if (code != null) {
