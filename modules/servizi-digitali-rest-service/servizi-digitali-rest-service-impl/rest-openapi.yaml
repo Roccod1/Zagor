@@ -76,7 +76,17 @@ components:
           application/xml:
             schema:
               $ref: "#/components/schemas/Error"
-        description: Authentication information is missing or invalid   
+        description: Authentication information is missing or invalid
+        
+      BadRequest:
+        content:
+          application/json:
+              schema:
+                  $ref: "#/components/schemas/Error"
+          application/xml:
+              schema:
+                  $ref: "#/components/schemas/Error"
+        description: Invalid request
             
     schemas:
     
@@ -445,6 +455,10 @@ paths:
                   type: array
                   items: 
                     $ref: '#/components/schemas/ComponenteNucleoFamiliareLight'
+          404:
+            $ref: '#/components/responses/NotFound'
+          403:
+            $ref: '#/components/responses/UnauthorizedError'
     "/servizi":
       get:
         operationId: getServiziEnte
@@ -478,6 +492,9 @@ paths:
                   type: array
                   items: 
                     $ref: '#/components/schemas/InfoServizioEnte'
+          404: 
+            $ref: '#/components/responses/NotFound'
+          
     "/servizi/{codiceServizio}":
       get:
         operationId: getInfoServizioEnte
@@ -570,6 +587,8 @@ paths:
               application/xml:
                 schema:
                   $ref: '#/components/schemas/RichiestaCertificato'
+          403:
+            $ref: '#/components/responses/UnauthorizedError'
     "/certificati/invio":
       get:
         operationId: invioCertificato
@@ -607,6 +626,8 @@ paths:
                 application/xml:
                   schema:
                     $ref: '#/components/schemas/RichiestaCertificato'
+            403:
+              $ref: '#/components/responses/UnauthorizedError'
     "/chatbot/risposta":
       get:
         operationId: getRispostaChatbot
