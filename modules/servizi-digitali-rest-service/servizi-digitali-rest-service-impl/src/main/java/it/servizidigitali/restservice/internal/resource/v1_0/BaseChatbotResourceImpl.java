@@ -41,7 +41,7 @@ public abstract class BaseChatbotResourceImpl implements ChatbotResource {
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/chatbot/risposta'  -u 'test@liferay.com:test'
+	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/chatbot/messaggio-servizio'  -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
 		description = "Get risposta chatbot"
@@ -70,10 +70,10 @@ public abstract class BaseChatbotResourceImpl implements ChatbotResource {
 		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Chatbot")}
 	)
 	@javax.ws.rs.GET
-	@javax.ws.rs.Path("/chatbot/risposta")
+	@javax.ws.rs.Path("/chatbot/messaggio-servizio")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public ChatbotAnswer getRispostaChatbot(
+	public ChatbotAnswer getChatbotMessaggioServizio(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.QueryParam("codiceFiscale")

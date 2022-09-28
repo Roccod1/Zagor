@@ -27,12 +27,12 @@ public interface ChatbotResource {
 		return new Builder();
 	}
 
-	public ChatbotAnswer getRispostaChatbot(
+	public ChatbotAnswer getChatbotMessaggioServizio(
 			String codiceFiscale, String codiceServizio, String amministrazione,
 			String nomeComune)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse getRispostaChatbotHttpResponse(
+	public HttpInvoker.HttpResponse getChatbotMessaggioServizioHttpResponse(
 			String codiceFiscale, String codiceServizio, String amministrazione,
 			String nomeComune)
 		throws Exception;
@@ -116,13 +116,13 @@ public interface ChatbotResource {
 
 	public static class ChatbotResourceImpl implements ChatbotResource {
 
-		public ChatbotAnswer getRispostaChatbot(
+		public ChatbotAnswer getChatbotMessaggioServizio(
 				String codiceFiscale, String codiceServizio,
 				String amministrazione, String nomeComune)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
-				getRispostaChatbotHttpResponse(
+				getChatbotMessaggioServizioHttpResponse(
 					codiceFiscale, codiceServizio, amministrazione, nomeComune);
 
 			String content = httpResponse.getContent();
@@ -162,7 +162,7 @@ public interface ChatbotResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse getRispostaChatbotHttpResponse(
+		public HttpInvoker.HttpResponse getChatbotMessaggioServizioHttpResponse(
 				String codiceFiscale, String codiceServizio,
 				String amministrazione, String nomeComune)
 			throws Exception {
@@ -210,7 +210,7 @@ public interface ChatbotResource {
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port +
-						"/o/servizi-digitali-rest-service/v1.0/chatbot/risposta");
+						"/o/servizi-digitali-rest-service/v1.0/chatbot/messaggio-servizio");
 
 			httpInvoker.userNameAndPassword(
 				_builder._login + ":" + _builder._password);

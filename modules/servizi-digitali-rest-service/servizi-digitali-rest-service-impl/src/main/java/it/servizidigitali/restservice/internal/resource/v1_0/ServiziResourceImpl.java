@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.vulcan.pagination.Page;
 
 import it.servizidigitali.common.utility.OrganizationUtility;
 import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
@@ -19,6 +20,7 @@ import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.restservice.dto.v1_0.CountServizioEnte;
 import it.servizidigitali.restservice.dto.v1_0.InfoServizioEnte;
 import it.servizidigitali.restservice.internal.constant.ServiziDigitaliRestConstants;
 import it.servizidigitali.restservice.internal.util.MessageUtil;
@@ -44,7 +46,21 @@ public class ServiziResourceImpl extends BaseServiziResourceImpl {
 	
 	@Reference
 	private OrganizationUtility _organizationUtility;
-
+	
+	
+	@Override
+	public Page<InfoServizioEnte> getServiziEnte(String nomeComune, @NotNull Long codiceTipologiaServizio,
+			String amministrazione) throws Exception {
+		// TODO Auto-generated method stub
+		return super.getServiziEnte(nomeComune, codiceTipologiaServizio, amministrazione);
+	}
+	
+	@Override
+	public Page<CountServizioEnte> getCountServizioEnte(String codiceServizio) throws Exception {
+		// TODO Auto-generated method stub
+		return super.getCountServizioEnte(codiceServizio);
+	}
+	
 	@Override
 	public InfoServizioEnte getInfoServizioEnte(@NotNull String codiceServizio, String nomeComune, String amministrazione) throws Exception {
 
@@ -74,6 +90,7 @@ public class ServiziResourceImpl extends BaseServiziResourceImpl {
 			throw new NotFoundException(message);
 		}
 
+		
 		InfoServizioEnte infoServizioEnte = new InfoServizioEnte();
 		infoServizioEnte.setCodiceIpa(organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo()).toString());
 		infoServizioEnte.setActive(servizioEnte.isAttivo());

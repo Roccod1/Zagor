@@ -43,7 +43,7 @@ public interface ChatbotResource {
 		return FactoryHolder.factory.create();
 	}
 
-	public ChatbotAnswer getRispostaChatbot(
+	public ChatbotAnswer getChatbotMessaggioServizio(
 			String codiceFiscale, String codiceServizio, String amministrazione,
 			String nomeComune)
 		throws Exception;

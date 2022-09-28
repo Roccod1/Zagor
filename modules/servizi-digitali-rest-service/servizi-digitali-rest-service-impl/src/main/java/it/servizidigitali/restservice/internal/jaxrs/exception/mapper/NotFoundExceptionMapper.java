@@ -20,7 +20,7 @@ import it.servizidigitali.restservice.dto.v1_0.Error;
 			},
 		service = ExceptionMapper.class
 	)
-public class ResourceNotFoundExceptionMapper extends BaseExceptionMapper<NotFoundException> {
+public class NotFoundExceptionMapper extends BaseExceptionMapper<NotFoundException> {
 
 	@Override
 	protected Problem getProblem(NotFoundException exception) {

@@ -628,9 +628,9 @@ paths:
                     $ref: '#/components/schemas/RichiestaCertificato'
             403:
               $ref: '#/components/responses/UnauthorizedError'
-    "/chatbot/risposta":
+    "/chatbot/messaggio-servizio":
       get:
-        operationId: getRispostaChatbot
+        operationId: getChatbotMessaggioServizio
         description: Get risposta chatbot
         security: 
           - BearerAuth: []

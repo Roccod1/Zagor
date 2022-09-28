@@ -97,21 +97,21 @@ public abstract class BaseChatbotResourceTestCase {
 	}
 
 	@Test
-	public void testGetRispostaChatbot() throws Exception {
+	public void testGetChatbotMessaggioServizio() throws Exception {
 		Chatbot postChatbot = testGetChatbot_addChatbot();
 
 		ChatbotAnswer postChatbotAnswer =
-			testGetRispostaChatbot_addChatbotAnswer(
+			testGetChatbotMessaggioServizio_addChatbotAnswer(
 				postChatbot.getId(), randomChatbotAnswer());
 
-		ChatbotAnswer getChatbotAnswer = chatbotResource.getRispostaChatbot(
-			postChatbot.getId());
+		ChatbotAnswer getChatbotAnswer =
+			chatbotResource.getChatbotMessaggioServizio(postChatbot.getId());
 
 		assertEquals(postChatbotAnswer, getChatbotAnswer);
 		assertValid(getChatbotAnswer);
 	}
 
-	protected ChatbotAnswer testGetRispostaChatbot_addChatbotAnswer(
+	protected ChatbotAnswer testGetChatbotMessaggioServizio_addChatbotAnswer(
 			long chatbotId, ChatbotAnswer chatbotAnswer)
 		throws Exception {
 
