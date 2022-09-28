@@ -2,7 +2,7 @@ package it.servizidigitali.restservice.client.dto.v1_0;
 
 import it.servizidigitali.restservice.client.dto.v1_0.DestinazioneUso;
 import it.servizidigitali.restservice.client.function.UnsafeSupplier;
-import it.servizidigitali.restservice.client.serdes.v1_0.InfoServizioAmministrazioneSerDes;
+import it.servizidigitali.restservice.client.serdes.v1_0.InfoServizioEnteSerDes;
 
 import java.io.Serializable;
 
@@ -15,10 +15,10 @@ import javax.annotation.Generated;
  * @generated
  */
 @Generated("")
-public class InfoServizioAmministrazione implements Cloneable, Serializable {
+public class InfoServizioEnte implements Cloneable, Serializable {
 
-	public static InfoServizioAmministrazione toDTO(String json) {
-		return InfoServizioAmministrazioneSerDes.toDTO(json);
+	public static InfoServizioEnte toDTO(String json) {
+		return InfoServizioEnteSerDes.toDTO(json);
 	}
 
 	public Boolean getActive() {
@@ -317,10 +317,8 @@ public class InfoServizioAmministrazione implements Cloneable, Serializable {
 	protected Boolean usableByChatbot;
 
 	@Override
-	public InfoServizioAmministrazione clone()
-		throws CloneNotSupportedException {
-
-		return (InfoServizioAmministrazione)super.clone();
+	public InfoServizioEnte clone() throws CloneNotSupportedException {
+		return (InfoServizioEnte)super.clone();
 	}
 
 	@Override
@@ -329,15 +327,13 @@ public class InfoServizioAmministrazione implements Cloneable, Serializable {
 			return true;
 		}
 
-		if (!(object instanceof InfoServizioAmministrazione)) {
+		if (!(object instanceof InfoServizioEnte)) {
 			return false;
 		}
 
-		InfoServizioAmministrazione infoServizioAmministrazione =
-			(InfoServizioAmministrazione)object;
+		InfoServizioEnte infoServizioEnte = (InfoServizioEnte)object;
 
-		return Objects.equals(
-			toString(), infoServizioAmministrazione.toString());
+		return Objects.equals(toString(), infoServizioEnte.toString());
 	}
 
 	@Override
@@ -348,7 +344,7 @@ public class InfoServizioAmministrazione implements Cloneable, Serializable {
 	}
 
 	public String toString() {
-		return InfoServizioAmministrazioneSerDes.toJSON(this);
+		return InfoServizioEnteSerDes.toJSON(this);
 	}
 
 }

@@ -1,18 +1,18 @@
 package it.servizidigitali.restservice.internal.resource.v1_0;
 
-import com.liferay.portal.kernel.model.Company;
-import com.liferay.portal.kernel.model.Organization;
-import com.liferay.portal.kernel.service.CompanyLocalService;
-import com.liferay.portal.kernel.service.OrganizationLocalService;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
-
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.NotFoundException;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
+import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.service.CompanyLocalService;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.util.Validator;
+
+import it.servizidigitali.common.utility.OrganizationUtility;
 import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
@@ -20,6 +20,8 @@ import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.restservice.dto.v1_0.InfoServizioEnte;
+import it.servizidigitali.restservice.internal.constant.ServiziDigitaliRestConstants;
+import it.servizidigitali.restservice.internal.util.MessageUtil;
 import it.servizidigitali.restservice.resource.v1_0.ServiziResource;
 
 /**
@@ -39,35 +41,56 @@ public class ServiziResourceImpl extends BaseServiziResourceImpl {
 
 	@Reference
 	private CompanyLocalService companyLocalService;
+	
+	@Reference
+	private OrganizationUtility _organizationUtility;
 
 	@Override
 	public InfoServizioEnte getInfoServizioEnte(@NotNull String codiceServizio, String nomeComune, String amministrazione) throws Exception {
 
-		Company company = companyLocalService.getCompanyByMx(PropsUtil.get(PropsKeys.COMPANY_DEFAULT_WEB_ID));
-		long organizationId = organizationLocalService.getOrganizationId(company.getCompanyId(), nomeComune);
+		MessageUtil messageUtil = new MessageUtil(ServiziDigitaliRestConstants.BUNDLE_SYMBOLIC_NAME, null);
+		
+		Organization organization = _organizationUtility.getByName(nomeComune);
+		
+		//Amministrazione = codice ipa = query su expando bridge
 
-		if (organizationId == 0) {
-			// TODO 404
+		if (Validator.isNull(organization)) {
+			
+			String message = messageUtil.getMessage("resourceNotFoundMessage", "Organization");
+			
+			throw new NotFoundException(message);
 		}
 
 		Servizio servizio = servizioLocalService.getServizioByCodice(codiceServizio);
 		if (servizio == null) {
-			// TODO 404
+			String message = messageUtil.getMessage("resourceNotFoundMessage", "Servizio");
+			throw new NotFoundException(message);
 		}
-		ServizioEntePK servizioEntePK = new ServizioEntePK(servizio.getServizioId(), organizationId);
+		ServizioEntePK servizioEntePK = new ServizioEntePK(servizio.getServizioId(), organization.getOrganizationId());
 		ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);
 
 		if (servizioEnte == null || !servizioEnte.isAttivo()) {
-			// TODO 404
+			String message = messageUtil.getMessage("resourceNotFoundMessage", "Servizio ente");
+			throw new NotFoundException(message);
 		}
-
-		Organization organization = organizationLocalService.getOrganization(organizationId);
 
 		InfoServizioEnte infoServizioEnte = new InfoServizioEnte();
 		infoServizioEnte.setCodiceIpa(organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo()).toString());
-		// TODO completare da servizioEnte
+		infoServizioEnte.setActive(servizioEnte.isAttivo());
+		// infoServizioEnte.setChatbotInline();
+		// infoServizioEnte.setChatbotInlineIntent(servizioEnte);
+		infoServizioEnte.setCode(servizio.getCodice());
+		// infoServizioEnte.setCorrelatedPaymentServiceCode(servizioEnte.);
+		infoServizioEnte.setDescription(servizioEnte.getDescrizione());
+		// infoServizioEnte.setDestinazioneUsos(null);
+		infoServizioEnte.setId(servizioEnte.getServizioId());
+		infoServizioEnte.setNomeComune(organization.getName());
+		// infoServizioEnte.setServiceCardUrl();
+		// infoServizioEnte.setServiceOnlineUrl();
+		infoServizioEnte.setTitle(servizioEnte.getNome());
+		// infoServizioEnte.setUsableByChatbot(null);
 
-		return super.getInfoServizioEnte(codiceServizio, nomeComune, amministrazione);
+		return infoServizioEnte;
 	}
 
 }

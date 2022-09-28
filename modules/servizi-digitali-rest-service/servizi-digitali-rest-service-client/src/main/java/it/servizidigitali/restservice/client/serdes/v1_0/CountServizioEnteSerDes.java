@@ -1,6 +1,6 @@
 package it.servizidigitali.restservice.client.serdes.v1_0;
 
-import it.servizidigitali.restservice.client.dto.v1_0.CountServizioAmministrazione;
+import it.servizidigitali.restservice.client.dto.v1_0.CountServizioEnte;
 import it.servizidigitali.restservice.client.json.BaseJSONParser;
 
 import java.util.Iterator;
@@ -16,28 +16,24 @@ import javax.annotation.Generated;
  * @generated
  */
 @Generated("")
-public class CountServizioAmministrazioneSerDes {
+public class CountServizioEnteSerDes {
 
-	public static CountServizioAmministrazione toDTO(String json) {
-		CountServizioAmministrazioneJSONParser
-			countServizioAmministrazioneJSONParser =
-				new CountServizioAmministrazioneJSONParser();
+	public static CountServizioEnte toDTO(String json) {
+		CountServizioEnteJSONParser countServizioEnteJSONParser =
+			new CountServizioEnteJSONParser();
 
-		return countServizioAmministrazioneJSONParser.parseToDTO(json);
+		return countServizioEnteJSONParser.parseToDTO(json);
 	}
 
-	public static CountServizioAmministrazione[] toDTOs(String json) {
-		CountServizioAmministrazioneJSONParser
-			countServizioAmministrazioneJSONParser =
-				new CountServizioAmministrazioneJSONParser();
+	public static CountServizioEnte[] toDTOs(String json) {
+		CountServizioEnteJSONParser countServizioEnteJSONParser =
+			new CountServizioEnteJSONParser();
 
-		return countServizioAmministrazioneJSONParser.parseToDTOs(json);
+		return countServizioEnteJSONParser.parseToDTOs(json);
 	}
 
-	public static String toJSON(
-		CountServizioAmministrazione countServizioAmministrazione) {
-
-		if (countServizioAmministrazione == null) {
+	public static String toJSON(CountServizioEnte countServizioEnte) {
+		if (countServizioEnte == null) {
 			return "null";
 		}
 
@@ -45,27 +41,27 @@ public class CountServizioAmministrazioneSerDes {
 
 		sb.append("{");
 
-		if (countServizioAmministrazione.getId() != null) {
+		if (countServizioEnte.getId() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
 			sb.append("\"id\": ");
 
-			sb.append(countServizioAmministrazione.getId());
+			sb.append(countServizioEnte.getId());
 		}
 
-		if (countServizioAmministrazione.getServiceCount() != null) {
+		if (countServizioEnte.getServiceCount() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
 			sb.append("\"serviceCount\": ");
 
-			sb.append(countServizioAmministrazione.getServiceCount());
+			sb.append(countServizioEnte.getServiceCount());
 		}
 
-		if (countServizioAmministrazione.getTitle() != null) {
+		if (countServizioEnte.getTitle() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
@@ -74,7 +70,7 @@ public class CountServizioAmministrazioneSerDes {
 
 			sb.append("\"");
 
-			sb.append(_escape(countServizioAmministrazione.getTitle()));
+			sb.append(_escape(countServizioEnte.getTitle()));
 
 			sb.append("\"");
 		}
@@ -85,84 +81,80 @@ public class CountServizioAmministrazioneSerDes {
 	}
 
 	public static Map<String, Object> toMap(String json) {
-		CountServizioAmministrazioneJSONParser
-			countServizioAmministrazioneJSONParser =
-				new CountServizioAmministrazioneJSONParser();
+		CountServizioEnteJSONParser countServizioEnteJSONParser =
+			new CountServizioEnteJSONParser();
 
-		return countServizioAmministrazioneJSONParser.parseToMap(json);
+		return countServizioEnteJSONParser.parseToMap(json);
 	}
 
 	public static Map<String, String> toMap(
-		CountServizioAmministrazione countServizioAmministrazione) {
+		CountServizioEnte countServizioEnte) {
 
-		if (countServizioAmministrazione == null) {
+		if (countServizioEnte == null) {
 			return null;
 		}
 
 		Map<String, String> map = new TreeMap<>();
 
-		if (countServizioAmministrazione.getId() == null) {
+		if (countServizioEnte.getId() == null) {
 			map.put("id", null);
 		}
 		else {
-			map.put("id", String.valueOf(countServizioAmministrazione.getId()));
+			map.put("id", String.valueOf(countServizioEnte.getId()));
 		}
 
-		if (countServizioAmministrazione.getServiceCount() == null) {
+		if (countServizioEnte.getServiceCount() == null) {
 			map.put("serviceCount", null);
 		}
 		else {
 			map.put(
 				"serviceCount",
-				String.valueOf(countServizioAmministrazione.getServiceCount()));
+				String.valueOf(countServizioEnte.getServiceCount()));
 		}
 
-		if (countServizioAmministrazione.getTitle() == null) {
+		if (countServizioEnte.getTitle() == null) {
 			map.put("title", null);
 		}
 		else {
-			map.put(
-				"title",
-				String.valueOf(countServizioAmministrazione.getTitle()));
+			map.put("title", String.valueOf(countServizioEnte.getTitle()));
 		}
 
 		return map;
 	}
 
-	public static class CountServizioAmministrazioneJSONParser
-		extends BaseJSONParser<CountServizioAmministrazione> {
+	public static class CountServizioEnteJSONParser
+		extends BaseJSONParser<CountServizioEnte> {
 
 		@Override
-		protected CountServizioAmministrazione createDTO() {
-			return new CountServizioAmministrazione();
+		protected CountServizioEnte createDTO() {
+			return new CountServizioEnte();
 		}
 
 		@Override
-		protected CountServizioAmministrazione[] createDTOArray(int size) {
-			return new CountServizioAmministrazione[size];
+		protected CountServizioEnte[] createDTOArray(int size) {
+			return new CountServizioEnte[size];
 		}
 
 		@Override
 		protected void setField(
-			CountServizioAmministrazione countServizioAmministrazione,
-			String jsonParserFieldName, Object jsonParserFieldValue) {
+			CountServizioEnte countServizioEnte, String jsonParserFieldName,
+			Object jsonParserFieldValue) {
 
 			if (Objects.equals(jsonParserFieldName, "id")) {
 				if (jsonParserFieldValue != null) {
-					countServizioAmministrazione.setId(
+					countServizioEnte.setId(
 						Long.valueOf((String)jsonParserFieldValue));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "serviceCount")) {
 				if (jsonParserFieldValue != null) {
-					countServizioAmministrazione.setServiceCount(
+					countServizioEnte.setServiceCount(
 						Long.valueOf((String)jsonParserFieldValue));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "title")) {
 				if (jsonParserFieldValue != null) {
-					countServizioAmministrazione.setTitle(
-						(String)jsonParserFieldValue);
+					countServizioEnte.setTitle((String)jsonParserFieldValue);
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 package it.servizidigitali.restservice.client.serdes.v1_0;
 
 import it.servizidigitali.restservice.client.dto.v1_0.DestinazioneUso;
-import it.servizidigitali.restservice.client.dto.v1_0.InfoServizioAmministrazione;
+import it.servizidigitali.restservice.client.dto.v1_0.InfoServizioEnte;
 import it.servizidigitali.restservice.client.json.BaseJSONParser;
 
 import java.util.Iterator;
@@ -18,28 +18,24 @@ import javax.annotation.Generated;
  * @generated
  */
 @Generated("")
-public class InfoServizioAmministrazioneSerDes {
+public class InfoServizioEnteSerDes {
 
-	public static InfoServizioAmministrazione toDTO(String json) {
-		InfoServizioAmministrazioneJSONParser
-			infoServizioAmministrazioneJSONParser =
-				new InfoServizioAmministrazioneJSONParser();
+	public static InfoServizioEnte toDTO(String json) {
+		InfoServizioEnteJSONParser infoServizioEnteJSONParser =
+			new InfoServizioEnteJSONParser();
 
-		return infoServizioAmministrazioneJSONParser.parseToDTO(json);
+		return infoServizioEnteJSONParser.parseToDTO(json);
 	}
 
-	public static InfoServizioAmministrazione[] toDTOs(String json) {
-		InfoServizioAmministrazioneJSONParser
-			infoServizioAmministrazioneJSONParser =
-				new InfoServizioAmministrazioneJSONParser();
+	public static InfoServizioEnte[] toDTOs(String json) {
+		InfoServizioEnteJSONParser infoServizioEnteJSONParser =
+			new InfoServizioEnteJSONParser();
 
-		return infoServizioAmministrazioneJSONParser.parseToDTOs(json);
+		return infoServizioEnteJSONParser.parseToDTOs(json);
 	}
 
-	public static String toJSON(
-		InfoServizioAmministrazione infoServizioAmministrazione) {
-
-		if (infoServizioAmministrazione == null) {
+	public static String toJSON(InfoServizioEnte infoServizioEnte) {
+		if (infoServizioEnte == null) {
 			return "null";
 		}
 
@@ -47,37 +43,37 @@ public class InfoServizioAmministrazioneSerDes {
 
 		sb.append("{");
 
-		if (infoServizioAmministrazione.getActive() != null) {
+		if (infoServizioEnte.getActive() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
 			sb.append("\"active\": ");
 
-			sb.append(infoServizioAmministrazione.getActive());
+			sb.append(infoServizioEnte.getActive());
 		}
 
-		if (infoServizioAmministrazione.getChatbotInline() != null) {
+		if (infoServizioEnte.getChatbotInline() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
 			sb.append("\"chatbotInline\": ");
 
-			sb.append(infoServizioAmministrazione.getChatbotInline());
+			sb.append(infoServizioEnte.getChatbotInline());
 		}
 
-		if (infoServizioAmministrazione.getChatbotInlineIntent() != null) {
+		if (infoServizioEnte.getChatbotInlineIntent() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
 			sb.append("\"chatbotInlineIntent\": ");
 
-			sb.append(infoServizioAmministrazione.getChatbotInlineIntent());
+			sb.append(infoServizioEnte.getChatbotInlineIntent());
 		}
 
-		if (infoServizioAmministrazione.getCode() != null) {
+		if (infoServizioEnte.getCode() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
@@ -86,12 +82,12 @@ public class InfoServizioAmministrazioneSerDes {
 
 			sb.append("\"");
 
-			sb.append(_escape(infoServizioAmministrazione.getCode()));
+			sb.append(_escape(infoServizioEnte.getCode()));
 
 			sb.append("\"");
 		}
 
-		if (infoServizioAmministrazione.getCodiceIpa() != null) {
+		if (infoServizioEnte.getCodiceIpa() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
@@ -100,14 +96,12 @@ public class InfoServizioAmministrazioneSerDes {
 
 			sb.append("\"");
 
-			sb.append(_escape(infoServizioAmministrazione.getCodiceIpa()));
+			sb.append(_escape(infoServizioEnte.getCodiceIpa()));
 
 			sb.append("\"");
 		}
 
-		if (infoServizioAmministrazione.getCorrelatedPaymentServiceCode() !=
-				null) {
-
+		if (infoServizioEnte.getCorrelatedPaymentServiceCode() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
@@ -117,14 +111,12 @@ public class InfoServizioAmministrazioneSerDes {
 			sb.append("\"");
 
 			sb.append(
-				_escape(
-					infoServizioAmministrazione.
-						getCorrelatedPaymentServiceCode()));
+				_escape(infoServizioEnte.getCorrelatedPaymentServiceCode()));
 
 			sb.append("\"");
 		}
 
-		if (infoServizioAmministrazione.getDescription() != null) {
+		if (infoServizioEnte.getDescription() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
@@ -133,12 +125,12 @@ public class InfoServizioAmministrazioneSerDes {
 
 			sb.append("\"");
 
-			sb.append(_escape(infoServizioAmministrazione.getDescription()));
+			sb.append(_escape(infoServizioEnte.getDescription()));
 
 			sb.append("\"");
 		}
 
-		if (infoServizioAmministrazione.getDestinazioneUsos() != null) {
+		if (infoServizioEnte.getDestinazioneUsos() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
@@ -147,18 +139,13 @@ public class InfoServizioAmministrazioneSerDes {
 
 			sb.append("[");
 
-			for (int i = 0;
-				 i < infoServizioAmministrazione.getDestinazioneUsos().length;
+			for (int i = 0; i < infoServizioEnte.getDestinazioneUsos().length;
 				 i++) {
 
 				sb.append(
-					String.valueOf(
-						infoServizioAmministrazione.getDestinazioneUsos()[i]));
+					String.valueOf(infoServizioEnte.getDestinazioneUsos()[i]));
 
-				if ((i + 1) <
-						infoServizioAmministrazione.
-							getDestinazioneUsos().length) {
-
+				if ((i + 1) < infoServizioEnte.getDestinazioneUsos().length) {
 					sb.append(", ");
 				}
 			}
@@ -166,17 +153,17 @@ public class InfoServizioAmministrazioneSerDes {
 			sb.append("]");
 		}
 
-		if (infoServizioAmministrazione.getId() != null) {
+		if (infoServizioEnte.getId() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
 			sb.append("\"id\": ");
 
-			sb.append(infoServizioAmministrazione.getId());
+			sb.append(infoServizioEnte.getId());
 		}
 
-		if (infoServizioAmministrazione.getNomeComune() != null) {
+		if (infoServizioEnte.getNomeComune() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
@@ -185,12 +172,12 @@ public class InfoServizioAmministrazioneSerDes {
 
 			sb.append("\"");
 
-			sb.append(_escape(infoServizioAmministrazione.getNomeComune()));
+			sb.append(_escape(infoServizioEnte.getNomeComune()));
 
 			sb.append("\"");
 		}
 
-		if (infoServizioAmministrazione.getServiceCardUrl() != null) {
+		if (infoServizioEnte.getServiceCardUrl() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
@@ -199,12 +186,12 @@ public class InfoServizioAmministrazioneSerDes {
 
 			sb.append("\"");
 
-			sb.append(_escape(infoServizioAmministrazione.getServiceCardUrl()));
+			sb.append(_escape(infoServizioEnte.getServiceCardUrl()));
 
 			sb.append("\"");
 		}
 
-		if (infoServizioAmministrazione.getServiceOnlineUrl() != null) {
+		if (infoServizioEnte.getServiceOnlineUrl() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
@@ -213,13 +200,12 @@ public class InfoServizioAmministrazioneSerDes {
 
 			sb.append("\"");
 
-			sb.append(
-				_escape(infoServizioAmministrazione.getServiceOnlineUrl()));
+			sb.append(_escape(infoServizioEnte.getServiceOnlineUrl()));
 
 			sb.append("\"");
 		}
 
-		if (infoServizioAmministrazione.getTitle() != null) {
+		if (infoServizioEnte.getTitle() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
@@ -228,19 +214,19 @@ public class InfoServizioAmministrazioneSerDes {
 
 			sb.append("\"");
 
-			sb.append(_escape(infoServizioAmministrazione.getTitle()));
+			sb.append(_escape(infoServizioEnte.getTitle()));
 
 			sb.append("\"");
 		}
 
-		if (infoServizioAmministrazione.getUsableByChatbot() != null) {
+		if (infoServizioEnte.getUsableByChatbot() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
 			}
 
 			sb.append("\"usableByChatbot\": ");
 
-			sb.append(infoServizioAmministrazione.getUsableByChatbot());
+			sb.append(infoServizioEnte.getUsableByChatbot());
 		}
 
 		sb.append("}");
@@ -249,184 +235,165 @@ public class InfoServizioAmministrazioneSerDes {
 	}
 
 	public static Map<String, Object> toMap(String json) {
-		InfoServizioAmministrazioneJSONParser
-			infoServizioAmministrazioneJSONParser =
-				new InfoServizioAmministrazioneJSONParser();
+		InfoServizioEnteJSONParser infoServizioEnteJSONParser =
+			new InfoServizioEnteJSONParser();
 
-		return infoServizioAmministrazioneJSONParser.parseToMap(json);
+		return infoServizioEnteJSONParser.parseToMap(json);
 	}
 
-	public static Map<String, String> toMap(
-		InfoServizioAmministrazione infoServizioAmministrazione) {
-
-		if (infoServizioAmministrazione == null) {
+	public static Map<String, String> toMap(InfoServizioEnte infoServizioEnte) {
+		if (infoServizioEnte == null) {
 			return null;
 		}
 
 		Map<String, String> map = new TreeMap<>();
 
-		if (infoServizioAmministrazione.getActive() == null) {
+		if (infoServizioEnte.getActive() == null) {
 			map.put("active", null);
 		}
 		else {
-			map.put(
-				"active",
-				String.valueOf(infoServizioAmministrazione.getActive()));
+			map.put("active", String.valueOf(infoServizioEnte.getActive()));
 		}
 
-		if (infoServizioAmministrazione.getChatbotInline() == null) {
+		if (infoServizioEnte.getChatbotInline() == null) {
 			map.put("chatbotInline", null);
 		}
 		else {
 			map.put(
 				"chatbotInline",
-				String.valueOf(infoServizioAmministrazione.getChatbotInline()));
+				String.valueOf(infoServizioEnte.getChatbotInline()));
 		}
 
-		if (infoServizioAmministrazione.getChatbotInlineIntent() == null) {
+		if (infoServizioEnte.getChatbotInlineIntent() == null) {
 			map.put("chatbotInlineIntent", null);
 		}
 		else {
 			map.put(
 				"chatbotInlineIntent",
-				String.valueOf(
-					infoServizioAmministrazione.getChatbotInlineIntent()));
+				String.valueOf(infoServizioEnte.getChatbotInlineIntent()));
 		}
 
-		if (infoServizioAmministrazione.getCode() == null) {
+		if (infoServizioEnte.getCode() == null) {
 			map.put("code", null);
 		}
 		else {
-			map.put(
-				"code", String.valueOf(infoServizioAmministrazione.getCode()));
+			map.put("code", String.valueOf(infoServizioEnte.getCode()));
 		}
 
-		if (infoServizioAmministrazione.getCodiceIpa() == null) {
+		if (infoServizioEnte.getCodiceIpa() == null) {
 			map.put("codiceIpa", null);
 		}
 		else {
 			map.put(
-				"codiceIpa",
-				String.valueOf(infoServizioAmministrazione.getCodiceIpa()));
+				"codiceIpa", String.valueOf(infoServizioEnte.getCodiceIpa()));
 		}
 
-		if (infoServizioAmministrazione.getCorrelatedPaymentServiceCode() ==
-				null) {
-
+		if (infoServizioEnte.getCorrelatedPaymentServiceCode() == null) {
 			map.put("correlatedPaymentServiceCode", null);
 		}
 		else {
 			map.put(
 				"correlatedPaymentServiceCode",
 				String.valueOf(
-					infoServizioAmministrazione.
-						getCorrelatedPaymentServiceCode()));
+					infoServizioEnte.getCorrelatedPaymentServiceCode()));
 		}
 
-		if (infoServizioAmministrazione.getDescription() == null) {
+		if (infoServizioEnte.getDescription() == null) {
 			map.put("description", null);
 		}
 		else {
 			map.put(
 				"description",
-				String.valueOf(infoServizioAmministrazione.getDescription()));
+				String.valueOf(infoServizioEnte.getDescription()));
 		}
 
-		if (infoServizioAmministrazione.getDestinazioneUsos() == null) {
+		if (infoServizioEnte.getDestinazioneUsos() == null) {
 			map.put("destinazioneUsos", null);
 		}
 		else {
 			map.put(
 				"destinazioneUsos",
-				String.valueOf(
-					infoServizioAmministrazione.getDestinazioneUsos()));
+				String.valueOf(infoServizioEnte.getDestinazioneUsos()));
 		}
 
-		if (infoServizioAmministrazione.getId() == null) {
+		if (infoServizioEnte.getId() == null) {
 			map.put("id", null);
 		}
 		else {
-			map.put("id", String.valueOf(infoServizioAmministrazione.getId()));
+			map.put("id", String.valueOf(infoServizioEnte.getId()));
 		}
 
-		if (infoServizioAmministrazione.getNomeComune() == null) {
+		if (infoServizioEnte.getNomeComune() == null) {
 			map.put("nomeComune", null);
 		}
 		else {
 			map.put(
-				"nomeComune",
-				String.valueOf(infoServizioAmministrazione.getNomeComune()));
+				"nomeComune", String.valueOf(infoServizioEnte.getNomeComune()));
 		}
 
-		if (infoServizioAmministrazione.getServiceCardUrl() == null) {
+		if (infoServizioEnte.getServiceCardUrl() == null) {
 			map.put("serviceCardUrl", null);
 		}
 		else {
 			map.put(
 				"serviceCardUrl",
-				String.valueOf(
-					infoServizioAmministrazione.getServiceCardUrl()));
+				String.valueOf(infoServizioEnte.getServiceCardUrl()));
 		}
 
-		if (infoServizioAmministrazione.getServiceOnlineUrl() == null) {
+		if (infoServizioEnte.getServiceOnlineUrl() == null) {
 			map.put("serviceOnlineUrl", null);
 		}
 		else {
 			map.put(
 				"serviceOnlineUrl",
-				String.valueOf(
-					infoServizioAmministrazione.getServiceOnlineUrl()));
+				String.valueOf(infoServizioEnte.getServiceOnlineUrl()));
 		}
 
-		if (infoServizioAmministrazione.getTitle() == null) {
+		if (infoServizioEnte.getTitle() == null) {
 			map.put("title", null);
 		}
 		else {
-			map.put(
-				"title",
-				String.valueOf(infoServizioAmministrazione.getTitle()));
+			map.put("title", String.valueOf(infoServizioEnte.getTitle()));
 		}
 
-		if (infoServizioAmministrazione.getUsableByChatbot() == null) {
+		if (infoServizioEnte.getUsableByChatbot() == null) {
 			map.put("usableByChatbot", null);
 		}
 		else {
 			map.put(
 				"usableByChatbot",
-				String.valueOf(
-					infoServizioAmministrazione.getUsableByChatbot()));
+				String.valueOf(infoServizioEnte.getUsableByChatbot()));
 		}
 
 		return map;
 	}
 
-	public static class InfoServizioAmministrazioneJSONParser
-		extends BaseJSONParser<InfoServizioAmministrazione> {
+	public static class InfoServizioEnteJSONParser
+		extends BaseJSONParser<InfoServizioEnte> {
 
 		@Override
-		protected InfoServizioAmministrazione createDTO() {
-			return new InfoServizioAmministrazione();
+		protected InfoServizioEnte createDTO() {
+			return new InfoServizioEnte();
 		}
 
 		@Override
-		protected InfoServizioAmministrazione[] createDTOArray(int size) {
-			return new InfoServizioAmministrazione[size];
+		protected InfoServizioEnte[] createDTOArray(int size) {
+			return new InfoServizioEnte[size];
 		}
 
 		@Override
 		protected void setField(
-			InfoServizioAmministrazione infoServizioAmministrazione,
-			String jsonParserFieldName, Object jsonParserFieldValue) {
+			InfoServizioEnte infoServizioEnte, String jsonParserFieldName,
+			Object jsonParserFieldValue) {
 
 			if (Objects.equals(jsonParserFieldName, "active")) {
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setActive(
-						(Boolean)jsonParserFieldValue);
+					infoServizioEnte.setActive((Boolean)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "chatbotInline")) {
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setChatbotInline(
+					infoServizioEnte.setChatbotInline(
 						(Boolean)jsonParserFieldValue);
 				}
 			}
@@ -434,39 +401,37 @@ public class InfoServizioAmministrazioneSerDes {
 						jsonParserFieldName, "chatbotInlineIntent")) {
 
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setChatbotInlineIntent(
+					infoServizioEnte.setChatbotInlineIntent(
 						(Boolean)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "code")) {
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setCode(
-						(String)jsonParserFieldValue);
+					infoServizioEnte.setCode((String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "codiceIpa")) {
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setCodiceIpa(
-						(String)jsonParserFieldValue);
+					infoServizioEnte.setCodiceIpa((String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(
 						jsonParserFieldName, "correlatedPaymentServiceCode")) {
 
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setCorrelatedPaymentServiceCode(
+					infoServizioEnte.setCorrelatedPaymentServiceCode(
 						(String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "description")) {
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setDescription(
+					infoServizioEnte.setDescription(
 						(String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "destinazioneUsos")) {
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setDestinazioneUsos(
+					infoServizioEnte.setDestinazioneUsos(
 						Stream.of(
 							toStrings((Object[])jsonParserFieldValue)
 						).map(
@@ -479,37 +444,36 @@ public class InfoServizioAmministrazioneSerDes {
 			}
 			else if (Objects.equals(jsonParserFieldName, "id")) {
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setId(
+					infoServizioEnte.setId(
 						Long.valueOf((String)jsonParserFieldValue));
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "nomeComune")) {
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setNomeComune(
+					infoServizioEnte.setNomeComune(
 						(String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "serviceCardUrl")) {
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setServiceCardUrl(
+					infoServizioEnte.setServiceCardUrl(
 						(String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "serviceOnlineUrl")) {
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setServiceOnlineUrl(
+					infoServizioEnte.setServiceOnlineUrl(
 						(String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "title")) {
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setTitle(
-						(String)jsonParserFieldValue);
+					infoServizioEnte.setTitle((String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "usableByChatbot")) {
 				if (jsonParserFieldValue != null) {
-					infoServizioAmministrazione.setUsableByChatbot(
+					infoServizioEnte.setUsableByChatbot(
 						(Boolean)jsonParserFieldValue);
 				}
 			}

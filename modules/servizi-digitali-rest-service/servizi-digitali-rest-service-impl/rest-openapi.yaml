@@ -56,6 +56,27 @@ components:
             required: true
             schema:
               type: string
+    
+    responses:
+      NotFound:
+        content:
+          application/json:
+              schema:
+                  $ref: "#/components/schemas/Error"
+          application/xml:
+              schema:
+                  $ref: "#/components/schemas/Error"
+        description: The specified resource was not found
+           
+      UnauthorizedError:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Error"
+        description: Authentication information is missing or invalid   
             
     schemas:
     
@@ -257,6 +278,19 @@ components:
               type: string
             lastIntentMatched:
               type: string
+          
+        Error:
+          type: object
+          properties:
+            errorCode:
+              type: integer
+              description: Internal error code mapping
+            errorDescription:
+              type: string
+            message:
+              type: string
+            status:
+              type: integer
 paths:
     "/richieste-servizio":
         get:
@@ -471,6 +505,8 @@ paths:
               application/xml:
                 schema:
                   $ref: '#/components/schemas/InfoServizioEnte'
+          404: 
+            $ref: '#/components/responses/NotFound'
     "/servizi/count":
       get:
         operationId: getCountServizioEnte

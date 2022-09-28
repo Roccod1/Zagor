@@ -1,7 +1,7 @@
 package it.servizidigitali.restservice.client.dto.v1_0;
 
 import it.servizidigitali.restservice.client.function.UnsafeSupplier;
-import it.servizidigitali.restservice.client.serdes.v1_0.CountServizioAmministrazioneSerDes;
+import it.servizidigitali.restservice.client.serdes.v1_0.CountServizioEnteSerDes;
 
 import java.io.Serializable;
 
@@ -14,10 +14,10 @@ import javax.annotation.Generated;
  * @generated
  */
 @Generated("")
-public class CountServizioAmministrazione implements Cloneable, Serializable {
+public class CountServizioEnte implements Cloneable, Serializable {
 
-	public static CountServizioAmministrazione toDTO(String json) {
-		return CountServizioAmministrazioneSerDes.toDTO(json);
+	public static CountServizioEnte toDTO(String json) {
+		return CountServizioEnteSerDes.toDTO(json);
 	}
 
 	public Long getId() {
@@ -82,10 +82,8 @@ public class CountServizioAmministrazione implements Cloneable, Serializable {
 	protected String title;
 
 	@Override
-	public CountServizioAmministrazione clone()
-		throws CloneNotSupportedException {
-
-		return (CountServizioAmministrazione)super.clone();
+	public CountServizioEnte clone() throws CloneNotSupportedException {
+		return (CountServizioEnte)super.clone();
 	}
 
 	@Override
@@ -94,15 +92,13 @@ public class CountServizioAmministrazione implements Cloneable, Serializable {
 			return true;
 		}
 
-		if (!(object instanceof CountServizioAmministrazione)) {
+		if (!(object instanceof CountServizioEnte)) {
 			return false;
 		}
 
-		CountServizioAmministrazione countServizioAmministrazione =
-			(CountServizioAmministrazione)object;
+		CountServizioEnte countServizioEnte = (CountServizioEnte)object;
 
-		return Objects.equals(
-			toString(), countServizioAmministrazione.toString());
+		return Objects.equals(toString(), countServizioEnte.toString());
 	}
 
 	@Override
@@ -113,7 +109,7 @@ public class CountServizioAmministrazione implements Cloneable, Serializable {
 	}
 
 	public String toString() {
-		return CountServizioAmministrazioneSerDes.toJSON(this);
+		return CountServizioEnteSerDes.toJSON(this);
 	}
 
 }
