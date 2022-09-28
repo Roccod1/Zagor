@@ -19,8 +19,7 @@ import it.servizidigitali.common.utility.model.IndirizzoResidenza;
  * @author pindi
  *
  */
-
-@Component(name = "utenteUtility", service = UtenteUtility.class)
+@Component(immediate = true, name = "utenteUtility", service = UtenteUtility.class)
 public class UtenteUtility {
 
 	private static final Log log = LogFactoryUtil.getLog(UtenteUtility.class.getName());
@@ -45,7 +44,7 @@ public class UtenteUtility {
 				if (residenza != null) {
 					String residenzaString = (String) residenza;
 					String[] split = residenzaString.split(StringPool.SPACE);
-					
+
 					if (split.length >= 5) {
 						indirizzoResidenza.setTipologia(split[0]);
 						indirizzoResidenza.setIndirizzo(split[1]);
@@ -55,7 +54,8 @@ public class UtenteUtility {
 						if (split.length > 5) {
 							indirizzoResidenza.setProvincia(split[5]);
 						}
-					} else {
+					}
+					else {
 						return null;
 					}
 				}
