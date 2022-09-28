@@ -90,7 +90,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
 
-		log.debug("render presentatore forms");
+		log.debug("render presentatore forms.");
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
