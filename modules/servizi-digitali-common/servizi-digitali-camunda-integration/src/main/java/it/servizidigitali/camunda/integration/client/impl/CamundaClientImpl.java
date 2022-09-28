@@ -199,14 +199,13 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<Task> getTasksByBusinessKey(String tenantId, String businessKey, boolean includeCandidateGroups) throws CamundaClientException {
+	public List<Task> getTasksByBusinessKey(String tenantId, String businessKey) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
 
 			TaskQueryDto q = new TaskQueryDto();
 			q.setProcessInstanceBusinessKey(businessKey);
-			q.setWithCandidateGroups(includeCandidateGroups);
 
 			if (Validator.isNotNull(tenantId)) {
 				q.setTenantIdIn(Arrays.asList(tenantId));
