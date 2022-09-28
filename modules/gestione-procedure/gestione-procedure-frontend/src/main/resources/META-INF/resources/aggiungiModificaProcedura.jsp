@@ -158,7 +158,7 @@
 									
 										<c:when test="${not empty listaTemplatePdf}">
 											<c:forEach items="${listaTemplatePdf}" var="templatePdf" varStatus="loop">
-												<div class="lfr-form-row lfr-form-row-inline">
+												<div class="lfr-form-row lfr-form-row-inline" id="jasperDiv${loop.index}">
 													<aui:input type="hidden" name="idAllegatoJasper${loop.index}" value="${templatePdf.templatePdfId}"/>
 													<p>${templatePdf.nomeFile}</p>
 													<aui:input type="file" name="jasperReportFile${loop.index}" label="allegato-jasper-report">
@@ -182,7 +182,7 @@
 										</c:when>
 										
 										<c:otherwise>
-											<div class="lfr-form-row lfr-form-row-inline">
+											<div class="lfr-form-row lfr-form-row-inline" id="jasperDiv0">
 													<aui:input type="hidden" name="idAllegatoJasper0" value="0"/>
 													<aui:input type="file" name="jasperReportFile0" label="allegato-jasper-report">
 													<aui:validator name="acceptFiles">
@@ -190,6 +190,11 @@
 													</aui:validator>	
 													</aui:input>
 													<aui:input label="principale" type="checkbox" id="allegatoPrincipale0" name="allegatoPrincipale0" cssClass="checkboxPrincipaleAllegati" onClick="checkboxJasperReport(this);"/>
+													<aui:row>
+														<a class="aggiungiJasper" onclick="aggiungiRigaJasper();">Aggiungi</a>
+														<a id="rimuoviJasper0" onclick="eliminaRigaJasperReport(this); ">Rimuovi</a>
+													</aui:row>
+													
 											</div>
 										</c:otherwise>
 									
@@ -213,39 +218,65 @@
 
 </aui:row>
 
-<aui:script use="liferay-auto-fields">
-	new Liferay.AutoFields({
-		contentBox: '#<portlet:namespace />container-upload-allegati',
-		fieldIndexes: '<portlet:namespace />rowIndexes',
-		 on: {
-       		'clone': function(event) {
-       			var ultimoInputFile = $("#container-allegati-template").find('input[type=file]:last');
-       			var nomeFile = $("#container-allegati-template").find('p:last');
-       			$(ultimoInputFile).val("");
-       			nomeFile.remove();
-       		},
-       		'delete': function(event) {
-       			 console.log(event);
-	       		 var rowEliminata = event.deletedRow;
-	       		 rowEliminata = rowEliminata.replace('DIV','');
-	       		 console.log("Riga eliminata: " + rowEliminata);
-       		}
-       	}
-	}).render();
-</aui:script>
 
 <script>
 
 	var listaFormIdIntegrativi = ${listaFormIntegrativiProcedura};
 	var listaTipiIntegrazioneBackoffice = ${listaTipoIntegrazioneBackofficeProcedura};
 	var valueSelectAllegati = $('#<portlet:namespace />tipiGenerazioneTemplate').val();
-
-
+	var indexJasperReport = 1;
+	
+	 
 	$(document).ready(function() {
+		
 		if (valueSelectAllegati == "JASPER_REPORT") {
 			$('#container-allegati-template').removeClass("invisible");
 		}
+		
+		var conteggioJasperPresenti = $("#<portlet:namespace />container-upload-allegati > div").length; 
+		
+		if(conteggioJasperPresenti>0){
+			indexJasperReport = conteggioJasperPresenti;
+		}
+
 	});
+	
+	
+	function aggiungiRigaJasper(){
+		 var nuovaDiv = '<div class="lfr-form-row lfr-form-row-inline" id="jasperDiv'+ indexJasperReport +'"> <input type="hidden" name="idAllegatoJasper'+ indexJasperReport +'" value="0"> <label>Allegato Jasper Report</label> <input type="file" class="field form-control" id="jasperReportFile'+ indexJasperReport +'" name="<portlet:namespace />jasperReportFile'+ indexJasperReport +'"> <input type="checkbox" class="checkboxPrincipaleAllegati" id="allegatoPrincipale'+ indexJasperReport +'" name="<portlet:namespace />allegatoPrincipale'+ indexJasperReport +'" onClick="checkboxJasperReport(this);"/> <label>Principale</label> <div class="row"> <a class="aggiungiJasper" onclick="aggiungiRigaJasper();">Aggiungi</a> <a id="rimuoviJasper'+ indexJasperReport +'" onclick="eliminaRigaJasperReport(this);">Rimuovi</a> </div> </div>';
+		 $('#<portlet:namespace />container-upload-allegati').append(nuovaDiv);
+		 indexJasperReport++;
+	}
+
+	
+	function eliminaRigaJasperReport(btn){
+		var id = $(btn).attr('id').replace('rimuoviJasper','');
+		
+		var checkboxPrincipale = $('#<portlet:namespace />allegatoPrincipale' + id).is(":checked");
+		
+		if(!checkboxPrincipale){
+			$('#jasperDiv' + id).remove();
+		    shiftRowJasperReport(id);
+		    indexJasperReport--;
+		}
+		
+	}
+	
+	function shiftRowJasperReport(index) {
+	    i = index +1;
+	    newIndex = i - 1;
+	    
+	    while(i<indexJasperReport){
+	        $("#jasperReportFile" + i).attr("id","jasperReportFile" + newIndex);
+	        $("#jasperReportFile" + i).attr("name","<portlet:namespace />jasperReportFile" + newIndex);
+	        
+	        $("#allegatoPrincipale" + i).attr("id","allegatoPrincipale" + newIndex);
+	        $("#allegatoPrincipale" + i).attr("name","<portlet:namespace />allegatoPrincipale" + newIndex);
+	        
+	        i++;
+	    }
+	  
+	}
 
 	function checkboxJasperReport(checkbox) {
 
