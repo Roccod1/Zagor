@@ -41,6 +41,9 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 @Component(//
 		immediate = true, //
 		property = { //
+
+				"com.liferay.portlet.instanceable=true", "javax.portlet.display-name=PresentatoreForms", //
+				"javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp", //
 				"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
 				"mvc.command.name=" + "/caricaCompilaIstanza"//
 		}, //
@@ -55,7 +58,7 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 
 	@Reference
 	private AlpacaService alpacaService;
-	
+
 	@Reference
 	private DatiAnagraficiPortletService datiAnagraficiPortletService;
 
@@ -83,16 +86,16 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 
 			boolean stepComponentiFamiliari = procedura.getStep1Attivo();
 			String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
-			
+
 			if (Boolean.valueOf(isBozza) && istanzaFormRichiesta != null) {
 				jsonDataBozza = gson.toJson(gson.fromJson(istanzaFormRichiesta.getJson(), FormData.class));
-				formData = AlpacaUtil.loadFormData(form, jsonDataBozza, true);
+				formData = AlpacaUtil.loadFormData(form, jsonDataBozza, true, themeDisplay.getPortalURL());
 				alpacaStructure = formData.getAlpaca();
 			}
 			else {
-				
+
 				try {
-					
+
 					if (stepComponentiFamiliari) {
 						Long organizationId = themeDisplay.getSiteGroup().getOrganizationId();
 						String codiceFiscale = screenName;
@@ -100,24 +103,23 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 						IntegrationPreferences integrationPreferences = new IntegrationPreferences();
 						integrationPreferences.setUsaCache(procedura.isAbilitaCacheIntegrazioneBackoffice());
 
-						List<ComponenteNucleoFamiliare> componentiNucleoFamiliare = datiAnagraficiPortletService.getComponentiNucleoFamiliare(codiceFiscale, organizationId,
-								integrationPreferences);
+						List<ComponenteNucleoFamiliare> componentiNucleoFamiliare = datiAnagraficiPortletService.getComponentiNucleoFamiliare(codiceFiscale, organizationId, integrationPreferences);
 						renderRequest.setAttribute("componentiNucleoFamiliare", componentiNucleoFamiliare);
 						renderRequest.setAttribute("codiceFiscaleManuale", codiceFiscale);
 						renderRequest.setAttribute("filtroComponentiFamiliari", filtroComponentiFamiliari);
 
 						return PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO;
 
-					}else {
-						formData = AlpacaUtil.loadFormData(form, null, true);
+					}
+					else {
+						formData = AlpacaUtil.loadFormData(form, null, true, themeDisplay.getPortalURL());
 						alpacaStructure = formData.getAlpaca();
 
 						UserPreferences userPreferences = new UserPreferences();
 						userPreferences.setCodiceFiscaleRichiedente(screenName);
 
 						if (PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME) != null) {
-							userPreferences = (UserPreferences) PortalUtil.getHttpServletRequest(renderRequest).getSession()
-									.getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME);
+							userPreferences = (UserPreferences) PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME);
 						}
 
 						JsonObject data = gson.fromJson(gson.toJson(alpacaStructure.getData()), JsonObject.class);
@@ -142,7 +144,8 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 							}
 						}
 					}
-				}catch(Exception e) {
+				}
+				catch (Exception e) {
 					log.error(e.getMessage(), e);
 				}
 
