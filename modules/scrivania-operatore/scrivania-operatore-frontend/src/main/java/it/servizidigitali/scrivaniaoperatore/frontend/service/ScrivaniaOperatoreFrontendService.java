@@ -264,7 +264,7 @@ public class ScrivaniaOperatoreFrontendService {
 			User currentUser = userLocalService.getUser(userId);
 
 			String tenantId = String.valueOf(serviceContext.getScopeGroup().getOrganizationId());
-			List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(idRichiesta), false);
+			List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(idRichiesta));
 			if (tasksByBusinessKey != null) {
 				for (Task task : tasksByBusinessKey) {
 					String assignee = task.getAssignee();
@@ -477,7 +477,7 @@ public class ScrivaniaOperatoreFrontendService {
 			allegatoRichiestaLocalService.updateVisibilitaAllegatiRichiesta(fileEntryIds, true);
 		}
 
-		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId), true);
+		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId));
 		if (tasksByBusinessKey != null) {
 
 			for (Task task : tasksByBusinessKey) {
@@ -515,7 +515,7 @@ public class ScrivaniaOperatoreFrontendService {
 		User currentUser = userLocalService.getUser(serviceContext.getUserId());
 		User responsabileUser = userLocalService.getUser(userIdResponsabile);
 
-		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId), true);
+		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId));
 		if (tasksByBusinessKey != null) {
 
 			for (Task task : tasksByBusinessKey) {
@@ -597,7 +597,7 @@ public class ScrivaniaOperatoreFrontendService {
 
 		}
 
-		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId), true);
+		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId));
 		if (tasksByBusinessKey != null) {
 
 			for (Task task : tasksByBusinessKey) {
