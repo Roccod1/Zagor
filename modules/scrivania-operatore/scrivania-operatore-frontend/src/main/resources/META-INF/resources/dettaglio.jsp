@@ -7,7 +7,7 @@
 	<aui:form action="${assegnaResponsabileURL}">
 		<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 		<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
-	
+		<aui:input type="hidden" name="assegnaResponsabileVar" value="${assegnaResponsabileVar}" />
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">

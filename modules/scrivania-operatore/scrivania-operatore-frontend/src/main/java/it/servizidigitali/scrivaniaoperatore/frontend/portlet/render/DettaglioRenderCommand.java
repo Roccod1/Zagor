@@ -89,6 +89,12 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 
 		List<AzioneUtente> azioni = scrivaniaOperatoreFrontendService.getAzioniUtenteDettaglioRichiesta(id, ctx);
 		Map<CamundaCodiciOperazioniUtente, Boolean> azioniMask = getAzioniMask(azioni);
+		String assegnaResponsabileVar = azioni.stream()
+				.filter(x -> CamundaCodiciOperazioniUtente.ASSEGNA_RESPONSABILE.equals(CamundaCodiciOperazioniUtente.valueOf(x.getCodiceAzioneUtente())))
+				.map(x -> x.getVariableSet())
+				.findFirst()
+				.orElse(null);
+		request.setAttribute("assegnaResponsabileVar", assegnaResponsabileVar);
 		request.setAttribute("hasAssegnaAltroResponsabile", azioniMask.get(CamundaCodiciOperazioniUtente.ASSEGNA_ALTRO_RESPONSABILE));
 		request.setAttribute("hasAssegnaResponsabile", azioniMask.get(CamundaCodiciOperazioniUtente.ASSEGNA_RESPONSABILE));
 		request.setAttribute("hasEsitoPositivo", azioniMask.get(CamundaCodiciOperazioniUtente.ESITO_PROCEDIMENTO_POSITIVO));
