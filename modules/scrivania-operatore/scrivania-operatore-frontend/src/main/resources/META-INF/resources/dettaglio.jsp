@@ -353,8 +353,44 @@
 		</div>
 	</div>
 </div>
-			
 
+<div class="modal fade" tabindex="-1" id="<portlet:namespace />rimandaAlReferenteModal" style="display: none;">
+	<portlet:actionURL var="rimandaAlReferenteURL" name="/action/rimandaAlReferente">
+	</portlet:actionURL>
+	
+	<aui:form action="${rimandaAlReferenteURL}">
+		<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
+		<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
+		
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title"><liferay-ui:message key="rimanda-al-referente" /></h5>
+					<button type="button" class="close" data-dismiss="modal">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label>
+							<liferay-ui:message key="commento" />
+						</label>
+						<textarea class="form-control" name="<portlet:namespace />commento"></textarea>
+					</div>
+				</div>
+				<div class="modal-footer d-flex justify-content-end">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">
+						<liferay-ui:message key="annulla" />
+					</button>
+					<button type="button" class="btn btn-primary ml-1 submit">
+						<liferay-ui:message key="conferma" />
+					</button>
+				</div>
+			</div>
+		</div>
+	</aui:form>
+</div>
+			
 <portlet:renderURL var="dettaglioURL">
 	<portlet:param name="mvcRenderCommandName" value="/render/dettaglio" />
 	<portlet:param name="id" value="${richiesta.id}" />
@@ -399,6 +435,10 @@
 	});
 	
 	$("#<portlet:namespace />rilasciaModal").find(".submit").on("click", function() {
+		$(this).parents("form").submit();
+	});
+	
+	$("#<portlet:namespace />rimandaAlReferenteModal").find(".submit").on("click", function() {
 		$(this).parents("form").submit();
 	});
 	

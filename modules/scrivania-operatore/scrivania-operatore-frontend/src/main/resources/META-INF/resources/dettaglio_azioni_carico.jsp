@@ -38,6 +38,10 @@
 					<liferay-ui:message key="rilascia" />
 				</button>
 			</c:if>
+			
+			<button class="btn btn-outline-primary mr-1 mt-1" data-toggle="modal" data-target="#<portlet:namespace />rimandaAlReferenteModal">
+				<liferay-ui:message key="rimanda-al-referente" />
+			</button>
 		</div>
 	</div>
 </c:if>
