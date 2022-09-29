@@ -311,12 +311,12 @@ public class GestioneProcedureMiddlewareService {
 			_log.error("Errore durante l'aggiornamento del file del template con ID : " + templatePdfId);
 		}
 
-		TemplatePdf templatePdf = aggiornaCreaTemplatePdf(templatePdfId, proceduraId, principale, userId, companyId, userFullName, fileEntryId);
+		TemplatePdf templatePdf = aggiornaCreaTemplatePdf(templatePdfId, proceduraId, principale, userId, groupId, companyId, userFullName, fileEntryId);
 
 		return templatePdf;
 	}
 
-	public TemplatePdf aggiornaCreaTemplatePdf(long templatePdfId, long proceduraId, boolean principale, long userId, long companyId, String userFullName, long fileEntryId) {
+	public TemplatePdf aggiornaCreaTemplatePdf(long templatePdfId, long proceduraId, boolean principale, long userId, long groupId, long companyId, String userFullName, long fileEntryId) {
 		TemplatePdf templatePdf = null;
 		long idTemplatePdfPrincipale = 0;
 
@@ -329,6 +329,7 @@ public class GestioneProcedureMiddlewareService {
 			}
 
 			templatePdf.setUserId(userId);
+			templatePdf.setGroupId(groupId);
 			templatePdf.setCompanyId(companyId);
 			templatePdf.setUserName(userFullName);
 
@@ -337,7 +338,6 @@ public class GestioneProcedureMiddlewareService {
 			}
 
 			templatePdf.setProceduraId(proceduraId);
-			templatePdf.setAttivo(Boolean.TRUE);
 
 			if (principale && idTemplatePdfPrincipale == 0) {
 				idTemplatePdfPrincipale = templatePdf.getTemplatePdfId();
@@ -410,7 +410,7 @@ public class GestioneProcedureMiddlewareService {
 		try {
 			if (proceduraId > 0) {
 				listaTemplatePdfNomeFile = new ArrayList<TemplatePdf>();
-				List<TemplatePdf> listaTemplatePdf = templatePdfLocalService.getTemplatePdfByProceduraIdAndAttivo(proceduraId, attivo);
+				List<TemplatePdf> listaTemplatePdf = templatePdfLocalService.getTemplatePdfByProceduraId(proceduraId);
 				Map<Long, FileEntry> templatePdfFileEntriesMap = templatePdfFileService.getTemplatePdfFileEntriesMap(listaTemplatePdf);
 				listaTemplatePdfNomeFile = new ArrayList<TemplatePdf>();
 				for (TemplatePdf templatePdf : listaTemplatePdf) {
@@ -452,13 +452,8 @@ public class GestioneProcedureMiddlewareService {
 		try {
 			for (TemplatePdf template : listaTemplatePdf) {
 				if (!listaReportDaMantenere.contains(template.getTemplatePdfId())) {
-					if (template.getTemplatePdfParentId() > 0) {
-						template.setAttivo(false);
-						templatePdfLocalService.updateTemplatePdf(template);
-					}
-					else {
-						_log.error("Impossibile eliminare l'allegato jasper con ID : " + template.getTemplatePdfId() + "perché è principale");
-					}
+					templatePdfFileService.deleteTemplatePdfFileEntry(template);
+					templatePdfLocalService.deleteTemplatePdf(template.getTemplatePdfId());
 				}
 			}
 		}

@@ -62,7 +62,7 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 		long companyGroupId = themeDisplay.getCompanyGroupId();
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
-		String[] rowIndexes = ParamUtil.getStringValues(actionRequest, "rowIndexes");
+		String rowIndexes = ParamUtil.getString(actionRequest, "countJasperReport");
 
 		long idProcedura = ParamUtil.getLong(actionRequest, GestioneProcedurePortletKeys.ID_PROCEDURA);
 		String nome = ParamUtil.getString(actionRequest, GestioneProcedurePortletKeys.NOME);
@@ -157,20 +157,14 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 						templatePrincipaleProcedura = gestioneProcedureMiddlewareService.recuperaTemplatePdfPrincipale(idProcedura);
 					}
 
-					for (int i = 0; i < rowIndexes.length; i++) {
-						boolean principale = ParamUtil.getBoolean(actionRequest, "allegatoPrincipale" + rowIndexes[i]);
-						long reportId = ParamUtil.getLong(actionRequest, "idAllegatoJasper" + rowIndexes[i]);
+					for (int i = 0; i < Long.valueOf(rowIndexes); i++) {
+						boolean principale = ParamUtil.getBoolean(actionRequest, "allegatoPrincipale" + i);
+						long reportId = ParamUtil.getLong(actionRequest, "idAllegatoJasper" + i);
 						File file = uploadPortletRequest.getFile("jasperReportFile" + i);
 						String nomeFile = uploadPortletRequest.getFileName("jasperReportFile" + i);
 
 						if (reportId > 0) {
 							listaReportDaMantenere.add(reportId);
-						}
-
-						if (Validator.isNotNull(templatePrincipaleProcedura)) {
-							if (principale && templatePrincipaleProcedura.getTemplatePdfId() != reportId) {
-								reportIdNuovoPrincipale = reportId;
-							}
 						}
 
 						if (Validator.isNotNull(file)) {
@@ -179,6 +173,17 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 
 							if (Validator.isNotNull(templateCaricato)) {
 								listaReportDaMantenere.add(templateCaricato.getTemplatePdfId());
+							}
+						}
+						
+						if (Validator.isNotNull(templatePrincipaleProcedura)) {
+							if (principale && templatePrincipaleProcedura.getTemplatePdfId() != reportId) {
+								
+								if(reportId==0) {
+									reportIdNuovoPrincipale = templateCaricato.getTemplatePdfId();
+								}else {
+									reportIdNuovoPrincipale = reportId;
+								}
 							}
 						}
 

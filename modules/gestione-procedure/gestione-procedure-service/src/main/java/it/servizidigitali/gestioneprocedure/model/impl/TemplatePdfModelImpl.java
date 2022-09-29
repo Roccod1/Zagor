@@ -74,10 +74,10 @@ public class TemplatePdfModelImpl
 
 	public static final Object[][] TABLE_COLUMNS = {
 		{"uuid_", Types.VARCHAR}, {"templatePdfId", Types.BIGINT},
-		{"companyId", Types.BIGINT}, {"userId", Types.BIGINT},
-		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
-		{"modifiedDate", Types.TIMESTAMP}, {"fileEntryId", Types.BIGINT},
-		{"attivo", Types.BOOLEAN}, {"proceduraId", Types.BIGINT},
+		{"groupId", Types.BIGINT}, {"companyId", Types.BIGINT},
+		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
+		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
+		{"fileEntryId", Types.BIGINT}, {"proceduraId", Types.BIGINT},
 		{"templatePdfParentId", Types.BIGINT}
 	};
 
@@ -87,19 +87,19 @@ public class TemplatePdfModelImpl
 	static {
 		TABLE_COLUMNS_MAP.put("uuid_", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("templatePdfId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("groupId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("companyId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("userId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("userName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("fileEntryId", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("attivo", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("proceduraId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("templatePdfParentId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table template_pdf (uuid_ VARCHAR(75) null,templatePdfId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,fileEntryId LONG,attivo BOOLEAN,proceduraId LONG,templatePdfParentId LONG)";
+		"create table template_pdf (uuid_ VARCHAR(75) null,templatePdfId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,fileEntryId LONG,proceduraId LONG,templatePdfParentId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table template_pdf";
 
@@ -119,13 +119,13 @@ public class TemplatePdfModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long ATTIVO_COLUMN_BITMASK = 1L;
+	public static final long COMPANYID_COLUMN_BITMASK = 1L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long COMPANYID_COLUMN_BITMASK = 2L;
+	public static final long GROUPID_COLUMN_BITMASK = 2L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
@@ -298,6 +298,9 @@ public class TemplatePdfModelImpl
 		attributeSetterBiConsumers.put(
 			"templatePdfId",
 			(BiConsumer<TemplatePdf, Long>)TemplatePdf::setTemplatePdfId);
+		attributeGetterFunctions.put("groupId", TemplatePdf::getGroupId);
+		attributeSetterBiConsumers.put(
+			"groupId", (BiConsumer<TemplatePdf, Long>)TemplatePdf::setGroupId);
 		attributeGetterFunctions.put("companyId", TemplatePdf::getCompanyId);
 		attributeSetterBiConsumers.put(
 			"companyId",
@@ -323,9 +326,6 @@ public class TemplatePdfModelImpl
 		attributeSetterBiConsumers.put(
 			"fileEntryId",
 			(BiConsumer<TemplatePdf, Long>)TemplatePdf::setFileEntryId);
-		attributeGetterFunctions.put("attivo", TemplatePdf::getAttivo);
-		attributeSetterBiConsumers.put(
-			"attivo", (BiConsumer<TemplatePdf, Boolean>)TemplatePdf::setAttivo);
 		attributeGetterFunctions.put(
 			"proceduraId", TemplatePdf::getProceduraId);
 		attributeSetterBiConsumers.put(
@@ -383,6 +383,29 @@ public class TemplatePdfModelImpl
 		}
 
 		_templatePdfId = templatePdfId;
+	}
+
+	@Override
+	public long getGroupId() {
+		return _groupId;
+	}
+
+	@Override
+	public void setGroupId(long groupId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_groupId = groupId;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalGroupId() {
+		return GetterUtil.getLong(this.<Long>getColumnOriginalValue("groupId"));
 	}
 
 	@Override
@@ -507,35 +530,6 @@ public class TemplatePdfModelImpl
 	}
 
 	@Override
-	public boolean getAttivo() {
-		return _attivo;
-	}
-
-	@Override
-	public boolean isAttivo() {
-		return _attivo;
-	}
-
-	@Override
-	public void setAttivo(boolean attivo) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_attivo = attivo;
-	}
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #getColumnOriginalValue(String)}
-	 */
-	@Deprecated
-	public boolean getOriginalAttivo() {
-		return GetterUtil.getBoolean(
-			this.<Boolean>getColumnOriginalValue("attivo"));
-	}
-
-	@Override
 	public long getProceduraId() {
 		return _proceduraId;
 	}
@@ -647,13 +641,13 @@ public class TemplatePdfModelImpl
 
 		templatePdfImpl.setUuid(getUuid());
 		templatePdfImpl.setTemplatePdfId(getTemplatePdfId());
+		templatePdfImpl.setGroupId(getGroupId());
 		templatePdfImpl.setCompanyId(getCompanyId());
 		templatePdfImpl.setUserId(getUserId());
 		templatePdfImpl.setUserName(getUserName());
 		templatePdfImpl.setCreateDate(getCreateDate());
 		templatePdfImpl.setModifiedDate(getModifiedDate());
 		templatePdfImpl.setFileEntryId(getFileEntryId());
-		templatePdfImpl.setAttivo(isAttivo());
 		templatePdfImpl.setProceduraId(getProceduraId());
 		templatePdfImpl.setTemplatePdfParentId(getTemplatePdfParentId());
 
@@ -669,6 +663,8 @@ public class TemplatePdfModelImpl
 		templatePdfImpl.setUuid(this.<String>getColumnOriginalValue("uuid_"));
 		templatePdfImpl.setTemplatePdfId(
 			this.<Long>getColumnOriginalValue("templatePdfId"));
+		templatePdfImpl.setGroupId(
+			this.<Long>getColumnOriginalValue("groupId"));
 		templatePdfImpl.setCompanyId(
 			this.<Long>getColumnOriginalValue("companyId"));
 		templatePdfImpl.setUserId(this.<Long>getColumnOriginalValue("userId"));
@@ -680,8 +676,6 @@ public class TemplatePdfModelImpl
 			this.<Date>getColumnOriginalValue("modifiedDate"));
 		templatePdfImpl.setFileEntryId(
 			this.<Long>getColumnOriginalValue("fileEntryId"));
-		templatePdfImpl.setAttivo(
-			this.<Boolean>getColumnOriginalValue("attivo"));
 		templatePdfImpl.setProceduraId(
 			this.<Long>getColumnOriginalValue("proceduraId"));
 		templatePdfImpl.setTemplatePdfParentId(
@@ -774,6 +768,8 @@ public class TemplatePdfModelImpl
 
 		templatePdfCacheModel.templatePdfId = getTemplatePdfId();
 
+		templatePdfCacheModel.groupId = getGroupId();
+
 		templatePdfCacheModel.companyId = getCompanyId();
 
 		templatePdfCacheModel.userId = getUserId();
@@ -805,8 +801,6 @@ public class TemplatePdfModelImpl
 		}
 
 		templatePdfCacheModel.fileEntryId = getFileEntryId();
-
-		templatePdfCacheModel.attivo = isAttivo();
 
 		templatePdfCacheModel.proceduraId = getProceduraId();
 
@@ -904,6 +898,7 @@ public class TemplatePdfModelImpl
 
 	private String _uuid;
 	private long _templatePdfId;
+	private long _groupId;
 	private long _companyId;
 	private long _userId;
 	private String _userName;
@@ -911,7 +906,6 @@ public class TemplatePdfModelImpl
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
 	private long _fileEntryId;
-	private boolean _attivo;
 	private long _proceduraId;
 	private long _templatePdfParentId;
 
@@ -946,13 +940,13 @@ public class TemplatePdfModelImpl
 
 		_columnOriginalValues.put("uuid_", _uuid);
 		_columnOriginalValues.put("templatePdfId", _templatePdfId);
+		_columnOriginalValues.put("groupId", _groupId);
 		_columnOriginalValues.put("companyId", _companyId);
 		_columnOriginalValues.put("userId", _userId);
 		_columnOriginalValues.put("userName", _userName);
 		_columnOriginalValues.put("createDate", _createDate);
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
 		_columnOriginalValues.put("fileEntryId", _fileEntryId);
-		_columnOriginalValues.put("attivo", _attivo);
 		_columnOriginalValues.put("proceduraId", _proceduraId);
 		_columnOriginalValues.put("templatePdfParentId", _templatePdfParentId);
 	}
@@ -982,19 +976,19 @@ public class TemplatePdfModelImpl
 
 		columnBitmasks.put("templatePdfId", 2L);
 
-		columnBitmasks.put("companyId", 4L);
+		columnBitmasks.put("groupId", 4L);
 
-		columnBitmasks.put("userId", 8L);
+		columnBitmasks.put("companyId", 8L);
 
-		columnBitmasks.put("userName", 16L);
+		columnBitmasks.put("userId", 16L);
 
-		columnBitmasks.put("createDate", 32L);
+		columnBitmasks.put("userName", 32L);
 
-		columnBitmasks.put("modifiedDate", 64L);
+		columnBitmasks.put("createDate", 64L);
 
-		columnBitmasks.put("fileEntryId", 128L);
+		columnBitmasks.put("modifiedDate", 128L);
 
-		columnBitmasks.put("attivo", 256L);
+		columnBitmasks.put("fileEntryId", 256L);
 
 		columnBitmasks.put("proceduraId", 512L);
 

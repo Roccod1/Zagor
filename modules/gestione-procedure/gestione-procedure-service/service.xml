@@ -105,6 +105,9 @@
 		<!-- PK fields -->
 		<column name="templatePdfId" primary="true" type="long" />
 		
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+		
 		<!-- Audit fields -->
 		<column name="companyId" type="long" />
 		<column name="userId" type="long" />
@@ -113,17 +116,11 @@
 		<column name="modifiedDate" type="Date" />
 		
 		<column name="fileEntryId" type="long" />
-		<column name="attivo" type="boolean" />
 		<column name="proceduraId" type="long" />
 		<column name="templatePdfParentId" type="long" convert-null="false"/>
 
         <finder name="TemplatePdfParentId" return-type="Collection">
             <finder-column name="templatePdfParentId"/>
-        </finder>
-        
-         <finder name="ProceduraIdAndAttivo" return-type="Collection">
-            <finder-column name="proceduraId"></finder-column>
-            <finder-column name="attivo"></finder-column>
         </finder>
         
         <finder name="ProceduraId" return-type="Collection">
