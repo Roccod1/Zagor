@@ -609,6 +609,49 @@ public class ScrivaniaOperatoreFrontendService {
 		}
 	}
 
+	/**
+	 *
+	 * @param richiestaId
+	 * @param taskId
+	 * @param variableSet
+	 * @param variableValue
+	 * @param commento
+	 * @param serviceContext
+	 * @throws PortalException
+	 */
+	public void rimandaReferente(long richiestaId, String taskId, String variableSet, String variableValue, String commento, ServiceContext serviceContext) throws PortalException {
+
+		String tenantId = String.valueOf(serviceContext.getScopeGroup().getOrganizationId());
+
+		User currentUser = userLocalService.getUser(serviceContext.getUserId());
+
+		// Completa task
+		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId));
+		if (tasksByBusinessKey != null) {
+
+			for (Task task : tasksByBusinessKey) {
+				if (taskId.equalsIgnoreCase(task.getId()) && currentUser.getScreenName().equalsIgnoreCase(task.getAssignee())) {
+					List<Entry<String, String>> variables = new ArrayList<Entry<String, String>>();
+
+					if (Validator.isNotNull(variableSet)) {
+						variables.add(new AbstractMap.SimpleEntry<String, String>(variableSet, variableValue != null ? variableValue : null));
+					}
+					camundaClient.completeTask(taskId, variables);
+				}
+			}
+		}
+
+		// Aggiunta commento, se presente
+		if (Validator.isNotNull(commento)) {
+			commentoRichiestaLocalService.createCommentoRichiesta(commento, taskId, false, richiestaId, currentUser.getUserId(), currentUser.getFullName(), serviceContext.getScopeGroupId(),
+					serviceContext.getCompanyId());
+		}
+
+		// Aggiornamento stato pratica con commenti
+		String note = "Pratica rimandata al referente";
+		richiestaLocalService.updateStatoRichiesta(richiestaId, StatoRichiesta.IN_LAVORAZIONE.name(), note);
+	}
+
 	public Servizio getServizioByProceduraId(long proceduraId) throws PortalException {
 		Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
 		long servizioId = procedura.getServizioId();
