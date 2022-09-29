@@ -149,6 +149,8 @@
 
 				</div>
 				
+				<aui:input type="hidden" id="countJasperReport" name="countJasperReport"/>
+				
 				<div id="container-allegati-template" class="invisible">
 						
 						<aui:row>
@@ -176,27 +178,22 @@
 														</c:otherwise>
 											
 													</c:choose>
+													
+													<aui:row>
+													
+														<aui:col span="1">
+														    <a class="aggiungiJasper" onclick="aggiungiRigaJasper();">Aggiungi</a>
+														</aui:col>
+														
+														<aui:col span="1">
+                											<a id="rimuoviJasper${loop.index}" onclick="eliminaRigaJasperReport(this); ">Rimuovi</a>
+														</aui:col>
+														
+            										</aui:row>
 												</div>
 											</c:forEach>
 										
 										</c:when>
-										
-										<c:otherwise>
-											<div class="lfr-form-row lfr-form-row-inline" id="jasperDiv0">
-													<aui:input type="hidden" name="idAllegatoJasper0" value="0"/>
-													<aui:input type="file" name="jasperReportFile0" label="allegato-jasper-report">
-													<aui:validator name="acceptFiles">
-													'jrxml'
-													</aui:validator>	
-													</aui:input>
-													<aui:input label="principale" type="checkbox" id="allegatoPrincipale0" name="allegatoPrincipale0" cssClass="checkboxPrincipaleAllegati" onClick="checkboxJasperReport(this);"/>
-													<aui:row>
-														<a class="aggiungiJasper" onclick="aggiungiRigaJasper();">Aggiungi</a>
-														<a id="rimuoviJasper0" onclick="eliminaRigaJasperReport(this); ">Rimuovi</a>
-													</aui:row>
-													
-											</div>
-										</c:otherwise>
 									
 									</c:choose>
 							
@@ -224,7 +221,7 @@
 	var listaFormIdIntegrativi = ${listaFormIntegrativiProcedura};
 	var listaTipiIntegrazioneBackoffice = ${listaTipoIntegrazioneBackofficeProcedura};
 	var valueSelectAllegati = $('#<portlet:namespace />tipiGenerazioneTemplate').val();
-	var indexJasperReport = 1;
+	indexJasperReport = 0;
 	
 	 
 	$(document).ready(function() {
@@ -237,41 +234,54 @@
 		
 		if(conteggioJasperPresenti>0){
 			indexJasperReport = conteggioJasperPresenti;
+			$("#<portlet:namespace />countJasperReport").val(conteggioJasperPresenti);
 		}
 
 	});
 	
 	
 	function aggiungiRigaJasper(){
-		 var nuovaDiv = '<div class="lfr-form-row lfr-form-row-inline" id="jasperDiv'+ indexJasperReport +'"> <input type="hidden" name="idAllegatoJasper'+ indexJasperReport +'" value="0"> <label>Allegato Jasper Report</label> <input type="file" class="field form-control" id="jasperReportFile'+ indexJasperReport +'" name="<portlet:namespace />jasperReportFile'+ indexJasperReport +'"> <input type="checkbox" class="checkboxPrincipaleAllegati" id="allegatoPrincipale'+ indexJasperReport +'" name="<portlet:namespace />allegatoPrincipale'+ indexJasperReport +'" onClick="checkboxJasperReport(this);"/> <label>Principale</label> <div class="row"> <a class="aggiungiJasper" onclick="aggiungiRigaJasper();">Aggiungi</a> <a id="rimuoviJasper'+ indexJasperReport +'" onclick="eliminaRigaJasperReport(this);">Rimuovi</a> </div> </div>';
-		 $('#<portlet:namespace />container-upload-allegati').append(nuovaDiv);
+		 var nuovaDiv = '<div class="lfr-form-row lfr-form-row-inline" id="jasperDiv'+ indexJasperReport +'"> <input type="hidden" id="idAllegatoJasper'+ indexJasperReport +'" name="<portlet:namespace />idAllegatoJasper'+ indexJasperReport +'" value="0"> <div class="form-group input-text-wrapper"> <label class="control-label">Allegato Jasper Report</label> <input type="file" class="field form-control" id="jasperReportFile'+ indexJasperReport +'" name="<portlet:namespace />jasperReportFile'+ indexJasperReport +'"> </div> <div class="form-group form-inline input-checkbox-wrapper"> <input type="checkbox" class="checkboxPrincipaleAllegati" id="allegatoPrincipale'+ indexJasperReport +'" name="<portlet:namespace />allegatoPrincipale'+ indexJasperReport +'" onClick="checkboxJasperReport(this);"/> <label class="ml-1">Principale</label> </div> <div class="row"> <div class="col-md-1"> <a class="aggiungiJasper" onclick="aggiungiRigaJasper();">Aggiungi</a> </div> <div class="col-md-1"> <a id="rimuoviJasper'+ indexJasperReport +'" onclick="eliminaRigaJasperReport(this);">Rimuovi</a> </div> </div> </div>';
 		 indexJasperReport++;
+		 $('#<portlet:namespace />container-upload-allegati').append(nuovaDiv);
+		 
+		 var countJasperReport = $("#<portlet:namespace />container-upload-allegati > div").length;
+		 $("#<portlet:namespace />countJasperReport").val(countJasperReport);
 	}
 
 	
 	function eliminaRigaJasperReport(btn){
 		var id = $(btn).attr('id').replace('rimuoviJasper','');
-		
-		var checkboxPrincipale = $('#<portlet:namespace />allegatoPrincipale' + id).is(":checked");
+		var indexRiga = parseInt(id);
+		var checkboxPrincipale = $('#allegatoPrincipale' + id).is(":checked");
 		
 		if(!checkboxPrincipale){
 			$('#jasperDiv' + id).remove();
-		    shiftRowJasperReport(id);
+		    shiftRowJasperReport(indexRiga);
 		    indexJasperReport--;
 		}
-		
+
+		var countJasperReport = $("#<portlet:namespace />container-upload-allegati > div").length;
+		$("#<portlet:namespace />countJasperReport").val(countJasperReport);
 	}
 	
 	function shiftRowJasperReport(index) {
-	    i = index +1;
-	    newIndex = i - 1;
-	    
+		 let i = index +1;
+
 	    while(i<indexJasperReport){
+	    	let newIndex = i - 1;
+	    	$("#jasperReportFile" + i).attr("name","<portlet:namespace />jasperReportFile" + newIndex);
 	        $("#jasperReportFile" + i).attr("id","jasperReportFile" + newIndex);
-	        $("#jasperReportFile" + i).attr("name","<portlet:namespace />jasperReportFile" + newIndex);
 	        
-	        $("#allegatoPrincipale" + i).attr("id","allegatoPrincipale" + newIndex);
 	        $("#allegatoPrincipale" + i).attr("name","<portlet:namespace />allegatoPrincipale" + newIndex);
+	        $("#allegatoPrincipale" + i).attr("id","allegatoPrincipale" + newIndex);
+	       
+	        $("#idAllegatoJasper" + i).attr("name","<portlet:namespace />idAllegatoJasper" + newIndex);
+	        $("#idAllegatoJasper" + i).attr("id","idAllegatoJasper" + newIndex);
+	        
+	        $("#jasperDiv" + i).attr("id","jasperDiv" + newIndex);
+	        
+	        $("#rimuoviJasper" + i).attr("id","rimuoviJasper" + newIndex);
 	        
 	        i++;
 	    }
@@ -295,7 +305,8 @@
 	function handleAttachments(selectObj) {
 		if (selectObj.value === "JASPER_REPORT") {
 			$('#container-allegati-template').removeClass("invisible");
-			$('#<portlet:namespace />allegatoPrincipale0')
+			aggiungiRigaJasper();
+			$('#allegatoPrincipale0')
 					.prop("checked", true);
 		} else {
 			$('#container-allegati-template').addClass("invisible");
