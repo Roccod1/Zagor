@@ -452,13 +452,8 @@ public class GestioneProcedureMiddlewareService {
 		try {
 			for (TemplatePdf template : listaTemplatePdf) {
 				if (!listaReportDaMantenere.contains(template.getTemplatePdfId())) {
-					if (template.getTemplatePdfParentId() > 0) {
-						template.setAttivo(false);
-						templatePdfLocalService.updateTemplatePdf(template);
-					}
-					else {
-						_log.error("Impossibile eliminare l'allegato jasper con ID : " + template.getTemplatePdfId() + "perché è principale");
-					}
+					templatePdfFileService.deleteTemplatePdfFileEntry(template);
+					templatePdfLocalService.deleteTemplatePdf(template.getTemplatePdfId());
 				}
 			}
 		}

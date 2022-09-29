@@ -253,20 +253,36 @@
 	function eliminaRigaJasperReport(btn){
 		var id = $(btn).attr('id').replace('rimuoviJasper','');
 		var indexRiga = parseInt(id);
-		var checkboxPrincipale = $('#allegatoPrincipale' + id).is(":checked");
+		var checkboxPrincipale = $('#<portlet:namespace />allegatoPrincipale' + id).is(":checked");
+		var countJasperReport = $("#<portlet:namespace />container-upload-allegati > div").length;
+
+		console.log("valore checkbox: " + checkboxPrincipale);
 		
-		if(!checkboxPrincipale){
+		if(countJasperReport>1){
+		
 			$('#jasperDiv' + id).remove();
 		    shiftRowJasperReport(indexRiga);
 		    indexJasperReport--;
+		    
+		    if(checkboxPrincipale){
+				console.log("effettuare change principale");
+				let elemento = $(".checkboxPrincipaleAllegati").first().prop("checked", true);
+				console.log("elemento change : " + elemento);
+			}
+		}else{
+			
+			if(!checkboxPrincipale){
+				$('#jasperDiv' + id).remove();
+			    shiftRowJasperReport(indexRiga);
+			    indexJasperReport--;
+			}
 		}
 
-		var countJasperReport = $("#<portlet:namespace />container-upload-allegati > div").length;
 		$("#<portlet:namespace />countJasperReport").val(countJasperReport);
 	}
 	
 	function shiftRowJasperReport(index) {
-		 let i = index +1;
+		let i = index +1;
 
 	    while(i<indexJasperReport){
 	    	let newIndex = i - 1;
@@ -305,7 +321,13 @@
 	function handleAttachments(selectObj) {
 		if (selectObj.value === "JASPER_REPORT") {
 			$('#container-allegati-template').removeClass("invisible");
-			aggiungiRigaJasper();
+			
+			var conteggioJasperPresenti = $("#<portlet:namespace />container-upload-allegati > div").length; 
+			
+			if(conteggioJasperPresenti==0){
+				aggiungiRigaJasper();
+			}
+			
 			$('#allegatoPrincipale0')
 					.prop("checked", true);
 		} else {

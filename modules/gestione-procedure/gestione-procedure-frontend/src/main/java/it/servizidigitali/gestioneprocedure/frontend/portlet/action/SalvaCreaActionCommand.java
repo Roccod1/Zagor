@@ -167,18 +167,23 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 							listaReportDaMantenere.add(reportId);
 						}
 
-						if (Validator.isNotNull(templatePrincipaleProcedura)) {
-							if (principale && templatePrincipaleProcedura.getTemplatePdfId() != reportId) {
-								reportIdNuovoPrincipale = reportId;
-							}
-						}
-
 						if (Validator.isNotNull(file)) {
 							templateCaricato = gestioneProcedureMiddlewareService.caricaTemplatePdf(file, nomeFile, principale, procedura.getProceduraId(), reportId, i, userFullName, userId,
 									siteGroupId, companyGroupId);
 
 							if (Validator.isNotNull(templateCaricato)) {
 								listaReportDaMantenere.add(templateCaricato.getTemplatePdfId());
+							}
+						}
+						
+						if (Validator.isNotNull(templatePrincipaleProcedura)) {
+							if (principale && templatePrincipaleProcedura.getTemplatePdfId() != reportId) {
+								
+								if(reportId==0) {
+									reportIdNuovoPrincipale = templateCaricato.getTemplatePdfId();
+								}else {
+									reportIdNuovoPrincipale = reportId;
+								}
 							}
 						}
 
