@@ -139,7 +139,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 
 							Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 
-							FormData formData = AlpacaUtil.loadFormData(form, null, true);
+							FormData formData = AlpacaUtil.loadFormData(form, null, true, themeDisplay.getPortalURL());
 							AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
 
 							UserPreferences userPreferences = new UserPreferences();

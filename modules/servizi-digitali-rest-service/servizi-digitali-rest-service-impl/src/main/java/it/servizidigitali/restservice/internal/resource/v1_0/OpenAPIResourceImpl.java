@@ -66,9 +66,15 @@ public class OpenAPIResourceImpl {
 
 	private final Set<Class<?>> _resourceClasses = new HashSet<Class<?>>() {
 		{
+			add(CertificatiResourceImpl.class);
+
+			add(ChatbotResourceImpl.class);
+
 			add(DatiAnagraficiResourceImpl.class);
 
 			add(RichiesteServizioResourceImpl.class);
+
+			add(ServiziResourceImpl.class);
 
 			add(OpenAPIResourceImpl.class);
 		}

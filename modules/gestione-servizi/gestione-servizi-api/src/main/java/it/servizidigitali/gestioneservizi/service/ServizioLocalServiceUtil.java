@@ -336,6 +336,10 @@ public class ServizioLocalServiceUtil {
 		return getService().getServizio(servizioId);
 	}
 
+	public static Servizio getServizioByCodice(String codice) {
+		return getService().getServizioByCodice(codice);
+	}
+
 	public static Servizio getServizioById(Long servizioId) throws Exception {
 		return getService().getServizioById(servizioId);
 	}

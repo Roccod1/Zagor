@@ -20,6 +20,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 
+import it.servizidigitali.backoffice.integration.enums.RelazioneParentela;
+import it.servizidigitali.backoffice.integration.enums.StatoCivile;
+import it.servizidigitali.backoffice.integration.enums.TitoloStudio;
 import it.servizidigitali.common.model.Comune;
 import it.servizidigitali.common.model.ComuneEstero;
 import it.servizidigitali.common.model.Provincia;
@@ -180,6 +183,51 @@ public class AlpacaRestApplication extends Application {
 		List<ComuneEstero> comuni = comuneEsteroLocalService.getComuniEsteriByDenominazione(denominazione);
 		for (ComuneEstero comune : comuni) {
 			alpacaDatasources.add(new AlpacaDatasource(comune.getDenominazione(), String.valueOf(comune.getCodice())));
+		}
+
+		return alpacaDatasources;
+	}
+
+	@GET
+	@Path("/titoli-studio")
+	@Produces("application/json")
+	public List<AlpacaDatasource> getTitoliStudio() {
+
+		List<AlpacaDatasource> alpacaDatasources = new ArrayList<AlpacaDatasource>();
+
+		TitoloStudio[] values = TitoloStudio.values();
+		for (TitoloStudio titoloStudio : values) {
+			alpacaDatasources.add(new AlpacaDatasource(titoloStudio.getDescrizione(), titoloStudio.getCodice()));
+		}
+
+		return alpacaDatasources;
+	}
+
+	@GET
+	@Path("/stati-civili")
+	@Produces("application/json")
+	public List<AlpacaDatasource> getStatiCivili() {
+
+		List<AlpacaDatasource> alpacaDatasources = new ArrayList<AlpacaDatasource>();
+
+		StatoCivile[] values = StatoCivile.values();
+		for (StatoCivile statoCivile : values) {
+			alpacaDatasources.add(new AlpacaDatasource(statoCivile.getDescrizione(), String.valueOf(statoCivile.getCodice())));
+		}
+
+		return alpacaDatasources;
+	}
+
+	@GET
+	@Path("/relazioni-parentela")
+	@Produces("application/json")
+	public List<AlpacaDatasource> getRelazioniParentela() {
+
+		List<AlpacaDatasource> alpacaDatasources = new ArrayList<AlpacaDatasource>();
+
+		RelazioneParentela[] values = RelazioneParentela.values();
+		for (RelazioneParentela relazioneParentela : values) {
+			alpacaDatasources.add(new AlpacaDatasource(relazioneParentela.getDescrizione(), String.valueOf(relazioneParentela.getCodice())));
 		}
 
 		return alpacaDatasources;

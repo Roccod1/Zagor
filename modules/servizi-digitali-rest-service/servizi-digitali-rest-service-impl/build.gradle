@@ -20,6 +20,8 @@ dependencies {
 	restBuilder group: "com.liferay", name: "com.liferay.portal.tools.rest.builder", version: "1.0.222"
 	
 	compileOnly project(":modules:scrivania-operatore:scrivania-operatore-api")
+	compileOnly project(":modules:gestione-servizi:gestione-servizi-api")
+	compileOnly project(":modules:gestione-enti:gestione-enti-api")
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-backoffice-integration")
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-api")	
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-utility")

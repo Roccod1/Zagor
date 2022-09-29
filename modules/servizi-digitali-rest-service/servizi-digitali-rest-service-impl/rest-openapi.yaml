@@ -46,7 +46,7 @@ components:
         queryNomeComune:
           name: nomeComune
           in: query
-          required: true
+          required: false
           schema:
             type: string
 
@@ -56,6 +56,37 @@ components:
             required: true
             schema:
               type: string
+    
+    responses:
+      NotFound:
+        content:
+          application/json:
+              schema:
+                  $ref: "#/components/schemas/Error"
+          application/xml:
+              schema:
+                  $ref: "#/components/schemas/Error"
+        description: The specified resource was not found
+           
+      UnauthorizedError:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Error"
+        description: Authentication information is missing or invalid
+        
+      BadRequest:
+        content:
+          application/json:
+              schema:
+                  $ref: "#/components/schemas/Error"
+          application/xml:
+              schema:
+                  $ref: "#/components/schemas/Error"
+        description: Invalid request
             
     schemas:
     
@@ -107,6 +138,169 @@ components:
                 description: Data di nascita
                 type: string
                 format: date
+        
+        DestinazioneUso:
+          type: object
+          properties:
+            id:
+              description: Id
+              type: integer
+              format: int64
+            "description":
+              type: string
+            name:
+              type: string
+            payment:
+              type: boolean
+            message:
+              type: string
+
+        InfoServizioEnte:
+          type: object
+          properties:
+            id:
+              description: Id
+              type: integer
+              format: int64
+            title:
+              description: Titolo servizio
+              type: string
+            code:
+              description: Codice del servizio
+              type: string
+            "description":
+              description: Descrizione del servizio
+              type: string
+            serviceCardUrl:
+              description: Service card url
+              type: string
+            serviceOnlineUrl:
+              description:  service online url
+              type: string
+            active:
+              type: boolean
+            usableByChatbot:
+              type: boolean
+            correlatedPaymentServiceCode:
+              type: string
+            codiceIpa:
+              type: string
+            nomeComune:
+              type: string
+            chatbotInline:
+              type: boolean
+            chatbotInlineIntent:
+              type: string
+            destinazioneUsos:
+              type: array
+              items:
+                $ref: '#/components/schemas/DestinazioneUso'
+        RichiestaCertificato:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            email: 
+              type: string
+              format: email
+            dataInserimento:
+              type: string
+              format: date-time
+            dataAggiornamento:
+              type: string
+              format: date-time
+            stato:
+              type: string
+            messaggio:
+              type: string
+
+        CountServizioEnte:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            title:
+              type: string
+            serviceCount:
+              type: integer
+              format: int64
+        
+        ChatbotAnswer:
+          type: object
+          properties:
+            messaggio:
+              type: string
+            pathServizio:
+              type: string
+
+        ChatbotDatiSessione:
+          type: object
+          properties:
+            sessionId:
+              type: string
+            message:
+              type: string
+            intentMatched:
+              type: string
+            isMatched:
+              type: boolean
+            isNegative:
+              type: boolean
+            isPositive:
+              type: boolean
+            isFallback:
+              type: boolean
+            isReset:
+              type: boolean
+            messageDate:
+              type: string
+              format: date
+            
+        ChatbotSession:
+          type: object
+          properties:
+            sessionId:
+              type: string
+            startDate:
+              type: string
+              format: date-time
+            lastDate:
+              type: string
+              format: date-time
+            messageCount:
+              type: integer
+              format: int32
+            negativeCount:
+              type: integer
+              format: int32
+            positiveCount:
+              type: integer
+              format: int32
+            fallbackCount:
+              type: integer
+              format: int32
+            resetCount:
+              type: integer
+              format: int32
+            lastMessage:
+              type: string
+            lastIntentMatched:
+              type: string
+          
+        Error:
+          type: object
+          properties:
+            errorCode:
+              type: integer
+              description: Internal error code mapping
+            errorDescription:
+              type: string
+            message:
+              type: string
+            status:
+              type: integer
 paths:
     "/richieste-servizio":
         get:
@@ -261,4 +455,236 @@ paths:
                   type: array
                   items: 
                     $ref: '#/components/schemas/ComponenteNucleoFamiliareLight'
-                    
+          404:
+            $ref: '#/components/responses/NotFound'
+          403:
+            $ref: '#/components/responses/UnauthorizedError'
+    "/servizi":
+      get:
+        operationId: getServiziEnte
+        description: Recupera i servizi ente
+        security:
+          - BearerAuth: []
+        tags: ['Servizi']
+        parameters:
+          - $ref: '#/components/parameters/queryNomeComune'
+          - name: codiceTipologiaServizio
+            in: query
+            required: true
+            schema:
+              type: integer
+              format: int64
+          - name: amministrazione
+            in: query
+            schema:
+              type: string
+        responses:
+          200:
+            description: Servizi ente
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/InfoServizioEnte'
+              application/xml:
+                schema:
+                  type: array
+                  items: 
+                    $ref: '#/components/schemas/InfoServizioEnte'
+          404: 
+            $ref: '#/components/responses/NotFound'
+          
+    "/servizi/{codiceServizio}":
+      get:
+        operationId: getInfoServizioEnte
+        security:
+          - BearerAuth: []
+        tags: ['Servizi']
+        parameters:
+          - name: codiceServizio
+            in: path
+            required: true
+            schema:
+              type: string
+          - $ref: '#/components/parameters/queryNomeComune'
+          - name: amministrazione
+            in: query
+            schema:
+              type: string
+        responses:
+          200:
+            description: Servizio ente
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/InfoServizioEnte'
+              application/xml:
+                schema:
+                  $ref: '#/components/schemas/InfoServizioEnte'
+          404: 
+            $ref: '#/components/responses/NotFound'
+    "/servizi/count":
+      get:
+        operationId: getCountServizioEnte
+        description: Count servizi ente
+        security: 
+          - BearerAuth: []
+        tags: ['Servizi']
+        parameters:
+          - name: codiceServizio
+            in: query
+            schema:
+              type: string
+        responses:
+          200:
+            description: Invio certificato
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/CountServizioEnte'
+              application/xml:
+                schema:
+                  type: array
+                  items: 
+                    $ref: '#/components/schemas/CountServizioEnte'
+    "/certificati/check-invio":
+      get:
+        operationId: checkInvioCertificato
+        description: Check invio certificato
+        security:
+          - BearerAuth: []
+        tags: ['Certificati']
+        parameters:
+          - $ref: '#/components/parameters/headerUserToken'
+          - $ref: '#/components/parameters/queryNomeComune'
+          - name: idDestinazioneUso
+            in: query
+            schema:
+              type: integer
+              format: int64
+          - name: codiceServizio
+            in: query
+            schema:
+              type: string
+          - name: amministrazione
+            in: query
+            schema:
+              type: string
+          - name: codiceFiscale
+            in: query
+            schema:
+              type: string
+        responses:
+          200:
+            description: Invio certificato
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/RichiestaCertificato'
+              application/xml:
+                schema:
+                  $ref: '#/components/schemas/RichiestaCertificato'
+          403:
+            $ref: '#/components/responses/UnauthorizedError'
+    "/certificati/invio":
+      get:
+        operationId: invioCertificato
+        description: Invio certificato
+        security:
+          - BearerAuth: []
+        tags: ['Certificati']
+        parameters:
+          - $ref: '#/components/parameters/headerUserToken'
+          - $ref: '#/components/parameters/queryNomeComune'
+          - name: idDestinazioneUso
+            in: query
+            schema:
+              type: integer
+              format: int64
+          - name: codiceServizio
+            in: query
+            schema:
+              type: string
+          - name: amministrazione
+            in: query
+            schema:
+              type: string
+          - name: codiceFiscale
+            in: query
+            schema:
+              type: string
+        responses:
+            200:
+              description: Invio certificato
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/RichiestaCertificato'
+                application/xml:
+                  schema:
+                    $ref: '#/components/schemas/RichiestaCertificato'
+            403:
+              $ref: '#/components/responses/UnauthorizedError'
+    "/chatbot/messaggio-servizio":
+      get:
+        operationId: getChatbotMessaggioServizio
+        description: Get risposta chatbot
+        security: 
+          - BearerAuth: []
+        tags: ['Chatbot']
+        parameters:
+          - name: codiceFiscale
+            required: true
+            in: query
+            schema:
+              type: string
+          - name: codiceServizio
+            required: true
+            in: query
+            schema:
+              type: string
+          - name: amministrazione
+            in: query
+            schema:
+              type: string
+          - $ref: '#/components/parameters/queryNomeComune'
+        responses:
+          200:
+            description: Invio certificato
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ChatbotAnswer'
+              application/xml:
+                schema:
+                  $ref: '#/components/schemas/ChatbotAnswer'
+    "/chatbot/session":
+      post:
+        operationId: addChatbotSession
+        description: Add chatbot session
+        security:
+          - BearerAuth: []
+        tags: ['Chatbot']
+        parameters: 
+          - $ref: '#/components/parameters/headerUserToken'
+        requestBody:
+                content:
+                  "application/json":
+                      schema:
+                          $ref: '#/components/schemas/ChatbotDatiSessione'
+                  "application/xml":
+                      schema:
+                          $ref: '#/components/schemas/ChatbotDatiSessione'
+        responses:
+          200:
+            description: Add session
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ChatbotSession'
+              application/xml:
+                schema:
+                  $ref: '#/components/schemas/ChatbotSession'
