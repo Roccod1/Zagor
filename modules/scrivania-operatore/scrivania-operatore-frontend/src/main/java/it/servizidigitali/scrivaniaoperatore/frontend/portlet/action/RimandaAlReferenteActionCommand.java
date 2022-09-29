@@ -5,6 +5,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.MutableRenderParameters;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -14,6 +15,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
+import it.servizidigitali.scrivaniaoperatore.frontend.service.ScrivaniaOperatoreFrontendService;
 
 @Component(immediate = true, service = MVCActionCommand.class, property = {
 		"javax.portlet.name=" + ScrivaniaOperatorePortletKeys.SCRIVANIAOPERATORE,
@@ -21,6 +23,9 @@ import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperato
 })
 public class RimandaAlReferenteActionCommand extends BaseMVCActionCommand {
 
+	@Reference
+	private ScrivaniaOperatoreFrontendService scrivaniaOperatoreFrontendService;
+	
 	@Override
 	protected void doProcessAction(ActionRequest request, ActionResponse response) throws Exception {
 		long richiestaId = ParamUtil.getLong(request, "richiestaId");
@@ -28,6 +33,13 @@ public class RimandaAlReferenteActionCommand extends BaseMVCActionCommand {
 		String commento = ParamUtil.getString(request, "commento");
 		
 		try {
+			scrivaniaOperatoreFrontendService.rimandaReferente(
+					richiestaId, 
+					commento, 
+					commento, 
+					dettaglioTab, 
+					commento, 
+					null);
 			//TODO aggancia service
 			throw new RuntimeException();
 		} catch (Exception e) {
