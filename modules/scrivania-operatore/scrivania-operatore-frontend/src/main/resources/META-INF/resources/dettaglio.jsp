@@ -301,28 +301,36 @@
 </div>
 
 <div class="modal fade" tabindex="-1" id="<portlet:namespace />rilasciaModal" style="display: none;">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title"><liferay-ui:message key="rilascia-pratica" /></h5>
-				<button type="button" class="close" data-dismiss="modal">
-					&times;
-				</button>
-			</div>
-			<div class="modal-body">
-				<span><liferay-ui:message key="rilascia-message" /></span>
-			</div>
-			<div class="modal-footer d-flex justify-content-end">		
-				<button type="button" class="btn btn-primary mr-1" id="<portlet:namespace />salvaCommentoBtn">
-					<liferay-ui:message key="conferma" />
-				</button>
-				
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">
-					<liferay-ui:message key="annulla" />
-				</button>
+	<portlet:actionURL var="rilasciaPraticaURL" name="/action/rilasciaPratica">
+	</portlet:actionURL>
+	
+	<aui:form action="${rilasciaPraticaURL}">
+		<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
+		<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
+		
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title"><liferay-ui:message key="rilascia-pratica" /></h5>
+					<button type="button" class="close" data-dismiss="modal">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<span><liferay-ui:message key="rilascia-message" /></span>
+				</div>
+				<div class="modal-footer d-flex justify-content-end">		
+					<button type="button" class="btn btn-primary mr-1 submit">
+						<liferay-ui:message key="conferma" />
+					</button>
+					
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">
+						<liferay-ui:message key="annulla" />
+					</button>
+				</div>
 			</div>
 		</div>
-	</div>
+	</aui:form>
 </div>
 
 <div class="modal fade" tabindex="-1" id="<portlet:namespace />richiediModificheModal" style="display: none;">
@@ -387,6 +395,10 @@
 	});
 	
 	$("#<portlet:namespace />assegnaAltroResponsabileModal").find(".submit").on("click", function() {
+		$(this).parents("form").submit();
+	});
+	
+	$("#<portlet:namespace />rilasciaModal").find(".submit").on("click", function() {
 		$(this).parents("form").submit();
 	});
 	
