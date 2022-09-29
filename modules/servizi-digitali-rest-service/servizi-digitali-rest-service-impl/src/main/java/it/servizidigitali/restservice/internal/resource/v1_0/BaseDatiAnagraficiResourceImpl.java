@@ -74,7 +74,6 @@ public abstract class BaseDatiAnagraficiResourceImpl
 			@javax.ws.rs.HeaderParam("userToken")
 			String userToken,
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-			@javax.validation.constraints.NotNull
 			@javax.ws.rs.QueryParam("nomeComune")
 			String nomeComune)
 		throws Exception {

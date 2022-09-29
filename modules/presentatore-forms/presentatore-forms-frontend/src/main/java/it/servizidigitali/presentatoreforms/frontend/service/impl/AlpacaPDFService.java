@@ -5,8 +5,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
-import com.liferay.portal.kernel.portlet.LiferayPortletURL;
-import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutSetLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
@@ -51,6 +49,8 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
  */
 @Component(name = "alpacaPDFService", immediate = true, service = PDFService.class, configurationPid = "it.servizidigitali.presentatoreforms.frontend.configuration.FreemarkerTemplateEnteConfiguration")
 public class AlpacaPDFService implements PDFService {
+
+	private static final String SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH = "/o/api/alpaca";
 
 	private static final Log log = LogFactoryUtil.getLog(AlpacaPDFService.class.getName());
 
@@ -101,8 +101,6 @@ public class AlpacaPDFService implements PDFService {
 			String numeroBollo, PortletRequest portletRequest) throws PDFServiceException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		LiferayPortletURL resourceUrl =  PortletURLFactoryUtil.create(portletRequest, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RESOURCE_PHASE);
-		
 
 		byte[] pdfContent = null;
 		try {
@@ -150,7 +148,7 @@ public class AlpacaPDFService implements PDFService {
 
 			data.put("numeroBollo", numeroBolloDescrizione);
 
-			addParametriAggiuntivi(data,resourceUrl);
+			addParametriAggiuntivi(data, themeDisplay);
 
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			Template template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.certificatiAlpacaTemplate()), config);
@@ -172,11 +170,9 @@ public class AlpacaPDFService implements PDFService {
 			String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		LiferayPortletURL resourceUrl =  PortletURLFactoryUtil.create(portletRequest, themeDisplay.getPortletDisplay().getId(), themeDisplay.getPlid(), PortletRequest.RESOURCE_PHASE);
 
-		
 		byte[] pdfContent = null;
-		
+
 		try {
 
 			freemarkerTemplateEnteConfiguration = configurationProvider.getGroupConfiguration(FreemarkerTemplateEnteConfiguration.class, themeDisplay.getScopeGroupId());
@@ -209,7 +205,7 @@ public class AlpacaPDFService implements PDFService {
 			data.put("dettagliRichiesta", dettagliRichiesta);
 			data.put(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 
-			addParametriAggiuntivi(data,resourceUrl);
+			addParametriAggiuntivi(data, themeDisplay);
 
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			Template template = null;
@@ -234,35 +230,17 @@ public class AlpacaPDFService implements PDFService {
 		return pdfContent;
 	}
 
-	private void addParametriAggiuntivi(Map<String, Object> data, LiferayPortletURL renderUrl) {
-		
-		renderUrl.setResourceID("/statiEsteri");
-		String url = renderUrl.toString();
-		data.put("listaStatiEsteriUrlKey", url);
-		
-		renderUrl.setResourceID("/province");
-		url = renderUrl.toString();
-		data.put("listaProvinceUrlKey", url);
-		
-		renderUrl.setResourceID("/comuni");
-		url = renderUrl.toString();
-		data.put("listaComuniUrlKey", url);
-		
-		renderUrl.setResourceID("/comuniEsteri");
-		url = renderUrl.toString();
-		data.put("listaComuniEsteriSelUrlKey", url);
+	private void addParametriAggiuntivi(Map<String, Object> data, ThemeDisplay themeDisplay) {
 
-		renderUrl.setResourceID("/titoliStudio");
-		url = renderUrl.toString();
-		data.put("listaTitoliStudioUrlKey", url);
+		String portalURL = themeDisplay.getPortalURL();
 
-		renderUrl.setResourceID("/statiCivili");
-		url = renderUrl.toString();
-		data.put("listaStatiCiviliUrlKey", url);
-		
-		renderUrl.setResourceID("/relazioniParentela");
-		url = renderUrl.toString();
-		data.put("listaRelazioniParentelaUrlKey", url);
+		data.put("listaStatiEsteriUrlKey", portalURL + SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH + "/stati-esteri");
+		data.put("listaProvinceUrlKey", portalURL + SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH + "/province");
+		data.put("listaComuniUrlKey", portalURL + SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH + "/comuni");
+		data.put("listaComuniEsteriSelUrlKey", portalURL + SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH + "/comuni-esteri");
+		data.put("listaTitoliStudioUrlKey", portalURL + SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH + "/titoli-studio");
+		data.put("listaStatiCiviliUrlKey", portalURL + SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH + "/stati-civili");
+		data.put("listaRelazioniParentelaUrlKey", portalURL + SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH + "/relazioni-parentela");
 	}
 
 }
