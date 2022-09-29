@@ -239,18 +239,18 @@ public class TemplatePdfLocalServiceWrapper
 	}
 
 	/**
-	 * Returns the template pdf with the matching UUID and company.
+	 * Returns the template pdf matching the UUID and group.
 	 *
 	 * @param uuid the template pdf's UUID
-	 * @param companyId the primary key of the company
+	 * @param groupId the primary key of the group
 	 * @return the matching template pdf, or <code>null</code> if a matching template pdf could not be found
 	 */
 	@Override
 	public it.servizidigitali.gestioneprocedure.model.TemplatePdf
-		fetchTemplatePdfByUuidAndCompanyId(String uuid, long companyId) {
+		fetchTemplatePdfByUuidAndGroupId(String uuid, long groupId) {
 
-		return _templatePdfLocalService.fetchTemplatePdfByUuidAndCompanyId(
-			uuid, companyId);
+		return _templatePdfLocalService.fetchTemplatePdfByUuidAndGroupId(
+			uuid, groupId);
 	}
 
 	@Override
@@ -322,31 +322,21 @@ public class TemplatePdfLocalServiceWrapper
 			proceduraId);
 	}
 
-	@Override
-	public java.util.List
-		<it.servizidigitali.gestioneprocedure.model.TemplatePdf>
-			getTemplatePdfByProceduraIdAndAttivo(
-				long proceduraId, boolean attivo) {
-
-		return _templatePdfLocalService.getTemplatePdfByProceduraIdAndAttivo(
-			proceduraId, attivo);
-	}
-
 	/**
-	 * Returns the template pdf with the matching UUID and company.
+	 * Returns the template pdf matching the UUID and group.
 	 *
 	 * @param uuid the template pdf's UUID
-	 * @param companyId the primary key of the company
+	 * @param groupId the primary key of the group
 	 * @return the matching template pdf
 	 * @throws PortalException if a matching template pdf could not be found
 	 */
 	@Override
 	public it.servizidigitali.gestioneprocedure.model.TemplatePdf
-			getTemplatePdfByUuidAndCompanyId(String uuid, long companyId)
+			getTemplatePdfByUuidAndGroupId(String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _templatePdfLocalService.getTemplatePdfByUuidAndCompanyId(
-			uuid, companyId);
+		return _templatePdfLocalService.getTemplatePdfByUuidAndGroupId(
+			uuid, groupId);
 	}
 
 	/**
@@ -366,6 +356,45 @@ public class TemplatePdfLocalServiceWrapper
 			getTemplatePdfs(int start, int end) {
 
 		return _templatePdfLocalService.getTemplatePdfs(start, end);
+	}
+
+	/**
+	 * Returns all the template pdfs matching the UUID and company.
+	 *
+	 * @param uuid the UUID of the template pdfs
+	 * @param companyId the primary key of the company
+	 * @return the matching template pdfs, or an empty list if no matches were found
+	 */
+	@Override
+	public java.util.List
+		<it.servizidigitali.gestioneprocedure.model.TemplatePdf>
+			getTemplatePdfsByUuidAndCompanyId(String uuid, long companyId) {
+
+		return _templatePdfLocalService.getTemplatePdfsByUuidAndCompanyId(
+			uuid, companyId);
+	}
+
+	/**
+	 * Returns a range of template pdfs matching the UUID and company.
+	 *
+	 * @param uuid the UUID of the template pdfs
+	 * @param companyId the primary key of the company
+	 * @param start the lower bound of the range of template pdfs
+	 * @param end the upper bound of the range of template pdfs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the range of matching template pdfs, or an empty list if no matches were found
+	 */
+	@Override
+	public java.util.List
+		<it.servizidigitali.gestioneprocedure.model.TemplatePdf>
+			getTemplatePdfsByUuidAndCompanyId(
+				String uuid, long companyId, int start, int end,
+				com.liferay.portal.kernel.util.OrderByComparator
+					<it.servizidigitali.gestioneprocedure.model.TemplatePdf>
+						orderByComparator) {
+
+		return _templatePdfLocalService.getTemplatePdfsByUuidAndCompanyId(
+			uuid, companyId, start, end, orderByComparator);
 	}
 
 	/**

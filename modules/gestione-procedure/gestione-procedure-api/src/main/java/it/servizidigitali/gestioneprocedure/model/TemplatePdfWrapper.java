@@ -45,13 +45,13 @@ public class TemplatePdfWrapper
 
 		attributes.put("uuid", getUuid());
 		attributes.put("templatePdfId", getTemplatePdfId());
+		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("userId", getUserId());
 		attributes.put("userName", getUserName());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("fileEntryId", getFileEntryId());
-		attributes.put("attivo", isAttivo());
 		attributes.put("proceduraId", getProceduraId());
 		attributes.put("templatePdfParentId", getTemplatePdfParentId());
 
@@ -70,6 +70,12 @@ public class TemplatePdfWrapper
 
 		if (templatePdfId != null) {
 			setTemplatePdfId(templatePdfId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
 		}
 
 		Long companyId = (Long)attributes.get("companyId");
@@ -108,12 +114,6 @@ public class TemplatePdfWrapper
 			setFileEntryId(fileEntryId);
 		}
 
-		Boolean attivo = (Boolean)attributes.get("attivo");
-
-		if (attivo != null) {
-			setAttivo(attivo);
-		}
-
 		Long proceduraId = (Long)attributes.get("proceduraId");
 
 		if (proceduraId != null) {
@@ -130,16 +130,6 @@ public class TemplatePdfWrapper
 	@Override
 	public TemplatePdf cloneWithOriginalValues() {
 		return wrap(model.cloneWithOriginalValues());
-	}
-
-	/**
-	 * Returns the attivo of this template pdf.
-	 *
-	 * @return the attivo of this template pdf
-	 */
-	@Override
-	public boolean getAttivo() {
-		return model.getAttivo();
 	}
 
 	/**
@@ -170,6 +160,16 @@ public class TemplatePdfWrapper
 	@Override
 	public long getFileEntryId() {
 		return model.getFileEntryId();
+	}
+
+	/**
+	 * Returns the group ID of this template pdf.
+	 *
+	 * @return the group ID of this template pdf
+	 */
+	@Override
+	public long getGroupId() {
+		return model.getGroupId();
 	}
 
 	/**
@@ -267,29 +267,9 @@ public class TemplatePdfWrapper
 		return model.getUuid();
 	}
 
-	/**
-	 * Returns <code>true</code> if this template pdf is attivo.
-	 *
-	 * @return <code>true</code> if this template pdf is attivo; <code>false</code> otherwise
-	 */
-	@Override
-	public boolean isAttivo() {
-		return model.isAttivo();
-	}
-
 	@Override
 	public void persist() {
 		model.persist();
-	}
-
-	/**
-	 * Sets whether this template pdf is attivo.
-	 *
-	 * @param attivo the attivo of this template pdf
-	 */
-	@Override
-	public void setAttivo(boolean attivo) {
-		model.setAttivo(attivo);
 	}
 
 	/**
@@ -320,6 +300,16 @@ public class TemplatePdfWrapper
 	@Override
 	public void setFileEntryId(long fileEntryId) {
 		model.setFileEntryId(fileEntryId);
+	}
+
+	/**
+	 * Sets the group ID of this template pdf.
+	 *
+	 * @param groupId the group ID of this template pdf
+	 */
+	@Override
+	public void setGroupId(long groupId) {
+		model.setGroupId(groupId);
 	}
 
 	/**

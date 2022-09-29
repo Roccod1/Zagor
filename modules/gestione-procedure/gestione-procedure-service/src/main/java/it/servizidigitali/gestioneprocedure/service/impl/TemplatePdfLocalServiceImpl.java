@@ -29,17 +29,6 @@ import it.servizidigitali.gestioneprocedure.service.base.TemplatePdfLocalService
 public class TemplatePdfLocalServiceImpl extends TemplatePdfLocalServiceBaseImpl {
 
 	@Override
-	public List<TemplatePdf> getTemplatePdfByProceduraIdAndAttivo(long proceduraId, boolean attivo) {
-		List<TemplatePdf> listaTemplatePdf = null;
-		if (proceduraId > 0) {
-			listaTemplatePdf = new ArrayList<TemplatePdf>();
-			listaTemplatePdf = templatePdfPersistence.findByProceduraIdAndAttivo(proceduraId, attivo);
-		}
-
-		return listaTemplatePdf;
-	}
-
-	@Override
 	public List<TemplatePdf> getTemplatePdfByProceduraId(long proceduraId) {
 		List<TemplatePdf> listaTemplatePdf = null;
 		if (proceduraId > 0) {

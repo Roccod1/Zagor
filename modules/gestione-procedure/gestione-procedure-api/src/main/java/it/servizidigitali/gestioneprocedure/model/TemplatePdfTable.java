@@ -36,6 +36,8 @@ public class TemplatePdfTable extends BaseTable<TemplatePdfTable> {
 		"uuid_", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<TemplatePdfTable, Long> templatePdfId = createColumn(
 		"templatePdfId", Long.class, Types.BIGINT, Column.FLAG_PRIMARY);
+	public final Column<TemplatePdfTable, Long> groupId = createColumn(
+		"groupId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<TemplatePdfTable, Long> companyId = createColumn(
 		"companyId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<TemplatePdfTable, Long> userId = createColumn(
@@ -48,8 +50,6 @@ public class TemplatePdfTable extends BaseTable<TemplatePdfTable> {
 		"modifiedDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
 	public final Column<TemplatePdfTable, Long> fileEntryId = createColumn(
 		"fileEntryId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
-	public final Column<TemplatePdfTable, Boolean> attivo = createColumn(
-		"attivo", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<TemplatePdfTable, Long> proceduraId = createColumn(
 		"proceduraId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<TemplatePdfTable, Long> templatePdfParentId =

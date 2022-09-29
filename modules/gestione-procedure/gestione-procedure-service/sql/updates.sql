@@ -12,3 +12,7 @@ CREATE TABLE `servizi_digitali`.`template_pdf` (
   `proceduraId` BIGINT NULL DEFAULT NULL,
   `templatePdfParentId` BIGINT NULL DEFAULT NULL,
   PRIMARY KEY (`templatePdfId`));
+
+  -- 20220929
+ALTER TABLE `servizi_digitali`.`template_pdf` 
+DROP COLUMN `attivo`;
