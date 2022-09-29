@@ -12,6 +12,7 @@ dependencies {
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.petra.io"
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.petra.reflect"
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.petra.string"
+	testIntegrationCompile group: "com.liferay", name: "com.liferay.petra.function"
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.portal.odata.api"
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.portal.vulcan.api", version: "9.3.1"
 	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel"
@@ -34,5 +35,5 @@ dependencies {
 }
 
 test {
-    exclude 'it/servizidigitali/restservice/**'
+    exclude 'src/testIntegration/java/**'
 }

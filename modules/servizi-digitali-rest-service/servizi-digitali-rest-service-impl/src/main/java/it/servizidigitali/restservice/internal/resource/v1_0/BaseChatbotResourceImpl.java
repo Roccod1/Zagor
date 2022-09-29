@@ -12,14 +12,14 @@ import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.odata.filter.ExpressionConvert;
 import com.liferay.portal.odata.filter.FilterParserProvider;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
-import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.util.ActionUtil;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
-import it.servizidigitali.restservice.dto.v1_0.ComponenteNucleoFamiliareLight;
-import it.servizidigitali.restservice.resource.v1_0.DatiAnagraficiResource;
+import it.servizidigitali.restservice.dto.v1_0.ChatbotAnswer;
+import it.servizidigitali.restservice.dto.v1_0.ChatbotDatiSessione;
+import it.servizidigitali.restservice.dto.v1_0.ChatbotSession;
+import it.servizidigitali.restservice.resource.v1_0.ChatbotResource;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -36,22 +36,29 @@ import javax.ws.rs.core.UriInfo;
  */
 @Generated("")
 @javax.ws.rs.Path("/v1.0")
-public abstract class BaseDatiAnagraficiResourceImpl
-	implements DatiAnagraficiResource {
+public abstract class BaseChatbotResourceImpl implements ChatbotResource {
 
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/dati-anagrafici/componenti-nucleo-familiare'  -u 'test@liferay.com:test'
+	 * curl -X 'GET' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/chatbot/messaggio-servizio'  -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
-		description = "Recupera i componenti del nucle familiare"
+		description = "Get risposta chatbot"
 	)
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
 			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER,
-				name = "userToken"
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "codiceFiscale"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "codiceServizio"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "amministrazione"
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
@@ -60,25 +67,65 @@ public abstract class BaseDatiAnagraficiResourceImpl
 		}
 	)
 	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {
-			@io.swagger.v3.oas.annotations.tags.Tag(name = "DatiAnagrafici")
-		}
+		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Chatbot")}
 	)
 	@javax.ws.rs.GET
-	@javax.ws.rs.Path("/dati-anagrafici/componenti-nucleo-familiare")
+	@javax.ws.rs.Path("/chatbot/messaggio-servizio")
 	@javax.ws.rs.Produces({"application/json", "application/xml"})
 	@Override
-	public Page<ComponenteNucleoFamiliareLight> getComponentiNucleoFamiliare(
+	public ChatbotAnswer getChatbotMessaggioServizio(
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
-			@javax.ws.rs.HeaderParam("userToken")
-			String userToken,
+			@javax.ws.rs.QueryParam("codiceFiscale")
+			String codiceFiscale,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.validation.constraints.NotNull
+			@javax.ws.rs.QueryParam("codiceServizio")
+			String codiceServizio,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("amministrazione")
+			String amministrazione,
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.ws.rs.QueryParam("nomeComune")
 			String nomeComune)
 		throws Exception {
 
-		return Page.of(Collections.emptyList());
+		return new ChatbotAnswer();
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -X 'POST' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/chatbot/session' -d $'{"intentMatched": ___, "isFallback": ___, "isMatched": ___, "isNegative": ___, "isPositive": ___, "isReset": ___, "message": ___, "messageDate": ___, "sessionId": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 */
+	@io.swagger.v3.oas.annotations.Operation(
+		description = "Add chatbot session"
+	)
+	@io.swagger.v3.oas.annotations.Parameters(
+		value = {
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER,
+				name = "userToken"
+			)
+		}
+	)
+	@io.swagger.v3.oas.annotations.tags.Tags(
+		value = {@io.swagger.v3.oas.annotations.tags.Tag(name = "Chatbot")}
+	)
+	@javax.ws.rs.Consumes({"application/json", "application/xml"})
+	@javax.ws.rs.Path("/chatbot/session")
+	@javax.ws.rs.POST
+	@javax.ws.rs.Produces({"application/json", "application/xml"})
+	@Override
+	public ChatbotSession addChatbotSession(
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.validation.constraints.NotNull
+			@javax.ws.rs.HeaderParam("userToken")
+			String userToken,
+			ChatbotDatiSessione chatbotDatiSessione)
+		throws Exception {
+
+		return new ChatbotSession();
 	}
 
 	public void setContextAcceptLanguage(AcceptLanguage contextAcceptLanguage) {
@@ -222,6 +269,6 @@ public abstract class BaseDatiAnagraficiResourceImpl
 	protected RoleLocalService roleLocalService;
 
 	private static final com.liferay.portal.kernel.log.Log _log =
-		LogFactoryUtil.getLog(BaseDatiAnagraficiResourceImpl.class);
+		LogFactoryUtil.getLog(BaseChatbotResourceImpl.class);
 
 }
