@@ -1,6 +1,7 @@
 package it.servizidigitali.scrivaniaoperatore.frontend.portlet.render;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -13,21 +14,30 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import it.servizidigitali.camunda.integration.client.model.Task;
+import it.servizidigitali.common.utility.enumeration.OrganizationRole;
+import it.servizidigitali.gestioneenti.model.ServizioEnte;
+import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
+import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
+import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AttivitaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AzioneUtente;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.CommentoDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.UserDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaCodiciOperazioniUtente;
 import it.servizidigitali.scrivaniaoperatore.frontend.service.ScrivaniaOperatoreFrontendService;
 import it.servizidigitali.scrivaniaoperatore.frontend.util.MapUtil;
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.service.AttivitaRichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
@@ -49,7 +59,11 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 	private AttivitaRichiestaLocalService attivitaRichiestaLocalService;
 	@Reference
 	private MapUtil mapUtil;
-
+	@Reference
+	private ProceduraLocalService proceduraLocalService;
+	@Reference
+	private ServizioEnteLocalService servizioEnteLocalService;
+	
 	@Override
 	public String render(RenderRequest request, RenderResponse response) throws PortletException {
 		long id = ParamUtil.getLong(request, "id");
@@ -63,18 +77,24 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 			throw new RuntimeException(e);
 		}
 
-		RichiestaDTO richiesta = mapUtil.mapRichiesta(ctx.getCompanyId(), richiestaLocalService.fetchRichiesta(id));
+		Richiesta richiestaModel = richiestaLocalService.fetchRichiesta(id);
+		RichiestaDTO richiesta = mapUtil.mapRichiesta(ctx.getCompanyId(), richiestaModel);
+		Procedura proceduraModel = proceduraLocalService.fetchProcedura(richiestaModel.getProceduraId());
+		ServizioEnte servizio = servizioEnteLocalService.fetchServizioEnte(new ServizioEntePK(proceduraModel.getServizioId(), ctx.getThemeDisplay().getSiteGroup().getOrganizationId()));
 		
-		// TODO caricamento responsabili ed altri responsabili per modale
-		// List<User> responsabili =
-		// scrivaniaOperatoreFrontendService.getOrganizationUsersByRole(servizio.getSubOrganizationId(),
-		// OrganizationRole.RESPONSABILE, ctx.getCompanyId());
-		// List<User> altriResponsabili =
-		// scrivaniaOperatoreFrontendService.getOrganizationUsersByRole(servizio.getSubOrganizationId(),
-		// OrganizationRole.ALTRO_RESPONSABILE, ctx.getCompanyId());
+		List<UserDTO> responsabili = getResponsabili(ctx, servizio);
+		List<UserDTO> altriResponsabili = getAltriResponsabili(ctx, servizio);
+		request.setAttribute("responsabili", responsabili);
+		request.setAttribute("altriResponsabili", altriResponsabili);
 
 		List<AzioneUtente> azioni = scrivaniaOperatoreFrontendService.getAzioniUtenteDettaglioRichiesta(id, ctx);
 		Map<CamundaCodiciOperazioniUtente, Boolean> azioniMask = getAzioniMask(azioni);
+		String assegnaResponsabileVar = azioni.stream()
+				.filter(x -> CamundaCodiciOperazioniUtente.ASSEGNA_RESPONSABILE.equals(CamundaCodiciOperazioniUtente.valueOf(x.getCodiceAzioneUtente())))
+				.map(x -> x.getVariableSet())
+				.findFirst()
+				.orElse(null);
+		request.setAttribute("assegnaResponsabileVar", assegnaResponsabileVar);
 		request.setAttribute("hasAssegnaAltroResponsabile", azioniMask.get(CamundaCodiciOperazioniUtente.ASSEGNA_ALTRO_RESPONSABILE));
 		request.setAttribute("hasAssegnaResponsabile", azioniMask.get(CamundaCodiciOperazioniUtente.ASSEGNA_RESPONSABILE));
 		request.setAttribute("hasEsitoPositivo", azioniMask.get(CamundaCodiciOperazioniUtente.ESITO_PROCEDIMENTO_POSITIVO));
@@ -90,6 +110,13 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 		request.setAttribute("richiesta", richiesta);
 		request.setAttribute("titleArgs", new String[] { String.valueOf(richiesta.getId()), richiesta.getServizio() });
 		
+		List<AllegatoDTO> allegatiRichiestaOperatore = scrivaniaOperatoreFrontendService
+				.getAllegatiRichiestaInterni(richiesta.getId()).stream()
+				.map(x -> mapUtil.mapAllegato(ctx, x))
+				.collect(Collectors.toList());
+		request.setAttribute("allegatiOperatoreList", allegatiRichiestaOperatore);
+		request.setAttribute("allegatiOperatoreCount", allegatiRichiestaOperatore.size());
+		
 		switch (dettaglioTab) {
 		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_DATI:
 			//TODO dimensione modello compilato dal cittadino
@@ -102,16 +129,9 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 				.stream()
 				.map(x -> mapUtil.mapAllegato(ctx, x))
 				.collect(Collectors.toList());
-			List<AllegatoDTO> allegatiRichiestaOperatore = scrivaniaOperatoreFrontendService
-				.getAllegatiRichiestaInterni(richiesta.getId()).stream()
-				.map(x -> mapUtil.mapAllegato(ctx, x))
-				.collect(Collectors.toList());
-			
 			
 			request.setAttribute("allegatiRichiedenteList", allegatiRichiesta);
-			request.setAttribute("allegatiOperatoreList", allegatiRichiestaOperatore);
 			request.setAttribute("allegatiRichiedenteCount", allegatiRichiesta.size());
-			request.setAttribute("allegatiOperatoreCount", allegatiRichiestaOperatore.size());
 			break;
 		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_COMMENTI:
 			List<CommentoDTO> commenti = scrivaniaOperatoreFrontendService
@@ -139,6 +159,40 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 		
 		
 		return "/dettaglio.jsp";
+	}
+
+	private List<UserDTO> getAltriResponsabili(ServiceContext ctx, ServizioEnte servizio) {
+		List<User> lst = scrivaniaOperatoreFrontendService.getOrganizationUsersByRole(
+				servizio.getSubOrganizationId(),
+				OrganizationRole.ALTRO_RESPONSABILE, 
+				ctx.getCompanyId());
+		if (lst != null) {
+			List<UserDTO> altriResponsabili = lst
+					.stream()
+					.filter(x -> x.getUserId() != ctx.getUserId())
+					.map(x -> mapUtil.mapUser(x))
+					.collect(Collectors.toList());
+			return altriResponsabili;
+		} else {
+			return Collections.emptyList();
+		}
+	}
+
+	private List<UserDTO> getResponsabili(ServiceContext ctx, ServizioEnte servizio) {
+		List<User> lst = scrivaniaOperatoreFrontendService.getOrganizationUsersByRole(
+				servizio.getSubOrganizationId(),
+				OrganizationRole.RESPONSABILE, 
+				ctx.getCompanyId());
+		if (lst != null) {
+			List<UserDTO> responsabili = lst
+					.stream()
+					.filter(x -> x.getUserId() != ctx.getUserId())
+					.map(x -> mapUtil.mapUser(x))
+					.collect(Collectors.toList());
+			return responsabili;
+		} else {
+			return Collections.emptyList();
+		}
 	}
 
 	private Map<CamundaCodiciOperazioniUtente, Boolean> getAzioniMask(List<AzioneUtente> azioni) {
