@@ -43,7 +43,7 @@ public class AssegnaResponsabileActionCommand extends BaseMVCActionCommand {
 		try {
 			long responsabile = ParamUtil.getLong(request, "responsabile");
 			String commento = ParamUtil.getString(request, "commento");
-			String assegnaResponsabileVar = ParamUtil.getString(request, "assegnaResponsabileVar");
+			String variableSet = ParamUtil.getString(request, "variableSet");
 			
 			ServiceContext context = ServiceContextFactory.getInstance(request);
 			Richiesta richiesta = richiestaLocalService.fetchRichiesta(richiestaId);
@@ -55,7 +55,7 @@ public class AssegnaResponsabileActionCommand extends BaseMVCActionCommand {
 					responsabile, 
 					richiestaId,
 					taskId,
-					assegnaResponsabileVar, 
+					variableSet, 
 					commento, 
 					context);
 		} catch (Exception e) {
