@@ -325,6 +325,28 @@
 	</div>
 </div>
 
+<div class="modal fade" tabindex="-1" id="<portlet:namespace />richiediModificheModal" style="display: none;">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title"><liferay-ui:message key="richiedi-modifiche-integrazioni-richiedente" /></h5>
+				<button type="button" class="close" data-dismiss="modal">
+					&times;
+				</button>
+			</div>
+			<div class="modal-body">
+				<span><liferay-ui:message key="non-sono-previste-integrazioni" /></span>
+			</div>
+			<div class="modal-footer d-flex justify-content-end">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">
+					<liferay-ui:message key="annulla" />
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+			
+
 <portlet:renderURL var="dettaglioURL">
 	<portlet:param name="mvcRenderCommandName" value="/render/dettaglio" />
 	<portlet:param name="id" value="${richiesta.id}" />

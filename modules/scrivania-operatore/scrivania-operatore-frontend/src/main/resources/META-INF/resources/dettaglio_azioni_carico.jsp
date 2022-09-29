@@ -28,7 +28,7 @@
 			</c:if>
 			
 			<c:if test="${hasRichiediModificheRichiedente}">
-				<button class="btn btn-outline-primary mr-1 mt-1">
+				<button class="btn btn-outline-primary mr-1 mt-1" data-toggle="modal" data-target="#<portlet:namespace />richiediModificheModal">
 					<liferay-ui:message key="richiedi-modifiche-integrazioni-richiedente" />
 				</button>
 			</c:if>
