@@ -1,10 +1,12 @@
 package it.servizidigitali.presentatoreforms.frontend.service;
 
+import com.google.gson.Gson;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -25,12 +27,15 @@ import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
+import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
+import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
 import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
+import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalServiceUtil;
 
 /**
  * @author pindi
@@ -182,5 +187,63 @@ public class PresentatoreFormFrontendService {
 	 */
 	public IstanzaForm getIstanzaFormRichiesta(long richiestaId, long formId) {
 		return istanzaFormLocalService.getIstanzaFormByRichiestaIdFormId(richiestaId, formId);
+	}
+	
+	public Richiesta createOrUpdateRichiesta(User user, long proceduraId, String dataForm, String stato) {
+
+		Richiesta richiesta = null;
+		IstanzaForm istanzaForm = null;
+		Form form = null;
+
+		Gson gson = new Gson();
+		AlpacaJsonStructure alpacaStructure = gson.fromJson(dataForm, AlpacaJsonStructure.class);
+		
+		if (Validator.isNotNull(alpacaStructure)) {
+			FormData formData = new FormData();
+			formData.setAlpaca(alpacaStructure);
+			String jsonToSave = gson.toJson(formData);
+
+			// recupero richiesta se esiste altrimenti ne creo una nuova
+			richiesta = getRichiestaBozza(user.getScreenName(), proceduraId);
+			form = getFormPrincipaleProcedura(proceduraId);
+			
+			if(Validator.isNotNull(form)) {
+				
+				if(Validator.isNotNull(StatoRichiesta.valueOf(stato))) {
+					//recupero richiesta esistente
+					if (Validator.isNotNull(richiesta)) {
+						log.debug("Recuperata richiesta in stato BOZZA con id: " + richiesta.getRichiestaId());
+						istanzaForm = getIstanzaFormRichiesta(richiesta.getRichiestaId(), form.getFormId());						
+					} else {
+						//creazione nuova richiesta
+						richiesta = richiestaLocalService.createRichiesta(0);
+						richiesta.setCodiceFiscale(user.getScreenName());
+						richiesta.setUserId(user.getUserId());
+						richiesta.setUserName(user.getFullName());
+						richiesta.setEmail(user.getEmailAddress());
+						richiesta.setProceduraId(proceduraId);
+						richiesta = richiestaLocalService.updateRichiesta(richiesta);
+						
+						istanzaForm = istanzaFormLocalService.createIstanzaForm(0);
+						istanzaForm.setRichiestaId(richiesta.getRichiestaId());
+						istanzaForm.setFormId(form.getFormId());
+					}
+					//aggiorno stato richiesta
+					richiesta.setStato(stato);
+					richiestaLocalService.updateRichiesta(richiesta);
+					//aggiorno json in istanza form
+					istanzaForm.setJson(jsonToSave);
+					istanzaFormLocalService.updateIstanzaForm(istanzaForm);
+				} else {
+					log.error("Valore non valido per lo stato della richiesta: " + stato);
+				}
+				
+			} else {
+				log.error("Nessun form principale associato alla procedura con id: " + proceduraId);
+			}
+			
+		}
+		
+		return richiesta;
 	}
 }
