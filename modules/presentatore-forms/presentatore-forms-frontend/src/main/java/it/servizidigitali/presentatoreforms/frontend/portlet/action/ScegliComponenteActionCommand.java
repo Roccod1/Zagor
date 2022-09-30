@@ -76,7 +76,7 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 
 		try {
 			procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
-			alpacaStructure = getAlpacaJsonStructure(procedura, themeDisplay);
+			alpacaStructure = getAlpacaJsonStructure(procedura,themeDisplay);
 
 			String step2TipoServizio = procedura.getStep2TipoServizio();
 

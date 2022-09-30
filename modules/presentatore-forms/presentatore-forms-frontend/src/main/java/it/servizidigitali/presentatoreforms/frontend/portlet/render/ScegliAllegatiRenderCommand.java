@@ -7,7 +7,6 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +27,6 @@ import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreForms
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AllegatoUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.DatiAllegato;
-import it.servizidigitali.presentatoreforms.frontend.util.model.DatiDocumentoPersonale;
 import it.servizidigitali.presentatoreforms.frontend.util.model.DatiFileAllegato;
 
 
