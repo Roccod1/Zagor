@@ -53,6 +53,20 @@ public class PagamentoLocalServiceWrapper
 		return _pagamentoLocalService.addPagamento(pagamento);
 	}
 
+	@Override
+	public long countByFilters(
+		java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
+		java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
+		String organizzazione, String categoria, String stato, String gateway,
+		String canale, String servizio, String cliente,
+		String identificativoPagamento, String codiceIuv, long idPagamento) {
+
+		return _pagamentoLocalService.countByFilters(
+			dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
+			dataOperazioneA, organizzazione, categoria, stato, gateway, canale,
+			servizio, cliente, identificativoPagamento, codiceIuv, idPagamento);
+	}
+
 	/**
 	 * Creates a new pagamento with the primary key. Does not add the pagamento to the database.
 	 *
@@ -388,6 +402,23 @@ public class PagamentoLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _pagamentoLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.gestionepagamenti.model.Pagamento>
+		search(
+			java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
+			java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
+			String organizzazione, String categoria, String stato,
+			String gateway, String canale, String servizio, String cliente,
+			String identificativoPagamento, String codiceIuv, long idPagamento,
+			int inizio, int fine, String orderByCol, String orderByType) {
+
+		return _pagamentoLocalService.search(
+			dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
+			dataOperazioneA, organizzazione, categoria, stato, gateway, canale,
+			servizio, cliente, identificativoPagamento, codiceIuv, idPagamento,
+			inizio, fine, orderByCol, orderByType);
 	}
 
 	/**

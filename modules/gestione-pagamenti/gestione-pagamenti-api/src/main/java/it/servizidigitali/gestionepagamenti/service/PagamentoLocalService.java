@@ -37,6 +37,7 @@ import it.servizidigitali.gestionepagamenti.model.Pagamento;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -77,6 +78,13 @@ public interface PagamentoLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Pagamento addPagamento(Pagamento pagamento);
+
+	public long countByFilters(
+		Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
+		Date dataOperazioneA, String organizzazione, String categoria,
+		String stato, String gateway, String canale, String servizio,
+		String cliente, String identificativoPagamento, String codiceIuv,
+		long idPagamento);
 
 	/**
 	 * Creates a new pagamento with the primary key. Does not add the pagamento to the database.
@@ -306,6 +314,15 @@ public interface PagamentoLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Pagamento> search(
+		Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
+		Date dataOperazioneA, String organizzazione, String categoria,
+		String stato, String gateway, String canale, String servizio,
+		String cliente, String identificativoPagamento, String codiceIuv,
+		long idPagamento, int inizio, int fine, String orderByCol,
+		String orderByType);
 
 	/**
 	 * Updates the pagamento in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

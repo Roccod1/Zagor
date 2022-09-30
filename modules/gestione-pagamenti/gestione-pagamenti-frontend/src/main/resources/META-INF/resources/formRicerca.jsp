@@ -1,0 +1,106 @@
+<portlet:actionURL var="cercaPagamentiActionURL"
+	name="<%=GestionePagamentiFrontendPortletKeys.CERCA_PAGAMENTI_ACTION_COMMAND%>">
+</portlet:actionURL>
+
+<aui:form method="post" action="${cercaPagamentiActionURL}"
+	name="formCercaPagamenti">
+	<aui:fieldset>
+		<aui:container>
+			<aui:row>
+				<aui:col md="3">
+					<aui:input value="${dataInserimentoDaCerca}"
+						label="gestionePagamenti.cerca.dataInserimentoDa"
+						id="dataInserimentoDa"
+						name="<%=GestionePagamentiFrontendPortletKeys.DATA_INSERIMENTO_DA_CERCA %>"
+						type="date" />
+				</aui:col>
+				<aui:col md="3">
+					<aui:input value="${dataInserimentoACerca}"
+						label="gestionePagamenti.cerca.dataInserimentoA"
+						id="dataInserimentoA"
+						name="<%=GestionePagamentiFrontendPortletKeys.DATA_INSERIMENTO_A_CERCA %>"
+						type="date" />
+				</aui:col>
+				<aui:col md="3">
+					<aui:input value="${dataOperazioneDaCerca}"
+						label="gestionePagamenti.cerca.dataOperazioneDa"
+						id="dataOperazioneDa"
+						name="<%=GestionePagamentiFrontendPortletKeys.DATA_OPERAZIONE_DA_CERCA %>"
+						type="date" />
+				</aui:col>
+				<aui:col md="3">
+					<aui:input value="${dataOperazioneACerca}"
+						label="gestionePagamenti.cerca.dataOperazioneA"
+						id="dataOperazioneA"
+						name="<%=GestionePagamentiFrontendPortletKeys.DATA_OPERAZIONE_A_CERCA %>"
+						type="date" />
+				</aui:col>
+			</aui:row>
+			<aui:row>
+				<aui:col md="3">
+					<aui:select value="${selectOrganizzazioneCerca}" label="gestionePagamenti.cerca.select.organizzazione"
+						name="<%=GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA%>"
+						showEmptyOption="true">
+					</aui:select>
+				</aui:col>
+				<aui:col md="3">
+					<aui:select value="${selectCategoriaCerca}" label="gestionePagamenti.cerca.select.categoria"
+						name="<%=GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA%>"
+						showEmptyOption="true">
+					</aui:select>
+				</aui:col>
+				<aui:col md="2">
+					<aui:select value="${selectStatoCerca}" label="gestionePagamenti.cerca.select.stato"
+						name="<%=GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA%>"
+						showEmptyOption="true">
+					</aui:select>
+				</aui:col>
+				<aui:col md="2">
+					<aui:select value="${selectGatewayCerca}" label="gestionePagamenti.cerca.select.gateway"
+						name="<%=GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA%>"
+						showEmptyOption="true">
+					</aui:select>
+				</aui:col>
+				<aui:col md="2">
+					<aui:select value="${selectCanaleCerca}" label="gestionePagamenti.cerca.select.canale"
+						name="<%=GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA%>"
+						showEmptyOption="true">
+					</aui:select>
+				</aui:col>
+			</aui:row>
+			<aui:row>
+				<aui:col md="3">
+					<aui:input value="${servizioCerca}" label="gestionePagamenti.cerca.servizio" id="servizio"
+						name="<%=GestionePagamentiFrontendPortletKeys.SERVIZIO_CERCA%>"
+						type="text" />
+				</aui:col>
+				<aui:col md="3">
+					<aui:input value="${clienteCerca}" label="gestionePagamenti.cerca.cliente" id="cliente"
+						name="<%=GestionePagamentiFrontendPortletKeys.CLIENTE_CERCA%>"
+						type="text" />
+				</aui:col>
+				<aui:col md="2">
+					<aui:input value="${identificativoPagamentoCerca}" label="gestionePagamenti.cerca.identificativoPagamento"
+						id="identificativoPagamento"
+						name="<%=GestionePagamentiFrontendPortletKeys.IDENTIFICATIVO_PAGAMENTO_CERCA%>"
+						type="text" />
+				</aui:col>
+				<aui:col md="2">
+					<aui:input value="${codiceIuvCerca}" label="gestionePagamenti.cerca.codiceIuv" id="codiceIuv"
+						name="<%=GestionePagamentiFrontendPortletKeys.CODICE_IUV_CERCA%>"
+						type="text" />
+				</aui:col>
+				<aui:col md="2">
+					<aui:input value="${idPagamentoCerca}" label="gestionePagamenti.cerca.idPagamento"
+						id="idPagamento"
+						name="<%=GestionePagamentiFrontendPortletKeys.ID_PAGAMENTO_CERCA%>"
+						type="number" />
+				</aui:col>
+			</aui:row>
+		</aui:container>
+	</aui:fieldset>
+
+	<aui:button-row cssClass="text-right">
+		<aui:button type="submit" value="gestionePagamenti.cerca.button" />
+	</aui:button-row>
+</aui:form>

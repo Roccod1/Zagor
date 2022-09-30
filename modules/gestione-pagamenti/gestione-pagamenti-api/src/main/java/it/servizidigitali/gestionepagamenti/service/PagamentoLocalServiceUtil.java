@@ -60,6 +60,19 @@ public class PagamentoLocalServiceUtil {
 		return getService().addPagamento(pagamento);
 	}
 
+	public static long countByFilters(
+		java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
+		java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
+		String organizzazione, String categoria, String stato, String gateway,
+		String canale, String servizio, String cliente,
+		String identificativoPagamento, String codiceIuv, long idPagamento) {
+
+		return getService().countByFilters(
+			dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
+			dataOperazioneA, organizzazione, categoria, stato, gateway, canale,
+			servizio, cliente, identificativoPagamento, codiceIuv, idPagamento);
+	}
+
 	/**
 	 * Creates a new pagamento with the primary key. Does not add the pagamento to the database.
 	 *
@@ -343,6 +356,21 @@ public class PagamentoLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static List<Pagamento> search(
+		java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
+		java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
+		String organizzazione, String categoria, String stato, String gateway,
+		String canale, String servizio, String cliente,
+		String identificativoPagamento, String codiceIuv, long idPagamento,
+		int inizio, int fine, String orderByCol, String orderByType) {
+
+		return getService().search(
+			dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
+			dataOperazioneA, organizzazione, categoria, stato, gateway, canale,
+			servizio, cliente, identificativoPagamento, codiceIuv, idPagamento,
+			inizio, fine, orderByCol, orderByType);
 	}
 
 	/**

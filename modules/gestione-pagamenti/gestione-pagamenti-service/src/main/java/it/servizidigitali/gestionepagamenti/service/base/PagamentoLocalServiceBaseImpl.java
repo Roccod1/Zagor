@@ -48,6 +48,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalServiceUtil;
+import it.servizidigitali.gestionepagamenti.service.persistence.PagamentoFinder;
 import it.servizidigitali.gestionepagamenti.service.persistence.PagamentoPersistence;
 
 import java.io.Serializable;
@@ -588,6 +589,9 @@ public abstract class PagamentoLocalServiceBaseImpl
 
 	@Reference
 	protected PagamentoPersistence pagamentoPersistence;
+
+	@Reference
+	protected PagamentoFinder pagamentoFinder;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService

@@ -56,8 +56,8 @@ public class PagamentoWrapper
 		attributes.put("idCredito", getIdCredito());
 		attributes.put("idFiscaleCliente", getIdFiscaleCliente());
 		attributes.put("denominazioneCliente", getDenominazioneCliente());
-		attributes.put("causale", getCausale());
 		attributes.put("emailQuietanza", getEmailQuietanza());
+		attributes.put("causale", getCausale());
 		attributes.put("descrizioneServizio", getDescrizioneServizio());
 		attributes.put("importo", getImporto());
 		attributes.put("commissioni", getCommissioni());
@@ -142,16 +142,16 @@ public class PagamentoWrapper
 			setDenominazioneCliente(denominazioneCliente);
 		}
 
-		String causale = (String)attributes.get("causale");
-
-		if (causale != null) {
-			setCausale(causale);
-		}
-
 		String emailQuietanza = (String)attributes.get("emailQuietanza");
 
 		if (emailQuietanza != null) {
 			setEmailQuietanza(emailQuietanza);
+		}
+
+		String causale = (String)attributes.get("causale");
+
+		if (causale != null) {
+			setCausale(causale);
 		}
 
 		String descrizioneServizio = (String)attributes.get(

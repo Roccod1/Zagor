@@ -88,10 +88,10 @@ public class PagamentoCacheModel
 		sb.append(idFiscaleCliente);
 		sb.append(", denominazioneCliente=");
 		sb.append(denominazioneCliente);
-		sb.append(", causale=");
-		sb.append(causale);
 		sb.append(", emailQuietanza=");
 		sb.append(emailQuietanza);
+		sb.append(", causale=");
+		sb.append(causale);
 		sb.append(", descrizioneServizio=");
 		sb.append(descrizioneServizio);
 		sb.append(", importo=");
@@ -177,18 +177,18 @@ public class PagamentoCacheModel
 			pagamentoImpl.setDenominazioneCliente(denominazioneCliente);
 		}
 
-		if (causale == null) {
-			pagamentoImpl.setCausale("");
-		}
-		else {
-			pagamentoImpl.setCausale(causale);
-		}
-
 		if (emailQuietanza == null) {
 			pagamentoImpl.setEmailQuietanza("");
 		}
 		else {
 			pagamentoImpl.setEmailQuietanza(emailQuietanza);
+		}
+
+		if (causale == null) {
+			pagamentoImpl.setCausale("");
+		}
+		else {
+			pagamentoImpl.setCausale(causale);
 		}
 
 		if (descrizioneServizio == null) {
@@ -271,8 +271,8 @@ public class PagamentoCacheModel
 		idCredito = objectInput.readUTF();
 		idFiscaleCliente = objectInput.readUTF();
 		denominazioneCliente = objectInput.readUTF();
-		causale = objectInput.readUTF();
 		emailQuietanza = objectInput.readUTF();
+		causale = objectInput.readUTF();
 		descrizioneServizio = objectInput.readUTF();
 		importo = (BigDecimal)objectInput.readObject();
 		commissioni = (BigDecimal)objectInput.readObject();
@@ -336,18 +336,18 @@ public class PagamentoCacheModel
 			objectOutput.writeUTF(denominazioneCliente);
 		}
 
-		if (causale == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(causale);
-		}
-
 		if (emailQuietanza == null) {
 			objectOutput.writeUTF("");
 		}
 		else {
 			objectOutput.writeUTF(emailQuietanza);
+		}
+
+		if (causale == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(causale);
 		}
 
 		if (descrizioneServizio == null) {
@@ -418,8 +418,8 @@ public class PagamentoCacheModel
 	public String idCredito;
 	public String idFiscaleCliente;
 	public String denominazioneCliente;
-	public String causale;
 	public String emailQuietanza;
+	public String causale;
 	public String descrizioneServizio;
 	public BigDecimal importo;
 	public BigDecimal commissioni;

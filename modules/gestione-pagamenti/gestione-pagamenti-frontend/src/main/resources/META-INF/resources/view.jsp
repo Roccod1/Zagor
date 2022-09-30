@@ -1,5 +1,10 @@
 <%@ include file="/init.jsp" %>
 
-<p>
-	<b><liferay-ui:message key="gestionepagamentifrontend.caption"/></b>
-</p>
+<aui:container>
+	<aui:row>
+		<aui:col md="12">
+			<%@ include file="formRicerca.jsp" %>
+			<%@ include file="listaPagamenti.jsp" %>
+		</aui:col>
+	</aui:row>
+</aui:container>

@@ -13,8 +13,8 @@
 		<field name="idCredito" type="String" />
 		<field name="idFiscaleCliente" type="String" />
 		<field name="denominazioneCliente" type="String" />
-		<field name="causale" type="String" />
 		<field name="emailQuietanza" type="String" />
+		<field name="causale" type="String" />
 		<field name="descrizioneServizio" type="String" />
 		<field name="importo" type="BigDecimal" />
 		<field name="commissioni" type="BigDecimal" />

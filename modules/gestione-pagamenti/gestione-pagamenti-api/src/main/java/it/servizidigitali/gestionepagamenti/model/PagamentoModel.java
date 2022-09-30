@@ -252,21 +252,6 @@ public interface PagamentoModel
 	public void setDenominazioneCliente(String denominazioneCliente);
 
 	/**
-	 * Returns the causale of this pagamento.
-	 *
-	 * @return the causale of this pagamento
-	 */
-	@AutoEscape
-	public String getCausale();
-
-	/**
-	 * Sets the causale of this pagamento.
-	 *
-	 * @param causale the causale of this pagamento
-	 */
-	public void setCausale(String causale);
-
-	/**
 	 * Returns the email quietanza of this pagamento.
 	 *
 	 * @return the email quietanza of this pagamento
@@ -280,6 +265,21 @@ public interface PagamentoModel
 	 * @param emailQuietanza the email quietanza of this pagamento
 	 */
 	public void setEmailQuietanza(String emailQuietanza);
+
+	/**
+	 * Returns the causale of this pagamento.
+	 *
+	 * @return the causale of this pagamento
+	 */
+	@AutoEscape
+	public String getCausale();
+
+	/**
+	 * Sets the causale of this pagamento.
+	 *
+	 * @param causale the causale of this pagamento
+	 */
+	public void setCausale(String causale);
 
 	/**
 	 * Returns the descrizione servizio of this pagamento.
