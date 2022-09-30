@@ -8,9 +8,14 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+
+import java.io.File;
+import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -18,6 +23,8 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
+import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
@@ -36,16 +43,7 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand{
 	public static final Log _log = LogFactoryUtil.getLog(SalvaInviaRichiestaActionCommand.class);
 	
 	@Reference
-	private FormLocalService formLocalService;
-	
-	@Reference
-    private CounterLocalService counterLocalService;
-	
-	@Reference
     private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
-	
-	@Reference
-	private GroupLocalService groupLocalService;
 	
 	@Reference
 	PresentatoreFormFrontendService presentatoreFormFrontendService;
@@ -58,8 +56,31 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand{
 		long proceduraId = ParamUtil.getLong(actionRequest, "proceduraId");
 		String dataForm = ParamUtil.getString(actionRequest, "dataForm");
 		
+		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
+		
 		if(Validator.isNotNull(dataForm) && proceduraId >0){
+			
 			presentatoreFormFrontendService.createOrUpdateRichiesta(user, proceduraId, dataForm, StatoRichiesta.NUOVA.name());
+			
+			Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(proceduraId);
+			
+			if(Validator.isNotNull(form)){
+				
+				List<DefinizioneAllegato> listaDefinizioneAllegato = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(form.getFormId());
+				
+				if(Validator.isNotNull(listaDefinizioneAllegato) && !listaDefinizioneAllegato.isEmpty()){
+					
+					for(DefinizioneAllegato definizioneAllegato : listaDefinizioneAllegato) {
+						File allegato = uploadPortletRequest.getFile("allegato-" + definizioneAllegato.getDefinizioneAllegatoId());
+						
+						if(Validator.isNotNull(allegato)) {
+							//TODO: salvataggio allegato
+						}
+					}
+					
+				}
+				
+			}
 		}		
 	}
 	
