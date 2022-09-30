@@ -155,7 +155,6 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 		if (lst != null) {
 			List<UserDTO> altriResponsabili = lst
 					.stream()
-					.filter(x -> x.getUserId() != ctx.getUserId())
 					.map(x -> mapUtil.mapUser(x))
 					.collect(Collectors.toList());
 			return altriResponsabili;
@@ -172,7 +171,6 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 		if (lst != null) {
 			List<UserDTO> responsabili = lst
 					.stream()
-					.filter(x -> x.getUserId() != ctx.getUserId())
 					.map(x -> mapUtil.mapUser(x))
 					.collect(Collectors.toList());
 			return responsabili;
