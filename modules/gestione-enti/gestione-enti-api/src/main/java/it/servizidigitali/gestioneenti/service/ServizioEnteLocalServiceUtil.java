@@ -252,22 +252,6 @@ public class ServizioEnteLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
-	public static List<Object> getListaServiziByCompanyOrganizationAttivo(
-			long companyId, long organizationId, boolean attivo)
-		throws Exception {
-
-		return getService().getListaServiziByCompanyOrganizationAttivo(
-			companyId, organizationId, attivo);
-	}
-
-	public static List<Long> getListaServiziByOrganizationAttivo(
-			long organizationId, boolean attivo)
-		throws Exception {
-
-		return getService().getListaServiziByOrganizationAttivo(
-			organizationId, attivo);
-	}
-
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -290,6 +274,14 @@ public class ServizioEnteLocalServiceUtil {
 		return getService().getServiziEnte(organizationId);
 	}
 
+	public static List<ServizioEnte> getServiziEnteByCompanyOrganizationAttivo(
+			long companyId, long organizationId, boolean attivo)
+		throws Exception {
+
+		return getService().getServiziEnteByCompanyOrganizationAttivo(
+			companyId, organizationId, attivo);
+	}
+
 	public static List<ServizioEnte>
 		getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(
 			long organizationId, List<Long> subOrganizationIds, Boolean attivo,
@@ -298,6 +290,14 @@ public class ServizioEnteLocalServiceUtil {
 		return getService().
 			getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(
 				organizationId, subOrganizationIds, attivo, groupId, companyId);
+	}
+
+	public static List<Long> getServiziIdsByOrganizationAttivo(
+			long organizationId, boolean attivo)
+		throws Exception {
+
+		return getService().getServiziIdsByOrganizationAttivo(
+			organizationId, attivo);
 	}
 
 	/**

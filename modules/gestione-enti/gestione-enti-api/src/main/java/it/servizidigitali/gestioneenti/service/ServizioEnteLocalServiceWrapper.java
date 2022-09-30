@@ -279,25 +279,6 @@ public class ServizioEnteLocalServiceWrapper
 		return _servizioEnteLocalService.getIndexableActionableDynamicQuery();
 	}
 
-	@Override
-	public java.util.List<Object> getListaServiziByCompanyOrganizationAttivo(
-			long companyId, long organizationId, boolean attivo)
-		throws Exception {
-
-		return _servizioEnteLocalService.
-			getListaServiziByCompanyOrganizationAttivo(
-				companyId, organizationId, attivo);
-	}
-
-	@Override
-	public java.util.List<Long> getListaServiziByOrganizationAttivo(
-			long organizationId, boolean attivo)
-		throws Exception {
-
-		return _servizioEnteLocalService.getListaServiziByOrganizationAttivo(
-			organizationId, attivo);
-	}
-
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -328,6 +309,17 @@ public class ServizioEnteLocalServiceWrapper
 
 	@Override
 	public java.util.List<it.servizidigitali.gestioneenti.model.ServizioEnte>
+			getServiziEnteByCompanyOrganizationAttivo(
+				long companyId, long organizationId, boolean attivo)
+		throws Exception {
+
+		return _servizioEnteLocalService.
+			getServiziEnteByCompanyOrganizationAttivo(
+				companyId, organizationId, attivo);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.gestioneenti.model.ServizioEnte>
 		getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(
 			long organizationId, java.util.List<Long> subOrganizationIds,
 			Boolean attivo, long groupId, long companyId) {
@@ -335,6 +327,15 @@ public class ServizioEnteLocalServiceWrapper
 		return _servizioEnteLocalService.
 			getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(
 				organizationId, subOrganizationIds, attivo, groupId, companyId);
+	}
+
+	@Override
+	public java.util.List<Long> getServiziIdsByOrganizationAttivo(
+			long organizationId, boolean attivo)
+		throws Exception {
+
+		return _servizioEnteLocalService.getServiziIdsByOrganizationAttivo(
+			organizationId, attivo);
 	}
 
 	/**

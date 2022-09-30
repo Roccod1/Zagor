@@ -136,7 +136,7 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 	}
 
 	@Override
-	public List<Object> getListaServiziByCompanyOrganizationAttivo(long companyId, long organizationId, boolean attivo) throws Exception {
+	public List<ServizioEnte> getServiziEnteByCompanyOrganizationAttivo(long companyId, long organizationId, boolean attivo) throws Exception {
 
 		ClassLoader classLoader = getClassLoader();
 		DynamicQuery servizioEnteDynamicQuery = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, classLoader);
@@ -150,14 +150,12 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 		if (organizationId > 0) {
 			servizioEnteDynamicQuery.add(RestrictionsFactoryUtil.eq("primaryKey.organizationId", organizationId));
 		}
-		// imposto projection per ottenere solo gli id delle entity
-		servizioEnteDynamicQuery.setProjection(ProjectionFactoryUtil.property("primaryKey.servizioId"));
 
 		return servizioEntePersistence.findWithDynamicQuery(servizioEnteDynamicQuery);
 	}
 
 	@Override
-	public List<Long> getListaServiziByOrganizationAttivo(long organizationId, boolean attivo) throws Exception {
+	public List<Long> getServiziIdsByOrganizationAttivo(long organizationId, boolean attivo) throws Exception {
 
 		ClassLoader classLoader = getClassLoader();
 		DynamicQuery servizioEnteDynamicQuery = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, classLoader);
