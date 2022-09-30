@@ -7,8 +7,8 @@
 	<portlet:param name="mvcPath" value="/view.jsp" />
 </liferay-portlet:renderURL>
 
-<liferay-ui:search-container delta="10" emptyResultsMessage="nessun-risultato-trovato" total="<%=listaServizi.size()%>" iteratorURL="${iteratorURL}" >
-	<liferay-ui:search-container-results results="<%=ListUtil.subList(listaServizi, searchContainer.getStart(), searchContainer.getEnd()) %>"/>
+<liferay-ui:search-container delta="10" emptyResultsMessage="nessun-risultato-trovato" total="${totaleElementi}" iteratorURL="${iteratorURL}" >
+	<liferay-ui:search-container-results results="<%=listaServizi%>"/>
 	<liferay-ui:search-container-row className="it.servizidigitali.gestioneservizi.model.Servizio" modelVar="servizio" >
 		<liferay-ui:search-container-column-text property="codice" name="codice-servizio" orderable="true" orderableProperty="codice"/>
 		<liferay-ui:search-container-column-text property="nome" name="nome" orderable="true" orderableProperty="nome"/>

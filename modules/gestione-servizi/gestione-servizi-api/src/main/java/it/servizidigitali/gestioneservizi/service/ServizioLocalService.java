@@ -92,8 +92,7 @@ public interface ServizioLocalService
 
 	public void clearTipologiaServizios(long tipologiaId);
 
-	public int countSearchServizio(
-		String nome, String codice, Boolean soloServiziAttivi);
+	public int count(String nome, String codice, Boolean soloServiziAttivi);
 
 	/**
 	 * @throws PortalException
@@ -391,8 +390,8 @@ public interface ServizioLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Servizio> searchServizio(
-			String nome, String codice, Boolean soloServiziAttivi, int cur,
-			int delta, String nomeOrdinamento, String direzioneOrdinamento)
+			String nome, String codice, Boolean soloServiziAttivi, int inizio,
+			int fine, OrderByComparator<Servizio> ordine)
 		throws Exception;
 
 	public void setTipologiaServizios(long tipologiaId, long[] servizioIds);

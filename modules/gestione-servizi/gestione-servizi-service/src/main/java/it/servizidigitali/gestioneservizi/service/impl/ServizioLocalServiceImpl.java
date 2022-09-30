@@ -111,35 +111,30 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl {
 	 * @return
 	 */
 	@Override
-	public List<Servizio> searchServizio(String nome, String codice, Boolean soloServiziAttivi, int cur, int delta, String nomeOrdinamento, String direzioneOrdinamento) throws Exception {
-
-		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
-		int inizio = posizioni[0];
-		int fine = posizioni[1];
-
-		if (Validator.isNull(nomeOrdinamento)) {
-			_log.debug("Nessun ordinamento impostato. Uso di default servizioId");
-			nomeOrdinamento = "servizioId";
-		}
-
-		if (inizio <= 0 || fine <= 0) {
-			_log.debug("Posizione iniziale o finale sono minori o uguali a zero. Imposto inizio e fine al valore ALL_POS");
-			inizio = QueryUtil.ALL_POS;
-			fine = QueryUtil.ALL_POS;
-		}
-
-		boolean direzione = "desc".equals(direzioneOrdinamento.toLowerCase()) ? false : true;
-
-		OrderByComparator<Servizio> ordine = OrderByComparatorFactoryUtil.create("Servizio", nomeOrdinamento, direzione);
-
+	public List<Servizio> searchServizio(String nome, String codice, Boolean soloServiziAttivi, int inizio, int fine, OrderByComparator<Servizio> ordine) throws Exception {
 		List<Servizio> listaServizi = servizioFinder.findServizioByFilter(nome, codice, soloServiziAttivi, inizio, fine, ordine);
-
 		return listaServizi;
 	}
 
 	@Override
-	public int countSearchServizio(String nome, String codice, Boolean soloServiziAttivi) {
-		return servizioFinder.countServizioByFilter(nome, codice, soloServiziAttivi);
+	public int count(String nome, String codice, Boolean soloServiziAttivi) {
+		ClassLoader classLoader = getClass().getClassLoader();
+		
+		DynamicQuery query = DynamicQueryFactoryUtil.forClass(Servizio.class, classLoader);
+
+		if(Validator.isNotNull(nome)) {
+			query.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));			
+		}
+		
+		if(Validator.isNotNull(codice)){
+			query.add(RestrictionsFactoryUtil.like("codice", StringPool.PERCENT + codice + StringPool.PERCENT));
+		}
+		
+		if(soloServiziAttivi) {
+			query.add(RestrictionsFactoryUtil.eq("attivo", true));
+		}
+		
+		return (int) servizioPersistence.countWithDynamicQuery(query);
 	}
 
 	@Override

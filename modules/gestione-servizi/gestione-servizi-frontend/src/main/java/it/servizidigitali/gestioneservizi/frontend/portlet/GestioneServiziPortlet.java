@@ -1,13 +1,17 @@
 package it.servizidigitali.gestioneservizi.frontend.portlet;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -71,20 +75,36 @@ public class GestioneServiziPortlet extends MVCPortlet {
 		String codice = ParamUtil.getString(renderRequest, GestioneServiziPortletKeys.CODICE_RICERCA);
 		Boolean soloServiziAttivi = ParamUtil.getBoolean(renderRequest, GestioneServiziPortletKeys.SOLO_SERVIZI_ATTIVI_RICERCA);
 		
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+
+		if (Validator.isNull(orderByCol)) {
+			_log.debug("Nessun ordinamento impostato. Uso di default servizioId");
+			orderByCol = "servizioId";
+		}
+
+		boolean direzione = "desc".equals(orderByType.toLowerCase()) ? false : true;
+
+		OrderByComparator<Servizio> ordine = OrderByComparatorFactoryUtil.create("Servizio", orderByCol, direzione);
+		
 		List<Servizio> listaServizi = new ArrayList<Servizio>();	
+		long totaleElementi = 0;
+		
 		try {
 			listaServizi = servizioLocalService.searchServizio(
 					nome, 
 					codice, 
 					soloServiziAttivi, 
-					cur, delta, 
-					orderByCol, 
-					orderByType);			
+					inizio, fine, 
+					ordine);		
+			totaleElementi = servizioLocalService.count(nome,codice,soloServiziAttivi);
 		}catch(Exception e) {
 			_log.error("Impossibile ottenere la lista dei servizi", e);
 		}
 
 		renderRequest.setAttribute(GestioneServiziPortletKeys.LISTA_SERVIZI, listaServizi);
+		renderRequest.setAttribute("totaleElementi", totaleElementi);
 		
 		//imposto nuovamente i parametri ricevuti in ingresso per l'integrazione tra formRicerca e searchContainer
 		renderRequest.setAttribute(GestioneServiziPortletKeys.NOME_RICERCA, nome);

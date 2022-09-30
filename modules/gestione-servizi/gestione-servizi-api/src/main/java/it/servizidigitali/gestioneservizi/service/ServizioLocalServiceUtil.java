@@ -92,11 +92,10 @@ public class ServizioLocalServiceUtil {
 		getService().clearTipologiaServizios(tipologiaId);
 	}
 
-	public static int countSearchServizio(
+	public static int count(
 		String nome, String codice, Boolean soloServiziAttivi) {
 
-		return getService().countSearchServizio(
-			nome, codice, soloServiziAttivi);
+		return getService().count(nome, codice, soloServiziAttivi);
 	}
 
 	/**
@@ -484,13 +483,12 @@ public class ServizioLocalServiceUtil {
 	 * @return
 	 */
 	public static List<Servizio> searchServizio(
-			String nome, String codice, Boolean soloServiziAttivi, int cur,
-			int delta, String nomeOrdinamento, String direzioneOrdinamento)
+			String nome, String codice, Boolean soloServiziAttivi, int inizio,
+			int fine, OrderByComparator<Servizio> ordine)
 		throws Exception {
 
 		return getService().searchServizio(
-			nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento,
-			direzioneOrdinamento);
+			nome, codice, soloServiziAttivi, inizio, fine, ordine);
 	}
 
 	public static void setTipologiaServizios(

@@ -4,8 +4,8 @@
 	<portlet:param name="mvcPath" value="<%=GestioneTipologieServizioPortletKeys.JSP_HOME %>" />
 </liferay-portlet:renderURL>
 
-<liferay-ui:search-container delta="10" emptyResultsMessage="nessun-risultato-trovato" total="<%=listaTipologie.size()%>" iteratorURL="${iteratorURL}" >
-	<liferay-ui:search-container-results results="<%=ListUtil.subList(listaTipologie, searchContainer.getStart(), searchContainer.getEnd()) %>"/>
+<liferay-ui:search-container delta="10" emptyResultsMessage="nessun-risultato-trovato" total="${totaleElementi}" iteratorURL="${iteratorURL}" >
+	<liferay-ui:search-container-results results="<%=listaTipologie%>"/>
 	<liferay-ui:search-container-row className="it.servizidigitali.gestioneservizi.model.Tipologia" modelVar="tipologia" >
 		<liferay-ui:search-container-column-text property="<%=GestioneTipologieServizioPortletKeys.TIPOLOGIA_ID %>" name="identificativo" orderable="true" orderableProperty="<%=GestioneTipologieServizioPortletKeys.TIPOLOGIA_ID %>"/>
 		<liferay-ui:search-container-column-text property="<%=GestioneTipologieServizioPortletKeys.NOME %>" name="nome" orderable="true" orderableProperty="<%=GestioneTipologieServizioPortletKeys.NOME %>"/>

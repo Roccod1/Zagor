@@ -15,12 +15,11 @@
 package it.servizidigitali.gestioneservizi.service.impl;
 
 import com.liferay.portal.aop.AopService;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
-import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
@@ -58,24 +57,22 @@ public class TipologiaLocalServiceImpl extends TipologiaLocalServiceBaseImpl {
 		return tipologia;
 	}
 	
-	public List<Tipologia> getListaTipologiaOrdinata(int cur, int delta, String nomeOrdinamento, String direzioneOrdinamento) throws Exception{
-		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
-		int inizio = posizioni[0];
-		int fine = posizioni[1];
+	public List<Tipologia> getListaTipologiaOrdinata(int inizio, int fine, OrderByComparator<Tipologia> ordine) throws Exception{
 		
-		if(Validator.isNull(nomeOrdinamento)) {
-			nomeOrdinamento = "tipologiaId";
-		}
-		
-		if(inizio <= 0 || fine <= 0) {
-			inizio = QueryUtil.ALL_POS;
-			fine = QueryUtil.ALL_POS;
-		}
-		
-		boolean direzione = "desc".equals(direzioneOrdinamento.toLowerCase()) ? false : true;
-		OrderByComparator<Tipologia> ordine = OrderByComparatorFactoryUtil.create("Tipologia", nomeOrdinamento, direzione);
-		
-		List<Tipologia> listaTipologia = tipologiaFinder.getListaTipologiaOrdinata(inizio, fine, ordine);
+		List<Tipologia> listaTipologia = tipologiaFinder.findListaTipologiaOrdinata(inizio, fine, ordine);
 		return listaTipologia;
 	}
+	
+	public long count() throws Exception{
+		
+		ClassLoader classLoader = getClass().getClassLoader();
+		
+		DynamicQuery query = DynamicQueryFactoryUtil.forClass(Tipologia.class, classLoader);
+		
+		long totale = tipologiaPersistence.countWithDynamicQuery(query);
+		
+		return totale;
+	}
+	
+	
 }

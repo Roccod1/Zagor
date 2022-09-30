@@ -1,13 +1,17 @@
 package it.servizidigitali.gestioneareetematiche.frontend.portlet;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,14 +63,30 @@ public class GestioneAreeTematichePortlet extends MVCPortlet {
 		String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 		
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+		
+		if(Validator.isNull(orderByCol)) {
+			orderByCol = "ordine";
+		}
+		
+		boolean direzione = "desc".equals(orderByType.toLowerCase()) ? false : true;
+		OrderByComparator<AreaTematica> ordine = OrderByComparatorFactoryUtil.create("Tipologia", orderByCol, direzione);
+		
 		List<AreaTematica> listaAreeTematiche = new ArrayList<AreaTematica>();
+		long totaleElementi = 0;
+		
 		try {
-			listaAreeTematiche = areaTematicaLocalService.getListaAreeTematicheOrdinata(cur, delta, orderByCol, orderByType);
+			listaAreeTematiche = areaTematicaLocalService.getListaAreeTematicheOrdinata(inizio, fine, ordine);
+			totaleElementi = areaTematicaLocalService.count();
 		} catch (Exception e) {
 			_log.error("Non e' stato possibile recuperare la lista delle aree tematiche", e);
 		}
 		
 		renderRequest.setAttribute(GestioneAreeTematichePortletKeys.LISTA_AREE_TEMATICHE, listaAreeTematiche);
+		renderRequest.setAttribute("totaleElementi", totaleElementi);
+		
 		
 		//nascondo messaggi success e error default
 		PortletConfig portletConfig = (PortletConfig) renderRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);

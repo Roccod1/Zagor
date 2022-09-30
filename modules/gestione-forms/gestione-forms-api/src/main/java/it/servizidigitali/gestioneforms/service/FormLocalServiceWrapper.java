@@ -51,6 +51,16 @@ public class FormLocalServiceWrapper
 		return _formLocalService.addForm(form);
 	}
 
+	@Override
+	public long count(
+			String nome, java.util.Date dataInserimentoDa,
+			java.util.Date dataInserimentoA)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _formLocalService.count(
+			nome, dataInserimentoDa, dataInserimentoA);
+	}
+
 	/**
 	 * Creates a new form with the primary key. Does not add the form to the database.
 	 *
@@ -391,13 +401,14 @@ public class FormLocalServiceWrapper
 	@Override
 	public java.util.List<it.servizidigitali.gestioneforms.model.Form> search(
 			String nome, java.util.Date dataInserimentoDa,
-			java.util.Date dataInserimentoA, long groupId, int delta, int cur,
-			String orderByCol, String orderByType)
+			java.util.Date dataInserimentoA, long groupId, int inizio, int fine,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<it.servizidigitali.gestioneforms.model.Form> comparator)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _formLocalService.search(
-			nome, dataInserimentoDa, dataInserimentoA, groupId, delta, cur,
-			orderByCol, orderByType);
+			nome, dataInserimentoDa, dataInserimentoA, groupId, inizio, fine,
+			comparator);
 	}
 
 	/**

@@ -20,15 +20,15 @@ import it.servizidigitali.gestioneforms.service.persistence.FormFinder;
 @Component(service = FormFinder.class)
 public class FormFinderImpl extends FormFinderBaseImpl implements FormFinder{
 	
-	public List<Form> findFormByFilter(String codice, Date dataInserimentoDa, Date dataInserimentoA, int cur, int delta, OrderByComparator<Form> ordine){
+	public List<Form> findFormByFilter(String nome, Date dataInserimentoDa, Date dataInserimentoA, int inizio, int fine, OrderByComparator<Form> ordine){
 		List<Form> listaForm = new ArrayList<>();
 		
 		ClassLoader classLoader = getClass().getClassLoader();
 		
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Form.class, classLoader);
 		
-		if(Validator.isNotNull(codice)) {
-			dynamicQuery.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + codice + StringPool.PERCENT));
+		if(Validator.isNotNull(nome)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));
 		}
 		
 		if(Validator.isNotNull(dataInserimentoDa)) {
@@ -38,11 +38,6 @@ public class FormFinderImpl extends FormFinderBaseImpl implements FormFinder{
 		if(Validator.isNotNull(dataInserimentoA)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.le("createDate", dataInserimentoA));
 		}
-		
-		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
-		
-		int inizio = posizioni[0];
-		int fine = posizioni[1];
 		
 		listaForm = formPersistence.findWithDynamicQuery(dynamicQuery,inizio,fine,ordine);
 		

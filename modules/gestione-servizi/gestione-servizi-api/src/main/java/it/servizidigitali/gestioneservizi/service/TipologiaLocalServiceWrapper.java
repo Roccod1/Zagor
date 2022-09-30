@@ -85,6 +85,11 @@ public class TipologiaLocalServiceWrapper
 		_tipologiaLocalService.clearServizioTipologias(servizioId);
 	}
 
+	@Override
+	public long count() throws Exception {
+		return _tipologiaLocalService.count();
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -335,12 +340,13 @@ public class TipologiaLocalServiceWrapper
 	@Override
 	public java.util.List<it.servizidigitali.gestioneservizi.model.Tipologia>
 			getListaTipologiaOrdinata(
-				int cur, int delta, String nomeOrdinamento,
-				String direzioneOrdinamento)
+				int inizio, int fine,
+				com.liferay.portal.kernel.util.OrderByComparator
+					<it.servizidigitali.gestioneservizi.model.Tipologia> ordine)
 		throws Exception {
 
 		return _tipologiaLocalService.getListaTipologiaOrdinata(
-			cur, delta, nomeOrdinamento, direzioneOrdinamento);
+			inizio, fine, ordine);
 	}
 
 	/**

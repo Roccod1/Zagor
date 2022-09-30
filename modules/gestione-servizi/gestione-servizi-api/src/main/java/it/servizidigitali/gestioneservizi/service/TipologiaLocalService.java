@@ -88,6 +88,8 @@ public interface TipologiaLocalService
 
 	public void clearServizioTipologias(long servizioId);
 
+	public long count() throws Exception;
+
 	/**
 	 * @throws PortalException
 	 */
@@ -243,8 +245,7 @@ public interface TipologiaLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Tipologia> getListaTipologiaOrdinata(
-			int cur, int delta, String nomeOrdinamento,
-			String direzioneOrdinamento)
+			int inizio, int fine, OrderByComparator<Tipologia> ordine)
 		throws Exception;
 
 	/**

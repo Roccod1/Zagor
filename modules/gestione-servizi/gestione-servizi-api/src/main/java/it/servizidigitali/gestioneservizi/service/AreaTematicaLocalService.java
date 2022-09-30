@@ -78,6 +78,8 @@ public interface AreaTematicaLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public AreaTematica addAreaTematica(AreaTematica areaTematica);
 
+	public long count() throws Exception;
+
 	/**
 	 * Creates a new area tematica with the primary key. Does not add the area tematica to the database.
 	 *
@@ -298,8 +300,7 @@ public interface AreaTematicaLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<AreaTematica> getListaAreeTematicheOrdinata(
-			int cur, int delta, String nomeOrdinamento,
-			String direzioneOrdinamento)
+			int inizio, int fine, OrderByComparator<AreaTematica> ordine)
 		throws Exception;
 
 	/**

@@ -15,12 +15,11 @@
 package it.servizidigitali.gestioneservizi.service.impl;
 
 import com.liferay.portal.aop.AopService;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
-import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
@@ -28,7 +27,6 @@ import java.util.List;
 import org.osgi.service.component.annotations.Component;
 
 import it.servizidigitali.gestioneservizi.model.AreaTematica;
-import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.base.AreaTematicaLocalServiceBaseImpl;
 
 /**
@@ -60,25 +58,18 @@ public class AreaTematicaLocalServiceImpl extends AreaTematicaLocalServiceBaseIm
 		return areaTematica;
 	}
 	
-	public List<AreaTematica> getListaAreeTematicheOrdinata(int cur, int delta, String nomeOrdinamento, String direzioneOrdinamento) throws Exception{
-		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
-		int inizio = posizioni[0];
-		int fine = posizioni[1];
+	public List<AreaTematica> getListaAreeTematicheOrdinata(int inizio, int fine, OrderByComparator<AreaTematica> ordine) throws Exception{
 		
-		if(Validator.isNull(nomeOrdinamento)) {
-			nomeOrdinamento = "ordine";
-		}
-		
-		if(inizio <= 0 || fine <= 0) {
-			inizio = QueryUtil.ALL_POS;
-			fine = QueryUtil.ALL_POS;
-		}
-		
-		boolean direzione = "desc".equals(direzioneOrdinamento.toLowerCase()) ? false : true;
-		OrderByComparator<AreaTematica> ordine = OrderByComparatorFactoryUtil.create("Tipologia", nomeOrdinamento, direzione);
-		
-		List<AreaTematica> listaAreeTematiche = areaTematicaFinder.getListaAreeTematicheOrdinata(inizio, fine, ordine);
+		List<AreaTematica> listaAreeTematiche = areaTematicaFinder.findListaAreeTematicheOrdinata(inizio, fine, ordine);
 		return listaAreeTematiche;
+	}
+	
+	public long count() throws Exception{
+		ClassLoader classLoader = getClass().getClassLoader();
+		DynamicQuery query = DynamicQueryFactoryUtil.forClass(AreaTematica.class, classLoader);
+
+		long totale = areaTematicaPersistence.countWithDynamicQuery(query);
+		return totale;
 	}
 	
 }

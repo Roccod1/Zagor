@@ -60,6 +60,14 @@ public class FormLocalServiceUtil {
 		return getService().addForm(form);
 	}
 
+	public static long count(
+			String nome, java.util.Date dataInserimentoDa,
+			java.util.Date dataInserimentoA)
+		throws PortalException {
+
+		return getService().count(nome, dataInserimentoDa, dataInserimentoA);
+	}
+
 	/**
 	 * Creates a new form with the primary key. Does not add the form to the database.
 	 *
@@ -348,13 +356,13 @@ public class FormLocalServiceUtil {
 
 	public static List<Form> search(
 			String nome, java.util.Date dataInserimentoDa,
-			java.util.Date dataInserimentoA, long groupId, int delta, int cur,
-			String orderByCol, String orderByType)
+			java.util.Date dataInserimentoA, long groupId, int inizio, int fine,
+			OrderByComparator<Form> comparator)
 		throws PortalException {
 
 		return getService().search(
-			nome, dataInserimentoDa, dataInserimentoA, groupId, delta, cur,
-			orderByCol, orderByType);
+			nome, dataInserimentoDa, dataInserimentoA, groupId, inizio, fine,
+			comparator);
 	}
 
 	/**

@@ -10,13 +10,13 @@
 <liferay-ui:search-container
 			delta="10"
 			emptyResultsMessage="non-e-presente-nessun-form"
-			total="<%=listaForm.size() %>"
+			total="${totaleElementi}"
 			iteratorURL="${iteratorURL}"
 			>
 			
 			
 		
-		<liferay-ui:search-container-results results="<%=ListUtil.subList(listaForm, searchContainer.getStart(), searchContainer.getEnd()) %>" />
+		<liferay-ui:search-container-results results="<%=listaForm%>" />
 		
 		
 			

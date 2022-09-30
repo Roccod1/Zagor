@@ -85,6 +85,10 @@ public class TipologiaLocalServiceUtil {
 		getService().clearServizioTipologias(servizioId);
 	}
 
+	public static long count() throws Exception {
+		return getService().count();
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -294,12 +298,10 @@ public class TipologiaLocalServiceUtil {
 	}
 
 	public static List<Tipologia> getListaTipologiaOrdinata(
-			int cur, int delta, String nomeOrdinamento,
-			String direzioneOrdinamento)
+			int inizio, int fine, OrderByComparator<Tipologia> ordine)
 		throws Exception {
 
-		return getService().getListaTipologiaOrdinata(
-			cur, delta, nomeOrdinamento, direzioneOrdinamento);
+		return getService().getListaTipologiaOrdinata(inizio, fine, ordine);
 	}
 
 	/**

@@ -95,11 +95,8 @@ public class ServizioLocalServiceWrapper
 	}
 
 	@Override
-	public int countSearchServizio(
-		String nome, String codice, Boolean soloServiziAttivi) {
-
-		return _servizioLocalService.countSearchServizio(
-			nome, codice, soloServiziAttivi);
+	public int count(String nome, String codice, Boolean soloServiziAttivi) {
+		return _servizioLocalService.count(nome, codice, soloServiziAttivi);
 	}
 
 	/**
@@ -568,13 +565,14 @@ public class ServizioLocalServiceWrapper
 	@Override
 	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
 			searchServizio(
-				String nome, String codice, Boolean soloServiziAttivi, int cur,
-				int delta, String nomeOrdinamento, String direzioneOrdinamento)
+				String nome, String codice, Boolean soloServiziAttivi,
+				int inizio, int fine,
+				com.liferay.portal.kernel.util.OrderByComparator
+					<it.servizidigitali.gestioneservizi.model.Servizio> ordine)
 		throws Exception {
 
 		return _servizioLocalService.searchServizio(
-			nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento,
-			direzioneOrdinamento);
+			nome, codice, soloServiziAttivi, inizio, fine, ordine);
 	}
 
 	@Override

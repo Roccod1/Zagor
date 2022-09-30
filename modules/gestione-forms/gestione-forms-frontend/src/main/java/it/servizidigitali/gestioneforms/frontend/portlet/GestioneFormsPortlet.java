@@ -5,6 +5,7 @@ import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
@@ -12,6 +13,8 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -88,6 +91,24 @@ public class GestioneFormsPortlet extends MVCPortlet {
 		
 		Date dataInserimentoDa = null;
 		Date dataInserimentoA = null;
+		long totale = 0;
+		
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+		
+		boolean direzione = false;
+
+		if (orderByType.equalsIgnoreCase("asc")) {
+			direzione = true;
+		}
+
+		if (Validator.isNull(orderByCol)) {
+			orderByCol = "formId";
+		}
+
+		OrderByComparator<Form> comparator = OrderByComparatorFactoryUtil.create("Form", orderByCol, direzione);
 
 		try {
 			
@@ -99,7 +120,8 @@ public class GestioneFormsPortlet extends MVCPortlet {
 				dataInserimentoA = simpleDateFormat.parse(dataInserimentoAString);
 			}
 			
-			listaForm = formLocalService.search(nome, dataInserimentoDa, dataInserimentoA, siteGroupId, delta, cur,orderByCol, orderByType);
+			listaForm = formLocalService.search(nome, dataInserimentoDa, dataInserimentoA, siteGroupId, inizio, fine, comparator);
+			totale = formLocalService.count(nome, dataInserimentoDa, dataInserimentoA);
 			
 		}catch(Exception e) {
 			_log.error("Impossibile recuperare la lista dei form!" + e.getMessage());
@@ -115,6 +137,7 @@ public class GestioneFormsPortlet extends MVCPortlet {
 		renderRequest.setAttribute(GestioneFormsPortletKeys.DATA_INSERIMENTO_A, dataInserimentoAString);
 		renderRequest.setAttribute(GestioneFormsPortletKeys.SITE_GROUP_ID, siteGroupId);
 		renderRequest.setAttribute(GestioneFormsPortletKeys.ORGANIZATION_ID_SITE_PRINCIPALE, organizationIdSitePrincipale);
+		renderRequest.setAttribute("totaleElementi", totale);
 		
 		
 		// Rimozione messaggi default

@@ -4,8 +4,8 @@
 	<portlet:param name="mvcPath" value="<%=GestioneAreeTematichePortletKeys.JSP_HOME %>" />
 </liferay-portlet:renderURL>
 
-<liferay-ui:search-container delta="10" emptyResultsMessage="nessun-risultato-trovato" total="<%=listaAreeTematiche.size()%>" iteratorURL="${iteratorURL}" >
-	<liferay-ui:search-container-results results="<%=ListUtil.subList(listaAreeTematiche, searchContainer.getStart(), searchContainer.getEnd()) %>"/>
+<liferay-ui:search-container delta="10" emptyResultsMessage="nessun-risultato-trovato" total="${totaleElementi}" iteratorURL="${iteratorURL}" >
+	<liferay-ui:search-container-results results="<%=listaAreeTematiche%>"/>
 	<liferay-ui:search-container-row className="it.servizidigitali.gestioneservizi.model.AreaTematica" modelVar="areaTematica" >
 		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.AREA_TEMATICA_ID %>" name="identificativo" orderable="true" orderableProperty="<%=GestioneAreeTematichePortletKeys.AREA_TEMATICA_ID %>"/>
 		<liferay-ui:search-container-column-text property="<%=GestioneAreeTematichePortletKeys.NOME %>" name="nome" orderable="true" orderableProperty="<%=GestioneAreeTematichePortletKeys.NOME %>"/>

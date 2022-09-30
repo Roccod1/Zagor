@@ -56,6 +56,11 @@ public class AreaTematicaLocalServiceWrapper
 		return _areaTematicaLocalService.addAreaTematica(areaTematica);
 	}
 
+	@Override
+	public long count() throws Exception {
+		return _areaTematicaLocalService.count();
+	}
+
 	/**
 	 * Creates a new area tematica with the primary key. Does not add the area tematica to the database.
 	 *
@@ -377,12 +382,14 @@ public class AreaTematicaLocalServiceWrapper
 	@Override
 	public java.util.List<it.servizidigitali.gestioneservizi.model.AreaTematica>
 			getListaAreeTematicheOrdinata(
-				int cur, int delta, String nomeOrdinamento,
-				String direzioneOrdinamento)
+				int inizio, int fine,
+				com.liferay.portal.kernel.util.OrderByComparator
+					<it.servizidigitali.gestioneservizi.model.AreaTematica>
+						ordine)
 		throws Exception {
 
 		return _areaTematicaLocalService.getListaAreeTematicheOrdinata(
-			cur, delta, nomeOrdinamento, direzioneOrdinamento);
+			inizio, fine, ordine);
 	}
 
 	/**

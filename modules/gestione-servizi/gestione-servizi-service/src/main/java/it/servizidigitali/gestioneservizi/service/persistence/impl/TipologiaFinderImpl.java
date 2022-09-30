@@ -20,7 +20,7 @@ import it.servizidigitali.gestioneservizi.service.persistence.TipologiaFinder;
 @Component(service = TipologiaFinder.class)
 public class TipologiaFinderImpl extends TipologiaFinderBaseImpl implements TipologiaFinder {
 	
-	public List<Tipologia> getListaTipologiaOrdinata(int inizio, int fine, OrderByComparator<Tipologia> ordine){
+	public List<Tipologia> findListaTipologiaOrdinata(int inizio, int fine, OrderByComparator<Tipologia> ordine){
 		
 		ClassLoader classLoader = getClass().getClassLoader();
 		

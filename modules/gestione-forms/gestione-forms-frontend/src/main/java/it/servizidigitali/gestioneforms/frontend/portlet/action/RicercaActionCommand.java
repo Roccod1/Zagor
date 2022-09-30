@@ -1,11 +1,14 @@
 package it.servizidigitali.gestioneforms.frontend.portlet.action;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -67,7 +70,26 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 		String orderByCol = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		String orderByType = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 		
-		List<Form> listaForm = formLocalService.search(nome, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), delta, cur, orderByCol, orderByType);
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+		
+		boolean direzione = false;
+
+		if (orderByType.equalsIgnoreCase("asc")) {
+			direzione = true;
+		}
+
+		if (Validator.isNull(orderByCol)) {
+			orderByCol = "formId";
+		}
+		
+		OrderByComparator<Form> comparator = OrderByComparatorFactoryUtil.create("Form", orderByCol, direzione);
+		
+		List<Form> listaForm = formLocalService.search(nome, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), inizio, fine, comparator);
+		long totale = formLocalService.count(nome, dataInserimentoDa, dataInserimentoA);
+
 		
 		actionRequest.setAttribute(GestioneFormsPortletKeys.LISTA_FORM, listaForm);
 		
@@ -75,6 +97,8 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 		actionRequest.setAttribute(GestioneFormsPortletKeys.NOME_RICERCA, nome);
 		actionRequest.setAttribute(GestioneFormsPortletKeys.DATA_INSERIMENTO_DA, dataInserimentoDaString);
 		actionRequest.setAttribute(GestioneFormsPortletKeys.DATA_INSERIMENTO_A, dataInserimentoAString);
+		actionRequest.setAttribute("totaleElementi", totale);
+
 		
 	}
 

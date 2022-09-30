@@ -1,11 +1,15 @@
 package it.servizidigitali.gestioneservizi.frontend.portlet.action;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
 
@@ -50,8 +54,25 @@ public class RicercaServizioActionCommand extends BaseMVCActionCommand {
 		String codice = ParamUtil.getString(actionRequest, GestioneServiziPortletKeys.CODICE_RICERCA);
 		Boolean soloServiziAttivi = ParamUtil.getBoolean(actionRequest, GestioneServiziPortletKeys.SOLO_SERVIZI_ATTIVI_RICERCA, false);
 		
-		List<Servizio> listaServiziFiltrata = servizioLocalService.searchServizio(nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento, direzioneOrdinamento);
+		long totaleElementi = 0;
+		
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+
+		if (Validator.isNull(nomeOrdinamento)) {
+			_log.debug("Nessun ordinamento impostato. Uso di default servizioId");
+			nomeOrdinamento = "servizioId";
+		}
+
+		boolean direzione = "desc".equals(direzioneOrdinamento.toLowerCase()) ? false : true;
+
+		OrderByComparator<Servizio> ordine = OrderByComparatorFactoryUtil.create("Servizio", nomeOrdinamento, direzione);
+		
+		List<Servizio> listaServiziFiltrata = servizioLocalService.searchServizio(nome, codice, soloServiziAttivi, inizio, fine, ordine);
+		totaleElementi = servizioLocalService.count(nome,codice,soloServiziAttivi);
 		actionRequest.setAttribute(GestioneServiziPortletKeys.LISTA_SERVIZI, listaServiziFiltrata);
+		actionRequest.setAttribute("totaleElementi", totaleElementi);
 		
 		//imposto nuovamente i parametri ricevuti in ingresso per l'integrazione tra formRicerca e searchContainer
 		actionRequest.setAttribute(GestioneServiziPortletKeys.NOME_RICERCA, nome);
