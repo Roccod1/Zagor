@@ -381,15 +381,11 @@ public class AreaTematicaLocalServiceWrapper
 
 	@Override
 	public java.util.List<it.servizidigitali.gestioneservizi.model.AreaTematica>
-			getListaAreeTematicheOrdinata(
-				int inizio, int fine,
-				com.liferay.portal.kernel.util.OrderByComparator
-					<it.servizidigitali.gestioneservizi.model.AreaTematica>
-						ordine)
-		throws Exception {
+		getListaAreeTematiche(
+			int inizio, int fine, String orderByCol, String orderByType) {
 
-		return _areaTematicaLocalService.getListaAreeTematicheOrdinata(
-			inizio, fine, ordine);
+		return _areaTematicaLocalService.getListaAreeTematiche(
+			inizio, fine, orderByCol, orderByType);
 	}
 
 	/**

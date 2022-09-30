@@ -394,11 +394,11 @@ public class ServizioEnteLocalServiceUtil {
 
 	public static List<com.liferay.portal.kernel.model.Organization> search(
 			String nome, String codiceIpa, int inizio, int fine,
-			OrderByComparator<com.liferay.portal.kernel.model.Organization>
-				ordine)
+			String orderByCol, String orderByType)
 		throws Exception {
 
-		return getService().search(nome, codiceIpa, inizio, fine, ordine);
+		return getService().search(
+			nome, codiceIpa, inizio, fine, orderByCol, orderByType);
 	}
 
 	/**

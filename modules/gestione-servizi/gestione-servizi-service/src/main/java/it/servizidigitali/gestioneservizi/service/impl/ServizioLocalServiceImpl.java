@@ -101,39 +101,46 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl {
 	}
 
 	/**
+	 *
 	 * @param nome
 	 * @param codice
 	 * @param soloServiziAttivi
-	 * @param cur: pagina attuale
-	 * @param delta: numero elementi per pagina
-	 * @param nomeOrdinamento
-	 * @param direzioneOrdinamento
+	 * @param inizio
+	 * @param fine
+	 * @param orderByCol
+	 * @param orderByType
 	 * @return
+	 * @throws Exception
 	 */
 	@Override
-	public List<Servizio> searchServizio(String nome, String codice, Boolean soloServiziAttivi, int inizio, int fine, OrderByComparator<Servizio> ordine) throws Exception {
-		List<Servizio> listaServizi = servizioFinder.findServizioByFilter(nome, codice, soloServiziAttivi, inizio, fine, ordine);
+	public List<Servizio> search(String nome, String codice, Boolean soloServiziAttivi, int inizio, int fine, String orderByCol, String orderByType) throws Exception {
+
+		boolean direzione = "desc".equals(orderByType.toLowerCase()) ? false : true;
+
+		OrderByComparator<Servizio> ordine = OrderByComparatorFactoryUtil.create("Servizio", orderByCol, direzione);
+
+		List<Servizio> listaServizi = servizioFinder.findByNomeCodiceAttivo(nome, codice, soloServiziAttivi, inizio, fine, ordine);
 		return listaServizi;
 	}
 
 	@Override
 	public int count(String nome, String codice, Boolean soloServiziAttivi) {
 		ClassLoader classLoader = getClass().getClassLoader();
-		
+
 		DynamicQuery query = DynamicQueryFactoryUtil.forClass(Servizio.class, classLoader);
 
-		if(Validator.isNotNull(nome)) {
-			query.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));			
+		if (Validator.isNotNull(nome)) {
+			query.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));
 		}
-		
-		if(Validator.isNotNull(codice)){
+
+		if (Validator.isNotNull(codice)) {
 			query.add(RestrictionsFactoryUtil.like("codice", StringPool.PERCENT + codice + StringPool.PERCENT));
 		}
-		
-		if(soloServiziAttivi) {
+
+		if (soloServiziAttivi) {
 			query.add(RestrictionsFactoryUtil.eq("attivo", true));
 		}
-		
+
 		return (int) servizioPersistence.countWithDynamicQuery(query);
 	}
 
@@ -211,6 +218,7 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl {
 		}
 	}
 
+	@Override
 	public Servizio getServizioByCodice(String codice) {
 		Servizio servizio = null;
 		try {

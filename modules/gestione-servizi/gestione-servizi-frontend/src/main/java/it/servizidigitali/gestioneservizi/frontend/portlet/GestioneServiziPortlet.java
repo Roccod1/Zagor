@@ -8,8 +8,6 @@ import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.JavaConstants;
-import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -84,20 +82,16 @@ public class GestioneServiziPortlet extends MVCPortlet {
 			orderByCol = "servizioId";
 		}
 
-		boolean direzione = "desc".equals(orderByType.toLowerCase()) ? false : true;
-
-		OrderByComparator<Servizio> ordine = OrderByComparatorFactoryUtil.create("Servizio", orderByCol, direzione);
-		
 		List<Servizio> listaServizi = new ArrayList<Servizio>();	
 		long totaleElementi = 0;
 		
 		try {
-			listaServizi = servizioLocalService.searchServizio(
+			listaServizi = servizioLocalService.search(
 					nome, 
 					codice, 
 					soloServiziAttivi, 
 					inizio, fine, 
-					ordine);		
+					orderByCol, orderByType);		
 			totaleElementi = servizioLocalService.count(nome,codice,soloServiziAttivi);
 		}catch(Exception e) {
 			_log.error("Impossibile ottenere la lista dei servizi", e);

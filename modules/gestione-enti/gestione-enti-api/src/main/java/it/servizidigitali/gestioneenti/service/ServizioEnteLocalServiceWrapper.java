@@ -447,12 +447,11 @@ public class ServizioEnteLocalServiceWrapper
 	@Override
 	public java.util.List<com.liferay.portal.kernel.model.Organization> search(
 			String nome, String codiceIpa, int inizio, int fine,
-			com.liferay.portal.kernel.util.OrderByComparator
-				<com.liferay.portal.kernel.model.Organization> ordine)
+			String orderByCol, String orderByType)
 		throws Exception {
 
 		return _servizioEnteLocalService.search(
-			nome, codiceIpa, inizio, fine, ordine);
+			nome, codiceIpa, inizio, fine, orderByCol, orderByType);
 	}
 
 	/**

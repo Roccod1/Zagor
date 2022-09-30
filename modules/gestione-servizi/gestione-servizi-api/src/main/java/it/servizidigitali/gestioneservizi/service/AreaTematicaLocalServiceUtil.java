@@ -331,11 +331,11 @@ public class AreaTematicaLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
-	public static List<AreaTematica> getListaAreeTematicheOrdinata(
-			int inizio, int fine, OrderByComparator<AreaTematica> ordine)
-		throws Exception {
+	public static List<AreaTematica> getListaAreeTematiche(
+		int inizio, int fine, String orderByCol, String orderByType) {
 
-		return getService().getListaAreeTematicheOrdinata(inizio, fine, ordine);
+		return getService().getListaAreeTematiche(
+			inizio, fine, orderByCol, orderByType);
 	}
 
 	/**

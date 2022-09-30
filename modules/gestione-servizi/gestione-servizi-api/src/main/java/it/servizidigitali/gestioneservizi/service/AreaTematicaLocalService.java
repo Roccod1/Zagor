@@ -299,9 +299,8 @@ public interface AreaTematicaLocalService
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<AreaTematica> getListaAreeTematicheOrdinata(
-			int inizio, int fine, OrderByComparator<AreaTematica> ordine)
-		throws Exception;
+	public List<AreaTematica> getListaAreeTematiche(
+		int inizio, int fine, String orderByCol, String orderByType);
 
 	/**
 	 * Returns the OSGi service identifier.

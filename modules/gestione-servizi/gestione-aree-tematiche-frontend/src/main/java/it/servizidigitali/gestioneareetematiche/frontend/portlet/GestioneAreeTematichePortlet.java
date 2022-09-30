@@ -71,14 +71,11 @@ public class GestioneAreeTematichePortlet extends MVCPortlet {
 			orderByCol = "ordine";
 		}
 		
-		boolean direzione = "desc".equals(orderByType.toLowerCase()) ? false : true;
-		OrderByComparator<AreaTematica> ordine = OrderByComparatorFactoryUtil.create("Tipologia", orderByCol, direzione);
-		
 		List<AreaTematica> listaAreeTematiche = new ArrayList<AreaTematica>();
 		long totaleElementi = 0;
 		
 		try {
-			listaAreeTematiche = areaTematicaLocalService.getListaAreeTematicheOrdinata(inizio, fine, ordine);
+			listaAreeTematiche = areaTematicaLocalService.getListaAreeTematiche(inizio, fine, orderByCol, orderByType);
 			totaleElementi = areaTematicaLocalService.count();
 		} catch (Exception e) {
 			_log.error("Non e' stato possibile recuperare la lista delle aree tematiche", e);

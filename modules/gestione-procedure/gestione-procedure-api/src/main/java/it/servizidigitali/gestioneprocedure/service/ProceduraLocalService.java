@@ -333,7 +333,7 @@ public interface ProceduraLocalService
 	public List<Procedura> search(
 		String nome, String attiva, Date dataInserimentoDa,
 		Date dataInserimentoA, long siteGroupId, int inizio, int fine,
-		OrderByComparator<Procedura> comparator);
+		String orderByCol, String orderByType);
 
 	/**
 	 * Updates the procedura in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

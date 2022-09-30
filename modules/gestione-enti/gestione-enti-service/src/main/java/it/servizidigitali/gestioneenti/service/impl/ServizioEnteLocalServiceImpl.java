@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
@@ -85,8 +86,11 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 	}
 
 	@Override
-	public List<Organization> search(String nome, String codiceIpa, int inizio, int fine, OrderByComparator<Organization> ordine) throws Exception {
+	public List<Organization> search(String nome, String codiceIpa, int inizio, int fine, String orderByCol, String orderByType) throws Exception {
 		_log.debug("Ricerca Organizzazioni :: INIZIO");
+
+		boolean direzione = "desc".equals(orderByType.toLowerCase()) ? false : true;
+		OrderByComparator<Organization> ordine = OrderByComparatorFactoryUtil.create("Organization", orderByCol, direzione);
 
 		List<Organization> listaOrganizations = null;
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -169,8 +173,9 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 		return servizioEntePersistence.findWithDynamicQuery(servizioEnteDynamicQuery);
 	}
 
+	@Override
 	public List<ServizioEnte> getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(long organizationId, List<Long> subOrganizationIds, Boolean attivo, long groupId, long companyId) {
-		return servizioEnteFinder.findServizioEnteByFilters(organizationId, subOrganizationIds, attivo, groupId, companyId);
+		return servizioEnteFinder.findServiziEnteByFilters(organizationId, subOrganizationIds, attivo, groupId, companyId);
 	}
 
 	@Override

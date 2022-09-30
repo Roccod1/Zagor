@@ -476,19 +476,21 @@ public class ServizioLocalServiceUtil {
 	 * @param nome
 	 * @param codice
 	 * @param soloServiziAttivi
-	 * @param cur: pagina attuale
-	 * @param delta: numero elementi per pagina
-	 * @param nomeOrdinamento
-	 * @param direzioneOrdinamento
+	 * @param inizio
+	 * @param fine
+	 * @param orderByCol
+	 * @param orderByType
 	 * @return
+	 * @throws Exception
 	 */
-	public static List<Servizio> searchServizio(
+	public static List<Servizio> search(
 			String nome, String codice, Boolean soloServiziAttivi, int inizio,
-			int fine, OrderByComparator<Servizio> ordine)
+			int fine, String orderByCol, String orderByType)
 		throws Exception {
 
-		return getService().searchServizio(
-			nome, codice, soloServiziAttivi, inizio, fine, ordine);
+		return getService().search(
+			nome, codice, soloServiziAttivi, inizio, fine, orderByCol,
+			orderByType);
 	}
 
 	public static void setTipologiaServizios(

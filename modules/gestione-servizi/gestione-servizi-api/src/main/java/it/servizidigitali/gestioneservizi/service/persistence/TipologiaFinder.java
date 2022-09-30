@@ -22,11 +22,4 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public interface TipologiaFinder {
-
-	public java.util.List<it.servizidigitali.gestioneservizi.model.Tipologia>
-		findListaTipologiaOrdinata(
-			int inizio, int fine,
-			com.liferay.portal.kernel.util.OrderByComparator
-				<it.servizidigitali.gestioneservizi.model.Tipologia> ordine);
-
 }

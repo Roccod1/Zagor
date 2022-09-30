@@ -7,8 +7,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -75,19 +73,7 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 		int inizio = posizioni[0];
 		int fine = posizioni[1];
 		
-		boolean direzione = false;
-
-		if (orderByType.equalsIgnoreCase("asc")) {
-			direzione = true;
-		}
-
-		if (Validator.isNull(orderByCol)) {
-			orderByCol = "processoId";
-		}
-		
-		OrderByComparator<Processo> comparator = OrderByComparatorFactoryUtil.create("Processo", orderByCol, direzione);
-		
-		List<Processo> listaProcessi = processoLocalService.search(nome, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), inizio, fine, comparator);
+		List<Processo> listaProcessi = processoLocalService.search(nome, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), inizio, fine, orderByCol, orderByType);
 		long totale = processoLocalService.count(nome, dataInserimentoDa, dataInserimentoA);
 		
 		actionRequest.setAttribute(GestioneProcessiPortletKeys.LISTA_PROCESSI, listaProcessi);

@@ -89,19 +89,6 @@ public class GestioneProcedurePortlet extends MVCPortlet {
 		int inizio = posizioni[0];
 		int fine = posizioni[1];
 		
-		boolean direzione = false;
-
-		if (orderByType.equalsIgnoreCase("asc")) {
-			direzione = true;
-		}
-
-		if (Validator.isNull(orderByCol)) {
-			orderByCol = "proceduraId";
-		}
-
-		OrderByComparator<Procedura> comparator = OrderByComparatorFactoryUtil.create("Procedura", orderByCol, direzione);
-		
-		
 		try {
 			
 			if(Validator.isNotNull(dataInserimentoDaString)) {
@@ -117,7 +104,7 @@ public class GestioneProcedurePortlet extends MVCPortlet {
 		}
 		
 
-		listaProcedure = proceduraLocalService.search(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), inizio, fine, comparator);
+		listaProcedure = proceduraLocalService.search(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), inizio, fine, orderByCol, orderByType);
 		long totale = proceduraLocalService.count(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId());
 
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_PROCEDURE, listaProcedure);

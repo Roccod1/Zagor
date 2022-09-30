@@ -91,9 +91,6 @@ public class GestioneEntiPortlet extends MVCPortlet {
 			orderByCol = "organizationId";
 		}
 
-		boolean direzione = "desc".equals(orderByType.toLowerCase()) ? false : true;
-		OrderByComparator<Organization> ordine = OrderByComparatorFactoryUtil.create("Organization", orderByCol, direzione);
-		
 		ServiceContext serviceContext = null;
 		try {
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
@@ -118,7 +115,7 @@ public class GestioneEntiPortlet extends MVCPortlet {
 					listaOrganizations.add(organization);
 					renderRequest.setAttribute(GestioneEntiPortletKeys.DISABILITA_RICERCA, true);
 				}else {
-					listaOrganizations = servizioEnteLocalService.search(nome, codiceIpa, inizio, fine, ordine);
+					listaOrganizations = servizioEnteLocalService.search(nome, codiceIpa, inizio, fine, orderByCol, orderByType);
 				}
 				if(Validator.isNull(listaOrganizations)) {
 					_log.warn("Lista organizzazioni e' vuota o null");

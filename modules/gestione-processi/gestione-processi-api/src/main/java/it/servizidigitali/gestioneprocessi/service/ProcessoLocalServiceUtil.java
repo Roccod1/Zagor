@@ -378,12 +378,12 @@ public class ProcessoLocalServiceUtil {
 	public static List<Processo> search(
 			String nome, java.util.Date dataInserimentoDa,
 			java.util.Date dataInserimentoA, long groupId, int inizio, int fine,
-			OrderByComparator<Processo> comparator)
+			String orderByCol, String orderByType)
 		throws PortalException {
 
 		return getService().search(
 			nome, dataInserimentoDa, dataInserimentoA, groupId, inizio, fine,
-			comparator);
+			orderByCol, orderByType);
 	}
 
 	/**

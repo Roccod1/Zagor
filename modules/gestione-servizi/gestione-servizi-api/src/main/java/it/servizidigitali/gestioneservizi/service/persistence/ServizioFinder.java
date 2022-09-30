@@ -24,9 +24,8 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface ServizioFinder {
 
 	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
-		findServizioByFilter(
-			String nome, String codice, Boolean soloServiziAttivi, int inizio,
-			int fine,
+		findByNomeCodiceAttivo(
+			String nome, String codice, Boolean attivo, int inizio, int fine,
 			com.liferay.portal.kernel.util.OrderByComparator
 				<it.servizidigitali.gestioneservizi.model.Servizio> ordine);
 

@@ -7,8 +7,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -60,10 +58,7 @@ public class RicercaEntiActionCommand extends BaseMVCActionCommand {
 			orderByCol = "organizationId";
 		}
 
-		boolean direzione = "desc".equals(orderByType.toLowerCase()) ? false : true;
-		OrderByComparator<Organization> ordine = OrderByComparatorFactoryUtil.create("Organization", orderByCol, direzione);
-
-		List<Organization> listaOrganization = servizioEnteLocalService.search(nome, codiceIpa, inizio, fine, ordine);
+		List<Organization> listaOrganization = servizioEnteLocalService.search(nome, codiceIpa, inizio, fine, orderByCol, orderByType);
 		actionRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONI, listaOrganization);
 
 	}

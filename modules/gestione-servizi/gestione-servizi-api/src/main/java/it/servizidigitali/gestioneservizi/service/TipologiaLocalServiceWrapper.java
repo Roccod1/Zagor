@@ -337,18 +337,6 @@ public class TipologiaLocalServiceWrapper
 		return _tipologiaLocalService.getIndexableActionableDynamicQuery();
 	}
 
-	@Override
-	public java.util.List<it.servizidigitali.gestioneservizi.model.Tipologia>
-			getListaTipologiaOrdinata(
-				int inizio, int fine,
-				com.liferay.portal.kernel.util.OrderByComparator
-					<it.servizidigitali.gestioneservizi.model.Tipologia> ordine)
-		throws Exception {
-
-		return _tipologiaLocalService.getListaTipologiaOrdinata(
-			inizio, fine, ordine);
-	}
-
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -508,6 +496,15 @@ public class TipologiaLocalServiceWrapper
 	@Override
 	public int getTipologiasCount() {
 		return _tipologiaLocalService.getTipologiasCount();
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.gestioneservizi.model.Tipologia>
+		getTipologie(
+			int inizio, int fine, String orderByCol, String orderByType) {
+
+		return _tipologiaLocalService.getTipologie(
+			inizio, fine, orderByCol, orderByType);
 	}
 
 	@Override

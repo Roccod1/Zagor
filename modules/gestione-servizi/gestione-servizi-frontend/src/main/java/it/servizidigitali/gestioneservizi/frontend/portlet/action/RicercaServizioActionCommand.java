@@ -6,8 +6,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -65,11 +63,7 @@ public class RicercaServizioActionCommand extends BaseMVCActionCommand {
 			nomeOrdinamento = "servizioId";
 		}
 
-		boolean direzione = "desc".equals(direzioneOrdinamento.toLowerCase()) ? false : true;
-
-		OrderByComparator<Servizio> ordine = OrderByComparatorFactoryUtil.create("Servizio", nomeOrdinamento, direzione);
-		
-		List<Servizio> listaServiziFiltrata = servizioLocalService.searchServizio(nome, codice, soloServiziAttivi, inizio, fine, ordine);
+		List<Servizio> listaServiziFiltrata = servizioLocalService.search(nome, codice, soloServiziAttivi, inizio, fine, nomeOrdinamento, direzioneOrdinamento);
 		totaleElementi = servizioLocalService.count(nome,codice,soloServiziAttivi);
 		actionRequest.setAttribute(GestioneServiziPortletKeys.LISTA_SERVIZI, listaServiziFiltrata);
 		actionRequest.setAttribute("totaleElementi", totaleElementi);

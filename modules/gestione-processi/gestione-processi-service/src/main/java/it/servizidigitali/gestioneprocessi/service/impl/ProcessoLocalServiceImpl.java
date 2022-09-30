@@ -16,9 +16,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
-import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -55,8 +53,20 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 	private GroupLocalService groupLocalService;
 
 	@Override
-	public List<Processo> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, long groupId, int inizio, int fine, OrderByComparator<Processo> comparator) throws PortalException {
-		
+	public List<Processo> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, long groupId, int inizio, int fine, String orderByCol, String orderByType) throws PortalException {
+
+		boolean direzione = false;
+
+		if (orderByType.equalsIgnoreCase("asc")) {
+			direzione = true;
+		}
+
+		if (Validator.isNull(orderByCol)) {
+			orderByCol = "processoId";
+		}
+
+		OrderByComparator<Processo> comparator = OrderByComparatorFactoryUtil.create("Processo", orderByCol, direzione);
+
 		List<Processo> listaProcesso = processoFinder.findByFilters(nome, dataInserimentoDa, dataInserimentoA, inizio, fine, comparator);
 		Group group = null;
 		Organization organization = null;
@@ -81,26 +91,26 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 
 		return listaProcesso;
 	}
-	
+
 	@Override
 	public long count(String nome, Date dataInserimentoDa, Date dataInserimentoA) throws PortalException {
-		
+
 		ClassLoader classLoader = getClass().getClassLoader();
-		
+
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Processo.class, classLoader);
-		
-		if(Validator.isNotNull(nome)) {
+
+		if (Validator.isNotNull(nome)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));
 		}
-		
-		if(Validator.isNotNull(dataInserimentoDa)) {
+
+		if (Validator.isNotNull(dataInserimentoDa)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.ge("createDate", dataInserimentoDa));
 		}
-		
-		if(Validator.isNotNull(dataInserimentoA)) {
+
+		if (Validator.isNotNull(dataInserimentoA)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.le("createDate", dataInserimentoA));
 		}
-		
+
 		long count = processoPersistence.countWithDynamicQuery(dynamicQuery);
 
 		return count;

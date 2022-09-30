@@ -433,15 +433,12 @@ public class ProcessoLocalServiceWrapper
 			search(
 				String nome, java.util.Date dataInserimentoDa,
 				java.util.Date dataInserimentoA, long groupId, int inizio,
-				int fine,
-				com.liferay.portal.kernel.util.OrderByComparator
-					<it.servizidigitali.gestioneprocessi.model.Processo>
-						comparator)
+				int fine, String orderByCol, String orderByType)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _processoLocalService.search(
 			nome, dataInserimentoDa, dataInserimentoA, groupId, inizio, fine,
-			comparator);
+			orderByCol, orderByType);
 	}
 
 	/**

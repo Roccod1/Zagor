@@ -339,7 +339,7 @@ public interface ServizioEnteLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Organization> search(
 			String nome, String codiceIpa, int inizio, int fine,
-			OrderByComparator<Organization> ordine)
+			String orderByCol, String orderByType)
 		throws Exception;
 
 	/**

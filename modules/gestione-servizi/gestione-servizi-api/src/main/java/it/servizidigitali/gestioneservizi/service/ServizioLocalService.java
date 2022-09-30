@@ -382,16 +382,17 @@ public interface ServizioLocalService
 	 * @param nome
 	 * @param codice
 	 * @param soloServiziAttivi
-	 * @param cur: pagina attuale
-	 * @param delta: numero elementi per pagina
-	 * @param nomeOrdinamento
-	 * @param direzioneOrdinamento
+	 * @param inizio
+	 * @param fine
+	 * @param orderByCol
+	 * @param orderByType
 	 * @return
+	 * @throws Exception
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<Servizio> searchServizio(
+	public List<Servizio> search(
 			String nome, String codice, Boolean soloServiziAttivi, int inizio,
-			int fine, OrderByComparator<Servizio> ordine)
+			int fine, String orderByCol, String orderByType)
 		throws Exception;
 
 	public void setTipologiaServizios(long tipologiaId, long[] servizioIds);

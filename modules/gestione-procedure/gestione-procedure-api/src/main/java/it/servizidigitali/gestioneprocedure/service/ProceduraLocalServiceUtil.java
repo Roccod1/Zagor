@@ -384,11 +384,11 @@ public class ProceduraLocalServiceUtil {
 	public static List<Procedura> search(
 		String nome, String attiva, java.util.Date dataInserimentoDa,
 		java.util.Date dataInserimentoA, long siteGroupId, int inizio, int fine,
-		OrderByComparator<Procedura> comparator) {
+		String orderByCol, String orderByType) {
 
 		return getService().search(
 			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId,
-			inizio, fine, comparator);
+			inizio, fine, orderByCol, orderByType);
 	}
 
 	/**

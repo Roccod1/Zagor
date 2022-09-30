@@ -556,23 +556,23 @@ public class ServizioLocalServiceWrapper
 	 * @param nome
 	 * @param codice
 	 * @param soloServiziAttivi
-	 * @param cur: pagina attuale
-	 * @param delta: numero elementi per pagina
-	 * @param nomeOrdinamento
-	 * @param direzioneOrdinamento
+	 * @param inizio
+	 * @param fine
+	 * @param orderByCol
+	 * @param orderByType
 	 * @return
+	 * @throws Exception
 	 */
 	@Override
 	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
-			searchServizio(
+			search(
 				String nome, String codice, Boolean soloServiziAttivi,
-				int inizio, int fine,
-				com.liferay.portal.kernel.util.OrderByComparator
-					<it.servizidigitali.gestioneservizi.model.Servizio> ordine)
+				int inizio, int fine, String orderByCol, String orderByType)
 		throws Exception {
 
-		return _servizioLocalService.searchServizio(
-			nome, codice, soloServiziAttivi, inizio, fine, ordine);
+		return _servizioLocalService.search(
+			nome, codice, soloServiziAttivi, inizio, fine, orderByCol,
+			orderByType);
 	}
 
 	@Override

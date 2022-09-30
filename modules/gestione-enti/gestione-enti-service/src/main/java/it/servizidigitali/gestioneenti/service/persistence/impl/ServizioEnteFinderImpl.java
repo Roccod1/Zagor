@@ -21,7 +21,7 @@ import it.servizidigitali.gestioneenti.service.persistence.ServizioEnteFinder;
 public class ServizioEnteFinderImpl extends ServizioEnteFinderBaseImpl implements ServizioEnteFinder {
 
 	@Override
-	public List<ServizioEnte> findServizioEnteByFilters(long organizationId, List<Long> subOrganizationIds, Boolean attivo, long groupId, long companyId) {
+	public List<ServizioEnte> findServiziEnteByFilters(long organizationId, List<Long> subOrganizationIds, Boolean attivo, long groupId, long companyId) {
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, getClass().getClassLoader());
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("primaryKey.organizationId", organizationId));

@@ -71,14 +71,11 @@ public class GestioneTipologieServizioPortlet extends MVCPortlet {
 			orderByCol = "tipologiaId";
 		}
 		
-		boolean direzione = "desc".equals(orderByType.toLowerCase()) ? false : true;
-		OrderByComparator<Tipologia> ordine = OrderByComparatorFactoryUtil.create("Tipologia", orderByCol, direzione);
-		
 		List<Tipologia> listaTipologie = new ArrayList<Tipologia>();
 		long totaleElementi = 0;
 		
 		try{
-			listaTipologie = tipologiaLocalService.getListaTipologiaOrdinata(inizio, fine, ordine);
+			listaTipologie = tipologiaLocalService.getTipologie(inizio, fine, orderByCol, orderByType);
 			totaleElementi = tipologiaLocalService.count();
 		}catch(Exception e) {
 			_log.error("Impossibile ottenere la lista delle tipologie", e);

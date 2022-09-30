@@ -440,14 +440,11 @@ public class ProceduraLocalServiceWrapper
 		search(
 			String nome, String attiva, java.util.Date dataInserimentoDa,
 			java.util.Date dataInserimentoA, long siteGroupId, int inizio,
-			int fine,
-			com.liferay.portal.kernel.util.OrderByComparator
-				<it.servizidigitali.gestioneprocedure.model.Procedura>
-					comparator) {
+			int fine, String orderByCol, String orderByType) {
 
 		return _proceduraLocalService.search(
 			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId,
-			inizio, fine, comparator);
+			inizio, fine, orderByCol, orderByType);
 	}
 
 	/**

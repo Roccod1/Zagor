@@ -10,7 +10,6 @@ import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
-import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -76,7 +75,7 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 
 	@Reference
 	private UtenteOrganizzazioneCanaleComunicazioneLocalService utenteOrganizzazioneCanaleComunicazioneLocalService;
-	
+
 	@Reference
 	private ProfiloUtentePreferenzeMiddlewareService profiloUtentePreferenzeMiddlewareService;
 
@@ -99,21 +98,21 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 		User utenteCorrente = null;
 		Group globalGroup = null;
 		long currentOrganizationId = 0;
-		
+
 		int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, ProfiloUtentePreferenzePortletKeys.DEFAULT_CUR);
 		int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, ProfiloUtentePreferenzePortletKeys.DEFAULT_DELTA);
 		String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
-		
+
 		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
-		
+
 		/*
 		 * Vengono impostati a -1 per ottenere la lista completa
 		 */
-		
+
 		int inizio = -1;
 		int fine = -1;
-		
+
 		boolean direzione = false;
 
 		if (orderByType.equalsIgnoreCase("asc")) {
@@ -125,7 +124,7 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 		}
 
 		OrderByComparator<Organization> comparator = OrderByComparatorFactoryUtil.create("Organization", orderByCol, direzione);
-		
+
 		try {
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
 			themeDisplay = serviceContext.getThemeDisplay();
@@ -151,7 +150,7 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 				List<UtenteOrganizzazioneCanaleComunicazione> listaUtenteOrganizzazioneCanaleComunicazione = utenteOrganizzazioneCanaleComunicazioneLocalService
 						.getListaCanaleComunicazioneByUtenteOrganization(utenteCorrente.getUserId(), currentOrganizationId);
 
-				listaOrganizzazioni = profiloUtentePreferenzeMiddlewareService.getListaOrganizzazioni(inizio, fine, comparator);
+				listaOrganizzazioni = profiloUtentePreferenzeMiddlewareService.getOrganizations(inizio, fine, comparator);
 
 				Organization organization = profiloUtentePreferenzeMiddlewareService.getOrganization(currentOrganizationId);
 
@@ -169,7 +168,7 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 				renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_UTENTE_ORGANIZZAZIONE_CANALE_COMUNICAZIONE, listaUtenteOrganizzazioneCanaleComunicazione);
 			}
 			else {
-				listaOrganizzazioni = profiloUtentePreferenzeMiddlewareService.getListaOrganizzazioni(inizio, fine, comparator);
+				listaOrganizzazioni = profiloUtentePreferenzeMiddlewareService.getOrganizations(inizio, fine, comparator);
 
 				List<UtenteOrganizzazione> listaUtenteOrganizzazione = utenteOrganizzazioneLocalService.getByUtentePreferito(utenteCorrente.getUserId(), true);
 
