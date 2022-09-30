@@ -1,6 +1,5 @@
 package it.servizidigitali.scrivaniaoperatore.frontend.portlet.render;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +33,6 @@ import it.servizidigitali.scrivaniaoperatore.frontend.dto.AzioneUtente;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.CommentoDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.UserDTO;
-import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaCodiciOperazioniUtente;
 import it.servizidigitali.scrivaniaoperatore.frontend.service.ScrivaniaOperatoreFrontendService;
 import it.servizidigitali.scrivaniaoperatore.frontend.util.MapUtil;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
@@ -88,20 +86,8 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 		request.setAttribute("altriResponsabili", altriResponsabili);
 
 		List<AzioneUtente> azioni = scrivaniaOperatoreFrontendService.getAzioniUtenteDettaglioRichiesta(id, ctx);
-		Map<CamundaCodiciOperazioniUtente, Boolean> azioniMask = getAzioniMask(azioni);
-		String assegnaResponsabileVar = azioni.stream()
-				.filter(x -> CamundaCodiciOperazioniUtente.ASSEGNA_RESPONSABILE.equals(CamundaCodiciOperazioniUtente.valueOf(x.getCodiceAzioneUtente())))
-				.map(x -> x.getVariableSet())
-				.findFirst()
-				.orElse(null);
-		request.setAttribute("assegnaResponsabileVar", assegnaResponsabileVar);
-		request.setAttribute("hasAssegnaAltroResponsabile", azioniMask.get(CamundaCodiciOperazioniUtente.ASSEGNA_ALTRO_RESPONSABILE));
-		request.setAttribute("hasAssegnaResponsabile", azioniMask.get(CamundaCodiciOperazioniUtente.ASSEGNA_RESPONSABILE));
-		request.setAttribute("hasEsitoPositivo", azioniMask.get(CamundaCodiciOperazioniUtente.ESITO_PROCEDIMENTO_POSITIVO));
-		request.setAttribute("hasEsitoNegativo", azioniMask.get(CamundaCodiciOperazioniUtente.ESITO_PROCEDIMENTO_NEGATIVO));
-		request.setAttribute("hasRichiediModificheRichiedente", azioniMask.get(CamundaCodiciOperazioniUtente.RICHIESTA_INTEGRAZIONE));
-		request.setAttribute("hasRilascia", azioniMask.get(CamundaCodiciOperazioniUtente.RILASCIA_TASK));
-
+		request.setAttribute("azioni", azioni);
+		
 		Map<String, Task> userTasks = scrivaniaOperatoreFrontendService.getUserTasks(ctx);
 		boolean inCarico = userTasks.containsKey(richiesta.getProcessInstanceId());
 		request.setAttribute("inCarico", inCarico);
@@ -195,13 +181,4 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 		}
 	}
 
-	private Map<CamundaCodiciOperazioniUtente, Boolean> getAzioniMask(List<AzioneUtente> azioni) {
-		List<CamundaCodiciOperazioniUtente> azioniKeys = azioni.stream()
-				.map(x -> x.getCodiceAzioneUtente())
-				.map(x -> CamundaCodiciOperazioniUtente.valueOf(x))
-				.collect(Collectors.toList());
-		
-		return Arrays.stream(CamundaCodiciOperazioniUtente.values())
-				.collect(Collectors.toMap(x -> x, x -> azioniKeys.contains(x)));
-	}
 }

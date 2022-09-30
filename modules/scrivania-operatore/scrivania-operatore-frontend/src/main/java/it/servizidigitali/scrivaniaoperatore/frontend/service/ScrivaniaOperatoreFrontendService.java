@@ -291,6 +291,9 @@ public class ScrivaniaOperatoreFrontendService {
 		catch (PortalException e) {
 			log.error("getAzioniUtenteDettaglioRichiesta :: " + e.getMessage(), e);
 		}
+		
+		azioniUtente.sort((a, b) -> a.getCodiceAzioneUtente().compareTo(b.getCodiceAzioneUtente()));
+		
 		return azioniUtente;
 	}
 

@@ -26,9 +26,9 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 @Component(immediate = true, service = MVCActionCommand.class, property = {
 		"javax.portlet.name=" + ScrivaniaOperatorePortletKeys.SCRIVANIAOPERATORE,
-		"mvc.command.name=/action/assegnaResponsabile"
+		"mvc.command.name=/action/rimandaAlReferente"
 })
-public class AssegnaResponsabileActionCommand extends BaseMVCActionCommand {
+public class RimandaAlReferenteActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private ScrivaniaOperatoreFrontendService scrivaniaOperatoreFrontendService;
@@ -39,23 +39,23 @@ public class AssegnaResponsabileActionCommand extends BaseMVCActionCommand {
 	protected void doProcessAction(ActionRequest request, ActionResponse response) throws Exception {
 		long richiestaId = ParamUtil.getLong(request, "richiestaId");
 		String dettaglioTab = ParamUtil.getString(request, "dettaglioTab");
+		String commento = ParamUtil.getString(request, "commento");
+		String variabileSet = ParamUtil.getString(request, "variabileSet");
+		String variabileVal = ParamUtil.getString(request, "variabileVal");
 		
 		try {
-			long responsabile = ParamUtil.getLong(request, "responsabile");
-			String commento = ParamUtil.getString(request, "commento");
-			String variableSet = ParamUtil.getString(request, "variableSet");
-			
 			ServiceContext context = ServiceContextFactory.getInstance(request);
+			
 			Richiesta richiesta = richiestaLocalService.fetchRichiesta(richiestaId);
 			
 			Map<String, Task> tasks = scrivaniaOperatoreFrontendService.getUserTasks(context);
 			String taskId = tasks.get(richiesta.getProcessInstanceId()).getId();
 			
-			scrivaniaOperatoreFrontendService.assegnaResponsabile(
-					responsabile, 
-					richiestaId,
-					taskId,
-					variableSet, 
+			scrivaniaOperatoreFrontendService.rimandaReferente(
+					richiestaId, 
+					taskId, 
+					variabileSet, 
+					variabileVal, 
 					commento, 
 					context);
 		} catch (Exception e) {
@@ -67,8 +67,8 @@ public class AssegnaResponsabileActionCommand extends BaseMVCActionCommand {
 		renderParameters.setValue("mvcRenderCommandName", "/render/dettaglio");
 		renderParameters.setValue("id", String.valueOf(richiestaId));
 		renderParameters.setValue("dettaglioTab", dettaglioTab);
-		renderParameters.setValue("isMain", String.valueOf(false));
+		renderParameters.setValue("isMain", String.valueOf(false));	
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(AssegnaResponsabileActionCommand.class);
+	private static final Log _log = LogFactoryUtil.getLog(RimandaAlReferenteActionCommand.class);
 }

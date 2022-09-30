@@ -107,13 +107,11 @@
 		<div class="col-6">
 			<aui:input name="num-protocollo-richiesta" value="${richiesta.numeroProtocollo}" readonly="true" />
 		</div>
-		<div class="col-6">
+		<div class="col-6 form-group">
 			<fmt:formatDate value="${richiesta.dataProtocollo}" pattern="yyyy-MM-dd'T'HH:mm" var="richiestaDataProtocollo" />
 			<label><liferay-ui:message key="data-protocollo-richiesta" /></label>
-			<input type="datetime-local"
-		           readonly
-		           id="<portlet:namespace/>dataProtocolloRichiesta"
-		           name="<portlet:namespace/>dataProtocolloRichiesta"
+			<input readonly
+				   class="form-control"
 		           value="${richiestaDataProtocollo}">
 		</div>
 	</div>
@@ -128,7 +126,7 @@
 	</c:choose>
 	
 	<div class="row">
-		<div class="col-6">
+		<div class="col-6 form-group">
 			<label class="control-label"><liferay-ui:message key="num-protocollo-esito" /></label>
 			<input name="<portlet:namespace />numProtocolloEsito"
 			       id="<portlet:namespace />numProtocolloEsito"
@@ -136,11 +134,12 @@
 			       ${readonlyAttr}
 			       class="form-control">
 		</div>
-		<div class="col-6">
+		<div class="col-6 form-group">
 			<fmt:formatDate value="${richiesta.dataProtocolloEsterno}" pattern="yyyy-MM-dd'T'HH:mm" var="richiestaDataProtocolloEsterno" />
 			<label><liferay-ui:message key="data-protocollo-esito" /></label>
 			<input type="datetime-local"
 		           ${readonlyAttr}
+		           class="form-control"
 		           id="<portlet:namespace/>dataProtocolloEsito"
 		           name="<portlet:namespace/>dataProtocolloEsito"
 		           value="${richiestaDataProtocolloEsterno}">
