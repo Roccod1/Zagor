@@ -86,7 +86,7 @@ public class GestioneProcedureMiddlewareService {
 
 	public List<Servizio> getServiziByOrganizationAttivo(long organizationId) throws Exception {
 
-		List<Long> listaServiziEnte = servizioEnteLocalService.getListaServiziByOrganizationAttivo(organizationId, true);
+		List<Long> listaServiziEnte = servizioEnteLocalService.getServiziIdsByOrganizationAttivo(organizationId, true);
 		List<Servizio> listaServizi = new ArrayList<Servizio>();
 
 		if (Validator.isNotNull(listaServiziEnte)) {
@@ -265,7 +265,7 @@ public class GestioneProcedureMiddlewareService {
 
 		try {
 			// lista di tutti i servizi ente
-			List<Long> listaServizioEnteId = servizioEnteLocalService.getListaServiziByOrganizationAttivo(organizationId, true);
+			List<Long> listaServizioEnteId = servizioEnteLocalService.getServiziIdsByOrganizationAttivo(organizationId, true);
 
 			// lista dei servizi per specifico groupId che gia' associati ad una procedura
 			List<Procedura> listaProcedure = proceduraLocalService.getProcedureByGroupIdAttiva(groupId, true);
