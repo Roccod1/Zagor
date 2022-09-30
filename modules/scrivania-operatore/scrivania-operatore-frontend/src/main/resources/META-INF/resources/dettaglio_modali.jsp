@@ -9,7 +9,7 @@
 					<portlet:actionURL var="assegnaResponsabileURL" name="/action/assegnaResponsabile">
 					</portlet:actionURL>
 					
-					<aui:form action="${assegnaResponsabileURL}">
+					<aui:form action="${assegnaResponsabileURL}" name="assegnaResponsabileForm">
 						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
 						<aui:input type="hidden" name="variableSet" value="${azione.variableSet}" />
@@ -28,7 +28,7 @@
 											<liferay-ui:message key="selezione-responsabile" />
 										</label>
 										<select class="form-control" name="<portlet:namespace />responsabile">
-											<option value="0"><liferay-ui:message key="seleziona-un-responsabile" /></option>
+											<option value=""><liferay-ui:message key="seleziona-un-responsabile" /></option>
 											<c:forEach items="${responsabili}" var="responsabile">
 												<option value="${responsabile.userId}">${responsabile.nome}</option>
 											</c:forEach>
@@ -45,7 +45,7 @@
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">
 										<liferay-ui:message key="annulla" />
 									</button>
-									<button type="button" class="btn btn-primary ml-1 submit">
+									<button type="submit" class="btn btn-primary ml-1">
 										<liferay-ui:message key="conferma" />
 									</button>
 								</div>
@@ -60,7 +60,7 @@
 					<portlet:actionURL var="assegnaAltroResponsabileURL" name="/action/assegnaAltroResponsabile">
 					</portlet:actionURL>
 					
-					<aui:form action="${assegnaAltroResponsabileURL}">
+					<aui:form action="${assegnaAltroResponsabileURL}" name="assegnaAltroResponsabileForm">
 						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
 					
@@ -78,7 +78,7 @@
 											<liferay-ui:message key="selezione-altro-responsabile" />
 										</label>
 										<select class="form-control" name="<portlet:namespace />responsabile">
-											<option value="0"><liferay-ui:message key="seleziona-un-responsabile" /></option>
+											<option value=""><liferay-ui:message key="seleziona-un-responsabile" /></option>
 											<c:forEach items="${altriResponsabili}" var="responsabile">
 												<option value="${responsabile.userId}">${responsabile.nome}</option>
 											</c:forEach>
@@ -95,7 +95,7 @@
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">
 										<liferay-ui:message key="annulla" />
 									</button>
-									<button type="button" class="btn btn-primary ml-1 submit">
+									<button type="submit" class="btn btn-primary ml-1">
 										<liferay-ui:message key="conferma" />
 									</button>
 								</div>
@@ -110,7 +110,7 @@
 					<portlet:actionURL var="chiudiEsitoPositivoURL" name="/action/chiudiEsitoPositivo">
 					</portlet:actionURL>
 					
-					<aui:form action="${chiudiEsitoPositivoURL}">
+					<aui:form action="${chiudiEsitoPositivoURL}" name="chiudiEsitoPositivoForm">
 						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
 						
@@ -155,7 +155,7 @@
 								<div class="modal-footer d-flex justify-content-end">		
 									<button type="button" class="btn btn-secondary" data-dismiss="modal"><liferay-ui:message key="annulla" /></button>
 									
-									<button type="button" class="btn btn-primary ml-1 submit">
+									<button type="submit" class="btn btn-primary ml-1">
 										<liferay-ui:message key="conferma" />
 									</button>
 								</div>
@@ -170,7 +170,7 @@
 					<portlet:actionURL var="chiudiEsitoNegativoURL" name="/action/chiudiEsitoNegativo">
 					</portlet:actionURL>
 					
-					<aui:form action="${chiudiEsitoNegativoURL}">
+					<aui:form action="${chiudiEsitoNegativoURL}" name="chiudiEsitoNegativoForm">
 						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
 						
@@ -215,7 +215,7 @@
 								<div class="modal-footer d-flex justify-content-end">		
 									<button type="button" class="btn btn-secondary" data-dismiss="modal"><liferay-ui:message key="annulla" /></button>
 									
-									<button type="button" class="btn btn-primary ml-1 submit">
+									<button type="submit" class="btn btn-primary ml-1">
 										<liferay-ui:message key="conferma" />
 									</button>
 								</div>
@@ -246,7 +246,7 @@
 									<span><liferay-ui:message key="rilascia-message" /></span>
 								</div>
 								<div class="modal-footer d-flex justify-content-end">		
-									<button type="button" class="btn btn-primary mr-1 submit">
+									<button type="submit" class="btn btn-primary mr-1">
 										<liferay-ui:message key="conferma" />
 									</button>
 									
@@ -288,7 +288,7 @@
 					<portlet:actionURL var="rimandaAlReferenteURL" name="/action/rimandaAlReferente">
 					</portlet:actionURL>
 					
-					<aui:form action="${rimandaAlReferenteURL}">
+					<aui:form action="${rimandaAlReferenteURL}" name="rimandaAlReferenteForm">
 						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
 						<aui:input type="hidden" name="variabileSet" value="${azione.variableSet}" />
@@ -314,7 +314,7 @@
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">
 										<liferay-ui:message key="annulla" />
 									</button>
-									<button type="button" class="btn btn-primary ml-1 submit">
+									<button type="submit" class="btn btn-primary ml-1">
 										<liferay-ui:message key="conferma" />
 									</button>
 								</div>
@@ -332,7 +332,7 @@
 	<portlet:actionURL var="aggiungiAllegatoURL" name="/action/aggiungiAllegato">
 	</portlet:actionURL>
 	
-	<aui:form action="${aggiungiAllegatoURL}" enctype="multipart/form-data">
+	<aui:form action="${aggiungiAllegatoURL}" enctype="multipart/form-data" name="aggiungiAllegatoForm">
 		<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 		
 		<div class="modal-dialog">
@@ -365,7 +365,7 @@
 				<div class="modal-footer d-flex justify-content-end">		
 					<button type="button" class="btn btn-secondary" data-dismiss="modal"><liferay-ui:message key="annulla" /></button>
 					
-					<button type="button" class="btn btn-primary submit ml-1">
+					<button type="submit" class="btn btn-primary ml-1">
 						<liferay-ui:message key="salva-allegato" />
 						<i class="fas fa-upload"></i>
 					</button>
@@ -379,7 +379,7 @@
 	<portlet:actionURL var="aggiungiCommentoURL" name="/action/aggiungiCommento">
 	</portlet:actionURL>
 	
-	<aui:form action="${aggiungiCommentoURL}">
+	<aui:form action="${aggiungiCommentoURL}" name="aggiungiCommentoForm">
 		<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 				
 		<div class="modal-dialog">
@@ -393,7 +393,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<label><liferay-ui:message key="testo" /></label>
-						<textarea class="form-control" name="<portlet:namespace />testo"></textarea>
+						<textarea class="form-control" id="<portlet:namespace />testo" name="<portlet:namespace />testo"></textarea>
 					</div>
 					<div class="form-group form-check">
 						<label class="form-check-label"><liferay-ui:message key="visibile-al-cittadino" /></label>
@@ -401,7 +401,7 @@
 					</div>
 				</div>
 				<div class="modal-footer d-flex justify-content-end">		
-					<button type="button" class="btn btn-primary mr-1 submit">
+					<button type="submit" class="btn btn-primary mr-1">
 						<liferay-ui:message key="salva-commento" />
 					</button>
 					
