@@ -5,9 +5,7 @@
 	<portlet:param name="idServizio" value="${idServizio}" />
 </portlet:resourceURL>
 
-<portlet:actionURL var="salvaUrl">
-	<portlet:param name="action" value="action-salva" />
-	<portlet:param name="idServizio" value="${idServizio}" />
+<portlet:actionURL var="salvaUrl" name="<%=PresentatoreFormsPortletKeys.SALVA_INVIA_RICHIESTA_ACTION_COMMAND %>">
 </portlet:actionURL>
 
 <portlet:renderURL var="homeScrivaniaUrl">
@@ -151,14 +149,14 @@ console.log("dentro scegli allegati");
 				        				
 						     			<c:choose>
 						     				<c:when test="${!invioIstanza}">
-						       					<div class="margintop10"><liferay-ui:message key="pdf.firmato.no.invio.istanza.download.descrizione"/></div>
+						       					<div class="mt-3"><liferay-ui:message key="pdf.firmato.no.invio.istanza.download.descrizione"/></div>
 						     				</c:when>
 						     				<c:when test="${not empty allegati}">
-								     			<div class="margintop10"><liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.descrizione"/></div>
-								     			<div class="margintop10"><liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione.toppagina" arguments="${uploadFileMaxSizeLabel}"/></div>
+								     			<div class="mt-3"><liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.descrizione"/></div>
+								     			<div class="mt-3"><liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione.toppagina" arguments="${uploadFileMaxSizeLabel}"/></div>
 						     				</c:when>
 						     				<c:otherwise>
-								     			<div class="margintop10"><liferay-ui:message key="pdf.firmato.istanza.download.descrizione"/></div>
+								     			<div class="mt-3"><liferay-ui:message key="pdf.firmato.istanza.download.descrizione"/></div>
 						     				</c:otherwise>
 						     			</c:choose>
 				        			</c:otherwise>
@@ -177,14 +175,14 @@ console.log("dentro scegli allegati");
 									</legend>
 	
 									<c:forEach items="${allegati}" var="allegato" varStatus="loop">
-										<div class="control-group margintop10 alpaca-field-object">
+										<div class="control-group mt-3 alpaca-field-object">
 											<label class="control-label" for="allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}">${allegato.definizione.denominazione}<c:if test="${allegato.definizione.obbligatorio}">*</c:if> (<liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione" arguments="${uploadFileMaxSizeLabel}"/>):</label>
 											
 											<c:if test="${not empty allegato.definizione.filenameModello }">
 												<span class="help-block"> 
 													<spring:message	code="documento.precompilato.info" />
 												</span>
-												<div class="margintop10 marginbottom10">
+												<div class="mt-3 mb-3">
 													<portlet:resourceURL id="downloadModello" var="downloadModelloUrl">
 														<portlet:param name="id" value="${allegato.definizione.definizioneAllegatoId}" />
 														<portlet:param name="fileName" value="${allegato.definizione.filenameModello}" />
@@ -261,6 +259,9 @@ console.log("dentro scegli allegati");
 					<input type="hidden" name="inBozza" value="true" id="in-bozza">
 					
 				</aui:form>
+				
+				<div class="mt-3"></div>
+				
 				<div class="form-actions">
 					<a class="btn btn-sm btn-secondary" href="${homeScrivaniaUrl}"><liferay-ui:message key="label.indietro" /></a>
 					<c:choose>
