@@ -4,19 +4,18 @@
 	<portlet:param name="<%=GestioneProcessiPortletKeys.DATA_INSERIMENTO_A %>" value="${dataInserimentoA}"/>
 	<portlet:param name="mvcPath" value="<%=GestioneProcessiPortletKeys.JSP_HOME %>"/>
 </liferay-portlet:renderURL>
-
 				
 
 <liferay-ui:search-container
 			delta="10"
 			emptyResultsMessage="non-e-presente-nessun-processo"
-			total="<%=listaProcessi.size() %>"
+			total="${totaleElementi}"
 			iteratorURL="${iteratorURL}"
 			>
 			
 			
 		
-		<liferay-ui:search-container-results results="<%=ListUtil.subList(listaProcessi, searchContainer.getStart(), searchContainer.getEnd()) %>" />
+		<liferay-ui:search-container-results results="<%=listaProcessi%>" />
 		
 		
 			
@@ -98,7 +97,4 @@
 
 			</liferay-ui:search-container-row>
 		<liferay-ui:search-iterator />
-		
-		
-
 	</liferay-ui:search-container>

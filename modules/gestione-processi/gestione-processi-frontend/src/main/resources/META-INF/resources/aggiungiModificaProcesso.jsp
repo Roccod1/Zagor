@@ -30,6 +30,7 @@
 
 <liferay-ui:error key="<%=GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_CAMUNDA %>" message="impossibile-effettuare-salvataggio-camunda" />
 <liferay-ui:error key="<%=GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_PROCESSO_CODICE_ESISTENTE %>" message="esiste-gia-un-processo-con-codice-specificato" />
+<liferay-ui:error key="<%=GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_MODELLO_NON_VALIDO %>" message="modello-non-valido" />
 
 <div class="page-header">
 	<h2><liferay-ui:message key="processo"/></h2>
@@ -73,7 +74,10 @@
 		
 		<aui:button-row cssClass="text-right">
 			<aui:button value="annulla" id="annulla" href="${homeURL}"/>
-			<c:if test="${processo.modificabile}">
+			<c:if test="${processo.processoId > 0 && processo.modificabile}">
+				<aui:button type="submit" value="salva" id="salva"/>
+			</c:if>
+			<c:if test="${empty processo.processoId}">
 				<aui:button type="submit" value="salva" id="salva"/>
 			</c:if>
 		</aui:button-row>

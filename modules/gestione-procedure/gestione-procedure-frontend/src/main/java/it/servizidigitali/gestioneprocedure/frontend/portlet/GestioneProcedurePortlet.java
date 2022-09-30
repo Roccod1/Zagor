@@ -71,9 +71,7 @@ public class GestioneProcedurePortlet extends MVCPortlet {
 
 		
 		List<Procedura> listaProcedure = (List<Procedura>) renderRequest.getAttribute(GestioneProcedurePortletKeys.LISTA_PROCEDURE);
-		
-		Procedura procedura = gestioneProcedureMiddlewareService.getProcedura(themeDisplay.getSiteGroupId(), 45101, true);
-		
+				
 		int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM,GestioneProcedurePortletKeys.DEFAULT_CUR);
 		int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,GestioneProcedurePortletKeys.DEFAULT_DELTA);
 		String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);

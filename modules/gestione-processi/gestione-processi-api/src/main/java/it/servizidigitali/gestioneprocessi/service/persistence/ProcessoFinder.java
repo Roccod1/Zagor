@@ -26,7 +26,7 @@ public interface ProcessoFinder {
 	public java.util.List<it.servizidigitali.gestioneprocessi.model.Processo>
 		findByFilters(
 			String denominazione, java.util.Date dataInserimentoDa,
-			java.util.Date dataInserimentoA, int cur, int delta,
+			java.util.Date dataInserimentoA, int inizio, int fine,
 			com.liferay.portal.kernel.util.OrderByComparator
 				<it.servizidigitali.gestioneprocessi.model.Processo> ordine);
 

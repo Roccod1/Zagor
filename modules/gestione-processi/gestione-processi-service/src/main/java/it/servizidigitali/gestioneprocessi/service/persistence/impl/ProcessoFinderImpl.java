@@ -19,7 +19,7 @@ import it.servizidigitali.gestioneprocessi.service.persistence.ProcessoFinder;
 
 @Component(service = ProcessoFinder.class)
 public class ProcessoFinderImpl extends ProcessoFinderBaseImpl implements ProcessoFinder{
-	public List<Processo> findByFilters(String denominazione, Date dataInserimentoDa, Date dataInserimentoA, int cur, int delta, OrderByComparator<Processo> ordine){
+	public List<Processo> findByFilters(String denominazione, Date dataInserimentoDa, Date dataInserimentoA, int inizio, int fine, OrderByComparator<Processo> ordine){
 		List<Processo> listaProcessi = new ArrayList<>();
 		
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -37,11 +37,6 @@ public class ProcessoFinderImpl extends ProcessoFinderBaseImpl implements Proces
 		if(Validator.isNotNull(dataInserimentoA)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.le("createDate", dataInserimentoA));
 		}
-		
-		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
-		
-		int inizio = posizioni[0];
-		int fine = posizioni[1];
 		
 		listaProcessi = processoPersistence.findWithDynamicQuery(dynamicQuery,inizio,fine,ordine);
 		

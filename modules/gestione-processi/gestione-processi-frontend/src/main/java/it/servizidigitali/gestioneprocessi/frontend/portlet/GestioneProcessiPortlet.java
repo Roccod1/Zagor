@@ -1,6 +1,7 @@
 package it.servizidigitali.gestioneprocessi.frontend.portlet;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
@@ -8,6 +9,8 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -84,6 +87,23 @@ public class GestioneProcessiPortlet extends MVCPortlet {
 
 		Date dataInserimentoDa = null;
 		Date dataInserimentoA = null;
+		
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+		
+		boolean direzione = false;
+
+		if (orderByType.equalsIgnoreCase("asc")) {
+			direzione = true;
+		}
+
+		if (Validator.isNull(orderByCol)) {
+			orderByCol = "processoId";
+		}
+		
+		OrderByComparator<Processo> comparator = OrderByComparatorFactoryUtil.create("Processo", orderByCol, direzione);
+		long totale = 0;
 
 		try {
 
@@ -100,7 +120,8 @@ public class GestioneProcessiPortlet extends MVCPortlet {
 				dataInserimentoA = simpleDateFormat.parse(dataInserimentoAString);
 			}
 
-			listaProcessi = processoLocalService.search(nome, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), delta, cur, orderByCol, orderByType);
+			listaProcessi = processoLocalService.search(nome, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), inizio, fine, comparator);
+			totale = processoLocalService.count(nome, dataInserimentoDa, dataInserimentoA);
 
 		}
 		catch (Exception e) {
@@ -115,6 +136,7 @@ public class GestioneProcessiPortlet extends MVCPortlet {
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.NOME_RICERCA, nome);
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.DATA_INSERIMENTO_DA, dataInserimentoDaString);
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.DATA_INSERIMENTO_A, dataInserimentoAString);
+		renderRequest.setAttribute("totaleElementi", totale);
 		renderRequest.setAttribute("groupIdUtente", groupIdUtente);
 		renderRequest.setAttribute("organizationIdSitePrincipale", organizationIdSitePrincipale);
 

@@ -53,6 +53,16 @@ public class ProcessoLocalServiceWrapper
 		return _processoLocalService.addProcesso(processo);
 	}
 
+	@Override
+	public long count(
+			String nome, java.util.Date dataInserimentoDa,
+			java.util.Date dataInserimentoA)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _processoLocalService.count(
+			nome, dataInserimentoDa, dataInserimentoA);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -422,13 +432,16 @@ public class ProcessoLocalServiceWrapper
 	public java.util.List<it.servizidigitali.gestioneprocessi.model.Processo>
 			search(
 				String nome, java.util.Date dataInserimentoDa,
-				java.util.Date dataInserimentoA, long groupId, int delta,
-				int cur, String orderByCol, String orderByType)
+				java.util.Date dataInserimentoA, long groupId, int inizio,
+				int fine,
+				com.liferay.portal.kernel.util.OrderByComparator
+					<it.servizidigitali.gestioneprocessi.model.Processo>
+						comparator)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _processoLocalService.search(
-			nome, dataInserimentoDa, dataInserimentoA, groupId, delta, cur,
-			orderByCol, orderByType);
+			nome, dataInserimentoDa, dataInserimentoA, groupId, inizio, fine,
+			comparator);
 	}
 
 	/**
