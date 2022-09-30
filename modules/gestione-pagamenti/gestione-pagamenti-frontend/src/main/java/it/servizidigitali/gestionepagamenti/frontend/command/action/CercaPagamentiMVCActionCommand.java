@@ -5,6 +5,8 @@ import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.text.DateFormat;
@@ -55,8 +57,7 @@ public class CercaPagamentiMVCActionCommand extends BaseMVCActionCommand {
 				null);
 		String canale = ParamUtil.getString(actionRequest, GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA,
 				null);
-		String servizio = ParamUtil.getString(actionRequest, GestionePagamentiFrontendPortletKeys.SERVIZIO_CERCA, null);
-		String cliente = ParamUtil.getString(actionRequest, GestionePagamentiFrontendPortletKeys.CLIENTE_CERCA, null);
+		String codiceFiscale = ParamUtil.getString(actionRequest, GestionePagamentiFrontendPortletKeys.CODICE_FISCALE_CERCA, null);
 		String identificativoPagamento = ParamUtil.getString(actionRequest,
 				GestionePagamentiFrontendPortletKeys.IDENTIFICATIVO_PAGAMENTO_CERCA, null);
 		String codiceIuv = ParamUtil.getString(actionRequest, GestionePagamentiFrontendPortletKeys.CODICE_IUV_CERCA,
@@ -70,15 +71,17 @@ public class CercaPagamentiMVCActionCommand extends BaseMVCActionCommand {
 
 		int inizio = posizioni[0];
 		int fine = posizioni[1];
+
+		OrderByComparator<Pagamento> comparator = OrderByComparatorFactoryUtil.create("Pagamento", "pagamentoId", true);
 		
-		long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, servizio, cliente, identificativoPagamento, codiceIuv, idPagamento);
+		long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento);
 
 		List<Pagamento> listaPagamenti = Collections.emptyList();
 		
 		if(totalCountPagamenti != 0) {
 			listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA,
-					dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, servizio, cliente,
-					identificativoPagamento, codiceIuv, idPagamento, inizio, fine, null, null);
+					dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, codiceFiscale,
+					identificativoPagamento, codiceIuv, idPagamento, inizio, fine, comparator);
 		}
 
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.TOTAL_COUNT_PAGAMENTI, totalCountPagamenti);
@@ -95,8 +98,7 @@ public class CercaPagamentiMVCActionCommand extends BaseMVCActionCommand {
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA, stato);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA, gateway);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA, canale);
-		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SERVIZIO_CERCA, servizio);
-		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.CLIENTE_CERCA, cliente);
+		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.CODICE_FISCALE_CERCA, codiceFiscale);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.IDENTIFICATIVO_PAGAMENTO_CERCA, identificativoPagamento);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.CODICE_IUV_CERCA, codiceIuv);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.ID_PAGAMENTO_CERCA, idPagamento != 0 ? idPagamento : null);

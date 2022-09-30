@@ -17,8 +17,7 @@ public class GestionePagamentiFrontendPortletKeys {
 	public static final String SELECT_STATO_CERCA = "selectStatoCerca";
 	public static final String SELECT_GATEWAY_CERCA = "selectGatewayCerca";
 	public static final String SELECT_CANALE_CERCA = "selectCanaleCerca";
-	public static final String SERVIZIO_CERCA = "servizioCerca";
-	public static final String CLIENTE_CERCA = "clienteCerca";
+	public static final String CODICE_FISCALE_CERCA = "codiceFiscaleCerca";
 	public static final String IDENTIFICATIVO_PAGAMENTO_CERCA = "identificativoPagamentoCerca";
 	public static final String CODICE_IUV_CERCA = "codiceIuvCerca";
 	public static final String ID_PAGAMENTO_CERCA = "idPagamentoCerca";

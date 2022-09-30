@@ -4,6 +4,8 @@ import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -77,8 +79,7 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 					null);
 			String canale = ParamUtil.getString(renderRequest, GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA,
 					null);
-			String servizio = ParamUtil.getString(renderRequest, GestionePagamentiFrontendPortletKeys.SERVIZIO_CERCA, null);
-			String cliente = ParamUtil.getString(renderRequest, GestionePagamentiFrontendPortletKeys.CLIENTE_CERCA, null);
+			String codiceFiscale = ParamUtil.getString(renderRequest, GestionePagamentiFrontendPortletKeys.CODICE_FISCALE_CERCA, null);
 			String identificativoPagamento = ParamUtil.getString(renderRequest,
 					GestionePagamentiFrontendPortletKeys.IDENTIFICATIVO_PAGAMENTO_CERCA, null);
 			String codiceIuv = ParamUtil.getString(renderRequest, GestionePagamentiFrontendPortletKeys.CODICE_IUV_CERCA,
@@ -96,12 +97,24 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 			String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 			
-			long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, servizio, cliente, identificativoPagamento, codiceIuv, idPagamento);
+			boolean direzione = true;
+
+			if ("desc".equalsIgnoreCase(orderByType)) {
+				direzione = false;
+			}
+
+			if (Validator.isNull(orderByCol)) {
+				orderByCol = "pagamentoId";
+			}
+
+			OrderByComparator<Pagamento> comparator = OrderByComparatorFactoryUtil.create("Pagamento", orderByCol, direzione);
+			
+			long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento);
 
 			listaPagamenti = Collections.emptyList();
 			
 			if(totalCountPagamenti != 0) {
-				listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, servizio, cliente, identificativoPagamento, codiceIuv, idPagamento, inizio, fine, orderByCol, orderByType);
+				listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento, inizio, fine, comparator);
 			}
 
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.TOTAL_COUNT_PAGAMENTI, totalCountPagamenti);
@@ -116,8 +129,7 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA, stato);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA, gateway);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA, canale);
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SERVIZIO_CERCA, servizio);
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.CLIENTE_CERCA, cliente);
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.CODICE_FISCALE_CERCA, codiceFiscale);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.IDENTIFICATIVO_PAGAMENTO_CERCA, identificativoPagamento);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.CODICE_IUV_CERCA, codiceIuv);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.ID_PAGAMENTO_CERCA, idPagamento != 0 ? idPagamento : null);

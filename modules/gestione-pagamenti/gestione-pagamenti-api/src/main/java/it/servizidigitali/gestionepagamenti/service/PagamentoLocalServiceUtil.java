@@ -64,13 +64,13 @@ public class PagamentoLocalServiceUtil {
 		java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
 		java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
 		String organizzazione, String categoria, String stato, String gateway,
-		String canale, String servizio, String cliente,
-		String identificativoPagamento, String codiceIuv, long idPagamento) {
+		String canale, String codiceFiscale, String identificativoPagamento,
+		String codiceIuv, long idPagamento) {
 
 		return getService().countByFilters(
 			dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
 			dataOperazioneA, organizzazione, categoria, stato, gateway, canale,
-			servizio, cliente, identificativoPagamento, codiceIuv, idPagamento);
+			codiceFiscale, identificativoPagamento, codiceIuv, idPagamento);
 	}
 
 	/**
@@ -362,15 +362,15 @@ public class PagamentoLocalServiceUtil {
 		java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
 		java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
 		String organizzazione, String categoria, String stato, String gateway,
-		String canale, String servizio, String cliente,
-		String identificativoPagamento, String codiceIuv, long idPagamento,
-		int inizio, int fine, String orderByCol, String orderByType) {
+		String canale, String codiceFiscale, String identificativoPagamento,
+		String codiceIuv, long idPagamento, int inizio, int fine,
+		OrderByComparator<Pagamento> comparator) {
 
 		return getService().search(
 			dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
 			dataOperazioneA, organizzazione, categoria, stato, gateway, canale,
-			servizio, cliente, identificativoPagamento, codiceIuv, idPagamento,
-			inizio, fine, orderByCol, orderByType);
+			codiceFiscale, identificativoPagamento, codiceIuv, idPagamento,
+			inizio, fine, comparator);
 	}
 
 	/**

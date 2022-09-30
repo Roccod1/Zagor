@@ -58,13 +58,13 @@ public class PagamentoLocalServiceWrapper
 		java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
 		java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
 		String organizzazione, String categoria, String stato, String gateway,
-		String canale, String servizio, String cliente,
-		String identificativoPagamento, String codiceIuv, long idPagamento) {
+		String canale, String codiceFiscale, String identificativoPagamento,
+		String codiceIuv, long idPagamento) {
 
 		return _pagamentoLocalService.countByFilters(
 			dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
 			dataOperazioneA, organizzazione, categoria, stato, gateway, canale,
-			servizio, cliente, identificativoPagamento, codiceIuv, idPagamento);
+			codiceFiscale, identificativoPagamento, codiceIuv, idPagamento);
 	}
 
 	/**
@@ -410,15 +410,18 @@ public class PagamentoLocalServiceWrapper
 			java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
 			java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
 			String organizzazione, String categoria, String stato,
-			String gateway, String canale, String servizio, String cliente,
+			String gateway, String canale, String codiceFiscale,
 			String identificativoPagamento, String codiceIuv, long idPagamento,
-			int inizio, int fine, String orderByCol, String orderByType) {
+			int inizio, int fine,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<it.servizidigitali.gestionepagamenti.model.Pagamento>
+					comparator) {
 
 		return _pagamentoLocalService.search(
 			dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
 			dataOperazioneA, organizzazione, categoria, stato, gateway, canale,
-			servizio, cliente, identificativoPagamento, codiceIuv, idPagamento,
-			inizio, fine, orderByCol, orderByType);
+			codiceFiscale, identificativoPagamento, codiceIuv, idPagamento,
+			inizio, fine, comparator);
 	}
 
 	/**

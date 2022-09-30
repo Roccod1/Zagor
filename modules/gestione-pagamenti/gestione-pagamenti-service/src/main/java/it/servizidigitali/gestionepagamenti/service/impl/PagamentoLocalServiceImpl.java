@@ -16,8 +16,6 @@ package it.servizidigitali.gestionepagamenti.service.impl;
 
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Date;
 import java.util.List;
@@ -36,32 +34,20 @@ public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
 	@Override
 	public List<Pagamento> search(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
 			Date dataOperazioneA, String organizzazione, String categoria, String stato, String gateway, String canale,
-			String servizio, String cliente, String identificativoPagamento, String codiceIuv, long idPagamento, int inizio, int fine, String orderByCol, String orderByType) {
-		
-		boolean direzione = true;
-
-		if ("desc".equalsIgnoreCase(orderByType)) {
-			direzione = false;
-		}
-
-		if (Validator.isNull(orderByCol)) {
-			orderByCol = "pagamentoId";
-		}
-
-		OrderByComparator<Pagamento> comparator = OrderByComparatorFactoryUtil.create("Pagamento", orderByCol, direzione);
+			String codiceFiscale, String identificativoPagamento, String codiceIuv, long idPagamento, int inizio, int fine, OrderByComparator<Pagamento> comparator) {
 		
 		return this.pagamentoFinder.findByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
-				dataOperazioneA, organizzazione, categoria, stato, gateway, canale, servizio, cliente,
+				dataOperazioneA, organizzazione, categoria, stato, gateway, canale, codiceFiscale,
 				identificativoPagamento, codiceIuv, idPagamento, inizio, fine, comparator);
 	}
 	
 	@Override
 	public long countByFilters(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
 			Date dataOperazioneA, String organizzazione, String categoria, String stato, String gateway, String canale,
-			String servizio, String cliente, String identificativoPagamento, String codiceIuv, long idPagamento) {
+			String codiceFiscale, String identificativoPagamento, String codiceIuv, long idPagamento) {
 		
 		return this.pagamentoFinder.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
-				dataOperazioneA, organizzazione, categoria, stato, gateway, canale, servizio, cliente,
+				dataOperazioneA, organizzazione, categoria, stato, gateway, canale, codiceFiscale,
 				identificativoPagamento, codiceIuv, idPagamento);
 	}
 }

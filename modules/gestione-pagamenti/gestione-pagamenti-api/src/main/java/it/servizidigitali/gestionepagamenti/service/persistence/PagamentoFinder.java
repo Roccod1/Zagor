@@ -28,7 +28,7 @@ public interface PagamentoFinder {
 			java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
 			java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
 			String organizzazione, String categoria, String stato,
-			String gateway, String canale, String servizio, String cliente,
+			String gateway, String canale, String codiceFiscale,
 			String identificativoPagamento, String codiceIuv, long idPagamento,
 			int inizio, int fine,
 			com.liferay.portal.kernel.util.OrderByComparator
@@ -38,7 +38,7 @@ public interface PagamentoFinder {
 		java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
 		java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
 		String organizzazione, String categoria, String stato, String gateway,
-		String canale, String servizio, String cliente,
-		String identificativoPagamento, String codiceIuv, long idPagamento);
+		String canale, String codiceFiscale, String identificativoPagamento,
+		String codiceIuv, long idPagamento);
 
 }
