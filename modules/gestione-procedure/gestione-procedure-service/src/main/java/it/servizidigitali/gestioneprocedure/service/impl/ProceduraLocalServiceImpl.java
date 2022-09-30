@@ -12,7 +12,11 @@
 
 package it.servizidigitali.gestioneprocedure.service.impl;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -38,7 +42,7 @@ public class ProceduraLocalServiceImpl extends ProceduraLocalServiceBaseImpl {
 	public static final Log _log = LogFactoryUtil.getLog(ProceduraLocalServiceImpl.class);
 
 	@Override
-	public List<Procedura> search(String nome, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId, int delta, int cur, String orderByCol, String orderByType) {
+	public List<Procedura> search(String nome, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId, int inizio, int fine, String orderByCol, String orderByType) {
 		boolean direzione = false;
 
 		if (orderByType.equalsIgnoreCase("asc")) {
@@ -50,9 +54,47 @@ public class ProceduraLocalServiceImpl extends ProceduraLocalServiceBaseImpl {
 		}
 
 		OrderByComparator<Procedura> comparator = OrderByComparatorFactoryUtil.create("Procedura", orderByCol, direzione);
-		List<Procedura> listaProcedure = proceduraFinder.findByFilters(nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId, cur, delta, comparator);
+		List<Procedura> listaProcedure = proceduraFinder.findByFilters(nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId, inizio, fine, comparator);
 
 		return listaProcedure;
+	}
+	
+	@Override
+	public long countByNomeAttivaDataInserimentoGroupId(String nome, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId) {
+		ClassLoader classLoader = getClass().getClassLoader();
+
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Procedura.class, classLoader);
+
+		if (Validator.isNotNull(nome)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));
+		}
+
+		if (Validator.isNotNull(attiva) && !attiva.equalsIgnoreCase("-1")) {
+
+			if (attiva.equalsIgnoreCase("1")) {
+				dynamicQuery.add(RestrictionsFactoryUtil.eq("attiva", true));
+			}
+			else {
+				dynamicQuery.add(RestrictionsFactoryUtil.eq("attiva", Boolean.parseBoolean(attiva)));
+			}
+
+		}
+
+		if (Validator.isNotNull(siteGroupId)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("groupId", siteGroupId));
+		}
+
+		if (Validator.isNotNull(dataInserimentoDa)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.ge("createDate", dataInserimentoDa));
+		}
+
+		if (Validator.isNotNull(dataInserimentoA)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.le("createDate", dataInserimentoA));
+		}
+		
+		long count = proceduraPersistence.countWithDynamicQuery(dynamicQuery);
+		
+		return count;
 	}
 
 	@Override

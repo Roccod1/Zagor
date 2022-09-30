@@ -60,6 +60,14 @@ public class ProceduraLocalServiceUtil {
 		return getService().addProcedura(procedura);
 	}
 
+	public static long countByNomeAttivaDataInserimentoGroupId(
+		String nome, String attiva, java.util.Date dataInserimentoDa,
+		java.util.Date dataInserimentoA, long siteGroupId) {
+
+		return getService().countByNomeAttivaDataInserimentoGroupId(
+			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -375,12 +383,12 @@ public class ProceduraLocalServiceUtil {
 
 	public static List<Procedura> search(
 		String nome, String attiva, java.util.Date dataInserimentoDa,
-		java.util.Date dataInserimentoA, long siteGroupId, int delta, int cur,
+		java.util.Date dataInserimentoA, long siteGroupId, int inizio, int fine,
 		String orderByCol, String orderByType) {
 
 		return getService().search(
 			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId,
-			delta, cur, orderByCol, orderByType);
+			inizio, fine, orderByCol, orderByType);
 	}
 
 	/**

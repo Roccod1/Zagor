@@ -8,13 +8,13 @@
 <liferay-ui:search-container
 			delta="10"
 			emptyResultsMessage="non-e-presente-nessuna-procedura"
-			total="<%=listaProcedure.size() %>"
+			total="${totaleElementi}"
 			iteratorURL="${iteratorURL}"
 			>
 			
 			
 		
-		<liferay-ui:search-container-results results="<%=ListUtil.subList(listaProcedure, searchContainer.getStart(), searchContainer.getEnd()) %>" />
+		<liferay-ui:search-container-results results="<%=listaProcedure%>" />
 		
 		
 			

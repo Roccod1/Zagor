@@ -79,6 +79,10 @@ public interface ProceduraLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public Procedura addProcedura(Procedura procedura);
 
+	public long countByNomeAttivaDataInserimentoGroupId(
+		String nome, String attiva, Date dataInserimentoDa,
+		Date dataInserimentoA, long siteGroupId);
+
 	/**
 	 * @throws PortalException
 	 */
@@ -328,7 +332,7 @@ public interface ProceduraLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Procedura> search(
 		String nome, String attiva, Date dataInserimentoDa,
-		Date dataInserimentoA, long siteGroupId, int delta, int cur,
+		Date dataInserimentoA, long siteGroupId, int inizio, int fine,
 		String orderByCol, String orderByType);
 
 	/**

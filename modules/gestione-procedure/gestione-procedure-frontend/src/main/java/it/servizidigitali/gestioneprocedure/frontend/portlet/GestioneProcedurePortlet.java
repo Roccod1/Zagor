@@ -6,6 +6,7 @@ import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
@@ -84,6 +85,11 @@ public class GestioneProcedurePortlet extends MVCPortlet {
 		Date dataInserimentoDa = null;
 		Date dataInserimentoA = null;
 		
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+		
+		
 		try {
 			
 			if(Validator.isNotNull(dataInserimentoDaString)) {
@@ -99,14 +105,15 @@ public class GestioneProcedurePortlet extends MVCPortlet {
 		}
 		
 
-		listaProcedure = proceduraLocalService.search(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), delta, cur, orderByCol, orderByType);
+		listaProcedure = proceduraLocalService.search(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), inizio, fine, orderByCol, orderByType);
+		long totale = proceduraLocalService.countByNomeAttivaDataInserimentoGroupId(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId());
 
-		
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_PROCEDURE, listaProcedure);
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.NOME_RICERCA, nome);
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.STATO_RICERCA, attiva);
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.DATA_INSERIMENTO_DA, dataInserimentoDaString);
 		renderRequest.setAttribute(GestioneProcedurePortletKeys.DATA_INSERIMENTO_A, dataInserimentoAString);
+		renderRequest.setAttribute("totaleElementi", totale);
 		
 		// Rimozione messaggi default
 		

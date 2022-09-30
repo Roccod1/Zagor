@@ -53,6 +53,15 @@ public class ProceduraLocalServiceWrapper
 		return _proceduraLocalService.addProcedura(procedura);
 	}
 
+	@Override
+	public long countByNomeAttivaDataInserimentoGroupId(
+		String nome, String attiva, java.util.Date dataInserimentoDa,
+		java.util.Date dataInserimentoA, long siteGroupId) {
+
+		return _proceduraLocalService.countByNomeAttivaDataInserimentoGroupId(
+			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -430,12 +439,12 @@ public class ProceduraLocalServiceWrapper
 	public java.util.List<it.servizidigitali.gestioneprocedure.model.Procedura>
 		search(
 			String nome, String attiva, java.util.Date dataInserimentoDa,
-			java.util.Date dataInserimentoA, long siteGroupId, int delta,
-			int cur, String orderByCol, String orderByType) {
+			java.util.Date dataInserimentoA, long siteGroupId, int inizio,
+			int fine, String orderByCol, String orderByType) {
 
 		return _proceduraLocalService.search(
 			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId,
-			delta, cur, orderByCol, orderByType);
+			inizio, fine, orderByCol, orderByType);
 	}
 
 	/**
