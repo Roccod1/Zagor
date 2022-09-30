@@ -19,9 +19,12 @@
 			</div>
 			<div class="col">
 				<div class="form-group">
-					<aui:input type="text" name="<%=GestioneTipologieServizioPortletKeys.NOME %>" label="nome" value="${tipologia.nome}">
-						<aui:validator name="required"/>
-					</aui:input>
+					<aui:select type="text" name="<%=GestioneTipologieServizioPortletKeys.CODICE %>" label="codice" value="${tipologia.codice}">
+						<aui:option value="" selected="true" label="seleziona" disabled="true"/>
+						<c:forEach items="${codici}" var="codice">
+							<aui:option value="${codice}"><liferay-ui:message key="tipo-servizio-${codice}"/></aui:option>
+						</c:forEach>
+					</aui:select>
 				</div>
 			</div>
 		</div>
@@ -29,9 +32,19 @@
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
+					<aui:input type="text" name="<%=GestioneTipologieServizioPortletKeys.NOME %>" label="nome" value="${tipologia.nome}">
+						<aui:validator name="required"/>
+					</aui:input>
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group">
 					<aui:input type="text" name="<%=GestioneTipologieServizioPortletKeys.DESCRIZIONE %>" label="descrizione" value="${tipologia.descrizione}" />
 				</div>
 			</div>
+		</div>
+		
+		<div class="row">
 			<div class="col">
 				<div class="form-group">
 					<aui:input type="text" name="<%=GestioneTipologieServizioPortletKeys.CHATBOT_INLINE_INTENT %>" label="chatbot-inline-intent" value="${tipologia.chatbotInlineIntent}" />
