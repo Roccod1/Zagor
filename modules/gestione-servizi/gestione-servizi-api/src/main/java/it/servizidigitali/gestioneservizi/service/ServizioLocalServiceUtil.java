@@ -414,12 +414,12 @@ public class ServizioLocalServiceUtil {
 	}
 
 	public static List<Servizio> getServiziUtilizzabili(
-		List<Object> listaServiziEnte, String nome, long areaTematicaId,
+		List<Long> serviziEnteId, String nome, long areaTematicaId,
 		long tipologiaId, int cur, int delta, String orderByCol,
 		String orderByType) {
 
 		return getService().getServiziUtilizzabili(
-			listaServiziEnte, nome, areaTematicaId, tipologiaId, cur, delta,
+			serviziEnteId, nome, areaTematicaId, tipologiaId, cur, delta,
 			orderByCol, orderByType);
 	}
 

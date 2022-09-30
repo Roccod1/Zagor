@@ -340,7 +340,7 @@ public interface ServizioLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Servizio> getServiziUtilizzabili(
-		List<Object> listaServiziEnte, String nome, long areaTematicaId,
+		List<Long> serviziEnteId, String nome, long areaTematicaId,
 		long tipologiaId, int cur, int delta, String orderByCol,
 		String orderByType);
 

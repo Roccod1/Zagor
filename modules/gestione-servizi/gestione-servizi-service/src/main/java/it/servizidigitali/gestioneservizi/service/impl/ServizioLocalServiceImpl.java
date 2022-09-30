@@ -150,7 +150,7 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl {
 	}
 
 	@Override
-	public List<Servizio> getServiziUtilizzabili(List<Object> listaServiziEnte, String nome, long areaTematicaId, long tipologiaId, int cur, int delta, String orderByCol, String orderByType) {
+	public List<Servizio> getServiziUtilizzabili(List<Long> serviziId, String nome, long areaTematicaId, long tipologiaId, int cur, int delta, String orderByCol, String orderByType) {
 
 		// preparo i parametri per ordinamento e paginazione
 		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
@@ -182,7 +182,7 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl {
 
 		// imposto "join" di servizio su servizioEnte in modo che servizioEnte.servizioId =
 		// servizio.servizioId
-		servizioDynamicQuery.add(PropertyFactoryUtil.forName("servizioId").in(listaServiziEnte));
+		servizioDynamicQuery.add(PropertyFactoryUtil.forName("servizioId").in(serviziId));
 
 		if (!Validator.isBlank(nome)) {
 			servizioDynamicQuery.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));

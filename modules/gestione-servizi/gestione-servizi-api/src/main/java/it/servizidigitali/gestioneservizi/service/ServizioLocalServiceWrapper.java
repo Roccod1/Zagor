@@ -481,12 +481,12 @@ public class ServizioLocalServiceWrapper
 	@Override
 	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
 		getServiziUtilizzabili(
-			java.util.List<Object> listaServiziEnte, String nome,
+			java.util.List<Long> serviziEnteId, String nome,
 			long areaTematicaId, long tipologiaId, int cur, int delta,
 			String orderByCol, String orderByType) {
 
 		return _servizioLocalService.getServiziUtilizzabili(
-			listaServiziEnte, nome, areaTematicaId, tipologiaId, cur, delta,
+			serviziEnteId, nome, areaTematicaId, tipologiaId, cur, delta,
 			orderByCol, orderByType);
 	}
 
