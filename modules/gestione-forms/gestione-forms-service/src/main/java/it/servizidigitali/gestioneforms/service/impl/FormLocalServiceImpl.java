@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Date;
@@ -42,63 +43,75 @@ import it.servizidigitali.gestioneforms.service.base.FormLocalServiceBaseImpl;
  */
 @Component(property = "model.class.name=it.servizidigitali.gestioneforms.model.Form", service = AopService.class)
 public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
-	
+
 	@Reference
 	private OrganizationLocalService organizationLocalService;
-	
+
 	@Reference
 	private GroupLocalService groupLocalService;
 
 	public static final Log _log = LogFactoryUtil.getLog(FormLocalServiceImpl.class);
 
 	@Override
-	public List<Form> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, long groupId, int inizio, int fine, OrderByComparator<Form> comparator) throws PortalException {
-		
+	public List<Form> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, long groupId, int inizio, int fine, String orderByCol, String orderByType) throws PortalException {
 
-		List<Form> listaForm = formFinder.findFormByFilter(nome, dataInserimentoDa, dataInserimentoA, inizio, fine, comparator);
+		boolean direzione = false;
+
+		if (orderByType.equalsIgnoreCase("asc")) {
+			direzione = true;
+		}
+
+		if (Validator.isNull(orderByCol)) {
+			orderByCol = "formId";
+		}
+
+		OrderByComparator<Form> comparator = OrderByComparatorFactoryUtil.create("Form", orderByCol, direzione);
+
+		List<Form> listaForm = formFinder.findByFilter(nome, dataInserimentoDa, dataInserimentoA, inizio, fine, comparator);
 		Group group = null;
 		Organization organization = null;
 
 		for (Form form : listaForm) {
 			group = groupLocalService.getGroup(form.getGroupId());
 			long organizationIdSite = groupLocalService.getGroup(groupId).getOrganizationId();
-			
-			if(organizationIdSite==0) {
-				
+
+			if (organizationIdSite == 0) {
+
 				if (group.getOrganizationId() > 0) {
 					organization = organizationLocalService.getOrganization(group.getOrganizationId());
 					form.setNomeEnte(organization.getName());
-				}else {
+				}
+				else {
 					form.setNomeEnte("-");
 				}
-				
+
 			}
 		}
 
 		return listaForm;
 	}
-	
+
 	@Override
 	public long count(String nome, Date dataInserimentoDa, Date dataInserimentoA) throws PortalException {
-		
+
 		ClassLoader classLoader = getClass().getClassLoader();
-		
+
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Form.class, classLoader);
-		
-		if(Validator.isNotNull(nome)) {
+
+		if (Validator.isNotNull(nome)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));
 		}
-		
-		if(Validator.isNotNull(dataInserimentoDa)) {
+
+		if (Validator.isNotNull(dataInserimentoDa)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.ge("createDate", dataInserimentoDa));
 		}
-		
-		if(Validator.isNotNull(dataInserimentoA)) {
+
+		if (Validator.isNotNull(dataInserimentoA)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.le("createDate", dataInserimentoA));
 		}
-		
+
 		long totale = formPersistence.countWithDynamicQuery(dynamicQuery);
-		
+
 		return totale;
 	}
 

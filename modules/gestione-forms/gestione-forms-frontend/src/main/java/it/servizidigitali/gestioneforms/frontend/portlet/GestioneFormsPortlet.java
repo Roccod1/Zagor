@@ -98,18 +98,6 @@ public class GestioneFormsPortlet extends MVCPortlet {
 		int inizio = posizioni[0];
 		int fine = posizioni[1];
 		
-		boolean direzione = false;
-
-		if (orderByType.equalsIgnoreCase("asc")) {
-			direzione = true;
-		}
-
-		if (Validator.isNull(orderByCol)) {
-			orderByCol = "formId";
-		}
-
-		OrderByComparator<Form> comparator = OrderByComparatorFactoryUtil.create("Form", orderByCol, direzione);
-
 		try {
 			
 			if(Validator.isNotNull(dataInserimentoDaString)) {
@@ -120,7 +108,7 @@ public class GestioneFormsPortlet extends MVCPortlet {
 				dataInserimentoA = simpleDateFormat.parse(dataInserimentoAString);
 			}
 			
-			listaForm = formLocalService.search(nome, dataInserimentoDa, dataInserimentoA, siteGroupId, inizio, fine, comparator);
+			listaForm = formLocalService.search(nome, dataInserimentoDa, dataInserimentoA, siteGroupId, inizio, fine, orderByCol, orderByType);
 			totale = formLocalService.count(nome, dataInserimentoDa, dataInserimentoA);
 			
 		}catch(Exception e) {

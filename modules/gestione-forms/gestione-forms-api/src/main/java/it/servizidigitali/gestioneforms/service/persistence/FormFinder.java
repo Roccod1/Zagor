@@ -24,7 +24,7 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface FormFinder {
 
 	public java.util.List<it.servizidigitali.gestioneforms.model.Form>
-		findFormByFilter(
+		findByFilter(
 			String nome, java.util.Date dataInserimentoDa,
 			java.util.Date dataInserimentoA, int inizio, int fine,
 			com.liferay.portal.kernel.util.OrderByComparator

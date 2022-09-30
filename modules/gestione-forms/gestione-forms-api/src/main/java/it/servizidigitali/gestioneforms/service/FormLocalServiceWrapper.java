@@ -402,13 +402,12 @@ public class FormLocalServiceWrapper
 	public java.util.List<it.servizidigitali.gestioneforms.model.Form> search(
 			String nome, java.util.Date dataInserimentoDa,
 			java.util.Date dataInserimentoA, long groupId, int inizio, int fine,
-			com.liferay.portal.kernel.util.OrderByComparator
-				<it.servizidigitali.gestioneforms.model.Form> comparator)
+			String orderByCol, String orderByType)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _formLocalService.search(
 			nome, dataInserimentoDa, dataInserimentoA, groupId, inizio, fine,
-			comparator);
+			orderByCol, orderByType);
 	}
 
 	/**
