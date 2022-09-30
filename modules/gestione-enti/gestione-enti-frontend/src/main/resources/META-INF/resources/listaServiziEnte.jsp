@@ -20,8 +20,8 @@
 		</div>
 	</div>
 	
-	<liferay-ui:search-container delta="10" emptyResultsMessage="nessun-risultato-trovato" total="<%=listaServiziEnte.size()%>" iteratorURL="${iteratorURL}" >
-		<liferay-ui:search-container-results results="<%=ListUtil.subList(listaServiziEnte, searchContainer.getStart(), searchContainer.getEnd()) %>"/>
+	<liferay-ui:search-container delta="10" emptyResultsMessage="nessun-risultato-trovato" total="${totaleElementi}" iteratorURL="${iteratorURL}" >
+		<liferay-ui:search-container-results results="<%=listaServiziEnte%>"/>
 		<liferay-ui:search-container-row className="it.servizidigitali.gestioneenti.model.ServizioEnte" modelVar="servizioEnte" >
 			<c:forEach items="${listaServizi }" var="servizio">
 				<c:if test="${servizio.servizioId eq servizioEnte.servizioId }">

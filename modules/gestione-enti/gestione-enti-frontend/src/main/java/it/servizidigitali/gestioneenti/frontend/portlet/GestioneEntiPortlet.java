@@ -1,6 +1,7 @@
 package it.servizidigitali.gestioneenti.frontend.portlet;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
@@ -12,6 +13,8 @@ import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -80,6 +83,17 @@ public class GestioneEntiPortlet extends MVCPortlet {
 		String codiceIpa = ParamUtil.getString(renderRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_CODICE_IPA_RICERCA);
 		String nome = ParamUtil.getString(renderRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_NOME_RICERCA);
 		
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+		if (Validator.isNull(orderByCol)) {
+			_log.debug("Nessun ordinamento impostato. Uso di default organizationId");
+			orderByCol = "organizationId";
+		}
+
+		boolean direzione = "desc".equals(orderByType.toLowerCase()) ? false : true;
+		OrderByComparator<Organization> ordine = OrderByComparatorFactoryUtil.create("Organization", orderByCol, direzione);
+		
 		ServiceContext serviceContext = null;
 		try {
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
@@ -104,7 +118,7 @@ public class GestioneEntiPortlet extends MVCPortlet {
 					listaOrganizations.add(organization);
 					renderRequest.setAttribute(GestioneEntiPortletKeys.DISABILITA_RICERCA, true);
 				}else {
-					listaOrganizations = servizioEnteLocalService.findOrganizationsByParams(nome, codiceIpa, cur, delta, orderByCol, orderByType);
+					listaOrganizations = servizioEnteLocalService.search(nome, codiceIpa, inizio, fine, ordine);
 				}
 				if(Validator.isNull(listaOrganizations)) {
 					_log.warn("Lista organizzazioni e' vuota o null");

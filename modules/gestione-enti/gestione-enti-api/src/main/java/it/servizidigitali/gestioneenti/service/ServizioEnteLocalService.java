@@ -216,11 +216,6 @@ public interface ServizioEnteLocalService
 	public ServizioEnte fetchServizioEnteByUuidAndGroupId(
 		String uuid, long groupId);
 
-	public List<Organization> findOrganizationsByParams(
-			String nome, String codiceIpa, int cur, int delta,
-			String orderByCol, String orderByType)
-		throws Exception;
-
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
@@ -340,6 +335,12 @@ public interface ServizioEnteLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getServizioEntesCount();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Organization> search(
+			String nome, String codiceIpa, int inizio, int fine,
+			OrderByComparator<Organization> ordine)
+		throws Exception;
 
 	/**
 	 * Updates the servizio ente in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

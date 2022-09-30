@@ -16,7 +16,7 @@
 	<liferay-ui:search-container delta="10" emptyResultsMessage="nessun-risultato-trovato" total="<%=listaEnti.size()%>" iteratorURL="${iteratorURL}" >
 		<liferay-ui:search-container-results results="<%=ListUtil.subList(listaEnti, searchContainer.getStart(), searchContainer.getEnd()) %>"/>
 		<liferay-ui:search-container-row className="com.liferay.portal.kernel.model.Organization" modelVar="ente" >
-			<liferay-ui:search-container-column-text property="name" name="nome"/>
+			<liferay-ui:search-container-column-text property="name" name="nome" orderable="true" orderableProperty="name" />
 			<portlet:renderURL var="modificaURL">
 				<portlet:param name="mvcRenderCommandName" value="<%=ProfiloUtentePreferenzePortletKeys.RENDER_INSERISCI_MODIFICA %>" />
 				<portlet:param name="<%=ProfiloUtentePreferenzePortletKeys.ORGANIZATION_ID %>" value="${ente.organizationId}" />	

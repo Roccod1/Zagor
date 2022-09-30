@@ -256,17 +256,6 @@ public class ServizioEnteLocalServiceWrapper
 	}
 
 	@Override
-	public java.util.List<com.liferay.portal.kernel.model.Organization>
-			findOrganizationsByParams(
-				String nome, String codiceIpa, int cur, int delta,
-				String orderByCol, String orderByType)
-		throws Exception {
-
-		return _servizioEnteLocalService.findOrganizationsByParams(
-			nome, codiceIpa, cur, delta, orderByCol, orderByType);
-	}
-
-	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -453,6 +442,17 @@ public class ServizioEnteLocalServiceWrapper
 	@Override
 	public int getServizioEntesCount() {
 		return _servizioEnteLocalService.getServizioEntesCount();
+	}
+
+	@Override
+	public java.util.List<com.liferay.portal.kernel.model.Organization> search(
+			String nome, String codiceIpa, int inizio, int fine,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.portal.kernel.model.Organization> ordine)
+		throws Exception {
+
+		return _servizioEnteLocalService.search(
+			nome, codiceIpa, inizio, fine, ordine);
 	}
 
 	/**

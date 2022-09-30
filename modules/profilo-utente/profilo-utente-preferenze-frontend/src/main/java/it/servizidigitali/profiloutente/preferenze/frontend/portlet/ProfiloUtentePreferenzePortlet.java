@@ -1,7 +1,8 @@
 package it.servizidigitali.profiloutente.preferenze.frontend.portlet;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
@@ -14,6 +15,9 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
@@ -36,6 +40,7 @@ import it.servizidigitali.profiloutente.model.UtenteOrganizzazione;
 import it.servizidigitali.profiloutente.model.UtenteOrganizzazioneCanaleComunicazione;
 import it.servizidigitali.profiloutente.portal.configuration.ProfiloUtenteConfiguration;
 import it.servizidigitali.profiloutente.preferenze.frontend.constants.ProfiloUtentePreferenzePortletKeys;
+import it.servizidigitali.profiloutente.preferenze.frontend.service.ProfiloUtentePreferenzeMiddlewareService;
 import it.servizidigitali.profiloutente.service.CanaleComunicazioneLocalService;
 import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneCanaleComunicazioneLocalService;
 import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneLocalService;
@@ -70,10 +75,10 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 	private UtenteOrganizzazioneLocalService utenteOrganizzazioneLocalService;
 
 	@Reference
-	private OrganizationLocalService organizationLocalService;
-
-	@Reference
 	private UtenteOrganizzazioneCanaleComunicazioneLocalService utenteOrganizzazioneCanaleComunicazioneLocalService;
+	
+	@Reference
+	private ProfiloUtentePreferenzeMiddlewareService profiloUtentePreferenzeMiddlewareService;
 
 	private volatile ProfiloUtenteConfiguration profiloUtenteConfiguration;
 
@@ -94,6 +99,33 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 		User utenteCorrente = null;
 		Group globalGroup = null;
 		long currentOrganizationId = 0;
+		
+		int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM, ProfiloUtentePreferenzePortletKeys.DEFAULT_CUR);
+		int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, ProfiloUtentePreferenzePortletKeys.DEFAULT_DELTA);
+		String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
+		String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
+		
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		
+		/*
+		 * Vengono impostati a -1 per ottenere la lista completa
+		 */
+		
+		int inizio = -1;
+		int fine = -1;
+		
+		boolean direzione = false;
+
+		if (orderByType.equalsIgnoreCase("asc")) {
+			direzione = true;
+		}
+
+		if (Validator.isNull(orderByCol)) {
+			orderByCol = "name";
+		}
+
+		OrderByComparator<Organization> comparator = OrderByComparatorFactoryUtil.create("Organization", orderByCol, direzione);
+		
 		try {
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
 			themeDisplay = serviceContext.getThemeDisplay();
@@ -119,9 +151,9 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 				List<UtenteOrganizzazioneCanaleComunicazione> listaUtenteOrganizzazioneCanaleComunicazione = utenteOrganizzazioneCanaleComunicazioneLocalService
 						.getListaCanaleComunicazioneByUtenteOrganization(utenteCorrente.getUserId(), currentOrganizationId);
 
-				listaOrganizzazioni = organizationLocalService.getOrganizations(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+				listaOrganizzazioni = profiloUtentePreferenzeMiddlewareService.getListaOrganizzazioni(inizio, fine, comparator);
 
-				Organization organization = organizationLocalService.getOrganization(currentOrganizationId);
+				Organization organization = profiloUtentePreferenzeMiddlewareService.getOrganization(currentOrganizationId);
 
 				UtenteOrganizzazionePK utenteOrganizzazionePK = new UtenteOrganizzazionePK(utenteCorrente.getUserId(), currentOrganizationId);
 				UtenteOrganizzazione utenteOrganizzazione = utenteOrganizzazioneLocalService.fetchUtenteOrganizzazione(utenteOrganizzazionePK);
@@ -137,7 +169,7 @@ public class ProfiloUtentePreferenzePortlet extends MVCPortlet {
 				renderRequest.setAttribute(ProfiloUtentePreferenzePortletKeys.LISTA_UTENTE_ORGANIZZAZIONE_CANALE_COMUNICAZIONE, listaUtenteOrganizzazioneCanaleComunicazione);
 			}
 			else {
-				listaOrganizzazioni = organizationLocalService.getOrganizations(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+				listaOrganizzazioni = profiloUtentePreferenzeMiddlewareService.getListaOrganizzazioni(inizio, fine, comparator);
 
 				List<UtenteOrganizzazione> listaUtenteOrganizzazione = utenteOrganizzazioneLocalService.getByUtentePreferito(utenteCorrente.getUserId(), true);
 
