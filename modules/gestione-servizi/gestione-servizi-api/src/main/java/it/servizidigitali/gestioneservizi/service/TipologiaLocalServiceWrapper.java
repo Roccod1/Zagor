@@ -416,6 +416,13 @@ public class TipologiaLocalServiceWrapper
 		return _tipologiaLocalService.getTipologia(tipologiaId);
 	}
 
+	@Override
+	public it.servizidigitali.gestioneservizi.model.Tipologia
+		getTipologiaByCodice(String codice) {
+
+		return _tipologiaLocalService.getTipologiaByCodice(codice);
+	}
+
 	/**
 	 * Returns the tipologia matching the UUID and group.
 	 *

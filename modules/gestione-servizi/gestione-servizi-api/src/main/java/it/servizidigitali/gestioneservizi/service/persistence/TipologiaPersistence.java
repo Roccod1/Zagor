@@ -532,6 +532,50 @@ public interface TipologiaPersistence extends BasePersistence<Tipologia> {
 	public int countByVisibile(boolean visibile);
 
 	/**
+	 * Returns the tipologia where codice = &#63; or throws a <code>NoSuchTipologiaException</code> if it could not be found.
+	 *
+	 * @param codice the codice
+	 * @return the matching tipologia
+	 * @throws NoSuchTipologiaException if a matching tipologia could not be found
+	 */
+	public Tipologia findByCodice(String codice)
+		throws NoSuchTipologiaException;
+
+	/**
+	 * Returns the tipologia where codice = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param codice the codice
+	 * @return the matching tipologia, or <code>null</code> if a matching tipologia could not be found
+	 */
+	public Tipologia fetchByCodice(String codice);
+
+	/**
+	 * Returns the tipologia where codice = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param codice the codice
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching tipologia, or <code>null</code> if a matching tipologia could not be found
+	 */
+	public Tipologia fetchByCodice(String codice, boolean useFinderCache);
+
+	/**
+	 * Removes the tipologia where codice = &#63; from the database.
+	 *
+	 * @param codice the codice
+	 * @return the tipologia that was removed
+	 */
+	public Tipologia removeByCodice(String codice)
+		throws NoSuchTipologiaException;
+
+	/**
+	 * Returns the number of tipologias where codice = &#63;.
+	 *
+	 * @param codice the codice
+	 * @return the number of matching tipologias
+	 */
+	public int countByCodice(String codice);
+
+	/**
 	 * Caches the tipologia in the entity cache if it is enabled.
 	 *
 	 * @param tipologia the tipologia

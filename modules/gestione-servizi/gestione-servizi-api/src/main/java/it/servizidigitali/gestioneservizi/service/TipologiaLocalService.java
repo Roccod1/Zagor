@@ -292,6 +292,9 @@ public interface TipologiaLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Tipologia getTipologia(long tipologiaId) throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Tipologia getTipologiaByCodice(String codice);
+
 	/**
 	 * Returns the tipologia matching the UUID and group.
 	 *

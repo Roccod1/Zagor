@@ -149,6 +149,7 @@
 		<column name="visibile" type="boolean" />
 		<column name="invioEmailCittadino" type="boolean" />
 		<column name="chatbotInlineIntent" type="String" />
+		<column name="codice" type="String" />
 		
 		<!-- Relationship -->
 		<column name="servizi" type="Collection" entity="Servizio" mapping-table="servizio_tipologia"/>
@@ -161,6 +162,10 @@
 		<!-- Finder methods -->
 		<finder name="Visibile" return-type="Collection">
 			<finder-column name="visibile" />
+		</finder>
+
+		<finder name="Codice" return-type="Tipologia">
+			<finder-column name="codice" />
 		</finder>
 	</entity>
 </service-builder>

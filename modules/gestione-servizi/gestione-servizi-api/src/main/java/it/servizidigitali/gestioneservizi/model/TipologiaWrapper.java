@@ -56,6 +56,7 @@ public class TipologiaWrapper
 		attributes.put("visibile", isVisibile());
 		attributes.put("invioEmailCittadino", isInvioEmailCittadino());
 		attributes.put("chatbotInlineIntent", getChatbotInlineIntent());
+		attributes.put("codice", getCodice());
 
 		return attributes;
 	}
@@ -141,6 +142,12 @@ public class TipologiaWrapper
 		if (chatbotInlineIntent != null) {
 			setChatbotInlineIntent(chatbotInlineIntent);
 		}
+
+		String codice = (String)attributes.get("codice");
+
+		if (codice != null) {
+			setCodice(codice);
+		}
 	}
 
 	@Override
@@ -156,6 +163,16 @@ public class TipologiaWrapper
 	@Override
 	public String getChatbotInlineIntent() {
 		return model.getChatbotInlineIntent();
+	}
+
+	/**
+	 * Returns the codice of this tipologia.
+	 *
+	 * @return the codice of this tipologia
+	 */
+	@Override
+	public String getCodice() {
+		return model.getCodice();
 	}
 
 	/**
@@ -331,6 +348,16 @@ public class TipologiaWrapper
 	@Override
 	public void setChatbotInlineIntent(String chatbotInlineIntent) {
 		model.setChatbotInlineIntent(chatbotInlineIntent);
+	}
+
+	/**
+	 * Sets the codice of this tipologia.
+	 *
+	 * @param codice the codice of this tipologia
+	 */
+	@Override
+	public void setCodice(String codice) {
+		model.setCodice(codice);
 	}
 
 	/**

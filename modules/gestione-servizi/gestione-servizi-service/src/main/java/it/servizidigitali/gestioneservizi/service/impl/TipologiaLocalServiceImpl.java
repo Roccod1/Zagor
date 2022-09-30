@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
+import it.servizidigitali.gestioneservizi.exception.NoSuchTipologiaException;
 import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.base.TipologiaLocalServiceBaseImpl;
 
@@ -54,6 +55,7 @@ public class TipologiaLocalServiceImpl extends TipologiaLocalServiceBaseImpl {
 		return tipologia;
 	}
 
+	@Override
 	public List<Tipologia> getTipologie(int inizio, int fine, String orderByCol, String orderByType) {
 
 		boolean direzione = "desc".equals(orderByType.toLowerCase()) ? false : true;
@@ -73,6 +75,17 @@ public class TipologiaLocalServiceImpl extends TipologiaLocalServiceBaseImpl {
 		long totale = tipologiaPersistence.countWithDynamicQuery(query);
 
 		return totale;
+	}
+
+	@Override
+	public Tipologia getTipologiaByCodice(String codice) {
+		try {
+			Tipologia tipologia = tipologiaPersistence.findByCodice(codice);
+			return tipologia;
+		}
+		catch (NoSuchTipologiaException e) {
+		}
+		return null;
 	}
 
 }

@@ -62,6 +62,8 @@ public class TipologiaTable extends BaseTable<TipologiaTable> {
 		createColumn(
 			"chatbotInlineIntent", String.class, Types.VARCHAR,
 			Column.FLAG_DEFAULT);
+	public final Column<TipologiaTable, String> codice = createColumn(
+		"codice", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 
 	private TipologiaTable() {
 		super("tipologia", TipologiaTable::new);

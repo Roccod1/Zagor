@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 
@@ -59,6 +60,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1953,6 +1955,246 @@ public class TipologiaPersistenceImpl
 	private static final String _FINDER_COLUMN_VISIBILE_VISIBILE_2 =
 		"tipologia.visibile = ?";
 
+	private FinderPath _finderPathFetchByCodice;
+	private FinderPath _finderPathCountByCodice;
+
+	/**
+	 * Returns the tipologia where codice = &#63; or throws a <code>NoSuchTipologiaException</code> if it could not be found.
+	 *
+	 * @param codice the codice
+	 * @return the matching tipologia
+	 * @throws NoSuchTipologiaException if a matching tipologia could not be found
+	 */
+	@Override
+	public Tipologia findByCodice(String codice)
+		throws NoSuchTipologiaException {
+
+		Tipologia tipologia = fetchByCodice(codice);
+
+		if (tipologia == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("codice=");
+			sb.append(codice);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchTipologiaException(sb.toString());
+		}
+
+		return tipologia;
+	}
+
+	/**
+	 * Returns the tipologia where codice = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param codice the codice
+	 * @return the matching tipologia, or <code>null</code> if a matching tipologia could not be found
+	 */
+	@Override
+	public Tipologia fetchByCodice(String codice) {
+		return fetchByCodice(codice, true);
+	}
+
+	/**
+	 * Returns the tipologia where codice = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param codice the codice
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching tipologia, or <code>null</code> if a matching tipologia could not be found
+	 */
+	@Override
+	public Tipologia fetchByCodice(String codice, boolean useFinderCache) {
+		codice = Objects.toString(codice, "");
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {codice};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByCodice, finderArgs);
+		}
+
+		if (result instanceof Tipologia) {
+			Tipologia tipologia = (Tipologia)result;
+
+			if (!Objects.equals(codice, tipologia.getCodice())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_SELECT_TIPOLOGIA_WHERE);
+
+			boolean bindCodice = false;
+
+			if (codice.isEmpty()) {
+				sb.append(_FINDER_COLUMN_CODICE_CODICE_3);
+			}
+			else {
+				bindCodice = true;
+
+				sb.append(_FINDER_COLUMN_CODICE_CODICE_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindCodice) {
+					queryPos.add(codice);
+				}
+
+				List<Tipologia> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByCodice, finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {codice};
+							}
+
+							_log.warn(
+								"TipologiaPersistenceImpl.fetchByCodice(String, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					Tipologia tipologia = list.get(0);
+
+					result = tipologia;
+
+					cacheResult(tipologia);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (Tipologia)result;
+		}
+	}
+
+	/**
+	 * Removes the tipologia where codice = &#63; from the database.
+	 *
+	 * @param codice the codice
+	 * @return the tipologia that was removed
+	 */
+	@Override
+	public Tipologia removeByCodice(String codice)
+		throws NoSuchTipologiaException {
+
+		Tipologia tipologia = findByCodice(codice);
+
+		return remove(tipologia);
+	}
+
+	/**
+	 * Returns the number of tipologias where codice = &#63;.
+	 *
+	 * @param codice the codice
+	 * @return the number of matching tipologias
+	 */
+	@Override
+	public int countByCodice(String codice) {
+		codice = Objects.toString(codice, "");
+
+		FinderPath finderPath = _finderPathCountByCodice;
+
+		Object[] finderArgs = new Object[] {codice};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_TIPOLOGIA_WHERE);
+
+			boolean bindCodice = false;
+
+			if (codice.isEmpty()) {
+				sb.append(_FINDER_COLUMN_CODICE_CODICE_3);
+			}
+			else {
+				bindCodice = true;
+
+				sb.append(_FINDER_COLUMN_CODICE_CODICE_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindCodice) {
+					queryPos.add(codice);
+				}
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_CODICE_CODICE_2 =
+		"tipologia.codice = ?";
+
+	private static final String _FINDER_COLUMN_CODICE_CODICE_3 =
+		"(tipologia.codice IS NULL OR tipologia.codice = '')";
+
 	public TipologiaPersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -1981,6 +2223,10 @@ public class TipologiaPersistenceImpl
 		finderCache.putResult(
 			_finderPathFetchByUUID_G,
 			new Object[] {tipologia.getUuid(), tipologia.getGroupId()},
+			tipologia);
+
+		finderCache.putResult(
+			_finderPathFetchByCodice, new Object[] {tipologia.getCodice()},
 			tipologia);
 	}
 
@@ -2061,6 +2307,12 @@ public class TipologiaPersistenceImpl
 		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, tipologiaModelImpl);
+
+		args = new Object[] {tipologiaModelImpl.getCodice()};
+
+		finderCache.putResult(_finderPathCountByCodice, args, Long.valueOf(1));
+		finderCache.putResult(
+			_finderPathFetchByCodice, args, tipologiaModelImpl);
 	}
 
 	/**
@@ -2893,6 +3145,16 @@ public class TipologiaPersistenceImpl
 		_finderPathCountByVisibile = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByVisibile",
 			new String[] {Boolean.class.getName()}, new String[] {"visibile"},
+			false);
+
+		_finderPathFetchByCodice = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByCodice",
+			new String[] {String.class.getName()}, new String[] {"codice"},
+			true);
+
+		_finderPathCountByCodice = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCodice",
+			new String[] {String.class.getName()}, new String[] {"codice"},
 			false);
 
 		_setTipologiaUtilPersistence(this);
