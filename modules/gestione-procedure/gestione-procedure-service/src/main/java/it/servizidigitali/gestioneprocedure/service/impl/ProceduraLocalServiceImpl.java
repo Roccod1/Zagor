@@ -42,25 +42,14 @@ public class ProceduraLocalServiceImpl extends ProceduraLocalServiceBaseImpl {
 	public static final Log _log = LogFactoryUtil.getLog(ProceduraLocalServiceImpl.class);
 
 	@Override
-	public List<Procedura> search(String nome, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId, int inizio, int fine, String orderByCol, String orderByType) {
-		boolean direzione = false;
-
-		if (orderByType.equalsIgnoreCase("asc")) {
-			direzione = true;
-		}
-
-		if (Validator.isNull(orderByCol)) {
-			orderByCol = "proceduraId";
-		}
-
-		OrderByComparator<Procedura> comparator = OrderByComparatorFactoryUtil.create("Procedura", orderByCol, direzione);
+	public List<Procedura> search(String nome, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId, int inizio, int fine, OrderByComparator<Procedura> comparator) {
 		List<Procedura> listaProcedure = proceduraFinder.findByFilters(nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId, inizio, fine, comparator);
 
 		return listaProcedure;
 	}
 	
 	@Override
-	public long countByNomeAttivaDataInserimentoGroupId(String nome, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId) {
+	public long count(String nome, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId) {
 		ClassLoader classLoader = getClass().getClassLoader();
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Procedura.class, classLoader);

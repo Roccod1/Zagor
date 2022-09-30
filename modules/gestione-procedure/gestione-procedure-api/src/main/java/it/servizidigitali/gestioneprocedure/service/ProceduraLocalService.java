@@ -79,7 +79,7 @@ public interface ProceduraLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public Procedura addProcedura(Procedura procedura);
 
-	public long countByNomeAttivaDataInserimentoGroupId(
+	public long count(
 		String nome, String attiva, Date dataInserimentoDa,
 		Date dataInserimentoA, long siteGroupId);
 
@@ -333,7 +333,7 @@ public interface ProceduraLocalService
 	public List<Procedura> search(
 		String nome, String attiva, Date dataInserimentoDa,
 		Date dataInserimentoA, long siteGroupId, int inizio, int fine,
-		String orderByCol, String orderByType);
+		OrderByComparator<Procedura> comparator);
 
 	/**
 	 * Updates the procedura in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

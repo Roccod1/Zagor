@@ -5,6 +5,8 @@ import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -67,8 +69,20 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 		int inizio = posizioni[0];
 		int fine = posizioni[1];
 		
-		List<Procedura> listaProcedure = proceduraLocalService.search(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), inizio, fine, orderByCol, orderByType);
-		long totale = proceduraLocalService.countByNomeAttivaDataInserimentoGroupId(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId());
+		boolean direzione = false;
+
+		if (orderByType.equalsIgnoreCase("asc")) {
+			direzione = true;
+		}
+
+		if (Validator.isNull(orderByCol)) {
+			orderByCol = "proceduraId";
+		}
+
+		OrderByComparator<Procedura> comparator = OrderByComparatorFactoryUtil.create("Procedura", orderByCol, direzione);
+		
+		List<Procedura> listaProcedure = proceduraLocalService.search(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), inizio, fine, comparator);
+		long totale = proceduraLocalService.count(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId());
 		
 		actionRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_PROCEDURE, listaProcedure);
 		actionRequest.setAttribute(GestioneProcedurePortletKeys.NOME_RICERCA, nome);

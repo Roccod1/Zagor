@@ -54,11 +54,11 @@ public class ProceduraLocalServiceWrapper
 	}
 
 	@Override
-	public long countByNomeAttivaDataInserimentoGroupId(
+	public long count(
 		String nome, String attiva, java.util.Date dataInserimentoDa,
 		java.util.Date dataInserimentoA, long siteGroupId) {
 
-		return _proceduraLocalService.countByNomeAttivaDataInserimentoGroupId(
+		return _proceduraLocalService.count(
 			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId);
 	}
 
@@ -440,11 +440,14 @@ public class ProceduraLocalServiceWrapper
 		search(
 			String nome, String attiva, java.util.Date dataInserimentoDa,
 			java.util.Date dataInserimentoA, long siteGroupId, int inizio,
-			int fine, String orderByCol, String orderByType) {
+			int fine,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<it.servizidigitali.gestioneprocedure.model.Procedura>
+					comparator) {
 
 		return _proceduraLocalService.search(
 			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId,
-			inizio, fine, orderByCol, orderByType);
+			inizio, fine, comparator);
 	}
 
 	/**

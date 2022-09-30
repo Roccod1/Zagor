@@ -60,11 +60,11 @@ public class ProceduraLocalServiceUtil {
 		return getService().addProcedura(procedura);
 	}
 
-	public static long countByNomeAttivaDataInserimentoGroupId(
+	public static long count(
 		String nome, String attiva, java.util.Date dataInserimentoDa,
 		java.util.Date dataInserimentoA, long siteGroupId) {
 
-		return getService().countByNomeAttivaDataInserimentoGroupId(
+		return getService().count(
 			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId);
 	}
 
@@ -384,11 +384,11 @@ public class ProceduraLocalServiceUtil {
 	public static List<Procedura> search(
 		String nome, String attiva, java.util.Date dataInserimentoDa,
 		java.util.Date dataInserimentoA, long siteGroupId, int inizio, int fine,
-		String orderByCol, String orderByType) {
+		OrderByComparator<Procedura> comparator) {
 
 		return getService().search(
 			nome, attiva, dataInserimentoDa, dataInserimentoA, siteGroupId,
-			inizio, fine, orderByCol, orderByType);
+			inizio, fine, comparator);
 	}
 
 	/**
