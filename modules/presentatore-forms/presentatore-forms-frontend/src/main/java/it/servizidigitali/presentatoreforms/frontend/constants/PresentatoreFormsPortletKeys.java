@@ -27,6 +27,7 @@ public class PresentatoreFormsPortletKeys {
 	public static final String STATI_CIVILI_RESOURCE_COMMAND = "/listaStatiCivili";
 	public static final String STATI_ESTERI_RESOURCE_COMMAND = "/listaStatiEsteri";
 	public static final String TITOLI_STUDIO_RESOURCE_COMMAND = "/listaTitoliStudio";
+	public static final String ESITO_INVIO_RENDER_COMMAND = "/esitoInvio";
 
 	// JSP
 	public static final String JSP_SCEGLI_ALLEGATI = "/scegliAllegati.jsp";
@@ -35,6 +36,7 @@ public class PresentatoreFormsPortletKeys {
 	public static final String JSP_SCEGLI_MODALITA_PAGAMENTO = "/scegliModalitaPagamento.jsp";
 	public static final String JSP_COMPILA_FORM = "/compilaForm.jsp";
 	public static final String JSP_HOME = "/home.jsp";
+	public static final String JSP_ESITO_INVIO = "/esitoInvio.jsp";
 
 	// MESSAGGI DI ERRORE
 	public static final String IMPOSSIBILE_RECUPERARE_RICHIESTA = "impossibile-recuperare-richiesta";

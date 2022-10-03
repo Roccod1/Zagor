@@ -79,12 +79,15 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 		Gson gson = new Gson();
 		try {
 			User currentUser = themeDisplay.getUser();
-
+			
 			Procedura procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
 			Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 			Richiesta richiestaBozza = presentatoreFormFrontendService.getRichiestaBozza(currentUser.getScreenName(), procedura.getProceduraId());
 			IstanzaForm istanzaFormRichiesta = presentatoreFormFrontendService.getIstanzaFormRichiesta(richiestaBozza.getRichiestaId(), form.getFormId());
 
+			presentatoreFormFrontendService.deleteRichiesteBozzaUtente(screenName, procedura.getProceduraId());
+
+			
 			boolean stepComponentiFamiliari = procedura.getStep1Attivo();
 			String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
 

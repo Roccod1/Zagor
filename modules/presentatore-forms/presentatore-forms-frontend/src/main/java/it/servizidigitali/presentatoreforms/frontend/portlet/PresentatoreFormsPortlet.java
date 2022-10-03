@@ -118,7 +118,6 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 				if (Validator.isNotNull(richiesta) && richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
 					renderRequest.setAttribute("richiestaId", richiesta.getRichiestaId());
 					include(PresentatoreFormsPortletKeys.JSP_HOME, renderRequest, renderResponse);
-					presentatoreFormFrontendService.deleteRichiesteBozzaUtente(screenName, procedura.getProceduraId());
 				}
 				else {
 					try {

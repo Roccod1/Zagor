@@ -12,6 +12,7 @@ import java.io.InputStream;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.file.utility.factory.FileServiceFactory;
 import it.servizidigitali.file.utility.service.FileService;
 
 @Component(name = "allegatiRichiestaService", immediate = true, service = AllegatoRichiestaService.class)
@@ -20,7 +21,7 @@ public class AllegatoRichiestaService {
 	private static final Log log = LogFactoryUtil.getLog(AllegatoRichiestaService.class.getName());
 	
 	@Reference
-	FileService fileService;
+	FileServiceFactory fileServiceFactory;
 	
 	public void salvaAllegatiRichiesta(File allegato, String codiceServizio, long userId, long groupId) {
 		
@@ -29,9 +30,11 @@ public class AllegatoRichiestaService {
 			if(Validator.isNotNull(allegato)) {
 				InputStream stream = new FileInputStream(allegato);
 				
+				
+				
 				if(Validator.isNotNull(allegato)) {
 					String mimeType = MimeTypesUtil.getContentType(allegato);
-					fileService.saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), codiceServizio, stream, mimeType, userId, groupId);
+					fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), codiceServizio, stream, mimeType, userId, groupId);
 				}
 
 			}
@@ -40,5 +43,25 @@ public class AllegatoRichiestaService {
 			log.error("Errore durante il caricamento del file : " + e.getMessage(), e); 
 		}
 		
+	}
+	
+	public void salvaAllegatoFirmato(File allegato, String codiceServizio, long userId, long groupId) {
+		// TODO: Implementare eventualmente la verifica della firma digitale
+		
+		try {
+			
+			if(Validator.isNotNull(allegato)) {
+				InputStream stream = new FileInputStream(allegato);
+				
+				if(Validator.isNotNull(allegato)) {
+					String mimeType = MimeTypesUtil.getContentType(allegato);
+					fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), codiceServizio, stream, mimeType, userId, groupId);
+				}
+
+			}
+
+		}catch(Exception e) {
+			log.error("Errore durante il caricamento del file firmato : " + e.getMessage(), e); 
+		}
 	}
 }

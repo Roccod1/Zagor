@@ -18,11 +18,13 @@ import javax.portlet.ResourceResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.TipoGenerazionePDF;
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
+import it.servizidigitali.presentatoreforms.frontend.service.PDFServiceFactory;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
@@ -42,7 +44,7 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 	private PresentatoreFormFrontendService presentatoreFormFrontendService;
 
 	@Reference
-	private PDFService pdfService;
+	private PDFServiceFactory pdfServiceFactory;
 
 	@Override
 	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
@@ -60,6 +62,7 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 
 		try {
 			Procedura procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
+			PDFService pdfService = pdfServiceFactory.getPDFService(TipoGenerazionePDF.valueOf(procedura.getTipoGenerazionePDF()));
 
 			if (procedura == null) {
 				SessionErrors.add(resourceRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);

@@ -18,6 +18,14 @@
 <script>
 console.log("dentro scegli allegati");
 </script>
+
+
+<c:if test="${not empty errori}">
+	<div class="alert alert-danger">
+		${errori}
+	</div>
+</c:if>
+
 <c:choose>
 	<c:when test="${richiestaStatus == bozzaStatus }">
 		<div class="row-fluid">
@@ -44,7 +52,7 @@ console.log("dentro scegli allegati");
 			                    <ul class="nav navbar-nav">
 			                       
 			                        <li data-alpaca-wizard-step-index="0" class="disabled">
-			                            <div class="holder">
+			                            <div class="holder"><c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>
 			                                <div class="title">...</div>
 			                                <div class="description"></div>
 			                            </div>
@@ -110,7 +118,7 @@ console.log("dentro scegli allegati");
 											<div id="div-uploadFileFirmato" <c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>>					
 												<div class="control-group">
 											  	  	<div class="" style="margin-left:0px; display: inline-block">
-														<aui:input type="file" id="uploadFileFirmato" name="" required="true">
+														<aui:input type="file" id="uploadFileFirmato" name="uploadFileFirmato" required="true">
 															<aui:validator name="acceptFiles">".pdf,.p7m"</aui:validator>
 															<aui:validator name="custom" errorMessage="La dimensione del file non deve superare ${uploadFileMaxSizeLabel}">
 																function(val,node,junction){
@@ -224,7 +232,7 @@ console.log("dentro scegli allegati");
 												
 															<div class="control-group">
 														  	  	<div class="span8" style="margin-left:0px; display: inline-block">
-																	<aui:input type="file" id="allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" name="" required="${allegato.definizione.obbligatorio}">
+																	<aui:input type="file" id="allegato-${allegato.definizione.definizioneAllegatoId}" name="allegato-${allegato.definizione.definizioneAllegatoId}" required="${allegato.definizione.obbligatorio}">
 																		<aui:validator name="acceptFiles">"${allegato.definizione.tipiFileAmmessi}"</aui:validator>
 																		<aui:validator name="custom" errorMessage="La dimensione del file non deve superare ${uploadFileMaxSizeLabel}">
 																			function(val,node,junction){
@@ -509,31 +517,7 @@ console.log("aui script");
 			
 	</c:forEach>	
 		
-		//Download istanza da firmare
-		$("#form-download-istanza").submit(function(e){
-			var $downloadModal = $('#download-modal');
-			$('.dismiss-download-pdf').prop('disabled', true);
-			$downloadModal.modal('show');
-	        
-			$.fileDownload($(this).prop('action'), {
-		        httpMethod: "POST",
-		        data: $(this).serialize(),
-		        successCallback: function (url) {
-		        	if (isDebugEnabled) {
-		        		console.log('successCallback');
-		        	}
-	                $downloadModal.modal('hide');
-	            },
-	            failCallback: function (responseHtml, url) {
-	            	if (isDebugEnabled) {
-	            		console.log('failCallback');
-	            	}
-	            	$('.modal-body', $downloadModal).html('<div class="alert alert-danger" role="alert"><liferay-ui:message key="errore.download.pdf" /></div>');
-	            	$('.dismiss-download-pdf').prop('disabled', false);
-	            }
-		    });
-		    e.preventDefault(); //otherwise a normal form submit would occur
-		});
+		
 	});
 	
 </script>

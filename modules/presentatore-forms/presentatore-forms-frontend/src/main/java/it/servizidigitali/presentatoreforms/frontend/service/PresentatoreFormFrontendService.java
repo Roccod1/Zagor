@@ -1,6 +1,7 @@
 package it.servizidigitali.presentatoreforms.frontend.service;
 
 import com.google.gson.Gson;
+import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -70,6 +71,9 @@ public class PresentatoreFormFrontendService {
 
 	@Reference
 	private DestinazioneUsoLocalService destinazioneUsoLocalService;
+	
+	@Reference
+	private CounterLocalService counterLocalService;
 
 	/**
 	 * Ritorna il servizio attuale sulla base della pagina in cui è in esecuzione la portlet.
@@ -193,7 +197,7 @@ public class PresentatoreFormFrontendService {
 		return istanzaFormLocalService.getIstanzaFormByRichiestaIdFormId(richiestaId, formId);
 	}
 
-	public Richiesta createOrUpdateRichiesta(User user, long proceduraId, String dataForm, String stato) {
+	public Richiesta createOrUpdateRichiesta(User user, long proceduraId, String dataForm, String stato, long groupId) {
 
 		Richiesta richiesta = null;
 		IstanzaForm istanzaForm = null;
@@ -221,15 +225,18 @@ public class PresentatoreFormFrontendService {
 					}
 					else {
 						// creazione nuova richiesta
-						richiesta = richiestaLocalService.createRichiesta(0);
+						richiesta = richiestaLocalService.createRichiesta(counterLocalService.increment());
 						richiesta.setCodiceFiscale(user.getScreenName());
 						richiesta.setUserId(user.getUserId());
 						richiesta.setUserName(user.getFullName());
 						richiesta.setEmail(user.getEmailAddress());
 						richiesta.setProceduraId(proceduraId);
+						richiesta.setStato(StatoRichiesta.BOZZA.name());
+						richiesta.setGroupId(groupId);
 						richiesta = richiestaLocalService.updateRichiesta(richiesta);
 
-						istanzaForm = istanzaFormLocalService.createIstanzaForm(0);
+						istanzaForm = istanzaFormLocalService.createIstanzaForm(counterLocalService.increment());
+						istanzaForm.setGroupId(groupId);
 						istanzaForm.setRichiestaId(richiesta.getRichiestaId());
 						istanzaForm.setFormId(form.getFormId());
 					}
