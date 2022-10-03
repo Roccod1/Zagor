@@ -1,5 +1,6 @@
 package it.servizidigitali.scrivaniaoperatore.frontend.portlet.render;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ import it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AttivitaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AzioneUtente;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.CommentoDTO;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.IntegrazioneDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.UserDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.service.ScrivaniaOperatoreFrontendService;
@@ -79,6 +81,14 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 		RichiestaDTO richiesta = mapUtil.mapRichiesta(ctx.getCompanyId(), richiestaModel);
 		Procedura proceduraModel = proceduraLocalService.fetchProcedura(richiestaModel.getProceduraId());
 		ServizioEnte servizio = servizioEnteLocalService.fetchServizioEnte(new ServizioEntePK(proceduraModel.getServizioId(), ctx.getThemeDisplay().getSiteGroup().getOrganizationId()));
+		
+		//TODO carica integrazioni da service (da agganciare)
+		List<IntegrazioneDTO> integrazioni = new ArrayList<>();
+		IntegrazioneDTO integrazione = new IntegrazioneDTO();
+		integrazione.setId("1");
+		integrazione.setNome("Integrazione 1");
+		integrazioni.add(integrazione);
+		request.setAttribute("integrazioni", integrazioni);
 		
 		List<UserDTO> responsabili = getResponsabili(ctx, servizio);
 		List<UserDTO> altriResponsabili = getAltriResponsabili(ctx, servizio);

@@ -37,7 +37,11 @@
 		var formId = $(this).attr('id');
 	
 		var formValidator = Liferay.Form.get(formId).formValidator;
-		if (!formValidator.hasErrors()) {
+		if (formValidator != undefined) {
+			if (!formValidator.hasErrors()) {
+				modals.modal('hide');
+			}
+		} else {
 			modals.modal('hide');
 		}
 	});
@@ -159,6 +163,22 @@
 					{
 						validatorName: 'required',
 						fieldName: '<portlet:namespace />commento'
+					}
+					];
+					
+					form.set('fieldRules', oldRules.concat(newRules));
+				</aui:script>
+			</c:when>
+		
+			<c:when test="${azione.codiceAzioneUtente == 'RICHIESTA_INTEGRAZIONE'}">
+				<aui:script use="liferay-form">
+					var form = Liferay.Form.get('<portlet:namespace />richiediModificheForm');
+					
+					var oldRules = form.get('fieldRules');
+					var newRules = [
+					{
+						validatorName: 'required',
+						fieldName: '<portlet:namespace />note'
 					}
 					];
 					

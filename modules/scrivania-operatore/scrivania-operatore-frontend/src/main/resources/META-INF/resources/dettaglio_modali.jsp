@@ -132,11 +132,11 @@
 						     			
 										<liferay-ui:search-container-row className="it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO" 
 										                                 modelVar="elem">
-										                                 <liferay-ui:search-container-column-text name="#">
-											<div class="form-group form-check">
-												<c:set var="checkedAttr" value="${elem.visibileAlCittadino ? 'checked' : '' }" />
-												<input type="checkbox" class="form-check-input" value="${elem.id}" name="<portlet:namespace />selezionati" ${checkedAttr}>
-											</div>
+		                                    <liferay-ui:search-container-column-text name="#">
+												<div class="form-group form-check">
+													<c:set var="checkedAttr" value="${elem.visibileAlCittadino ? 'checked' : '' }" />
+													<input type="checkbox" class="form-check-input" value="${elem.id}" name="<portlet:namespace />selezionati" ${checkedAttr}>
+												</div>
 				                            </liferay-ui:search-container-column-text>
 											<liferay-ui:search-container-column-text name="nome-file" value="${elem.nomeFile}" />
 				    						<liferay-ui:search-container-column-text name="dimensione" value="${elem.dimensione}" />
@@ -262,24 +262,89 @@
 			
 			<c:when test="${azione.codiceAzioneUtente == 'RICHIESTA_INTEGRAZIONE'}">
 				<div class="modal fade" tabindex="-1" id="<portlet:namespace />richiediModificheModal" style="display: none;">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title"><liferay-ui:message key="richiedi-modifiche-integrazioni-richiedente" /></h5>
-								<button type="button" class="close" data-dismiss="modal">
-									&times;
-								</button>
-							</div>
-							<div class="modal-body">
-								<span><liferay-ui:message key="non-sono-previste-integrazioni" /></span>
-							</div>
-							<div class="modal-footer d-flex justify-content-end">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">
-									<liferay-ui:message key="annulla" />
-								</button>
+					<portlet:actionURL var="richiediIntegrazioneURL" name="/action/richiediIntegrazione">
+					</portlet:actionURL>
+				
+					<aui:form action="${richiediIntegrazioneURL}" name="richiediModificheForm">
+						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
+						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
+						
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title"><liferay-ui:message key="richiedi-modifiche-integrazioni-richiedente" /></h5>
+									<button type="button" class="close" data-dismiss="modal">
+										&times;
+									</button>
+								</div>
+								<div class="modal-body">
+									<c:choose>
+										<c:when test="${empty integrazioni}">
+											<span><liferay-ui:message key="non-sono-previste-integrazioni" /></span>
+										</c:when>
+										<c:otherwise>
+											<span><liferay-ui:message key="integrazioni-message" /></span>
+
+											<div class="form-group">
+												<label><liferay-ui:message key="note" /></label>
+												<textarea class="form-control" name="<portlet:namespace />note"></textarea>
+											</div>
+											
+											<h5><liferay-ui:message key="seleziona-documenti-integrazione" /></h5>											
+											<liferay-ui:search-container total="${integrazioni.size()}">
+												<liferay-ui:search-container-results results="${integrazioni}" />
+												
+												<liferay-ui:search-container-row className="it.servizidigitali.scrivaniaoperatore.frontend.dto.IntegrazioneDTO" 
+										                                 modelVar="elem">
+													<liferay-ui:search-container-column-text name="#">
+														<div class="form-group form-check">
+															<input type="checkbox" class="form-check-input" value="${elem.id}" name="<portlet:namespace />integrazioni">
+														</div>
+													</liferay-ui:search-container-column-text>
+													
+						                            <liferay-ui:search-container-column-text name="integrazione" value="${elem.nome}" />     
+		                                		</liferay-ui:search-container-row>
+												
+												<liferay-ui:search-iterator markupView="lexicon" />
+											</liferay-ui:search-container>
+											
+											<h5><liferay-ui:message key="seleziona-allegati-condividere" /></h5>
+											<liferay-ui:search-container total="${allegatiOperatoreCount}"
+											 					 emptyResultsMessage="non-sono-presenti-allegati"
+				                             				     delta="10">
+								     			<liferay-ui:search-container-results results="${allegatiOperatoreList}" />
+								     			
+												<liferay-ui:search-container-row className="it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO" 
+												                                 modelVar="elem">
+				                                    <liferay-ui:search-container-column-text name="#">
+														<div class="form-group form-check">
+															<c:set var="checkedAttr" value="${elem.visibileAlCittadino ? 'checked' : '' }" />
+															<input type="checkbox" class="form-check-input" value="${elem.id}" name="<portlet:namespace />allegati" ${checkedAttr}>
+														</div>
+						                            </liferay-ui:search-container-column-text>
+													<liferay-ui:search-container-column-text name="nome-file" value="${elem.nomeFile}" />
+						    						<liferay-ui:search-container-column-text name="dimensione" value="${elem.dimensione}" />
+						    						<liferay-ui:search-container-column-jsp name="azioni" path="/dettaglio_allegati_azioni.jsp" />
+						   						</liferay-ui:search-container-row>
+							
+												<liferay-ui:search-iterator markupView="lexicon" />
+											</liferay-ui:search-container>
+										</c:otherwise>
+									</c:choose>
+								</div>
+								<div class="modal-footer d-flex justify-content-end">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">
+										<liferay-ui:message key="annulla" />
+									</button>
+									<c:if test="${not empty integrazioni}">
+										<button type="submit" class="btn btn-primary">
+											<liferay-ui:message key="conferma" />
+										</button>
+									</c:if>
+								</div>
 							</div>
 						</div>
-					</div>
+					</aui:form>
 				</div>
 			</c:when>
 			
