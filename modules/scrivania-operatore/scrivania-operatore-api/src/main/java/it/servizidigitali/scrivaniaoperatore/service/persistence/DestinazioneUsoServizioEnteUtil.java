@@ -878,6 +878,233 @@ public class DestinazioneUsoServizioEnteUtil {
 	}
 
 	/**
+	 * Returns all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @return the matching destinazione uso servizio entes
+	 */
+	public static List<DestinazioneUsoServizioEnte> findByO_S_G_C(
+		long organizationId, long servizioId, long groupId, long companyId) {
+
+		return getPersistence().findByO_S_G_C(
+			organizationId, servizioId, groupId, companyId);
+	}
+
+	/**
+	 * Returns a range of all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DestinazioneUsoServizioEnteModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of destinazione uso servizio entes
+	 * @param end the upper bound of the range of destinazione uso servizio entes (not inclusive)
+	 * @return the range of matching destinazione uso servizio entes
+	 */
+	public static List<DestinazioneUsoServizioEnte> findByO_S_G_C(
+		long organizationId, long servizioId, long groupId, long companyId,
+		int start, int end) {
+
+		return getPersistence().findByO_S_G_C(
+			organizationId, servizioId, groupId, companyId, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DestinazioneUsoServizioEnteModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of destinazione uso servizio entes
+	 * @param end the upper bound of the range of destinazione uso servizio entes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching destinazione uso servizio entes
+	 */
+	public static List<DestinazioneUsoServizioEnte> findByO_S_G_C(
+		long organizationId, long servizioId, long groupId, long companyId,
+		int start, int end,
+		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator) {
+
+		return getPersistence().findByO_S_G_C(
+			organizationId, servizioId, groupId, companyId, start, end,
+			orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DestinazioneUsoServizioEnteModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of destinazione uso servizio entes
+	 * @param end the upper bound of the range of destinazione uso servizio entes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching destinazione uso servizio entes
+	 */
+	public static List<DestinazioneUsoServizioEnte> findByO_S_G_C(
+		long organizationId, long servizioId, long groupId, long companyId,
+		int start, int end,
+		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator,
+		boolean useFinderCache) {
+
+		return getPersistence().findByO_S_G_C(
+			organizationId, servizioId, groupId, companyId, start, end,
+			orderByComparator, useFinderCache);
+	}
+
+	/**
+	 * Returns the first destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching destinazione uso servizio ente
+	 * @throws NoSuchDestinazioneUsoServizioEnteException if a matching destinazione uso servizio ente could not be found
+	 */
+	public static DestinazioneUsoServizioEnte findByO_S_G_C_First(
+			long organizationId, long servizioId, long groupId, long companyId,
+			OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchDestinazioneUsoServizioEnteException {
+
+		return getPersistence().findByO_S_G_C_First(
+			organizationId, servizioId, groupId, companyId, orderByComparator);
+	}
+
+	/**
+	 * Returns the first destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching destinazione uso servizio ente, or <code>null</code> if a matching destinazione uso servizio ente could not be found
+	 */
+	public static DestinazioneUsoServizioEnte fetchByO_S_G_C_First(
+		long organizationId, long servizioId, long groupId, long companyId,
+		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator) {
+
+		return getPersistence().fetchByO_S_G_C_First(
+			organizationId, servizioId, groupId, companyId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching destinazione uso servizio ente
+	 * @throws NoSuchDestinazioneUsoServizioEnteException if a matching destinazione uso servizio ente could not be found
+	 */
+	public static DestinazioneUsoServizioEnte findByO_S_G_C_Last(
+			long organizationId, long servizioId, long groupId, long companyId,
+			OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchDestinazioneUsoServizioEnteException {
+
+		return getPersistence().findByO_S_G_C_Last(
+			organizationId, servizioId, groupId, companyId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching destinazione uso servizio ente, or <code>null</code> if a matching destinazione uso servizio ente could not be found
+	 */
+	public static DestinazioneUsoServizioEnte fetchByO_S_G_C_Last(
+		long organizationId, long servizioId, long groupId, long companyId,
+		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator) {
+
+		return getPersistence().fetchByO_S_G_C_Last(
+			organizationId, servizioId, groupId, companyId, orderByComparator);
+	}
+
+	/**
+	 * Returns the destinazione uso servizio entes before and after the current destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param destinazioneUsoServizioEntePK the primary key of the current destinazione uso servizio ente
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next destinazione uso servizio ente
+	 * @throws NoSuchDestinazioneUsoServizioEnteException if a destinazione uso servizio ente with the primary key could not be found
+	 */
+	public static DestinazioneUsoServizioEnte[] findByO_S_G_C_PrevAndNext(
+			it.servizidigitali.scrivaniaoperatore.service.persistence.
+				DestinazioneUsoServizioEntePK destinazioneUsoServizioEntePK,
+			long organizationId, long servizioId, long groupId, long companyId,
+			OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchDestinazioneUsoServizioEnteException {
+
+		return getPersistence().findByO_S_G_C_PrevAndNext(
+			destinazioneUsoServizioEntePK, organizationId, servizioId, groupId,
+			companyId, orderByComparator);
+	}
+
+	/**
+	 * Removes all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 */
+	public static void removeByO_S_G_C(
+		long organizationId, long servizioId, long groupId, long companyId) {
+
+		getPersistence().removeByO_S_G_C(
+			organizationId, servizioId, groupId, companyId);
+	}
+
+	/**
+	 * Returns the number of destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @return the number of matching destinazione uso servizio entes
+	 */
+	public static int countByO_S_G_C(
+		long organizationId, long servizioId, long groupId, long companyId) {
+
+		return getPersistence().countByO_S_G_C(
+			organizationId, servizioId, groupId, companyId);
+	}
+
+	/**
 	 * Caches the destinazione uso servizio ente in the entity cache if it is enabled.
 	 *
 	 * @param destinazioneUsoServizioEnte the destinazione uso servizio ente

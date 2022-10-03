@@ -2423,6 +2423,646 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 		_FINDER_COLUMN_ORGANIZATIONIDGROUPIDCOMPANYID_COMPANYID_2 =
 			"destinazioneUsoServizioEnte.companyId = ?";
 
+	private FinderPath _finderPathWithPaginationFindByO_S_G_C;
+	private FinderPath _finderPathWithoutPaginationFindByO_S_G_C;
+	private FinderPath _finderPathCountByO_S_G_C;
+
+	/**
+	 * Returns all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @return the matching destinazione uso servizio entes
+	 */
+	@Override
+	public List<DestinazioneUsoServizioEnte> findByO_S_G_C(
+		long organizationId, long servizioId, long groupId, long companyId) {
+
+		return findByO_S_G_C(
+			organizationId, servizioId, groupId, companyId, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DestinazioneUsoServizioEnteModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of destinazione uso servizio entes
+	 * @param end the upper bound of the range of destinazione uso servizio entes (not inclusive)
+	 * @return the range of matching destinazione uso servizio entes
+	 */
+	@Override
+	public List<DestinazioneUsoServizioEnte> findByO_S_G_C(
+		long organizationId, long servizioId, long groupId, long companyId,
+		int start, int end) {
+
+		return findByO_S_G_C(
+			organizationId, servizioId, groupId, companyId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DestinazioneUsoServizioEnteModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of destinazione uso servizio entes
+	 * @param end the upper bound of the range of destinazione uso servizio entes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching destinazione uso servizio entes
+	 */
+	@Override
+	public List<DestinazioneUsoServizioEnte> findByO_S_G_C(
+		long organizationId, long servizioId, long groupId, long companyId,
+		int start, int end,
+		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator) {
+
+		return findByO_S_G_C(
+			organizationId, servizioId, groupId, companyId, start, end,
+			orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DestinazioneUsoServizioEnteModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of destinazione uso servizio entes
+	 * @param end the upper bound of the range of destinazione uso servizio entes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching destinazione uso servizio entes
+	 */
+	@Override
+	public List<DestinazioneUsoServizioEnte> findByO_S_G_C(
+		long organizationId, long servizioId, long groupId, long companyId,
+		int start, int end,
+		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator,
+		boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByO_S_G_C;
+				finderArgs = new Object[] {
+					organizationId, servizioId, groupId, companyId
+				};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByO_S_G_C;
+			finderArgs = new Object[] {
+				organizationId, servizioId, groupId, companyId, start, end,
+				orderByComparator
+			};
+		}
+
+		List<DestinazioneUsoServizioEnte> list = null;
+
+		if (useFinderCache) {
+			list = (List<DestinazioneUsoServizioEnte>)finderCache.getResult(
+				finderPath, finderArgs);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (DestinazioneUsoServizioEnte destinazioneUsoServizioEnte :
+						list) {
+
+					if ((organizationId !=
+							destinazioneUsoServizioEnte.getOrganizationId()) ||
+						(servizioId !=
+							destinazioneUsoServizioEnte.getServizioId()) ||
+						(groupId != destinazioneUsoServizioEnte.getGroupId()) ||
+						(companyId !=
+							destinazioneUsoServizioEnte.getCompanyId())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					6 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(6);
+			}
+
+			sb.append(_SQL_SELECT_DESTINAZIONEUSOSERVIZIOENTE_WHERE);
+
+			sb.append(_FINDER_COLUMN_O_S_G_C_ORGANIZATIONID_2);
+
+			sb.append(_FINDER_COLUMN_O_S_G_C_SERVIZIOID_2);
+
+			sb.append(_FINDER_COLUMN_O_S_G_C_GROUPID_2);
+
+			sb.append(_FINDER_COLUMN_O_S_G_C_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(DestinazioneUsoServizioEnteModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(organizationId);
+
+				queryPos.add(servizioId);
+
+				queryPos.add(groupId);
+
+				queryPos.add(companyId);
+
+				list = (List<DestinazioneUsoServizioEnte>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching destinazione uso servizio ente
+	 * @throws NoSuchDestinazioneUsoServizioEnteException if a matching destinazione uso servizio ente could not be found
+	 */
+	@Override
+	public DestinazioneUsoServizioEnte findByO_S_G_C_First(
+			long organizationId, long servizioId, long groupId, long companyId,
+			OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator)
+		throws NoSuchDestinazioneUsoServizioEnteException {
+
+		DestinazioneUsoServizioEnte destinazioneUsoServizioEnte =
+			fetchByO_S_G_C_First(
+				organizationId, servizioId, groupId, companyId,
+				orderByComparator);
+
+		if (destinazioneUsoServizioEnte != null) {
+			return destinazioneUsoServizioEnte;
+		}
+
+		StringBundler sb = new StringBundler(10);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("organizationId=");
+		sb.append(organizationId);
+
+		sb.append(", servizioId=");
+		sb.append(servizioId);
+
+		sb.append(", groupId=");
+		sb.append(groupId);
+
+		sb.append(", companyId=");
+		sb.append(companyId);
+
+		sb.append("}");
+
+		throw new NoSuchDestinazioneUsoServizioEnteException(sb.toString());
+	}
+
+	/**
+	 * Returns the first destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching destinazione uso servizio ente, or <code>null</code> if a matching destinazione uso servizio ente could not be found
+	 */
+	@Override
+	public DestinazioneUsoServizioEnte fetchByO_S_G_C_First(
+		long organizationId, long servizioId, long groupId, long companyId,
+		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator) {
+
+		List<DestinazioneUsoServizioEnte> list = findByO_S_G_C(
+			organizationId, servizioId, groupId, companyId, 0, 1,
+			orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching destinazione uso servizio ente
+	 * @throws NoSuchDestinazioneUsoServizioEnteException if a matching destinazione uso servizio ente could not be found
+	 */
+	@Override
+	public DestinazioneUsoServizioEnte findByO_S_G_C_Last(
+			long organizationId, long servizioId, long groupId, long companyId,
+			OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator)
+		throws NoSuchDestinazioneUsoServizioEnteException {
+
+		DestinazioneUsoServizioEnte destinazioneUsoServizioEnte =
+			fetchByO_S_G_C_Last(
+				organizationId, servizioId, groupId, companyId,
+				orderByComparator);
+
+		if (destinazioneUsoServizioEnte != null) {
+			return destinazioneUsoServizioEnte;
+		}
+
+		StringBundler sb = new StringBundler(10);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("organizationId=");
+		sb.append(organizationId);
+
+		sb.append(", servizioId=");
+		sb.append(servizioId);
+
+		sb.append(", groupId=");
+		sb.append(groupId);
+
+		sb.append(", companyId=");
+		sb.append(companyId);
+
+		sb.append("}");
+
+		throw new NoSuchDestinazioneUsoServizioEnteException(sb.toString());
+	}
+
+	/**
+	 * Returns the last destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching destinazione uso servizio ente, or <code>null</code> if a matching destinazione uso servizio ente could not be found
+	 */
+	@Override
+	public DestinazioneUsoServizioEnte fetchByO_S_G_C_Last(
+		long organizationId, long servizioId, long groupId, long companyId,
+		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator) {
+
+		int count = countByO_S_G_C(
+			organizationId, servizioId, groupId, companyId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<DestinazioneUsoServizioEnte> list = findByO_S_G_C(
+			organizationId, servizioId, groupId, companyId, count - 1, count,
+			orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the destinazione uso servizio entes before and after the current destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param destinazioneUsoServizioEntePK the primary key of the current destinazione uso servizio ente
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next destinazione uso servizio ente
+	 * @throws NoSuchDestinazioneUsoServizioEnteException if a destinazione uso servizio ente with the primary key could not be found
+	 */
+	@Override
+	public DestinazioneUsoServizioEnte[] findByO_S_G_C_PrevAndNext(
+			DestinazioneUsoServizioEntePK destinazioneUsoServizioEntePK,
+			long organizationId, long servizioId, long groupId, long companyId,
+			OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator)
+		throws NoSuchDestinazioneUsoServizioEnteException {
+
+		DestinazioneUsoServizioEnte destinazioneUsoServizioEnte =
+			findByPrimaryKey(destinazioneUsoServizioEntePK);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			DestinazioneUsoServizioEnte[] array =
+				new DestinazioneUsoServizioEnteImpl[3];
+
+			array[0] = getByO_S_G_C_PrevAndNext(
+				session, destinazioneUsoServizioEnte, organizationId,
+				servizioId, groupId, companyId, orderByComparator, true);
+
+			array[1] = destinazioneUsoServizioEnte;
+
+			array[2] = getByO_S_G_C_PrevAndNext(
+				session, destinazioneUsoServizioEnte, organizationId,
+				servizioId, groupId, companyId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected DestinazioneUsoServizioEnte getByO_S_G_C_PrevAndNext(
+		Session session,
+		DestinazioneUsoServizioEnte destinazioneUsoServizioEnte,
+		long organizationId, long servizioId, long groupId, long companyId,
+		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator,
+		boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				7 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(6);
+		}
+
+		sb.append(_SQL_SELECT_DESTINAZIONEUSOSERVIZIOENTE_WHERE);
+
+		sb.append(_FINDER_COLUMN_O_S_G_C_ORGANIZATIONID_2);
+
+		sb.append(_FINDER_COLUMN_O_S_G_C_SERVIZIOID_2);
+
+		sb.append(_FINDER_COLUMN_O_S_G_C_GROUPID_2);
+
+		sb.append(_FINDER_COLUMN_O_S_G_C_COMPANYID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(DestinazioneUsoServizioEnteModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(organizationId);
+
+		queryPos.add(servizioId);
+
+		queryPos.add(groupId);
+
+		queryPos.add(companyId);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						destinazioneUsoServizioEnte)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<DestinazioneUsoServizioEnte> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 */
+	@Override
+	public void removeByO_S_G_C(
+		long organizationId, long servizioId, long groupId, long companyId) {
+
+		for (DestinazioneUsoServizioEnte destinazioneUsoServizioEnte :
+				findByO_S_G_C(
+					organizationId, servizioId, groupId, companyId,
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
+			remove(destinazioneUsoServizioEnte);
+		}
+	}
+
+	/**
+	 * Returns the number of destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param servizioId the servizio ID
+	 * @param groupId the group ID
+	 * @param companyId the company ID
+	 * @return the number of matching destinazione uso servizio entes
+	 */
+	@Override
+	public int countByO_S_G_C(
+		long organizationId, long servizioId, long groupId, long companyId) {
+
+		FinderPath finderPath = _finderPathCountByO_S_G_C;
+
+		Object[] finderArgs = new Object[] {
+			organizationId, servizioId, groupId, companyId
+		};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(5);
+
+			sb.append(_SQL_COUNT_DESTINAZIONEUSOSERVIZIOENTE_WHERE);
+
+			sb.append(_FINDER_COLUMN_O_S_G_C_ORGANIZATIONID_2);
+
+			sb.append(_FINDER_COLUMN_O_S_G_C_SERVIZIOID_2);
+
+			sb.append(_FINDER_COLUMN_O_S_G_C_GROUPID_2);
+
+			sb.append(_FINDER_COLUMN_O_S_G_C_COMPANYID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(organizationId);
+
+				queryPos.add(servizioId);
+
+				queryPos.add(groupId);
+
+				queryPos.add(companyId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_O_S_G_C_ORGANIZATIONID_2 =
+		"destinazioneUsoServizioEnte.id.organizationId = ? AND ";
+
+	private static final String _FINDER_COLUMN_O_S_G_C_SERVIZIOID_2 =
+		"destinazioneUsoServizioEnte.id.servizioId = ? AND ";
+
+	private static final String _FINDER_COLUMN_O_S_G_C_GROUPID_2 =
+		"destinazioneUsoServizioEnte.groupId = ? AND ";
+
+	private static final String _FINDER_COLUMN_O_S_G_C_COMPANYID_2 =
+		"destinazioneUsoServizioEnte.companyId = ?";
+
 	public DestinazioneUsoServizioEntePersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -3190,6 +3830,41 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
 			new String[] {"organizationId", "groupId", "companyId"}, false);
+
+		_finderPathWithPaginationFindByO_S_G_C = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByO_S_G_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			},
+			new String[] {
+				"organizationId", "servizioId", "groupId", "companyId"
+			},
+			true);
+
+		_finderPathWithoutPaginationFindByO_S_G_C = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByO_S_G_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Long.class.getName(), Long.class.getName()
+			},
+			new String[] {
+				"organizationId", "servizioId", "groupId", "companyId"
+			},
+			true);
+
+		_finderPathCountByO_S_G_C = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByO_S_G_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Long.class.getName(), Long.class.getName()
+			},
+			new String[] {
+				"organizationId", "servizioId", "groupId", "companyId"
+			},
+			false);
 
 		_setDestinazioneUsoServizioEnteUtilPersistence(this);
 	}

@@ -328,6 +328,15 @@ public class DestinazioneUsoLocalServiceUtil {
 			organizationId, groupId, companyId);
 	}
 
+	public static List<DestinazioneUso>
+		getDestinazioniUsoByServizioIdOrganizationId(
+			long servizioId, long organizationId, long groupId,
+			long companyId) {
+
+		return getService().getDestinazioniUsoByServizioIdOrganizationId(
+			servizioId, organizationId, groupId, companyId);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery
 		getExportActionableDynamicQuery(
 			com.liferay.exportimport.kernel.lar.PortletDataContext
