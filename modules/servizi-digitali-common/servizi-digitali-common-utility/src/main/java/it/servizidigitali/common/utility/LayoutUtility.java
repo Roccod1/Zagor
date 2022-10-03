@@ -67,4 +67,30 @@ public class LayoutUtility {
 		}
 		return null;
 	}
+
+	/**
+	 *
+	 * @param siteId
+	 * @param companyId
+	 * @return
+	 */
+	public String getSitePath(long siteId, long companyId) {
+
+		try {
+			Group group = groupLocalService.getGroup(siteId);
+			boolean isSite = group.isSite();
+			if (isSite) {
+				LayoutSet layoutSet = layoutSetLocalService.getLayoutSet(siteId, false);
+				List<VirtualHost> virtualHosts = virtualHostLocalService.getVirtualHosts(companyId, layoutSet.getLayoutSetId());
+				if (virtualHosts != null) {
+					VirtualHost virtualHost = virtualHosts.stream().filter(vh -> vh.getDefaultVirtualHost()).findAny().orElse(null);
+					return "https://" + virtualHost.getHostname();
+				}
+			}
+		}
+		catch (PortalException e) {
+			log.error("getHostName :: " + e.getMessage(), e);
+		}
+		return null;
+	}
 }
