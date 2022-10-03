@@ -45,34 +45,48 @@
 				</aui:col>
 			</aui:row>
 			<aui:row>
-				<aui:col md="3">
+				<c:if test = "${showSelectOrganizzazione}">
+					<aui:col md="${selectOrganizzazioneCercaColSize}">
 					<aui:select value="${selectOrganizzazioneCerca}" label="gestionePagamenti.cerca.select.organizzazione"
 						name="<%=GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA%>"
 						showEmptyOption="true">
+						<c:forEach items="${listaOrganizzazioni}" var="organizzazioneCerca">
+							<aui:option value="${organizzazioneCerca.organizationId}" label="${organizzazioneCerca.name}"/>
+						</c:forEach>
 					</aui:select>
 				</aui:col>
-				<aui:col md="3">
+				</c:if>
+				<aui:col md="${selectCategoriaCercaColSize}">
 					<aui:select value="${selectCategoriaCerca}" label="gestionePagamenti.cerca.select.categoria"
 						name="<%=GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA%>"
 						showEmptyOption="true">
 					</aui:select>
 				</aui:col>
-				<aui:col md="2">
+				<aui:col md="${selectStatoCercaColSize}">
 					<aui:select value="${selectStatoCerca}" label="gestionePagamenti.cerca.select.stato"
 						name="<%=GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA%>"
 						showEmptyOption="true">
+						<c:forEach items="<%=StatoPagamento.values() %>" var="statoCerca">
+							<aui:option value="${statoCerca}" label="${statoCerca.descrizione}"/>
+						</c:forEach>
 					</aui:select>
 				</aui:col>
-				<aui:col md="2">
+				<aui:col md="${selectGatewayCercaColSize}">
 					<aui:select value="${selectGatewayCerca}" label="gestionePagamenti.cerca.select.gateway"
 						name="<%=GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA%>"
 						showEmptyOption="true">
+						<c:forEach items="<%=TipoPagamentiClient.values() %>" var="gatewayCerca">
+							<aui:option value="${gatewayCerca}" label="${gatewayCerca.descrizione}"/>
+						</c:forEach>
 					</aui:select>
 				</aui:col>
-				<aui:col md="2">
+				<aui:col md="${selectCanaleCercaColSize}">
 					<aui:select value="${selectCanaleCerca}" label="gestionePagamenti.cerca.select.canale"
 						name="<%=GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA%>"
 						showEmptyOption="true">
+						<c:forEach items="<%=CanalePagamento.values() %>" var="canaleCerca">
+							<aui:option value="${canaleCerca}" label="${canaleCerca.descrizione}"/>
+						</c:forEach>
 					</aui:select>
 				</aui:col>
 			</aui:row>

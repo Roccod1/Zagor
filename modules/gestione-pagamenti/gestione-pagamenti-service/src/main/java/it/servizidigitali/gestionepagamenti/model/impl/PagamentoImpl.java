@@ -18,4 +18,24 @@ package it.servizidigitali.gestionepagamenti.model.impl;
  * @author Brian Wing Shun Chan
  */
 public class PagamentoImpl extends PagamentoBaseImpl {
+	
+	private String dataInserimentoFormatted;
+	
+	private String statoFormatted;
+
+	public String getDataInserimentoFormatted() {
+		return dataInserimentoFormatted;
+	}
+
+	public void setDataInserimentoFormatted(String dataInserimentoFormatted) {
+		this.dataInserimentoFormatted = dataInserimentoFormatted;
+	}
+
+	public String getStatoFormatted() {
+		return statoFormatted;
+	}
+
+	public void setStatoFormatted(String statoFormatted) {
+		this.statoFormatted = statoFormatted;
+	}
 }

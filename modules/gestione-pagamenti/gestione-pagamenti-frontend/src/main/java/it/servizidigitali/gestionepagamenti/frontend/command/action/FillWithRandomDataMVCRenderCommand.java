@@ -1,7 +1,9 @@
 package it.servizidigitali.gestionepagamenti.frontend.command.action;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -16,6 +18,8 @@ import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
 
+import it.servizidigitali.gestionepagamenti.common.enumeration.CanalePagamento;
+import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
 import it.servizidigitali.gestionepagamenti.frontend.constants.GestionePagamentiFrontendPortletKeys;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalServiceUtil;
@@ -27,7 +31,13 @@ public class FillWithRandomDataMVCRenderCommand implements MVCRenderCommand {
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
 		Pagamento pagamento = PagamentoLocalServiceUtil.createPagamento(0);
+		
+		pagamento.setGroupId(themeDisplay.getSiteGroupId());
+		pagamento.setUserId(themeDisplay.getUserId());
+		pagamento.setUserName(themeDisplay.getUser().getFullName());
 
 		pagamento.setCreateDate(randomDate());
 		pagamento.setModifiedDate(randomDate());
@@ -40,13 +50,13 @@ public class FillWithRandomDataMVCRenderCommand implements MVCRenderCommand {
 		pagamento.setDescrizioneServizio(randomString(10));
 		pagamento.setImporto(randomBigDecimal());
 		pagamento.setCommissioni(randomBigDecimal());
-		pagamento.setCanale(randomString(10));
+		pagamento.setCanale(randomCanalePagamento().toString());
 		pagamento.setIud(randomString(10));
 		pagamento.setIuv(randomString(10));
 		pagamento.setIdSessione(randomString(10));
 		pagamento.setPathAvviso(randomString(10));
 		pagamento.setEmailInviata(randomBoolean());
-		pagamento.setStato(randomString(10));
+		pagamento.setStato(randomStatoPagamento().toString());
 		pagamento.setRichiestaId(randomLong());
 		
 		PagamentoLocalServiceUtil.updatePagamento(pagamento);
@@ -98,5 +108,19 @@ public class FillWithRandomDataMVCRenderCommand implements MVCRenderCommand {
 	
 	private BigDecimal randomBigDecimal() {
 		return BigDecimal.valueOf(Math.random());
+	}
+	
+	private StatoPagamento randomStatoPagamento() {
+		Random random = new Random();
+		
+		StatoPagamento[] statiPagamento = StatoPagamento.values();
+		return statiPagamento[random.nextInt(statiPagamento.length)];
+	}
+	
+	private CanalePagamento randomCanalePagamento() {
+		Random random = new Random();
+		
+		CanalePagamento[] canaliPagamento = CanalePagamento.values();
+		return canaliPagamento[random.nextInt(canaliPagamento.length)];
 	}
 }

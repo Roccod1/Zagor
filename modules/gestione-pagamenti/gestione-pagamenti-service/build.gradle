@@ -1,5 +1,6 @@
 dependencies {
 	compile project(":modules:gestione-pagamenti:gestione-pagamenti-api")
+	compileOnly project(":modules:gestione-pagamenti:gestione-pagamenti-common")
 
 	compileOnly group: "com.liferay.portal", name: "release.portal.api"
 }

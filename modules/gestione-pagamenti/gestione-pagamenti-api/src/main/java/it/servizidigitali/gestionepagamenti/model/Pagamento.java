@@ -58,4 +58,12 @@ public interface Pagamento extends PagamentoModel, PersistedModel {
 
 		};
 
+	public String getDataInserimentoFormatted();
+
+	public void setDataInserimentoFormatted(String dataInserimentoFormatted);
+
+	public String getStatoFormatted();
+
+	public void setStatoFormatted(String statoFormatted);
+
 }

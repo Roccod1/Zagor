@@ -81,8 +81,8 @@ public interface PagamentoLocalService
 
 	public long countByFilters(
 		Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
-		Date dataOperazioneA, String organizzazione, String categoria,
-		String stato, String gateway, String canale, String codiceFiscale,
+		Date dataOperazioneA, long groupId, String categoria, String stato,
+		String gateway, String canale, String codiceFiscale,
 		String identificativoPagamento, String codiceIuv, long idPagamento);
 
 	/**
@@ -317,10 +317,10 @@ public interface PagamentoLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Pagamento> search(
 		Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
-		Date dataOperazioneA, String organizzazione, String categoria,
-		String stato, String gateway, String canale, String codiceFiscale,
+		Date dataOperazioneA, long groupId, String categoria, String stato,
+		String gateway, String canale, String codiceFiscale,
 		String identificativoPagamento, String codiceIuv, long idPagamento,
-		int inizio, int fine, OrderByComparator<Pagamento> comparator);
+		int inizio, int fine, String orderByCol, String orderByType);
 
 	/**
 	 * Updates the pagamento in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

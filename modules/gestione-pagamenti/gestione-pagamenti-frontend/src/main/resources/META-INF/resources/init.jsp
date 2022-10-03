@@ -8,7 +8,11 @@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <%@page import="it.servizidigitali.gestionepagamenti.frontend.constants.GestionePagamentiFrontendPortletKeys"%>
+<%@page import="com.liferay.portal.kernel.model.Organization"%>
 <%@page import="it.servizidigitali.gestionepagamenti.model.Pagamento"%>
+<%@page import="it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento"%>
+<%@page import="it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient"%>
+<%@page import="it.servizidigitali.gestionepagamenti.common.enumeration.CanalePagamento"%>
 
 <liferay-theme:defineObjects />
 

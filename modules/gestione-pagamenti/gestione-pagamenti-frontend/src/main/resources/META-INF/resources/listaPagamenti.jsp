@@ -28,9 +28,9 @@
 		<liferay-ui:search-container-column-text property="idFiscaleCliente" name="gestionePagamenti.cerca.codiceFiscale" orderable="true" orderableProperty="idFiscaleCliente"/>
 		<liferay-ui:search-container-column-text property="causale" name="gestionePagamenti.searchContainer.causale" orderable="true" orderableProperty="causale"/>
 		<liferay-ui:search-container-column-text property="iuv" name="gestionePagamenti.searchContainer.codiceIuv" orderable="true" orderableProperty="iuv"/>
-		<liferay-ui:search-container-column-text property="createDate" name="gestionePagamenti.searchContainer.dataInserimento" orderable="true" orderableProperty="createDate"/>
+		<liferay-ui:search-container-column-text property="dataInserimentoFormatted" name="gestionePagamenti.searchContainer.dataInserimento" orderable="true" orderableProperty="createDate"/>
 		<liferay-ui:search-container-column-text property="importo" name="gestionePagamenti.searchContainer.importoTotale" orderable="true" orderableProperty="importo"/>
-		<liferay-ui:search-container-column-text property="stato" name="gestionePagamenti.searchContainer.stato" orderable="true" orderableProperty="stato"/>
+		<liferay-ui:search-container-column-text property="statoFormatted" name="gestionePagamenti.searchContainer.stato" orderable="true" orderableProperty="stato"/>
 
 	</liferay-ui:search-container-row>
 	

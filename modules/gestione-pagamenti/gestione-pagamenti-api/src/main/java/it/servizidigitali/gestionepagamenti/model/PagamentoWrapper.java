@@ -277,6 +277,11 @@ public class PagamentoWrapper
 		return model.getCreateDate();
 	}
 
+	@Override
+	public String getDataInserimentoFormatted() {
+		return model.getDataInserimentoFormatted();
+	}
+
 	/**
 	 * Returns the denominazione cliente of this pagamento.
 	 *
@@ -447,6 +452,11 @@ public class PagamentoWrapper
 		return model.getStato();
 	}
 
+	@Override
+	public String getStatoFormatted() {
+		return model.getStatoFormatted();
+	}
+
 	/**
 	 * Returns the user ID of this pagamento.
 	 *
@@ -550,6 +560,11 @@ public class PagamentoWrapper
 	@Override
 	public void setCreateDate(Date createDate) {
 		model.setCreateDate(createDate);
+	}
+
+	@Override
+	public void setDataInserimentoFormatted(String dataInserimentoFormatted) {
+		model.setDataInserimentoFormatted(dataInserimentoFormatted);
 	}
 
 	/**
@@ -720,6 +735,11 @@ public class PagamentoWrapper
 	@Override
 	public void setStato(String stato) {
 		model.setStato(stato);
+	}
+
+	@Override
+	public void setStatoFormatted(String statoFormatted) {
+		model.setStatoFormatted(statoFormatted);
 	}
 
 	/**

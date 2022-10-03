@@ -2,12 +2,12 @@ package it.servizidigitali.gestionepagamenti.frontend.command.action;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
+import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.text.DateFormat;
 import java.util.Collections;
@@ -18,6 +18,7 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 import it.servizidigitali.gestionepagamenti.frontend.constants.GestionePagamentiFrontendPortletKeys;
+import it.servizidigitali.gestionepagamenti.frontend.service.GestionePagamentiService;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
 
@@ -30,6 +31,9 @@ import org.osgi.service.component.annotations.Reference;
 				MVCActionCommand.class })
 public class CercaPagamentiMVCActionCommand extends BaseMVCActionCommand {
 
+	@Reference
+	private GestionePagamentiService gestionePagamentiService;
+	
 	@Reference
 	private PagamentoLocalService pagamentoLocalService;
 
@@ -47,8 +51,17 @@ public class CercaPagamentiMVCActionCommand extends BaseMVCActionCommand {
 		Date dataOperazioneA = ParamUtil.getDate(actionRequest,
 				GestionePagamentiFrontendPortletKeys.DATA_OPERAZIONE_A_CERCA, dateFormat, null);
 
-		String organizzazione = ParamUtil.getString(actionRequest,
-				GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA, null);
+		long siteGroupId = 0;
+		
+		long organizzazioneId = ParamUtil.getLong(actionRequest,
+				GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA);
+		
+		Organization organization = organizzazioneId != 0 ? gestionePagamentiService.getOrganization(organizzazioneId) : null;
+		
+		if (Validator.isNotNull(organization)) {
+			siteGroupId = organization.getGroupId();
+		}
+		
 		String categoria = ParamUtil.getString(actionRequest,
 				GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA, null);
 		String stato = ParamUtil.getString(actionRequest, GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA,
@@ -71,17 +84,15 @@ public class CercaPagamentiMVCActionCommand extends BaseMVCActionCommand {
 
 		int inizio = posizioni[0];
 		int fine = posizioni[1];
-
-		OrderByComparator<Pagamento> comparator = OrderByComparatorFactoryUtil.create("Pagamento", "pagamentoId", true);
 		
-		long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento);
+		long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento);
 
 		List<Pagamento> listaPagamenti = Collections.emptyList();
 		
 		if(totalCountPagamenti != 0) {
 			listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA,
-					dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, codiceFiscale,
-					identificativoPagamento, codiceIuv, idPagamento, inizio, fine, comparator);
+					dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale,
+					identificativoPagamento, codiceIuv, idPagamento, inizio, fine, null, null);
 		}
 
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.TOTAL_COUNT_PAGAMENTI, totalCountPagamenti);
@@ -93,7 +104,7 @@ public class CercaPagamentiMVCActionCommand extends BaseMVCActionCommand {
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_INSERIMENTO_A_CERCA, dataInserimentoA == null ? null : dateFormat.format(dataInserimentoA));
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_OPERAZIONE_DA_CERCA, dataOperazioneDa == null ? null : dateFormat.format(dataOperazioneDa));
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_OPERAZIONE_A_CERCA, dataOperazioneA == null ? null : dateFormat.format(dataOperazioneA));
-		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA, organizzazione);
+		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA, organizzazioneId);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA, categoria);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA, stato);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA, gateway);

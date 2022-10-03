@@ -2,12 +2,13 @@ package it.servizidigitali.gestionepagamenti.frontend.portlet;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
+import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -24,6 +25,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestionepagamenti.frontend.constants.GestionePagamentiFrontendPortletKeys;
+import it.servizidigitali.gestionepagamenti.frontend.service.GestionePagamentiService;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
 
@@ -48,11 +50,46 @@ import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
 public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 	
 	@Reference
+	private GestionePagamentiService gestionePagamentiService;
+	
+	@Reference
 	private PagamentoLocalService pagamentoLocalService;
 
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse)
 			throws IOException, PortletException {
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		long siteOrganizationId = themeDisplay.getSiteGroup().getOrganizationId();
+		
+		long siteGroupId = 0;
+		
+		if (siteOrganizationId == 0) { //MAIN SITE
+			
+			List<Organization> listaOrganizzazioni = gestionePagamentiService.getAllParentsOrganizations();
+			
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SHOW_SELECT_ORGANIZZAZIONE, true);
+			
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA_COL_SIZE, 3);
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA_COL_SIZE, 3);
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA_COL_SIZE, 2);
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA_COL_SIZE, 2);
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA_COL_SIZE, 2);
+			
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.LISTA_ORGANIZZAZIONI, listaOrganizzazioni);
+			
+		} else { //SPECIFIC SITE
+			
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SHOW_SELECT_ORGANIZZAZIONE, false);
+			
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA_COL_SIZE, 0);
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA_COL_SIZE, 3);
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA_COL_SIZE, 3);
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA_COL_SIZE, 3);
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA_COL_SIZE, 3);
+			siteGroupId = themeDisplay.getSiteGroupId();
+		}
 		
 		List<Pagamento> listaPagamenti = (List<Pagamento>) renderRequest.getAttribute(GestionePagamentiFrontendPortletKeys.LISTA_PAGAMENTI);
 		
@@ -69,8 +106,15 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			Date dataOperazioneA = ParamUtil.getDate(renderRequest,
 					GestionePagamentiFrontendPortletKeys.DATA_OPERAZIONE_A_CERCA, dateFormat, null);
 
-			String organizzazione = ParamUtil.getString(renderRequest,
-					GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA, null);
+			long organizzazioneId = ParamUtil.getLong(renderRequest,
+					GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA);
+			
+			Organization organization = organizzazioneId != 0 ? gestionePagamentiService.getOrganization(organizzazioneId) : null;
+			
+			if (Validator.isNotNull(organization)) {
+				siteGroupId = organization.getGroupId();
+			}
+			
 			String categoria = ParamUtil.getString(renderRequest,
 					GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA, null);
 			String stato = ParamUtil.getString(renderRequest, GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA,
@@ -97,24 +141,12 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 			String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 			
-			boolean direzione = true;
-
-			if ("desc".equalsIgnoreCase(orderByType)) {
-				direzione = false;
-			}
-
-			if (Validator.isNull(orderByCol)) {
-				orderByCol = "pagamentoId";
-			}
-
-			OrderByComparator<Pagamento> comparator = OrderByComparatorFactoryUtil.create("Pagamento", orderByCol, direzione);
-			
-			long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento);
+			long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento);
 
 			listaPagamenti = Collections.emptyList();
 			
 			if(totalCountPagamenti != 0) {
-				listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento, inizio, fine, comparator);
+				listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento, inizio, fine, orderByCol, orderByType);
 			}
 
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.TOTAL_COUNT_PAGAMENTI, totalCountPagamenti);
@@ -124,7 +156,7 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_INSERIMENTO_A_CERCA, dataInserimentoA == null ? null : dateFormat.format(dataInserimentoA));
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_OPERAZIONE_DA_CERCA, dataOperazioneDa == null ? null : dateFormat.format(dataOperazioneDa));
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_OPERAZIONE_A_CERCA, dataOperazioneA == null ? null : dateFormat.format(dataOperazioneA));
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA, organizzazione);
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA, organizzazioneId);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA, categoria);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA, stato);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA, gateway);

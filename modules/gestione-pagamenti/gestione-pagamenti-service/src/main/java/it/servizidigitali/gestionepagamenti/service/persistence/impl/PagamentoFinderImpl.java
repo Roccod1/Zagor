@@ -19,26 +19,26 @@ public class PagamentoFinderImpl extends PagamentoFinderBaseImpl implements Paga
 
 	@Override
 	public List<Pagamento> findByFilters(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
-			Date dataOperazioneA, String organizzazione, String categoria, String stato, String gateway, String canale,
+			Date dataOperazioneA, long groupId, String categoria, String stato, String gateway, String canale,
 			String codiceFiscale, String identificativoPagamento, String codiceIuv, long idPagamento, int inizio, int fine, OrderByComparator<Pagamento> ordine) {
 		
-		DynamicQuery dynamicQuery = this.buildDynamicQueryByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento);
+		DynamicQuery dynamicQuery = this.buildDynamicQueryByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, groupId, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento);
 		
 		return this.pagamentoPersistence.findWithDynamicQuery(dynamicQuery, inizio, fine, ordine);
 	}
 	
 	@Override
 	public long countByFilters(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
-			Date dataOperazioneA, String organizzazione, String categoria, String stato, String gateway, String canale,
+			Date dataOperazioneA, long groupId, String categoria, String stato, String gateway, String canale,
 			String codiceFiscale, String identificativoPagamento, String codiceIuv, long idPagamento) {
 		
-		DynamicQuery dynamicQuery = this.buildDynamicQueryByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, organizzazione, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento);
+		DynamicQuery dynamicQuery = this.buildDynamicQueryByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, groupId, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento);
 		
 		return this.pagamentoPersistence.countWithDynamicQuery(dynamicQuery);
 	}
 	
 	private DynamicQuery buildDynamicQueryByFilters(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
-			Date dataOperazioneA, String organizzazione, String categoria, String stato, String gateway, String canale,
+			Date dataOperazioneA, long groupId, String categoria, String stato, String gateway, String canale,
 			String codiceFiscale, String identificativoPagamento, String codiceIuv, long idPagamento) {
 		
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Pagamento.class, this.getClassLoader());
@@ -55,9 +55,9 @@ public class PagamentoFinderImpl extends PagamentoFinderBaseImpl implements Paga
 		if (Validator.isNotNull(dataOperazioneA)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.lt("modifiedDate", dataOperazioneA));
 		}
-		/*if (Validator.isNotNull(organizzazione)) {
-			dynamicQuery.add(RestrictionsFactoryUtil.eq("", organizzazione));
-		}*/
+		if (groupId != 0) {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("groupId", groupId));
+		}
 		/*if (Validator.isNotNull(categoria)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.eq("", categoria));
 		}*/
