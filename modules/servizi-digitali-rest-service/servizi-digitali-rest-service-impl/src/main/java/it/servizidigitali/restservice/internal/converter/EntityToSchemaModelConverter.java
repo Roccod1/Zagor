@@ -5,6 +5,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
@@ -18,7 +19,9 @@ import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
+import it.servizidigitali.restservice.dto.v1_0.DestinazioneUso;
 import it.servizidigitali.restservice.dto.v1_0.InfoServizioEnte;
+import it.servizidigitali.scrivaniaoperatore.service.DestinazioneUsoLocalService;
 
 /**
  * @author pindi
@@ -42,6 +45,9 @@ public class EntityToSchemaModelConverter {
 
 	@Reference
 	private OrganizationLocalService organizationLocalService;
+
+	@Reference
+	private DestinazioneUsoLocalService destinazioneUsoLocalService;
 
 	/**
 	 *
@@ -96,11 +102,42 @@ public class EntityToSchemaModelConverter {
 		}
 
 		infoServizioEnte.setServiceOnlineUrl(pathServizio);
-		// TODO da completare
-		// infoServizioEnte.setDestinazioneUsos(null);
+
+		List<DestinazioneUso> destinazioneUso = getDestinazioniUso(servizioEnte.getServizioId(), organization.getOrganizationId(), organization.getGroupId(), organization.getCompanyId());
+
+		if (destinazioneUso != null && !destinazioneUso.isEmpty()) {
+			infoServizioEnte.setDestinazioneUsos(destinazioneUso.toArray(new DestinazioneUso[0]));
+		}
+
 		infoServizioEnte.setServiceCardUrl(getSchedaServizioPath(servizioEnte.getServizioId(), organization.getOrganizationId(), organization.getCompanyId()));
 
 		return infoServizioEnte;
+	}
+
+	/**
+	 *
+	 * @param servizioId
+	 * @param organizationId
+	 * @param groupId
+	 * @param companyId
+	 * @return
+	 */
+	private List<DestinazioneUso> getDestinazioniUso(long servizioId, long organizationId, long groupId, long companyId) {
+
+		List<it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso> destinazioniUso = destinazioneUsoLocalService.getDestinazioniUsoByServizioIdOrganizationId(servizioId, organizationId,
+				groupId, companyId);
+
+		List<DestinazioneUso> results = new ArrayList<DestinazioneUso>();
+
+		for (it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso destinazioneUso : destinazioniUso) {
+			DestinazioneUso destinazioneUsoResult = new DestinazioneUso();
+			destinazioneUsoResult.setId(destinazioneUso.getDestinazioneUsoId());
+			destinazioneUsoResult.setName(destinazioneUso.getNome());
+			destinazioneUsoResult.setDescription(destinazioneUso.getDescrizione());
+			destinazioneUsoResult.setPayment(destinazioneUso.getPagamentoBollo());
+			results.add(destinazioneUsoResult);
+		}
+		return results;
 	}
 
 	/**
