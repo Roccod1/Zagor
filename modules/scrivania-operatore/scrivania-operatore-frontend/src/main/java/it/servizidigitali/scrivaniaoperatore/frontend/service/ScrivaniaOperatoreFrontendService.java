@@ -43,7 +43,10 @@ import it.servizidigitali.communication.model.Utente;
 import it.servizidigitali.communication.sender.CommunicationSender;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
+import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
+import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
@@ -51,6 +54,7 @@ import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneCanaleComuni
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AzioneUtente;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.IntegrazioneDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaActionsVariable;
 import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaCodiciOperazioniUtente;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
@@ -107,6 +111,12 @@ public class ScrivaniaOperatoreFrontendService {
 
 	@Reference
 	private ServizioLocalService servizioLocalService;
+
+	@Reference
+	private ProceduraFormLocalService proceduraFormLocalService;
+
+	@Reference
+	private FormLocalService formLocalService;
 
 	/**
 	 *
@@ -291,9 +301,9 @@ public class ScrivaniaOperatoreFrontendService {
 		catch (PortalException e) {
 			log.error("getAzioniUtenteDettaglioRichiesta :: " + e.getMessage(), e);
 		}
-		
+
 		azioniUtente.sort((a, b) -> a.getCodiceAzioneUtente().compareTo(b.getCodiceAzioneUtente()));
-		
+
 		return azioniUtente;
 	}
 
@@ -653,6 +663,35 @@ public class ScrivaniaOperatoreFrontendService {
 		// Aggiornamento stato pratica con commenti
 		String note = "Pratica rimandata al referente";
 		richiestaLocalService.updateStatoRichiesta(richiestaId, StatoRichiesta.IN_LAVORAZIONE.name(), note);
+	}
+
+	/**
+	 *
+	 * @param procedura
+	 * @return
+	 */
+	public List<IntegrazioneDTO> getIntegrazioniFormProcedura(Procedura procedura) {
+
+		List<ProceduraForm> listaProceduraFormProcedura = proceduraFormLocalService.getListaProceduraFormProcedura(procedura.getProceduraId());
+
+		if (listaProceduraFormProcedura != null) {
+			List<IntegrazioneDTO> integrazioneDTOs = new ArrayList<IntegrazioneDTO>();
+			for (ProceduraForm proceduraForm : listaProceduraFormProcedura) {
+				IntegrazioneDTO integrazioneDTO = new IntegrazioneDTO();
+				integrazioneDTO.setId(proceduraForm.getProceduraId());
+				try {
+					integrazioneDTO.setNome(formLocalService.getForm(proceduraForm.getFormId()).getNome());
+				}
+				catch (PortalException e) {
+					log.warn("getIntegrazioniProcedura :: " + e.getMessage());
+				}
+				integrazioneDTOs.add(integrazioneDTO);
+			}
+			return integrazioneDTOs;
+		}
+
+		return null;
+
 	}
 
 	public Servizio getServizioByProceduraId(long proceduraId) throws PortalException {
