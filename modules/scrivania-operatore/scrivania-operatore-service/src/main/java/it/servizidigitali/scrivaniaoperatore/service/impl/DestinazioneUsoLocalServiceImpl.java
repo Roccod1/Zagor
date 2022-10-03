@@ -38,7 +38,7 @@ public class DestinazioneUsoLocalServiceImpl extends DestinazioneUsoLocalService
 
 	@Override
 	public List<DestinazioneUso> getDestinazioniUsoByServizioIdOrganizationId(long servizioId, long organizationId, long groupId, long companyId) {
-		List<DestinazioneUsoServizioEnte> destinazioniUsoServizioEnte = destinazioneUsoServizioEntePersistence.findByO_S_G_C(servizioId, organizationId, groupId, companyId);
+		List<DestinazioneUsoServizioEnte> destinazioniUsoServizioEnte = destinazioneUsoServizioEntePersistence.findByS_O_G_C(servizioId, organizationId, groupId, companyId);
 		List<Long> destinazioniUsoIds = destinazioniUsoServizioEnte.stream().map(DestinazioneUsoServizioEnte::getDestinazioneUsoId).collect(Collectors.toList());
 		return destinazioneUsoFinder.findByDestinazioneUsoIdsCompanyId(destinazioniUsoIds, companyId);
 	}

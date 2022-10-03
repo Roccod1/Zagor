@@ -2423,37 +2423,37 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 		_FINDER_COLUMN_ORGANIZATIONIDGROUPIDCOMPANYID_COMPANYID_2 =
 			"destinazioneUsoServizioEnte.companyId = ?";
 
-	private FinderPath _finderPathWithPaginationFindByO_S_G_C;
-	private FinderPath _finderPathWithoutPaginationFindByO_S_G_C;
-	private FinderPath _finderPathCountByO_S_G_C;
+	private FinderPath _finderPathWithPaginationFindByS_O_G_C;
+	private FinderPath _finderPathWithoutPaginationFindByS_O_G_C;
+	private FinderPath _finderPathCountByS_O_G_C;
 
 	/**
-	 * Returns all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 * Returns all the destinazione uso servizio entes where servizioId = &#63; and organizationId = &#63; and groupId = &#63; and companyId = &#63;.
 	 *
-	 * @param organizationId the organization ID
 	 * @param servizioId the servizio ID
+	 * @param organizationId the organization ID
 	 * @param groupId the group ID
 	 * @param companyId the company ID
 	 * @return the matching destinazione uso servizio entes
 	 */
 	@Override
-	public List<DestinazioneUsoServizioEnte> findByO_S_G_C(
-		long organizationId, long servizioId, long groupId, long companyId) {
+	public List<DestinazioneUsoServizioEnte> findByS_O_G_C(
+		long servizioId, long organizationId, long groupId, long companyId) {
 
-		return findByO_S_G_C(
-			organizationId, servizioId, groupId, companyId, QueryUtil.ALL_POS,
+		return findByS_O_G_C(
+			servizioId, organizationId, groupId, companyId, QueryUtil.ALL_POS,
 			QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 * Returns a range of all the destinazione uso servizio entes where servizioId = &#63; and organizationId = &#63; and groupId = &#63; and companyId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DestinazioneUsoServizioEnteModelImpl</code>.
 	 * </p>
 	 *
-	 * @param organizationId the organization ID
 	 * @param servizioId the servizio ID
+	 * @param organizationId the organization ID
 	 * @param groupId the group ID
 	 * @param companyId the company ID
 	 * @param start the lower bound of the range of destinazione uso servizio entes
@@ -2461,23 +2461,23 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 	 * @return the range of matching destinazione uso servizio entes
 	 */
 	@Override
-	public List<DestinazioneUsoServizioEnte> findByO_S_G_C(
-		long organizationId, long servizioId, long groupId, long companyId,
+	public List<DestinazioneUsoServizioEnte> findByS_O_G_C(
+		long servizioId, long organizationId, long groupId, long companyId,
 		int start, int end) {
 
-		return findByO_S_G_C(
-			organizationId, servizioId, groupId, companyId, start, end, null);
+		return findByS_O_G_C(
+			servizioId, organizationId, groupId, companyId, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 * Returns an ordered range of all the destinazione uso servizio entes where servizioId = &#63; and organizationId = &#63; and groupId = &#63; and companyId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DestinazioneUsoServizioEnteModelImpl</code>.
 	 * </p>
 	 *
-	 * @param organizationId the organization ID
 	 * @param servizioId the servizio ID
+	 * @param organizationId the organization ID
 	 * @param groupId the group ID
 	 * @param companyId the company ID
 	 * @param start the lower bound of the range of destinazione uso servizio entes
@@ -2486,25 +2486,25 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 	 * @return the ordered range of matching destinazione uso servizio entes
 	 */
 	@Override
-	public List<DestinazioneUsoServizioEnte> findByO_S_G_C(
-		long organizationId, long servizioId, long groupId, long companyId,
+	public List<DestinazioneUsoServizioEnte> findByS_O_G_C(
+		long servizioId, long organizationId, long groupId, long companyId,
 		int start, int end,
 		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator) {
 
-		return findByO_S_G_C(
-			organizationId, servizioId, groupId, companyId, start, end,
+		return findByS_O_G_C(
+			servizioId, organizationId, groupId, companyId, start, end,
 			orderByComparator, true);
 	}
 
 	/**
-	 * Returns an ordered range of all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 * Returns an ordered range of all the destinazione uso servizio entes where servizioId = &#63; and organizationId = &#63; and groupId = &#63; and companyId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DestinazioneUsoServizioEnteModelImpl</code>.
 	 * </p>
 	 *
-	 * @param organizationId the organization ID
 	 * @param servizioId the servizio ID
+	 * @param organizationId the organization ID
 	 * @param groupId the group ID
 	 * @param companyId the company ID
 	 * @param start the lower bound of the range of destinazione uso servizio entes
@@ -2514,8 +2514,8 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 	 * @return the ordered range of matching destinazione uso servizio entes
 	 */
 	@Override
-	public List<DestinazioneUsoServizioEnte> findByO_S_G_C(
-		long organizationId, long servizioId, long groupId, long companyId,
+	public List<DestinazioneUsoServizioEnte> findByS_O_G_C(
+		long servizioId, long organizationId, long groupId, long companyId,
 		int start, int end,
 		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator,
 		boolean useFinderCache) {
@@ -2527,16 +2527,16 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 			(orderByComparator == null)) {
 
 			if (useFinderCache) {
-				finderPath = _finderPathWithoutPaginationFindByO_S_G_C;
+				finderPath = _finderPathWithoutPaginationFindByS_O_G_C;
 				finderArgs = new Object[] {
-					organizationId, servizioId, groupId, companyId
+					servizioId, organizationId, groupId, companyId
 				};
 			}
 		}
 		else if (useFinderCache) {
-			finderPath = _finderPathWithPaginationFindByO_S_G_C;
+			finderPath = _finderPathWithPaginationFindByS_O_G_C;
 			finderArgs = new Object[] {
-				organizationId, servizioId, groupId, companyId, start, end,
+				servizioId, organizationId, groupId, companyId, start, end,
 				orderByComparator
 			};
 		}
@@ -2551,10 +2551,10 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 				for (DestinazioneUsoServizioEnte destinazioneUsoServizioEnte :
 						list) {
 
-					if ((organizationId !=
-							destinazioneUsoServizioEnte.getOrganizationId()) ||
-						(servizioId !=
+					if ((servizioId !=
 							destinazioneUsoServizioEnte.getServizioId()) ||
+						(organizationId !=
+							destinazioneUsoServizioEnte.getOrganizationId()) ||
 						(groupId != destinazioneUsoServizioEnte.getGroupId()) ||
 						(companyId !=
 							destinazioneUsoServizioEnte.getCompanyId())) {
@@ -2580,13 +2580,13 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 
 			sb.append(_SQL_SELECT_DESTINAZIONEUSOSERVIZIOENTE_WHERE);
 
-			sb.append(_FINDER_COLUMN_O_S_G_C_ORGANIZATIONID_2);
+			sb.append(_FINDER_COLUMN_S_O_G_C_SERVIZIOID_2);
 
-			sb.append(_FINDER_COLUMN_O_S_G_C_SERVIZIOID_2);
+			sb.append(_FINDER_COLUMN_S_O_G_C_ORGANIZATIONID_2);
 
-			sb.append(_FINDER_COLUMN_O_S_G_C_GROUPID_2);
+			sb.append(_FINDER_COLUMN_S_O_G_C_GROUPID_2);
 
-			sb.append(_FINDER_COLUMN_O_S_G_C_COMPANYID_2);
+			sb.append(_FINDER_COLUMN_S_O_G_C_COMPANYID_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(
@@ -2607,9 +2607,9 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 
 				QueryPos queryPos = QueryPos.getInstance(query);
 
-				queryPos.add(organizationId);
-
 				queryPos.add(servizioId);
+
+				queryPos.add(organizationId);
 
 				queryPos.add(groupId);
 
@@ -2636,10 +2636,10 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 	}
 
 	/**
-	 * Returns the first destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 * Returns the first destinazione uso servizio ente in the ordered set where servizioId = &#63; and organizationId = &#63; and groupId = &#63; and companyId = &#63;.
 	 *
-	 * @param organizationId the organization ID
 	 * @param servizioId the servizio ID
+	 * @param organizationId the organization ID
 	 * @param groupId the group ID
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -2647,14 +2647,14 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 	 * @throws NoSuchDestinazioneUsoServizioEnteException if a matching destinazione uso servizio ente could not be found
 	 */
 	@Override
-	public DestinazioneUsoServizioEnte findByO_S_G_C_First(
-			long organizationId, long servizioId, long groupId, long companyId,
+	public DestinazioneUsoServizioEnte findByS_O_G_C_First(
+			long servizioId, long organizationId, long groupId, long companyId,
 			OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator)
 		throws NoSuchDestinazioneUsoServizioEnteException {
 
 		DestinazioneUsoServizioEnte destinazioneUsoServizioEnte =
-			fetchByO_S_G_C_First(
-				organizationId, servizioId, groupId, companyId,
+			fetchByS_O_G_C_First(
+				servizioId, organizationId, groupId, companyId,
 				orderByComparator);
 
 		if (destinazioneUsoServizioEnte != null) {
@@ -2665,11 +2665,11 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 
 		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		sb.append("organizationId=");
-		sb.append(organizationId);
-
-		sb.append(", servizioId=");
+		sb.append("servizioId=");
 		sb.append(servizioId);
+
+		sb.append(", organizationId=");
+		sb.append(organizationId);
 
 		sb.append(", groupId=");
 		sb.append(groupId);
@@ -2683,22 +2683,22 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 	}
 
 	/**
-	 * Returns the first destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 * Returns the first destinazione uso servizio ente in the ordered set where servizioId = &#63; and organizationId = &#63; and groupId = &#63; and companyId = &#63;.
 	 *
-	 * @param organizationId the organization ID
 	 * @param servizioId the servizio ID
+	 * @param organizationId the organization ID
 	 * @param groupId the group ID
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching destinazione uso servizio ente, or <code>null</code> if a matching destinazione uso servizio ente could not be found
 	 */
 	@Override
-	public DestinazioneUsoServizioEnte fetchByO_S_G_C_First(
-		long organizationId, long servizioId, long groupId, long companyId,
+	public DestinazioneUsoServizioEnte fetchByS_O_G_C_First(
+		long servizioId, long organizationId, long groupId, long companyId,
 		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator) {
 
-		List<DestinazioneUsoServizioEnte> list = findByO_S_G_C(
-			organizationId, servizioId, groupId, companyId, 0, 1,
+		List<DestinazioneUsoServizioEnte> list = findByS_O_G_C(
+			servizioId, organizationId, groupId, companyId, 0, 1,
 			orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -2709,10 +2709,10 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 	}
 
 	/**
-	 * Returns the last destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 * Returns the last destinazione uso servizio ente in the ordered set where servizioId = &#63; and organizationId = &#63; and groupId = &#63; and companyId = &#63;.
 	 *
-	 * @param organizationId the organization ID
 	 * @param servizioId the servizio ID
+	 * @param organizationId the organization ID
 	 * @param groupId the group ID
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -2720,14 +2720,14 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 	 * @throws NoSuchDestinazioneUsoServizioEnteException if a matching destinazione uso servizio ente could not be found
 	 */
 	@Override
-	public DestinazioneUsoServizioEnte findByO_S_G_C_Last(
-			long organizationId, long servizioId, long groupId, long companyId,
+	public DestinazioneUsoServizioEnte findByS_O_G_C_Last(
+			long servizioId, long organizationId, long groupId, long companyId,
 			OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator)
 		throws NoSuchDestinazioneUsoServizioEnteException {
 
 		DestinazioneUsoServizioEnte destinazioneUsoServizioEnte =
-			fetchByO_S_G_C_Last(
-				organizationId, servizioId, groupId, companyId,
+			fetchByS_O_G_C_Last(
+				servizioId, organizationId, groupId, companyId,
 				orderByComparator);
 
 		if (destinazioneUsoServizioEnte != null) {
@@ -2738,11 +2738,11 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 
 		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		sb.append("organizationId=");
-		sb.append(organizationId);
-
-		sb.append(", servizioId=");
+		sb.append("servizioId=");
 		sb.append(servizioId);
+
+		sb.append(", organizationId=");
+		sb.append(organizationId);
 
 		sb.append(", groupId=");
 		sb.append(groupId);
@@ -2756,29 +2756,29 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 	}
 
 	/**
-	 * Returns the last destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 * Returns the last destinazione uso servizio ente in the ordered set where servizioId = &#63; and organizationId = &#63; and groupId = &#63; and companyId = &#63;.
 	 *
-	 * @param organizationId the organization ID
 	 * @param servizioId the servizio ID
+	 * @param organizationId the organization ID
 	 * @param groupId the group ID
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching destinazione uso servizio ente, or <code>null</code> if a matching destinazione uso servizio ente could not be found
 	 */
 	@Override
-	public DestinazioneUsoServizioEnte fetchByO_S_G_C_Last(
-		long organizationId, long servizioId, long groupId, long companyId,
+	public DestinazioneUsoServizioEnte fetchByS_O_G_C_Last(
+		long servizioId, long organizationId, long groupId, long companyId,
 		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator) {
 
-		int count = countByO_S_G_C(
-			organizationId, servizioId, groupId, companyId);
+		int count = countByS_O_G_C(
+			servizioId, organizationId, groupId, companyId);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<DestinazioneUsoServizioEnte> list = findByO_S_G_C(
-			organizationId, servizioId, groupId, companyId, count - 1, count,
+		List<DestinazioneUsoServizioEnte> list = findByS_O_G_C(
+			servizioId, organizationId, groupId, companyId, count - 1, count,
 			orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -2789,11 +2789,11 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 	}
 
 	/**
-	 * Returns the destinazione uso servizio entes before and after the current destinazione uso servizio ente in the ordered set where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 * Returns the destinazione uso servizio entes before and after the current destinazione uso servizio ente in the ordered set where servizioId = &#63; and organizationId = &#63; and groupId = &#63; and companyId = &#63;.
 	 *
 	 * @param destinazioneUsoServizioEntePK the primary key of the current destinazione uso servizio ente
-	 * @param organizationId the organization ID
 	 * @param servizioId the servizio ID
+	 * @param organizationId the organization ID
 	 * @param groupId the group ID
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -2801,9 +2801,9 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 	 * @throws NoSuchDestinazioneUsoServizioEnteException if a destinazione uso servizio ente with the primary key could not be found
 	 */
 	@Override
-	public DestinazioneUsoServizioEnte[] findByO_S_G_C_PrevAndNext(
+	public DestinazioneUsoServizioEnte[] findByS_O_G_C_PrevAndNext(
 			DestinazioneUsoServizioEntePK destinazioneUsoServizioEntePK,
-			long organizationId, long servizioId, long groupId, long companyId,
+			long servizioId, long organizationId, long groupId, long companyId,
 			OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator)
 		throws NoSuchDestinazioneUsoServizioEnteException {
 
@@ -2818,15 +2818,15 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 			DestinazioneUsoServizioEnte[] array =
 				new DestinazioneUsoServizioEnteImpl[3];
 
-			array[0] = getByO_S_G_C_PrevAndNext(
-				session, destinazioneUsoServizioEnte, organizationId,
-				servizioId, groupId, companyId, orderByComparator, true);
+			array[0] = getByS_O_G_C_PrevAndNext(
+				session, destinazioneUsoServizioEnte, servizioId,
+				organizationId, groupId, companyId, orderByComparator, true);
 
 			array[1] = destinazioneUsoServizioEnte;
 
-			array[2] = getByO_S_G_C_PrevAndNext(
-				session, destinazioneUsoServizioEnte, organizationId,
-				servizioId, groupId, companyId, orderByComparator, false);
+			array[2] = getByS_O_G_C_PrevAndNext(
+				session, destinazioneUsoServizioEnte, servizioId,
+				organizationId, groupId, companyId, orderByComparator, false);
 
 			return array;
 		}
@@ -2838,10 +2838,10 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 		}
 	}
 
-	protected DestinazioneUsoServizioEnte getByO_S_G_C_PrevAndNext(
+	protected DestinazioneUsoServizioEnte getByS_O_G_C_PrevAndNext(
 		Session session,
 		DestinazioneUsoServizioEnte destinazioneUsoServizioEnte,
-		long organizationId, long servizioId, long groupId, long companyId,
+		long servizioId, long organizationId, long groupId, long companyId,
 		OrderByComparator<DestinazioneUsoServizioEnte> orderByComparator,
 		boolean previous) {
 
@@ -2858,13 +2858,13 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 
 		sb.append(_SQL_SELECT_DESTINAZIONEUSOSERVIZIOENTE_WHERE);
 
-		sb.append(_FINDER_COLUMN_O_S_G_C_ORGANIZATIONID_2);
+		sb.append(_FINDER_COLUMN_S_O_G_C_SERVIZIOID_2);
 
-		sb.append(_FINDER_COLUMN_O_S_G_C_SERVIZIOID_2);
+		sb.append(_FINDER_COLUMN_S_O_G_C_ORGANIZATIONID_2);
 
-		sb.append(_FINDER_COLUMN_O_S_G_C_GROUPID_2);
+		sb.append(_FINDER_COLUMN_S_O_G_C_GROUPID_2);
 
-		sb.append(_FINDER_COLUMN_O_S_G_C_COMPANYID_2);
+		sb.append(_FINDER_COLUMN_S_O_G_C_COMPANYID_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields =
@@ -2935,9 +2935,9 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 
 		QueryPos queryPos = QueryPos.getInstance(query);
 
-		queryPos.add(organizationId);
-
 		queryPos.add(servizioId);
+
+		queryPos.add(organizationId);
 
 		queryPos.add(groupId);
 
@@ -2963,20 +2963,20 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 	}
 
 	/**
-	 * Removes all the destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63; from the database.
+	 * Removes all the destinazione uso servizio entes where servizioId = &#63; and organizationId = &#63; and groupId = &#63; and companyId = &#63; from the database.
 	 *
-	 * @param organizationId the organization ID
 	 * @param servizioId the servizio ID
+	 * @param organizationId the organization ID
 	 * @param groupId the group ID
 	 * @param companyId the company ID
 	 */
 	@Override
-	public void removeByO_S_G_C(
-		long organizationId, long servizioId, long groupId, long companyId) {
+	public void removeByS_O_G_C(
+		long servizioId, long organizationId, long groupId, long companyId) {
 
 		for (DestinazioneUsoServizioEnte destinazioneUsoServizioEnte :
-				findByO_S_G_C(
-					organizationId, servizioId, groupId, companyId,
+				findByS_O_G_C(
+					servizioId, organizationId, groupId, companyId,
 					QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 
 			remove(destinazioneUsoServizioEnte);
@@ -2984,22 +2984,22 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 	}
 
 	/**
-	 * Returns the number of destinazione uso servizio entes where organizationId = &#63; and servizioId = &#63; and groupId = &#63; and companyId = &#63;.
+	 * Returns the number of destinazione uso servizio entes where servizioId = &#63; and organizationId = &#63; and groupId = &#63; and companyId = &#63;.
 	 *
-	 * @param organizationId the organization ID
 	 * @param servizioId the servizio ID
+	 * @param organizationId the organization ID
 	 * @param groupId the group ID
 	 * @param companyId the company ID
 	 * @return the number of matching destinazione uso servizio entes
 	 */
 	@Override
-	public int countByO_S_G_C(
-		long organizationId, long servizioId, long groupId, long companyId) {
+	public int countByS_O_G_C(
+		long servizioId, long organizationId, long groupId, long companyId) {
 
-		FinderPath finderPath = _finderPathCountByO_S_G_C;
+		FinderPath finderPath = _finderPathCountByS_O_G_C;
 
 		Object[] finderArgs = new Object[] {
-			organizationId, servizioId, groupId, companyId
+			servizioId, organizationId, groupId, companyId
 		};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
@@ -3009,13 +3009,13 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 
 			sb.append(_SQL_COUNT_DESTINAZIONEUSOSERVIZIOENTE_WHERE);
 
-			sb.append(_FINDER_COLUMN_O_S_G_C_ORGANIZATIONID_2);
+			sb.append(_FINDER_COLUMN_S_O_G_C_SERVIZIOID_2);
 
-			sb.append(_FINDER_COLUMN_O_S_G_C_SERVIZIOID_2);
+			sb.append(_FINDER_COLUMN_S_O_G_C_ORGANIZATIONID_2);
 
-			sb.append(_FINDER_COLUMN_O_S_G_C_GROUPID_2);
+			sb.append(_FINDER_COLUMN_S_O_G_C_GROUPID_2);
 
-			sb.append(_FINDER_COLUMN_O_S_G_C_COMPANYID_2);
+			sb.append(_FINDER_COLUMN_S_O_G_C_COMPANYID_2);
 
 			String sql = sb.toString();
 
@@ -3028,9 +3028,9 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 
 				QueryPos queryPos = QueryPos.getInstance(query);
 
-				queryPos.add(organizationId);
-
 				queryPos.add(servizioId);
+
+				queryPos.add(organizationId);
 
 				queryPos.add(groupId);
 
@@ -3051,16 +3051,16 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_O_S_G_C_ORGANIZATIONID_2 =
-		"destinazioneUsoServizioEnte.id.organizationId = ? AND ";
-
-	private static final String _FINDER_COLUMN_O_S_G_C_SERVIZIOID_2 =
+	private static final String _FINDER_COLUMN_S_O_G_C_SERVIZIOID_2 =
 		"destinazioneUsoServizioEnte.id.servizioId = ? AND ";
 
-	private static final String _FINDER_COLUMN_O_S_G_C_GROUPID_2 =
+	private static final String _FINDER_COLUMN_S_O_G_C_ORGANIZATIONID_2 =
+		"destinazioneUsoServizioEnte.id.organizationId = ? AND ";
+
+	private static final String _FINDER_COLUMN_S_O_G_C_GROUPID_2 =
 		"destinazioneUsoServizioEnte.groupId = ? AND ";
 
-	private static final String _FINDER_COLUMN_O_S_G_C_COMPANYID_2 =
+	private static final String _FINDER_COLUMN_S_O_G_C_COMPANYID_2 =
 		"destinazioneUsoServizioEnte.companyId = ?";
 
 	public DestinazioneUsoServizioEntePersistenceImpl() {
@@ -3831,8 +3831,8 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 			},
 			new String[] {"organizationId", "groupId", "companyId"}, false);
 
-		_finderPathWithPaginationFindByO_S_G_C = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByO_S_G_C",
+		_finderPathWithPaginationFindByS_O_G_C = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByS_O_G_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Long.class.getName(), Long.class.getName(),
@@ -3840,29 +3840,29 @@ public class DestinazioneUsoServizioEntePersistenceImpl
 				OrderByComparator.class.getName()
 			},
 			new String[] {
-				"organizationId", "servizioId", "groupId", "companyId"
+				"servizioId", "organizationId", "groupId", "companyId"
 			},
 			true);
 
-		_finderPathWithoutPaginationFindByO_S_G_C = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByO_S_G_C",
+		_finderPathWithoutPaginationFindByS_O_G_C = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByS_O_G_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Long.class.getName(), Long.class.getName()
 			},
 			new String[] {
-				"organizationId", "servizioId", "groupId", "companyId"
+				"servizioId", "organizationId", "groupId", "companyId"
 			},
 			true);
 
-		_finderPathCountByO_S_G_C = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByO_S_G_C",
+		_finderPathCountByS_O_G_C = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByS_O_G_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Long.class.getName(), Long.class.getName()
 			},
 			new String[] {
-				"organizationId", "servizioId", "groupId", "companyId"
+				"servizioId", "organizationId", "groupId", "companyId"
 			},
 			false);
 

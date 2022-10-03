@@ -348,9 +348,9 @@
 			<finder-column name="companyId" />
 		</finder>
 
-		<finder name="O_S_G_C" return-type="Collection">
-			<finder-column name="organizationId" />
+		<finder name="S_O_G_C" return-type="Collection">
 			<finder-column name="servizioId" />
+			<finder-column name="organizationId" />
 			<finder-column name="groupId" />
 			<finder-column name="companyId" />
 		</finder>
