@@ -30,12 +30,13 @@ import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
 import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
+import it.servizidigitali.scrivaniaoperatore.service.DestinazioneUsoLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
-import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalServiceUtil;
 
 /**
  * @author pindi
@@ -66,6 +67,9 @@ public class PresentatoreFormFrontendService {
 
 	@Reference
 	private IstanzaFormLocalService istanzaFormLocalService;
+
+	@Reference
+	private DestinazioneUsoLocalService destinazioneUsoLocalService;
 
 	/**
 	 * Ritorna il servizio attuale sulla base della pagina in cui è in esecuzione la portlet.
@@ -188,7 +192,7 @@ public class PresentatoreFormFrontendService {
 	public IstanzaForm getIstanzaFormRichiesta(long richiestaId, long formId) {
 		return istanzaFormLocalService.getIstanzaFormByRichiestaIdFormId(richiestaId, formId);
 	}
-	
+
 	public Richiesta createOrUpdateRichiesta(User user, long proceduraId, String dataForm, String stato) {
 
 		Richiesta richiesta = null;
@@ -197,7 +201,7 @@ public class PresentatoreFormFrontendService {
 
 		Gson gson = new Gson();
 		AlpacaJsonStructure alpacaStructure = gson.fromJson(dataForm, AlpacaJsonStructure.class);
-		
+
 		if (Validator.isNotNull(alpacaStructure)) {
 			FormData formData = new FormData();
 			formData.setAlpaca(alpacaStructure);
@@ -206,16 +210,17 @@ public class PresentatoreFormFrontendService {
 			// recupero richiesta se esiste altrimenti ne creo una nuova
 			richiesta = getRichiestaBozza(user.getScreenName(), proceduraId);
 			form = getFormPrincipaleProcedura(proceduraId);
-			
-			if(Validator.isNotNull(form)) {
-				
-				if(Validator.isNotNull(StatoRichiesta.valueOf(stato))) {
-					//recupero richiesta esistente
+
+			if (Validator.isNotNull(form)) {
+
+				if (Validator.isNotNull(StatoRichiesta.valueOf(stato))) {
+					// recupero richiesta esistente
 					if (Validator.isNotNull(richiesta)) {
 						log.debug("Recuperata richiesta in stato BOZZA con id: " + richiesta.getRichiestaId());
-						istanzaForm = getIstanzaFormRichiesta(richiesta.getRichiestaId(), form.getFormId());						
-					} else {
-						//creazione nuova richiesta
+						istanzaForm = getIstanzaFormRichiesta(richiesta.getRichiestaId(), form.getFormId());
+					}
+					else {
+						// creazione nuova richiesta
 						richiesta = richiestaLocalService.createRichiesta(0);
 						richiesta.setCodiceFiscale(user.getScreenName());
 						richiesta.setUserId(user.getUserId());
@@ -223,27 +228,41 @@ public class PresentatoreFormFrontendService {
 						richiesta.setEmail(user.getEmailAddress());
 						richiesta.setProceduraId(proceduraId);
 						richiesta = richiestaLocalService.updateRichiesta(richiesta);
-						
+
 						istanzaForm = istanzaFormLocalService.createIstanzaForm(0);
 						istanzaForm.setRichiestaId(richiesta.getRichiestaId());
 						istanzaForm.setFormId(form.getFormId());
 					}
-					//aggiorno stato richiesta
+					// aggiorno stato richiesta
 					richiesta.setStato(stato);
 					richiestaLocalService.updateRichiesta(richiesta);
-					//aggiorno json in istanza form
+					// aggiorno json in istanza form
 					istanzaForm.setJson(jsonToSave);
 					istanzaFormLocalService.updateIstanzaForm(istanzaForm);
-				} else {
+				}
+				else {
 					log.error("Valore non valido per lo stato della richiesta: " + stato);
 				}
-				
-			} else {
+
+			}
+			else {
 				log.error("Nessun form principale associato alla procedura con id: " + proceduraId);
 			}
-			
+
 		}
-		
+
 		return richiesta;
+	}
+
+	/**
+	 *
+	 * @param themeDisplay
+	 * @return
+	 */
+	public List<DestinazioneUso> getDestinazioniUso(ThemeDisplay themeDisplay) {
+		long organizationId = themeDisplay.getSiteGroup().getOrganizationId();
+		long groupId = themeDisplay.getSiteGroupId();
+		long companyId = themeDisplay.getCompanyId();
+		return destinazioneUsoLocalService.getDestinazioniUsoByOrganizationId(organizationId, groupId, companyId);
 	}
 }

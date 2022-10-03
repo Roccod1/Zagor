@@ -44,6 +44,7 @@ import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 
 /**
@@ -64,8 +65,7 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 				"com.liferay.portlet.footer-portlet-javascript=/libs/jquery.handsontable/jquery.handsontable.full.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/alpaca-custom/alpaca.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/dist/custom-fields.min.js", //
-				"com.liferay.portlet.single-page-application=false",
-				"com.liferay.portlet.instanceable=true", "javax.portlet.display-name=PresentatoreForms", //
+				"com.liferay.portlet.single-page-application=false", "com.liferay.portlet.instanceable=true", "javax.portlet.display-name=PresentatoreForms", //
 				"javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp", //
 				"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
 				"javax.portlet.resource-bundle=content.Language", //
@@ -105,6 +105,9 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 			String screenName = themeDisplay.getUser().getScreenName();
 
 			Richiesta richiesta = presentatoreFormFrontendService.getRichiestaBozza(screenName, procedura.getProceduraId());
+
+			String step2TipoServizio = procedura.getStep2TipoServizio();
+			TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
 
 			boolean stepComponentiFamiliari = procedura.getStep1Attivo();
 			String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
@@ -165,8 +168,6 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 								if (e.getConditionCode() != 0) {
 									throw e;
 								}
-								String step2TipoServizio = procedura.getStep2TipoServizio();
-								TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
 								if (tipoServizio != null && tipoServizio.equals(TipoServizio.VISURA) || tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 									log.error("renderizzaAlpacaForm :: impossibile caricare le informazioni dal backoffice per il Comune : " + themeDisplay.getScopeGroup().getName() + " :: "
 											+ e.getMessage(), e);
@@ -180,8 +181,14 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 							alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
 
 							renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
-							include(PresentatoreFormsPortletKeys.JSP_COMPILA_FORM, renderRequest, renderResponse);
 
+							// Aggiunta destinazioni d'uso in pagina se certificato
+							if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
+								List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
+								renderRequest.setAttribute("destinazioniUso", destinazioniUso);
+							}
+
+							include(PresentatoreFormsPortletKeys.JSP_COMPILA_FORM, renderRequest, renderResponse);
 						}
 
 					}

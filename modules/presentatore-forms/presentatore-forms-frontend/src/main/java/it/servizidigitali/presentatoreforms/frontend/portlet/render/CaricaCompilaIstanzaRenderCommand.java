@@ -35,6 +35,7 @@ import it.servizidigitali.presentatoreforms.frontend.service.integration.input.j
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
+import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
 import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 
@@ -87,6 +88,9 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 			boolean stepComponentiFamiliari = procedura.getStep1Attivo();
 			String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
 
+			String step2TipoServizio = procedura.getStep2TipoServizio();
+			TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
+
 			if (Boolean.valueOf(isBozza) && istanzaFormRichiesta != null) {
 				jsonDataBozza = gson.toJson(gson.fromJson(istanzaFormRichiesta.getJson(), FormData.class));
 				formData = AlpacaUtil.loadFormData(form, jsonDataBozza, true, themeDisplay.getPortalURL());
@@ -135,13 +139,22 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 							if (e.getConditionCode() != 0) {
 								throw e;
 							}
-							String step2TipoServizio = procedura.getStep2TipoServizio();
-							TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
 							if (tipoServizio != null && tipoServizio.equals(TipoServizio.VISURA) || tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 								log.error("renderizzaAlpacaForm :: impossibile caricare le informazioni dal backoffice per il Comune : " + themeDisplay.getScopeGroup().getName() + " :: "
 										+ e.getMessage(), e);
 								throw e;
 							}
+						}
+
+						String dataString = gson.toJson(alpacaStructure.getData());
+						JsonObject jsonData = gson.fromJson(dataString, JsonObject.class);
+						alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
+						renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+
+						// Aggiunta destinazioni d'uso in pagina se certificato
+						if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
+							List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
+							renderRequest.setAttribute("destinazioniUso", destinazioniUso);
 						}
 					}
 				}
