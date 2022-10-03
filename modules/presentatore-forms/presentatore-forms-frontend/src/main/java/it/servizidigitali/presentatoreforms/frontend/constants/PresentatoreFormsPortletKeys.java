@@ -16,7 +16,8 @@ public class PresentatoreFormsPortletKeys {
 	public static final String SALVA_DATI_FORM_ACTION_COMMAND = "/salvaDatiForm";
 	public static final String CARICA_COMPILA_ISTANZA_RENDER_COMMAND = "/caricaCompilaIstanza";
 	public static final String SCEGLI_MODALITA_PAGAMENTO_RENDER_COMMAND = "/scegliModalitaPagamento";
-	public static final String SALVA_INVIA_ACTION_COMMAND = "/salvaInvia";
+	public static final String SALVA_INVIA_RICHIESTA_ACTION_COMMAND = "/salvaInvia";
+	public static final String SALVA_RICHIESTA_BOZZA_ACTION_COMMAND = "/salvaBozza";
 	public static final String SCEGLI_COMPONENTE_ACTION_COMMAND = "/scegliComponente";
 	public static final String DOWNLOAD_ISTANZA_PDF_RESOURCE_COMMAND = "/downloadIstanza";
 	public static final String COMUNE_RESOURCE_COMMAND = "/listaComuni";

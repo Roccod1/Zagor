@@ -81,3 +81,34 @@ ADD PRIMARY KEY (`allegatoRichiestaId`);
 
 ALTER TABLE `servizi_digitali`.`allegato_richiesta` 
 ADD COLUMN `richiestaId` BIGINT NOT NULL AFTER `visibile`;
+
+-- 20221003
+CREATE TABLE `destinazione_uso` (
+  `uuid_` varchar(75) DEFAULT NULL,
+  `destinazioneUsoId` bigint NOT NULL,
+  `groupId` bigint DEFAULT NULL,
+  `companyId` bigint DEFAULT NULL,
+  `userId` bigint DEFAULT NULL,
+  `userName` varchar(75) DEFAULT NULL,
+  `createDate` datetime(6) DEFAULT NULL,
+  `modifiedDate` datetime(6) DEFAULT NULL,
+  `nome` varchar(250) DEFAULT NULL,
+  `descrizione` varchar(500) DEFAULT NULL,
+  `pagamentoBollo` tinyint DEFAULT NULL,
+  `importo` decimal(19,2) DEFAULT NULL,
+  PRIMARY KEY (`destinazioneUsoId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `destinazione_uso_servizio_ente` (
+  `uuid_` varchar(75) DEFAULT NULL,
+  `destinazioneUsoId` bigint NOT NULL,
+  `servizioId` bigint NOT NULL,
+  `organizationId` bigint NOT NULL,
+  `groupId` bigint DEFAULT NULL,
+  `companyId` bigint DEFAULT NULL,
+  `userId` bigint DEFAULT NULL,
+  `userName` varchar(75) DEFAULT NULL,
+  `createDate` datetime(6) DEFAULT NULL,
+  `modifiedDate` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`destinazioneUsoId`,`servizioId`,`organizationId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

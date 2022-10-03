@@ -37,7 +37,7 @@ import it.servizidigitali.gestioneservizi.model.Servizio;
 	property = {
 		"com.liferay.portlet.display-category=category.servizidigitali",
 		"com.liferay.portlet.header-portlet-css=/css/main.css",
-		"com.liferay.portlet.instanceable=true",
+		"com.liferay.portlet.instanceable=false",
 		"javax.portlet.display-name=CatalogoServizi",
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/view.jsp",

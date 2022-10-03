@@ -270,4 +270,89 @@
 			<finder-column name="richiestaId" />
 		</finder>
 	</entity>
+
+	<entity 
+		name="DestinazioneUso"
+		table="destinazione_uso"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="destinazioneUsoId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="nome" type="String" />
+		<column name="descrizione" type="String" />
+		<column name="pagamentoBollo" type="boolean" />
+		<column name="importo" type="BigDecimal" />
+		
+		<!-- Finder methods -->
+		<finder name="GroupId" return-type="Collection">
+			<finder-column name="groupId" />
+		</finder>
+
+		<finder name="PagamentoBollo" return-type="Collection">
+			<finder-column name="pagamentoBollo" />
+		</finder>
+	</entity>
+
+	<entity 
+		name="DestinazioneUsoServizioEnte"
+		table="destinazione_uso_servizio_ente"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="destinazioneUsoId" primary="true" type="long" />
+		<column name="servizioId" primary="true" type="long" />
+		<column name="organizationId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Finder methods -->
+		<finder name="DestinazioneUsoIdServizioIdOrganizationId" return-type="DestinazioneUsoServizio">
+			<finder-column name="destinazioneUsoId" />
+			<finder-column name="servizioId" />
+			<finder-column name="organizationId" />
+		</finder>
+
+		<finder name="OrganizationIdGroupIdCompanyId" return-type="Collection">
+			<finder-column name="organizationId" />
+			<finder-column name="groupId" />
+			<finder-column name="companyId" />
+		</finder>
+
+		<finder name="S_O_G_C" return-type="Collection">
+			<finder-column name="servizioId" />
+			<finder-column name="organizationId" />
+			<finder-column name="groupId" />
+			<finder-column name="companyId" />
+		</finder>
+	</entity>
 </service-builder>
