@@ -33,6 +33,7 @@ import it.servizidigitali.presentatoreforms.frontend.service.integration.input.j
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
+import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
 import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 
 /**
@@ -76,7 +77,7 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 
 		try {
 			procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
-			alpacaStructure = getAlpacaJsonStructure(procedura,themeDisplay);
+			alpacaStructure = getAlpacaJsonStructure(procedura, themeDisplay);
 
 			String step2TipoServizio = procedura.getStep2TipoServizio();
 
@@ -118,10 +119,10 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 
 			actionRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 
+			// Aggiunta destinazioni d'uso in pagina se certificato
 			if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
-				List<String> lstDestinazioniUso = getListaDestinazioniUso();
-				actionRequest.setAttribute("destinazioniUso", lstDestinazioniUso);
-				// TODO
+				List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
+				actionRequest.setAttribute("destinazioniUso", destinazioniUso);
 			}
 		}
 		catch (Exception e) {

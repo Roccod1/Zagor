@@ -45,6 +45,32 @@
 		<field name="visibile" type="boolean" />
 		<field name="richiestaId" type="long" />
 	</model>
+	<model name="it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso">
+		<field name="uuid" type="String" />
+		<field name="destinazioneUsoId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="nome" type="String" />
+		<field name="descrizione" type="String" />
+		<field name="pagamentoBollo" type="boolean" />
+		<field name="importo" type="BigDecimal" />
+	</model>
+	<model name="it.servizidigitali.scrivaniaoperatore.model.DestinazioneUsoServizioEnte">
+		<field name="uuid" type="String" />
+		<field name="destinazioneUsoId" type="long" />
+		<field name="servizioId" type="long" />
+		<field name="organizationId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+	</model>
 	<model name="it.servizidigitali.scrivaniaoperatore.model.IstanzaForm">
 		<field name="uuid" type="String" />
 		<field name="istanzaFormId" type="long" />
