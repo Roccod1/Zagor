@@ -66,4 +66,8 @@ public interface Pagamento extends PagamentoModel, PersistedModel {
 
 	public void setStatoFormatted(String statoFormatted);
 
+	public String getNomeOrganizzazione();
+
+	public void setNomeOrganizzazione(String nomeOrganizzazione);
+
 }

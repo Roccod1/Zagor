@@ -15,16 +15,13 @@
 package it.servizidigitali.gestionepagamenti.service.impl;
 
 import com.liferay.portal.aop.AopService;
-import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
-import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.base.PagamentoLocalServiceBaseImpl;
 
@@ -35,8 +32,6 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(property = "model.class.name=it.servizidigitali.gestionepagamenti.model.Pagamento", service = AopService.class)
 public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
-	
-	private static final DateFormat DATE_FORMAT_ITALY_WITH_TIME = DateFormatFactoryUtil.getSimpleDateFormat("dd/MM/yyyy HH:mm");
 
 	@Override
 	public List<Pagamento> search(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
@@ -55,13 +50,9 @@ public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
 
 		OrderByComparator<Pagamento> comparator = OrderByComparatorFactoryUtil.create("Pagamento", orderByCol, direzione);
 		
-		List<Pagamento> pagamenti = this.pagamentoFinder.findByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
+		return this.pagamentoFinder.findByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
 				dataOperazioneA, groupId, categoria, stato, gateway, canale, codiceFiscale,
 				identificativoPagamento, codiceIuv, idPagamento, inizio, fine, comparator);
-		
-		pagamenti.forEach(pagamento -> initAdditionalData(pagamento));
-		
-		return pagamenti;
 	}
 	
 	@Override
@@ -72,19 +63,5 @@ public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
 		return this.pagamentoFinder.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
 				dataOperazioneA, groupId, categoria, stato, gateway, canale, codiceFiscale,
 				identificativoPagamento, codiceIuv, idPagamento);
-	}
-	
-	private void initAdditionalData(Pagamento pagamento) {
-		Date createDate = pagamento.getCreateDate();
-		if(Validator.isNotNull(createDate)) {
-			pagamento.setDataInserimentoFormatted(DATE_FORMAT_ITALY_WITH_TIME.format(createDate));
-		}
-		
-		String stato = pagamento.getStato();
-		
-		if (Validator.isNotNull(stato)) {
-			StatoPagamento statoPagamento = StatoPagamento.valueOf(stato);
-			pagamento.setStatoFormatted(statoPagamento.getDescrizione());
-		}
 	}
 }

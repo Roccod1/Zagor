@@ -6,21 +6,35 @@ import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
+import it.servizidigitali.gestionepagamenti.model.Pagamento;
+
 @Component(name = "getOrganizzazioniService", immediate = true, service = GestionePagamentiService.class)
 public class GestionePagamentiService {
 	
 	public static final Log LOG = LogFactoryUtil.getLog(GestionePagamentiService.class);
+	
+	private static final DateFormat DATE_FORMAT_ITALY_WITH_TIME = DateFormatFactoryUtil.getSimpleDateFormat("dd/MM/yyyy HH:mm");
 
 	@Reference
 	private OrganizationLocalService organizationLocalService;
+	
+	@Reference
+	private GroupLocalService groupLocalService;
 	
 	public List<Organization> getAllParentsOrganizations() {
 		
@@ -41,5 +55,43 @@ public class GestionePagamentiService {
 		}
 		
 		return organization;
+	}
+	
+	public void initAdditionalData(Pagamento pagamento) {
+		Date createDate = pagamento.getCreateDate();
+		if(Validator.isNotNull(createDate)) {
+			pagamento.setDataInserimentoFormatted(DATE_FORMAT_ITALY_WITH_TIME.format(createDate));
+		}
+		
+		String stato = pagamento.getStato();
+		
+		if (Validator.isNotNull(stato)) {
+			StatoPagamento statoPagamento = StatoPagamento.valueOf(stato);
+			pagamento.setStatoFormatted(statoPagamento.getDescrizione());
+		}
+		
+		String nomeOrganizzazione = "-";
+		
+		long groupId = pagamento.getGroupId();
+		long organizationId = 0;
+		Organization organization = null;
+		
+		if (groupId != 0) {
+			try {
+				Group group = groupLocalService.getGroup(groupId);
+				
+				organizationId = group.getOrganizationId();
+				
+			} catch (PortalException e) {
+				LOG.error(e.getMessage(), e);
+			}
+		}
+		if (organizationId != 0) {
+			organization = this.getOrganization(organizationId);
+		}
+		if (Validator.isNotNull(organization)) {
+			nomeOrganizzazione = organization.getName();
+		}
+		pagamento.setNomeOrganizzazione(nomeOrganizzazione);
 	}
 }

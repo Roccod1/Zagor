@@ -402,6 +402,11 @@ public class PagamentoWrapper
 		return model.getModifiedDate();
 	}
 
+	@Override
+	public String getNomeOrganizzazione() {
+		return model.getNomeOrganizzazione();
+	}
+
 	/**
 	 * Returns the pagamento ID of this pagamento.
 	 *
@@ -685,6 +690,11 @@ public class PagamentoWrapper
 	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		model.setModifiedDate(modifiedDate);
+	}
+
+	@Override
+	public void setNomeOrganizzazione(String nomeOrganizzazione) {
+		model.setNomeOrganizzazione(nomeOrganizzazione);
 	}
 
 	/**

@@ -31,11 +31,5 @@ public class GestionePagamentiFrontendPortletKeys {
 	public static final int DEFAULT_DELTA = 10;
 
 	public static final String LISTA_ORGANIZZAZIONI = "listaOrganizzazioni";
-	public static final String SHOW_SELECT_ORGANIZZAZIONE = "showSelectOrganizzazione";
-	
-	public static final String SELECT_ORGANIZZAZIONE_CERCA_COL_SIZE = "selectOrganizzazioneCercaColSize";
-	public static final String SELECT_CATEGORIA_CERCA_COL_SIZE = "selectCategoriaCercaColSize";
-	public static final String SELECT_STATO_CERCA_COL_SIZE = "selectStatoCercaColSize";
-	public static final String SELECT_GATEWAY_CERCA_COL_SIZE = "selectGatewayCercaColSize";
-	public static final String SELECT_CANALE_CERCA_COL_SIZE = "selectCanaleCercaColSize";
+	public static final String SITE_ORGANIZATION_ID = "siteOrganizationId";
 }

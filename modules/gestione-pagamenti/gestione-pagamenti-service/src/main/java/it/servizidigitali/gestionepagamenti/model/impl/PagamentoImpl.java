@@ -22,6 +22,8 @@ public class PagamentoImpl extends PagamentoBaseImpl {
 	private String dataInserimentoFormatted;
 	
 	private String statoFormatted;
+	
+	private String nomeOrganizzazione;
 
 	public String getDataInserimentoFormatted() {
 		return dataInserimentoFormatted;
@@ -37,5 +39,13 @@ public class PagamentoImpl extends PagamentoBaseImpl {
 
 	public void setStatoFormatted(String statoFormatted) {
 		this.statoFormatted = statoFormatted;
+	}
+
+	public String getNomeOrganizzazione() {
+		return nomeOrganizzazione;
+	}
+
+	public void setNomeOrganizzazione(String nomeOrganizzazione) {
+		this.nomeOrganizzazione = nomeOrganizzazione;
 	}
 }

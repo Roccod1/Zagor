@@ -61,7 +61,9 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
-		long siteOrganizationId = themeDisplay.getSiteGroup().getOrganizationId();
+		long siteOrganizationId = themeDisplay.getSiteGroup().getOrganizationId(); 
+		
+		renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SITE_ORGANIZATION_ID, siteOrganizationId);
 		
 		long siteGroupId = 0;
 		
@@ -69,25 +71,9 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			
 			List<Organization> listaOrganizzazioni = gestionePagamentiService.getAllParentsOrganizations();
 			
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SHOW_SELECT_ORGANIZZAZIONE, true);
-			
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA_COL_SIZE, 3);
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA_COL_SIZE, 3);
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA_COL_SIZE, 2);
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA_COL_SIZE, 2);
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA_COL_SIZE, 2);
-			
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.LISTA_ORGANIZZAZIONI, listaOrganizzazioni);
 			
 		} else { //SPECIFIC SITE
-			
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SHOW_SELECT_ORGANIZZAZIONE, false);
-			
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA_COL_SIZE, 0);
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA_COL_SIZE, 3);
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA_COL_SIZE, 3);
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA_COL_SIZE, 3);
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA_COL_SIZE, 3);
 			siteGroupId = themeDisplay.getSiteGroupId();
 		}
 		
@@ -147,6 +133,7 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			
 			if(totalCountPagamenti != 0) {
 				listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento, inizio, fine, orderByCol, orderByType);
+				listaPagamenti.forEach(pagamento -> gestionePagamentiService.initAdditionalData(pagamento));
 			}
 
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.TOTAL_COUNT_PAGAMENTI, totalCountPagamenti);
