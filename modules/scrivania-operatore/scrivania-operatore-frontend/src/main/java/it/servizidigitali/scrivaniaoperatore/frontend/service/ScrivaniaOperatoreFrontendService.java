@@ -43,6 +43,7 @@ import it.servizidigitali.communication.model.Utente;
 import it.servizidigitali.communication.sender.CommunicationSender;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
+import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
@@ -677,15 +678,19 @@ public class ScrivaniaOperatoreFrontendService {
 		if (listaProceduraFormProcedura != null) {
 			List<IntegrazioneDTO> integrazioneDTOs = new ArrayList<IntegrazioneDTO>();
 			for (ProceduraForm proceduraForm : listaProceduraFormProcedura) {
-				IntegrazioneDTO integrazioneDTO = new IntegrazioneDTO();
-				integrazioneDTO.setId(proceduraForm.getProceduraId());
 				try {
-					integrazioneDTO.setNome(formLocalService.getForm(proceduraForm.getFormId()).getNome());
+					Form form = formLocalService.getForm(proceduraForm.getFormId());
+					if (form.isPrincipale()) {
+						continue;
+					}
+					IntegrazioneDTO integrazioneDTO = new IntegrazioneDTO();
+					integrazioneDTO.setId(proceduraForm.getProceduraId());
+					integrazioneDTO.setNome(form.getNome());
+					integrazioneDTOs.add(integrazioneDTO);
 				}
 				catch (PortalException e) {
 					log.warn("getIntegrazioniProcedura :: " + e.getMessage());
 				}
-				integrazioneDTOs.add(integrazioneDTO);
 			}
 			return integrazioneDTOs;
 		}
