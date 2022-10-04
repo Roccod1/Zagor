@@ -6,6 +6,7 @@ import com.liferay.portal.kernel.portlet.FriendlyURLMapper;
 import org.osgi.service.component.annotations.Component;
 
 import it.servizidigitali.catalogoservizi.frontend.constants.CatalogoServiziPortletKeys;
+import it.servizidigitali.common.utility.enumeration.FriendlyUrl;
 
 /**
  * @author pindi
@@ -24,5 +25,5 @@ public class SchedaServizioFriendlyURLMapper extends DefaultFriendlyURLMapper {
 		return _MAPPING;
 	}
 
-	private static final String _MAPPING = "scheda-servizio";
+	private static final String _MAPPING = FriendlyUrl.SCHEDA_SERVIZIO.getMapping();
 }
