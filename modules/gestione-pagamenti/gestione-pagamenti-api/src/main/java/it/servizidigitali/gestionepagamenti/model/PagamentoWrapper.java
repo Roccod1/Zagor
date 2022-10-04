@@ -62,6 +62,7 @@ public class PagamentoWrapper
 		attributes.put("importo", getImporto());
 		attributes.put("commissioni", getCommissioni());
 		attributes.put("canale", getCanale());
+		attributes.put("gateway", getGateway());
 		attributes.put("iud", getIud());
 		attributes.put("iuv", getIuv());
 		attributes.put("idSessione", getIdSessione());
@@ -179,6 +180,12 @@ public class PagamentoWrapper
 			setCanale(canale);
 		}
 
+		String gateway = (String)attributes.get("gateway");
+
+		if (gateway != null) {
+			setGateway(gateway);
+		}
+
 		String iud = (String)attributes.get("iud");
 
 		if (iud != null) {
@@ -277,11 +284,6 @@ public class PagamentoWrapper
 		return model.getCreateDate();
 	}
 
-	@Override
-	public String getDataInserimentoFormatted() {
-		return model.getDataInserimentoFormatted();
-	}
-
 	/**
 	 * Returns the denominazione cliente of this pagamento.
 	 *
@@ -320,6 +322,16 @@ public class PagamentoWrapper
 	@Override
 	public String getEmailQuietanza() {
 		return model.getEmailQuietanza();
+	}
+
+	/**
+	 * Returns the gateway of this pagamento.
+	 *
+	 * @return the gateway of this pagamento
+	 */
+	@Override
+	public String getGateway() {
+		return model.getGateway();
 	}
 
 	/**
@@ -458,8 +470,11 @@ public class PagamentoWrapper
 	}
 
 	@Override
-	public String getStatoFormatted() {
-		return model.getStatoFormatted();
+	public
+		it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento
+			getStatoEnum() {
+
+		return model.getStatoEnum();
 	}
 
 	/**
@@ -567,11 +582,6 @@ public class PagamentoWrapper
 		model.setCreateDate(createDate);
 	}
 
-	@Override
-	public void setDataInserimentoFormatted(String dataInserimentoFormatted) {
-		model.setDataInserimentoFormatted(dataInserimentoFormatted);
-	}
-
 	/**
 	 * Sets the denominazione cliente of this pagamento.
 	 *
@@ -610,6 +620,16 @@ public class PagamentoWrapper
 	@Override
 	public void setEmailQuietanza(String emailQuietanza) {
 		model.setEmailQuietanza(emailQuietanza);
+	}
+
+	/**
+	 * Sets the gateway of this pagamento.
+	 *
+	 * @param gateway the gateway of this pagamento
+	 */
+	@Override
+	public void setGateway(String gateway) {
+		model.setGateway(gateway);
 	}
 
 	/**
@@ -748,8 +768,11 @@ public class PagamentoWrapper
 	}
 
 	@Override
-	public void setStatoFormatted(String statoFormatted) {
-		model.setStatoFormatted(statoFormatted);
+	public void setStatoEnum(
+		it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento
+			statoEnum) {
+
+		model.setStatoEnum(statoEnum);
 	}
 
 	/**

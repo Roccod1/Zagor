@@ -37,6 +37,7 @@
 		<column name="importo" type="BigDecimal" />
 		<column name="commissioni" type="BigDecimal" />
 		<column name="canale" type="String" />
+		<column name="gateway" type="String" />
 		<column name="iud" type="String" />
 		<column name="iuv" type="String" />
 		<column name="idSessione" type="String" />

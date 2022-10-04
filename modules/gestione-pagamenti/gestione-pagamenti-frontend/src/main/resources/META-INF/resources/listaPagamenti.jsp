@@ -28,9 +28,11 @@
 		<liferay-ui:search-container-column-text property="idFiscaleCliente" name="gestionePagamenti.cerca.codiceFiscale" orderable="true" orderableProperty="idFiscaleCliente"/>
 		<liferay-ui:search-container-column-text property="causale" name="gestionePagamenti.searchContainer.causale" orderable="true" orderableProperty="causale"/>
 		<liferay-ui:search-container-column-text property="iuv" name="gestionePagamenti.searchContainer.codiceIuv" orderable="true" orderableProperty="iuv"/>
-		<liferay-ui:search-container-column-text property="dataInserimentoFormatted" name="gestionePagamenti.searchContainer.dataInserimento" orderable="true" orderableProperty="createDate"/>
+		<liferay-ui:search-container-column-text name="gestionePagamenti.searchContainer.dataInserimento" orderable="true" orderableProperty="createDate">
+			<fmt:formatDate value="${pagamento.createDate}" pattern="dd/MM/yyyy HH:mm"/>
+		</liferay-ui:search-container-column-text>
 		<liferay-ui:search-container-column-text property="importo" name="gestionePagamenti.searchContainer.importoTotale" orderable="true" orderableProperty="importo"/>
-		<liferay-ui:search-container-column-text property="statoFormatted" name="gestionePagamenti.searchContainer.stato" orderable="true" orderableProperty="stato"/>
+		<liferay-ui:search-container-column-text value="${pagamento.statoEnum.descrizione}" name="gestionePagamenti.searchContainer.stato" orderable="true" orderableProperty="stato"/>
 		<c:if test = "${siteOrganizationId == 0}">
 			<liferay-ui:search-container-column-text property="nomeOrganizzazione" name="gestionePagamenti.searchContainer.nomeOrganizzazione"/>
 		</c:if>

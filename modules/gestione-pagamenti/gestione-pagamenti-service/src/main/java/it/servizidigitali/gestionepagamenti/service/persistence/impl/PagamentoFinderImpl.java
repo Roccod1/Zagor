@@ -64,9 +64,9 @@ public class PagamentoFinderImpl extends PagamentoFinderBaseImpl implements Paga
 		if (Validator.isNotNull(stato)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.eq("stato", stato));
 		}
-		/*if (Validator.isNotNull(gateway)) {
-			dynamicQuery.add(RestrictionsFactoryUtil.eq("", gateway));
-		}*/
+		if (Validator.isNotNull(gateway)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.eq("gateway", gateway));
+		}
 		if (Validator.isNotNull(canale)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.eq("canale", canale));
 		}

@@ -84,10 +84,10 @@ public class PagamentoModelImpl
 		{"emailQuietanza", Types.VARCHAR}, {"causale", Types.VARCHAR},
 		{"descrizioneServizio", Types.VARCHAR}, {"importo", Types.DECIMAL},
 		{"commissioni", Types.DECIMAL}, {"canale", Types.VARCHAR},
-		{"iud", Types.VARCHAR}, {"iuv", Types.VARCHAR},
-		{"idSessione", Types.VARCHAR}, {"pathAvviso", Types.VARCHAR},
-		{"emailInviata", Types.BOOLEAN}, {"stato", Types.VARCHAR},
-		{"richiestaId", Types.BIGINT}
+		{"gateway", Types.VARCHAR}, {"iud", Types.VARCHAR},
+		{"iuv", Types.VARCHAR}, {"idSessione", Types.VARCHAR},
+		{"pathAvviso", Types.VARCHAR}, {"emailInviata", Types.BOOLEAN},
+		{"stato", Types.VARCHAR}, {"richiestaId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -111,6 +111,7 @@ public class PagamentoModelImpl
 		TABLE_COLUMNS_MAP.put("importo", Types.DECIMAL);
 		TABLE_COLUMNS_MAP.put("commissioni", Types.DECIMAL);
 		TABLE_COLUMNS_MAP.put("canale", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("gateway", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("iud", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("iuv", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("idSessione", Types.VARCHAR);
@@ -121,7 +122,7 @@ public class PagamentoModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table pagamento (uuid_ VARCHAR(75) null,pagamentoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,idCredito VARCHAR(75) null,idFiscaleCliente VARCHAR(75) null,denominazioneCliente VARCHAR(75) null,emailQuietanza VARCHAR(75) null,causale VARCHAR(75) null,descrizioneServizio VARCHAR(75) null,importo DECIMAL(30, 16) null,commissioni DECIMAL(30, 16) null,canale VARCHAR(75) null,iud VARCHAR(75) null,iuv VARCHAR(75) null,idSessione VARCHAR(75) null,pathAvviso VARCHAR(75) null,emailInviata BOOLEAN,stato VARCHAR(75) null,richiestaId LONG)";
+		"create table pagamento (uuid_ VARCHAR(75) null,pagamentoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,idCredito VARCHAR(75) null,idFiscaleCliente VARCHAR(75) null,denominazioneCliente VARCHAR(75) null,emailQuietanza VARCHAR(75) null,causale VARCHAR(75) null,descrizioneServizio VARCHAR(75) null,importo DECIMAL(30, 16) null,commissioni DECIMAL(30, 16) null,canale VARCHAR(75) null,gateway VARCHAR(75) null,iud VARCHAR(75) null,iuv VARCHAR(75) null,idSessione VARCHAR(75) null,pathAvviso VARCHAR(75) null,emailInviata BOOLEAN,stato VARCHAR(75) null,richiestaId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table pagamento";
 
@@ -413,6 +414,9 @@ public class PagamentoModelImpl
 		attributeGetterFunctions.put("canale", Pagamento::getCanale);
 		attributeSetterBiConsumers.put(
 			"canale", (BiConsumer<Pagamento, String>)Pagamento::setCanale);
+		attributeGetterFunctions.put("gateway", Pagamento::getGateway);
+		attributeSetterBiConsumers.put(
+			"gateway", (BiConsumer<Pagamento, String>)Pagamento::setGateway);
 		attributeGetterFunctions.put("iud", Pagamento::getIud);
 		attributeSetterBiConsumers.put(
 			"iud", (BiConsumer<Pagamento, String>)Pagamento::setIud);
@@ -798,6 +802,25 @@ public class PagamentoModelImpl
 	}
 
 	@Override
+	public String getGateway() {
+		if (_gateway == null) {
+			return "";
+		}
+		else {
+			return _gateway;
+		}
+	}
+
+	@Override
+	public void setGateway(String gateway) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_gateway = gateway;
+	}
+
+	@Override
 	public String getIud() {
 		if (_iud == null) {
 			return "";
@@ -1060,6 +1083,7 @@ public class PagamentoModelImpl
 		pagamentoImpl.setImporto(getImporto());
 		pagamentoImpl.setCommissioni(getCommissioni());
 		pagamentoImpl.setCanale(getCanale());
+		pagamentoImpl.setGateway(getGateway());
 		pagamentoImpl.setIud(getIud());
 		pagamentoImpl.setIuv(getIuv());
 		pagamentoImpl.setIdSessione(getIdSessione());
@@ -1107,6 +1131,8 @@ public class PagamentoModelImpl
 		pagamentoImpl.setCommissioni(
 			this.<BigDecimal>getColumnOriginalValue("commissioni"));
 		pagamentoImpl.setCanale(this.<String>getColumnOriginalValue("canale"));
+		pagamentoImpl.setGateway(
+			this.<String>getColumnOriginalValue("gateway"));
 		pagamentoImpl.setIud(this.<String>getColumnOriginalValue("iud"));
 		pagamentoImpl.setIuv(this.<String>getColumnOriginalValue("iuv"));
 		pagamentoImpl.setIdSessione(
@@ -1301,6 +1327,14 @@ public class PagamentoModelImpl
 			pagamentoCacheModel.canale = null;
 		}
 
+		pagamentoCacheModel.gateway = getGateway();
+
+		String gateway = pagamentoCacheModel.gateway;
+
+		if ((gateway != null) && (gateway.length() == 0)) {
+			pagamentoCacheModel.gateway = null;
+		}
+
 		pagamentoCacheModel.iud = getIud();
 
 		String iud = pagamentoCacheModel.iud;
@@ -1453,6 +1487,7 @@ public class PagamentoModelImpl
 	private BigDecimal _importo;
 	private BigDecimal _commissioni;
 	private String _canale;
+	private String _gateway;
 	private String _iud;
 	private String _iuv;
 	private String _idSessione;
@@ -1508,6 +1543,7 @@ public class PagamentoModelImpl
 		_columnOriginalValues.put("importo", _importo);
 		_columnOriginalValues.put("commissioni", _commissioni);
 		_columnOriginalValues.put("canale", _canale);
+		_columnOriginalValues.put("gateway", _gateway);
 		_columnOriginalValues.put("iud", _iud);
 		_columnOriginalValues.put("iuv", _iuv);
 		_columnOriginalValues.put("idSessione", _idSessione);
@@ -1572,19 +1608,21 @@ public class PagamentoModelImpl
 
 		columnBitmasks.put("canale", 65536L);
 
-		columnBitmasks.put("iud", 131072L);
+		columnBitmasks.put("gateway", 131072L);
 
-		columnBitmasks.put("iuv", 262144L);
+		columnBitmasks.put("iud", 262144L);
 
-		columnBitmasks.put("idSessione", 524288L);
+		columnBitmasks.put("iuv", 524288L);
 
-		columnBitmasks.put("pathAvviso", 1048576L);
+		columnBitmasks.put("idSessione", 1048576L);
 
-		columnBitmasks.put("emailInviata", 2097152L);
+		columnBitmasks.put("pathAvviso", 2097152L);
 
-		columnBitmasks.put("stato", 4194304L);
+		columnBitmasks.put("emailInviata", 4194304L);
 
-		columnBitmasks.put("richiestaId", 8388608L);
+		columnBitmasks.put("stato", 8388608L);
+
+		columnBitmasks.put("richiestaId", 16777216L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

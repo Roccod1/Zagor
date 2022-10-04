@@ -10,11 +10,8 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
-import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
@@ -27,8 +24,6 @@ import it.servizidigitali.gestionepagamenti.model.Pagamento;
 public class GestionePagamentiService {
 	
 	public static final Log LOG = LogFactoryUtil.getLog(GestionePagamentiService.class);
-	
-	private static final DateFormat DATE_FORMAT_ITALY_WITH_TIME = DateFormatFactoryUtil.getSimpleDateFormat("dd/MM/yyyy HH:mm");
 
 	@Reference
 	private OrganizationLocalService organizationLocalService;
@@ -58,16 +53,12 @@ public class GestionePagamentiService {
 	}
 	
 	public void initAdditionalData(Pagamento pagamento) {
-		Date createDate = pagamento.getCreateDate();
-		if(Validator.isNotNull(createDate)) {
-			pagamento.setDataInserimentoFormatted(DATE_FORMAT_ITALY_WITH_TIME.format(createDate));
-		}
 		
 		String stato = pagamento.getStato();
 		
 		if (Validator.isNotNull(stato)) {
 			StatoPagamento statoPagamento = StatoPagamento.valueOf(stato);
-			pagamento.setStatoFormatted(statoPagamento.getDescrizione());
+			pagamento.setStatoEnum(statoPagamento);
 		}
 		
 		String nomeOrganizzazione = "-";

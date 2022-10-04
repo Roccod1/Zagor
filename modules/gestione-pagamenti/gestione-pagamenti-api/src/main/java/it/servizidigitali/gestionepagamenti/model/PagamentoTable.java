@@ -72,6 +72,8 @@ public class PagamentoTable extends BaseTable<PagamentoTable> {
 		"commissioni", BigDecimal.class, Types.DECIMAL, Column.FLAG_DEFAULT);
 	public final Column<PagamentoTable, String> canale = createColumn(
 		"canale", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<PagamentoTable, String> gateway = createColumn(
+		"gateway", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<PagamentoTable, String> iud = createColumn(
 		"iud", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<PagamentoTable, String> iuv = createColumn(

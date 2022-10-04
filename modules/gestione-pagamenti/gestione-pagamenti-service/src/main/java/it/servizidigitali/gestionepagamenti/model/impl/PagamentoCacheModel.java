@@ -64,7 +64,7 @@ public class PagamentoCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(49);
+		StringBundler sb = new StringBundler(51);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -100,6 +100,8 @@ public class PagamentoCacheModel
 		sb.append(commissioni);
 		sb.append(", canale=");
 		sb.append(canale);
+		sb.append(", gateway=");
+		sb.append(gateway);
 		sb.append(", iud=");
 		sb.append(iud);
 		sb.append(", iuv=");
@@ -208,6 +210,13 @@ public class PagamentoCacheModel
 			pagamentoImpl.setCanale(canale);
 		}
 
+		if (gateway == null) {
+			pagamentoImpl.setGateway("");
+		}
+		else {
+			pagamentoImpl.setGateway(gateway);
+		}
+
 		if (iud == null) {
 			pagamentoImpl.setIud("");
 		}
@@ -277,6 +286,7 @@ public class PagamentoCacheModel
 		importo = (BigDecimal)objectInput.readObject();
 		commissioni = (BigDecimal)objectInput.readObject();
 		canale = objectInput.readUTF();
+		gateway = objectInput.readUTF();
 		iud = objectInput.readUTF();
 		iuv = objectInput.readUTF();
 		idSessione = objectInput.readUTF();
@@ -367,6 +377,13 @@ public class PagamentoCacheModel
 			objectOutput.writeUTF(canale);
 		}
 
+		if (gateway == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(gateway);
+		}
+
 		if (iud == null) {
 			objectOutput.writeUTF("");
 		}
@@ -424,6 +441,7 @@ public class PagamentoCacheModel
 	public BigDecimal importo;
 	public BigDecimal commissioni;
 	public String canale;
+	public String gateway;
 	public String iud;
 	public String iuv;
 	public String idSessione;

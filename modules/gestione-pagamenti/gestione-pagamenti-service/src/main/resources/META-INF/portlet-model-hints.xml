@@ -19,6 +19,7 @@
 		<field name="importo" type="BigDecimal" />
 		<field name="commissioni" type="BigDecimal" />
 		<field name="canale" type="String" />
+		<field name="gateway" type="String" />
 		<field name="iud" type="String" />
 		<field name="iuv" type="String" />
 		<field name="idSessione" type="String" />

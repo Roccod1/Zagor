@@ -14,31 +14,23 @@
 
 package it.servizidigitali.gestionepagamenti.model.impl;
 
+import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
+
 /**
  * @author Brian Wing Shun Chan
  */
 public class PagamentoImpl extends PagamentoBaseImpl {
 	
-	private String dataInserimentoFormatted;
-	
-	private String statoFormatted;
+	private StatoPagamento statoEnum;
 	
 	private String nomeOrganizzazione;
 
-	public String getDataInserimentoFormatted() {
-		return dataInserimentoFormatted;
+	public StatoPagamento getStatoEnum() {
+		return statoEnum;
 	}
 
-	public void setDataInserimentoFormatted(String dataInserimentoFormatted) {
-		this.dataInserimentoFormatted = dataInserimentoFormatted;
-	}
-
-	public String getStatoFormatted() {
-		return statoFormatted;
-	}
-
-	public void setStatoFormatted(String statoFormatted) {
-		this.statoFormatted = statoFormatted;
+	public void setStatoEnum(StatoPagamento statoEnum) {
+		this.statoEnum = statoEnum;
 	}
 
 	public String getNomeOrganizzazione() {

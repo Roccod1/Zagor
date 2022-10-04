@@ -58,13 +58,13 @@ public interface Pagamento extends PagamentoModel, PersistedModel {
 
 		};
 
-	public String getDataInserimentoFormatted();
+	public
+		it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento
+			getStatoEnum();
 
-	public void setDataInserimentoFormatted(String dataInserimentoFormatted);
-
-	public String getStatoFormatted();
-
-	public void setStatoFormatted(String statoFormatted);
+	public void setStatoEnum(
+		it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento
+			statoEnum);
 
 	public String getNomeOrganizzazione();
 

@@ -20,6 +20,7 @@ import org.osgi.service.component.annotations.Component;
 
 import it.servizidigitali.gestionepagamenti.common.enumeration.CanalePagamento;
 import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
+import it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient;
 import it.servizidigitali.gestionepagamenti.frontend.constants.GestionePagamentiFrontendPortletKeys;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalServiceUtil;
@@ -51,6 +52,7 @@ public class FillWithRandomDataMVCRenderCommand implements MVCRenderCommand {
 		pagamento.setImporto(randomBigDecimal());
 		pagamento.setCommissioni(randomBigDecimal());
 		pagamento.setCanale(randomCanalePagamento().toString());
+		pagamento.setGateway(randomGatewayPagamento().toString());
 		pagamento.setIud(randomString(10));
 		pagamento.setIuv(randomString(10));
 		pagamento.setIdSessione(randomString(10));
@@ -122,5 +124,12 @@ public class FillWithRandomDataMVCRenderCommand implements MVCRenderCommand {
 		
 		CanalePagamento[] canaliPagamento = CanalePagamento.values();
 		return canaliPagamento[random.nextInt(canaliPagamento.length)];
+	}
+	
+	private TipoPagamentiClient randomGatewayPagamento() {
+		Random random = new Random();
+		
+		TipoPagamentiClient[] tipiPagamento = TipoPagamentiClient.values();
+		return tipiPagamento[random.nextInt(tipiPagamento.length)];
 	}
 }

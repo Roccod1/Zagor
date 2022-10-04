@@ -340,6 +340,21 @@ public interface PagamentoModel
 	public void setCanale(String canale);
 
 	/**
+	 * Returns the gateway of this pagamento.
+	 *
+	 * @return the gateway of this pagamento
+	 */
+	@AutoEscape
+	public String getGateway();
+
+	/**
+	 * Sets the gateway of this pagamento.
+	 *
+	 * @param gateway the gateway of this pagamento
+	 */
+	public void setGateway(String gateway);
+
+	/**
 	 * Returns the iud of this pagamento.
 	 *
 	 * @return the iud of this pagamento
