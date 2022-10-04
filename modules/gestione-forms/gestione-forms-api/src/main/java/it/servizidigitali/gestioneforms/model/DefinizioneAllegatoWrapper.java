@@ -58,7 +58,6 @@ public class DefinizioneAllegatoWrapper
 		attributes.put(
 			"codiciTipologiaDocumento", getCodiciTipologiaDocumento());
 		attributes.put("obbligatorio", isObbligatorio());
-		attributes.put("eliminato", isEliminato());
 		attributes.put("organizationId", getOrganizationId());
 		attributes.put("formId", getFormId());
 
@@ -153,12 +152,6 @@ public class DefinizioneAllegatoWrapper
 			setObbligatorio(obbligatorio);
 		}
 
-		Boolean eliminato = (Boolean)attributes.get("eliminato");
-
-		if (eliminato != null) {
-			setEliminato(eliminato);
-		}
-
 		Long organizationId = (Long)attributes.get("organizationId");
 
 		if (organizationId != null) {
@@ -225,16 +218,6 @@ public class DefinizioneAllegatoWrapper
 	@Override
 	public String getDenominazione() {
 		return model.getDenominazione();
-	}
-
-	/**
-	 * Returns the eliminato of this definizione allegato.
-	 *
-	 * @return the eliminato of this definizione allegato
-	 */
-	@Override
-	public boolean getEliminato() {
-		return model.getEliminato();
 	}
 
 	/**
@@ -368,16 +351,6 @@ public class DefinizioneAllegatoWrapper
 	}
 
 	/**
-	 * Returns <code>true</code> if this definizione allegato is eliminato.
-	 *
-	 * @return <code>true</code> if this definizione allegato is eliminato; <code>false</code> otherwise
-	 */
-	@Override
-	public boolean isEliminato() {
-		return model.isEliminato();
-	}
-
-	/**
 	 * Returns <code>true</code> if this definizione allegato is obbligatorio.
 	 *
 	 * @return <code>true</code> if this definizione allegato is obbligatorio; <code>false</code> otherwise
@@ -440,16 +413,6 @@ public class DefinizioneAllegatoWrapper
 	@Override
 	public void setDenominazione(String denominazione) {
 		model.setDenominazione(denominazione);
-	}
-
-	/**
-	 * Sets whether this definizione allegato is eliminato.
-	 *
-	 * @param eliminato the eliminato of this definizione allegato
-	 */
-	@Override
-	public void setEliminato(boolean eliminato) {
-		model.setEliminato(eliminato);
 	}
 
 	/**

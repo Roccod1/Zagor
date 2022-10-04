@@ -16,7 +16,6 @@
 		<field name="tipiFileAmmessi" type="String" />
 		<field name="codiciTipologiaDocumento" type="String" />
 		<field name="obbligatorio" type="boolean" />
-		<field name="eliminato" type="boolean" />
 		<field name="organizationId" type="long" />
 		<field name="formId" type="long" />
 	</model>
@@ -53,6 +52,5 @@
 		<field name="stato" type="String" />
 		<field name="numeroRequired" type="long" />
 		<field name="dataScadenzaRequired" type="long" />
-		<field name="organizationId" type="long" />
 	</model>
 </model-hints>

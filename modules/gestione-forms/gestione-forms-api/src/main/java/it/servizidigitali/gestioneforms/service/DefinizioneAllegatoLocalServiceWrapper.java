@@ -57,14 +57,6 @@ public class DefinizioneAllegatoLocalServiceWrapper
 			definizioneAllegato);
 	}
 
-	@Override
-	public it.servizidigitali.gestioneforms.model.DefinizioneAllegato
-		cancellaAllegati(String[] allegatiDaEliminare) {
-
-		return _definizioneAllegatoLocalService.cancellaAllegati(
-			allegatiDaEliminare);
-	}
-
 	/**
 	 * Creates a new definizione allegato with the primary key. Does not add the definizione allegato to the database.
 	 *
@@ -89,6 +81,11 @@ public class DefinizioneAllegatoLocalServiceWrapper
 
 		return _definizioneAllegatoLocalService.createPersistedModel(
 			primaryKeyObj);
+	}
+
+	@Override
+	public void deleteAllegati(java.util.List<Long> ids) {
+		_definizioneAllegatoLocalService.deleteAllegati(ids);
 	}
 
 	/**

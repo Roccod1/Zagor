@@ -65,7 +65,7 @@ public class DefinizioneAllegatoCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(35);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -95,8 +95,6 @@ public class DefinizioneAllegatoCacheModel
 		sb.append(codiciTipologiaDocumento);
 		sb.append(", obbligatorio=");
 		sb.append(obbligatorio);
-		sb.append(", eliminato=");
-		sb.append(eliminato);
 		sb.append(", organizationId=");
 		sb.append(organizationId);
 		sb.append(", formId=");
@@ -176,7 +174,6 @@ public class DefinizioneAllegatoCacheModel
 		}
 
 		definizioneAllegatoImpl.setObbligatorio(obbligatorio);
-		definizioneAllegatoImpl.setEliminato(eliminato);
 		definizioneAllegatoImpl.setOrganizationId(organizationId);
 		definizioneAllegatoImpl.setFormId(formId);
 
@@ -207,8 +204,6 @@ public class DefinizioneAllegatoCacheModel
 		codiciTipologiaDocumento = objectInput.readUTF();
 
 		obbligatorio = objectInput.readBoolean();
-
-		eliminato = objectInput.readBoolean();
 
 		organizationId = objectInput.readLong();
 
@@ -274,8 +269,6 @@ public class DefinizioneAllegatoCacheModel
 
 		objectOutput.writeBoolean(obbligatorio);
 
-		objectOutput.writeBoolean(eliminato);
-
 		objectOutput.writeLong(organizationId);
 
 		objectOutput.writeLong(formId);
@@ -295,7 +288,6 @@ public class DefinizioneAllegatoCacheModel
 	public String tipiFileAmmessi;
 	public String codiciTipologiaDocumento;
 	public boolean obbligatorio;
-	public boolean eliminato;
 	public long organizationId;
 	public long formId;
 

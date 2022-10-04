@@ -1461,9 +1461,9 @@ public class TipoDocumentoPersistenceImpl
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 =
 		"tipoDocumento.companyId = ?";
 
-	private FinderPath _finderPathWithPaginationFindBystato;
-	private FinderPath _finderPathWithoutPaginationFindBystato;
-	private FinderPath _finderPathCountBystato;
+	private FinderPath _finderPathWithPaginationFindByStato;
+	private FinderPath _finderPathWithoutPaginationFindByStato;
+	private FinderPath _finderPathCountByStato;
 
 	/**
 	 * Returns all the tipo documentos where stato = &#63;.
@@ -1472,8 +1472,8 @@ public class TipoDocumentoPersistenceImpl
 	 * @return the matching tipo documentos
 	 */
 	@Override
-	public List<TipoDocumento> findBystato(String stato) {
-		return findBystato(stato, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	public List<TipoDocumento> findByStato(String stato) {
+		return findByStato(stato, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
@@ -1489,8 +1489,8 @@ public class TipoDocumentoPersistenceImpl
 	 * @return the range of matching tipo documentos
 	 */
 	@Override
-	public List<TipoDocumento> findBystato(String stato, int start, int end) {
-		return findBystato(stato, start, end, null);
+	public List<TipoDocumento> findByStato(String stato, int start, int end) {
+		return findByStato(stato, start, end, null);
 	}
 
 	/**
@@ -1507,11 +1507,11 @@ public class TipoDocumentoPersistenceImpl
 	 * @return the ordered range of matching tipo documentos
 	 */
 	@Override
-	public List<TipoDocumento> findBystato(
+	public List<TipoDocumento> findByStato(
 		String stato, int start, int end,
 		OrderByComparator<TipoDocumento> orderByComparator) {
 
-		return findBystato(stato, start, end, orderByComparator, true);
+		return findByStato(stato, start, end, orderByComparator, true);
 	}
 
 	/**
@@ -1529,7 +1529,7 @@ public class TipoDocumentoPersistenceImpl
 	 * @return the ordered range of matching tipo documentos
 	 */
 	@Override
-	public List<TipoDocumento> findBystato(
+	public List<TipoDocumento> findByStato(
 		String stato, int start, int end,
 		OrderByComparator<TipoDocumento> orderByComparator,
 		boolean useFinderCache) {
@@ -1543,12 +1543,12 @@ public class TipoDocumentoPersistenceImpl
 			(orderByComparator == null)) {
 
 			if (useFinderCache) {
-				finderPath = _finderPathWithoutPaginationFindBystato;
+				finderPath = _finderPathWithoutPaginationFindByStato;
 				finderArgs = new Object[] {stato};
 			}
 		}
 		else if (useFinderCache) {
-			finderPath = _finderPathWithPaginationFindBystato;
+			finderPath = _finderPathWithPaginationFindByStato;
 			finderArgs = new Object[] {stato, start, end, orderByComparator};
 		}
 
@@ -1645,11 +1645,11 @@ public class TipoDocumentoPersistenceImpl
 	 * @throws NoSuchTipoDocumentoException if a matching tipo documento could not be found
 	 */
 	@Override
-	public TipoDocumento findBystato_First(
+	public TipoDocumento findByStato_First(
 			String stato, OrderByComparator<TipoDocumento> orderByComparator)
 		throws NoSuchTipoDocumentoException {
 
-		TipoDocumento tipoDocumento = fetchBystato_First(
+		TipoDocumento tipoDocumento = fetchByStato_First(
 			stato, orderByComparator);
 
 		if (tipoDocumento != null) {
@@ -1676,10 +1676,10 @@ public class TipoDocumentoPersistenceImpl
 	 * @return the first matching tipo documento, or <code>null</code> if a matching tipo documento could not be found
 	 */
 	@Override
-	public TipoDocumento fetchBystato_First(
+	public TipoDocumento fetchByStato_First(
 		String stato, OrderByComparator<TipoDocumento> orderByComparator) {
 
-		List<TipoDocumento> list = findBystato(stato, 0, 1, orderByComparator);
+		List<TipoDocumento> list = findByStato(stato, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1697,11 +1697,11 @@ public class TipoDocumentoPersistenceImpl
 	 * @throws NoSuchTipoDocumentoException if a matching tipo documento could not be found
 	 */
 	@Override
-	public TipoDocumento findBystato_Last(
+	public TipoDocumento findByStato_Last(
 			String stato, OrderByComparator<TipoDocumento> orderByComparator)
 		throws NoSuchTipoDocumentoException {
 
-		TipoDocumento tipoDocumento = fetchBystato_Last(
+		TipoDocumento tipoDocumento = fetchByStato_Last(
 			stato, orderByComparator);
 
 		if (tipoDocumento != null) {
@@ -1728,16 +1728,16 @@ public class TipoDocumentoPersistenceImpl
 	 * @return the last matching tipo documento, or <code>null</code> if a matching tipo documento could not be found
 	 */
 	@Override
-	public TipoDocumento fetchBystato_Last(
+	public TipoDocumento fetchByStato_Last(
 		String stato, OrderByComparator<TipoDocumento> orderByComparator) {
 
-		int count = countBystato(stato);
+		int count = countByStato(stato);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<TipoDocumento> list = findBystato(
+		List<TipoDocumento> list = findByStato(
 			stato, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -1757,7 +1757,7 @@ public class TipoDocumentoPersistenceImpl
 	 * @throws NoSuchTipoDocumentoException if a tipo documento with the primary key could not be found
 	 */
 	@Override
-	public TipoDocumento[] findBystato_PrevAndNext(
+	public TipoDocumento[] findByStato_PrevAndNext(
 			long tipoDocumentoId, String stato,
 			OrderByComparator<TipoDocumento> orderByComparator)
 		throws NoSuchTipoDocumentoException {
@@ -1773,12 +1773,12 @@ public class TipoDocumentoPersistenceImpl
 
 			TipoDocumento[] array = new TipoDocumentoImpl[3];
 
-			array[0] = getBystato_PrevAndNext(
+			array[0] = getByStato_PrevAndNext(
 				session, tipoDocumento, stato, orderByComparator, true);
 
 			array[1] = tipoDocumento;
 
-			array[2] = getBystato_PrevAndNext(
+			array[2] = getByStato_PrevAndNext(
 				session, tipoDocumento, stato, orderByComparator, false);
 
 			return array;
@@ -1791,7 +1791,7 @@ public class TipoDocumentoPersistenceImpl
 		}
 	}
 
-	protected TipoDocumento getBystato_PrevAndNext(
+	protected TipoDocumento getByStato_PrevAndNext(
 		Session session, TipoDocumento tipoDocumento, String stato,
 		OrderByComparator<TipoDocumento> orderByComparator, boolean previous) {
 
@@ -1917,9 +1917,9 @@ public class TipoDocumentoPersistenceImpl
 	 * @param stato the stato
 	 */
 	@Override
-	public void removeBystato(String stato) {
+	public void removeByStato(String stato) {
 		for (TipoDocumento tipoDocumento :
-				findBystato(
+				findByStato(
 					stato, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 
 			remove(tipoDocumento);
@@ -1933,10 +1933,10 @@ public class TipoDocumentoPersistenceImpl
 	 * @return the number of matching tipo documentos
 	 */
 	@Override
-	public int countBystato(String stato) {
+	public int countByStato(String stato) {
 		stato = Objects.toString(stato, "");
 
-		FinderPath finderPath = _finderPathCountBystato;
+		FinderPath finderPath = _finderPathCountByStato;
 
 		Object[] finderArgs = new Object[] {stato};
 
@@ -2623,21 +2623,21 @@ public class TipoDocumentoPersistenceImpl
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "companyId"}, false);
 
-		_finderPathWithPaginationFindBystato = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findBystato",
+		_finderPathWithPaginationFindByStato = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByStato",
 			new String[] {
 				String.class.getName(), Integer.class.getName(),
 				Integer.class.getName(), OrderByComparator.class.getName()
 			},
 			new String[] {"stato"}, true);
 
-		_finderPathWithoutPaginationFindBystato = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findBystato",
+		_finderPathWithoutPaginationFindByStato = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByStato",
 			new String[] {String.class.getName()}, new String[] {"stato"},
 			true);
 
-		_finderPathCountBystato = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countBystato",
+		_finderPathCountByStato = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStato",
 			new String[] {String.class.getName()}, new String[] {"stato"},
 			false);
 

@@ -300,27 +300,6 @@ public interface DefinizioneAllegatoModel
 	public void setObbligatorio(boolean obbligatorio);
 
 	/**
-	 * Returns the eliminato of this definizione allegato.
-	 *
-	 * @return the eliminato of this definizione allegato
-	 */
-	public boolean getEliminato();
-
-	/**
-	 * Returns <code>true</code> if this definizione allegato is eliminato.
-	 *
-	 * @return <code>true</code> if this definizione allegato is eliminato; <code>false</code> otherwise
-	 */
-	public boolean isEliminato();
-
-	/**
-	 * Sets whether this definizione allegato is eliminato.
-	 *
-	 * @param eliminato the eliminato of this definizione allegato
-	 */
-	public void setEliminato(boolean eliminato);
-
-	/**
 	 * Returns the organization ID of this definizione allegato.
 	 *
 	 * @return the organization ID of this definizione allegato

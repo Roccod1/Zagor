@@ -68,8 +68,6 @@ public class TipoDocumentoTable extends BaseTable<TipoDocumentoTable> {
 		createColumn(
 			"dataScadenzaRequired", Long.class, Types.BIGINT,
 			Column.FLAG_DEFAULT);
-	public final Column<TipoDocumentoTable, Long> organizationId = createColumn(
-		"organizationId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 
 	private TipoDocumentoTable() {
 		super("tipo_documento", TipoDocumentoTable::new);

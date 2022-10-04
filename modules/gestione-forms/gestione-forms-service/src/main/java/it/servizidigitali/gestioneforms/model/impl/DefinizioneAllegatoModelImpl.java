@@ -81,8 +81,8 @@ public class DefinizioneAllegatoModelImpl
 		{"denominazione", Types.VARCHAR}, {"fileEntryId", Types.BIGINT},
 		{"filenameModello", Types.VARCHAR}, {"tipiFileAmmessi", Types.VARCHAR},
 		{"codiciTipologiaDocumento", Types.VARCHAR},
-		{"obbligatorio", Types.BOOLEAN}, {"eliminato", Types.BOOLEAN},
-		{"organizationId", Types.BIGINT}, {"formId", Types.BIGINT}
+		{"obbligatorio", Types.BOOLEAN}, {"organizationId", Types.BIGINT},
+		{"formId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -103,13 +103,12 @@ public class DefinizioneAllegatoModelImpl
 		TABLE_COLUMNS_MAP.put("tipiFileAmmessi", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("codiciTipologiaDocumento", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("obbligatorio", Types.BOOLEAN);
-		TABLE_COLUMNS_MAP.put("eliminato", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("organizationId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("formId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table definizione_allegato (uuid_ VARCHAR(75) null,definizioneAllegatoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,denominazione VARCHAR(75) null,fileEntryId LONG,filenameModello VARCHAR(75) null,tipiFileAmmessi VARCHAR(75) null,codiciTipologiaDocumento VARCHAR(75) null,obbligatorio BOOLEAN,eliminato BOOLEAN,organizationId LONG,formId LONG)";
+		"create table definizione_allegato (uuid_ VARCHAR(75) null,definizioneAllegatoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,denominazione VARCHAR(75) null,fileEntryId LONG,filenameModello VARCHAR(75) null,tipiFileAmmessi VARCHAR(75) null,codiciTipologiaDocumento VARCHAR(75) null,obbligatorio BOOLEAN,organizationId LONG,formId LONG)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table definizione_allegato";
@@ -136,19 +135,19 @@ public class DefinizioneAllegatoModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long ELIMINATO_COLUMN_BITMASK = 2L;
+	public static final long FORMID_COLUMN_BITMASK = 2L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long FORMID_COLUMN_BITMASK = 4L;
+	public static final long GROUPID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long GROUPID_COLUMN_BITMASK = 8L;
+	public static final long ORGANIZATIONID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
@@ -388,12 +387,6 @@ public class DefinizioneAllegatoModelImpl
 			"obbligatorio",
 			(BiConsumer<DefinizioneAllegato, Boolean>)
 				DefinizioneAllegato::setObbligatorio);
-		attributeGetterFunctions.put(
-			"eliminato", DefinizioneAllegato::getEliminato);
-		attributeSetterBiConsumers.put(
-			"eliminato",
-			(BiConsumer<DefinizioneAllegato, Boolean>)
-				DefinizioneAllegato::setEliminato);
 		attributeGetterFunctions.put(
 			"organizationId", DefinizioneAllegato::getOrganizationId);
 		attributeSetterBiConsumers.put(
@@ -694,35 +687,6 @@ public class DefinizioneAllegatoModelImpl
 	}
 
 	@Override
-	public boolean getEliminato() {
-		return _eliminato;
-	}
-
-	@Override
-	public boolean isEliminato() {
-		return _eliminato;
-	}
-
-	@Override
-	public void setEliminato(boolean eliminato) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_eliminato = eliminato;
-	}
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #getColumnOriginalValue(String)}
-	 */
-	@Deprecated
-	public boolean getOriginalEliminato() {
-		return GetterUtil.getBoolean(
-			this.<Boolean>getColumnOriginalValue("eliminato"));
-	}
-
-	@Override
 	public long getOrganizationId() {
 		return _organizationId;
 	}
@@ -734,6 +698,16 @@ public class DefinizioneAllegatoModelImpl
 		}
 
 		_organizationId = organizationId;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalOrganizationId() {
+		return GetterUtil.getLong(
+			this.<Long>getColumnOriginalValue("organizationId"));
 	}
 
 	@Override
@@ -839,7 +813,6 @@ public class DefinizioneAllegatoModelImpl
 		definizioneAllegatoImpl.setCodiciTipologiaDocumento(
 			getCodiciTipologiaDocumento());
 		definizioneAllegatoImpl.setObbligatorio(isObbligatorio());
-		definizioneAllegatoImpl.setEliminato(isEliminato());
 		definizioneAllegatoImpl.setOrganizationId(getOrganizationId());
 		definizioneAllegatoImpl.setFormId(getFormId());
 
@@ -881,8 +854,6 @@ public class DefinizioneAllegatoModelImpl
 			this.<String>getColumnOriginalValue("codiciTipologiaDocumento"));
 		definizioneAllegatoImpl.setObbligatorio(
 			this.<Boolean>getColumnOriginalValue("obbligatorio"));
-		definizioneAllegatoImpl.setEliminato(
-			this.<Boolean>getColumnOriginalValue("eliminato"));
 		definizioneAllegatoImpl.setOrganizationId(
 			this.<Long>getColumnOriginalValue("organizationId"));
 		definizioneAllegatoImpl.setFormId(
@@ -1048,8 +1019,6 @@ public class DefinizioneAllegatoModelImpl
 
 		definizioneAllegatoCacheModel.obbligatorio = isObbligatorio();
 
-		definizioneAllegatoCacheModel.eliminato = isEliminato();
-
 		definizioneAllegatoCacheModel.organizationId = getOrganizationId();
 
 		definizioneAllegatoCacheModel.formId = getFormId();
@@ -1160,7 +1129,6 @@ public class DefinizioneAllegatoModelImpl
 	private String _tipiFileAmmessi;
 	private String _codiciTipologiaDocumento;
 	private boolean _obbligatorio;
-	private boolean _eliminato;
 	private long _organizationId;
 	private long _formId;
 
@@ -1209,7 +1177,6 @@ public class DefinizioneAllegatoModelImpl
 		_columnOriginalValues.put(
 			"codiciTipologiaDocumento", _codiciTipologiaDocumento);
 		_columnOriginalValues.put("obbligatorio", _obbligatorio);
-		_columnOriginalValues.put("eliminato", _eliminato);
 		_columnOriginalValues.put("organizationId", _organizationId);
 		_columnOriginalValues.put("formId", _formId);
 	}
@@ -1263,11 +1230,9 @@ public class DefinizioneAllegatoModelImpl
 
 		columnBitmasks.put("obbligatorio", 8192L);
 
-		columnBitmasks.put("eliminato", 16384L);
+		columnBitmasks.put("organizationId", 16384L);
 
-		columnBitmasks.put("organizationId", 32768L);
-
-		columnBitmasks.put("formId", 65536L);
+		columnBitmasks.put("formId", 32768L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

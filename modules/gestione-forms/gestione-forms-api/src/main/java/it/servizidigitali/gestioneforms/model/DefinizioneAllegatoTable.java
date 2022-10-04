@@ -77,9 +77,6 @@ public class DefinizioneAllegatoTable
 	public final Column<DefinizioneAllegatoTable, Boolean> obbligatorio =
 		createColumn(
 			"obbligatorio", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
-	public final Column<DefinizioneAllegatoTable, Boolean> eliminato =
-		createColumn(
-			"eliminato", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<DefinizioneAllegatoTable, Long> organizationId =
 		createColumn(
 			"organizationId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);

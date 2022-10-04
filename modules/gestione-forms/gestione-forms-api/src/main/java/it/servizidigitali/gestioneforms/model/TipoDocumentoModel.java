@@ -322,20 +322,6 @@ public interface TipoDocumentoModel
 	 */
 	public void setDataScadenzaRequired(long dataScadenzaRequired);
 
-	/**
-	 * Returns the organization ID of this tipo documento.
-	 *
-	 * @return the organization ID of this tipo documento
-	 */
-	public long getOrganizationId();
-
-	/**
-	 * Sets the organization ID of this tipo documento.
-	 *
-	 * @param organizationId the organization ID of this tipo documento
-	 */
-	public void setOrganizationId(long organizationId);
-
 	@Override
 	public TipoDocumento cloneWithOriginalValues();
 
