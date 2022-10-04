@@ -1,15 +1,13 @@
 dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.portal.api"
 
-	compile project(":modules:scrivania-operatore:scrivania-operatore-api")
-	compile project(":modules:gestione-comunicazioni:gestione-comunicazioni-api")
-	compile project(":modules:gestione-enti:gestione-enti-api")
-	compile project(":modules:gestione-servizi:gestione-servizi-api")
-	compile project(":modules:gestione-procedure:gestione-procedure-api")
-	compile project(":modules:servizi-digitali-common:servizi-digitali-richieste-common")
-	
-	
-	
+	compileOnly project(":modules:scrivania-operatore:scrivania-operatore-api")
+	compileOnly project(":modules:gestione-comunicazioni:gestione-comunicazioni-api")
+	compileOnly project(":modules:gestione-enti:gestione-enti-api")
+	compileOnly project(":modules:gestione-servizi:gestione-servizi-api")
+	compileOnly project(":modules:gestione-procedure:gestione-procedure-api")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-richieste-common")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-utility")
 	
 	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.0.2"
 }
