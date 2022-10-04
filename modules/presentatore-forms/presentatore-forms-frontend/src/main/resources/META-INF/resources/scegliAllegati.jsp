@@ -1,33 +1,26 @@
 <%@ include file="./init.jsp"%>
 
-
-<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.UPLOAD_ALLEGATO_RESOURCE_COMMAND %>" var="uploadFileUrl">
-	<portlet:param name="idServizio" value="${idServizio}" />
-</portlet:resourceURL>
-
 <portlet:actionURL var="salvaUrl" name="<%=PresentatoreFormsPortletKeys.SALVA_INVIA_RICHIESTA_ACTION_COMMAND %>">
 </portlet:actionURL>
 
-<portlet:renderURL var="homeScrivaniaUrl">
-	<portlet:param name="portletAction" value="renderizzaFormJson" />
-	<portlet:param name="idServizio" value="${idServizio}" />
-	<portlet:param name="caricaBozza" value="true" />
-	<portlet:param name="idRichiestaServizio" value="${idRichiesta}" />
-</portlet:renderURL>
+<portlet:actionURL var="indietroUrl" name="<%=PresentatoreFormsPortletKeys.INDIETRO_ACTION_COMMAND %>">
+</portlet:actionURL>
+
+<portlet:resourceURL id="/downloadIstanza" var="downloadIstanzaUrl"/>
+
+<portlet:renderURL var="homeURL"></portlet:renderURL>
 
 <script>
 console.log("dentro scegli allegati");
 </script>
 
 
-<c:if test="${not empty errori}">
+<c:if test="${not empty listaErrori}">
 	<div class="alert alert-danger">
-		${errori}
+		${listaErrori}
 	</div>
 </c:if>
 
-<c:choose>
-	<c:when test="${richiestaStatus == bozzaStatus }">
 		<div class="row-fluid">
 			<div class="page-header">
 				<h2 class="noMargin">${titoloPortletServizio}</h2>
@@ -103,17 +96,15 @@ console.log("dentro scegli allegati");
 										<%-- FIXME <liferay-journal:journal-article articleId="${scegliAllegatiDescription}" languageId="<%=themeDisplay.getLanguageId()%>" groupId="<%=themeDisplay.getScopeGroup().getGroupId()%>"/> --%>
 										
 										<div class="form-actions text-center">
-											<portlet:resourceURL id="/downloadIstanza" var="downloadIstanzaUrl"/>
-											<a href="${downloadIstanzaUrl }" >Download</a>
-<%-- 											<button class="btn btn-primary" type="button" href="${downloadIstanzaUrl}"> --%>
-<!-- 												<i class="fa fa-download marginright10" aria-hidden="true"></i> -->
-<%-- 												<liferay-ui:message key="download.istanza.dafirmare" /> --%>
-<!-- 											</button> -->
+											<button class="btn btn-primary" type="button" onclick="window.open('${downloadIstanzaUrl}');">
+												<i class="fa fa-download marginright10" aria-hidden="true"></i>
+												<liferay-ui:message key="download.istanza.dafirmare" />
+											</button>
 										</div>
 										
 										<label class="control-label" for="uploadFileFirmato"><liferay-ui:message key="upload.documento.firmato" />* (<liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione" arguments="${uploadFileMaxSizeLabel}"/>): </label>
 										<div class="controls">
-											<input type="hidden" class="allegato" name="${nomeFileFirmato}"	value="${empty pdfFirmato ? '' : pdfFirmato.fileName }">
+<%-- 											<input type="hidden" class="allegato" name="${nomeFileFirmato}"	value="${empty pdfFirmato ? '' : pdfFirmato.fileName }"> --%>
 											
 											<div id="div-uploadFileFirmato" <c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>>					
 												<div class="control-group">
@@ -190,8 +181,6 @@ console.log("dentro scegli allegati");
 												<div class="mt-3 mb-3">
 													<portlet:resourceURL id="downloadModello" var="downloadModelloUrl">
 														<portlet:param name="id" value="${allegato.definizione.definizioneAllegatoId}" />
-														<portlet:param name="fileName" value="${allegato.definizione.filenameModello}" />
-														<portlet:param name="idServizio" value="${idServizio}" />
 													</portlet:resourceURL>
 													<a class="btn btn-custom" href="${downloadModelloUrl}" title='<liferay-ui:message key="label.download" />'>
 														<liferay-ui:message key="download.modello" />
@@ -257,7 +246,6 @@ console.log("dentro scegli allegati");
 							</div>
 						</div>
 					</c:if>
-					<input type="hidden" name="idIstanzaForm" value="${idRichiesta}">
 					<input type="hidden" name="inBozza" value="true" id="in-bozza">
 					
 				</aui:form>
@@ -265,7 +253,7 @@ console.log("dentro scegli allegati");
 				<div class="mt-3"></div>
 				
 				<div class="form-actions">
-					<a class="btn btn-sm btn-secondary" href="${homeScrivaniaUrl}"><liferay-ui:message key="label.indietro" /></a>
+					<a class="btn btn-sm btn-secondary" href="${homeURL}"><liferay-ui:message key="label.indietro" /></a>
 					<c:choose>
 	        			<c:when test="${firmaDocumentoAbilitata && invioIstanza}">
 							<button class="btn btn-sm btn-primary pull-right" id="salva-e-invia">
@@ -273,11 +261,7 @@ console.log("dentro scegli allegati");
 							</button>
 	        			</c:when>
 	        			<c:otherwise>
-	        				<portlet:resourceURL id="downloadIstanza" var="downloadIstanzaUrl">
-								<portlet:param name="idServizio" value="${idServizio}" />
-								<portlet:param name="idIstanzaForm" value="${idRichiesta}" />
-							</portlet:resourceURL>
-							<a class="btn btn-sm btn-secondary" href="${downloadIstanzaUrl}"><liferay-ui:message key="download.istanza" /></a>
+							<a class="btn btn-sm btn-secondary" onclick="window.open('${downloadIstanzaUrl}');"><liferay-ui:message key="download.istanza" /></a>
 							<c:choose>
 								<c:when test="${invioIstanza}">
 		        					<button class="btn btn-sm btn-primary pull-right" id="salva-e-invia">
@@ -357,22 +341,12 @@ console.log("dentro scegli allegati");
 				</div>
 			</div>
 		</div>
-		</c:when>
-		<c:otherwise>
-			<div  class="row-fluid">
-				La richiesta non si trova in stato bozza, controlla le tue richieste
-				nella tua <a href="${pathScrivaniaVirtuale}">Scrivania Virtuale</a>
-			</div>
-		</c:otherwise>
 	
-</c:choose>
 <aui:script use="liferay-form">
 console.log("aui script");
 </aui:script>
 
 <script>
-
-	var isDebugEnabled = ${isDebugEnabled};
 	
 	$(function(){
 		//Salva in bozza handler

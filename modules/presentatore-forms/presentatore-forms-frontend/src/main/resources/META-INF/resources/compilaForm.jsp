@@ -31,6 +31,8 @@
 <portlet:actionURL var="salvaBozzaUrl" name="<%=PresentatoreFormsPortletKeys.SALVA_RICHIESTA_BOZZA_ACTION_COMMAND %>">
 </portlet:actionURL>
 
+<portlet:renderURL var="homeURL"></portlet:renderURL>
+
 <div class="row-fluid">
 	<div class="span12 formpresenter-portlet nuova-istanza">
 				<div id="formIscrizione"></div>
@@ -85,7 +87,19 @@ var relazioniParentelaJsonCF = [];
 /* NOMINATIM OPENSTREETMAP*/
 var getAddressByCoordsUrl = 'https://nominatim.openstreetmap.org/reverse.php?format=json&zoom=16';
 var getCoordsByAddressUrl = 'https://nominatim.openstreetmap.org/search.php?format=json&limit=1&bounded=1&q=';
-setTimeout(mainScript, 3000);
+
+$.blockUI({ 
+        message: "<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '>Caricamento del Modulo...</div>",
+        baseZ:2000,
+         css: { 
+                border: 'none', 
+                fontFamily: "'Titillium Web',sans-serif",
+                opacity: .7, 
+                color: '#ae1d3f',
+            } 
+    });
+    
+    mainScript();
 
 function mainScript() {
 	console.log("timeout over in the jsp script");
@@ -193,7 +207,7 @@ function mainScript() {
 			            "id": "indietroButton",
 			            "styles": "btn btn-outline-primary",
 			            "click": function() {
-			            	window.location.href = '';
+			            	window.location.href = '${homeURL}';
 			            }
 		   	     	},
 		   	        "salvaBozzaSubmit":{
@@ -350,93 +364,6 @@ function mainScript() {
 				   	            		$.unblockUI();
 				   	            	});
 			   	            	}
-			   	            	
-			   	            	
-
-			   	            	
-// 			   	            	if(submitForm){
-// 			   	            		var submitFormUrlNew = submitFormUrl;
-// 			   	            		if (destinazioneUsoId != null) {
-// 			   	            			submitFormUrlNew = submitFormUrl + destinazioneUsoId;
-// 			   	            		}
-// 			   	            		$.ajax({
-// 			   	            		    url : '${submitFormUrl}',
-// 			   	            			data : dataTosend,
-// 			   	            			type: 'POST',
-// 			   	            	 		dataType : "json",
-// 				   	            	    success: function(data){
-// 					   	     				if (downloadFile && data.status === "ok" && (data.daPagare == null || data.daPagare == false)) {
-// 												/*se non c'è da pagare, lascio tutto come sta, abilito il pulsante per la generazione (da creare)
-// 	 				   	     					if(submitFormUrl.indexOf("idServizio") == -1){
-// 	 				   	     						submitFormUrl += '&idServizio=${idServizio}';
-// 	 				   	     					}*/
-					   	     					
-// 	 				   	     				/*
-// 	 				   	     					nomeFile = data.nomeFile;
-// 					   	     					$("button[data-key='scaricaCertificatoButton']").show();
-// 					   	     					$("button[data-key='pagaButton']").hide();
-// 					   	     					$("button[data-key='submitButton']").attr('disabled', 'disabled');
-// 					   	     				*/
-// 												/*window.location.href = step3Url + '&nomeFile=' + data.nomeFile + '&idServizio=${idServizio}';*/
-												
-												
-// 												/*se non c'è da pagare, porto sulla pagina di dowload del certificato*/
-// 												$("button[data-key='scaricaCertificatoButton']").hide();
-// 												$("button[data-key='pagaButton']").html("Genera Certificato");
-// 												$("button[data-key='pagaButton']").hide();
-												
-// 							   	            	var dataTosend = {"dataForm": 
-// 							   	            		JSON.stringify({"schema": ${alpacaStructure.schema}, "options": ${alpacaStructure.options}, "data": userData, "view": ${alpacaStructure.view}})
-// 							   	            	};
-// 							   	            	if (isDebugEnabled) {
-// 							   	            		console.log("dataTosend: ", JSON.parse(dataTosend.dataForm));
-// 							   	            	}
-// 							   	            	$.blockUI({ 
-// 						   	                 		message: "<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '> Attendere...</div>",
-// 							   	                 	baseZ:2000,
-// 							   	                  	css: { 
-// 							   	                         border: 'none', 
-// 							   	                         fontFamily: "'Titillium Web',sans-serif",
-// 							   	                         opacity: .7, 
-// 							   	                         color: '#ae1d3f',
-// 							   	                     } 
-// 							   	               	});
-// 							   	            	idRichiesta = data.richiesta.id;
-// 					     						window.location.href = step3DaPagareUrl + '&idRichiesta=' + idRichiesta + '&success=ok&idServizio=${idServizio}' + destinazioneUsoId;
-												
-												
-// 					   	     				} else if (downloadFile && data.status === "ok" && data.daPagare == true){
-// 					   	     					/*se c'è da pagare, abilito un pulsante paga che fa qualcosa*/
-// 						   	     				$("button[data-key='scaricaCertificatoButton']").hide();
-// 					   	     					$("button[data-key='pagaButton']").show();
-// 					   	     					$("button[data-key='submitButton']").attr('disabled', 'disabled');
-// 					   	     					idRichiesta = data.richiesta.id;
-// 					   	     				} else {
-// 					   	     					if(data.status === "ok"){
-// 					   	     						$("button[data-key='pagaButton']").hide();
-// 					   	     						$("button[data-key='scaricaCertificatoButton']").hide();
-// 					   	     						idRichiesta = data.richiesta.id;
-// 						   	     					urlRedirect = step3Url + '&idRichiesta=' + idRichiesta + '&success=ok&idServizio=${idServizio}';
-// 					   	     						if (destinazioneUsoId != null) {
-// 					   	     							urlRedirect = urlRedirect + destinazioneUsoId;
-// 							   	            		}
-// 					   	     						window.location.href = urlRedirect;
-// 					   	     					}
-// 					   	     				}
-// 					   	     				if (isDebugEnabled) {
-// 					   	     					console.log('response data', data);
-// 					   	     				}
-// 				   	            	    },
-// 				   	            	    error: function (jqXHR, exception) {
-// 				   	            	    	if (isDebugEnabled) {
-// 				   	            	    		console.log('ERRORE submit: ' + exception);
-// 				   	            	    	}
-// 				   	            	    }
-// 				   	            	}).always(function() {
-// 				   	            		/*In ogni caso deve essere nascosto il loader*/
-// 				   	            		$.unblockUI();
-// 				   	            	});
-// 			   	            	}
 
 			   	         	}
 			   	    },
@@ -545,16 +472,6 @@ function mainScript() {
 		optForm.form.buttons["showServiceEvaluationButton"] = showServiceEvaluationButton;
 	}
 	var opt = $.extend(optJson, optForm);
-	$.blockUI({ 
-        message: "<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '>Caricamento del Modulo...</div>",
-        baseZ:2000,
-         css: { 
-                border: 'none', 
-                fontFamily: "'Titillium Web',sans-serif",
-                opacity: .7, 
-                color: '#ae1d3f',
-            } 
-    });
 	
 	function __alpacaSearchField(obj, name) {
 		for (var key in obj) {
@@ -566,6 +483,8 @@ function mainScript() {
 		}
 		return null;
 	}
+	
+	
 	
 	$(document).ready(function() {
 		/*console.log('test', JSON.stringify(${alpacaStructure.schema}), JSON.stringify(${alpacaStructure.options}), JSON.stringify(${alpacaStructure.view}));*/

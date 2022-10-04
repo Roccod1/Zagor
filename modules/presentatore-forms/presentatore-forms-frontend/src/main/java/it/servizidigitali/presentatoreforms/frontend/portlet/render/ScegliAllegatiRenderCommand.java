@@ -1,14 +1,19 @@
 package it.servizidigitali.presentatoreforms.frontend.portlet.render;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -17,17 +22,21 @@ import javax.portlet.RenderResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneforms.service.TipoDocumentoLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.presentatoreforms.frontend.configuration.UploadFileRichiesteEnteConfiguration;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AllegatoUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.DatiAllegato;
 import it.servizidigitali.presentatoreforms.frontend.util.model.DatiFileAllegato;
+import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 
 
 /**
@@ -44,8 +53,17 @@ import it.servizidigitali.presentatoreforms.frontend.util.model.DatiFileAllegato
 	)
 public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 	
+	private ConfigurationProvider configurationProvider;
+	
+	private volatile UploadFileRichiesteEnteConfiguration uploadFileRichiesteEnteConfiguration;
+
 	public static final Log _log = LogFactoryUtil.getLog(ScegliAllegatiRenderCommand.class);
 	
+	@Reference
+	protected void setConfigurationProvider(ConfigurationProvider configurationProvider) {
+		this.configurationProvider = configurationProvider;
+	}
+		
 	@Reference
 	private FormLocalService formLocalService;
 	
@@ -57,9 +75,6 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 	
 	@Reference
 	private PresentatoreFormFrontendService presentatoreFormFrontendService;
-	
-	private Map<String, String> attachmentFileTypesMap;
-	private String attachmentFileTypes = "PDF,P7M,JPG,PNG,DOC,DOCX,XLS,ZIP";
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -67,14 +82,22 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 		_log.info("render scegliAllegati");
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+	
+		User user = themeDisplay.getUser();
+		Gson gson = new Gson();
 		
 		Form form = null;
 		Procedura procedura = null;
+		Richiesta richiesta = null;
+		IstanzaForm istanzaForm = null;
 		
 		
 		try {
+			uploadFileRichiesteEnteConfiguration = configurationProvider.getGroupConfiguration(UploadFileRichiesteEnteConfiguration.class, themeDisplay.getScopeGroupId());
 			procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
 			form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
+			richiesta = presentatoreFormFrontendService.getRichiestaBozza(user.getScreenName(), procedura.getProceduraId());
+			istanzaForm = presentatoreFormFrontendService.getIstanzaFormRichiesta(richiesta.getRichiestaId(), form.getFormId());
 		} catch (Exception e) {
 			_log.error("errore nel recupero del form: " + form.getFormId() + " :: ERORR MESSAGE: " + e.getMessage());
 		}
@@ -83,37 +106,59 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 		
 		List<DatiAllegato> allegati = AllegatoUtil.mergeDefinizioneAndData(definizioneAllegati, new ArrayList<DatiFileAllegato>());
 		
-		//FIXME Valori mock
+		String jsonAlpaca = istanzaForm.getJson();
 		
-		renderRequest.setAttribute("idServizio",1);
-		renderRequest.setAttribute("idRichiesta",1);
-		renderRequest.setAttribute("richiestaStatus", true);
-		renderRequest.setAttribute("bozzaStatus", true);
-		renderRequest.setAttribute("titoloPortletServizio",form.getNome());
-		renderRequest.setAttribute("!invioIstanza",true);
-		renderRequest.setAttribute("firmaDocumentoAbilitata",true);
-		renderRequest.setAttribute("salvaUrl","/");
-		renderRequest.setAttribute("scegliAllegatiDescription","42656");
-		renderRequest.setAttribute("downloadIstanzaUrl","/");
-		renderRequest.setAttribute("uploadFileMaxSize",3145728);
-		renderRequest.setAttribute("uploadFileMaxSizeLabel",Long.toString(3145728 / 1000000) + " MB");
-		renderRequest.setAttribute("nomeFileFirmato","file_firm");
+		// TODO: Implementare recupero firmaDocumentoAbilitata da db in base al servizio/procedura
+		boolean firmaDocumentoAbilitata = false;
+
+		if(Validator.isNotNull(jsonAlpaca)) {
+			JsonObject jsonAlpacaObject = gson.fromJson(jsonAlpaca, JsonObject.class);
+			JsonElement istanzaDaFirmareObject = jsonAlpacaObject.getAsJsonObject("alpaca").getAsJsonObject("data").get("isIstanzaDaFirmare");
+			if (istanzaDaFirmareObject != null && firmaDocumentoAbilitata) {
+				firmaDocumentoAbilitata = istanzaDaFirmareObject.getAsBoolean();
+			}
+		}
 		
-		// TODO
-		renderRequest.setAttribute("pdfFirmato", null);
-		//
+		String step2TipoServizio = procedura.getStep2TipoServizio();
+		TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
 		
-		renderRequest.setAttribute("downloadFilePrincipaleUrl","/");
-		renderRequest.setAttribute("allegati", allegati);
-		renderRequest.setAttribute("downloadFileUrl","/");
-		renderRequest.setAttribute("downloadModelloUrl","/");
-		renderRequest.setAttribute("downloadDocumentoPersonaleUrl", "/");
-		renderRequest.setAttribute("homeScrivaniaUrl","/");
-		renderRequest.setAttribute("firmaDocumentoAbilitata", true);
-		renderRequest.setAttribute("invioIstanza",true);
-		renderRequest.setAttribute("evaluationServiceEnable",false);
-		renderRequest.setAttribute("pathScrivaniaVirtuale","/");
-		renderRequest.setAttribute("isDebugEnabled",true);
+		switch (tipoServizio) {
+		case DICHIARAZIONE:
+			renderRequest.setAttribute(PresentatoreFormsPortletKeys.INVIO_ISTANZA,true);
+			break;
+		case CONCORSO:
+			renderRequest.setAttribute(PresentatoreFormsPortletKeys.INVIO_ISTANZA,true);
+			break;
+		case PAGAMENTO:
+			break;
+		case CERTIFICATO:
+			renderRequest.setAttribute(PresentatoreFormsPortletKeys.INVIO_ISTANZA,false);
+			break;
+		case VISURA:
+			break;
+		case AUTO_DICHIARAZIONE:
+			renderRequest.setAttribute(PresentatoreFormsPortletKeys.INVIO_ISTANZA,false);
+			break;
+		default:
+			break;
+		}
+		
+		renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO,form.getNome());
+		renderRequest.setAttribute(PresentatoreFormsPortletKeys.FIRMA_DOCUMENTO_ABILITATA,true);
+		
+		// TODO: Capire perché viene settata sempre a questa cifra
+		
+//		renderRequest.setAttribute("scegliAllegatiDescription","42656");		
+		renderRequest.setAttribute("uploadFileMaxSize",uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize());
+		renderRequest.setAttribute("uploadFileMaxSizeLabel",Long.toString(uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize() / 1000000) + " MB");
+		
+
+		
+		renderRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_ALLEGATI, allegati);
+		
+		// TODO: Capire in base a cosa e quando
+		
+//		renderRequest.setAttribute("evaluationServiceEnable",false);
 		
 		return PresentatoreFormsPortletKeys.JSP_SCEGLI_ALLEGATI;
 	}
