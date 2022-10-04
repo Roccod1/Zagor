@@ -9,7 +9,7 @@
 					<portlet:actionURL var="assegnaResponsabileURL" name="/action/assegnaResponsabile">
 					</portlet:actionURL>
 					
-					<aui:form action="${assegnaResponsabileURL}">
+					<aui:form action="${assegnaResponsabileURL}" name="assegnaResponsabileForm">
 						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
 						<aui:input type="hidden" name="variableSet" value="${azione.variableSet}" />
@@ -28,7 +28,7 @@
 											<liferay-ui:message key="selezione-responsabile" />
 										</label>
 										<select class="form-control" name="<portlet:namespace />responsabile">
-											<option value="0"><liferay-ui:message key="seleziona-un-responsabile" /></option>
+											<option value=""><liferay-ui:message key="seleziona-un-responsabile" /></option>
 											<c:forEach items="${responsabili}" var="responsabile">
 												<option value="${responsabile.userId}">${responsabile.nome}</option>
 											</c:forEach>
@@ -45,7 +45,7 @@
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">
 										<liferay-ui:message key="annulla" />
 									</button>
-									<button type="button" class="btn btn-primary ml-1 submit">
+									<button type="submit" class="btn btn-primary ml-1">
 										<liferay-ui:message key="conferma" />
 									</button>
 								</div>
@@ -60,7 +60,7 @@
 					<portlet:actionURL var="assegnaAltroResponsabileURL" name="/action/assegnaAltroResponsabile">
 					</portlet:actionURL>
 					
-					<aui:form action="${assegnaAltroResponsabileURL}">
+					<aui:form action="${assegnaAltroResponsabileURL}" name="assegnaAltroResponsabileForm">
 						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
 					
@@ -78,7 +78,7 @@
 											<liferay-ui:message key="selezione-altro-responsabile" />
 										</label>
 										<select class="form-control" name="<portlet:namespace />responsabile">
-											<option value="0"><liferay-ui:message key="seleziona-un-responsabile" /></option>
+											<option value=""><liferay-ui:message key="seleziona-un-responsabile" /></option>
 											<c:forEach items="${altriResponsabili}" var="responsabile">
 												<option value="${responsabile.userId}">${responsabile.nome}</option>
 											</c:forEach>
@@ -95,7 +95,7 @@
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">
 										<liferay-ui:message key="annulla" />
 									</button>
-									<button type="button" class="btn btn-primary ml-1 submit">
+									<button type="submit" class="btn btn-primary ml-1">
 										<liferay-ui:message key="conferma" />
 									</button>
 								</div>
@@ -110,7 +110,7 @@
 					<portlet:actionURL var="chiudiEsitoPositivoURL" name="/action/chiudiEsitoPositivo">
 					</portlet:actionURL>
 					
-					<aui:form action="${chiudiEsitoPositivoURL}">
+					<aui:form action="${chiudiEsitoPositivoURL}" name="chiudiEsitoPositivoForm">
 						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
 						
@@ -132,11 +132,11 @@
 						     			
 										<liferay-ui:search-container-row className="it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO" 
 										                                 modelVar="elem">
-										                                 <liferay-ui:search-container-column-text name="#">
-											<div class="form-group form-check">
-												<c:set var="checkedAttr" value="${elem.visibileAlCittadino ? 'checked' : '' }" />
-												<input type="checkbox" class="form-check-input" value="${elem.id}" name="<portlet:namespace />selezionati" ${checkedAttr}>
-											</div>
+		                                    <liferay-ui:search-container-column-text name="#">
+												<div class="form-group form-check">
+													<c:set var="checkedAttr" value="${elem.visibileAlCittadino ? 'checked' : '' }" />
+													<input type="checkbox" class="form-check-input" value="${elem.id}" name="<portlet:namespace />selezionati" ${checkedAttr}>
+												</div>
 				                            </liferay-ui:search-container-column-text>
 											<liferay-ui:search-container-column-text name="nome-file" value="${elem.nomeFile}" />
 				    						<liferay-ui:search-container-column-text name="dimensione" value="${elem.dimensione}" />
@@ -155,7 +155,7 @@
 								<div class="modal-footer d-flex justify-content-end">		
 									<button type="button" class="btn btn-secondary" data-dismiss="modal"><liferay-ui:message key="annulla" /></button>
 									
-									<button type="button" class="btn btn-primary ml-1 submit">
+									<button type="submit" class="btn btn-primary ml-1">
 										<liferay-ui:message key="conferma" />
 									</button>
 								</div>
@@ -170,7 +170,7 @@
 					<portlet:actionURL var="chiudiEsitoNegativoURL" name="/action/chiudiEsitoNegativo">
 					</portlet:actionURL>
 					
-					<aui:form action="${chiudiEsitoNegativoURL}">
+					<aui:form action="${chiudiEsitoNegativoURL}" name="chiudiEsitoNegativoForm">
 						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
 						
@@ -215,7 +215,7 @@
 								<div class="modal-footer d-flex justify-content-end">		
 									<button type="button" class="btn btn-secondary" data-dismiss="modal"><liferay-ui:message key="annulla" /></button>
 									
-									<button type="button" class="btn btn-primary ml-1 submit">
+									<button type="submit" class="btn btn-primary ml-1">
 										<liferay-ui:message key="conferma" />
 									</button>
 								</div>
@@ -246,7 +246,7 @@
 									<span><liferay-ui:message key="rilascia-message" /></span>
 								</div>
 								<div class="modal-footer d-flex justify-content-end">		
-									<button type="button" class="btn btn-primary mr-1 submit">
+									<button type="submit" class="btn btn-primary mr-1">
 										<liferay-ui:message key="conferma" />
 									</button>
 									
@@ -262,24 +262,89 @@
 			
 			<c:when test="${azione.codiceAzioneUtente == 'RICHIESTA_INTEGRAZIONE'}">
 				<div class="modal fade" tabindex="-1" id="<portlet:namespace />richiediModificheModal" style="display: none;">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title"><liferay-ui:message key="richiedi-modifiche-integrazioni-richiedente" /></h5>
-								<button type="button" class="close" data-dismiss="modal">
-									&times;
-								</button>
-							</div>
-							<div class="modal-body">
-								<span><liferay-ui:message key="non-sono-previste-integrazioni" /></span>
-							</div>
-							<div class="modal-footer d-flex justify-content-end">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">
-									<liferay-ui:message key="annulla" />
-								</button>
+					<portlet:actionURL var="richiediIntegrazioneURL" name="/action/richiediIntegrazione">
+					</portlet:actionURL>
+				
+					<aui:form action="${richiediIntegrazioneURL}" name="richiediModificheForm">
+						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
+						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
+						
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title"><liferay-ui:message key="richiedi-modifiche-integrazioni-richiedente" /></h5>
+									<button type="button" class="close" data-dismiss="modal">
+										&times;
+									</button>
+								</div>
+								<div class="modal-body">
+									<c:choose>
+										<c:when test="${empty integrazioni}">
+											<span><liferay-ui:message key="non-sono-previste-integrazioni" /></span>
+										</c:when>
+										<c:otherwise>
+											<span><liferay-ui:message key="integrazioni-message" /></span>
+
+											<div class="form-group">
+												<label><liferay-ui:message key="note" /></label>
+												<textarea class="form-control" name="<portlet:namespace />note"></textarea>
+											</div>
+											
+											<h5><liferay-ui:message key="seleziona-documenti-integrazione" /></h5>											
+											<liferay-ui:search-container total="${integrazioni.size()}">
+												<liferay-ui:search-container-results results="${integrazioni}" />
+												
+												<liferay-ui:search-container-row className="it.servizidigitali.scrivaniaoperatore.frontend.dto.IntegrazioneDTO" 
+										                                 modelVar="elem">
+													<liferay-ui:search-container-column-text name="#">
+														<div class="form-group form-check">
+															<input type="checkbox" class="form-check-input" value="${elem.id}" name="<portlet:namespace />integrazioni">
+														</div>
+													</liferay-ui:search-container-column-text>
+													
+						                            <liferay-ui:search-container-column-text name="integrazione" value="${elem.nome}" />     
+		                                		</liferay-ui:search-container-row>
+												
+												<liferay-ui:search-iterator markupView="lexicon" />
+											</liferay-ui:search-container>
+											
+											<h5><liferay-ui:message key="seleziona-allegati-condividere" /></h5>
+											<liferay-ui:search-container total="${allegatiOperatoreCount}"
+											 					 emptyResultsMessage="non-sono-presenti-allegati"
+				                             				     delta="10">
+								     			<liferay-ui:search-container-results results="${allegatiOperatoreList}" />
+								     			
+												<liferay-ui:search-container-row className="it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO" 
+												                                 modelVar="elem">
+				                                    <liferay-ui:search-container-column-text name="#">
+														<div class="form-group form-check">
+															<c:set var="checkedAttr" value="${elem.visibileAlCittadino ? 'checked' : '' }" />
+															<input type="checkbox" class="form-check-input" value="${elem.idDocumentale}" name="<portlet:namespace />allegati" ${checkedAttr}>
+														</div>
+						                            </liferay-ui:search-container-column-text>
+													<liferay-ui:search-container-column-text name="nome-file" value="${elem.nomeFile}" />
+						    						<liferay-ui:search-container-column-text name="dimensione" value="${elem.dimensione}" />
+						    						<liferay-ui:search-container-column-jsp name="azioni" path="/dettaglio_allegati_azioni.jsp" />
+						   						</liferay-ui:search-container-row>
+							
+												<liferay-ui:search-iterator markupView="lexicon" />
+											</liferay-ui:search-container>
+										</c:otherwise>
+									</c:choose>
+								</div>
+								<div class="modal-footer d-flex justify-content-end">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">
+										<liferay-ui:message key="annulla" />
+									</button>
+									<c:if test="${not empty integrazioni}">
+										<button type="submit" class="btn btn-primary">
+											<liferay-ui:message key="conferma" />
+										</button>
+									</c:if>
+								</div>
 							</div>
 						</div>
-					</div>
+					</aui:form>
 				</div>
 			</c:when>
 			
@@ -288,7 +353,7 @@
 					<portlet:actionURL var="rimandaAlReferenteURL" name="/action/rimandaAlReferente">
 					</portlet:actionURL>
 					
-					<aui:form action="${rimandaAlReferenteURL}">
+					<aui:form action="${rimandaAlReferenteURL}" name="rimandaAlReferenteForm">
 						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
 						<aui:input type="hidden" name="variabileSet" value="${azione.variableSet}" />
@@ -314,7 +379,7 @@
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">
 										<liferay-ui:message key="annulla" />
 									</button>
-									<button type="button" class="btn btn-primary ml-1 submit">
+									<button type="submit" class="btn btn-primary ml-1">
 										<liferay-ui:message key="conferma" />
 									</button>
 								</div>
@@ -332,7 +397,7 @@
 	<portlet:actionURL var="aggiungiAllegatoURL" name="/action/aggiungiAllegato">
 	</portlet:actionURL>
 	
-	<aui:form action="${aggiungiAllegatoURL}" enctype="multipart/form-data">
+	<aui:form action="${aggiungiAllegatoURL}" enctype="multipart/form-data" name="aggiungiAllegatoForm">
 		<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 		
 		<div class="modal-dialog">
@@ -365,7 +430,7 @@
 				<div class="modal-footer d-flex justify-content-end">		
 					<button type="button" class="btn btn-secondary" data-dismiss="modal"><liferay-ui:message key="annulla" /></button>
 					
-					<button type="button" class="btn btn-primary submit ml-1">
+					<button type="submit" class="btn btn-primary ml-1">
 						<liferay-ui:message key="salva-allegato" />
 						<i class="fas fa-upload"></i>
 					</button>
@@ -379,7 +444,7 @@
 	<portlet:actionURL var="aggiungiCommentoURL" name="/action/aggiungiCommento">
 	</portlet:actionURL>
 	
-	<aui:form action="${aggiungiCommentoURL}">
+	<aui:form action="${aggiungiCommentoURL}" name="aggiungiCommentoForm">
 		<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 				
 		<div class="modal-dialog">
@@ -393,7 +458,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<label><liferay-ui:message key="testo" /></label>
-						<textarea class="form-control" name="<portlet:namespace />testo"></textarea>
+						<textarea class="form-control" id="<portlet:namespace />testo" name="<portlet:namespace />testo"></textarea>
 					</div>
 					<div class="form-group form-check">
 						<label class="form-check-label"><liferay-ui:message key="visibile-al-cittadino" /></label>
@@ -401,7 +466,7 @@
 					</div>
 				</div>
 				<div class="modal-footer d-flex justify-content-end">		
-					<button type="button" class="btn btn-primary mr-1 submit">
+					<button type="submit" class="btn btn-primary mr-1">
 						<liferay-ui:message key="salva-commento" />
 					</button>
 					

@@ -1,7 +1,7 @@
 -- 20221004
 DROP TABLE `servizi_digitali`.`definizione_allegato`;
 
-CRATE TABLE `servizi_digitali`.`definizione_allegato` (
+CREATE TABLE `servizi_digitali`.`definizione_allegato` (
   `uuid_` varchar(75) DEFAULT NULL,
   `definizioneAllegatoId` bigint NOT NULL,
   `groupId` bigint DEFAULT NULL,

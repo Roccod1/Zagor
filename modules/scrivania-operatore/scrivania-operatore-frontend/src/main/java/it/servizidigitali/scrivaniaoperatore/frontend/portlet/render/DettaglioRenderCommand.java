@@ -31,6 +31,7 @@ import it.servizidigitali.scrivaniaoperatore.frontend.dto.AllegatoDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AttivitaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AzioneUtente;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.CommentoDTO;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.IntegrazioneDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.RichiestaDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.UserDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.service.ScrivaniaOperatoreFrontendService;
@@ -61,12 +62,12 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 	private ProceduraLocalService proceduraLocalService;
 	@Reference
 	private ServizioEnteLocalService servizioEnteLocalService;
-	
+
 	@Override
 	public String render(RenderRequest request, RenderResponse response) throws PortletException {
 		long id = ParamUtil.getLong(request, "id");
 		String dettaglioTab = ParamUtil.getString(request, "dettaglioTab", ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_DATI);
-		
+
 		ServiceContext ctx;
 		try {
 			ctx = ServiceContextFactory.getInstance(request);
@@ -79,7 +80,11 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 		RichiestaDTO richiesta = mapUtil.mapRichiesta(ctx.getCompanyId(), richiestaModel);
 		Procedura proceduraModel = proceduraLocalService.fetchProcedura(richiestaModel.getProceduraId());
 		ServizioEnte servizio = servizioEnteLocalService.fetchServizioEnte(new ServizioEntePK(proceduraModel.getServizioId(), ctx.getThemeDisplay().getSiteGroup().getOrganizationId()));
-		
+
+		List<IntegrazioneDTO> integrazioni = scrivaniaOperatoreFrontendService
+				.getIntegrazioniFormProcedura(proceduraModel);
+		request.setAttribute("integrazioni", integrazioni);
+
 		List<UserDTO> responsabili = getResponsabili(ctx, servizio);
 		List<UserDTO> altriResponsabili = getAltriResponsabili(ctx, servizio);
 		request.setAttribute("responsabili", responsabili);
@@ -87,96 +92,70 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 
 		List<AzioneUtente> azioni = scrivaniaOperatoreFrontendService.getAzioniUtenteDettaglioRichiesta(id, ctx);
 		request.setAttribute("azioni", azioni);
-		
+
 		Map<String, Task> userTasks = scrivaniaOperatoreFrontendService.getUserTasks(ctx);
 		boolean inCarico = userTasks.containsKey(richiesta.getProcessInstanceId());
 		request.setAttribute("inCarico", inCarico);
-		
+
 		request.setAttribute("dettaglioTab", dettaglioTab);
 		request.setAttribute("richiesta", richiesta);
 		request.setAttribute("titleArgs", new String[] { String.valueOf(richiesta.getId()), richiesta.getServizio() });
-		
-		List<AllegatoDTO> allegatiRichiestaOperatore = scrivaniaOperatoreFrontendService
-				.getAllegatiRichiestaInterni(richiesta.getId()).stream()
-				.map(x -> mapUtil.mapAllegato(ctx, x))
+
+		List<AllegatoDTO> allegatiRichiestaOperatore = scrivaniaOperatoreFrontendService.getAllegatiRichiestaInterni(richiesta.getId()).stream().map(x -> mapUtil.mapAllegato(ctx, x))
 				.collect(Collectors.toList());
 		request.setAttribute("allegatiOperatoreList", allegatiRichiestaOperatore);
 		request.setAttribute("allegatiOperatoreCount", allegatiRichiestaOperatore.size());
-		
+
 		switch (dettaglioTab) {
 		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_DATI:
-			//TODO dimensione modello compilato dal cittadino
+			// TODO dimensione modello compilato dal cittadino
 			request.setAttribute("modelloArgs", "100 MB");
-				
+
 			break;
 		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_ALLEGATI:
-			List<AllegatoDTO> allegatiRichiesta = scrivaniaOperatoreFrontendService
-				.getAllegatiRichiestaRichiedente(richiesta.getId())
-				.stream()
-				.map(x -> mapUtil.mapAllegato(ctx, x))
-				.collect(Collectors.toList());
-			
+			List<AllegatoDTO> allegatiRichiesta = scrivaniaOperatoreFrontendService.getAllegatiRichiestaRichiedente(richiesta.getId()).stream().map(x -> mapUtil.mapAllegato(ctx, x))
+					.collect(Collectors.toList());
+
 			request.setAttribute("allegatiRichiedenteList", allegatiRichiesta);
 			request.setAttribute("allegatiRichiedenteCount", allegatiRichiesta.size());
 			break;
 		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_COMMENTI:
-			List<CommentoDTO> commenti = scrivaniaOperatoreFrontendService
-				.getCommentiRichiesta(richiesta.getId())
-				.stream()
-				.map(x -> mapUtil.mapCommento(x))
-				.collect(Collectors.toList());
-			
+			List<CommentoDTO> commenti = scrivaniaOperatoreFrontendService.getCommentiRichiesta(richiesta.getId()).stream().map(x -> mapUtil.mapCommento(x)).collect(Collectors.toList());
+
 			request.setAttribute("commentiCount", commenti.size());
 			request.setAttribute("commentiList", commenti);
 			break;
 		case ScrivaniaOperatorePortletKeys.DETTAGLIO_TAB_ATTIVITA:
-			List<AttivitaDTO> attivita = attivitaRichiestaLocalService
-				.getAttivitaRichiestaByRichiestaId(id)
-				.stream()
-				.map(x -> mapUtil.mapAttivita(x))
-				.collect(Collectors.toList());
-			
+			List<AttivitaDTO> attivita = attivitaRichiestaLocalService.getAttivitaRichiestaByRichiestaId(id).stream().map(x -> mapUtil.mapAttivita(x)).collect(Collectors.toList());
+
 			request.setAttribute("attivitaCount", attivita.size());
 			request.setAttribute("attivitaList", attivita);
 			break;
 		default:
 			throw new RuntimeException("dettaglioTab");
 		}
-		
-		
+
 		return "/dettaglio.jsp";
 	}
 
 	private List<UserDTO> getAltriResponsabili(ServiceContext ctx, ServizioEnte servizio) {
-		List<User> lst = scrivaniaOperatoreFrontendService.getOrganizationUsersByRole(
-				servizio.getSubOrganizationId(),
-				OrganizationRole.ALTRO_RESPONSABILE, 
-				ctx.getCompanyId());
+		List<User> lst = scrivaniaOperatoreFrontendService.getOrganizationUsersByRole(servizio.getSubOrganizationId(), OrganizationRole.ALTRO_RESPONSABILE, ctx.getCompanyId());
 		if (lst != null) {
-			List<UserDTO> altriResponsabili = lst
-					.stream()
-					.filter(x -> x.getUserId() != ctx.getUserId())
-					.map(x -> mapUtil.mapUser(x))
-					.collect(Collectors.toList());
+			List<UserDTO> altriResponsabili = lst.stream().map(x -> mapUtil.mapUser(x)).collect(Collectors.toList());
 			return altriResponsabili;
-		} else {
+		}
+		else {
 			return Collections.emptyList();
 		}
 	}
 
 	private List<UserDTO> getResponsabili(ServiceContext ctx, ServizioEnte servizio) {
-		List<User> lst = scrivaniaOperatoreFrontendService.getOrganizationUsersByRole(
-				servizio.getSubOrganizationId(),
-				OrganizationRole.RESPONSABILE, 
-				ctx.getCompanyId());
+		List<User> lst = scrivaniaOperatoreFrontendService.getOrganizationUsersByRole(servizio.getSubOrganizationId(), OrganizationRole.RESPONSABILE, ctx.getCompanyId());
 		if (lst != null) {
-			List<UserDTO> responsabili = lst
-					.stream()
-					.filter(x -> x.getUserId() != ctx.getUserId())
-					.map(x -> mapUtil.mapUser(x))
-					.collect(Collectors.toList());
+			List<UserDTO> responsabili = lst.stream().map(x -> mapUtil.mapUser(x)).collect(Collectors.toList());
 			return responsabili;
-		} else {
+		}
+		else {
 			return Collections.emptyList();
 		}
 	}

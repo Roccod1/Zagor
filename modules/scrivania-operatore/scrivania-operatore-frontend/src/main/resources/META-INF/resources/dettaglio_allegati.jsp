@@ -58,9 +58,3 @@
 </div>
 
 <%@ include file="dettaglio_azioni_carico.jsp" %>
-
-<script>
-	$("#<portlet:namespace />aggiungiAllegatoModal").find(".submit").on("click", function() {
-		$(this).parents("form").submit();
-	});
-</script>

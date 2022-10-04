@@ -30,29 +30,162 @@
 	
 </liferay-ui:tabs>
 
-<script>
-	$("#<portlet:namespace />chiudiEsitoNegativoModal").find(".submit").on("click", function() {
-		$(this).parents("form").submit();
-	});
+<aui:script use="liferay-form">
+	//Chiudi modali nel submit
+	var modals = $(".modal");
+	modals.find("form").on("submit", function(e) {
+		var formId = $(this).attr('id');
 	
-	$("#<portlet:namespace />chiudiEsitoPositivoModal").find(".submit").on("click", function() {
-		$(this).parents("form").submit();
+		var formValidator = Liferay.Form.get(formId).formValidator;
+		if (formValidator != undefined) {
+			if (!formValidator.hasErrors()) {
+				modals.modal('hide');
+			}
+		} else {
+			modals.modal('hide');
+		}
 	});
+</aui:script>
+
+<aui:script use="liferay-form">
+	var form = Liferay.Form.get('<portlet:namespace />aggiungiCommentoForm');
 	
-	$("#<portlet:namespace />assegnaResponsabileModal").find(".submit").on("click", function() {
-		$(this).parents("form").submit();
-	});
+	var oldRules = form.get('fieldRules');
+	var newRules = [
+	{
+		validatorName: 'required',
+		fieldName: '<portlet:namespace />testo'
+	}
+	];
 	
-	$("#<portlet:namespace />assegnaAltroResponsabileModal").find(".submit").on("click", function() {
-		$(this).parents("form").submit();
-	});
+	form.set('fieldRules', oldRules.concat(newRules));
+</aui:script>
+
+<aui:script use="liferay-form">
+	var form = Liferay.Form.get('<portlet:namespace />aggiungiAllegatoForm');
 	
-	$("#<portlet:namespace />rilasciaModal").find(".submit").on("click", function() {
-		$(this).parents("form").submit();
-	});
+	var oldRules = form.get('fieldRules');
+	var newRules = [
+	{
+		validatorName: 'required',
+		fieldName: '<portlet:namespace />titoloDocumento'
+	},
+	{
+		validatorName: 'required',
+		fieldName: '<portlet:namespace />allegato'
+	}
+	];
 	
-	$("#<portlet:namespace />rimandaAlReferenteModal").find(".submit").on("click", function() {
-		$(this).parents("form").submit();
-	});
-	
-</script>
+	form.set('fieldRules', oldRules.concat(newRules));
+</aui:script>
+
+<c:if test="${inCarico}">
+	<c:forEach items="${azioni}" var="azione">
+		<c:choose>
+			<c:when test="${azione.codiceAzioneUtente == 'ASSEGNA_RESPONSABILE'}">
+				<aui:script use="liferay-form">
+					var form = Liferay.Form.get('<portlet:namespace />assegnaResponsabileForm');
+					
+					var oldRules = form.get('fieldRules');
+					var newRules = [
+					{
+						validatorName: 'required',
+						fieldName: '<portlet:namespace />responsabile'
+					},
+					{
+						validatorName: 'required',
+						fieldName: '<portlet:namespace />commento'
+					}
+					];
+					
+					form.set('fieldRules', oldRules.concat(newRules));
+				</aui:script>
+			</c:when>
+			
+			<c:when test="${azione.codiceAzioneUtente == 'ASSEGNA_ALTRO_RESPONSABILE'}">
+				<aui:script use="liferay-form">
+					var form = Liferay.Form.get('<portlet:namespace />assegnaAltroResponsabileForm');
+					
+					var oldRules = form.get('fieldRules');
+					var newRules = [
+					{
+						validatorName: 'required',
+						fieldName: '<portlet:namespace />responsabile'
+					},
+					{
+						validatorName: 'required',
+						fieldName: '<portlet:namespace />commento'
+					}
+					];
+					
+					form.set('fieldRules', oldRules.concat(newRules));
+				</aui:script>
+			</c:when>
+			
+			<c:when test="${azione.codiceAzioneUtente == 'ESITO_PROCEDIMENTO_POSITIVO'}">
+				<aui:script use="liferay-form">
+					var form = Liferay.Form.get('<portlet:namespace />chiudiEsitoPositivoForm');
+					
+					var oldRules = form.get('fieldRules');
+					var newRules = [
+					{
+						validatorName: 'required',
+						fieldName: '<portlet:namespace />commento'
+					}
+					];
+					
+					form.set('fieldRules', oldRules.concat(newRules));
+				</aui:script>
+			</c:when>
+			
+			<c:when test="${azione.codiceAzioneUtente == 'ESITO_PROCEDIMENTO_NEGATIVO'}">
+				<aui:script use="liferay-form">
+					var form = Liferay.Form.get('<portlet:namespace />chiudiEsitoNegativoForm');
+					
+					var oldRules = form.get('fieldRules');
+					var newRules = [
+					{
+						validatorName: 'required',
+						fieldName: '<portlet:namespace />commento'
+					}
+					];
+					
+					form.set('fieldRules', oldRules.concat(newRules));
+				</aui:script>
+			</c:when>
+			
+			<c:when test="${azione.codiceAzioneUtente == 'RIMANDA_REFERENTE'}">
+				<aui:script use="liferay-form">
+					var form = Liferay.Form.get('<portlet:namespace />rimandaAlReferenteForm');
+					
+					var oldRules = form.get('fieldRules');
+					var newRules = [
+					{
+						validatorName: 'required',
+						fieldName: '<portlet:namespace />commento'
+					}
+					];
+					
+					form.set('fieldRules', oldRules.concat(newRules));
+				</aui:script>
+			</c:when>
+		
+			<c:when test="${azione.codiceAzioneUtente == 'RICHIESTA_INTEGRAZIONE'}">
+				<aui:script use="liferay-form">
+					var form = Liferay.Form.get('<portlet:namespace />richiediModificheForm');
+					
+					var oldRules = form.get('fieldRules');
+					var newRules = [
+					{
+						validatorName: 'required',
+						fieldName: '<portlet:namespace />note'
+					}
+					];
+					
+					form.set('fieldRules', oldRules.concat(newRules));
+				</aui:script>
+			</c:when>
+			
+		</c:choose>
+	</c:forEach>
+</c:if>

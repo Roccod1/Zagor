@@ -35,8 +35,3 @@
 
 <%@ include file="dettaglio_azioni_carico.jsp" %>
 
-<script>
-	$("#<portlet:namespace />aggiungiCommentoModal").find(".submit").on("click", function() {
-		$(this).parents("form").submit();
-	});
-</script>
