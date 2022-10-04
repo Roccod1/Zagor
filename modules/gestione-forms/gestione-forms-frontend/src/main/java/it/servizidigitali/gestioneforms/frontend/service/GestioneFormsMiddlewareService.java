@@ -1,6 +1,7 @@
 package it.servizidigitali.gestioneforms.frontend.service;
 
 import com.liferay.counter.kernel.service.CounterLocalService;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
@@ -11,7 +12,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -44,7 +48,9 @@ public class GestioneFormsMiddlewareService {
 		long idAllegatoCaricato = 0;
 		InputStream inputStream = null;
 
-		if (Validator.isNotNull(fileCaricato)) {
+		boolean fileExists = fileCaricato.exists();
+
+		if (fileExists) {
 			inputStream = new DataInputStream(new FileInputStream(fileCaricato));
 		}
 
@@ -55,9 +61,11 @@ public class GestioneFormsMiddlewareService {
 			allegato.setDefinizioneAllegatoId(counterLocalService.increment());
 		}
 
-		fileNameModello = fileNameModello + "_" + String.valueOf(allegato.getDefinizioneAllegatoId()) + "_" + nowToString();
+		if (Validator.isNotNull(fileNameModello)) {
+			fileNameModello = fileNameModello + "_" + String.valueOf(allegato.getDefinizioneAllegatoId()) + "_" + nowToString();
+		}
 
-		if (Validator.isNotNull(fileCaricato)) {
+		if (fileExists) {
 			idAllegatoCaricato = templateAllegatoFileService.saveTemplateAllegato(fileNameModello, denominazione, null, formId, inputStream, null, userId, groupId);
 		}
 
@@ -98,5 +106,25 @@ public class GestioneFormsMiddlewareService {
 	public static String nowToString() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 		return sdf.format(new Date());
+	}
+
+	/**
+	 *
+	 * @param ids
+	 * @throws PortalException
+	 */
+	public void eliminaAllegati(String[] allegatiDaEliminare) throws PortalException {
+
+		if (allegatiDaEliminare != null && allegatiDaEliminare.length > 0) {
+			List<Long> ids = Arrays.asList(allegatiDaEliminare).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+
+			for (Long id : ids) {
+				DefinizioneAllegato definizioneAllegato = definizioneAllegatoLocalService.getDefinizioneAllegato(id);
+				if (definizioneAllegato != null && definizioneAllegato.getFileEntryId() != 0) {
+					templateAllegatoFileService.deleteTemplateAllegato(definizioneAllegato.getFileEntryId());
+				}
+			}
+			definizioneAllegatoLocalService.deleteAllegati(ids);
+		}
 	}
 }
