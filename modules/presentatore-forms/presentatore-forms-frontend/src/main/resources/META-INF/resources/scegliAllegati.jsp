@@ -111,14 +111,14 @@ console.log("dentro scegli allegati");
 <!-- 											</button> -->
 										</div>
 										
-										<label class="control-label" for="uploadFileFirmato"><liferay-ui:message key="upload.documento.firmato" /> (<liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione" arguments="${uploadFileMaxSizeLabel}"/>): </label>
+										<label class="control-label" for="uploadFileFirmato"><liferay-ui:message key="upload.documento.firmato" />* (<liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione" arguments="${uploadFileMaxSizeLabel}"/>): </label>
 										<div class="controls">
 											<input type="hidden" class="allegato" name="${nomeFileFirmato}"	value="${empty pdfFirmato ? '' : pdfFirmato.fileName }">
 											
 											<div id="div-uploadFileFirmato" <c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>>					
 												<div class="control-group">
 											  	  	<div class="" style="margin-left:0px; display: inline-block">
-														<aui:input type="file" id="uploadFileFirmato" name="uploadFileFirmato" required="true">
+														<aui:input type="file" id="uploadFileFirmato" name="uploadFileFirmato" required="true" label="" >
 															<aui:validator name="acceptFiles">".pdf,.p7m"</aui:validator>
 															<aui:validator name="custom" errorMessage="La dimensione del file non deve superare ${uploadFileMaxSizeLabel}">
 																function(val,node,junction){
@@ -127,9 +127,6 @@ console.log("dentro scegli allegati");
 																</aui:validator>
 														</aui:input>
 												    </div>
-												    <button class="btn btn-secondary save-attachment-uploadFileFirmato" type="button" style="vertical-align: top">
-														<liferay-ui:message key="label-conferma"/>
-												    </button>
 											    </div>
 											    <div id="alertUplaodAllegato-uploadFileFirmato" class="portlet-msg-alert hidden">
 													<liferay-ui:message key="errore-durante-il-caricamento-dell-allegato"/>
@@ -184,7 +181,7 @@ console.log("dentro scegli allegati");
 	
 									<c:forEach items="${allegati}" var="allegato" varStatus="loop">
 										<div class="control-group mt-3 alpaca-field-object">
-											<label class="control-label" for="allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}">${allegato.definizione.denominazione}<c:if test="${allegato.definizione.obbligatorio}">*</c:if> (<liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione" arguments="${uploadFileMaxSizeLabel}"/>):</label>
+											<label class="control-label" for="allegato-${allegato.definizione.definizioneAllegatoId}">${allegato.definizione.denominazione}<c:if test="${allegato.definizione.obbligatorio}">*</c:if> (<liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione" arguments="${uploadFileMaxSizeLabel}"/>):</label>
 											
 											<c:if test="${not empty allegato.definizione.filenameModello }">
 												<span class="help-block"> 
@@ -203,7 +200,7 @@ console.log("dentro scegli allegati");
 											</c:if>
 	
 											<div class="controls">
-											<input type="hidden" class="allegato" name="allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" value="${empty allegato.datiFile ? '' : allegato.datiFile.fileName }">
+											<input type="hidden" class="allegato" name="allegato-${allegato.definizione.definizioneAllegatoId}" value="${empty allegato.datiFile ? '' : allegato.datiFile.fileName }">
 												<div class="row-fluid">
 													<div class="span8">
 														<c:choose>
@@ -228,11 +225,11 @@ console.log("dentro scegli allegati");
 														</c:choose>
 														
 														<%-- +++ MODIFICATO --%>
-														<div id="div-allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" <c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>>					
+														<div id="div-allegato-${allegato.definizione.definizioneAllegatoId}" <c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>>					
 												
 															<div class="control-group">
 														  	  	<div class="span8" style="margin-left:0px; display: inline-block">
-																	<aui:input type="file" id="allegato-${allegato.definizione.definizioneAllegatoId}" name="allegato-${allegato.definizione.definizioneAllegatoId}" required="${allegato.definizione.obbligatorio}">
+																	<aui:input type="file" id="allegato-${allegato.definizione.definizioneAllegatoId}" name="allegato-${allegato.definizione.definizioneAllegatoId}" required="${allegato.definizione.obbligatorio}" label="" >
 																		<aui:validator name="acceptFiles">"${allegato.definizione.tipiFileAmmessi}"</aui:validator>
 																		<aui:validator name="custom" errorMessage="La dimensione del file non deve superare ${uploadFileMaxSizeLabel}">
 																			function(val,node,junction){
@@ -241,14 +238,11 @@ console.log("dentro scegli allegati");
 																			</aui:validator>
 																	</aui:input>
 															    </div>
-															    <button class="btn btn-secondary save-attachment-${loop.index}-${allegato.definizione.definizioneAllegatoId}" type="button"  style="vertical-align: top">
-																	<liferay-ui:message key="label-conferma"/>
-															    </button>
 														    </div>
-														    <div id="alertUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" class="portlet-msg-alert hidden">
+														    <div id="alertUplaodAllegato-${allegato.definizione.definizioneAllegatoId}" class="portlet-msg-alert hidden">
 																<liferay-ui:message key="errore-durante-il-caricamento-dell-allegato"/>
 															</div>
-															<div id="successUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" class="portlet-msg-success hidden">
+															<div id="successUplaodAllegato-${allegato.definizione.definizioneAllegatoId}" class="portlet-msg-success hidden">
 																<liferay-ui:message key="conferma-caricamento-dell-allegato"/>
 															</div>
 														
@@ -421,103 +415,6 @@ console.log("aui script");
 			//Submit del form
 			$("#<portlet:namespace />salva-form").submit();
 		});
-	
-		
-		<%-- GESTIONE UPLOAD FILE FIRMATO --%>	
-	$('.save-attachment-uploadFileFirmato').on('click', function(){	
-			var nomeAllegato = $('#<portlet:namespace />uploadFileFirmato').val();
-	    	var attachmentFileNameValue = nomeAllegato.replace('C:\\fakepath\\', ' ');
-			var idAllegatoTemporaneoValue = '';
-			
-			var formData = new FormData();
-			formData.append('<portlet:namespace />' + 'attachmentFile', $('#<portlet:namespace />uploadFileFirmato')[0].files[0]);
-			formData.append('<portlet:namespace />' + 'idDefinizioneAllegato', 0);
-			formData.append('<portlet:namespace />' + 'idIstanzaForm', ${idRichiesta});
-			
-			if(nomeAllegato) {
-				
-				$.ajax({
-		    		url: "${uploadFileUrl}",
-		    		type: 'POST',
-		    		data: formData,
-		    		processData: false,
-		    		contentType: false,
-		    		success: function(data){	
-		    			if(data.status==='ok'){
-		    				console.log("Successo in upload del file!");
-		    				$("input[name='${nomeFileFirmato}']").val(data.fileName);
-		    	        	
-		    				$('#alertUplaodAllegato-uploadFileFirmato').addClass('hidden');
-		    				$('#successUplaodAllegato-uploadFileFirmato').removeClass('hidden');
-	 	    				idAllegatoTemporaneoValue = data.idAllegatoTemporaneo;
-	 	    				
-		    			}else if(data.status==='error'){
-		    	        	$("input[name='${nomeFileFirmato}']").val('');
-		    	    
-		    				$('#alertUplaodAllegato-uploadFileFirmato').removeClass('hidden');
-		    				$('#successUplaodAllegato-uploadFileFirmato').addClass('hidden');
-		    				console.log("Errore durante l'upload del file!");
-		    			}
-		    		}, error: function(xhr){
-	    				console.log("Errore durante CHIAMATA l'upload del file!");
-	
-		    		}
-		    	});
-			}
-		
-	});
-		
-		<%-- GESTIONE UPLOAD ALTRI ALLEGATI --%>
-		<c:forEach items="${allegati}" var="allegato" varStatus="loop">
-		
-		$('.save-attachment-${loop.index}-${allegato.definizione.definizioneAllegatoId}').on('click', function(){
-			
-			
-			var nomeAllegato = $('#<portlet:namespace />allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').val();
-	    	var attachmentFileNameValue = nomeAllegato.replace('C:\\fakepath\\', ' ');
-			var idAllegatoTemporaneoValue = '';
-			
-			var formData = new FormData();
-			formData.append('<portlet:namespace />' + 'attachmentFile', $('#<portlet:namespace />allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}')[0].files[0]);
-			formData.append('<portlet:namespace />' + 'idDefinizioneAllegato', ${allegato.definizione.definizioneAllegatoId});
-			formData.append('<portlet:namespace />' + 'idIstanzaForm', ${idRichiesta});
-			
-			if(nomeAllegato){
-				
-				$.ajax({
-		    		url: "${uploadFileUrl}",
-		    		type: 'POST',
-		    		data: formData,
-		    		processData: false,
-		    		contentType: false,
-		    		success: function(data){	
-		    			if(data.status==='ok'){
-		    				console.log("Successo in upload del file!");
-		    				$("input[name='allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}']").val(data.fileName);
-		    	        	
-		    				$('#alertUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').addClass('hidden');
-		    				$('#successUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').removeClass('hidden');
-		    				idAllegatoTemporaneoValue = data.idAllegatoTemporaneo;
-		    			}else if(data.status==='error'){
-		    	        	$("input[name='allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}']").val('');
-		    	    	
-		    				$('#alertUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').removeClass('hidden');
-		    				$('#successUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').addClass('hidden');
 
-		    				console.log("Errore durante l'upload del file!");
-		    			}
-		    		}, error: function(xhr){
-	    				console.log("Errore durante CHIAMATA l'upload del file!");
-
-		    		}
-		    	});
-			}
-		
-    });
-			
-	</c:forEach>	
-		
-		
 	});
-	
 </script>
