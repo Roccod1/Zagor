@@ -112,9 +112,9 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 						integrationPreferences.setUsaCache(procedura.isAbilitaCacheIntegrazioneBackoffice());
 
 						List<ComponenteNucleoFamiliare> componentiNucleoFamiliare = datiAnagraficiPortletService.getComponentiNucleoFamiliare(codiceFiscale, organizationId, integrationPreferences);
-						renderRequest.setAttribute("componentiNucleoFamiliare", componentiNucleoFamiliare);
-						renderRequest.setAttribute("codiceFiscaleManuale", codiceFiscale);
-						renderRequest.setAttribute("filtroComponentiFamiliari", filtroComponentiFamiliari);
+						renderRequest.setAttribute(PresentatoreFormsPortletKeys.COMPONENTI_NUCLEO_FAMILIARE, componentiNucleoFamiliare);
+						renderRequest.setAttribute(PresentatoreFormsPortletKeys.CODICE_FISCALE_MANUALE, codiceFiscale);
+						renderRequest.setAttribute(PresentatoreFormsPortletKeys.FILTRO_COMPONENTI_FAMILIARI, filtroComponentiFamiliari);
 
 						return PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO;
 
@@ -158,7 +158,7 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 						// Aggiunta destinazioni d'uso in pagina se certificato
 						if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 							List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
-							renderRequest.setAttribute("destinazioniUso", destinazioniUso);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONI_USO, destinazioniUso);
 						}
 					}
 				}
@@ -184,7 +184,6 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 		}
 		catch (Exception e) {
 			SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
-			// TODO: Capire dove renderizzare
 			log.error("Errore durante il caricamento della bozza all'utente! " + e.getMessage(), e);
 			return PresentatoreFormsPortletKeys.JSP_HOME;
 		}

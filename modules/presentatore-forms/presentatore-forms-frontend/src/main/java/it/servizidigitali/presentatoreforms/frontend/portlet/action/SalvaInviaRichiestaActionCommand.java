@@ -3,6 +3,7 @@ package it.servizidigitali.presentatoreforms.frontend.portlet.action;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -27,6 +28,7 @@ import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.presentatoreforms.frontend.configuration.UploadFileRichiesteEnteConfiguration;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.AllegatoRichiestaService;
 import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
@@ -50,6 +52,15 @@ service = { MVCActionCommand.class }
 )
 public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand{
 	public static final Log _log = LogFactoryUtil.getLog(SalvaInviaRichiestaActionCommand.class);
+	
+	ConfigurationProvider configurationProvider;
+	
+	private volatile UploadFileRichiesteEnteConfiguration uploadFileRichiesteEnteConfiguration;
+	
+	@Reference
+	protected void setConfigurationProvider(ConfigurationProvider configurationProvider) {
+		this.configurationProvider = configurationProvider;
+	}
 	
 	@Reference
     private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
@@ -90,104 +101,97 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand{
 					.getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME);
 		}
 		
-		if(Validator.isNotNull(procedura) && procedura.getProceduraId() >0){
-			
-			Richiesta richiesta = presentatoreFormFrontendService.getRichiestaBozza(user.getScreenName(), procedura.getProceduraId());
-			
-			Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
-			
-			if(Validator.isNotNull(form)){
-				
-				List<DefinizioneAllegato> listaDefinizioneAllegato = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(form.getFormId());
-				
-				
-					
-					File fileFirmato = uploadPortletRequest.getFile("uploadFileFirmato");
-					
-					if(Validator.isNotNull(fileFirmato)) {
-						allegatoRichiestaService.salvaAllegatoFirmato(fileFirmato, servizio.getCodice(), richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
-					}else {
-						_log.error("SalvaInviaRichiestaActionCommand :: Errore durante il salvataggio dell'allegato firmato!");
-						List<DefinizioneAllegato> definizioneAllegati = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(form.getFormId());
-						List<DatiAllegato> allegati = AllegatoUtil.mergeDefinizioneAndData(definizioneAllegati, new ArrayList<DatiFileAllegato>());
-						listaErrori.add("Errore durante il salvataggio dell'allegato principale!");
-						String errori = String.join(",", listaErrori);
+		try {
+			uploadFileRichiesteEnteConfiguration = configurationProvider.getGroupConfiguration(UploadFileRichiesteEnteConfiguration.class, themeDisplay.getScopeGroupId());
 
-						actionRequest.setAttribute("bozzaStatus", richiesta.getStato());
-						actionRequest.setAttribute("titoloPortletServizio",form.getNome());
-						actionRequest.setAttribute("!invioIstanza",true);
-						actionRequest.setAttribute("firmaDocumentoAbilitata",true);
-						actionRequest.setAttribute("salvaUrl","/");
-						actionRequest.setAttribute("scegliAllegatiDescription","42656");
-						actionRequest.setAttribute("downloadIstanzaUrl","/");
-						actionRequest.setAttribute("uploadFileMaxSize",3145728);
-						actionRequest.setAttribute("uploadFileMaxSizeLabel",Long.toString(3145728 / 1000000) + " MB");
-						actionRequest.setAttribute("nomeFileFirmato","file_firm");
-						
-						// TODO
-						actionRequest.setAttribute("pdfFirmato", null);
-						//
-						
-						actionRequest.setAttribute("downloadFilePrincipaleUrl","/");
-						actionRequest.setAttribute("allegati", allegati);
-						actionRequest.setAttribute("downloadFileUrl","/");
-						actionRequest.setAttribute("downloadModelloUrl","/");
-						actionRequest.setAttribute("downloadDocumentoPersonaleUrl", "/");
-						actionRequest.setAttribute("homeScrivaniaUrl","/");
-						actionRequest.setAttribute("firmaDocumentoAbilitata", true);
-						actionRequest.setAttribute("invioIstanza",true);
-						actionRequest.setAttribute("evaluationServiceEnable",false);
-						actionRequest.setAttribute("pathScrivaniaVirtuale","/");
-						actionRequest.setAttribute("isDebugEnabled",true);
-						actionRequest.setAttribute("listaErrori", errori);
-						actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_ALLEGATI);
-						return;
-					}
+			if(Validator.isNotNull(procedura) && procedura.getProceduraId() >0){
+				
+				Richiesta richiesta = presentatoreFormFrontendService.getRichiestaBozza(user.getScreenName(), procedura.getProceduraId());
+				
+				Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
+				
+				if(Validator.isNotNull(form)){
 					
-					if(Validator.isNotNull(listaDefinizioneAllegato) && !listaDefinizioneAllegato.isEmpty()) {
-						for(DefinizioneAllegato definizioneAllegato : listaDefinizioneAllegato) {
-							File allegato = uploadPortletRequest.getFile("allegato-" + definizioneAllegato.getDefinizioneAllegatoId());
+					List<DefinizioneAllegato> listaDefinizioneAllegato = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(form.getFormId());
+				
+						File fileFirmato = uploadPortletRequest.getFile("uploadFileFirmato");
+						
+						if(Validator.isNotNull(fileFirmato)) {
+							allegatoRichiestaService.salvaAllegatoFirmato(fileFirmato, servizio.getCodice(), richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
+						}else {
+							_log.error("SalvaInviaRichiestaActionCommand :: Errore durante il salvataggio dell'allegato firmato!");
+							List<DefinizioneAllegato> definizioneAllegati = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(form.getFormId());
+							List<DatiAllegato> allegati = AllegatoUtil.mergeDefinizioneAndData(definizioneAllegati, new ArrayList<DatiFileAllegato>());
+							listaErrori.add("Errore durante il salvataggio dell'allegato principale!");
+							String errori = String.join(",", listaErrori);
+
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO,form.getNome());
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.FIRMA_DOCUMENTO_ABILITATA,true);	
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.UPLOAD_FILE_MAX_SIZE,uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize());
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.UPLOAD_FILE_MAX_SIZE_LABEL,Long.toString(uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize() / 1000000) + " MB");
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_ALLEGATI, allegati);
 							
-							if(Validator.isNotNull(allegato)) {
-								allegatoRichiestaService.salvaAllegatiRichiesta(allegato, servizio.getCodice(), richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
-							}else {
-								_log.error("SalvaInviaRichiestaActionCommand :: Errore durante il salvataggio dell'allegato con id definizione : " + definizioneAllegato.getDefinizioneAllegatoId());
-								List<DefinizioneAllegato> definizioneAllegati = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(form.getFormId());
-								List<DatiAllegato> allegati = AllegatoUtil.mergeDefinizioneAndData(definizioneAllegati, new ArrayList<DatiFileAllegato>());
-								listaErrori.add("Errore durante il salvataggio dell'allegato : " + definizioneAllegato.getDenominazione());
-								String errori = String.join(",", listaErrori);
-								actionRequest.setAttribute("listaErrori", errori);
-								actionRequest.setAttribute("allegati", allegati);
-								actionResponse.getRenderParameters().setValue("jspPage", PresentatoreFormsPortletKeys.JSP_SCEGLI_ALLEGATI);
-								return;
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_ERRORI, errori);
+							actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_ALLEGATI);
+							return;
+						}
+						
+						if(Validator.isNotNull(listaDefinizioneAllegato) && !listaDefinizioneAllegato.isEmpty()) {
+							for(DefinizioneAllegato definizioneAllegato : listaDefinizioneAllegato) {
+								File allegato = uploadPortletRequest.getFile("allegato-" + definizioneAllegato.getDefinizioneAllegatoId());
+								
+								if(Validator.isNotNull(allegato)) {
+									allegatoRichiestaService.salvaAllegatiRichiesta(allegato, servizio.getCodice(), richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
+								}else {
+									_log.error("SalvaInviaRichiestaActionCommand :: Errore durante il salvataggio dell'allegato con id definizione : " + definizioneAllegato.getDefinizioneAllegatoId());
+									List<DefinizioneAllegato> definizioneAllegati = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(form.getFormId());
+									List<DatiAllegato> allegati = AllegatoUtil.mergeDefinizioneAndData(definizioneAllegati, new ArrayList<DatiFileAllegato>());
+									listaErrori.add("Errore durante il salvataggio dell'allegato : " + definizioneAllegato.getDenominazione());
+									String errori = String.join(",", listaErrori);
+									actionRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO,form.getNome());
+									actionRequest.setAttribute(PresentatoreFormsPortletKeys.FIRMA_DOCUMENTO_ABILITATA,true);	
+									actionRequest.setAttribute(PresentatoreFormsPortletKeys.UPLOAD_FILE_MAX_SIZE,uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize());
+									actionRequest.setAttribute(PresentatoreFormsPortletKeys.UPLOAD_FILE_MAX_SIZE_LABEL,Long.toString(uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize() / 1000000) + " MB");
+									actionRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_ALLEGATI, allegati);
+									
+									actionRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_ERRORI, errori);
+									actionResponse.getRenderParameters().setValue("jspPage", PresentatoreFormsPortletKeys.JSP_SCEGLI_ALLEGATI);
+									return;
+								}
 							}
 						}
-					}
 
-					if(Validator.isNotNull(richiesta)) {
-						richiestaLocalService.updateStatoRichiesta(richiesta.getRichiestaId(), StatoRichiesta.NUOVA.name());
-					}else {
-						_log.error("SalvaInviaRichiestaActionCommand :: Errore durante il salvataggio della richiesta con ID : " + richiesta.getRichiestaId());
-						listaErrori.add("Errore durante il salvataggio della richiesta con ID : " + richiesta.getRichiestaId());
-						String errori = String.join(",", listaErrori);
-						actionRequest.setAttribute("listaErrori", errori);
-						actionResponse.getRenderParameters().setValue("jspPage", PresentatoreFormsPortletKeys.JSP_SCEGLI_ALLEGATI);
-						return;
-					}
+						if(Validator.isNotNull(richiesta)) {
+							richiestaLocalService.updateStatoRichiesta(richiesta.getRichiestaId(), StatoRichiesta.NUOVA.name());
+						}else {
+							_log.error("SalvaInviaRichiestaActionCommand :: Errore durante il salvataggio della richiesta con ID : " + richiesta.getRichiestaId());
+							List<DefinizioneAllegato> definizioneAllegati = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(form.getFormId());
+							List<DatiAllegato> allegati = AllegatoUtil.mergeDefinizioneAndData(definizioneAllegati, new ArrayList<DatiFileAllegato>());
+							listaErrori.add("Errore durante il salvataggio della richiesta con ID : " + richiesta.getRichiestaId());
+							String errori = String.join(",", listaErrori);
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO,form.getNome());
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.FIRMA_DOCUMENTO_ABILITATA,true);	
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.UPLOAD_FILE_MAX_SIZE,uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize());
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.UPLOAD_FILE_MAX_SIZE_LABEL,Long.toString(uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize() / 1000000) + " MB");
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_ALLEGATI, allegati);
+							
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_ERRORI, errori);
+							actionResponse.getRenderParameters().setValue("jspPage", PresentatoreFormsPortletKeys.JSP_SCEGLI_ALLEGATI);
+							return;
+						}
 
-					DichiarazioneRisposta risposta = alpacaService.sendData(richiesta, procedura, userPreferences);
-					
-					actionRequest.setAttribute("titoloPortletServizio", form.getNome());
-					actionRequest.setAttribute("dichiarazioneRisposta", risposta);
-					actionRequest.setAttribute("invioIstanza", true);
-					actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_ESITO_INVIO);
-					
-				
-				
-			}
-		}	
+						DichiarazioneRisposta risposta = alpacaService.sendData(richiesta, procedura, userPreferences);
+						
+						actionRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, form.getNome());
+						actionRequest.setAttribute(PresentatoreFormsPortletKeys.DICHIARAZIONE_RISPOSTA, risposta);
+						actionRequest.setAttribute(PresentatoreFormsPortletKeys.INVIO_ISTANZA, true);
+						actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_ESITO_INVIO);
 		
-		
+				}
+			}	
+		}catch(Exception e) {
+			// log
+		}
 		
 	}
 	

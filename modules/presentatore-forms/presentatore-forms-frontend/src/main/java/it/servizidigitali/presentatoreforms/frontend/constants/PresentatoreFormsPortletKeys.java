@@ -58,7 +58,16 @@ public class PresentatoreFormsPortletKeys {
 	public static final String FIRMA_DOCUMENTO_ABILITATA = "firmaDocumentoAbilitata";
 	public static final String LISTA_ALLEGATI = "allegati";
 	public static final String INVIO_ISTANZA = "invioIstanza";
-
+	public static final String RICHIESTA_ID = "richiestaId";
+	public static final String COMPONENTI_NUCLEO_FAMILIARE = "componentiNucleoFamiliare";
+	public static final String CODICE_FISCALE_MANUALE = "codiceFiscaleManuale";
+	public static final String FILTRO_COMPONENTI_FAMILIARI = "filtroComponentiFamiliari";
+	public static final String DESTINAZIONI_USO = "destinazioniUso";
+	public static final String LISTA_ERRORI = "listaErrori";
+	public static final String UPLOAD_FILE_MAX_SIZE = "uploadFileMaxSize";
+	public static final String UPLOAD_FILE_MAX_SIZE_LABEL = "uploadFileMaxSizeLabel";
+	public static final String DICHIARAZIONE_RISPOSTA = "dichiarazioneRisposta";
+	
 	// JSON
 	public static final String STATUS = "status";
 	public static final String STATUS_OK = "ok";

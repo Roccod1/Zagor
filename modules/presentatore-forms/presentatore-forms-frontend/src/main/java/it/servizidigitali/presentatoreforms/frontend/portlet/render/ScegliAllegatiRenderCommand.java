@@ -144,16 +144,9 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 		}
 		
 		renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO,form.getNome());
-		renderRequest.setAttribute(PresentatoreFormsPortletKeys.FIRMA_DOCUMENTO_ABILITATA,true);
-		
-		// TODO: Capire perché viene settata sempre a questa cifra
-		
-//		renderRequest.setAttribute("scegliAllegatiDescription","42656");		
-		renderRequest.setAttribute("uploadFileMaxSize",uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize());
-		renderRequest.setAttribute("uploadFileMaxSizeLabel",Long.toString(uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize() / 1000000) + " MB");
-		
-
-		
+		renderRequest.setAttribute(PresentatoreFormsPortletKeys.FIRMA_DOCUMENTO_ABILITATA,true);	
+		renderRequest.setAttribute(PresentatoreFormsPortletKeys.UPLOAD_FILE_MAX_SIZE,uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize());
+		renderRequest.setAttribute(PresentatoreFormsPortletKeys.UPLOAD_FILE_MAX_SIZE_LABEL,Long.toString(uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize() / 1000000) + " MB");
 		renderRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_ALLEGATI, allegati);
 		
 		// TODO: Capire in base a cosa e quando
