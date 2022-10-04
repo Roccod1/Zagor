@@ -10,6 +10,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.ResourceRequest;
@@ -64,7 +65,7 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 			Procedura procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
 			PDFService pdfService = pdfServiceFactory.getPDFService(TipoGenerazionePDF.valueOf(procedura.getTipoGenerazionePDF()));
 
-			if (procedura == null) {
+			if (Validator.isNull(procedura)) {
 				SessionErrors.add(resourceRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
 				return;
 			}
@@ -102,7 +103,6 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 				break;
 			}
 
-			// TODO: Capire se isDelega viene utilizzato
 			PortletResponseUtil.sendFile(resourceRequest, resourceResponse, fileName, pdf, ContentTypes.APPLICATION_PDF);
 
 		}

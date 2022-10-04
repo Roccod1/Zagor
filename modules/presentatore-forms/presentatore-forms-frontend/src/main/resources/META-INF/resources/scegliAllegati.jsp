@@ -182,7 +182,7 @@ console.log("dentro scegli allegati");
 													<portlet:resourceURL id="downloadModello" var="downloadModelloUrl">
 														<portlet:param name="id" value="${allegato.definizione.definizioneAllegatoId}" />
 													</portlet:resourceURL>
-													<a class="btn btn-custom" href="${downloadModelloUrl}" title='<liferay-ui:message key="label.download" />'>
+													<a class="btn btn-custom" onclick="window.open('${downloadModelloUrl}');" title='<liferay-ui:message key="label.download" />'>
 														<liferay-ui:message key="download.modello" />
 													</a>
 												</div>

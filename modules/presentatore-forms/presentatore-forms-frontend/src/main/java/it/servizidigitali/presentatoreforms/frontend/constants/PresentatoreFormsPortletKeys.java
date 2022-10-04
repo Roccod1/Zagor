@@ -29,6 +29,7 @@ public class PresentatoreFormsPortletKeys {
 	public static final String TITOLI_STUDIO_RESOURCE_COMMAND = "/listaTitoliStudio";
 	public static final String INDIETRO_ACTION_COMMAND = "/indietro";
 	public static final String ANNULLA_ACTION_COMMAND = "/annulla";
+	public static final String DOWNLOAD_MODELLO_RESOURCE_COMMAND = "/downloadModello";
 
 	// JSP
 	public static final String JSP_SCEGLI_ALLEGATI = "/scegliAllegati.jsp";

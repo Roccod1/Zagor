@@ -1,8 +1,10 @@
 package it.servizidigitali.presentatoreforms.frontend.service;
 
 import com.liferay.counter.kernel.service.CounterLocalService;
+import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -14,6 +16,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.file.utility.factory.FileServiceFactory;
+import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
+import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
+import it.servizidigitali.presentatoreforms.frontend.util.model.DatiFileAllegato;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
 
@@ -29,7 +34,13 @@ public class AllegatoRichiestaService {
 	AllegatoRichiestaLocalService allegatoRichiestaLocalService;
 	
 	@Reference
+	DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
+	
+	@Reference
 	CounterLocalService counterLocalService;
+	
+	@Reference
+	private DLAppService dlAppService;
 	
 	public void salvaAllegatiRichiesta(File allegato, String codiceServizio, long richiestaId, String userName, long userId, long groupId) {
 		
@@ -89,5 +100,42 @@ public class AllegatoRichiestaService {
 		}catch(Exception e) {
 			log.error("Errore durante il caricamento del file firmato : " + e.getMessage(), e); 
 		}
+	}
+	
+	
+	public DatiFileAllegato getModelloAllegato(long definizioneAllegatoId) {
+		DatiFileAllegato modello = null;
+		DefinizioneAllegato allegato = null;
+		
+		try {
+			if(definizioneAllegatoId>0) {
+				allegato = definizioneAllegatoLocalService.getDefinizioneAllegato(definizioneAllegatoId);
+				
+				if(allegato.getFileEntryId()>0) {
+					FileEntry templateFileEntry = dlAppService.getFileEntry(allegato.getFileEntryId());
+					
+					if(Validator.isNotNull(templateFileEntry)) {
+						modello = new DatiFileAllegato();
+						modello.setFileName(allegato.getFilenameModello());
+						
+						InputStream isTemplate = templateFileEntry.getContentStream();
+						
+						if(Validator.isNotNull(isTemplate)) {
+							modello.setContenuto(isTemplate.readAllBytes());
+						}else {
+							log.error("AllegatoRichiestaService :: getModelloAllegato :: Input stream modello NULL!");
+						}
+					}else {
+						log.error("AllegatoRichiestaService :: getModelloAllegato :: fileEntry dell'allegato con ID : " + definizioneAllegatoId + " NULL");
+					}
+				}
+			}
+			
+		}catch(Exception e) {
+			log.error("Errore durante il recupero dell'allegato con id definizione : " + definizioneAllegatoId + e.getMessage(),e);
+		}
+
+		
+		return modello;
 	}
 }
