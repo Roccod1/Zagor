@@ -85,7 +85,6 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 			Richiesta richiestaBozza = presentatoreFormFrontendService.getRichiestaBozza(currentUser.getScreenName(), procedura.getProceduraId());
 			IstanzaForm istanzaFormRichiesta = presentatoreFormFrontendService.getIstanzaFormRichiesta(richiestaBozza.getRichiestaId(), form.getFormId());
 
-			presentatoreFormFrontendService.deleteRichiesteBozzaUtente(screenName, procedura.getProceduraId());
 
 			
 			boolean stepComponentiFamiliari = procedura.getStep1Attivo();
@@ -100,8 +99,10 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 				alpacaStructure = formData.getAlpaca();
 			}
 			else {
-
+				
 				try {
+					
+					presentatoreFormFrontendService.deleteRichiesteBozzaUtente(screenName, procedura.getProceduraId(), form.getFormId());
 
 					if (stepComponentiFamiliari) {
 						Long organizationId = themeDisplay.getSiteGroup().getOrganizationId();
