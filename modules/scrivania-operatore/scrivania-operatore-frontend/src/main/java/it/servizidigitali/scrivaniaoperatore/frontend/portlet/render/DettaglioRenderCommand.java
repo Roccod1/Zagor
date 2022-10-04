@@ -1,13 +1,5 @@
 package it.servizidigitali.scrivaniaoperatore.frontend.portlet.render;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.ServiceContextFactory;
-import com.liferay.portal.kernel.util.ParamUtil;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +11,13 @@ import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.util.ParamUtil;
 
 import it.servizidigitali.camunda.integration.client.model.Task;
 import it.servizidigitali.common.utility.enumeration.OrganizationRole;
@@ -82,12 +81,8 @@ public class DettaglioRenderCommand implements MVCRenderCommand {
 		Procedura proceduraModel = proceduraLocalService.fetchProcedura(richiestaModel.getProceduraId());
 		ServizioEnte servizio = servizioEnteLocalService.fetchServizioEnte(new ServizioEntePK(proceduraModel.getServizioId(), ctx.getThemeDisplay().getSiteGroup().getOrganizationId()));
 
-		// TODO carica integrazioni da service (da agganciare)
-		List<IntegrazioneDTO> integrazioni = new ArrayList<>();
-		IntegrazioneDTO integrazione = new IntegrazioneDTO();
-		integrazione.setId(1L);
-		integrazione.setNome("Integrazione 1");
-		integrazioni.add(integrazione);
+		List<IntegrazioneDTO> integrazioni = scrivaniaOperatoreFrontendService
+				.getIntegrazioniFormProcedura(proceduraModel);
 		request.setAttribute("integrazioni", integrazioni);
 
 		List<UserDTO> responsabili = getResponsabili(ctx, servizio);
