@@ -319,7 +319,7 @@
 				                                    <liferay-ui:search-container-column-text name="#">
 														<div class="form-group form-check">
 															<c:set var="checkedAttr" value="${elem.visibileAlCittadino ? 'checked' : '' }" />
-															<input type="checkbox" class="form-check-input" value="${elem.id}" name="<portlet:namespace />allegati" ${checkedAttr}>
+															<input type="checkbox" class="form-check-input" value="${elem.idDocumentale}" name="<portlet:namespace />allegati" ${checkedAttr}>
 														</div>
 						                            </liferay-ui:search-container-column-text>
 													<liferay-ui:search-container-column-text name="nome-file" value="${elem.nomeFile}" />
