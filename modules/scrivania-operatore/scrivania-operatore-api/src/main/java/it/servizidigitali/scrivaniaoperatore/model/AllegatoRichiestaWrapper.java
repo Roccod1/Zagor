@@ -57,6 +57,7 @@ public class AllegatoRichiestaWrapper
 		attributes.put("principale", isPrincipale());
 		attributes.put("interno", isInterno());
 		attributes.put("visibile", isVisibile());
+		attributes.put("definizioneAllegatoId", getDefinizioneAllegatoId());
 		attributes.put("richiestaId", getRichiestaId());
 
 		return attributes;
@@ -148,6 +149,13 @@ public class AllegatoRichiestaWrapper
 			setVisibile(visibile);
 		}
 
+		Long definizioneAllegatoId = (Long)attributes.get(
+			"definizioneAllegatoId");
+
+		if (definizioneAllegatoId != null) {
+			setDefinizioneAllegatoId(definizioneAllegatoId);
+		}
+
 		Long richiestaId = (Long)attributes.get("richiestaId");
 
 		if (richiestaId != null) {
@@ -188,6 +196,16 @@ public class AllegatoRichiestaWrapper
 	@Override
 	public Date getCreateDate() {
 		return model.getCreateDate();
+	}
+
+	/**
+	 * Returns the definizione allegato ID of this allegato richiesta.
+	 *
+	 * @return the definizione allegato ID of this allegato richiesta
+	 */
+	@Override
+	public Long getDefinizioneAllegatoId() {
+		return model.getDefinizioneAllegatoId();
 	}
 
 	/**
@@ -393,6 +411,16 @@ public class AllegatoRichiestaWrapper
 	@Override
 	public void setCreateDate(Date createDate) {
 		model.setCreateDate(createDate);
+	}
+
+	/**
+	 * Sets the definizione allegato ID of this allegato richiesta.
+	 *
+	 * @param definizioneAllegatoId the definizione allegato ID of this allegato richiesta
+	 */
+	@Override
+	public void setDefinizioneAllegatoId(Long definizioneAllegatoId) {
+		model.setDefinizioneAllegatoId(definizioneAllegatoId);
 	}
 
 	/**

@@ -112,3 +112,8 @@ CREATE TABLE `destinazione_uso_servizio_ente` (
   `modifiedDate` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`destinazioneUsoId`,`servizioId`,`organizationId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- 20221005
+ALTER TABLE `servizi_digitali`.`allegato_richiesta` 
+ADD COLUMN `definizioneAllegatoId` BIGINT NULL AFTER `visibile`;

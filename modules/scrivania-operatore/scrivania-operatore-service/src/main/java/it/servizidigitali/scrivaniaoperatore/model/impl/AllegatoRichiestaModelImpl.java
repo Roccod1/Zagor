@@ -80,7 +80,7 @@ public class AllegatoRichiestaModelImpl
 		{"idDocumentale", Types.VARCHAR}, {"nome", Types.VARCHAR},
 		{"url", Types.VARCHAR}, {"principale", Types.BOOLEAN},
 		{"interno", Types.BOOLEAN}, {"visibile", Types.BOOLEAN},
-		{"richiestaId", Types.BIGINT}
+		{"definizioneAllegatoId", Types.BIGINT}, {"richiestaId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -101,11 +101,12 @@ public class AllegatoRichiestaModelImpl
 		TABLE_COLUMNS_MAP.put("principale", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("interno", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("visibile", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("definizioneAllegatoId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("richiestaId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table allegato_richiesta (uuid_ VARCHAR(75) null,allegatoRichiestaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,idDocumentale VARCHAR(75) null,nome VARCHAR(75) null,url VARCHAR(75) null,principale BOOLEAN,interno BOOLEAN,visibile BOOLEAN,richiestaId LONG)";
+		"create table allegato_richiesta (uuid_ VARCHAR(75) null,allegatoRichiestaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,idDocumentale VARCHAR(75) null,nome VARCHAR(75) null,url VARCHAR(75) null,principale BOOLEAN,interno BOOLEAN,visibile BOOLEAN,definizioneAllegatoId LONG,richiestaId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table allegato_richiesta";
 
@@ -396,6 +397,13 @@ public class AllegatoRichiestaModelImpl
 			"visibile",
 			(BiConsumer<AllegatoRichiesta, Boolean>)
 				AllegatoRichiesta::setVisibile);
+		attributeGetterFunctions.put(
+			"definizioneAllegatoId",
+			AllegatoRichiesta::getDefinizioneAllegatoId);
+		attributeSetterBiConsumers.put(
+			"definizioneAllegatoId",
+			(BiConsumer<AllegatoRichiesta, Long>)
+				AllegatoRichiesta::setDefinizioneAllegatoId);
 		attributeGetterFunctions.put(
 			"richiestaId", AllegatoRichiesta::getRichiestaId);
 		attributeSetterBiConsumers.put(
@@ -744,6 +752,20 @@ public class AllegatoRichiestaModelImpl
 	}
 
 	@Override
+	public Long getDefinizioneAllegatoId() {
+		return _definizioneAllegatoId;
+	}
+
+	@Override
+	public void setDefinizioneAllegatoId(Long definizioneAllegatoId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_definizioneAllegatoId = definizioneAllegatoId;
+	}
+
+	@Override
 	public long getRichiestaId() {
 		return _richiestaId;
 	}
@@ -844,6 +866,8 @@ public class AllegatoRichiestaModelImpl
 		allegatoRichiestaImpl.setPrincipale(isPrincipale());
 		allegatoRichiestaImpl.setInterno(isInterno());
 		allegatoRichiestaImpl.setVisibile(isVisibile());
+		allegatoRichiestaImpl.setDefinizioneAllegatoId(
+			getDefinizioneAllegatoId());
 		allegatoRichiestaImpl.setRichiestaId(getRichiestaId());
 
 		allegatoRichiestaImpl.resetOriginalValues();
@@ -884,6 +908,8 @@ public class AllegatoRichiestaModelImpl
 			this.<Boolean>getColumnOriginalValue("interno"));
 		allegatoRichiestaImpl.setVisibile(
 			this.<Boolean>getColumnOriginalValue("visibile"));
+		allegatoRichiestaImpl.setDefinizioneAllegatoId(
+			this.<Long>getColumnOriginalValue("definizioneAllegatoId"));
 		allegatoRichiestaImpl.setRichiestaId(
 			this.<Long>getColumnOriginalValue("richiestaId"));
 
@@ -1037,6 +1063,13 @@ public class AllegatoRichiestaModelImpl
 
 		allegatoRichiestaCacheModel.visibile = isVisibile();
 
+		Long definizioneAllegatoId = getDefinizioneAllegatoId();
+
+		if (definizioneAllegatoId != null) {
+			allegatoRichiestaCacheModel.definizioneAllegatoId =
+				definizioneAllegatoId;
+		}
+
 		allegatoRichiestaCacheModel.richiestaId = getRichiestaId();
 
 		return allegatoRichiestaCacheModel;
@@ -1145,6 +1178,7 @@ public class AllegatoRichiestaModelImpl
 	private boolean _principale;
 	private boolean _interno;
 	private boolean _visibile;
+	private Long _definizioneAllegatoId;
 	private long _richiestaId;
 
 	public <T> T getColumnValue(String columnName) {
@@ -1190,6 +1224,8 @@ public class AllegatoRichiestaModelImpl
 		_columnOriginalValues.put("principale", _principale);
 		_columnOriginalValues.put("interno", _interno);
 		_columnOriginalValues.put("visibile", _visibile);
+		_columnOriginalValues.put(
+			"definizioneAllegatoId", _definizioneAllegatoId);
 		_columnOriginalValues.put("richiestaId", _richiestaId);
 	}
 
@@ -1242,7 +1278,9 @@ public class AllegatoRichiestaModelImpl
 
 		columnBitmasks.put("visibile", 8192L);
 
-		columnBitmasks.put("richiestaId", 16384L);
+		columnBitmasks.put("definizioneAllegatoId", 16384L);
+
+		columnBitmasks.put("richiestaId", 32768L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}
