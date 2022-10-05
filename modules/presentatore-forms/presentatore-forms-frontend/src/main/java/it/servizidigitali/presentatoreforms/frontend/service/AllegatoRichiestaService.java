@@ -42,7 +42,7 @@ public class AllegatoRichiestaService {
 	@Reference
 	private DLAppService dlAppService;
 
-	public void salvaAllegatiRichiesta(File allegato, String codiceServizio, long richiestaId, String userName, long userId, long groupId) throws Exception {
+	public void salvaAllegatiRichiesta(File allegato, String codiceServizio, long richiestaId, Long definizioneAllegatoId, String userName, long userId, long groupId) throws Exception {
 
 		try {
 
@@ -53,7 +53,7 @@ public class AllegatoRichiestaService {
 					String mimeType = MimeTypesUtil.getContentType(allegato);
 					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), codiceServizio, stream, mimeType,
 							userId, groupId);
-					creaAllegatoRichiesta(idDocumentale, richiestaId, userName, groupId, userId);
+					creaAllegatoRichiesta(idDocumentale, richiestaId, definizioneAllegatoId, userName, groupId, userId);
 				}
 
 			}
@@ -66,7 +66,7 @@ public class AllegatoRichiestaService {
 
 	}
 
-	public void creaAllegatoRichiesta(String idDocumentale, long richiestaId, String userName, long groupId, long userId) {
+	public void creaAllegatoRichiesta(String idDocumentale, long richiestaId, Long definizioneAllegatoId, String userName, long groupId, long userId) {
 		AllegatoRichiesta allegatoRichiesta = allegatoRichiestaLocalService.createAllegatoRichiesta(counterLocalService.increment());
 
 		if (Validator.isNotNull(idDocumentale)) {
@@ -75,6 +75,7 @@ public class AllegatoRichiestaService {
 			allegatoRichiesta.setUserName(userName);
 			allegatoRichiesta.setRichiestaId(richiestaId);
 			allegatoRichiesta.setIdDocumentale(idDocumentale);
+			allegatoRichiesta.setDefinizioneAllegatoId(definizioneAllegatoId);
 
 			allegatoRichiestaLocalService.updateAllegatoRichiesta(allegatoRichiesta);
 		}
@@ -92,7 +93,7 @@ public class AllegatoRichiestaService {
 							userId, groupId);
 
 					if (Validator.isNotNull(idDocumentale)) {
-						creaAllegatoRichiesta(idDocumentale, richiestaId, userName, groupId, userId);
+						creaAllegatoRichiesta(idDocumentale, richiestaId, null, userName, groupId, userId);
 					}
 				}
 			}
