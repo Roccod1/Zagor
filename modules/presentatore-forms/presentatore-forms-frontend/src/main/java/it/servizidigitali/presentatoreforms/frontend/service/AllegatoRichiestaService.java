@@ -28,21 +28,21 @@ public class AllegatoRichiestaService {
 	private static final Log log = LogFactoryUtil.getLog(AllegatoRichiestaService.class.getName());
 
 	@Reference
-	FileServiceFactory fileServiceFactory;
+	private FileServiceFactory fileServiceFactory;
 
 	@Reference
-	AllegatoRichiestaLocalService allegatoRichiestaLocalService;
+	private AllegatoRichiestaLocalService allegatoRichiestaLocalService;
 
 	@Reference
-	DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
+	private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
 
 	@Reference
-	CounterLocalService counterLocalService;
+	private CounterLocalService counterLocalService;
 
 	@Reference
 	private DLAppService dlAppService;
 
-	public void salvaAllegatiRichiesta(File allegato, String codiceServizio, long richiestaId, String userName, long userId, long groupId) {
+	public void salvaAllegatiRichiesta(File allegato, String codiceServizio, long richiestaId, String userName, long userId, long groupId) throws Exception {
 
 		try {
 
@@ -61,6 +61,7 @@ public class AllegatoRichiestaService {
 		}
 		catch (Exception e) {
 			log.error("Errore durante il caricamento del file : " + e.getMessage(), e);
+			throw e;
 		}
 
 	}

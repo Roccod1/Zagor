@@ -111,8 +111,7 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand {
 								themeDisplay.getSiteGroupId());
 					}
 					else {
-						// TODO che tipo di errore è? (cosa vogliamo dire all'utente?)
-						_log.error("SalvaInviaRichiestaActionCommand :: Errore durante il salvataggio dell'allegato firmato!");
+						_log.error("SalvaInviaRichiestaActionCommand :: Allegato firmato non presente!");
 						listaErrori.add(resourceBundleLoader.loadResourceBundle(themeDisplay.getLocale()).getString("errore-durante-il-salvataggio-del-file-principale"));
 						String errori = String.join(StringPool.PERIOD + StringPool.SPACE, listaErrori);
 						actionRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_ERRORI, errori);
@@ -129,8 +128,7 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand {
 										themeDisplay.getSiteGroupId());
 							}
 							else {
-								// TODO che tipo di errore è? (cosa vogliamo dire all'utente?)
-								_log.error("SalvaInviaRichiestaActionCommand :: Errore durante il salvataggio dell'allegato con id definizione : " + definizioneAllegato.getDefinizioneAllegatoId());
+								_log.error("SalvaInviaRichiestaActionCommand :: Non è presente l'allegato con ID definizione : " + definizioneAllegato.getDefinizioneAllegatoId());
 								listaErrori.add(resourceBundleLoader.loadResourceBundle(themeDisplay.getLocale()).getString("errore-durante-il-salvataggio-dell-allegato") + ": "
 										+ definizioneAllegato.getDenominazione());
 								String errori = String.join(StringPool.PERIOD + StringPool.SPACE, listaErrori);
@@ -152,8 +150,7 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand {
 						actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_ESITO_INVIO);
 					}
 					else {
-						// FIXME NPE! (richiesta è NULL!!!!)
-						_log.error("SalvaInviaRichiestaActionCommand :: Errore durante il salvataggio della richiesta con ID : " + richiesta.getRichiestaId());
+						_log.error("SalvaInviaRichiestaActionCommand :: Non è presente una richiesta in stato bozza per il CF : " + user.getScreenName());
 						listaErrori.add(resourceBundleLoader.loadResourceBundle(themeDisplay.getLocale()).getString("errore-durante-il-salvataggio-della-richiesta-con-id") + ": "
 								+ richiesta.getRichiestaId());
 						String errori = String.join(StringPool.PERIOD + StringPool.SPACE, listaErrori);
