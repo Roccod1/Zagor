@@ -79,12 +79,14 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 		Gson gson = new Gson();
 		try {
 			User currentUser = themeDisplay.getUser();
-
+			
 			Procedura procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
 			Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 			Richiesta richiestaBozza = presentatoreFormFrontendService.getRichiestaBozza(currentUser.getScreenName(), procedura.getProceduraId());
 			IstanzaForm istanzaFormRichiesta = presentatoreFormFrontendService.getIstanzaFormRichiesta(richiestaBozza.getRichiestaId(), form.getFormId());
 
+
+			
 			boolean stepComponentiFamiliari = procedura.getStep1Attivo();
 			String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
 
@@ -97,8 +99,10 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 				alpacaStructure = formData.getAlpaca();
 			}
 			else {
-
+				
 				try {
+					
+					presentatoreFormFrontendService.deleteRichiesteBozzaUtente(screenName, procedura.getProceduraId(), form.getFormId());
 
 					if (stepComponentiFamiliari) {
 						Long organizationId = themeDisplay.getSiteGroup().getOrganizationId();
@@ -108,9 +112,9 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 						integrationPreferences.setUsaCache(procedura.isAbilitaCacheIntegrazioneBackoffice());
 
 						List<ComponenteNucleoFamiliare> componentiNucleoFamiliare = datiAnagraficiPortletService.getComponentiNucleoFamiliare(codiceFiscale, organizationId, integrationPreferences);
-						renderRequest.setAttribute("componentiNucleoFamiliare", componentiNucleoFamiliare);
-						renderRequest.setAttribute("codiceFiscaleManuale", codiceFiscale);
-						renderRequest.setAttribute("filtroComponentiFamiliari", filtroComponentiFamiliari);
+						renderRequest.setAttribute(PresentatoreFormsPortletKeys.COMPONENTI_NUCLEO_FAMILIARE, componentiNucleoFamiliare);
+						renderRequest.setAttribute(PresentatoreFormsPortletKeys.CODICE_FISCALE_MANUALE, codiceFiscale);
+						renderRequest.setAttribute(PresentatoreFormsPortletKeys.FILTRO_COMPONENTI_FAMILIARI, filtroComponentiFamiliari);
 
 						return PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO;
 
@@ -154,7 +158,7 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 						// Aggiunta destinazioni d'uso in pagina se certificato
 						if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 							List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
-							renderRequest.setAttribute("destinazioniUso", destinazioniUso);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONI_USO, destinazioniUso);
 						}
 					}
 				}
@@ -180,7 +184,6 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 		}
 		catch (Exception e) {
 			SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
-			// TODO: Capire dove renderizzare
 			log.error("Errore durante il caricamento della bozza all'utente! " + e.getMessage(), e);
 			return PresentatoreFormsPortletKeys.JSP_HOME;
 		}

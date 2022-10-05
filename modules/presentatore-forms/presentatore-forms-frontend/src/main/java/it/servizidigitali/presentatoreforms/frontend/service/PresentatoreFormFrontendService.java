@@ -1,7 +1,7 @@
 package it.servizidigitali.presentatoreforms.frontend.service;
 
 import com.google.gson.Gson;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -10,10 +10,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -33,7 +30,6 @@ import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
 import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
-import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
 import it.servizidigitali.scrivaniaoperatore.service.DestinazioneUsoLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
@@ -70,6 +66,9 @@ public class PresentatoreFormFrontendService {
 
 	@Reference
 	private DestinazioneUsoLocalService destinazioneUsoLocalService;
+	
+	@Reference
+	private CounterLocalService counterLocalService;
 
 	/**
 	 * Ritorna il servizio attuale sulla base della pagina in cui è in esecuzione la portlet.
@@ -140,30 +139,20 @@ public class PresentatoreFormFrontendService {
 	 * @param screenName
 	 * @param proceduraId
 	 */
-	public void deleteRichiesteBozzaUtente(String screenName, long proceduraId) {
-		RichiestaFilters richiestaFilters = new RichiestaFilters();
-		List<Richiesta> listaRichiesteBozza = new ArrayList<Richiesta>();
-
-		// TODO: Ottimizzare utilizzando il nuovo metodo per recuperare le richieste
-		Set<Long> procedureIds = new HashSet<>();
-		procedureIds.add(proceduraId);
-		richiestaFilters.setCodiceFiscale(screenName);
-		richiestaFilters.setProcedureIds(procedureIds);
-		richiestaFilters.setTipo(StatoRichiesta.BOZZA.name());
-
-		listaRichiesteBozza = richiestaLocalService.search(richiestaFilters, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-
-		if (Validator.isNotNull(listaRichiesteBozza) && !listaRichiesteBozza.isEmpty()) {
-			for (Richiesta richiesta : listaRichiesteBozza) {
-
+	public void deleteRichiesteBozzaUtente(String screenName, long proceduraId, long formId) {
+		Richiesta richiestaBozza = getRichiestaBozza(screenName, proceduraId);
+		if (Validator.isNotNull(richiestaBozza)) {
+			IstanzaForm istanzaFormBozza = getIstanzaFormRichiesta(richiestaBozza.getRichiestaId(), formId);
+			
+			if(Validator.isNotNull(istanzaFormBozza)) {
 				try {
-					richiestaLocalService.deleteRichiesta(richiesta.getRichiestaId());
+					istanzaFormLocalService.deleteIstanzaForm(istanzaFormBozza.getIstanzaFormId());
+					richiestaLocalService.deleteRichiesta(richiestaBozza.getRichiestaId());
+				}catch(Exception e) {
+					log.error("Errore durante l'eliminazione della richiesta in bozza dell'utente con CF : " + screenName + e.getMessage(),e);
 				}
-				catch (Exception e) {
-					log.error("Impossibile eliminare la richiesta con ID : " + richiesta.getRichiestaId());
-				}
-
 			}
+
 		}
 	}
 
@@ -193,7 +182,7 @@ public class PresentatoreFormFrontendService {
 		return istanzaFormLocalService.getIstanzaFormByRichiestaIdFormId(richiestaId, formId);
 	}
 
-	public Richiesta createOrUpdateRichiesta(User user, long proceduraId, String dataForm, String stato) {
+	public Richiesta createOrUpdateRichiesta(User user, long proceduraId, String dataForm, String stato, long groupId) {
 
 		Richiesta richiesta = null;
 		IstanzaForm istanzaForm = null;
@@ -221,15 +210,20 @@ public class PresentatoreFormFrontendService {
 					}
 					else {
 						// creazione nuova richiesta
-						richiesta = richiestaLocalService.createRichiesta(0);
+						richiesta = richiestaLocalService.createRichiesta(counterLocalService.increment());
 						richiesta.setCodiceFiscale(user.getScreenName());
 						richiesta.setUserId(user.getUserId());
 						richiesta.setUserName(user.getFullName());
 						richiesta.setEmail(user.getEmailAddress());
 						richiesta.setProceduraId(proceduraId);
+						richiesta.setStato(StatoRichiesta.BOZZA.name());
+						richiesta.setGroupId(groupId);
 						richiesta = richiestaLocalService.updateRichiesta(richiesta);
 
-						istanzaForm = istanzaFormLocalService.createIstanzaForm(0);
+						istanzaForm = istanzaFormLocalService.createIstanzaForm(counterLocalService.increment());
+						istanzaForm.setGroupId(groupId);
+						istanzaForm.setUserId(user.getUserId());
+						istanzaForm.setUserName(user.getFullName());
 						istanzaForm.setRichiestaId(richiesta.getRichiestaId());
 						istanzaForm.setFormId(form.getFormId());
 					}

@@ -45,7 +45,6 @@ import it.servizidigitali.presentatoreforms.frontend.exception.PDFServiceExcepti
 import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.output.VocabolariService;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
-import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -137,8 +136,7 @@ public class JasperReportPDFService implements PDFService {
 
 			Map<String, Object> param = new HashMap<String, Object>();
 
-			FormData formData = (FormData) alpacaStructure.getData();
-			Object data = formData.getAlpaca().getData();
+			Object data = alpacaStructure.getData();
 
 			Gson gson = new Gson();
 			InputStream stream = new ByteArrayInputStream(gson.toJson(data).getBytes("UTF-8"));
@@ -188,6 +186,7 @@ public class JasperReportPDFService implements PDFService {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		Image image = imageLocalService.getCompanyLogo(themeDisplay.getCompany().getLogoId());
+		Gson gson = new Gson();
 
 		try {
 			long proceduraId = richiesta.getProceduraId();
@@ -203,11 +202,9 @@ public class JasperReportPDFService implements PDFService {
 			}
 
 			Map<String, Object> param = new HashMap<String, Object>();
+			
+			Object data = alpacaStructure.getData();
 
-			FormData formData = (FormData) alpacaStructure.getData();
-			Object data = formData.getAlpaca().getData();
-
-			Gson gson = new Gson();
 			InputStream stream = new ByteArrayInputStream(gson.toJson(data).getBytes("UTF-8"));
 
 			JRDataSource jsonDataSource = new JsonDataSource(stream);

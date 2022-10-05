@@ -11,7 +11,6 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -84,7 +83,7 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 			TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
 
 			if (Validator.isNotNull(alpacaStructure)) {
-				actionRequest.setAttribute("alpacaStructure", alpacaStructure);
+				actionRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 			}
 
 			String codiceFiscaleComponente = ParamUtil.getString(actionRequest, PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE);
@@ -122,7 +121,7 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 			// Aggiunta destinazioni d'uso in pagina se certificato
 			if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 				List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
-				actionRequest.setAttribute("destinazioniUso", destinazioniUso);
+				actionRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONI_USO, destinazioniUso);
 			}
 		}
 		catch (Exception e) {
@@ -143,14 +142,6 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 
 		return alpacaStructure;
 
-	}
-
-	private List<String> getListaDestinazioniUso() {
-		List<String> lstDestinazioniUso = new ArrayList<String>();
-		lstDestinazioniUso.add("Bollo");
-		lstDestinazioniUso.add("Esenzione");
-
-		return lstDestinazioniUso;
 	}
 
 }

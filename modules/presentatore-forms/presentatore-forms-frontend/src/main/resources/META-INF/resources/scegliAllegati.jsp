@@ -1,25 +1,26 @@
 <%@ include file="./init.jsp"%>
 
-
-<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.UPLOAD_ALLEGATO_RESOURCE_COMMAND %>" var="uploadFileUrl">
-	<portlet:param name="idServizio" value="${idServizio}" />
-</portlet:resourceURL>
-
 <portlet:actionURL var="salvaUrl" name="<%=PresentatoreFormsPortletKeys.SALVA_INVIA_RICHIESTA_ACTION_COMMAND %>">
 </portlet:actionURL>
 
-<portlet:renderURL var="homeScrivaniaUrl">
-	<portlet:param name="portletAction" value="renderizzaFormJson" />
-	<portlet:param name="idServizio" value="${idServizio}" />
-	<portlet:param name="caricaBozza" value="true" />
-	<portlet:param name="idRichiestaServizio" value="${idRichiesta}" />
-</portlet:renderURL>
+<portlet:actionURL var="indietroUrl" name="<%=PresentatoreFormsPortletKeys.INDIETRO_ACTION_COMMAND %>">
+</portlet:actionURL>
+
+<portlet:resourceURL id="/downloadIstanza" var="downloadIstanzaUrl"/>
+
+<portlet:renderURL var="homeURL"></portlet:renderURL>
 
 <script>
 console.log("dentro scegli allegati");
 </script>
-<c:choose>
-	<c:when test="${richiestaStatus == bozzaStatus }">
+
+
+<c:if test="${not empty listaErrori}">
+	<div class="alert alert-danger">
+		${listaErrori}
+	</div>
+</c:if>
+
 		<div class="row-fluid">
 			<div class="page-header">
 				<h2 class="noMargin">${titoloPortletServizio}</h2>
@@ -44,7 +45,7 @@ console.log("dentro scegli allegati");
 			                    <ul class="nav navbar-nav">
 			                       
 			                        <li data-alpaca-wizard-step-index="0" class="disabled">
-			                            <div class="holder">
+			                            <div class="holder"><c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>
 			                                <div class="title">...</div>
 			                                <div class="description"></div>
 			                            </div>
@@ -95,22 +96,20 @@ console.log("dentro scegli allegati");
 										<%-- FIXME <liferay-journal:journal-article articleId="${scegliAllegatiDescription}" languageId="<%=themeDisplay.getLanguageId()%>" groupId="<%=themeDisplay.getScopeGroup().getGroupId()%>"/> --%>
 										
 										<div class="form-actions text-center">
-											<portlet:resourceURL id="/downloadIstanza" var="downloadIstanzaUrl"/>
-											<a href="${downloadIstanzaUrl }" >Download</a>
-<%-- 											<button class="btn btn-primary" type="button" href="${downloadIstanzaUrl}"> --%>
-<!-- 												<i class="fa fa-download marginright10" aria-hidden="true"></i> -->
-<%-- 												<liferay-ui:message key="download.istanza.dafirmare" /> --%>
-<!-- 											</button> -->
+											<button class="btn btn-primary" type="button" onclick="window.open('${downloadIstanzaUrl}');">
+												<i class="fa fa-download marginright10" aria-hidden="true"></i>
+												<liferay-ui:message key="download.istanza.dafirmare" />
+											</button>
 										</div>
 										
-										<label class="control-label" for="uploadFileFirmato"><liferay-ui:message key="upload.documento.firmato" /> (<liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione" arguments="${uploadFileMaxSizeLabel}"/>): </label>
+										<label class="control-label" for="uploadFileFirmato"><liferay-ui:message key="upload.documento.firmato" />* (<liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione" arguments="${uploadFileMaxSizeLabel}"/>): </label>
 										<div class="controls">
-											<input type="hidden" class="allegato" name="${nomeFileFirmato}"	value="${empty pdfFirmato ? '' : pdfFirmato.fileName }">
+<%-- 											<input type="hidden" class="allegato" name="${nomeFileFirmato}"	value="${empty pdfFirmato ? '' : pdfFirmato.fileName }"> --%>
 											
 											<div id="div-uploadFileFirmato" <c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>>					
 												<div class="control-group">
 											  	  	<div class="" style="margin-left:0px; display: inline-block">
-														<aui:input type="file" id="uploadFileFirmato" name="" required="true">
+														<aui:input type="file" id="uploadFileFirmato" name="uploadFileFirmato" required="true" label="" >
 															<aui:validator name="acceptFiles">".pdf,.p7m"</aui:validator>
 															<aui:validator name="custom" errorMessage="La dimensione del file non deve superare ${uploadFileMaxSizeLabel}">
 																function(val,node,junction){
@@ -119,9 +118,6 @@ console.log("dentro scegli allegati");
 																</aui:validator>
 														</aui:input>
 												    </div>
-												    <button class="btn btn-secondary save-attachment-uploadFileFirmato" type="button" style="vertical-align: top">
-														<liferay-ui:message key="label-conferma"/>
-												    </button>
 											    </div>
 											    <div id="alertUplaodAllegato-uploadFileFirmato" class="portlet-msg-alert hidden">
 													<liferay-ui:message key="errore-durante-il-caricamento-dell-allegato"/>
@@ -176,7 +172,7 @@ console.log("dentro scegli allegati");
 	
 									<c:forEach items="${allegati}" var="allegato" varStatus="loop">
 										<div class="control-group mt-3 alpaca-field-object">
-											<label class="control-label" for="allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}">${allegato.definizione.denominazione}<c:if test="${allegato.definizione.obbligatorio}">*</c:if> (<liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione" arguments="${uploadFileMaxSizeLabel}"/>):</label>
+											<label class="control-label" for="allegato-${allegato.definizione.definizioneAllegatoId}">${allegato.definizione.denominazione}<c:if test="${allegato.definizione.obbligatorio}">*</c:if> (<liferay-ui:message key="pdf.firmato.istanza.download.con.allegati.alert.dimensione" arguments="${uploadFileMaxSizeLabel}"/>):</label>
 											
 											<c:if test="${not empty allegato.definizione.filenameModello }">
 												<span class="help-block"> 
@@ -185,17 +181,15 @@ console.log("dentro scegli allegati");
 												<div class="mt-3 mb-3">
 													<portlet:resourceURL id="downloadModello" var="downloadModelloUrl">
 														<portlet:param name="id" value="${allegato.definizione.definizioneAllegatoId}" />
-														<portlet:param name="fileName" value="${allegato.definizione.filenameModello}" />
-														<portlet:param name="idServizio" value="${idServizio}" />
 													</portlet:resourceURL>
-													<a class="btn btn-custom" href="${downloadModelloUrl}" title='<liferay-ui:message key="label.download" />'>
+													<a class="btn btn-custom" onclick="window.open('${downloadModelloUrl}');" title='<liferay-ui:message key="label.download" />'>
 														<liferay-ui:message key="download.modello" />
 													</a>
 												</div>
 											</c:if>
 	
 											<div class="controls">
-											<input type="hidden" class="allegato" name="allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" value="${empty allegato.datiFile ? '' : allegato.datiFile.fileName }">
+											<input type="hidden" class="allegato" name="allegato-${allegato.definizione.definizioneAllegatoId}" value="${empty allegato.datiFile ? '' : allegato.datiFile.fileName }">
 												<div class="row-fluid">
 													<div class="span8">
 														<c:choose>
@@ -220,11 +214,11 @@ console.log("dentro scegli allegati");
 														</c:choose>
 														
 														<%-- +++ MODIFICATO --%>
-														<div id="div-allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" <c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>>					
+														<div id="div-allegato-${allegato.definizione.definizioneAllegatoId}" <c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>>					
 												
 															<div class="control-group">
 														  	  	<div class="span8" style="margin-left:0px; display: inline-block">
-																	<aui:input type="file" id="allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" name="" required="${allegato.definizione.obbligatorio}">
+																	<aui:input type="file" id="allegato-${allegato.definizione.definizioneAllegatoId}" name="allegato-${allegato.definizione.definizioneAllegatoId}" required="${allegato.definizione.obbligatorio}" label="" >
 																		<aui:validator name="acceptFiles">"${allegato.definizione.tipiFileAmmessi}"</aui:validator>
 																		<aui:validator name="custom" errorMessage="La dimensione del file non deve superare ${uploadFileMaxSizeLabel}">
 																			function(val,node,junction){
@@ -233,14 +227,11 @@ console.log("dentro scegli allegati");
 																			</aui:validator>
 																	</aui:input>
 															    </div>
-															    <button class="btn btn-secondary save-attachment-${loop.index}-${allegato.definizione.definizioneAllegatoId}" type="button"  style="vertical-align: top">
-																	<liferay-ui:message key="label-conferma"/>
-															    </button>
 														    </div>
-														    <div id="alertUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" class="portlet-msg-alert hidden">
+														    <div id="alertUplaodAllegato-${allegato.definizione.definizioneAllegatoId}" class="portlet-msg-alert hidden">
 																<liferay-ui:message key="errore-durante-il-caricamento-dell-allegato"/>
 															</div>
-															<div id="successUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}" class="portlet-msg-success hidden">
+															<div id="successUplaodAllegato-${allegato.definizione.definizioneAllegatoId}" class="portlet-msg-success hidden">
 																<liferay-ui:message key="conferma-caricamento-dell-allegato"/>
 															</div>
 														
@@ -255,7 +246,6 @@ console.log("dentro scegli allegati");
 							</div>
 						</div>
 					</c:if>
-					<input type="hidden" name="idIstanzaForm" value="${idRichiesta}">
 					<input type="hidden" name="inBozza" value="true" id="in-bozza">
 					
 				</aui:form>
@@ -263,7 +253,7 @@ console.log("dentro scegli allegati");
 				<div class="mt-3"></div>
 				
 				<div class="form-actions">
-					<a class="btn btn-sm btn-secondary" href="${homeScrivaniaUrl}"><liferay-ui:message key="label.indietro" /></a>
+					<a class="btn btn-sm btn-secondary" href="${homeURL}"><liferay-ui:message key="label.indietro" /></a>
 					<c:choose>
 	        			<c:when test="${firmaDocumentoAbilitata && invioIstanza}">
 							<button class="btn btn-sm btn-primary pull-right" id="salva-e-invia">
@@ -271,11 +261,7 @@ console.log("dentro scegli allegati");
 							</button>
 	        			</c:when>
 	        			<c:otherwise>
-	        				<portlet:resourceURL id="downloadIstanza" var="downloadIstanzaUrl">
-								<portlet:param name="idServizio" value="${idServizio}" />
-								<portlet:param name="idIstanzaForm" value="${idRichiesta}" />
-							</portlet:resourceURL>
-							<a class="btn btn-sm btn-secondary" href="${downloadIstanzaUrl}"><liferay-ui:message key="download.istanza" /></a>
+							<a class="btn btn-sm btn-secondary" onclick="window.open('${downloadIstanzaUrl}');"><liferay-ui:message key="download.istanza" /></a>
 							<c:choose>
 								<c:when test="${invioIstanza}">
 		        					<button class="btn btn-sm btn-primary pull-right" id="salva-e-invia">
@@ -355,22 +341,12 @@ console.log("dentro scegli allegati");
 				</div>
 			</div>
 		</div>
-		</c:when>
-		<c:otherwise>
-			<div  class="row-fluid">
-				La richiesta non si trova in stato bozza, controlla le tue richieste
-				nella tua <a href="${pathScrivaniaVirtuale}">Scrivania Virtuale</a>
-			</div>
-		</c:otherwise>
 	
-</c:choose>
 <aui:script use="liferay-form">
 console.log("aui script");
 </aui:script>
 
 <script>
-
-	var isDebugEnabled = ${isDebugEnabled};
 	
 	$(function(){
 		//Salva in bozza handler
@@ -413,127 +389,7 @@ console.log("aui script");
 			//Submit del form
 			$("#<portlet:namespace />salva-form").submit();
 		});
-	
-		
-		<%-- GESTIONE UPLOAD FILE FIRMATO --%>	
-	$('.save-attachment-uploadFileFirmato').on('click', function(){	
-			var nomeAllegato = $('#<portlet:namespace />uploadFileFirmato').val();
-	    	var attachmentFileNameValue = nomeAllegato.replace('C:\\fakepath\\', ' ');
-			var idAllegatoTemporaneoValue = '';
-			
-			var formData = new FormData();
-			formData.append('<portlet:namespace />' + 'attachmentFile', $('#<portlet:namespace />uploadFileFirmato')[0].files[0]);
-			formData.append('<portlet:namespace />' + 'idDefinizioneAllegato', 0);
-			formData.append('<portlet:namespace />' + 'idIstanzaForm', ${idRichiesta});
-			
-			if(nomeAllegato) {
-				
-				$.ajax({
-		    		url: "${uploadFileUrl}",
-		    		type: 'POST',
-		    		data: formData,
-		    		processData: false,
-		    		contentType: false,
-		    		success: function(data){	
-		    			if(data.status==='ok'){
-		    				console.log("Successo in upload del file!");
-		    				$("input[name='${nomeFileFirmato}']").val(data.fileName);
-		    	        	
-		    				$('#alertUplaodAllegato-uploadFileFirmato').addClass('hidden');
-		    				$('#successUplaodAllegato-uploadFileFirmato').removeClass('hidden');
-	 	    				idAllegatoTemporaneoValue = data.idAllegatoTemporaneo;
-	 	    				
-		    			}else if(data.status==='error'){
-		    	        	$("input[name='${nomeFileFirmato}']").val('');
-		    	    
-		    				$('#alertUplaodAllegato-uploadFileFirmato').removeClass('hidden');
-		    				$('#successUplaodAllegato-uploadFileFirmato').addClass('hidden');
-		    				console.log("Errore durante l'upload del file!");
-		    			}
-		    		}, error: function(xhr){
-	    				console.log("Errore durante CHIAMATA l'upload del file!");
-	
-		    		}
-		    	});
-			}
-		
-	});
-		
-		<%-- GESTIONE UPLOAD ALTRI ALLEGATI --%>
-		<c:forEach items="${allegati}" var="allegato" varStatus="loop">
-		
-		$('.save-attachment-${loop.index}-${allegato.definizione.definizioneAllegatoId}').on('click', function(){
-			
-			
-			var nomeAllegato = $('#<portlet:namespace />allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').val();
-	    	var attachmentFileNameValue = nomeAllegato.replace('C:\\fakepath\\', ' ');
-			var idAllegatoTemporaneoValue = '';
-			
-			var formData = new FormData();
-			formData.append('<portlet:namespace />' + 'attachmentFile', $('#<portlet:namespace />allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}')[0].files[0]);
-			formData.append('<portlet:namespace />' + 'idDefinizioneAllegato', ${allegato.definizione.definizioneAllegatoId});
-			formData.append('<portlet:namespace />' + 'idIstanzaForm', ${idRichiesta});
-			
-			if(nomeAllegato){
-				
-				$.ajax({
-		    		url: "${uploadFileUrl}",
-		    		type: 'POST',
-		    		data: formData,
-		    		processData: false,
-		    		contentType: false,
-		    		success: function(data){	
-		    			if(data.status==='ok'){
-		    				console.log("Successo in upload del file!");
-		    				$("input[name='allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}']").val(data.fileName);
-		    	        	
-		    				$('#alertUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').addClass('hidden');
-		    				$('#successUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').removeClass('hidden');
-		    				idAllegatoTemporaneoValue = data.idAllegatoTemporaneo;
-		    			}else if(data.status==='error'){
-		    	        	$("input[name='allegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}']").val('');
-		    	    	
-		    				$('#alertUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').removeClass('hidden');
-		    				$('#successUplaodAllegato-${loop.index}-${allegato.definizione.definizioneAllegatoId}').addClass('hidden');
 
-		    				console.log("Errore durante l'upload del file!");
-		    			}
-		    		}, error: function(xhr){
-	    				console.log("Errore durante CHIAMATA l'upload del file!");
-
-		    		}
-		    	});
-			}
-		
-    });
-			
-	</c:forEach>	
-		
-		//Download istanza da firmare
-		$("#form-download-istanza").submit(function(e){
-			var $downloadModal = $('#download-modal');
-			$('.dismiss-download-pdf').prop('disabled', true);
-			$downloadModal.modal('show');
-	        
-			$.fileDownload($(this).prop('action'), {
-		        httpMethod: "POST",
-		        data: $(this).serialize(),
-		        successCallback: function (url) {
-		        	if (isDebugEnabled) {
-		        		console.log('successCallback');
-		        	}
-	                $downloadModal.modal('hide');
-	            },
-	            failCallback: function (responseHtml, url) {
-	            	if (isDebugEnabled) {
-	            		console.log('failCallback');
-	            	}
-	            	$('.modal-body', $downloadModal).html('<div class="alert alert-danger" role="alert"><liferay-ui:message key="errore.download.pdf" /></div>');
-	            	$('.dismiss-download-pdf').prop('disabled', false);
-	            }
-		    });
-		    e.preventDefault(); //otherwise a normal form submit would occur
-		});
 	});
 	
 </script>
