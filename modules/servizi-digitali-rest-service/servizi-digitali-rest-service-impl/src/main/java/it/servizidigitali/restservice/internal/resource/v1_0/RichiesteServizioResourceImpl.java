@@ -86,8 +86,7 @@ public class RichiesteServizioResourceImpl extends BaseRichiesteServizioResource
 		}
 
 		StatoRichiesta statoRichiesta = StatoRichiesta.valueOf(updateStatoRichiestaServizioRequest.getStato());
-		richiestaLocalService.updateStatoRichiesta(richiesta.getRichiestaId(), statoRichiesta.name());
-
+		richiestaLocalService.updateStatoRichiesta(richiesta.getRichiestaId(), statoRichiesta.name(), updateStatoRichiestaServizioRequest.getNote());
 		richiesta = richiestaLocalService.getRichiesta(updateStatoRichiestaServizioRequest.getId());
 
 		return entityToSchemaModelConverter.getRichiestaServizio(richiesta);

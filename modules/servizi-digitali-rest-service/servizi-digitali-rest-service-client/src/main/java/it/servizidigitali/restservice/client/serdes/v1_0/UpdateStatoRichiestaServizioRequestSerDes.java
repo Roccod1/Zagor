@@ -56,6 +56,20 @@ public class UpdateStatoRichiestaServizioRequestSerDes {
 			sb.append(updateStatoRichiestaServizioRequest.getId());
 		}
 
+		if (updateStatoRichiestaServizioRequest.getNote() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"note\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(updateStatoRichiestaServizioRequest.getNote()));
+
+			sb.append("\"");
+		}
+
 		if (updateStatoRichiestaServizioRequest.getStato() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -102,6 +116,15 @@ public class UpdateStatoRichiestaServizioRequestSerDes {
 				String.valueOf(updateStatoRichiestaServizioRequest.getId()));
 		}
 
+		if (updateStatoRichiestaServizioRequest.getNote() == null) {
+			map.put("note", null);
+		}
+		else {
+			map.put(
+				"note",
+				String.valueOf(updateStatoRichiestaServizioRequest.getNote()));
+		}
+
 		if (updateStatoRichiestaServizioRequest.getStato() == null) {
 			map.put("stato", null);
 		}
@@ -139,6 +162,12 @@ public class UpdateStatoRichiestaServizioRequestSerDes {
 				if (jsonParserFieldValue != null) {
 					updateStatoRichiestaServizioRequest.setId(
 						Long.valueOf((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "note")) {
+				if (jsonParserFieldValue != null) {
+					updateStatoRichiestaServizioRequest.setNote(
+						(String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "stato")) {

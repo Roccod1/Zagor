@@ -70,6 +70,32 @@ public class UpdateStatoRichiestaServizioRequest implements Serializable {
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected Long id;
 
+	@Schema(description = "Note")
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	@JsonIgnore
+	public void setNote(UnsafeSupplier<String, Exception> noteUnsafeSupplier) {
+		try {
+			note = noteUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField(description = "Note")
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected String note;
+
 	@Schema(description = "Stato")
 	public String getStato() {
 		return stato;
@@ -136,6 +162,20 @@ public class UpdateStatoRichiestaServizioRequest implements Serializable {
 			sb.append("\"id\": ");
 
 			sb.append(id);
+		}
+
+		if (note != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"note\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(note));
+
+			sb.append("\"");
 		}
 
 		if (stato != null) {

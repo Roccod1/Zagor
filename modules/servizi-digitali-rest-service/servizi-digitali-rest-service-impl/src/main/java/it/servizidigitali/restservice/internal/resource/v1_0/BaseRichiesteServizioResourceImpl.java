@@ -137,7 +137,7 @@ public abstract class BaseRichiesteServizioResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PUT' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/richieste-servizio' -d $'{"id": ___, "stato": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PUT' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/richieste-servizio' -d $'{"id": ___, "note": ___, "stato": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Operation(
 		description = "Modifica lo stato di una richiesta servizio"

@@ -188,6 +188,9 @@ components:
                 stato:
                   description: Stato
                   type: string
+                note:
+                  description: Note
+                  type: string
                   
         ComponenteNucleoFamiliareLight:
             type: object

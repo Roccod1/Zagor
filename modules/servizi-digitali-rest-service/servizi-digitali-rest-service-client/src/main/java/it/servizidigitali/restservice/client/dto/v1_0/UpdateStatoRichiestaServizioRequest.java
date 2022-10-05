@@ -40,6 +40,25 @@ public class UpdateStatoRichiestaServizioRequest
 
 	protected Long id;
 
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public void setNote(UnsafeSupplier<String, Exception> noteUnsafeSupplier) {
+		try {
+			note = noteUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected String note;
+
 	public String getStato() {
 		return stato;
 	}
