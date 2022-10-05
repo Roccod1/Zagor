@@ -134,8 +134,59 @@ public abstract class BaseRichiesteServizioResourceTestCase {
 	}
 
 	@Test
+	public void testPatchRichiestaServizio() throws Exception {
+		RichiesteServizio postRichiesteServizio =
+			testPatchRichiesteServizio_addRichiesteServizio();
+
+		testPatchRichiestaServizio_addRichiestaServizio(
+			postRichiesteServizio.getId(), randomRichiestaServizio());
+
+		RichiestaServizio randomRichiestaServizio = randomRichiestaServizio();
+
+		RichiestaServizio patchRichiestaServizio =
+			richiesteServizioResource.patchRichiestaServizio(null);
+
+		assertEquals(randomRichiestaServizio, patchRichiestaServizio);
+		assertValid(patchRichiestaServizio);
+	}
+
+	protected RichiestaServizio testPatchRichiestaServizio_addRichiestaServizio(
+			long richiesteServizioId, RichiestaServizio richiestaServizio)
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	@Test
 	public void testInsertRichiestaServizio() throws Exception {
 		Assert.assertTrue(true);
+	}
+
+	@Test
+	public void testUpdateStatoRichiestaServizio() throws Exception {
+		RichiesteServizio postRichiesteServizio =
+			testPutRichiesteServizio_addRichiesteServizio();
+
+		testUpdateStatoRichiestaServizio_addRichiestaServizio(
+			postRichiesteServizio.getId(), randomRichiestaServizio());
+
+		RichiestaServizio randomRichiestaServizio = randomRichiestaServizio();
+
+		RichiestaServizio putRichiestaServizio =
+			richiesteServizioResource.updateStatoRichiestaServizio(null);
+
+		assertEquals(randomRichiestaServizio, putRichiestaServizio);
+		assertValid(putRichiestaServizio);
+	}
+
+	protected RichiestaServizio
+			testUpdateStatoRichiestaServizio_addRichiestaServizio(
+				long richiesteServizioId, RichiestaServizio richiestaServizio)
+		throws Exception {
+
+		return richiesteServizioResource.updateStatoRichiestaServizio(
+			richiesteServizioId, richiestaServizio);
 	}
 
 	@Test
@@ -161,57 +212,6 @@ public abstract class BaseRichiesteServizioResourceTestCase {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
-	}
-
-	@Test
-	public void testPatchRichiestaServizio() throws Exception {
-		RichiesteServizio postRichiesteServizio =
-			testPatchRichiesteServizio_addRichiesteServizio();
-
-		testPatchRichiestaServizio_addRichiestaServizio(
-			postRichiesteServizio.getId(), randomRichiestaServizio());
-
-		RichiestaServizio randomRichiestaServizio = randomRichiestaServizio();
-
-		RichiestaServizio patchRichiestaServizio =
-			richiesteServizioResource.patchRichiestaServizio(null, null);
-
-		assertEquals(randomRichiestaServizio, patchRichiestaServizio);
-		assertValid(patchRichiestaServizio);
-	}
-
-	protected RichiestaServizio testPatchRichiestaServizio_addRichiestaServizio(
-			long richiesteServizioId, RichiestaServizio richiestaServizio)
-		throws Exception {
-
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
-	}
-
-	@Test
-	public void testUpdateRichiestaServizio() throws Exception {
-		RichiesteServizio postRichiesteServizio =
-			testPutRichiesteServizio_addRichiesteServizio();
-
-		testUpdateRichiestaServizio_addRichiestaServizio(
-			postRichiesteServizio.getId(), randomRichiestaServizio());
-
-		RichiestaServizio randomRichiestaServizio = randomRichiestaServizio();
-
-		RichiestaServizio putRichiestaServizio =
-			richiesteServizioResource.updateRichiestaServizio(null, null);
-
-		assertEquals(randomRichiestaServizio, putRichiestaServizio);
-		assertValid(putRichiestaServizio);
-	}
-
-	protected RichiestaServizio
-			testUpdateRichiestaServizio_addRichiestaServizio(
-				long richiesteServizioId, RichiestaServizio richiestaServizio)
-		throws Exception {
-
-		return richiesteServizioResource.updateRichiestaServizio(
-			richiesteServizioId, richiestaServizio);
 	}
 
 	protected void assertContains(

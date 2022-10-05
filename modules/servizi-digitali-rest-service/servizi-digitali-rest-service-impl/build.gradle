@@ -27,6 +27,7 @@ dependencies {
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-backoffice-integration")
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-api")	
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-utility")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-richieste-common")
 	
 	compileInclude group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '8.14.1'
 	

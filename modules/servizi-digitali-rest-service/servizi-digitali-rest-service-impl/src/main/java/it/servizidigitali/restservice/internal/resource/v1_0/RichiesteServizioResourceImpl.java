@@ -6,7 +6,7 @@ import com.liferay.portal.vulcan.pagination.Page;
 
 import java.util.ArrayList;
 
-import javax.validation.constraints.NotNull;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 
 import org.osgi.service.component.annotations.Component;
@@ -16,8 +16,12 @@ import org.osgi.service.component.annotations.ServiceScope;
 import it.servizidigitali.restservice.dto.v1_0.InsertRichiestaServizioRequest;
 import it.servizidigitali.restservice.dto.v1_0.RichiestaServizio;
 import it.servizidigitali.restservice.dto.v1_0.UpdateRichiestaServizioRequest;
+import it.servizidigitali.restservice.dto.v1_0.UpdateStatoRichiestaServizioRequest;
+import it.servizidigitali.restservice.internal.constant.ServiziDigitaliRestConstants;
 import it.servizidigitali.restservice.internal.converter.EntityToSchemaModelConverter;
+import it.servizidigitali.restservice.internal.util.MessageUtil;
 import it.servizidigitali.restservice.resource.v1_0.RichiesteServizioResource;
+import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
@@ -71,16 +75,27 @@ public class RichiesteServizioResourceImpl extends BaseRichiesteServizioResource
 	}
 
 	@Override
-	public RichiestaServizio updateRichiestaServizio(@NotNull Long id, UpdateRichiestaServizioRequest updateRichiestaServizioRequest) throws Exception {
+	public RichiestaServizio updateStatoRichiestaServizio(UpdateStatoRichiestaServizioRequest updateStatoRichiestaServizioRequest) throws Exception {
 
-		RichiestaServizio r = new RichiestaServizio();
-		r.setId(99L);
-		return r;
+		MessageUtil messageUtil = new MessageUtil(ServiziDigitaliRestConstants.BUNDLE_SYMBOLIC_NAME, null);
+
+		Richiesta richiesta = richiestaLocalService.getRichiesta(updateStatoRichiestaServizioRequest.getId());
+		if (richiesta == null) {
+			String message = messageUtil.getMessage("resourceNotFoundMessage", "Richiesta");
+			throw new NotFoundException(message);
+		}
+
+		StatoRichiesta statoRichiesta = StatoRichiesta.valueOf(updateStatoRichiestaServizioRequest.getStato());
+		richiestaLocalService.updateStatoRichiesta(richiesta.getRichiestaId(), statoRichiesta.name());
+
+		richiesta = richiestaLocalService.getRichiesta(updateStatoRichiestaServizioRequest.getId());
+
+		return entityToSchemaModelConverter.getRichiestaServizio(richiesta);
 
 	}
 
 	@Override
-	public RichiestaServizio patchRichiestaServizio(@NotNull Long id, UpdateRichiestaServizioRequest updateRichiestaServizioRequest) throws Exception {
+	public RichiestaServizio patchRichiestaServizio(UpdateRichiestaServizioRequest updateRichiestaServizioRequest) throws Exception {
 		RichiestaServizio r = new RichiestaServizio();
 		r.setId(99L);
 		r.setStato(updateRichiestaServizioRequest.getStato());

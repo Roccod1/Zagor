@@ -3,6 +3,7 @@ package it.servizidigitali.restservice.client.resource.v1_0;
 import it.servizidigitali.restservice.client.dto.v1_0.InsertRichiestaServizioRequest;
 import it.servizidigitali.restservice.client.dto.v1_0.RichiestaServizio;
 import it.servizidigitali.restservice.client.dto.v1_0.UpdateRichiestaServizioRequest;
+import it.servizidigitali.restservice.client.dto.v1_0.UpdateStatoRichiestaServizioRequest;
 import it.servizidigitali.restservice.client.http.HttpInvoker;
 import it.servizidigitali.restservice.client.pagination.Page;
 import it.servizidigitali.restservice.client.problem.Problem;
@@ -35,6 +36,14 @@ public interface RichiesteServizioResource {
 			Integer page, Integer size, String q)
 		throws Exception;
 
+	public RichiestaServizio patchRichiestaServizio(
+			UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
+		throws Exception;
+
+	public HttpInvoker.HttpResponse patchRichiestaServizioHttpResponse(
+			UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
+		throws Exception;
+
 	public RichiestaServizio insertRichiestaServizio(
 			InsertRichiestaServizioRequest insertRichiestaServizioRequest)
 		throws Exception;
@@ -43,29 +52,19 @@ public interface RichiesteServizioResource {
 			InsertRichiestaServizioRequest insertRichiestaServizioRequest)
 		throws Exception;
 
+	public RichiestaServizio updateStatoRichiestaServizio(
+			UpdateStatoRichiestaServizioRequest
+				updateStatoRichiestaServizioRequest)
+		throws Exception;
+
+	public HttpInvoker.HttpResponse updateStatoRichiestaServizioHttpResponse(
+			UpdateStatoRichiestaServizioRequest
+				updateStatoRichiestaServizioRequest)
+		throws Exception;
+
 	public RichiestaServizio getRichiestaServizio(Long id) throws Exception;
 
 	public HttpInvoker.HttpResponse getRichiestaServizioHttpResponse(Long id)
-		throws Exception;
-
-	public RichiestaServizio patchRichiestaServizio(
-			Long id,
-			UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
-		throws Exception;
-
-	public HttpInvoker.HttpResponse patchRichiestaServizioHttpResponse(
-			Long id,
-			UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
-		throws Exception;
-
-	public RichiestaServizio updateRichiestaServizio(
-			Long id,
-			UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
-		throws Exception;
-
-	public HttpInvoker.HttpResponse updateRichiestaServizioHttpResponse(
-			Long id,
-			UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
 		throws Exception;
 
 	public static class Builder {
@@ -232,6 +231,90 @@ public interface RichiesteServizioResource {
 			return httpInvoker.invoke();
 		}
 
+		public RichiestaServizio patchRichiestaServizio(
+				UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
+			throws Exception {
+
+			HttpInvoker.HttpResponse httpResponse =
+				patchRichiestaServizioHttpResponse(
+					updateRichiestaServizioRequest);
+
+			String content = httpResponse.getContent();
+
+			if ((httpResponse.getStatusCode() / 100) != 2) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response content: " + content);
+				_logger.log(
+					Level.WARNING,
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.log(
+					Level.WARNING,
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+
+				throw new Problem.ProblemException(Problem.toDTO(content));
+			}
+			else {
+				_logger.fine("HTTP response content: " + content);
+				_logger.fine(
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.fine(
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+			}
+
+			try {
+				return RichiestaServizioSerDes.toDTO(content);
+			}
+			catch (Exception e) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response: " + content, e);
+
+				throw new Problem.ProblemException(Problem.toDTO(content));
+			}
+		}
+
+		public HttpInvoker.HttpResponse patchRichiestaServizioHttpResponse(
+				UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
+			throws Exception {
+
+			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+			httpInvoker.body(
+				updateRichiestaServizioRequest.toString(), "application/json");
+
+			if (_builder._locale != null) {
+				httpInvoker.header(
+					"Accept-Language", _builder._locale.toLanguageTag());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
+			httpInvoker.httpMethod(HttpInvoker.HttpMethod.PATCH);
+
+			httpInvoker.path(
+				_builder._scheme + "://" + _builder._host + ":" +
+					_builder._port +
+						"/o/servizi-digitali-rest-service/v1.0/richieste-servizio");
+
+			httpInvoker.userNameAndPassword(
+				_builder._login + ":" + _builder._password);
+
+			return httpInvoker.invoke();
+		}
+
 		public RichiestaServizio insertRichiestaServizio(
 				InsertRichiestaServizioRequest insertRichiestaServizioRequest)
 			throws Exception {
@@ -316,6 +399,94 @@ public interface RichiesteServizioResource {
 			return httpInvoker.invoke();
 		}
 
+		public RichiestaServizio updateStatoRichiestaServizio(
+				UpdateStatoRichiestaServizioRequest
+					updateStatoRichiestaServizioRequest)
+			throws Exception {
+
+			HttpInvoker.HttpResponse httpResponse =
+				updateStatoRichiestaServizioHttpResponse(
+					updateStatoRichiestaServizioRequest);
+
+			String content = httpResponse.getContent();
+
+			if ((httpResponse.getStatusCode() / 100) != 2) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response content: " + content);
+				_logger.log(
+					Level.WARNING,
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.log(
+					Level.WARNING,
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+
+				throw new Problem.ProblemException(Problem.toDTO(content));
+			}
+			else {
+				_logger.fine("HTTP response content: " + content);
+				_logger.fine(
+					"HTTP response message: " + httpResponse.getMessage());
+				_logger.fine(
+					"HTTP response status code: " +
+						httpResponse.getStatusCode());
+			}
+
+			try {
+				return RichiestaServizioSerDes.toDTO(content);
+			}
+			catch (Exception e) {
+				_logger.log(
+					Level.WARNING,
+					"Unable to process HTTP response: " + content, e);
+
+				throw new Problem.ProblemException(Problem.toDTO(content));
+			}
+		}
+
+		public HttpInvoker.HttpResponse
+				updateStatoRichiestaServizioHttpResponse(
+					UpdateStatoRichiestaServizioRequest
+						updateStatoRichiestaServizioRequest)
+			throws Exception {
+
+			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+			httpInvoker.body(
+				updateStatoRichiestaServizioRequest.toString(),
+				"application/json");
+
+			if (_builder._locale != null) {
+				httpInvoker.header(
+					"Accept-Language", _builder._locale.toLanguageTag());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._headers.entrySet()) {
+
+				httpInvoker.header(entry.getKey(), entry.getValue());
+			}
+
+			for (Map.Entry<String, String> entry :
+					_builder._parameters.entrySet()) {
+
+				httpInvoker.parameter(entry.getKey(), entry.getValue());
+			}
+
+			httpInvoker.httpMethod(HttpInvoker.HttpMethod.PUT);
+
+			httpInvoker.path(
+				_builder._scheme + "://" + _builder._host + ":" +
+					_builder._port +
+						"/o/servizi-digitali-rest-service/v1.0/richieste-servizio");
+
+			httpInvoker.userNameAndPassword(
+				_builder._login + ":" + _builder._password);
+
+			return httpInvoker.invoke();
+		}
+
 		public RichiestaServizio getRichiestaServizio(Long id)
 			throws Exception {
 
@@ -383,182 +554,6 @@ public interface RichiesteServizioResource {
 			}
 
 			httpInvoker.httpMethod(HttpInvoker.HttpMethod.GET);
-
-			httpInvoker.path(
-				_builder._scheme + "://" + _builder._host + ":" +
-					_builder._port +
-						"/o/servizi-digitali-rest-service/v1.0/richieste-servizio/{id}");
-
-			httpInvoker.path("id", id);
-
-			httpInvoker.userNameAndPassword(
-				_builder._login + ":" + _builder._password);
-
-			return httpInvoker.invoke();
-		}
-
-		public RichiestaServizio patchRichiestaServizio(
-				Long id,
-				UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
-			throws Exception {
-
-			HttpInvoker.HttpResponse httpResponse =
-				patchRichiestaServizioHttpResponse(
-					id, updateRichiestaServizioRequest);
-
-			String content = httpResponse.getContent();
-
-			if ((httpResponse.getStatusCode() / 100) != 2) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response content: " + content);
-				_logger.log(
-					Level.WARNING,
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.log(
-					Level.WARNING,
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-
-				throw new Problem.ProblemException(Problem.toDTO(content));
-			}
-			else {
-				_logger.fine("HTTP response content: " + content);
-				_logger.fine(
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.fine(
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-			}
-
-			try {
-				return RichiestaServizioSerDes.toDTO(content);
-			}
-			catch (Exception e) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response: " + content, e);
-
-				throw new Problem.ProblemException(Problem.toDTO(content));
-			}
-		}
-
-		public HttpInvoker.HttpResponse patchRichiestaServizioHttpResponse(
-				Long id,
-				UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
-			throws Exception {
-
-			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
-
-			httpInvoker.body(
-				updateRichiestaServizioRequest.toString(), "application/json");
-
-			if (_builder._locale != null) {
-				httpInvoker.header(
-					"Accept-Language", _builder._locale.toLanguageTag());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._headers.entrySet()) {
-
-				httpInvoker.header(entry.getKey(), entry.getValue());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._parameters.entrySet()) {
-
-				httpInvoker.parameter(entry.getKey(), entry.getValue());
-			}
-
-			httpInvoker.httpMethod(HttpInvoker.HttpMethod.PATCH);
-
-			httpInvoker.path(
-				_builder._scheme + "://" + _builder._host + ":" +
-					_builder._port +
-						"/o/servizi-digitali-rest-service/v1.0/richieste-servizio/{id}");
-
-			httpInvoker.path("id", id);
-
-			httpInvoker.userNameAndPassword(
-				_builder._login + ":" + _builder._password);
-
-			return httpInvoker.invoke();
-		}
-
-		public RichiestaServizio updateRichiestaServizio(
-				Long id,
-				UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
-			throws Exception {
-
-			HttpInvoker.HttpResponse httpResponse =
-				updateRichiestaServizioHttpResponse(
-					id, updateRichiestaServizioRequest);
-
-			String content = httpResponse.getContent();
-
-			if ((httpResponse.getStatusCode() / 100) != 2) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response content: " + content);
-				_logger.log(
-					Level.WARNING,
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.log(
-					Level.WARNING,
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-
-				throw new Problem.ProblemException(Problem.toDTO(content));
-			}
-			else {
-				_logger.fine("HTTP response content: " + content);
-				_logger.fine(
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.fine(
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-			}
-
-			try {
-				return RichiestaServizioSerDes.toDTO(content);
-			}
-			catch (Exception e) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response: " + content, e);
-
-				throw new Problem.ProblemException(Problem.toDTO(content));
-			}
-		}
-
-		public HttpInvoker.HttpResponse updateRichiestaServizioHttpResponse(
-				Long id,
-				UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
-			throws Exception {
-
-			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
-
-			httpInvoker.body(
-				updateRichiestaServizioRequest.toString(), "application/json");
-
-			if (_builder._locale != null) {
-				httpInvoker.header(
-					"Accept-Language", _builder._locale.toLanguageTag());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._headers.entrySet()) {
-
-				httpInvoker.header(entry.getKey(), entry.getValue());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._parameters.entrySet()) {
-
-				httpInvoker.parameter(entry.getKey(), entry.getValue());
-			}
-
-			httpInvoker.httpMethod(HttpInvoker.HttpMethod.PUT);
 
 			httpInvoker.path(
 				_builder._scheme + "://" + _builder._host + ":" +

@@ -177,6 +177,17 @@ components:
                 stato:
                   description: Stato
                   type: string
+
+        UpdateStatoRichiestaServizioRequest:
+            type: object
+            properties:
+                id:
+                  description: Id
+                  type: integer
+                  format: int64
+                stato:
+                  description: Stato
+                  type: string
                   
         ComponenteNucleoFamiliareLight:
             type: object
@@ -406,6 +417,50 @@ paths:
                     application/xml:
                       schema: 
                           $ref: '#/components/schemas/RichiestaServizio'
+        patch:
+            operationId: patchRichiestaServizio
+            description: Modifica di una richiesta servizio
+            tags: ["RichiesteServizio"]
+            requestBody:
+                content:
+                  "application/json":
+                      schema:
+                          $ref: '#/components/schemas/UpdateRichiestaServizioRequest'
+                  "application/xml":
+                      schema:
+                          $ref: '#/components/schemas/UpdateRichiestaServizioRequest'
+            responses:
+                200:
+                    description: "Richiesta modificata"
+                    content:
+                        application/json:
+                          schema: 
+                              $ref: '#/components/schemas/RichiestaServizio'
+                        application/xml:
+                          schema: 
+                              $ref: '#/components/schemas/RichiestaServizio'
+        put:
+            operationId: updateStatoRichiestaServizio
+            description: Modifica lo stato di una richiesta servizio
+            tags: ["RichiesteServizio"]
+            requestBody:
+                content:
+                  "application/json":
+                      schema:
+                          $ref: '#/components/schemas/UpdateStatoRichiestaServizioRequest'
+                  "application/xml":
+                      schema:
+                          $ref: '#/components/schemas/UpdateStatoRichiestaServizioRequest'
+            responses:
+                200:
+                    description: "Richiesta modificata"
+                    content:
+                        application/json:
+                          schema: 
+                              $ref: '#/components/schemas/RichiestaServizio'
+                        application/xml:
+                          schema: 
+                              $ref: '#/components/schemas/RichiestaServizio'
                   
     "/richieste-servizio/{id}":
         get:
@@ -429,67 +484,7 @@ paths:
                   application/xml:
                     schema:
                       $ref: '#/components/schemas/RichiestaServizio'
-        patch:
-            operationId: patchRichiestaServizio
-            description: Modifica di una richiesta servizio
-            tags: ["RichiesteServizio"]
-            parameters:
-                - name: id
-                  in: path
-                  description: ID Richiesta
-                  required: true
-                  schema:
-                    type: integer
-                    format: int64
-            requestBody:
-                content:
-                  "application/json":
-                      schema:
-                          $ref: '#/components/schemas/UpdateRichiestaServizioRequest'
-                  "application/xml":
-                      schema:
-                          $ref: '#/components/schemas/UpdateRichiestaServizioRequest'
-            responses:
-                200:
-                    description: "Richiesta modificata"
-                    content:
-                        application/json:
-                          schema: 
-                              $ref: '#/components/schemas/RichiestaServizio'
-                        application/xml:
-                          schema: 
-                              $ref: '#/components/schemas/RichiestaServizio'
-        put:
-            operationId: updateRichiestaServizio
-            description: Modifica di una richiesta servizio
-            tags: ["RichiesteServizio"]
-            parameters:
-                - name: id
-                  in: path
-                  description: ID Richiesta
-                  required: true
-                  schema:
-                    type: integer
-                    format: int64
-            requestBody:
-                content:
-                  "application/json":
-                      schema:
-                          $ref: '#/components/schemas/UpdateRichiestaServizioRequest'
-                  "application/xml":
-                      schema:
-                          $ref: '#/components/schemas/UpdateRichiestaServizioRequest'
-            responses:
-                200:
-                    description: "Richiesta modificata"
-                    content:
-                        application/json:
-                          schema: 
-                              $ref: '#/components/schemas/RichiestaServizio'
-                        application/xml:
-                          schema: 
-                              $ref: '#/components/schemas/RichiestaServizio'
-
+                              
     "/dati-anagrafici/componenti-nucleo-familiare":
       get:
         operationId: getComponentiNucleoFamiliare
