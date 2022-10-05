@@ -1,11 +1,28 @@
 package it.servizidigitali.restservice.internal.resource.v1_0;
 
+import com.liferay.expando.kernel.model.ExpandoColumn;
+import com.liferay.expando.kernel.model.ExpandoValue;
+import com.liferay.expando.kernel.service.ExpandoValueLocalService;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.pagination.Page;
+import com.liferay.portal.vulcan.pagination.Pagination;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.crypto.Cipher;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.NotFoundException;
 
@@ -18,7 +35,9 @@ import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
 import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 import it.servizidigitali.restservice.dto.v1_0.CountServizioEnte;
 import it.servizidigitali.restservice.dto.v1_0.InfoServizioEnte;
 import it.servizidigitali.restservice.internal.constant.ServiziDigitaliRestConstants;
@@ -49,11 +68,55 @@ public class ServiziResourceImpl extends BaseServiziResourceImpl {
 
 	@Reference
 	private EntityToSchemaModelConverter entityToSchemaModelConverter;
+	
+	@Reference
+	private ExpandoValueLocalService expandoValueLocalService;
 
 	@Override
 	public Page<InfoServizioEnte> getServiziEnte(String nomeComune, @NotNull Long codiceTipologiaServizio, String amministrazione) throws Exception {
-		// TODO Auto-generated method stub
-		return super.getServiziEnte(nomeComune, codiceTipologiaServizio, amministrazione);
+		DynamicQuery seQuery = servizioEnteLocalService.dynamicQuery();
+
+		filterByTipologia(codiceTipologiaServizio, seQuery);
+		filterByAmministrazione(amministrazione, seQuery);
+
+		List<ServizioEnte> servizioEntes = servizioEnteLocalService.dynamicQuery(seQuery);
+		
+		List<InfoServizioEnte> payload = new ArrayList<>();
+		for (ServizioEnte servizioEnte : servizioEntes) {
+			Servizio servizio = servizioLocalService.fetchServizio(servizioEnte.getServizioId());
+			payload.add(entityToSchemaModelConverter.getInfoServizioEnte(servizioEnte, servizioEnte.getOrganization(), servizio));
+		}
+		
+		Page<InfoServizioEnte> page = Page.of(payload, Pagination.of(1, payload.size()), payload.size());
+		return page;
+	}
+
+	private void filterByTipologia(Long codiceTipologiaServizio, DynamicQuery seQuery) {
+		List<Long> serviziTipologia = servizioLocalService
+				.getTipologiaServizios(codiceTipologiaServizio)
+				.stream()
+				.map(x -> x.getServizioId())
+				.collect(Collectors.toList());
+
+		seQuery.add(RestrictionsFactoryUtil.in("primaryKey.servizioId", serviziTipologia));
+	}
+
+	private void filterByAmministrazione(String amministrazione, DynamicQuery seQuery) {
+		if (amministrazione != null && !amministrazione.isBlank()) {
+			ClassLoader classLoader = getClass().getClassLoader();
+
+			DynamicQuery expandoColumn = DynamicQueryFactoryUtil.forClass(ExpandoColumn.class, classLoader);
+			expandoColumn.add(RestrictionsFactoryUtil.eq("name", "codiceIPA"));
+			expandoColumn.setProjection(ProjectionFactoryUtil.property("columnId"));
+
+			DynamicQuery expandoValue = DynamicQueryFactoryUtil.forClass(ExpandoValue.class, classLoader);
+			expandoValue.add(RestrictionsFactoryUtil.like("data", StringPool.PERCENT + amministrazione + StringPool.PERCENT));
+			expandoValue.add(PropertyFactoryUtil.forName("columnId").in(expandoColumn));
+			expandoValue.setProjection(ProjectionFactoryUtil.property("classPK"));
+
+			List<Long> organizationIds = expandoValueLocalService.dynamicQuery(expandoValue);
+			seQuery.add(RestrictionsFactoryUtil.in("organizationId", organizationIds));
+		}
 	}
 
 	@Override
