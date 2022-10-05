@@ -164,6 +164,13 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand{
 
 						if(Validator.isNotNull(richiesta)) {
 							richiestaLocalService.updateStatoRichiesta(richiesta.getRichiestaId(), StatoRichiesta.NUOVA.name());
+							
+							DichiarazioneRisposta risposta = alpacaService.sendData(richiesta, procedura, userPreferences);
+							
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, form.getNome());
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.DICHIARAZIONE_RISPOSTA, risposta);
+							actionRequest.setAttribute(PresentatoreFormsPortletKeys.INVIO_ISTANZA, true);
+							actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_ESITO_INVIO);
 						}else {
 							_log.error("SalvaInviaRichiestaActionCommand :: Errore durante il salvataggio della richiesta con ID : " + richiesta.getRichiestaId());
 							List<DefinizioneAllegato> definizioneAllegati = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(form.getFormId());
@@ -181,12 +188,7 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand{
 							return;
 						}
 
-						DichiarazioneRisposta risposta = alpacaService.sendData(richiesta, procedura, userPreferences);
 						
-						actionRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, form.getNome());
-						actionRequest.setAttribute(PresentatoreFormsPortletKeys.DICHIARAZIONE_RISPOSTA, risposta);
-						actionRequest.setAttribute(PresentatoreFormsPortletKeys.INVIO_ISTANZA, true);
-						actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_ESITO_INVIO);
 		
 				}
 			}	
