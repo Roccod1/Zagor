@@ -24,118 +24,119 @@ import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalServi
 
 @Component(name = "allegatiRichiestaService", immediate = true, service = AllegatoRichiestaService.class)
 public class AllegatoRichiestaService {
-	
+
 	private static final Log log = LogFactoryUtil.getLog(AllegatoRichiestaService.class.getName());
-	
+
 	@Reference
 	FileServiceFactory fileServiceFactory;
-	
+
 	@Reference
 	AllegatoRichiestaLocalService allegatoRichiestaLocalService;
-	
+
 	@Reference
 	DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
-	
+
 	@Reference
 	CounterLocalService counterLocalService;
-	
+
 	@Reference
 	private DLAppService dlAppService;
-	
+
 	public void salvaAllegatiRichiesta(File allegato, String codiceServizio, long richiestaId, String userName, long userId, long groupId) {
-		
+
 		try {
-			
-			if(Validator.isNotNull(allegato)) {
+
+			if (Validator.isNotNull(allegato)) {
 				InputStream stream = new FileInputStream(allegato);
 
-				if(Validator.isNotNull(allegato)) {
+				if (Validator.isNotNull(allegato)) {
 					String mimeType = MimeTypesUtil.getContentType(allegato);
-					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), codiceServizio, stream, mimeType, userId, groupId);
+					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), codiceServizio, stream, mimeType,
+							userId, groupId);
 					creaAllegatoRichiesta(idDocumentale, richiestaId, userName, groupId, userId);
 				}
 
 			}
 
-		}catch(Exception e) {
-			log.error("Errore durante il caricamento del file : " + e.getMessage(), e); 
 		}
-		
+		catch (Exception e) {
+			log.error("Errore durante il caricamento del file : " + e.getMessage(), e);
+		}
+
 	}
-	
-	public void creaAllegatoRichiesta (String idDocumentale, long richiestaId, String userName, long groupId, long userId) {
+
+	public void creaAllegatoRichiesta(String idDocumentale, long richiestaId, String userName, long groupId, long userId) {
 		AllegatoRichiesta allegatoRichiesta = allegatoRichiestaLocalService.createAllegatoRichiesta(counterLocalService.increment());
-		
-		if(Validator.isNotNull(idDocumentale)) {
+
+		if (Validator.isNotNull(idDocumentale)) {
 			allegatoRichiesta.setGroupId(groupId);
 			allegatoRichiesta.setUserId(userId);
 			allegatoRichiesta.setUserName(userName);
 			allegatoRichiesta.setRichiestaId(richiestaId);
 			allegatoRichiesta.setIdDocumentale(idDocumentale);
-			
+
 			allegatoRichiestaLocalService.updateAllegatoRichiesta(allegatoRichiesta);
 		}
 	}
-	
-	public void salvaAllegatoFirmato(File allegato, String codiceServizio, long richiestaId, String userName, long userId, long groupId) {
-		// TODO: Implementare eventualmente la verifica della firma digitale
-		
-		try {
-			
-			if(Validator.isNotNull(allegato)) {
-				InputStream stream = new FileInputStream(allegato);
-				
-				if(Validator.isNotNull(allegato)) {
-					String mimeType = MimeTypesUtil.getContentType(allegato);
-					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), codiceServizio, stream, mimeType, userId, groupId);
 
-					if(Validator.isNotNull(idDocumentale)) {
+	public void salvaAllegatoFirmato(File allegato, String codiceServizio, long richiestaId, String userName, long userId, long groupId) throws Exception {
+		// TODO: Implementare eventualmente la verifica della firma digitale
+		try {
+			if (Validator.isNotNull(allegato)) {
+				InputStream stream = new FileInputStream(allegato);
+
+				if (Validator.isNotNull(allegato)) {
+					String mimeType = MimeTypesUtil.getContentType(allegato);
+					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), codiceServizio, stream, mimeType,
+							userId, groupId);
+
+					if (Validator.isNotNull(idDocumentale)) {
 						creaAllegatoRichiesta(idDocumentale, richiestaId, userName, groupId, userId);
 					}
-			
 				}
-
 			}
-
-		}catch(Exception e) {
-			log.error("Errore durante il caricamento del file firmato : " + e.getMessage(), e); 
+		}
+		catch (Exception e) {
+			log.error("Errore durante il caricamento del file firmato : " + e.getMessage(), e);
+			throw e;
 		}
 	}
-	
-	
+
 	public DatiFileAllegato getModelloAllegato(long definizioneAllegatoId) {
 		DatiFileAllegato modello = null;
 		DefinizioneAllegato allegato = null;
-		
+
 		try {
-			if(definizioneAllegatoId>0) {
+			if (definizioneAllegatoId > 0) {
 				allegato = definizioneAllegatoLocalService.getDefinizioneAllegato(definizioneAllegatoId);
-				
-				if(allegato.getFileEntryId()>0) {
+
+				if (allegato.getFileEntryId() > 0) {
 					FileEntry templateFileEntry = dlAppService.getFileEntry(allegato.getFileEntryId());
-					
-					if(Validator.isNotNull(templateFileEntry)) {
+
+					if (Validator.isNotNull(templateFileEntry)) {
 						modello = new DatiFileAllegato();
 						modello.setFileName(allegato.getFilenameModello());
-						
+
 						InputStream isTemplate = templateFileEntry.getContentStream();
-						
-						if(Validator.isNotNull(isTemplate)) {
+
+						if (Validator.isNotNull(isTemplate)) {
 							modello.setContenuto(isTemplate.readAllBytes());
-						}else {
+						}
+						else {
 							log.error("AllegatoRichiestaService :: getModelloAllegato :: Input stream modello NULL!");
 						}
-					}else {
+					}
+					else {
 						log.error("AllegatoRichiestaService :: getModelloAllegato :: fileEntry dell'allegato con ID : " + definizioneAllegatoId + " NULL");
 					}
 				}
 			}
-			
-		}catch(Exception e) {
-			log.error("Errore durante il recupero dell'allegato con id definizione : " + definizioneAllegatoId + e.getMessage(),e);
+
+		}
+		catch (Exception e) {
+			log.error("Errore durante il recupero dell'allegato con id definizione : " + definizioneAllegatoId + e.getMessage(), e);
 		}
 
-		
 		return modello;
 	}
 }

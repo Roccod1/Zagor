@@ -6,6 +6,7 @@ package it.servizidigitali.presentatoreforms.frontend.constants;
 public class PresentatoreFormsPortletKeys {
 
 	public static final String PRESENTATOREFORMS = "it_servizidigitali_presentatoreforms_frontend_PresentatoreFormsPortlet";
+	public static final String BUNDLE_SYMBOLIC_NAME = "it.servizidigitali.presentatoreforms.frontend";
 
 	public static final String ALPACA_STRUCTURE = "alpacaStructure";
 
@@ -67,7 +68,7 @@ public class PresentatoreFormsPortletKeys {
 	public static final String UPLOAD_FILE_MAX_SIZE = "uploadFileMaxSize";
 	public static final String UPLOAD_FILE_MAX_SIZE_LABEL = "uploadFileMaxSizeLabel";
 	public static final String DICHIARAZIONE_RISPOSTA = "dichiarazioneRisposta";
-	
+
 	// JSON
 	public static final String STATUS = "status";
 	public static final String STATUS_OK = "ok";
