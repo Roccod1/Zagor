@@ -79,6 +79,8 @@ public interface AttivitaRichiestaLocalService
 	public AttivitaRichiesta addAttivitaRichiesta(
 		AttivitaRichiesta attivitaRichiesta);
 
+	public int countAttivitaRichiestaByRichiestaId(long richiestaId);
+
 	/**
 	 * Creates a new attivita richiesta with the primary key. Does not add the attivita richiesta to the database.
 	 *
@@ -233,6 +235,10 @@ public interface AttivitaRichiestaLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<AttivitaRichiesta> getAttivitaRichiestaByRichiestaId(
 		long richiestaId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<AttivitaRichiesta> getAttivitaRichiestaByRichiestaId(
+		long richiestaId, int start, int end);
 
 	/**
 	 * Returns the attivita richiesta matching the UUID and group.
