@@ -65,7 +65,7 @@ public class AllegatoRichiestaCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -95,6 +95,8 @@ public class AllegatoRichiestaCacheModel
 		sb.append(interno);
 		sb.append(", visibile=");
 		sb.append(visibile);
+		sb.append(", definizioneAllegatoId=");
+		sb.append(definizioneAllegatoId);
 		sb.append(", richiestaId=");
 		sb.append(richiestaId);
 		sb.append("}");
@@ -164,6 +166,7 @@ public class AllegatoRichiestaCacheModel
 		allegatoRichiestaImpl.setPrincipale(principale);
 		allegatoRichiestaImpl.setInterno(interno);
 		allegatoRichiestaImpl.setVisibile(visibile);
+		allegatoRichiestaImpl.setDefinizioneAllegatoId(definizioneAllegatoId);
 		allegatoRichiestaImpl.setRichiestaId(richiestaId);
 
 		allegatoRichiestaImpl.resetOriginalValues();
@@ -194,6 +197,8 @@ public class AllegatoRichiestaCacheModel
 		interno = objectInput.readBoolean();
 
 		visibile = objectInput.readBoolean();
+
+		definizioneAllegatoId = objectInput.readLong();
 
 		richiestaId = objectInput.readLong();
 	}
@@ -252,6 +257,8 @@ public class AllegatoRichiestaCacheModel
 
 		objectOutput.writeBoolean(visibile);
 
+		objectOutput.writeLong(definizioneAllegatoId);
+
 		objectOutput.writeLong(richiestaId);
 	}
 
@@ -269,6 +276,7 @@ public class AllegatoRichiestaCacheModel
 	public boolean principale;
 	public boolean interno;
 	public boolean visibile;
+	public long definizioneAllegatoId;
 	public long richiestaId;
 
 }

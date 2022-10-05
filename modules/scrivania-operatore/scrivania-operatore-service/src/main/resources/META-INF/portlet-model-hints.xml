@@ -16,6 +16,7 @@
 		<field name="principale" type="boolean" />
 		<field name="interno" type="boolean" />
 		<field name="visibile" type="boolean" />
+		<field name="definizioneAllegatoId" type="Long" />
 		<field name="richiestaId" type="long" />
 	</model>
 	<model name="it.servizidigitali.scrivaniaoperatore.model.AttivitaRichiesta">

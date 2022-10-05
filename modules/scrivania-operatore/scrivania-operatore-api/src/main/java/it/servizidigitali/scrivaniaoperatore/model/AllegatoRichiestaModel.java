@@ -313,6 +313,20 @@ public interface AllegatoRichiestaModel
 	public void setVisibile(boolean visibile);
 
 	/**
+	 * Returns the definizione allegato ID of this allegato richiesta.
+	 *
+	 * @return the definizione allegato ID of this allegato richiesta
+	 */
+	public Long getDefinizioneAllegatoId();
+
+	/**
+	 * Sets the definizione allegato ID of this allegato richiesta.
+	 *
+	 * @param definizioneAllegatoId the definizione allegato ID of this allegato richiesta
+	 */
+	public void setDefinizioneAllegatoId(Long definizioneAllegatoId);
+
+	/**
 	 * Returns the richiesta ID of this allegato richiesta.
 	 *
 	 * @return the richiesta ID of this allegato richiesta

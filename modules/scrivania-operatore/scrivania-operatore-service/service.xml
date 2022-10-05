@@ -154,6 +154,7 @@
 		<column name="principale" type="boolean" />
 		<column name="interno" type="boolean" />
 		<column name="visibile" type="boolean" />
+		<column name="definizioneAllegatoId" type="Long" convert-null="false"/>
 		<column name="richiestaId" type="long" />
 		
 		<!-- Finder methods -->
