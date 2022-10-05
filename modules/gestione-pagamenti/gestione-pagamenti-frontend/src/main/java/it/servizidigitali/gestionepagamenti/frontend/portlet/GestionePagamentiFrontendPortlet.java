@@ -133,7 +133,7 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			
 			if(totalCountPagamenti != 0) {
 				listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento, inizio, fine, orderByCol, orderByType);
-				listaPagamenti.forEach(pagamento -> gestionePagamentiService.initAdditionalData(pagamento));
+				listaPagamenti.forEach(pagamento -> gestionePagamentiService.initDataForView(pagamento));
 			}
 
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.TOTAL_COUNT_PAGAMENTI, totalCountPagamenti);

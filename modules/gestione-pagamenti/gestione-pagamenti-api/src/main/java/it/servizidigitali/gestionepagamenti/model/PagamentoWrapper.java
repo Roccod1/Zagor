@@ -469,14 +469,6 @@ public class PagamentoWrapper
 		return model.getStato();
 	}
 
-	@Override
-	public
-		it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento
-			getStatoEnum() {
-
-		return model.getStatoEnum();
-	}
-
 	/**
 	 * Returns the user ID of this pagamento.
 	 *
@@ -765,14 +757,6 @@ public class PagamentoWrapper
 	@Override
 	public void setStato(String stato) {
 		model.setStato(stato);
-	}
-
-	@Override
-	public void setStatoEnum(
-		it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento
-			statoEnum) {
-
-		model.setStatoEnum(statoEnum);
 	}
 
 	/**

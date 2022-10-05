@@ -58,14 +58,6 @@ public interface Pagamento extends PagamentoModel, PersistedModel {
 
 		};
 
-	public
-		it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento
-			getStatoEnum();
-
-	public void setStatoEnum(
-		it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento
-			statoEnum);
-
 	public String getNomeOrganizzazione();
 
 	public void setNomeOrganizzazione(String nomeOrganizzazione);

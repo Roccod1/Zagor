@@ -52,13 +52,13 @@ public class GestionePagamentiService {
 		return organization;
 	}
 	
-	public void initAdditionalData(Pagamento pagamento) {
+	public void initDataForView(Pagamento pagamento) {
 		
 		String stato = pagamento.getStato();
 		
 		if (Validator.isNotNull(stato)) {
 			StatoPagamento statoPagamento = StatoPagamento.valueOf(stato);
-			pagamento.setStatoEnum(statoPagamento);
+			pagamento.setStato(statoPagamento.getDescrizione());
 		}
 		
 		String nomeOrganizzazione = "-";

@@ -93,7 +93,7 @@ public class CercaPagamentiMVCActionCommand extends BaseMVCActionCommand {
 			listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA,
 					dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale,
 					identificativoPagamento, codiceIuv, idPagamento, inizio, fine, null, null);
-			listaPagamenti.forEach(pagamento -> gestionePagamentiService.initAdditionalData(pagamento));
+			listaPagamenti.forEach(pagamento -> gestionePagamentiService.initDataForView(pagamento));
 		}
 
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.TOTAL_COUNT_PAGAMENTI, totalCountPagamenti);

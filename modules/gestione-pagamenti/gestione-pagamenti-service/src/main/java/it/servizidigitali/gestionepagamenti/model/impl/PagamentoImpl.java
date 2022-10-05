@@ -14,24 +14,12 @@
 
 package it.servizidigitali.gestionepagamenti.model.impl;
 
-import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
-
 /**
  * @author Brian Wing Shun Chan
  */
 public class PagamentoImpl extends PagamentoBaseImpl {
 	
-	private StatoPagamento statoEnum;
-	
 	private String nomeOrganizzazione;
-
-	public StatoPagamento getStatoEnum() {
-		return statoEnum;
-	}
-
-	public void setStatoEnum(StatoPagamento statoEnum) {
-		this.statoEnum = statoEnum;
-	}
 
 	public String getNomeOrganizzazione() {
 		return nomeOrganizzazione;

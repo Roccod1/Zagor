@@ -32,7 +32,7 @@
 			<fmt:formatDate value="${pagamento.createDate}" pattern="dd/MM/yyyy HH:mm"/>
 		</liferay-ui:search-container-column-text>
 		<liferay-ui:search-container-column-text property="importo" name="gestionePagamenti.searchContainer.importoTotale" orderable="true" orderableProperty="importo"/>
-		<liferay-ui:search-container-column-text value="${pagamento.statoEnum.descrizione}" name="gestionePagamenti.searchContainer.stato" orderable="true" orderableProperty="stato"/>
+		<liferay-ui:search-container-column-text property="stato" name="gestionePagamenti.searchContainer.stato" orderable="true" orderableProperty="stato"/>
 		<c:if test = "${siteOrganizationId == 0}">
 			<liferay-ui:search-container-column-text property="nomeOrganizzazione" name="gestionePagamenti.searchContainer.nomeOrganizzazione"/>
 		</c:if>
