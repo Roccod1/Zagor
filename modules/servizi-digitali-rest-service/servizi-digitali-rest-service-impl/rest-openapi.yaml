@@ -100,6 +100,65 @@ components:
               stato:
                 description: Stato
                 type: string
+              denominazioneRichiedente:
+                description: Denominazione richiedente
+                type: string
+              codiceFiscaleRichiedente:
+                description: Codice Fiscale richiedente
+                type: string
+              partitaIvaRichiedente:
+                description: PIVA richiedente
+                type: string
+              emailRichiedente:
+                description: Email richiedente
+                type: string
+              codiceFiscaleDelegato:
+                description: Codice Fiscale delegato
+                type: string
+              dataInserimento:
+                description: Data inserimento
+                type: string
+                format: date-time
+              dataAggiornamento:
+                description: Data aggiornamento
+                type: string
+                format: date-time
+              oggetto:
+                description: Oggetto
+                type: string
+              note:
+                description: Note
+                type: string
+              numeroProtocollo:
+                description: Numero protocollo
+                type: string
+              dataProtocollo:
+                description: Data protocollo
+                type: string
+                format: date-time
+              numeroProtocolloEsterno:
+                description: Numero protocollo esterno
+                type: string
+              dataProtocolloEsterno:
+                description: Data protocollo esterno
+                type: string
+                format: date-time
+              idProcedura:
+                type: number
+              identificativoProcesso:
+                type: string
+              codiceIdentificativoServizio:
+                type: string
+              denominazioneServizio:
+                type: string
+              codiceAreaTematica:
+                type: string
+              denominazioneAreaTematica:
+                type: string
+              identificativoEnte:
+                type: string
+              denominazioneEnte:
+                type: string
                 
         InsertRichiestaServizioRequest:
             type: object
