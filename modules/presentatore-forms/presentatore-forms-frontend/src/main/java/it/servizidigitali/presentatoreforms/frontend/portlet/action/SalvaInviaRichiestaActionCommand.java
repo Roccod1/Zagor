@@ -88,6 +88,7 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand{
 		Procedura procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
 		
 		Servizio servizio = servizioLocalService.getServizio(procedura.getServizioId());
+		Form form = null;
 				
 		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		
@@ -103,12 +104,12 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand{
 		
 		try {
 			uploadFileRichiesteEnteConfiguration = configurationProvider.getGroupConfiguration(UploadFileRichiesteEnteConfiguration.class, themeDisplay.getScopeGroupId());
+			form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 
 			if(Validator.isNotNull(procedura) && procedura.getProceduraId() >0){
 				
 				Richiesta richiesta = presentatoreFormFrontendService.getRichiestaBozza(user.getScreenName(), procedura.getProceduraId());
 				
-				Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 				
 				if(Validator.isNotNull(form)){
 					
@@ -190,7 +191,21 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand{
 				}
 			}	
 		}catch(Exception e) {
-			// log
+			_log.error("SalvaInviaRichiestaActionCommand :: Errore durante il salvataggio della richiesta!");
+			List<DefinizioneAllegato> definizioneAllegati = definizioneAllegatoLocalService.getListaDefinizioneAllegatoByFormId(form.getFormId());
+			List<DatiAllegato> allegati = AllegatoUtil.mergeDefinizioneAndData(definizioneAllegati, new ArrayList<DatiFileAllegato>());
+			listaErrori.add("Errore durante il salvataggio della richiesta!");
+			String errori = String.join(",", listaErrori);
+
+			actionRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO,form.getNome());
+			actionRequest.setAttribute(PresentatoreFormsPortletKeys.FIRMA_DOCUMENTO_ABILITATA,true);	
+			actionRequest.setAttribute(PresentatoreFormsPortletKeys.UPLOAD_FILE_MAX_SIZE,uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize());
+			actionRequest.setAttribute(PresentatoreFormsPortletKeys.UPLOAD_FILE_MAX_SIZE_LABEL,Long.toString(uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize() / 1000000) + " MB");
+			actionRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_ALLEGATI, allegati);
+			
+			actionRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_ERRORI, errori);
+			actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_ALLEGATI);
+			return;
 		}
 		
 	}
