@@ -1,7 +1,6 @@
 <%@ include file="./init.jsp" %>
 
-<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.SUBMIT_FORM_RESOURCE_COMMAND %>" var="submitFormUrl">
-</portlet:resourceURL>
+<script type="text/javascript" src="<%=request.getContextPath()%>/libs/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js" data-senna-track="temporary" ></script>
 
 <portlet:renderURL var="scegliAllegatiUrl">
 	<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND %>" />
@@ -57,7 +56,11 @@ $.blockUI({
             } 
     });
     
-    mainScript();
+   
+    
+    setTimeout(function() { 
+    	 mainScript();
+    }, 3000);
 
 function mainScript() {
 	console.log("timeout over in the jsp script");
@@ -75,7 +78,7 @@ function mainScript() {
 	var dataJson = ${alpacaStructure.data};
 	
 	
-	var configurazioneTipoServizioStep2 = 'AUTODICHIARAZIONE';
+	var configurazioneTipoServizioStep2 = '${configurazioneTipoServizioStep2}';
 	
 	var delegaPresente = ${delega != null};
 
@@ -91,15 +94,15 @@ function mainScript() {
 	var idRichiesta=null;
 	
 	switch(configurazioneTipoServizioStep2) {
-	case '${DICHIARAZIONE}':
+	case 'DICHIARAZIONE':
 		proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 		step3Url = '${scegliAllegatiUrl}';
   		break;
-	case '${PAGAMENTO}':
+	case 'PAGAMENTO':
 		proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 		step3Url = 'TODO';
   		break;
-	case '${CERTIFICATO}':
+	case 'CERTIFICATO':
 		proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 		enableSubmitFormButton = true;
 		step3Url = '${scegliModalitaPagamentoUrl}';
@@ -107,16 +110,16 @@ function mainScript() {
 		downloadFile = false;
 		showServiceEvaluationPage = false;
   		break;
-	case '${VISURA}':
+	case 'VISURA':
 		proseguiButtonTitle = '';
 		showButtons = false;
 		showServiceEvaluationPage = true;
   		break;
-	case '${AUTODICHIARAZIONE}':
+	case 'AUTO_DICHIARAZIONE':
 		proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 		step3Url = '${scegliAllegatiUrl}';
   		break;
-	case '${CONCORSO}':
+	case 'CONCORSO':
 		proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 		step3Url = '${scegliAllegatiUrl}';
   		break;
@@ -124,7 +127,6 @@ function mainScript() {
 		proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
 }
 	proseguiButtonTitle = '<liferay-ui:message key="button.salva.bozza.prosegui" />';
-	step3Url = '${scegliAllegatiUrl}';
 
 	
 	var updated = false;

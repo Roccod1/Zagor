@@ -3,6 +3,8 @@
 <portlet:actionURL var="scegliComponenteActionURL" name="<%=PresentatoreFormsPortletKeys.SCEGLI_COMPONENTE_ACTION_COMMAND %>">
 </portlet:actionURL>
 
+<liferay-ui:error key="<%=PresentatoreFormsPortletKeys.SELEZIONARE_COMPONENTE_NUCLEO %>" message="error.componenteNucleoFamiliare.required" />
+
 
 <div class="row-fluid">
 	<div class="page-header">

@@ -48,6 +48,7 @@ public class PresentatoreFormsPortletKeys {
 	public static final String IMPOSSIBILE_RECUPERARE_SERVIZIO = "impossibile-recuperare-servizio";
 	public static final String IMPOSSIBILE_RECUPERARE_PROCEDURA = "impossibile-recuperare-procedura";
 	public static final String ERRORE_GENERICO = "error.generico";
+	public static final String SELEZIONARE_COMPONENTE_NUCLEO = "componente-nucleo-obbligatorio";
 
 	// ATTRIBUTI
 	public static final String SELECT_COMPONENTI_NUCLEO_FAMILIARE = "selectComponentiNucleoFamiliare";
@@ -69,6 +70,11 @@ public class PresentatoreFormsPortletKeys {
 	public static final String UPLOAD_FILE_MAX_SIZE = "uploadFileMaxSize";
 	public static final String UPLOAD_FILE_MAX_SIZE_LABEL = "uploadFileMaxSizeLabel";
 	public static final String DICHIARAZIONE_RISPOSTA = "dichiarazioneRisposta";
+	public static final String DOWNLOAD_CERTIFICATO = "downloadCertificato";
+	public static final String CERTIFICATI_PREVIEW_ABILITATA = "certificatiPdfPreviewEnabled";
+	public static final String BASE_64_PDF_CERTIFICATO = "base64PDFCertificato";
+	public static final String DESTINAZIONE_USO_ID = "destinazioneUsoId";
+	public static final String TIPO_SERVIZIO_STEP2 = "configurazioneTipoServizioStep2";
 	public static final String API_ALPACA_PATH = "apiAlpacaPath";
 
 	// JSON

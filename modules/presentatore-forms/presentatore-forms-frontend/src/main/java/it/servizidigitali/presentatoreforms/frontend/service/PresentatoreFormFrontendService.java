@@ -24,6 +24,8 @@ import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
+import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
@@ -69,6 +71,9 @@ public class PresentatoreFormFrontendService {
 	
 	@Reference
 	private CounterLocalService counterLocalService;
+	
+	@Reference
+	private ServizioLocalService servizioLocalService;
 
 	/**
 	 * Ritorna il servizio attuale sulla base della pagina in cui è in esecuzione la portlet.
@@ -258,5 +263,32 @@ public class PresentatoreFormFrontendService {
 		long groupId = themeDisplay.getSiteGroupId();
 		long companyId = themeDisplay.getCompanyId();
 		return destinazioneUsoLocalService.getDestinazioniUsoByOrganizationId(organizationId, groupId, companyId);
+	}
+	
+	public DestinazioneUso checkDestinazioneUso(long destinazioneUsoId, long servizioId, long organizationId, long groupId, long companyId){
+		DestinazioneUso destinazioneUso = null;
+		
+		try {
+			
+			if(destinazioneUsoId>0) {
+				DestinazioneUso destinazioneUsoSelezionato = destinazioneUsoLocalService.getDestinazioneUso(destinazioneUsoId);
+				
+				if(Validator.isNotNull(destinazioneUsoSelezionato)) {
+					List<DestinazioneUso> listaDestinazioniServizio = destinazioneUsoLocalService.getDestinazioniUsoByServizioIdOrganizationId(servizioId, organizationId, groupId, companyId);
+					
+					if(Validator.isNotNull(listaDestinazioniServizio) && !listaDestinazioniServizio.isEmpty()) {
+						if(listaDestinazioniServizio.contains(destinazioneUsoSelezionato)) {
+							destinazioneUso = destinazioneUsoSelezionato;
+						}
+					}
+				
+				}
+			}
+			
+		}catch(Exception e) {
+			log.error("PresentatoreFormFrontendService :: getDestinazioneUsoServizio :: " + e.getMessage(),e);
+		}
+
+		return destinazioneUso;
 	}
 }

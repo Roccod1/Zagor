@@ -2,11 +2,9 @@
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/scripts/pdf.js" /></script>
 
-
-
 <aui:row>
 	<p>
-		<b>Titolo Servizio</b>
+		<b>${titoloPortletServizio}</b>
 	</p>
 	
 	<div class="content">
@@ -60,7 +58,7 @@
 							<label class="text-center"> 
 								<liferay-ui:message key="label.certificato.ultimoStep.titolo.sceltaPagamento"/>
 							</label>
-							<div class="mt-10">
+							<div class="mt-3">
 								<c:choose>
 									<c:when test="${empty delega}">
 										<liferay-ui:message key="label.certificato.ultimoStep.descrizione.sceltaPagamento"/>
@@ -85,7 +83,7 @@
 							<label class="text-center"> 
 								<liferay-ui:message key="label.certificato.ultimoStep.titolo.downloadCertificato"/>
 							</label>
-							<div class="mt-10">
+							<div class="mt-3">
 								<c:choose>
 									<c:when test="${empty delega}">
 										<liferay-ui:message key="label.certificato.ultimoStep.descrizione.downloadCertificato"/>
@@ -102,7 +100,7 @@
 							</label>
 							
 							<c:if test="${certificatiPdfPreviewEnabled}">
-								<div class="mt-10">
+								<div class="mt-3">
 									<div class="row-fluid bg_white">
 										<liferay-ui:message key="label.certificato.ultimoStep.preview"/>
 										<div class="span8 text-center offset2" id="certificatoPdfViewer"> </div>
@@ -110,7 +108,7 @@
 								</div>
 							</c:if>
 							
-							<div class="mt-10">
+							<div class="mt-3">
 								<liferay-ui:message key="label.certificato.ultimoStep.descrizione.generazioneCertificato"/>
 							</div>
 						</c:otherwise>
@@ -181,16 +179,6 @@
 								</aui:button-row>
 							</div>
 							
-<!-- 							<div class="modal-footer"> -->
-<!-- 								<button type="button" class="btn btn-default" -->
-<!-- 									data-dismiss="modal"> -->
-<!-- 									Annulla -->
-<!-- 								</button> -->
-<!-- 								<button type="button" class="btn btn-primary" -->
-<!-- 									id="salva-invia-modal-button"> -->
-<!-- 									Procedi -->
-<!-- 								</button> -->
-<!-- 							</div> -->
 						</div>
 					</div>
 				</div>
