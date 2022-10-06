@@ -28,8 +28,10 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.scrivaniacittadino.frontend.constants.ScrivaniaCittadinoPortletKeys;
 import it.servizidigitali.scrivaniacittadino.frontend.service.ScrivaniaCittadinoMiddlewareService;
+import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.model.RichiestaFilters;
+import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
@@ -60,7 +62,7 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 		   ServiceContext serviceContext = null;
 		   ThemeDisplay themeDisplay = null;
 		   boolean hasNext = false;
-		
+
 		   int cur = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_CUR_PARAM, SearchContainer.DEFAULT_CUR);
 //	       int delta = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_DELTA_PARAM);
 		   String sortName = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
@@ -121,6 +123,7 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 				if(Validator.isNotNull(paginaSuccessiva) && !paginaSuccessiva.isEmpty()) {
 					hasNext = true;
 				}
+				
 		   }catch(Exception e) {
 			   _log.error("doServeResource() :: "+e.getMessage(), e);
 			   throw new Exception(e);

@@ -4,6 +4,7 @@
 <portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_PRENOTAZIONI %>" var="getPrenotazioniUtenteResourceCommandUrl">
 </portlet:resourceURL>
 
+
 <div class="container">
 	<div class="row">
 		<div class="col-11">
@@ -65,17 +66,18 @@
 <div id="collapseDivComunicazioni" class="collapse-div collapse-background-active">
 	{{props listaComunicazioni}}
 	<div class="collapse-header" id="heading{{>prop.comunicazioneId}}">
-		<button data-toggle="collapse" data-target="#collapse{{>prop.comunicazioneId}}" aria-expanded="false" aria-controls="collapse{{>prop.comunicazioneId}}">
-			<div class="button-wrapper">
-			<span class="text-uppercase">
-				{{>prop.titolo}}			   		 
-			</span>
-		    <div class="icon-wrapper">
-				<span>{{>prop.tipologia ? prop.tipologia.nome : ""}}</span>
-		    </div>
+		<button data-toggle="collapse" data-target="#collapse{{>prop.comunicazioneId }}" aria-expanded="false" aria-controls="collapse{{>prop.comunicazioneId }}">
+			<div style="display:flex; justify-content:space-between">
+				<span class="text-uppercase">
+					{{>prop.titolo}}			         
+				</span>
+				<span class="text-uppercase">
+					{{>prop.tipologia ? prop.tipologia.nome : ""}}				
+				</span>
+			</div>
 		</button>
 	</div>
-	<div class="collapse-body">
+	<div class="collapse-body" style="padding-bottom: 10px;  padding-top: 0; ">
 		<div>
 			{{>prop.dataInvio ? prop.dataInvio : ""}}
 		</div>	

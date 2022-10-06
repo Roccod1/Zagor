@@ -57,6 +57,12 @@ public class AttivitaRichiestaLocalServiceWrapper
 			attivitaRichiesta);
 	}
 
+	@Override
+	public int countAttivitaRichiestaByRichiestaId(long richiestaId) {
+		return _attivitaRichiestaLocalService.
+			countAttivitaRichiestaByRichiestaId(richiestaId);
+	}
+
 	/**
 	 * Creates a new attivita richiesta with the primary key. Does not add the attivita richiesta to the database.
 	 *
@@ -291,6 +297,16 @@ public class AttivitaRichiestaLocalServiceWrapper
 
 		return _attivitaRichiestaLocalService.getAttivitaRichiestaByRichiestaId(
 			richiestaId);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.scrivaniaoperatore.model.AttivitaRichiesta>
+			getAttivitaRichiestaByRichiestaId(
+				long richiestaId, int start, int end) {
+
+		return _attivitaRichiestaLocalService.getAttivitaRichiestaByRichiestaId(
+			richiestaId, start, end);
 	}
 
 	/**

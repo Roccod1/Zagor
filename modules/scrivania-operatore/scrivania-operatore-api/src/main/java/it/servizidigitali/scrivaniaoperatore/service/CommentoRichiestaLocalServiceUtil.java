@@ -62,6 +62,13 @@ public class CommentoRichiestaLocalServiceUtil {
 		return getService().addCommentoRichiesta(commentoRichiesta);
 	}
 
+	public static int countCommentiRichiestaByRichiestaIdVisibile(
+		long richiestaId, boolean visibile) {
+
+		return getService().countCommentiRichiestaByRichiestaIdVisibile(
+			richiestaId, visibile);
+	}
+
 	/**
 	 * Creates a new commento richiesta with the primary key. Does not add the commento richiesta to the database.
 	 *
@@ -260,6 +267,14 @@ public class CommentoRichiestaLocalServiceUtil {
 
 		return getService().getCommentiRichiestaByRichiestaIdVisibile(
 			richiestaId, visibile);
+	}
+
+	public static List<CommentoRichiesta>
+		getCommentiRichiestaByRichiestaIdVisibile(
+			long richiestaId, boolean visibile, int start, int end) {
+
+		return getService().getCommentiRichiestaByRichiestaIdVisibile(
+			richiestaId, visibile, start, end);
 	}
 
 	/**

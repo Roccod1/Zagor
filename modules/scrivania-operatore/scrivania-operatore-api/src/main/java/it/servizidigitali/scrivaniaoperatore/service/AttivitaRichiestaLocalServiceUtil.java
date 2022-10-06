@@ -62,6 +62,10 @@ public class AttivitaRichiestaLocalServiceUtil {
 		return getService().addAttivitaRichiesta(attivitaRichiesta);
 	}
 
+	public static int countAttivitaRichiestaByRichiestaId(long richiestaId) {
+		return getService().countAttivitaRichiestaByRichiestaId(richiestaId);
+	}
+
 	/**
 	 * Creates a new attivita richiesta with the primary key. Does not add the attivita richiesta to the database.
 	 *
@@ -257,6 +261,13 @@ public class AttivitaRichiestaLocalServiceUtil {
 		long richiestaId) {
 
 		return getService().getAttivitaRichiestaByRichiestaId(richiestaId);
+	}
+
+	public static List<AttivitaRichiesta> getAttivitaRichiestaByRichiestaId(
+		long richiestaId, int start, int end) {
+
+		return getService().getAttivitaRichiestaByRichiestaId(
+			richiestaId, start, end);
 	}
 
 	/**
