@@ -59,13 +59,14 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 				"com.liferay.portlet.header-portlet-css=/libs/jquery.handsontable/jquery.handsontable.full.css", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/handlebars/handlebars.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/moment/moment-with-locales.min.js", //
+				"com.liferay.portlet.footer-portlet-javascript=/libs/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/jquery-ui-dist/jquery-ui.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/jquery-blockui/jquery.blockUI.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/jquery.handsontable/jquery.handsontable.full.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/alpaca-custom/alpaca.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/dist/custom-fields.min.js", //
 				"com.liferay.portlet.instanceable=true", "javax.portlet.display-name=PresentatoreForms", //
-				"javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp", //
+				"com.liferay.portlet.single-page-application=false", "javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp", //
 				"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
 				"javax.portlet.resource-bundle=content.Language", //
 				"javax.portlet.security-role-ref=power-user,user" }, //
@@ -188,7 +189,6 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 								List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
 								renderRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONI_USO, destinazioniUso);
 								renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, form.getNome());
-								renderRequest.setAttribute(PresentatoreFormsPortletKeys.RICHIESTA_STATUS, richiesta.getStato());
 								include(PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO, renderRequest, renderResponse);
 							}else {
 								include(PresentatoreFormsPortletKeys.JSP_COMPILA_FORM, renderRequest, renderResponse);

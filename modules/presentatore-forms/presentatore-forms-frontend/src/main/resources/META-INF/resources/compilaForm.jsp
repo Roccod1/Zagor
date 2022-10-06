@@ -1,7 +1,5 @@
 <%@ include file="./init.jsp" %>
 
-<script type="text/javascript" src="<%=request.getContextPath()%>/libs/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js" data-senna-track="temporary" ></script>
-
 <portlet:renderURL var="scegliAllegatiUrl">
 	<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND %>" />
 </portlet:renderURL>
@@ -17,7 +15,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" data-senna-track="temporary">
 
 console.log("starting the jsp script in compilaForm");
 
@@ -45,16 +43,16 @@ var relazioniParentelaJsonCF = [];
 var getAddressByCoordsUrl = 'https://nominatim.openstreetmap.org/reverse.php?format=json&zoom=16';
 var getCoordsByAddressUrl = 'https://nominatim.openstreetmap.org/search.php?format=json&limit=1&bounded=1&q=';
 
-$.blockUI({ 
-        message: "<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '>Caricamento del Modulo...</div>",
-        baseZ:2000,
-         css: { 
-                border: 'none', 
-                fontFamily: "'Titillium Web',sans-serif",
-                opacity: .7, 
-                color: '#ae1d3f',
-            } 
-    });
+// $.blockUI({ 
+//         message: "<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '>Caricamento del Modulo...</div>",
+//         baseZ:2000,
+//          css: { 
+//                 border: 'none', 
+//                 fontFamily: "'Titillium Web',sans-serif",
+//                 opacity: .7, 
+//                 color: '#ae1d3f',
+//             } 
+//     });
     
    
     
@@ -497,7 +495,7 @@ function mainScript() {
 				$("button[data-key='pagaButton']").hide();
 				$("button[data-key='scaricaCertificatoButton']").hide();
 				
-				$.unblockUI();
+// 				$.unblockUI();
             	if (enableSubmitFormButton) {
             		if (isDebugEnabled) {
             			console.log("sto riabilitando il bottone")
