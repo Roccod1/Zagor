@@ -2,6 +2,7 @@ package it.servizidigitali.presentatoreforms.frontend.service;
 
 import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.document.library.kernel.service.DLAppService;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -49,9 +50,20 @@ public class AllegatoRichiestaService {
 			if (Validator.isNotNull(allegato)) {
 				InputStream stream = new FileInputStream(allegato);
 				if (Validator.isNotNull(allegato)) {
+					String descrizione = null;
+					if (definizioneAllegatoId != null && !definizioneAllegatoId.equals(0L)) {
+						try {
+							DefinizioneAllegato definizioneAllegato = definizioneAllegatoLocalService.getDefinizioneAllegato(definizioneAllegatoId);
+							descrizione = "Allegato '" + definizioneAllegato.getDenominazione() + "'";
+						}
+						catch (PortalException e) {
+							log.error("salvaAllegatiRichiesta :: " + e.getMessage(), e);
+						}
+					}
+
 					String mimeType = MimeTypesUtil.getContentType(allegato);
-					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, null, servizio.getCodice(), richiestaId,
-							stream, mimeType, userId, groupId);
+					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId, stream, mimeType, userId,
+							groupId);
 					creaAllegatoRichiesta(idDocumentale, nomeFile, servizio.getNome(), richiestaId, definizioneAllegatoId, false, userName, groupId, userId);
 				}
 			}
@@ -63,7 +75,8 @@ public class AllegatoRichiestaService {
 
 	}
 
-	public void creaAllegatoRichiesta(String idDocumentale, String nomeFile, String nomeServizio, long richiestaId, Long definizioneAllegatoId, boolean principale, String userName, long groupId, long userId) {
+	public void creaAllegatoRichiesta(String idDocumentale, String nomeFile, String nomeServizio, long richiestaId, Long definizioneAllegatoId, boolean principale, String userName, long groupId,
+			long userId) {
 		AllegatoRichiesta allegatoRichiesta = allegatoRichiestaLocalService.createAllegatoRichiesta(counterLocalService.increment());
 
 		if (Validator.isNotNull(idDocumentale)) {
@@ -85,11 +98,11 @@ public class AllegatoRichiestaService {
 			if (Validator.isNotNull(allegato)) {
 				InputStream stream = new FileInputStream(allegato);
 				String nomeFile = "richiesta-" + richiestaId + ".pdf";
-				String descrizione = "Richiesta " + richiestaId;
- 				if (Validator.isNotNull(allegato)) {
+				String descrizione = "Richiesta servizio '" + servizio.getNome() + "' - ID: " + richiestaId;
+				if (Validator.isNotNull(allegato)) {
 					String mimeType = MimeTypesUtil.getContentType(allegato);
-					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId,
-							stream, mimeType, userId, groupId);
+					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId, stream, mimeType, userId,
+							groupId);
 
 					if (Validator.isNotNull(idDocumentale)) {
 						creaAllegatoRichiesta(idDocumentale, nomeFile, servizio.getNome(), richiestaId, null, true, userName, groupId, userId);
