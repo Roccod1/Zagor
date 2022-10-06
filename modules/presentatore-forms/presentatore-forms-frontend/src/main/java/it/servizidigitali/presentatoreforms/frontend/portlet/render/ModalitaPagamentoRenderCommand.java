@@ -77,10 +77,11 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand{
 		Form form = null;
 		IstanzaForm istanzaForm = null;
 		boolean daPagare = false;
+		boolean invioIstanza = true;
 		
 		String encoded = null;
 		
-		long destinazioneUsoId = ParamUtil.getLong(renderRequest, "destinazioneUsoId");
+		String destinazioneUsoId = ParamUtil.getString(renderRequest, "destinazioneUsoId");
 		
 		Gson gson = new Gson();
 		
@@ -102,7 +103,7 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand{
 			
 			// Controllo se la destinazione uso è associata al servizio
 			
-			DestinazioneUso destinazioneUso = presentatoreFormFrontendService.checkDestinazioneUso(destinazioneUsoId, servizio.getServizioId(), organizationId, groupId, companyId);
+			DestinazioneUso destinazioneUso = presentatoreFormFrontendService.checkDestinazioneUso(Long.valueOf(destinazioneUsoId), servizio.getServizioId(), organizationId, groupId, companyId);
 			
 			if(Validator.isNotNull(destinazioneUso)) {
 				if(destinazioneUso.isPagamentoBollo()) {
@@ -119,10 +120,7 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand{
 				if(Validator.isNotNull(tipoServizio)) {
 										
 					// CERTIFICATO
-					renderRequest.setAttribute(PresentatoreFormsPortletKeys.INVIO_ISTANZA, false);
-					renderRequest.setAttribute(PresentatoreFormsPortletKeys.DA_PAGARE, daPagare);
-					renderRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONE_USO_ID, destinazioneUsoId);
-					renderRequest.setAttribute(PresentatoreFormsPortletKeys.ANTEPRIMA_CERTIFICATI, certificatiPdfPreviewEnabled); 
+					
 					
 					if(certificatiPdfPreviewEnabled) {
 						
@@ -135,28 +133,31 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand{
 						alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), form.getListaDefinizioneAllegato(), true, themeDisplay.getPortalURL()));
 						alpacaStructure.setData(JsonParser.parseString(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
 						
-						byte[] pdfFile = pdfService.generaPDFCertificato(user.getScreenName(), user.getScreenName(), alpacaStructure, richiesta, destinazioneUsoId, null, renderRequest);
+						byte[] pdfFile = pdfService.generaPDFCertificato(user.getScreenName(), user.getScreenName(), alpacaStructure, richiesta, null, null, renderRequest);
 						
 						if(Validator.isNotNull(pdfFile)) {
 							encoded = new String(Base64.getEncoder().encode(pdfFile));
+							
 							renderRequest.setAttribute(PresentatoreFormsPortletKeys.BASE_64_PDF_CERTIFICATO, encoded);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.DOWNLOAD_CERTIFICATO, true);
+							
 						}
 
 					}
-				}
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, servizio.getNome());
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.INVIO_ISTANZA, invioIstanza);
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.DA_PAGARE, daPagare);
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONE_USO_ID, destinazioneUsoId);
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.ANTEPRIMA_CERTIFICATI, certificatiPdfPreviewEnabled); 
+				}				
 			}
 			
 		}catch(Exception e) {
 			_log.error(e.getMessage(),e);
 		}
 		
-		renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, form.getNome());
-		renderRequest.setAttribute(PresentatoreFormsPortletKeys.DA_PAGARE, true);
-		renderRequest.setAttribute(PresentatoreFormsPortletKeys.DOWNLOAD_CERTIFICATO, true);
-		
-		renderRequest.setAttribute(PresentatoreFormsPortletKeys.CERTIFICATI_PREVIEW_ABILITATA, certificatiPdfPreviewEnabled);
-		
 		return PresentatoreFormsPortletKeys.JSP_SCEGLI_MODALITA_PAGAMENTO;
+
 	}
 
 }

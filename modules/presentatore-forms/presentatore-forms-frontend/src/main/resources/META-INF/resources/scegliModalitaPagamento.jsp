@@ -1,11 +1,19 @@
 <%@ include file="./init.jsp" %>
 
+<portlet:renderURL var="scegliModalitaPagamentoUrl">
+	<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.SCEGLI_MODALITA_PAGAMENTO_RENDER_COMMAND %>" />
+</portlet:renderURL>
+
 <script type="text/javascript" src="<%=request.getContextPath()%>/scripts/pdf.js" /></script>
 
-<aui:row>
-	<p>
+<liferay-ui:error key="<%=PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA %>" message="error.generico" />
+
+<div class="page-header">
 		<b>${titoloPortletServizio}</b>
-	</p>
+	</div>
+
+<aui:row>
+	
 	
 	<div class="content">
 		<div class="alpaca-wizard">

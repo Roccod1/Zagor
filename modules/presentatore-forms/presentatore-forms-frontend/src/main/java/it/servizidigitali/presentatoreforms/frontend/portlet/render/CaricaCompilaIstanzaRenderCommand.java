@@ -95,6 +95,16 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 				jsonDataBozza = gson.toJson(gson.fromJson(istanzaFormRichiesta.getJson(), FormData.class));
 				formData = AlpacaUtil.loadFormData(form, jsonDataBozza, true, themeDisplay.getPortalURL());
 				alpacaStructure = formData.getAlpaca();
+				
+				if(tipoServizio.equals(tipoServizio.CERTIFICATO)) {
+					List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.API_ALPACA_PATH, themeDisplay.getPortalURL() + PresentatoreFormsPortletKeys.SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH);
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.TIPO_SERVIZIO_STEP2, procedura.getStep2TipoServizio());
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONI_USO, destinazioniUso);
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, form.getNome());
+					return PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO;
+				}
 			}
 			else {
 

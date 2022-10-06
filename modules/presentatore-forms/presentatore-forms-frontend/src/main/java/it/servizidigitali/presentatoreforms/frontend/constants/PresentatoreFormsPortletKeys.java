@@ -71,7 +71,6 @@ public class PresentatoreFormsPortletKeys {
 	public static final String UPLOAD_FILE_MAX_SIZE_LABEL = "uploadFileMaxSizeLabel";
 	public static final String DICHIARAZIONE_RISPOSTA = "dichiarazioneRisposta";
 	public static final String DOWNLOAD_CERTIFICATO = "downloadCertificato";
-	public static final String CERTIFICATI_PREVIEW_ABILITATA = "certificatiPdfPreviewEnabled";
 	public static final String BASE_64_PDF_CERTIFICATO = "base64PDFCertificato";
 	public static final String DESTINAZIONE_USO_ID = "destinazioneUsoId";
 	public static final String TIPO_SERVIZIO_STEP2 = "configurazioneTipoServizioStep2";
