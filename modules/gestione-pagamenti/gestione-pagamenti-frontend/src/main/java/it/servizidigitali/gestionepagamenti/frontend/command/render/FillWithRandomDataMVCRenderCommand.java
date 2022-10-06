@@ -1,4 +1,4 @@
-package it.servizidigitali.gestionepagamenti.frontend.command.action;
+package it.servizidigitali.gestionepagamenti.frontend.command.render;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -26,7 +26,7 @@ import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalServiceUtil;
 
 @Component(immediate = true, property = { "javax.portlet.name=" + GestionePagamentiFrontendPortletKeys.GESTIONEPAGAMENTIFRONTEND,
-"mvc.command.name=/persona/fillWithRandomData" }, service = { MVCRenderCommand.class })
+"mvc.command.name=/pagamento/fillWithRandomData" }, service = { MVCRenderCommand.class })
 public class FillWithRandomDataMVCRenderCommand implements MVCRenderCommand {
 
 	@Override

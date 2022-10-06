@@ -36,7 +36,7 @@ public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
 	@Override
 	public List<Pagamento> search(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
 			Date dataOperazioneA, long groupId, String categoria, String stato, String gateway, String canale,
-			String codiceFiscale, String identificativoPagamento, String codiceIuv, long idPagamento, int inizio, int fine, String orderByCol, String orderByType) {
+			String codiceFiscale, String codiceIuv, long idPagamento, int inizio, int fine, String orderByCol, String orderByType) {
 		
 		boolean direzione = true;
 
@@ -52,16 +52,16 @@ public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
 		
 		return this.pagamentoFinder.findByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
 				dataOperazioneA, groupId, categoria, stato, gateway, canale, codiceFiscale,
-				identificativoPagamento, codiceIuv, idPagamento, inizio, fine, comparator);
+				codiceIuv, idPagamento, inizio, fine, comparator);
 	}
 	
 	@Override
 	public long countByFilters(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
 			Date dataOperazioneA, long groupId, String categoria, String stato, String gateway, String canale,
-			String codiceFiscale, String identificativoPagamento, String codiceIuv, long idPagamento) {
+			String codiceFiscale, String codiceIuv, long idPagamento) {
 		
 		return this.pagamentoFinder.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
 				dataOperazioneA, groupId, categoria, stato, gateway, canale, codiceFiscale,
-				identificativoPagamento, codiceIuv, idPagamento);
+				codiceIuv, idPagamento);
 	}
 }

@@ -1,5 +1,7 @@
 package it.servizidigitali.gestionepagamenti.common.enumeration;
 
+import java.util.stream.Stream;
+
 /**
  * @author pindi
  *
@@ -14,6 +16,17 @@ public enum StatoPagamento {
 	}
 
 	public String getDescrizione() {
+		return descrizione;
+	}
+	
+	public static String getDescrizioneByName(String name) {
+		
+		String descrizione = "-";
+		
+		if (Stream.of(StatoPagamento.values()).filter(en -> en.toString().equals(name)).findAny().isPresent()) {
+			descrizione = StatoPagamento.valueOf(name).getDescrizione();
+		}
+		
 		return descrizione;
 	}
 }

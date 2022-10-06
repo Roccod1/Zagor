@@ -17,7 +17,6 @@ import java.util.List;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 
 @Component(name = "getOrganizzazioniService", immediate = true, service = GestionePagamentiService.class)
@@ -53,13 +52,6 @@ public class GestionePagamentiService {
 	}
 	
 	public void initDataForView(Pagamento pagamento) {
-		
-		String stato = pagamento.getStato();
-		
-		if (Validator.isNotNull(stato)) {
-			StatoPagamento statoPagamento = StatoPagamento.valueOf(stato);
-			pagamento.setStato(statoPagamento.getDescrizione());
-		}
 		
 		String nomeOrganizzazione = "-";
 		

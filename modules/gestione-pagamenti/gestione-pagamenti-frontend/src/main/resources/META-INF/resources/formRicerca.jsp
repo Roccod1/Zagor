@@ -3,12 +3,12 @@
 </portlet:actionURL>
 
 <portlet:renderURL var="homeURL">
-	<portlet:param name="mvcPath" value="/view.jsp" />
+	<portlet:param name="mvcPath" value="<%=GestionePagamentiFrontendPortletKeys.HOME_VIEW %>" />
 </portlet:renderURL>
 
 <portlet:renderURL var="fillWithRandomDataURL">
 	<portlet:param name="mvcRenderCommandName"
-		value="/persona/fillWithRandomData" />
+		value="/pagamento/fillWithRandomData" />
 </portlet:renderURL>
 
 <aui:form method="post" action="${cercaPagamentiActionURL}"
@@ -150,26 +150,19 @@
 				</c:choose>
 			</aui:row>
 			<aui:row>
-				<aui:col md="3">
+				<aui:col md="4">
 					<aui:input value="${codiceFiscaleCerca}"
 						label="gestionePagamenti.cerca.codiceFiscale" id="codiceFiscale"
 						name="<%=GestionePagamentiFrontendPortletKeys.CODICE_FISCALE_CERCA%>"
 						type="text" />
 				</aui:col>
-				<aui:col md="3">
-					<aui:input value="${identificativoPagamentoCerca}"
-						label="gestionePagamenti.cerca.identificativoPagamento"
-						id="identificativoPagamento"
-						name="<%=GestionePagamentiFrontendPortletKeys.IDENTIFICATIVO_PAGAMENTO_CERCA%>"
-						type="text" />
-				</aui:col>
-				<aui:col md="3">
+				<aui:col md="4">
 					<aui:input value="${codiceIuvCerca}"
 						label="gestionePagamenti.cerca.codiceIuv" id="codiceIuv"
 						name="<%=GestionePagamentiFrontendPortletKeys.CODICE_IUV_CERCA%>"
 						type="text" />
 				</aui:col>
-				<aui:col md="3">
+				<aui:col md="4">
 					<aui:input value="${idPagamentoCerca}"
 						label="gestionePagamenti.cerca.idPagamento" id="idPagamento"
 						name="<%=GestionePagamentiFrontendPortletKeys.ID_PAGAMENTO_CERCA%>"

@@ -82,8 +82,8 @@ public interface PagamentoLocalService
 	public long countByFilters(
 		Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
 		Date dataOperazioneA, long groupId, String categoria, String stato,
-		String gateway, String canale, String codiceFiscale,
-		String identificativoPagamento, String codiceIuv, long idPagamento);
+		String gateway, String canale, String codiceFiscale, String codiceIuv,
+		long idPagamento);
 
 	/**
 	 * Creates a new pagamento with the primary key. Does not add the pagamento to the database.
@@ -318,9 +318,9 @@ public interface PagamentoLocalService
 	public List<Pagamento> search(
 		Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
 		Date dataOperazioneA, long groupId, String categoria, String stato,
-		String gateway, String canale, String codiceFiscale,
-		String identificativoPagamento, String codiceIuv, long idPagamento,
-		int inizio, int fine, String orderByCol, String orderByType);
+		String gateway, String canale, String codiceFiscale, String codiceIuv,
+		long idPagamento, int inizio, int fine, String orderByCol,
+		String orderByType);
 
 	/**
 	 * Updates the pagamento in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

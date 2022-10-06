@@ -3,9 +3,12 @@ package it.servizidigitali.gestionepagamenti.frontend.portlet;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -17,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.portlet.Portlet;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -110,8 +114,6 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			String canale = ParamUtil.getString(renderRequest, GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA,
 					null);
 			String codiceFiscale = ParamUtil.getString(renderRequest, GestionePagamentiFrontendPortletKeys.CODICE_FISCALE_CERCA, null);
-			String identificativoPagamento = ParamUtil.getString(renderRequest,
-					GestionePagamentiFrontendPortletKeys.IDENTIFICATIVO_PAGAMENTO_CERCA, null);
 			String codiceIuv = ParamUtil.getString(renderRequest, GestionePagamentiFrontendPortletKeys.CODICE_IUV_CERCA,
 					null);
 			long idPagamento = ParamUtil.getLong(renderRequest, GestionePagamentiFrontendPortletKeys.ID_PAGAMENTO_CERCA);
@@ -127,12 +129,12 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 			String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 			
-			long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento);
+			long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale, codiceIuv, idPagamento);
 
 			listaPagamenti = Collections.emptyList();
 			
 			if(totalCountPagamenti != 0) {
-				listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale, identificativoPagamento, codiceIuv, idPagamento, inizio, fine, orderByCol, orderByType);
+				listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale, codiceIuv, idPagamento, inizio, fine, orderByCol, orderByType);
 				listaPagamenti.forEach(pagamento -> gestionePagamentiService.initDataForView(pagamento));
 			}
 
@@ -149,7 +151,6 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA, gateway);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA, canale);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.CODICE_FISCALE_CERCA, codiceFiscale);
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.IDENTIFICATIVO_PAGAMENTO_CERCA, identificativoPagamento);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.CODICE_IUV_CERCA, codiceIuv);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.ID_PAGAMENTO_CERCA, idPagamento != 0 ? idPagamento : null);
 			
@@ -158,6 +159,13 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			renderRequest.setAttribute(SearchContainer.DEFAULT_ORDER_BY_COL_PARAM, orderByCol);
 			renderRequest.setAttribute(SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM, orderByType);
 		}
+		
+		// Rimozione messaggi default
+		
+		PortletConfig portletConfig = (PortletConfig) renderRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		LiferayPortletConfig liferayPortletConfig = (LiferayPortletConfig) portletConfig;
+		SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+		SessionMessages.add(renderRequest, liferayPortletConfig.getPortletId() + SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
 		
 		super.render(renderRequest, renderResponse);
 	}
