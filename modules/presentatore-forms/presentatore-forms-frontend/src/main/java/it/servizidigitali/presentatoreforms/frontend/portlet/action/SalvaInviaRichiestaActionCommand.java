@@ -124,7 +124,8 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand {
 							File allegato = uploadPortletRequest.getFile("allegato-" + definizioneAllegato.getDefinizioneAllegatoId());
 
 							if (Validator.isNotNull(allegato)) {
-								allegatoRichiestaService.salvaAllegatiRichiesta(allegato, servizio, richiesta.getRichiestaId(), definizioneAllegato.getDefinizioneAllegatoId(),
+								String nomeFile = uploadPortletRequest.getFileName("allegato-" + definizioneAllegato.getDefinizioneAllegatoId());
+								allegatoRichiestaService.salvaAllegatiRichiesta(allegato, nomeFile, servizio, richiesta.getRichiestaId(), definizioneAllegato.getDefinizioneAllegatoId(),
 										user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
 							}
 							else {

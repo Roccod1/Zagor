@@ -43,7 +43,7 @@ public class AllegatoRichiestaService {
 	@Reference
 	private DLAppService dlAppService;
 
-	public void salvaAllegatiRichiesta(File allegato, Servizio servizio, long richiestaId, Long definizioneAllegatoId, String userName, long userId, long groupId) throws Exception {
+	public void salvaAllegatiRichiesta(File allegato, String nomeFile, Servizio servizio, long richiestaId, Long definizioneAllegatoId, String userName, long userId, long groupId) throws Exception {
 
 		try {
 			if (Validator.isNotNull(allegato)) {
@@ -52,7 +52,7 @@ public class AllegatoRichiestaService {
 					String mimeType = MimeTypesUtil.getContentType(allegato);
 					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), servizio.getCodice(), richiestaId,
 							stream, mimeType, userId, groupId);
-					creaAllegatoRichiesta(idDocumentale, servizio.getNome(), richiestaId, definizioneAllegatoId, false, userName, groupId, userId);
+					creaAllegatoRichiesta(idDocumentale, nomeFile, servizio.getNome(), richiestaId, definizioneAllegatoId, false, userName, groupId, userId);
 				}
 			}
 		}
@@ -63,7 +63,7 @@ public class AllegatoRichiestaService {
 
 	}
 
-	public void creaAllegatoRichiesta(String idDocumentale, String nomeServizio, long richiestaId, Long definizioneAllegatoId, boolean principale, String userName, long groupId, long userId) {
+	public void creaAllegatoRichiesta(String idDocumentale, String nomeFile, String nomeServizio, long richiestaId, Long definizioneAllegatoId, boolean principale, String userName, long groupId, long userId) {
 		AllegatoRichiesta allegatoRichiesta = allegatoRichiestaLocalService.createAllegatoRichiesta(counterLocalService.increment());
 
 		if (Validator.isNotNull(idDocumentale)) {
@@ -74,6 +74,7 @@ public class AllegatoRichiestaService {
 			allegatoRichiesta.setIdDocumentale(idDocumentale);
 			allegatoRichiesta.setDefinizioneAllegatoId(definizioneAllegatoId);
 			allegatoRichiesta.setPrincipale(principale);
+			allegatoRichiesta.setNome(nomeFile);
 			allegatoRichiestaLocalService.updateAllegatoRichiesta(allegatoRichiesta);
 		}
 	}
@@ -83,14 +84,14 @@ public class AllegatoRichiestaService {
 		try {
 			if (Validator.isNotNull(allegato)) {
 				InputStream stream = new FileInputStream(allegato);
-
+				String nomeFile = "richiesta-" + richiestaId + ".pdf";
 				if (Validator.isNotNull(allegato)) {
 					String mimeType = MimeTypesUtil.getContentType(allegato);
-					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), servizio.getCodice(), richiestaId,
+					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, allegato.getName(), allegato.getName(), servizio.getCodice(), richiestaId,
 							stream, mimeType, userId, groupId);
 
 					if (Validator.isNotNull(idDocumentale)) {
-						creaAllegatoRichiesta(idDocumentale, servizio.getNome(), richiestaId, null, true, userName, groupId, userId);
+						creaAllegatoRichiesta(idDocumentale, nomeFile, servizio.getNome(), richiestaId, null, true, userName, groupId, userId);
 					}
 				}
 			}
