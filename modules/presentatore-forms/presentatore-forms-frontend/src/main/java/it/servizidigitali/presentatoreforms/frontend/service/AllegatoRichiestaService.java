@@ -85,9 +85,10 @@ public class AllegatoRichiestaService {
 			if (Validator.isNotNull(allegato)) {
 				InputStream stream = new FileInputStream(allegato);
 				String nomeFile = "richiesta-" + richiestaId + ".pdf";
-				if (Validator.isNotNull(allegato)) {
+				String descrizione = "Richiesta " + richiestaId;
+ 				if (Validator.isNotNull(allegato)) {
 					String mimeType = MimeTypesUtil.getContentType(allegato);
-					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, allegato.getName(), allegato.getName(), servizio.getCodice(), richiestaId,
+					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId,
 							stream, mimeType, userId, groupId);
 
 					if (Validator.isNotNull(idDocumentale)) {
