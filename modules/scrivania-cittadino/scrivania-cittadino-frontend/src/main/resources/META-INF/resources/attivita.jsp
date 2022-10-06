@@ -11,7 +11,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-11">
-			<h3><liferay-ui:message key="richieste"/></h3>						
+			<h3><liferay-ui:message key="pratiche"/></h3>						
 		</div>	
 		<div class="col-1">
 			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#filterCollapseRichieste" aria-expanded="false"><liferay-ui:message key="filtri"/></button>
@@ -154,12 +154,9 @@
 		</div>
 		{{/if}}
 		<div id="collapse{{>prop.richiestaId }}" class="collapse" role="region" aria-labelledby="heading{{>prop.richiestaId }}">
-			{{if prop.note }}
-				<p class="mb-3">{{>prop.note}}</p>
-			{{/if}}
-			<p>Pratica: {{>prop.richiestaId }}</p>
-			<a href="${dettaglioRichiestaURL}&<portlet:namespace/>id={{>prop.richiestaId}}"><span class="t-primary underline"><liferay-ui:message key="dettaglio"/></span></a>  
-			<a href="#"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio"/></span></a>  
+			<p><liferay-ui:message key="protocollo"/>: {{>prop.numeroProtocollo }}</p>
+			<a class="btn btn-outline-primary" href="${dettaglioRichiestaURL}&<portlet:namespace/>id={{>prop.richiestaId}}"><span class="t-primary underline"><liferay-ui:message key="dettaglio"/></span></a>  
+			<a class="btn btn-outline-primary" href="#"><span class="t-primary underline"><liferay-ui:message key="vai-al-servizio"/></span></a>  
 		</div>
 	</div>
 	{{/props}}
@@ -209,7 +206,7 @@
 			{{/if}}
 			<p>Pratica: {{>prop.richiestaId }}</p>
 			<a href="${dettaglioRichiestaURL}&<portlet:namespace/>id={{>prop.richiestaId}}"><span class="t-primary underline"><liferay-ui:message key="dettaglio"/></span></a>  
-			<a href="#"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio"/></span></a>  
+			<a href="#"><span class="t-primary underline"><liferay-ui:message key="vai-al-servizio"/></span></a>  
 		</div>
 	</div>
 	{{/props}}

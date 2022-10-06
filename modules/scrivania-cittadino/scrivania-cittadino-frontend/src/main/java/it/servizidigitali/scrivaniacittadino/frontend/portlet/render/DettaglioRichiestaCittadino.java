@@ -73,6 +73,8 @@ public class DettaglioRichiestaCittadino implements MVCRenderCommand {
 			List<AllegatoRichiesta> listaAllegatiRichiesta = new ArrayList<AllegatoRichiesta>();
 			List<CommentoRichiesta> listaCommentiRichiesta = new ArrayList<CommentoRichiesta>();
 			List<AttivitaRichiesta> listaAttivitaRichiesta = new ArrayList<AttivitaRichiesta>();
+			AllegatoRichiesta pdfRichiesta = null;
+			
 			try {
 				richiesta = richiestaLocalService.getRichiesta(richiestaId);
 				int attivitaRichiestaCount = 0;
@@ -91,11 +93,14 @@ public class DettaglioRichiestaCittadino implements MVCRenderCommand {
 					listaAttivitaRichiesta = attivitaRichiestaLocalService.getAttivitaRichiestaByRichiestaId(richiestaId,posizioni[0],posizioni[1]);
 					attivitaRichiestaCount = attivitaRichiestaLocalService.countAttivitaRichiestaByRichiestaId(richiestaId);
 	
+					pdfRichiesta = allegatoRichiestaLocalService.getAllegatoRichiestaByRichiestaIdPrincipale(richiestaId, true);
+					
 				}
 
 				
 				renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.ALLEGATI_RICHIESTA, listaAllegatiRichiesta);
-				
+				renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.PDF_RICHIESTA, pdfRichiesta);
+
 				renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.ATTIVITA_RICHIESTA, listaAttivitaRichiesta);
 				renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.ATTIVITA_RICHIESTA_COUNT, attivitaRichiestaCount);
 

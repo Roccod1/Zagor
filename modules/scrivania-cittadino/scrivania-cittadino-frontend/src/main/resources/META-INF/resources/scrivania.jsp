@@ -79,7 +79,11 @@
 	</div>
 	<div class="collapse-body" style="padding-bottom: 10px;  padding-top: 0; ">
 		<div>
-			{{>prop.dataInvio ? prop.dataInvio : ""}}
+			{{if prop.dataInvio}}
+				<div>
+					{{localDate:prop.dataInvio}}
+				<div>
+			{{/if}}
 		</div>	
 		<div id="collapse{{>prop.comunicazioneId}}" class="collapse" role="region" aria-labelledby="heading{{>prop.comunicazioneId}}">
 			{{if prop.descrizione }}
@@ -87,8 +91,7 @@
 				{{:prop.descrizione}}
 			</div>
 			{{/if}}  	
-			<p><liferay-ui:message key="codice-servizio"/>: {{>prop.codiceServizio ? prop.codiceServizio : "-"}}</p>
-			<a href="{{>prop.uriServizio ? prop.uriServizio : "#" }}"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio"/></span></a>  
+			<a href="{{>prop.uriServizio ? prop.uriServizio : "#" }}"><span class="t-primary underline"><liferay-ui:message key="vai-a-servizio"/></span></a>  
 		</div>
 	</div>
 	{{/props}}

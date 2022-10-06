@@ -46,6 +46,7 @@ public class ScrivaniaCittadinoPortletKeys
     public static final String COMMENTI_RICHIESTA_COUNT = "commentiRichiestaCount";
     public static final String ATTIVITA_RICHIESTA = "attivitaRichiesta";
     public static final String ATTIVITA_RICHIESTA_COUNT = "attivitaRichiestaCount";
+    public static final String PDF_RICHIESTA = "pdfRichiesta";
     
     public static final String SEARCH_CONTAINER_NAME = "searchContainerName";
     public static final String SEARCH_CONTAINER_ATTIVITA = "attivita";
