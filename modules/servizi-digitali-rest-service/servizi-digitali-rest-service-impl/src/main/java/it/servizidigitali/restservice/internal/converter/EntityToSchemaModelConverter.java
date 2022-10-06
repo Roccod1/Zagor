@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +91,8 @@ public class EntityToSchemaModelConverter {
 	public InfoServizioEnte getInfoServizioEnte(ServizioEnte servizioEnte, Organization organization, Servizio servizio) {
 
 		InfoServizioEnte infoServizioEnte = new InfoServizioEnte();
-		infoServizioEnte.setCodiceIpa(organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo()).toString());
+		Serializable codIPA = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo());
+		infoServizioEnte.setCodiceIpa(codIPA != null ? codIPA.toString() : null);
 		infoServizioEnte.setActive(servizioEnte.isAttivo());
 		infoServizioEnte.setCode(servizio.getCodice());
 		infoServizioEnte.setDescription(servizioEnte.getDescrizione());

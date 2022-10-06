@@ -1,5 +1,16 @@
 package it.servizidigitali.restservice.internal.resource.v1_0;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.NotFoundException;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
+
 import com.liferay.expando.kernel.model.ExpandoColumn;
 import com.liferay.expando.kernel.model.ExpandoValue;
 import com.liferay.expando.kernel.service.ExpandoValueLocalService;
@@ -8,7 +19,6 @@ import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.service.CompanyLocalService;
@@ -17,27 +27,12 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.crypto.Cipher;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.NotFoundException;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ServiceScope;
-
 import it.servizidigitali.common.utility.OrganizationUtility;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
 import it.servizidigitali.gestioneservizi.model.Servizio;
-import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
-import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 import it.servizidigitali.restservice.dto.v1_0.CountServizioEnte;
 import it.servizidigitali.restservice.dto.v1_0.InfoServizioEnte;
 import it.servizidigitali.restservice.internal.constant.ServiziDigitaliRestConstants;
@@ -78,17 +73,31 @@ public class ServiziResourceImpl extends BaseServiziResourceImpl {
 
 		filterByTipologia(codiceTipologiaServizio, seQuery);
 		filterByAmministrazione(amministrazione, seQuery);
-
+		filterByNomeComune(nomeComune, seQuery);
+		
 		List<ServizioEnte> servizioEntes = servizioEnteLocalService.dynamicQuery(seQuery);
 		
 		List<InfoServizioEnte> payload = new ArrayList<>();
 		for (ServizioEnte servizioEnte : servizioEntes) {
 			Servizio servizio = servizioLocalService.fetchServizio(servizioEnte.getServizioId());
-			payload.add(entityToSchemaModelConverter.getInfoServizioEnte(servizioEnte, servizioEnte.getOrganization(), servizio));
+			Organization organization = organizationLocalService.getOrganization(servizioEnte.getOrganizationId());
+			payload.add(entityToSchemaModelConverter.getInfoServizioEnte(servizioEnte, organization, servizio));
 		}
 		
 		Page<InfoServizioEnte> page = Page.of(payload, Pagination.of(1, payload.size()), payload.size());
 		return page;
+	}
+
+	private void filterByNomeComune(String nomeComune, DynamicQuery seQuery) {
+		if (nomeComune != null && !nomeComune.isBlank()) {
+			ClassLoader classLoader = getClass().getClassLoader();
+			DynamicQuery orgQuery = organizationLocalService.dynamicQuery();
+			orgQuery.add(RestrictionsFactoryUtil.ilike("name", StringPool.PERCENT + nomeComune + StringPool.PERCENT));
+			orgQuery.setProjection(ProjectionFactoryUtil.property("organizationId"));
+			
+			List<Long> organizationIds = organizationLocalService.dynamicQuery(orgQuery);
+			seQuery.add(RestrictionsFactoryUtil.in("primaryKey.organizationId", organizationIds));
+		}
 	}
 
 	private void filterByTipologia(Long codiceTipologiaServizio, DynamicQuery seQuery) {
@@ -104,7 +113,7 @@ public class ServiziResourceImpl extends BaseServiziResourceImpl {
 	private void filterByAmministrazione(String amministrazione, DynamicQuery seQuery) {
 		if (amministrazione != null && !amministrazione.isBlank()) {
 			ClassLoader classLoader = getClass().getClassLoader();
-
+			
 			DynamicQuery expandoColumn = DynamicQueryFactoryUtil.forClass(ExpandoColumn.class, classLoader);
 			expandoColumn.add(RestrictionsFactoryUtil.eq("name", "codiceIPA"));
 			expandoColumn.setProjection(ProjectionFactoryUtil.property("columnId"));
@@ -115,7 +124,7 @@ public class ServiziResourceImpl extends BaseServiziResourceImpl {
 			expandoValue.setProjection(ProjectionFactoryUtil.property("classPK"));
 
 			List<Long> organizationIds = expandoValueLocalService.dynamicQuery(expandoValue);
-			seQuery.add(RestrictionsFactoryUtil.in("organizationId", organizationIds));
+			seQuery.add(RestrictionsFactoryUtil.in("primaryKey.organizationId", organizationIds));
 		}
 	}
 
