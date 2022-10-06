@@ -3,29 +3,8 @@
 <portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.SUBMIT_FORM_RESOURCE_COMMAND %>" var="submitFormUrl">
 </portlet:resourceURL>
 
-<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.COMUNE_RESOURCE_COMMAND %>" var="getComuniUrl">
-</portlet:resourceURL>
-
-<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.COMUNI_ESTERI_RESOURCE_COMMAND %>" var="searchListaComuniEsteriSelUrl">
-</portlet:resourceURL>
-
-<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.PROVINCE_RESOURCE_COMMAND %>" var="getProvinceUrl">
-</portlet:resourceURL>
-
-<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.RELAZIONI_PARENTELA_RESOURCE_COMMAND %>" var="getRelazioniParentelaUrl">
-</portlet:resourceURL>
-
-<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.STATI_CIVILI_RESOURCE_COMMAND %>" var="getStatiCiviliUrl">
-</portlet:resourceURL>
-
-<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.STATI_ESTERI_RESOURCE_COMMAND %>" var="getStatiEsteriUrl">
-</portlet:resourceURL>
-
-<portlet:resourceURL id="<%=PresentatoreFormsPortletKeys.TITOLI_STUDIO_RESOURCE_COMMAND %>" var="getTitoliStudioUrl">
-</portlet:resourceURL>
-
 <portlet:renderURL var="scegliAllegatiUrl">
-		<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND %>" />
+	<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND %>" />
 </portlet:renderURL>
 
 <portlet:actionURL var="salvaBozzaUrl" name="<%=PresentatoreFormsPortletKeys.SALVA_RICHIESTA_BOZZA_ACTION_COMMAND %>">
@@ -35,7 +14,7 @@
 
 <div class="row-fluid">
 	<div class="span12 formpresenter-portlet nuova-istanza">
-				<div id="formIscrizione"></div>
+		<div id="formIscrizione"></div>
 	</div>
 </div>
 
@@ -46,37 +25,16 @@ console.log("starting the jsp script in compilaForm");
 var logoInpsInnerUrl = '${pageContext.request.contextPath}' + '/images/INPS_logo.svg';
 var cfLoggedUser='${sessionScope.userPreferences.codiceFiscaleServizio}';
 var userToken = '${userToken}';
-var listaProvinceUrl = '${getProvinceUrl}';
-var listaComuniUrl = '${getComuniUrl}';
-var listaYearsUrl = '${getYearsUrl}';
-var listaFiveYearsUrl = '${getFiveYearsUrl}';
-var listaTitoliStudioUrl = '${getTitoliStudioUrl}';
-var listaRelazioniParentelaUrl = '${getRelazioniParentelaUrl}';
-var listaStatiCiviliUrl = '${getStatiCiviliUrl}';
-var listaStatiEsteriUrl = '${getStatiEsteriUrl}';
-var listaUsoBolloUrl = '${getUsoBolloUrl}';
-var listaComuniEsteriUrl = '${searchListaComuniEsteriSelUrl}';
+var listaProvinceUrl = '${apiAlpacaPath}/province';
+var listaComuniUrl = '${apiAlpacaPath}/comuni';
+var listaYearsUrl = '${apiAlpacaPath}/years';
+var listaFiveYearsUrl = '${apiAlpacaPath}/five-years';
+var listaTitoliStudioUrl = '${apiAlpacaPath}/titoli-studio';
+var listaRelazioniParentelaUrl = '${apiAlpacaPath}/relazioni-parentela';
+var listaStatiCiviliUrl = '${apiAlpacaPath}/stati-civili';
+var listaStatiEsteriUrl = '${apiAlpacaPath}/stati-esteri';
+var listaComuniEsteriUrl = '${apiAlpacaPath}/comuni-esteri';
 var listaStradarioUrl = '${searchStradarioUrl}';
-
-var listaScuoleByComuneUrl = '${COMPLETEAPIALPACAPATH}' + '/getListaScuoleByCodiceIpaAndCodiceServizioAndAnnoScolastico?codiceIpa=${codiceIpaEnte}&codiceServizio=${codiceServizio}';
-var infoScuolaByIdUrl = '${COMPLETEAPIALPACAPATH}' + '/getScuolaById?id=';
-var infoScuolaBacinoByIdUrl = '${COMPLETEAPIALPACAPATH}' + '/getScuolaBacinoById?codiceIpa=${codiceIpaEnte}&id=';
-
-var numeroMaxScuoleAlternativeUrl = '${COMPLETEAPIALPACAPATH}' + '/getConfigurazioneMaxScuoleAlternativeByCodiceIpaAndCodiceServizio?codiceIpa=' + '${codiceIpaEnte}&codiceServizio=' + '${codiceServizio}';
-
-var listaDichiarazioniFormScolasticiUrl = '${COMPLETEAPIALPACAPATH}' + '/dichiarazioni?&attivo=1&codiceIpa=' + '${codiceIpaEnte}&codiceServizio=' + '${codiceServizio}';
-var listaCriteriScolasticiUrl = '${COMPLETEAPIALPACAPATH}' + '/criteri?&attivo=1&codiceIpa=${codiceIpaEnte}&codiceServizio=${codiceServizio}';
-var listaNucleoFamigliareUrl = '${COMPLETEAPIALPACAPATH}' + '/getComponentiNucleoFamiliare?codiceFiscale=' + '${sessionScope.userPreferences.codiceFiscaleServizio}&codiceIpa=' + '${codiceIpaEnte}&codiceServizio=' + '${codiceServizio}'
-var componenteNucleoFamigliareUrl = '${COMPLETEAPIALPACAPATH}' + '/getComponenteNucleoFamiliare?cfRichiedente=' + '${sessionScope.userPreferences.codiceFiscaleServizio}&codiceIpa='+ '${codiceIpaEnte}' + '&codiceFiscale=';
-var elencoMinoriUrl = '${COMPLETEAPIALPACAPATH}' + '/getMinoriIscrivibiliServizio' + '?cfRichiedente=${sessionScope.userPreferences.codiceFiscaleServizio}&codiceIpa=${codiceIpaEnte}&codiceServizio=${codiceServizio}';
-var sogliaIseeUrl = '${COMPLETEAPIALPACAPATH}' + '/getConfigurazioneSogliaIsee?codiceIpa=' + '${codiceIpaEnte}&codiceServizio=${codiceServizio}';
-var inpsIseeUrl = '${COMPLETEAPIALPACAPATH}' + '/getIseeFromInps?codiceIpa=' + '${codiceIpaEnte}&codiceServizio=${codiceServizio}&cfRichiedente=' + cfLoggedUser;
-var checkResidenteUrl = '${COMPLETEAPIALPACAPATH}' + '/getCheckResidente?cfRichiedente=' + '${sessionScope.userPreferences.codiceFiscaleServizio}&codiceIpa=' + '${codiceIpaEnte}&codiceServizio=' + '${codiceServizio}';
-var sendMailCodiceViaMancanteUrl = '${COMPLETEAPIALPACAPATH}' + '/sendMailCodiceViaMancante?cfRichiedente=' + '${sessionScope.userPreferences.codiceFiscaleServizio}&codiceIpa=' + '${codiceIpaEnte}';
-var listaScuoleBRgByComuneUrl = '${COMPLETEAPIALPACAPATH}' + '/getListaScuoleBRgByCodiceIpaAndCodiceServizio?codiceIpa=' + '${codiceIpaEnte}' + '&codiceServizio=' + '${codiceServizio}' + '&cfRichiedente=${sessionScope.userPreferences.codiceFiscaleServizio}';
-var listaScuoleFBcByComuneUrl = '${COMPLETEAPIALPACAPATH}' + '/getListaScuoleFBcByCodiceIpaAndCodiceServizio?codiceIpa=' + '${codiceIpaEnte}' + '&codiceServizio=' + '${codiceServizio}' + '&cfRichiedente=${sessionScope.userPreferences.codiceFiscaleServizio}';
-var listaScuolePegComuneUrl = '${COMPLETEAPIALPACAPATH}' + '/getListaScuolePegByCodiceIpaAndCodiceServizio?codiceIpa=' + '${codiceIpaEnte}' + '&codiceServizio=' + '${codiceServizio}' + '&cfRichiedente=${sessionScope.userPreferences.codiceFiscaleServizio}';
-var checkAttivazioneBaciniUrl = '${COMPLETEAPIALPACAPATH}' + '/getCheckAttivazioneBacini?codiceIpa=' + '${codiceIpaEnte}&codiceServizio=' + '${codiceServizio}';
 
 /* Custom Fields JSON vars */
 var statiEsteriJsonCF = [];
@@ -103,9 +61,6 @@ $.blockUI({
 
 function mainScript() {
 	console.log("timeout over in the jsp script");
-
-	<!--***TODO aggiornare i seguenti valori una volta che avremo il model completo da backend***-->
-	
 		
 	var isDebugEnabled = true;
 	var isCaricaBozza = false;
@@ -114,19 +69,11 @@ function mainScript() {
 	var invioFormIscrizioneUrl = '';
 	var submitFormUrl = '${salvaBozzaUrl}';
 
-	
-	<%--
-	if(submitFormUrl.indexOf("idServizio") == -1){
-		submitFormUrl += '&idServizio=${idServizio}';
-	}
-	
-	submitFormUrl+= '&caricaBozza=${caricaBozza}&idRichiestaServizio=${idRichiestaServizio}';
-	--%>
-	
 	var idRichiestaServizio = '';
 	
 	var optJson = ${alpacaStructure.options};
 	var dataJson = ${alpacaStructure.data};
+	
 	
 	var configurazioneTipoServizioStep2 = 'AUTODICHIARAZIONE';
 	
@@ -142,8 +89,6 @@ function mainScript() {
 	var destinazioneUsoId=null;
 	var nomeFile=null;
 	var idRichiesta=null;
-	<!--***TODO fin qui***-->
-	<!-- *** -->	
 	
 	switch(configurazioneTipoServizioStep2) {
 	case '${DICHIARAZIONE}':

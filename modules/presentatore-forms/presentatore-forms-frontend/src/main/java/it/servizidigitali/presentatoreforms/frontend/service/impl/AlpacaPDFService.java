@@ -50,7 +50,7 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 @Component(name = "alpacaPDFService", immediate = true, service = PDFService.class, configurationPid = "it.servizidigitali.presentatoreforms.frontend.configuration.FreemarkerTemplateEnteConfiguration")
 public class AlpacaPDFService implements PDFService {
 
-	private static final String SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH = "/o/api/alpaca";
+	private static final String SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH = PresentatoreFormsPortletKeys.SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH;
 
 	private static final Log log = LogFactoryUtil.getLog(AlpacaPDFService.class.getName());
 

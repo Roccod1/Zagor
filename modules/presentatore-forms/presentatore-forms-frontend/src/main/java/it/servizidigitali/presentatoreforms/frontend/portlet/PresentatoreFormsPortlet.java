@@ -180,6 +180,8 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 							alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
 
 							renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.API_ALPACA_PATH,
+									themeDisplay.getPortalURL() + PresentatoreFormsPortletKeys.SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH);
 
 							// Aggiunta destinazioni d'uso in pagina se certificato
 							if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {

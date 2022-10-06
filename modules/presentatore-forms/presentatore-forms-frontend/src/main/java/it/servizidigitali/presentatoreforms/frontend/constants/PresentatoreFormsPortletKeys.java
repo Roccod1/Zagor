@@ -21,6 +21,7 @@ public class PresentatoreFormsPortletKeys {
 	public static final String SALVA_RICHIESTA_BOZZA_ACTION_COMMAND = "/salvaBozza";
 	public static final String SCEGLI_COMPONENTE_ACTION_COMMAND = "/scegliComponente";
 	public static final String DOWNLOAD_ISTANZA_PDF_RESOURCE_COMMAND = "/downloadIstanza";
+
 	public static final String COMUNE_RESOURCE_COMMAND = "/listaComuni";
 	public static final String COMUNI_ESTERI_RESOURCE_COMMAND = "/listaComuniEsteri";
 	public static final String PROVINCE_RESOURCE_COMMAND = "/listaProvince";
@@ -68,6 +69,7 @@ public class PresentatoreFormsPortletKeys {
 	public static final String UPLOAD_FILE_MAX_SIZE = "uploadFileMaxSize";
 	public static final String UPLOAD_FILE_MAX_SIZE_LABEL = "uploadFileMaxSizeLabel";
 	public static final String DICHIARAZIONE_RISPOSTA = "dichiarazioneRisposta";
+	public static final String API_ALPACA_PATH = "apiAlpacaPath";
 
 	// JSON
 	public static final String STATUS = "status";
@@ -76,5 +78,7 @@ public class PresentatoreFormsPortletKeys {
 
 	public static final String DEFINIZIONE_ALLEGATO_ID_TEMPORANEO = "idAllegatoTemporaneo";
 	public static final String USER_PREFERENCES_ATTRIBUTE_NAME = "userPreferences";
+
+	public static final String SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH = "/o/api/alpaca";
 
 }
