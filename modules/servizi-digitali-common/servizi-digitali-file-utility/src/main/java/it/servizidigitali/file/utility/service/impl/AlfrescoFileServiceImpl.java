@@ -80,7 +80,7 @@ public class AlfrescoFileServiceImpl implements FileService {
 	private Map<String, String> parameters;
 
 	@Override
-	public String saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, InputStream inputStream, String mimeType, long userId, long groupId)
+	public String saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, long richiestaId, InputStream inputStream, String mimeType, long userId, long groupId)
 			throws FileServiceException {
 		try {
 			Session session = SessionFactoryImpl.newInstance().getRepositories(parameters).get(0).createSession();
@@ -99,6 +99,8 @@ public class AlfrescoFileServiceImpl implements FileService {
 			// get/creazione folder "codiceServizio"
 			Folder codiceServizioFolder = getOrCreateFolder(codiceServizio, publicUserFolder, session);
 
+			Folder richiestaIdFolder = getOrCreateFolder(String.valueOf(richiestaId), codiceServizioFolder, session);
+
 			// Salvataggio documento in folder
 			byte[] bytes = inputStream.readAllBytes();
 			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
@@ -107,7 +109,7 @@ public class AlfrescoFileServiceImpl implements FileService {
 			// Update
 			Document document = null;
 			try {
-				document = (Document) session.getObjectByPath(codiceServizioFolder.getPath() + "/" + nomeFile);
+				document = (Document) session.getObjectByPath(richiestaIdFolder.getPath() + "/" + nomeFile);
 			}
 			catch (CmisObjectNotFoundException e) {
 				log.warn("saveRequestFile :: " + e.getMessage());
@@ -121,7 +123,7 @@ public class AlfrescoFileServiceImpl implements FileService {
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:document");
 				properties.put(PropertyIds.NAME, nomeFile);
-				document = codiceServizioFolder.createDocument(properties, contentStream, VersioningState.NONE);
+				document = richiestaIdFolder.createDocument(properties, contentStream, VersioningState.NONE);
 
 			}
 			log.debug("saveRequestFile :: file '" + document.getName() + "' creato correttamente ");
