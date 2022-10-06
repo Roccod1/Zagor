@@ -1,4 +1,4 @@
-package it.servizidigitali.gestionepagamenti.frontend.command.render;
+package it.servizidigitali.gestionepagamenti.frontend.portlet.render;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;

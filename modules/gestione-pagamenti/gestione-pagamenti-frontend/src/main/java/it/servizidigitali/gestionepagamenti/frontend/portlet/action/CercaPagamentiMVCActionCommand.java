@@ -1,4 +1,4 @@
-package it.servizidigitali.gestionepagamenti.frontend.command.action;
+package it.servizidigitali.gestionepagamenti.frontend.portlet.action;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
