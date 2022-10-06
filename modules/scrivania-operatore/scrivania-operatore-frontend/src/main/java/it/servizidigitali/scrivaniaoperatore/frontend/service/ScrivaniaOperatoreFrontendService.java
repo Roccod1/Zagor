@@ -446,7 +446,8 @@ public class ScrivaniaOperatoreFrontendService {
 	 */
 	public List<AllegatoRichiesta> getAllegatiRichiestaRichiedente(long richiestaId) {
 		List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdGroupIdInterno(richiestaId, false);
-		return allegatiRichiesta;
+		List<AllegatoRichiesta> filteredList = allegatiRichiesta.stream().filter(allegato -> !allegato.isPrincipale()).collect(Collectors.toList());
+		return filteredList;
 	}
 
 	/**
