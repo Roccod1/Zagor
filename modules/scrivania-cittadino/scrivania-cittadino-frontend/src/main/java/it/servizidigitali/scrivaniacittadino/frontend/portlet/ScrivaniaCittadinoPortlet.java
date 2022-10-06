@@ -4,6 +4,7 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class ScrivaniaCittadinoPortlet extends MVCPortlet {
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
 
+		String tabAttivaValue = ParamUtil.getString(renderRequest, ScrivaniaCittadinoPortletKeys.TAB_ATTIVA);
 		List<TipologiaComunicazione> listaTipologiaComunicazione = new ArrayList<TipologiaComunicazione>();
 		List<Tipologia> listaTipologiaServizi = new ArrayList<Tipologia>();
 		try {
@@ -73,7 +75,7 @@ public class ScrivaniaCittadinoPortlet extends MVCPortlet {
 		renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_TIPOLOGIA_COMUNICAZIONE, listaTipologiaComunicazione);
 		renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_STATO, Arrays.asList(StatoRichiesta.values()));
 		renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.LISTA_TIPOLOGIA_RICHIESTA, listaTipologiaServizi);
-
+		renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.TAB_ATTIVA, tabAttivaValue);
 		super.render(renderRequest, renderResponse);
 	}
 

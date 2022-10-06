@@ -50,8 +50,8 @@ public class AllegatoRichiestaService {
 				InputStream stream = new FileInputStream(allegato);
 				if (Validator.isNotNull(allegato)) {
 					String mimeType = MimeTypesUtil.getContentType(allegato);
-					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), servizio.getCodice(), stream, mimeType,
-							userId, groupId);
+					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), servizio.getCodice(), richiestaId,
+							stream, mimeType, userId, groupId);
 					creaAllegatoRichiesta(idDocumentale, servizio.getNome(), richiestaId, definizioneAllegatoId, false, userName, groupId, userId);
 				}
 			}
@@ -86,8 +86,8 @@ public class AllegatoRichiestaService {
 
 				if (Validator.isNotNull(allegato)) {
 					String mimeType = MimeTypesUtil.getContentType(allegato);
-					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), servizio.getCodice(), stream, mimeType,
-							userId, groupId);
+					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), servizio.getCodice(), richiestaId,
+							stream, mimeType, userId, groupId);
 
 					if (Validator.isNotNull(idDocumentale)) {
 						creaAllegatoRichiesta(idDocumentale, servizio.getNome(), richiestaId, null, true, userName, groupId, userId);
