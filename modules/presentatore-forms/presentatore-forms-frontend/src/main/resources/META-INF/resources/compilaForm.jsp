@@ -43,22 +43,29 @@ var relazioniParentelaJsonCF = [];
 var getAddressByCoordsUrl = 'https://nominatim.openstreetmap.org/reverse.php?format=json&zoom=16';
 var getCoordsByAddressUrl = 'https://nominatim.openstreetmap.org/search.php?format=json&limit=1&bounded=1&q=';
 
-// $.blockUI({ 
-//         message: "<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '>Caricamento del Modulo...</div>",
-//         baseZ:2000,
-//          css: { 
-//                 border: 'none', 
-//                 fontFamily: "'Titillium Web',sans-serif",
-//                 opacity: .7, 
-//                 color: '#ae1d3f',
-//             } 
-//     });
-    
-   
-    
-    setTimeout(function() { 
-    	 mainScript();
-    }, 3000);
+
+
+
+$(document).ready(function() {
+	$.blockUI({ 
+	    message: "<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '>Caricamento del Modulo...</div>",
+	    baseZ:2000,
+	     css: { 
+	            border: 'none', 
+	            fontFamily: "'Titillium Web',sans-serif",
+	            opacity: .7, 
+	            color: '#ae1d3f',
+	        },
+	     onBlock: function(){
+	    	 mainScript();
+	     }
+	});
+	
+});
+
+
+
+
 
 function mainScript() {
 	console.log("timeout over in the jsp script");
@@ -431,7 +438,8 @@ function mainScript() {
 	
 	
 	
-	$(document).ready(function() {
+
+		
 		/*console.log('test', JSON.stringify(${alpacaStructure.schema}), JSON.stringify(${alpacaStructure.options}), JSON.stringify(${alpacaStructure.view}));*/
 	    $("#formIscrizione").alpaca({
 	   	    "schema": ${alpacaStructure.schema}, 
@@ -439,6 +447,8 @@ function mainScript() {
 	   	    "data": ${alpacaStructure.data},
 	   	    "view": ${alpacaStructure.view},
             "postRender": function(control) {
+            	$.unblockUI();
+
            		if( configurazioneTipoServizioStep2 == '${CERTIFICATO}') {
            			if (isDebugEnabled) {
            				console.log('configurazioneTipoServizioStep2 = CERTIFICATO, nascondo il salvaBozzaFormButton'); 
@@ -495,7 +505,6 @@ function mainScript() {
 				$("button[data-key='pagaButton']").hide();
 				$("button[data-key='scaricaCertificatoButton']").hide();
 				
-// 				$.unblockUI();
             	if (enableSubmitFormButton) {
             		if (isDebugEnabled) {
             			console.log("sto riabilitando il bottone")
@@ -565,7 +574,10 @@ function mainScript() {
                         e.stopPropagation();
                         return false;
                     });
+                    
+
                 }
+                
 			}
 	}); 
 	    
@@ -583,8 +595,8 @@ function mainScript() {
 		$("button[data-key='pagaButton']").hide();
 		$("button[data-key='submitButton']").removeAttr('disabled');
     });
-    
-});
+
+
 	
 }
 </script>
