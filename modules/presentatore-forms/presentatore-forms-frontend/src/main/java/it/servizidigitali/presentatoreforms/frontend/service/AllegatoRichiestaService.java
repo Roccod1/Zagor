@@ -50,7 +50,7 @@ public class AllegatoRichiestaService {
 				InputStream stream = new FileInputStream(allegato);
 				if (Validator.isNotNull(allegato)) {
 					String mimeType = MimeTypesUtil.getContentType(allegato);
-					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(allegato.getName(), allegato.getName(), allegato.getName(), servizio.getCodice(), richiestaId,
+					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, null, servizio.getCodice(), richiestaId,
 							stream, mimeType, userId, groupId);
 					creaAllegatoRichiesta(idDocumentale, nomeFile, servizio.getNome(), richiestaId, definizioneAllegatoId, false, userName, groupId, userId);
 				}
