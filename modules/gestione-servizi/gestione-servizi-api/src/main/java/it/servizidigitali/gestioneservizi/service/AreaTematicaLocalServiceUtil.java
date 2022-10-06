@@ -60,6 +60,10 @@ public class AreaTematicaLocalServiceUtil {
 		return getService().addAreaTematica(areaTematica);
 	}
 
+	public static long count() throws Exception {
+		return getService().count();
+	}
+
 	/**
 	 * Creates a new area tematica with the primary key. Does not add the area tematica to the database.
 	 *
@@ -327,13 +331,11 @@ public class AreaTematicaLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
-	public static List<AreaTematica> getListaAreeTematicheOrdinata(
-			int cur, int delta, String nomeOrdinamento,
-			String direzioneOrdinamento)
-		throws Exception {
+	public static List<AreaTematica> getListaAreeTematiche(
+		int inizio, int fine, String orderByCol, String orderByType) {
 
-		return getService().getListaAreeTematicheOrdinata(
-			cur, delta, nomeOrdinamento, direzioneOrdinamento);
+		return getService().getListaAreeTematiche(
+			inizio, fine, orderByCol, orderByType);
 	}
 
 	/**

@@ -48,8 +48,12 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalServiceUtil;
-import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPK;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPersistence;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.AttivitaRichiestaPersistence;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.CommentoRichiestaPersistence;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.DestinazioneUsoFinder;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.DestinazioneUsoPersistence;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.DestinazioneUsoServizioEntePersistence;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.IstanzaFormPersistence;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.RichiestaFinder;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.RichiestaPersistence;
@@ -110,15 +114,13 @@ public abstract class AllegatoRichiestaLocalServiceBaseImpl
 	/**
 	 * Creates a new allegato richiesta with the primary key. Does not add the allegato richiesta to the database.
 	 *
-	 * @param allegatoRichiestaPK the primary key for the new allegato richiesta
+	 * @param allegatoRichiestaId the primary key for the new allegato richiesta
 	 * @return the new allegato richiesta
 	 */
 	@Override
 	@Transactional(enabled = false)
-	public AllegatoRichiesta createAllegatoRichiesta(
-		AllegatoRichiestaPK allegatoRichiestaPK) {
-
-		return allegatoRichiestaPersistence.create(allegatoRichiestaPK);
+	public AllegatoRichiesta createAllegatoRichiesta(long allegatoRichiestaId) {
+		return allegatoRichiestaPersistence.create(allegatoRichiestaId);
 	}
 
 	/**
@@ -128,17 +130,16 @@ public abstract class AllegatoRichiestaLocalServiceBaseImpl
 	 * <strong>Important:</strong> Inspect AllegatoRichiestaLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta that was removed
 	 * @throws PortalException if a allegato richiesta with the primary key could not be found
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
-	public AllegatoRichiesta deleteAllegatoRichiesta(
-			AllegatoRichiestaPK allegatoRichiestaPK)
+	public AllegatoRichiesta deleteAllegatoRichiesta(long allegatoRichiestaId)
 		throws PortalException {
 
-		return allegatoRichiestaPersistence.remove(allegatoRichiestaPK);
+		return allegatoRichiestaPersistence.remove(allegatoRichiestaId);
 	}
 
 	/**
@@ -259,11 +260,9 @@ public abstract class AllegatoRichiestaLocalServiceBaseImpl
 	}
 
 	@Override
-	public AllegatoRichiesta fetchAllegatoRichiesta(
-		AllegatoRichiestaPK allegatoRichiestaPK) {
-
+	public AllegatoRichiesta fetchAllegatoRichiesta(long allegatoRichiestaId) {
 		return allegatoRichiestaPersistence.fetchByPrimaryKey(
-			allegatoRichiestaPK);
+			allegatoRichiestaId);
 	}
 
 	/**
@@ -283,17 +282,16 @@ public abstract class AllegatoRichiestaLocalServiceBaseImpl
 	/**
 	 * Returns the allegato richiesta with the primary key.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta
 	 * @throws PortalException if a allegato richiesta with the primary key could not be found
 	 */
 	@Override
-	public AllegatoRichiesta getAllegatoRichiesta(
-			AllegatoRichiestaPK allegatoRichiestaPK)
+	public AllegatoRichiesta getAllegatoRichiesta(long allegatoRichiestaId)
 		throws PortalException {
 
 		return allegatoRichiestaPersistence.findByPrimaryKey(
-			allegatoRichiestaPK);
+			allegatoRichiestaId);
 	}
 
 	@Override
@@ -306,8 +304,7 @@ public abstract class AllegatoRichiestaLocalServiceBaseImpl
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 		actionableDynamicQuery.setModelClass(AllegatoRichiesta.class);
 
-		actionableDynamicQuery.setPrimaryKeyPropertyName(
-			"primaryKey.richiestaId");
+		actionableDynamicQuery.setPrimaryKeyPropertyName("allegatoRichiestaId");
 
 		return actionableDynamicQuery;
 	}
@@ -325,7 +322,7 @@ public abstract class AllegatoRichiestaLocalServiceBaseImpl
 		indexableActionableDynamicQuery.setModelClass(AllegatoRichiesta.class);
 
 		indexableActionableDynamicQuery.setPrimaryKeyPropertyName(
-			"primaryKey.richiestaId");
+			"allegatoRichiestaId");
 
 		return indexableActionableDynamicQuery;
 	}
@@ -338,8 +335,7 @@ public abstract class AllegatoRichiestaLocalServiceBaseImpl
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 		actionableDynamicQuery.setModelClass(AllegatoRichiesta.class);
 
-		actionableDynamicQuery.setPrimaryKeyPropertyName(
-			"primaryKey.richiestaId");
+		actionableDynamicQuery.setPrimaryKeyPropertyName("allegatoRichiestaId");
 	}
 
 	@Override
@@ -417,7 +413,7 @@ public abstract class AllegatoRichiestaLocalServiceBaseImpl
 		throws PortalException {
 
 		return allegatoRichiestaPersistence.create(
-			(AllegatoRichiestaPK)primaryKeyObj);
+			((Long)primaryKeyObj).longValue());
 	}
 
 	/**
@@ -623,6 +619,22 @@ public abstract class AllegatoRichiestaLocalServiceBaseImpl
 
 	@Reference
 	protected AllegatoRichiestaPersistence allegatoRichiestaPersistence;
+
+	@Reference
+	protected AttivitaRichiestaPersistence attivitaRichiestaPersistence;
+
+	@Reference
+	protected CommentoRichiestaPersistence commentoRichiestaPersistence;
+
+	@Reference
+	protected DestinazioneUsoPersistence destinazioneUsoPersistence;
+
+	@Reference
+	protected DestinazioneUsoFinder destinazioneUsoFinder;
+
+	@Reference
+	protected DestinazioneUsoServizioEntePersistence
+		destinazioneUsoServizioEntePersistence;
 
 	@Reference
 	protected IstanzaFormPersistence istanzaFormPersistence;

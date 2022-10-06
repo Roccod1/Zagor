@@ -62,12 +62,6 @@ public class DefinizioneAllegatoLocalServiceUtil {
 		return getService().addDefinizioneAllegato(definizioneAllegato);
 	}
 
-	public static DefinizioneAllegato cancellaAllegati(
-		String[] allegatiDaEliminare) {
-
-		return getService().cancellaAllegati(allegatiDaEliminare);
-	}
-
 	/**
 	 * Creates a new definizione allegato with the primary key. Does not add the definizione allegato to the database.
 	 *
@@ -88,6 +82,10 @@ public class DefinizioneAllegatoLocalServiceUtil {
 		throws PortalException {
 
 		return getService().createPersistedModel(primaryKeyObj);
+	}
+
+	public static void deleteAllegati(List<Long> ids) {
+		getService().deleteAllegati(ids);
 	}
 
 	/**

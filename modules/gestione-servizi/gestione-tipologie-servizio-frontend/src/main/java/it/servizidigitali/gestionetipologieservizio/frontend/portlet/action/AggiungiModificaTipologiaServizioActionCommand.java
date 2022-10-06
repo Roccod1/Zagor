@@ -46,8 +46,10 @@ public class AggiungiModificaTipologiaServizioActionCommand extends BaseMVCActio
 	
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+		
 		List<String> listaErrori = new ArrayList<String>();
 		Long tipologiaId = ParamUtil.getLong(actionRequest, GestioneTipologieServizioPortletKeys.TIPOLOGIA_ID);
+		String codice = ParamUtil.getString(actionRequest, GestioneTipologieServizioPortletKeys.CODICE);
 		String nome = ParamUtil.getString(actionRequest, GestioneTipologieServizioPortletKeys.NOME);
 		String descrizione = ParamUtil.getString(actionRequest, GestioneTipologieServizioPortletKeys.DESCRIZIONE);
 		Boolean visibile = ParamUtil.getBoolean(actionRequest, GestioneTipologieServizioPortletKeys.VISIBILE);
@@ -59,7 +61,6 @@ public class AggiungiModificaTipologiaServizioActionCommand extends BaseMVCActio
 			SessionErrors.add(actionRequest, GestioneTipologieServizioPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
 			listaErrori.add("nome e' obbligatorio");
 		}
-		
 			
 		Tipologia tipologia = tipologiaLocalService.createTipologia(0L);
 		
@@ -82,10 +83,12 @@ public class AggiungiModificaTipologiaServizioActionCommand extends BaseMVCActio
 		
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 		ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
-		tipologia.setGroupId(themeDisplay.getCompanyGroupId());
+		tipologia.setGroupId(themeDisplay.getScopeGroupId());
+		tipologia.setCompanyId(themeDisplay.getCompanyId());
 		tipologia.setUserId(themeDisplay.getUserId());
 		tipologia.setUserName(themeDisplay.getUser().getFullName());
 		
+		tipologia.setCodice(codice);
 		tipologia.setNome(nome);		
 		tipologia.setDescrizione(descrizione);						
 		tipologia.setVisibile(visibile);

@@ -199,14 +199,13 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public List<Task> getTasksByBusinessKey(String tenantId, String businessKey, boolean includeCandidateGroups) throws CamundaClientException {
+	public List<Task> getTasksByBusinessKey(String tenantId, String businessKey) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
 
 			TaskQueryDto q = new TaskQueryDto();
 			q.setProcessInstanceBusinessKey(businessKey);
-			q.setWithCandidateGroups(includeCandidateGroups);
 
 			if (Validator.isNotNull(tenantId)) {
 				q.setTenantIdIn(Arrays.asList(tenantId));
@@ -571,20 +570,20 @@ public class CamundaClientImpl implements CamundaClient {
 	}
 
 	@Override
-	public void completeTask(String taskId, List<Entry<String, String>> varialbles) throws CamundaClientException {
+	public void completeTask(String taskId, List<Entry<String, String>> variables) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
 
 		try {
 			CompleteTaskDto d = new CompleteTaskDto();
 
-			if (null != varialbles) {
-				for (Entry<String, String> entry : varialbles) {
+			if (null != variables) {
+				for (Entry<String, String> entry : variables) {
 
 					VariableValueDto value = new VariableValueDto();
 					value.setValue(entry.getValue());
 					value.setType("string");
 
-					d.putVariablesItem( /* trim */ entry.getKey(), value);
+					d.putVariablesItem(entry.getKey(), value);
 				}
 			}
 

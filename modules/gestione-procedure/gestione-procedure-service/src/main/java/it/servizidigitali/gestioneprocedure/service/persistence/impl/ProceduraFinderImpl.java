@@ -21,7 +21,7 @@ import it.servizidigitali.gestioneprocedure.service.persistence.ProceduraFinder;
 public class ProceduraFinderImpl extends ProceduraFinderBaseImpl implements ProceduraFinder {
 
 	@Override
-	public List<Procedura> findByFilters(String denominazione, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId, int cur, int delta,
+	public List<Procedura> findByFilters(String denominazione, String attiva, Date dataInserimentoDa, Date dataInserimentoA, long siteGroupId, int inizio, int fine,
 			OrderByComparator<Procedura> ordine) {
 		List<Procedura> listaProcedure = new ArrayList<>();
 
@@ -56,10 +56,6 @@ public class ProceduraFinderImpl extends ProceduraFinderBaseImpl implements Proc
 			dynamicQuery.add(RestrictionsFactoryUtil.le("createDate", dataInserimentoA));
 		}
 
-		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
-
-		int inizio = posizioni[0];
-		int fine = posizioni[1];
 
 		listaProcedure = proceduraPersistence.findWithDynamicQuery(dynamicQuery, inizio, fine, ordine);
 

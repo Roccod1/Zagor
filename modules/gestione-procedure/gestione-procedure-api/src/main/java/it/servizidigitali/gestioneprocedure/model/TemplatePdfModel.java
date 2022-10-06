@@ -16,6 +16,7 @@ package it.servizidigitali.gestioneprocedure.model;
 
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.model.GroupedModel;
 import com.liferay.portal.kernel.model.ShardedModel;
 import com.liferay.portal.kernel.model.StagedAuditedModel;
 
@@ -36,7 +37,8 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public interface TemplatePdfModel
-	extends BaseModel<TemplatePdf>, ShardedModel, StagedAuditedModel {
+	extends BaseModel<TemplatePdf>, GroupedModel, ShardedModel,
+			StagedAuditedModel {
 
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -88,6 +90,22 @@ public interface TemplatePdfModel
 	 * @param templatePdfId the template pdf ID of this template pdf
 	 */
 	public void setTemplatePdfId(long templatePdfId);
+
+	/**
+	 * Returns the group ID of this template pdf.
+	 *
+	 * @return the group ID of this template pdf
+	 */
+	@Override
+	public long getGroupId();
+
+	/**
+	 * Sets the group ID of this template pdf.
+	 *
+	 * @param groupId the group ID of this template pdf
+	 */
+	@Override
+	public void setGroupId(long groupId);
 
 	/**
 	 * Returns the company ID of this template pdf.
@@ -199,27 +217,6 @@ public interface TemplatePdfModel
 	 * @param fileEntryId the file entry ID of this template pdf
 	 */
 	public void setFileEntryId(long fileEntryId);
-
-	/**
-	 * Returns the attivo of this template pdf.
-	 *
-	 * @return the attivo of this template pdf
-	 */
-	public boolean getAttivo();
-
-	/**
-	 * Returns <code>true</code> if this template pdf is attivo.
-	 *
-	 * @return <code>true</code> if this template pdf is attivo; <code>false</code> otherwise
-	 */
-	public boolean isAttivo();
-
-	/**
-	 * Sets whether this template pdf is attivo.
-	 *
-	 * @param attivo the attivo of this template pdf
-	 */
-	public void setAttivo(boolean attivo);
 
 	/**
 	 * Returns the procedura ID of this template pdf.

@@ -1,19 +1,21 @@
 package it.servizidigitali.restservice.internal.resource.v1_0;
 
-import it.servizidigitali.restservice.dto.v1_0.InsertRichiestaServizioRequest;
-import it.servizidigitali.restservice.dto.v1_0.RichiestaServizio;
-import it.servizidigitali.restservice.dto.v1_0.UpdateRichiestaServizioRequest;
-import it.servizidigitali.restservice.resource.v1_0.RichiesteServizioResource;
-import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
-
 import java.util.ArrayList;
 
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.Context;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.pagination.Page;
+
+import it.servizidigitali.restservice.dto.v1_0.InsertRichiestaServizioRequest;
+import it.servizidigitali.restservice.dto.v1_0.RichiestaServizio;
+import it.servizidigitali.restservice.dto.v1_0.UpdateRichiestaServizioRequest;
+import it.servizidigitali.restservice.resource.v1_0.RichiesteServizioResource;
 
 /**
  * @author pindi
@@ -32,6 +34,10 @@ extends BaseRichiesteServizioResourceImpl {
 		for(int i = 0; i < 10; i++) {
 			RichiestaServizio r = new RichiestaServizio();
 			r.setId(Long.valueOf(i));
+			
+			if(Validator.isNotNull(user)) {
+				r.setStato(user.getScreenName());
+			}
 			
 			l.add(r);
 		}
@@ -77,5 +83,8 @@ extends BaseRichiesteServizioResourceImpl {
 		r.setStato(updateRichiestaServizioRequest.getStato());
 		return r;
 	}
+	
+	@Context
+	private User user;
 
 }

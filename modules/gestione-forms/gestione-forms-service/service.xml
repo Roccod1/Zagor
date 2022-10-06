@@ -86,16 +86,19 @@
 		<column name="tipiFileAmmessi" type="String" />
 		<column name="codiciTipologiaDocumento" type="String" />
 		<column name="obbligatorio" type="boolean" />
-		<column name="eliminato" type="boolean" />
 		
 		<!-- FK -->
 		<column name="organizationId" type="long" />	
 		<column name="formId" type="long" />
 		
 		<!-- Finder methods -->
-		<finder name="formIdAndEliminato" return-type="Collection">
+		<finder name="FormId" return-type="Collection">
 			<finder-column name="formId" />
-			<finder-column name="eliminato" />
+		</finder>
+
+		<finder name="FormIdOrganizationId" return-type="Collection">
+			<finder-column name="formId" />
+			<finder-column name="organizationId" />
 		</finder>
 
 	</entity>
@@ -133,14 +136,16 @@
 		<column name="numeroRequired" type="long"/>
 		<column name="dataScadenzaRequired" type="long"/>
 		
-		<!-- FK -->
-		<column name="organizationId" type="long" />	
+		
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="nome" />
+		</order>
 		
 		<!-- Finder methods -->
-		<finder name="stato" return-type="Collection">
+		<finder name="Stato" return-type="Collection">
 			<finder-column name="stato" />
 		</finder>
-
 	</entity>
 
 </service-builder>

@@ -291,6 +291,21 @@ public interface TipologiaModel
 	 */
 	public void setChatbotInlineIntent(String chatbotInlineIntent);
 
+	/**
+	 * Returns the codice of this tipologia.
+	 *
+	 * @return the codice of this tipologia
+	 */
+	@AutoEscape
+	public String getCodice();
+
+	/**
+	 * Sets the codice of this tipologia.
+	 *
+	 * @param codice the codice of this tipologia
+	 */
+	public void setCodice(String codice);
+
 	@Override
 	public Tipologia cloneWithOriginalValues();
 

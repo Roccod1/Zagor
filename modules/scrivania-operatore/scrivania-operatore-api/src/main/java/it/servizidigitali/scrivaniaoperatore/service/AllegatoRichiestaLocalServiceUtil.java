@@ -65,14 +65,13 @@ public class AllegatoRichiestaLocalServiceUtil {
 	/**
 	 * Creates a new allegato richiesta with the primary key. Does not add the allegato richiesta to the database.
 	 *
-	 * @param allegatoRichiestaPK the primary key for the new allegato richiesta
+	 * @param allegatoRichiestaId the primary key for the new allegato richiesta
 	 * @return the new allegato richiesta
 	 */
 	public static AllegatoRichiesta createAllegatoRichiesta(
-		it.servizidigitali.scrivaniaoperatore.service.persistence.
-			AllegatoRichiestaPK allegatoRichiestaPK) {
+		long allegatoRichiestaId) {
 
-		return getService().createAllegatoRichiesta(allegatoRichiestaPK);
+		return getService().createAllegatoRichiesta(allegatoRichiestaId);
 	}
 
 	/**
@@ -108,16 +107,15 @@ public class AllegatoRichiestaLocalServiceUtil {
 	 * <strong>Important:</strong> Inspect AllegatoRichiestaLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta that was removed
 	 * @throws PortalException if a allegato richiesta with the primary key could not be found
 	 */
 	public static AllegatoRichiesta deleteAllegatoRichiesta(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK)
+			long allegatoRichiestaId)
 		throws PortalException {
 
-		return getService().deleteAllegatoRichiesta(allegatoRichiestaPK);
+		return getService().deleteAllegatoRichiesta(allegatoRichiestaId);
 	}
 
 	/**
@@ -216,10 +214,9 @@ public class AllegatoRichiestaLocalServiceUtil {
 	}
 
 	public static AllegatoRichiesta fetchAllegatoRichiesta(
-		it.servizidigitali.scrivaniaoperatore.service.persistence.
-			AllegatoRichiestaPK allegatoRichiestaPK) {
+		long allegatoRichiestaId) {
 
-		return getService().fetchAllegatoRichiesta(allegatoRichiestaPK);
+		return getService().fetchAllegatoRichiesta(allegatoRichiestaId);
 	}
 
 	/**
@@ -242,32 +239,47 @@ public class AllegatoRichiestaLocalServiceUtil {
 		return getService().getActionableDynamicQuery();
 	}
 
-	public static List<AllegatoRichiesta> getAllegatiRichiesta(
-		long richiestaId, long groupId) {
+	public static List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaId(
+		long richiestaId) {
 
-		return getService().getAllegatiRichiesta(richiestaId, groupId);
+		return getService().getAllegatiRichiestaByRichiestaId(richiestaId);
+	}
+
+	public static List<AllegatoRichiesta>
+		getAllegatiRichiestaByRichiestaIdGroupIdInterno(
+			long richiestaId, boolean interno) {
+
+		return getService().getAllegatiRichiestaByRichiestaIdGroupIdInterno(
+			richiestaId, interno);
+	}
+
+	public static List<AllegatoRichiesta>
+		getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
+			long richiestaId, boolean visibile) {
+
+		return getService().getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
+			richiestaId, visibile);
 	}
 
 	/**
 	 * Returns the allegato richiesta with the primary key.
 	 *
-	 * @param allegatoRichiestaPK the primary key of the allegato richiesta
+	 * @param allegatoRichiestaId the primary key of the allegato richiesta
 	 * @return the allegato richiesta
 	 * @throws PortalException if a allegato richiesta with the primary key could not be found
 	 */
 	public static AllegatoRichiesta getAllegatoRichiesta(
-			it.servizidigitali.scrivaniaoperatore.service.persistence.
-				AllegatoRichiestaPK allegatoRichiestaPK)
+			long allegatoRichiestaId)
 		throws PortalException {
 
-		return getService().getAllegatoRichiesta(allegatoRichiestaPK);
+		return getService().getAllegatoRichiesta(allegatoRichiestaId);
 	}
 
-	public static AllegatoRichiesta getAllegatoRichiesta(
-		long richiestaId, boolean principale, long groupId) {
+	public static AllegatoRichiesta getAllegatoRichiestaByRichiestaIdPrincipale(
+		long richiestaId, boolean principale) {
 
-		return getService().getAllegatoRichiesta(
-			richiestaId, principale, groupId);
+		return getService().getAllegatoRichiestaByRichiestaIdPrincipale(
+			richiestaId, principale);
 	}
 
 	/**
@@ -391,6 +403,12 @@ public class AllegatoRichiestaLocalServiceUtil {
 		AllegatoRichiesta allegatoRichiesta) {
 
 		return getService().updateAllegatoRichiesta(allegatoRichiesta);
+	}
+
+	public static void updateVisibilitaAllegatiRichiesta(
+		List<String> ids, boolean visibile) {
+
+		getService().updateVisibilitaAllegatiRichiesta(ids, visibile);
 	}
 
 	public static AllegatoRichiestaLocalService getService() {

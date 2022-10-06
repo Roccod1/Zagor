@@ -69,6 +69,8 @@ public class TemplatePdfCacheModel
 		sb.append(uuid);
 		sb.append(", templatePdfId=");
 		sb.append(templatePdfId);
+		sb.append(", groupId=");
+		sb.append(groupId);
 		sb.append(", companyId=");
 		sb.append(companyId);
 		sb.append(", userId=");
@@ -81,8 +83,6 @@ public class TemplatePdfCacheModel
 		sb.append(modifiedDate);
 		sb.append(", fileEntryId=");
 		sb.append(fileEntryId);
-		sb.append(", attivo=");
-		sb.append(attivo);
 		sb.append(", proceduraId=");
 		sb.append(proceduraId);
 		sb.append(", templatePdfParentId=");
@@ -104,6 +104,7 @@ public class TemplatePdfCacheModel
 		}
 
 		templatePdfImpl.setTemplatePdfId(templatePdfId);
+		templatePdfImpl.setGroupId(groupId);
 		templatePdfImpl.setCompanyId(companyId);
 		templatePdfImpl.setUserId(userId);
 
@@ -129,7 +130,6 @@ public class TemplatePdfCacheModel
 		}
 
 		templatePdfImpl.setFileEntryId(fileEntryId);
-		templatePdfImpl.setAttivo(attivo);
 		templatePdfImpl.setProceduraId(proceduraId);
 		templatePdfImpl.setTemplatePdfParentId(templatePdfParentId);
 
@@ -144,6 +144,8 @@ public class TemplatePdfCacheModel
 
 		templatePdfId = objectInput.readLong();
 
+		groupId = objectInput.readLong();
+
 		companyId = objectInput.readLong();
 
 		userId = objectInput.readLong();
@@ -152,8 +154,6 @@ public class TemplatePdfCacheModel
 		modifiedDate = objectInput.readLong();
 
 		fileEntryId = objectInput.readLong();
-
-		attivo = objectInput.readBoolean();
 
 		proceduraId = objectInput.readLong();
 
@@ -171,6 +171,8 @@ public class TemplatePdfCacheModel
 
 		objectOutput.writeLong(templatePdfId);
 
+		objectOutput.writeLong(groupId);
+
 		objectOutput.writeLong(companyId);
 
 		objectOutput.writeLong(userId);
@@ -187,8 +189,6 @@ public class TemplatePdfCacheModel
 
 		objectOutput.writeLong(fileEntryId);
 
-		objectOutput.writeBoolean(attivo);
-
 		objectOutput.writeLong(proceduraId);
 
 		objectOutput.writeLong(templatePdfParentId);
@@ -196,13 +196,13 @@ public class TemplatePdfCacheModel
 
 	public String uuid;
 	public long templatePdfId;
+	public long groupId;
 	public long companyId;
 	public long userId;
 	public String userName;
 	public long createDate;
 	public long modifiedDate;
 	public long fileEntryId;
-	public boolean attivo;
 	public long proceduraId;
 	public long templatePdfParentId;
 

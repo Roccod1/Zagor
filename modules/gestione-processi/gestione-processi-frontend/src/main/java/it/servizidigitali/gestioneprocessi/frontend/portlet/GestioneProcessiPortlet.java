@@ -1,6 +1,7 @@
 package it.servizidigitali.gestioneprocessi.frontend.portlet;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
@@ -85,6 +86,12 @@ public class GestioneProcessiPortlet extends MVCPortlet {
 		Date dataInserimentoDa = null;
 		Date dataInserimentoA = null;
 
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+
+		long totale = 0;
+
 		try {
 
 			// Allineamento lista processi di default portale <--> camunda
@@ -100,7 +107,8 @@ public class GestioneProcessiPortlet extends MVCPortlet {
 				dataInserimentoA = simpleDateFormat.parse(dataInserimentoAString);
 			}
 
-			listaProcessi = processoLocalService.search(nome, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), delta, cur, orderByCol, orderByType);
+			listaProcessi = processoLocalService.search(nome, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), inizio, fine, orderByCol, orderByType);
+			totale = processoLocalService.count(nome, dataInserimentoDa, dataInserimentoA);
 
 		}
 		catch (Exception e) {
@@ -115,6 +123,7 @@ public class GestioneProcessiPortlet extends MVCPortlet {
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.NOME_RICERCA, nome);
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.DATA_INSERIMENTO_DA, dataInserimentoDaString);
 		renderRequest.setAttribute(GestioneProcessiPortletKeys.DATA_INSERIMENTO_A, dataInserimentoAString);
+		renderRequest.setAttribute("totaleElementi", totale);
 		renderRequest.setAttribute("groupIdUtente", groupIdUtente);
 		renderRequest.setAttribute("organizationIdSitePrincipale", organizationIdSitePrincipale);
 

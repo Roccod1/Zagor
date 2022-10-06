@@ -88,6 +88,8 @@ public interface TipologiaLocalService
 
 	public void clearServizioTipologias(long servizioId);
 
+	public long count() throws Exception;
+
 	/**
 	 * @throws PortalException
 	 */
@@ -241,12 +243,6 @@ public interface TipologiaLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<Tipologia> getListaTipologiaOrdinata(
-			int cur, int delta, String nomeOrdinamento,
-			String direzioneOrdinamento)
-		throws Exception;
-
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -295,6 +291,9 @@ public interface TipologiaLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Tipologia getTipologia(long tipologiaId) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Tipologia getTipologiaByCodice(String codice);
 
 	/**
 	 * Returns the tipologia matching the UUID and group.
@@ -355,6 +354,10 @@ public interface TipologiaLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getTipologiasCount();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Tipologia> getTipologie(
+		int inizio, int fine, String orderByCol, String orderByType);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public boolean hasServizioTipologia(long servizioId, long tipologiaId);

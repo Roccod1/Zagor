@@ -95,11 +95,8 @@ public class ServizioLocalServiceWrapper
 	}
 
 	@Override
-	public int countSearchServizio(
-		String nome, String codice, Boolean soloServiziAttivi) {
-
-		return _servizioLocalService.countSearchServizio(
-			nome, codice, soloServiziAttivi);
+	public int count(String nome, String codice, Boolean soloServiziAttivi) {
+		return _servizioLocalService.count(nome, codice, soloServiziAttivi);
 	}
 
 	/**
@@ -386,6 +383,13 @@ public class ServizioLocalServiceWrapper
 	}
 
 	@Override
+	public it.servizidigitali.gestioneservizi.model.Servizio
+		getServizioByCodice(String codice) {
+
+		return _servizioLocalService.getServizioByCodice(codice);
+	}
+
+	@Override
 	public it.servizidigitali.gestioneservizi.model.Servizio getServizioById(
 			Long servizioId)
 		throws Exception {
@@ -477,12 +481,12 @@ public class ServizioLocalServiceWrapper
 	@Override
 	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
 		getServiziUtilizzabili(
-			java.util.List<Object> listaServiziEnte, String nome,
+			java.util.List<Long> serviziEnteId, String nome,
 			long areaTematicaId, long tipologiaId, int cur, int delta,
 			String orderByCol, String orderByType) {
 
 		return _servizioLocalService.getServiziUtilizzabili(
-			listaServiziEnte, nome, areaTematicaId, tipologiaId, cur, delta,
+			serviziEnteId, nome, areaTematicaId, tipologiaId, cur, delta,
 			orderByCol, orderByType);
 	}
 
@@ -552,22 +556,23 @@ public class ServizioLocalServiceWrapper
 	 * @param nome
 	 * @param codice
 	 * @param soloServiziAttivi
-	 * @param cur: pagina attuale
-	 * @param delta: numero elementi per pagina
-	 * @param nomeOrdinamento
-	 * @param direzioneOrdinamento
+	 * @param inizio
+	 * @param fine
+	 * @param orderByCol
+	 * @param orderByType
 	 * @return
+	 * @throws Exception
 	 */
 	@Override
 	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
-			searchServizio(
-				String nome, String codice, Boolean soloServiziAttivi, int cur,
-				int delta, String nomeOrdinamento, String direzioneOrdinamento)
+			search(
+				String nome, String codice, Boolean soloServiziAttivi,
+				int inizio, int fine, String orderByCol, String orderByType)
 		throws Exception {
 
-		return _servizioLocalService.searchServizio(
-			nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento,
-			direzioneOrdinamento);
+		return _servizioLocalService.search(
+			nome, codice, soloServiziAttivi, inizio, fine, orderByCol,
+			orderByType);
 	}
 
 	@Override

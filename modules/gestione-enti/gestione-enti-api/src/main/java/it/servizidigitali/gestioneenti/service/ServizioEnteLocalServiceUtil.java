@@ -231,16 +231,6 @@ public class ServizioEnteLocalServiceUtil {
 		return getService().fetchServizioEnteByUuidAndGroupId(uuid, groupId);
 	}
 
-	public static List<com.liferay.portal.kernel.model.Organization>
-			findOrganizationsByParams(
-				String nome, String codiceIpa, int cur, int delta,
-				String orderByCol, String orderByType)
-		throws Exception {
-
-		return getService().findOrganizationsByParams(
-			nome, codiceIpa, cur, delta, orderByCol, orderByType);
-	}
-
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -260,22 +250,6 @@ public class ServizioEnteLocalServiceUtil {
 			getIndexableActionableDynamicQuery() {
 
 		return getService().getIndexableActionableDynamicQuery();
-	}
-
-	public static List<Object> getListaServiziByCompanyOrganizationAttivo(
-			long companyId, long organizationId, boolean attivo)
-		throws Exception {
-
-		return getService().getListaServiziByCompanyOrganizationAttivo(
-			companyId, organizationId, attivo);
-	}
-
-	public static List<Long> getListaServiziByOrganizationAttivo(
-			long organizationId, boolean attivo)
-		throws Exception {
-
-		return getService().getListaServiziByOrganizationAttivo(
-			organizationId, attivo);
 	}
 
 	/**
@@ -300,6 +274,14 @@ public class ServizioEnteLocalServiceUtil {
 		return getService().getServiziEnte(organizationId);
 	}
 
+	public static List<ServizioEnte> getServiziEnteByCompanyOrganizationAttivo(
+			long companyId, long organizationId, boolean attivo)
+		throws Exception {
+
+		return getService().getServiziEnteByCompanyOrganizationAttivo(
+			companyId, organizationId, attivo);
+	}
+
 	public static List<ServizioEnte>
 		getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(
 			long organizationId, List<Long> subOrganizationIds, Boolean attivo,
@@ -308,6 +290,14 @@ public class ServizioEnteLocalServiceUtil {
 		return getService().
 			getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(
 				organizationId, subOrganizationIds, attivo, groupId, companyId);
+	}
+
+	public static List<Long> getServiziIdsByOrganizationAttivo(
+			long organizationId, boolean attivo)
+		throws Exception {
+
+		return getService().getServiziIdsByOrganizationAttivo(
+			organizationId, attivo);
 	}
 
 	/**
@@ -400,6 +390,15 @@ public class ServizioEnteLocalServiceUtil {
 	 */
 	public static int getServizioEntesCount() {
 		return getService().getServizioEntesCount();
+	}
+
+	public static List<com.liferay.portal.kernel.model.Organization> search(
+			String nome, String codiceIpa, int inizio, int fine,
+			String orderByCol, String orderByType)
+		throws Exception {
+
+		return getService().search(
+			nome, codiceIpa, inizio, fine, orderByCol, orderByType);
 	}
 
 	/**

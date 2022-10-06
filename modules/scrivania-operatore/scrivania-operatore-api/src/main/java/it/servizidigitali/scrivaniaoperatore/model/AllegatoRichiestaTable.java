@@ -35,12 +35,10 @@ public class AllegatoRichiestaTable extends BaseTable<AllegatoRichiestaTable> {
 
 	public final Column<AllegatoRichiestaTable, String> uuid = createColumn(
 		"uuid_", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<AllegatoRichiestaTable, Long> richiestaId =
+	public final Column<AllegatoRichiestaTable, Long> allegatoRichiestaId =
 		createColumn(
-			"richiestaId", Long.class, Types.BIGINT, Column.FLAG_PRIMARY);
-	public final Column<AllegatoRichiestaTable, Long> fileEntryId =
-		createColumn(
-			"fileEntryId", Long.class, Types.BIGINT, Column.FLAG_PRIMARY);
+			"allegatoRichiestaId", Long.class, Types.BIGINT,
+			Column.FLAG_PRIMARY);
 	public final Column<AllegatoRichiestaTable, Long> groupId = createColumn(
 		"groupId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<AllegatoRichiestaTable, Long> companyId = createColumn(
@@ -54,16 +52,28 @@ public class AllegatoRichiestaTable extends BaseTable<AllegatoRichiestaTable> {
 	public final Column<AllegatoRichiestaTable, Date> modifiedDate =
 		createColumn(
 			"modifiedDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
-	public final Column<AllegatoRichiestaTable, String> nome = createColumn(
-		"nome", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<AllegatoRichiestaTable, String> idDocumentale =
 		createColumn(
 			"idDocumentale", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<AllegatoRichiestaTable, String> nome = createColumn(
+		"nome", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<AllegatoRichiestaTable, String> url = createColumn(
 		"url", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<AllegatoRichiestaTable, Boolean> principale =
 		createColumn(
 			"principale", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
+	public final Column<AllegatoRichiestaTable, Boolean> interno = createColumn(
+		"interno", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
+	public final Column<AllegatoRichiestaTable, Boolean> visibile =
+		createColumn(
+			"visibile", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
+	public final Column<AllegatoRichiestaTable, Long> definizioneAllegatoId =
+		createColumn(
+			"definizioneAllegatoId", Long.class, Types.BIGINT,
+			Column.FLAG_DEFAULT);
+	public final Column<AllegatoRichiestaTable, Long> richiestaId =
+		createColumn(
+			"richiestaId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 
 	private AllegatoRichiestaTable() {
 		super("allegato_richiesta", AllegatoRichiestaTable::new);

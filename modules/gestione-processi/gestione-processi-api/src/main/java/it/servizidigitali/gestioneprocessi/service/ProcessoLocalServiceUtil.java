@@ -60,6 +60,14 @@ public class ProcessoLocalServiceUtil {
 		return getService().addProcesso(processo);
 	}
 
+	public static long count(
+			String nome, java.util.Date dataInserimentoDa,
+			java.util.Date dataInserimentoA)
+		throws PortalException {
+
+		return getService().count(nome, dataInserimentoDa, dataInserimentoA);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -369,12 +377,12 @@ public class ProcessoLocalServiceUtil {
 
 	public static List<Processo> search(
 			String nome, java.util.Date dataInserimentoDa,
-			java.util.Date dataInserimentoA, long groupId, int delta, int cur,
+			java.util.Date dataInserimentoA, long groupId, int inizio, int fine,
 			String orderByCol, String orderByType)
 		throws PortalException {
 
 		return getService().search(
-			nome, dataInserimentoDa, dataInserimentoA, groupId, delta, cur,
+			nome, dataInserimentoDa, dataInserimentoA, groupId, inizio, fine,
 			orderByCol, orderByType);
 	}
 

@@ -216,11 +216,6 @@ public interface ServizioEnteLocalService
 	public ServizioEnte fetchServizioEnteByUuidAndGroupId(
 		String uuid, long groupId);
 
-	public List<Organization> findOrganizationsByParams(
-			String nome, String codiceIpa, int cur, int delta,
-			String orderByCol, String orderByType)
-		throws Exception;
-
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
@@ -230,16 +225,6 @@ public interface ServizioEnteLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<Object> getListaServiziByCompanyOrganizationAttivo(
-			long companyId, long organizationId, boolean attivo)
-		throws Exception;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<Long> getListaServiziByOrganizationAttivo(
-			long organizationId, boolean attivo)
-		throws Exception;
 
 	/**
 	 * Returns the OSGi service identifier.
@@ -260,10 +245,20 @@ public interface ServizioEnteLocalService
 	public List<ServizioEnte> getServiziEnte(long organizationId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<ServizioEnte> getServiziEnteByCompanyOrganizationAttivo(
+			long companyId, long organizationId, boolean attivo)
+		throws Exception;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ServizioEnte>
 		getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(
 			long organizationId, List<Long> subOrganizationIds, Boolean attivo,
 			long groupId, long companyId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Long> getServiziIdsByOrganizationAttivo(
+			long organizationId, boolean attivo)
+		throws Exception;
 
 	/**
 	 * Returns the servizio ente with the primary key.
@@ -340,6 +335,12 @@ public interface ServizioEnteLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getServizioEntesCount();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Organization> search(
+			String nome, String codiceIpa, int inizio, int fine,
+			String orderByCol, String orderByType)
+		throws Exception;
 
 	/**
 	 * Updates the servizio ente in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

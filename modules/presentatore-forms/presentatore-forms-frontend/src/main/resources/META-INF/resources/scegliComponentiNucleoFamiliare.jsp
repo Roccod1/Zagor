@@ -64,7 +64,10 @@
 				</aui:container>			
 			</aui:fieldset>
 			
-			<aui:button cssClass="pull-right" type="submit" value="button.componenteNucleoFamiliare.avanti" />
+			<div class="alpaca-form-buttons-container">
+				<aui:button cssClass="pull-right" type="submit" value="button.componenteNucleoFamiliare.avanti" />
+			</div>
+			
 			
 		</aui:form>
 	</div>

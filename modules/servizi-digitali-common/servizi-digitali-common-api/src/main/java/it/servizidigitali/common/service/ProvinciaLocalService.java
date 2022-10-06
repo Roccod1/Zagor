@@ -231,6 +231,9 @@ public interface ProvinciaLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Provincia getProvincia(long provinciaId) throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Provincia getProvinciaBySigla(String sigla);
+
 	/**
 	 * Returns a range of all the provincias.
 	 *

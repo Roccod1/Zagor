@@ -56,6 +56,11 @@ public class AreaTematicaLocalServiceWrapper
 		return _areaTematicaLocalService.addAreaTematica(areaTematica);
 	}
 
+	@Override
+	public long count() throws Exception {
+		return _areaTematicaLocalService.count();
+	}
+
 	/**
 	 * Creates a new area tematica with the primary key. Does not add the area tematica to the database.
 	 *
@@ -376,13 +381,11 @@ public class AreaTematicaLocalServiceWrapper
 
 	@Override
 	public java.util.List<it.servizidigitali.gestioneservizi.model.AreaTematica>
-			getListaAreeTematicheOrdinata(
-				int cur, int delta, String nomeOrdinamento,
-				String direzioneOrdinamento)
-		throws Exception {
+		getListaAreeTematiche(
+			int inizio, int fine, String orderByCol, String orderByType) {
 
-		return _areaTematicaLocalService.getListaAreeTematicheOrdinata(
-			cur, delta, nomeOrdinamento, direzioneOrdinamento);
+		return _areaTematicaLocalService.getListaAreeTematiche(
+			inizio, fine, orderByCol, orderByType);
 	}
 
 	/**

@@ -19,7 +19,6 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.model.CacheModel;
 
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
-import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPK;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -50,8 +49,8 @@ public class AllegatoRichiestaCacheModel
 		AllegatoRichiestaCacheModel allegatoRichiestaCacheModel =
 			(AllegatoRichiestaCacheModel)object;
 
-		if (allegatoRichiestaPK.equals(
-				allegatoRichiestaCacheModel.allegatoRichiestaPK)) {
+		if (allegatoRichiestaId ==
+				allegatoRichiestaCacheModel.allegatoRichiestaId) {
 
 			return true;
 		}
@@ -61,19 +60,17 @@ public class AllegatoRichiestaCacheModel
 
 	@Override
 	public int hashCode() {
-		return HashUtil.hash(0, allegatoRichiestaPK);
+		return HashUtil.hash(0, allegatoRichiestaId);
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
-		sb.append(", richiestaId=");
-		sb.append(richiestaId);
-		sb.append(", fileEntryId=");
-		sb.append(fileEntryId);
+		sb.append(", allegatoRichiestaId=");
+		sb.append(allegatoRichiestaId);
 		sb.append(", groupId=");
 		sb.append(groupId);
 		sb.append(", companyId=");
@@ -86,14 +83,22 @@ public class AllegatoRichiestaCacheModel
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
-		sb.append(", nome=");
-		sb.append(nome);
 		sb.append(", idDocumentale=");
 		sb.append(idDocumentale);
+		sb.append(", nome=");
+		sb.append(nome);
 		sb.append(", url=");
 		sb.append(url);
 		sb.append(", principale=");
 		sb.append(principale);
+		sb.append(", interno=");
+		sb.append(interno);
+		sb.append(", visibile=");
+		sb.append(visibile);
+		sb.append(", definizioneAllegatoId=");
+		sb.append(definizioneAllegatoId);
+		sb.append(", richiestaId=");
+		sb.append(richiestaId);
 		sb.append("}");
 
 		return sb.toString();
@@ -111,8 +116,7 @@ public class AllegatoRichiestaCacheModel
 			allegatoRichiestaImpl.setUuid(uuid);
 		}
 
-		allegatoRichiestaImpl.setRichiestaId(richiestaId);
-		allegatoRichiestaImpl.setFileEntryId(fileEntryId);
+		allegatoRichiestaImpl.setAllegatoRichiestaId(allegatoRichiestaId);
 		allegatoRichiestaImpl.setGroupId(groupId);
 		allegatoRichiestaImpl.setCompanyId(companyId);
 		allegatoRichiestaImpl.setUserId(userId);
@@ -138,18 +142,18 @@ public class AllegatoRichiestaCacheModel
 			allegatoRichiestaImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
-		if (nome == null) {
-			allegatoRichiestaImpl.setNome("");
-		}
-		else {
-			allegatoRichiestaImpl.setNome(nome);
-		}
-
 		if (idDocumentale == null) {
 			allegatoRichiestaImpl.setIdDocumentale("");
 		}
 		else {
 			allegatoRichiestaImpl.setIdDocumentale(idDocumentale);
+		}
+
+		if (nome == null) {
+			allegatoRichiestaImpl.setNome("");
+		}
+		else {
+			allegatoRichiestaImpl.setNome(nome);
 		}
 
 		if (url == null) {
@@ -160,6 +164,10 @@ public class AllegatoRichiestaCacheModel
 		}
 
 		allegatoRichiestaImpl.setPrincipale(principale);
+		allegatoRichiestaImpl.setInterno(interno);
+		allegatoRichiestaImpl.setVisibile(visibile);
+		allegatoRichiestaImpl.setDefinizioneAllegatoId(definizioneAllegatoId);
+		allegatoRichiestaImpl.setRichiestaId(richiestaId);
 
 		allegatoRichiestaImpl.resetOriginalValues();
 
@@ -170,9 +178,7 @@ public class AllegatoRichiestaCacheModel
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		uuid = objectInput.readUTF();
 
-		richiestaId = objectInput.readLong();
-
-		fileEntryId = objectInput.readLong();
+		allegatoRichiestaId = objectInput.readLong();
 
 		groupId = objectInput.readLong();
 
@@ -182,13 +188,19 @@ public class AllegatoRichiestaCacheModel
 		userName = objectInput.readUTF();
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
-		nome = objectInput.readUTF();
 		idDocumentale = objectInput.readUTF();
+		nome = objectInput.readUTF();
 		url = objectInput.readUTF();
 
 		principale = objectInput.readBoolean();
 
-		allegatoRichiestaPK = new AllegatoRichiestaPK(richiestaId, fileEntryId);
+		interno = objectInput.readBoolean();
+
+		visibile = objectInput.readBoolean();
+
+		definizioneAllegatoId = objectInput.readLong();
+
+		richiestaId = objectInput.readLong();
 	}
 
 	@Override
@@ -200,9 +212,7 @@ public class AllegatoRichiestaCacheModel
 			objectOutput.writeUTF(uuid);
 		}
 
-		objectOutput.writeLong(richiestaId);
-
-		objectOutput.writeLong(fileEntryId);
+		objectOutput.writeLong(allegatoRichiestaId);
 
 		objectOutput.writeLong(groupId);
 
@@ -220,18 +230,18 @@ public class AllegatoRichiestaCacheModel
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
 
-		if (nome == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(nome);
-		}
-
 		if (idDocumentale == null) {
 			objectOutput.writeUTF("");
 		}
 		else {
 			objectOutput.writeUTF(idDocumentale);
+		}
+
+		if (nome == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(nome);
 		}
 
 		if (url == null) {
@@ -242,21 +252,31 @@ public class AllegatoRichiestaCacheModel
 		}
 
 		objectOutput.writeBoolean(principale);
+
+		objectOutput.writeBoolean(interno);
+
+		objectOutput.writeBoolean(visibile);
+
+		objectOutput.writeLong(definizioneAllegatoId);
+
+		objectOutput.writeLong(richiestaId);
 	}
 
 	public String uuid;
-	public long richiestaId;
-	public long fileEntryId;
+	public long allegatoRichiestaId;
 	public long groupId;
 	public long companyId;
 	public long userId;
 	public String userName;
 	public long createDate;
 	public long modifiedDate;
-	public String nome;
 	public String idDocumentale;
+	public String nome;
 	public String url;
 	public boolean principale;
-	public transient AllegatoRichiestaPK allegatoRichiestaPK;
+	public boolean interno;
+	public boolean visibile;
+	public long definizioneAllegatoId;
+	public long richiestaId;
 
 }

@@ -63,5 +63,6 @@
 		<field name="visibile" type="boolean" />
 		<field name="invioEmailCittadino" type="boolean" />
 		<field name="chatbotInlineIntent" type="String" />
+		<field name="codice" type="String" />
 	</model>
 </model-hints>

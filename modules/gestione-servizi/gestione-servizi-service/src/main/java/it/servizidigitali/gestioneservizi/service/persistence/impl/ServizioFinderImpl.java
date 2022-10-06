@@ -20,49 +20,29 @@ import it.servizidigitali.gestioneservizi.service.persistence.ServizioFinder;
  */
 
 @Component(service = ServizioFinder.class)
-public class ServizioFinderImpl extends ServizioFinderBaseImpl implements ServizioFinder{
-	
-	public List<Servizio> findServizioByFilter(String nome, String codice, Boolean soloServiziAttivi, int inizio, int fine, OrderByComparator<Servizio> ordine){
-		
+public class ServizioFinderImpl extends ServizioFinderBaseImpl implements ServizioFinder {
+
+	public List<Servizio> findByNomeCodiceAttivo(String nome, String codice, Boolean attivo, int inizio, int fine, OrderByComparator<Servizio> ordine) {
+
 		ClassLoader classLoader = getClass().getClassLoader();
-		
+
 		DynamicQuery query = DynamicQueryFactoryUtil.forClass(Servizio.class, classLoader);
 
-		if(Validator.isNotNull(nome)) {
-			query.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));			
+		if (Validator.isNotNull(nome)) {
+			query.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));
 		}
-		
-		if(Validator.isNotNull(codice)){
+
+		if (Validator.isNotNull(codice)) {
 			query.add(RestrictionsFactoryUtil.like("codice", StringPool.PERCENT + codice + StringPool.PERCENT));
 		}
-		
-		if(soloServiziAttivi) {
+
+		if (attivo) {
 			query.add(RestrictionsFactoryUtil.eq("attivo", true));
 		}
-		
+
 		List<Servizio> listaServiziFiltered = servizioPersistence.findWithDynamicQuery(query, inizio, fine, ordine);
-		
+
 		return listaServiziFiltered;
 	}
-	
-	public int countServizioByFilter(String nome, String codice, Boolean soloServiziAttivi) {
-		ClassLoader classLoader = getClass().getClassLoader();
-		
-		DynamicQuery query = DynamicQueryFactoryUtil.forClass(Servizio.class, classLoader);
 
-		if(Validator.isNotNull(nome)) {
-			query.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));			
-		}
-		
-		if(Validator.isNotNull(codice)){
-			query.add(RestrictionsFactoryUtil.like("codice", StringPool.PERCENT + codice + StringPool.PERCENT));
-		}
-		
-		if(soloServiziAttivi) {
-			query.add(RestrictionsFactoryUtil.eq("attivo", true));
-		}
-		
-		return (int) servizioPersistence.countWithDynamicQuery(query);
-	}
-	
 }

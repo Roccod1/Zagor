@@ -20,9 +20,7 @@ import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
-import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -88,29 +86,14 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 	}
 
 	@Override
-	public List<Organization> findOrganizationsByParams(String nome, String codiceIpa, int cur, int delta, String orderByCol, String orderByType) throws Exception {
+	public List<Organization> search(String nome, String codiceIpa, int inizio, int fine, String orderByCol, String orderByType) throws Exception {
 		_log.debug("Ricerca Organizzazioni :: INIZIO");
-
-		List<Organization> listaOrganizations = null;
-		ClassLoader classLoader = getClass().getClassLoader();
-
-		// preparo i parametri per ordinamento e paginazione
-		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
-		int inizio = posizioni[0];
-		int fine = posizioni[1];
-		if (Validator.isNull(orderByCol)) {
-			_log.debug("Nessun ordinamento impostato. Uso di default organizationId");
-			orderByCol = "organizationId";
-		}
-
-		if (inizio <= 0 || fine <= 0) {
-			_log.debug("Posizione iniziale o finale sono minori o uguali a zero. Imposto inizio e fine al valore ALL_POS");
-			inizio = QueryUtil.ALL_POS;
-			fine = QueryUtil.ALL_POS;
-		}
 
 		boolean direzione = "desc".equals(orderByType.toLowerCase()) ? false : true;
 		OrderByComparator<Organization> ordine = OrderByComparatorFactoryUtil.create("Organization", orderByCol, direzione);
+
+		List<Organization> listaOrganizations = null;
+		ClassLoader classLoader = getClass().getClassLoader();
 
 		DynamicQuery listaOrganizationQuery = DynamicQueryFactoryUtil.forClass(Organization.class, classLoader);
 
@@ -153,7 +136,7 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 	}
 
 	@Override
-	public List<Object> getListaServiziByCompanyOrganizationAttivo(long companyId, long organizationId, boolean attivo) throws Exception {
+	public List<ServizioEnte> getServiziEnteByCompanyOrganizationAttivo(long companyId, long organizationId, boolean attivo) throws Exception {
 
 		ClassLoader classLoader = getClassLoader();
 		DynamicQuery servizioEnteDynamicQuery = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, classLoader);
@@ -167,14 +150,12 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 		if (organizationId > 0) {
 			servizioEnteDynamicQuery.add(RestrictionsFactoryUtil.eq("primaryKey.organizationId", organizationId));
 		}
-		// imposto projection per ottenere solo gli id delle entity
-		servizioEnteDynamicQuery.setProjection(ProjectionFactoryUtil.property("primaryKey.servizioId"));
 
 		return servizioEntePersistence.findWithDynamicQuery(servizioEnteDynamicQuery);
 	}
 
 	@Override
-	public List<Long> getListaServiziByOrganizationAttivo(long organizationId, boolean attivo) throws Exception {
+	public List<Long> getServiziIdsByOrganizationAttivo(long organizationId, boolean attivo) throws Exception {
 
 		ClassLoader classLoader = getClassLoader();
 		DynamicQuery servizioEnteDynamicQuery = DynamicQueryFactoryUtil.forClass(ServizioEnte.class, classLoader);
@@ -190,8 +171,9 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 		return servizioEntePersistence.findWithDynamicQuery(servizioEnteDynamicQuery);
 	}
 
+	@Override
 	public List<ServizioEnte> getServiziEnteByOrganizationIdSubOrganizationIdsAttivo(long organizationId, List<Long> subOrganizationIds, Boolean attivo, long groupId, long companyId) {
-		return servizioEnteFinder.findServizioEnteByFilters(organizationId, subOrganizationIds, attivo, groupId, companyId);
+		return servizioEnteFinder.findServiziEnteByFilters(organizationId, subOrganizationIds, attivo, groupId, companyId);
 	}
 
 	@Override

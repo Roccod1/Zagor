@@ -283,6 +283,13 @@ public class ProvinciaLocalServiceWrapper
 		return _provinciaLocalService.getProvincia(provinciaId);
 	}
 
+	@Override
+	public it.servizidigitali.common.model.Provincia getProvinciaBySigla(
+		String sigla) {
+
+		return _provinciaLocalService.getProvinciaBySigla(sigla);
+	}
+
 	/**
 	 * Returns a range of all the provincias.
 	 *

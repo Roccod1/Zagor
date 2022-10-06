@@ -24,7 +24,7 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface ServizioEnteFinder {
 
 	public java.util.List<it.servizidigitali.gestioneenti.model.ServizioEnte>
-		findServizioEnteByFilters(
+		findServiziEnteByFilters(
 			long organizationId, java.util.List<Long> subOrganizationIds,
 			Boolean attivo, long groupId, long companyId);
 

@@ -92,11 +92,10 @@ public class ServizioLocalServiceUtil {
 		getService().clearTipologiaServizios(tipologiaId);
 	}
 
-	public static int countSearchServizio(
+	public static int count(
 		String nome, String codice, Boolean soloServiziAttivi) {
 
-		return getService().countSearchServizio(
-			nome, codice, soloServiziAttivi);
+		return getService().count(nome, codice, soloServiziAttivi);
 	}
 
 	/**
@@ -336,6 +335,10 @@ public class ServizioLocalServiceUtil {
 		return getService().getServizio(servizioId);
 	}
 
+	public static Servizio getServizioByCodice(String codice) {
+		return getService().getServizioByCodice(codice);
+	}
+
 	public static Servizio getServizioById(Long servizioId) throws Exception {
 		return getService().getServizioById(servizioId);
 	}
@@ -411,12 +414,12 @@ public class ServizioLocalServiceUtil {
 	}
 
 	public static List<Servizio> getServiziUtilizzabili(
-		List<Object> listaServiziEnte, String nome, long areaTematicaId,
+		List<Long> serviziEnteId, String nome, long areaTematicaId,
 		long tipologiaId, int cur, int delta, String orderByCol,
 		String orderByType) {
 
 		return getService().getServiziUtilizzabili(
-			listaServiziEnte, nome, areaTematicaId, tipologiaId, cur, delta,
+			serviziEnteId, nome, areaTematicaId, tipologiaId, cur, delta,
 			orderByCol, orderByType);
 	}
 
@@ -473,20 +476,21 @@ public class ServizioLocalServiceUtil {
 	 * @param nome
 	 * @param codice
 	 * @param soloServiziAttivi
-	 * @param cur: pagina attuale
-	 * @param delta: numero elementi per pagina
-	 * @param nomeOrdinamento
-	 * @param direzioneOrdinamento
+	 * @param inizio
+	 * @param fine
+	 * @param orderByCol
+	 * @param orderByType
 	 * @return
+	 * @throws Exception
 	 */
-	public static List<Servizio> searchServizio(
-			String nome, String codice, Boolean soloServiziAttivi, int cur,
-			int delta, String nomeOrdinamento, String direzioneOrdinamento)
+	public static List<Servizio> search(
+			String nome, String codice, Boolean soloServiziAttivi, int inizio,
+			int fine, String orderByCol, String orderByType)
 		throws Exception {
 
-		return getService().searchServizio(
-			nome, codice, soloServiziAttivi, cur, delta, nomeOrdinamento,
-			direzioneOrdinamento);
+		return getService().search(
+			nome, codice, soloServiziAttivi, inizio, fine, orderByCol,
+			orderByType);
 	}
 
 	public static void setTipologiaServizios(

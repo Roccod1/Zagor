@@ -20,8 +20,6 @@ import com.liferay.portal.kernel.model.GroupedModel;
 import com.liferay.portal.kernel.model.ShardedModel;
 import com.liferay.portal.kernel.model.StagedAuditedModel;
 
-import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPK;
-
 import java.util.Date;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -53,14 +51,14 @@ public interface AllegatoRichiestaModel
 	 *
 	 * @return the primary key of this allegato richiesta
 	 */
-	public AllegatoRichiestaPK getPrimaryKey();
+	public long getPrimaryKey();
 
 	/**
 	 * Sets the primary key of this allegato richiesta.
 	 *
 	 * @param primaryKey the primary key of this allegato richiesta
 	 */
-	public void setPrimaryKey(AllegatoRichiestaPK primaryKey);
+	public void setPrimaryKey(long primaryKey);
 
 	/**
 	 * Returns the uuid of this allegato richiesta.
@@ -80,32 +78,18 @@ public interface AllegatoRichiestaModel
 	public void setUuid(String uuid);
 
 	/**
-	 * Returns the richiesta ID of this allegato richiesta.
+	 * Returns the allegato richiesta ID of this allegato richiesta.
 	 *
-	 * @return the richiesta ID of this allegato richiesta
+	 * @return the allegato richiesta ID of this allegato richiesta
 	 */
-	public long getRichiestaId();
+	public long getAllegatoRichiestaId();
 
 	/**
-	 * Sets the richiesta ID of this allegato richiesta.
+	 * Sets the allegato richiesta ID of this allegato richiesta.
 	 *
-	 * @param richiestaId the richiesta ID of this allegato richiesta
+	 * @param allegatoRichiestaId the allegato richiesta ID of this allegato richiesta
 	 */
-	public void setRichiestaId(long richiestaId);
-
-	/**
-	 * Returns the file entry ID of this allegato richiesta.
-	 *
-	 * @return the file entry ID of this allegato richiesta
-	 */
-	public long getFileEntryId();
-
-	/**
-	 * Sets the file entry ID of this allegato richiesta.
-	 *
-	 * @param fileEntryId the file entry ID of this allegato richiesta
-	 */
-	public void setFileEntryId(long fileEntryId);
+	public void setAllegatoRichiestaId(long allegatoRichiestaId);
 
 	/**
 	 * Returns the group ID of this allegato richiesta.
@@ -221,21 +205,6 @@ public interface AllegatoRichiestaModel
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
-	 * Returns the nome of this allegato richiesta.
-	 *
-	 * @return the nome of this allegato richiesta
-	 */
-	@AutoEscape
-	public String getNome();
-
-	/**
-	 * Sets the nome of this allegato richiesta.
-	 *
-	 * @param nome the nome of this allegato richiesta
-	 */
-	public void setNome(String nome);
-
-	/**
 	 * Returns the id documentale of this allegato richiesta.
 	 *
 	 * @return the id documentale of this allegato richiesta
@@ -249,6 +218,21 @@ public interface AllegatoRichiestaModel
 	 * @param idDocumentale the id documentale of this allegato richiesta
 	 */
 	public void setIdDocumentale(String idDocumentale);
+
+	/**
+	 * Returns the nome of this allegato richiesta.
+	 *
+	 * @return the nome of this allegato richiesta
+	 */
+	@AutoEscape
+	public String getNome();
+
+	/**
+	 * Sets the nome of this allegato richiesta.
+	 *
+	 * @param nome the nome of this allegato richiesta
+	 */
+	public void setNome(String nome);
 
 	/**
 	 * Returns the url of this allegato richiesta.
@@ -285,6 +269,76 @@ public interface AllegatoRichiestaModel
 	 * @param principale the principale of this allegato richiesta
 	 */
 	public void setPrincipale(boolean principale);
+
+	/**
+	 * Returns the interno of this allegato richiesta.
+	 *
+	 * @return the interno of this allegato richiesta
+	 */
+	public boolean getInterno();
+
+	/**
+	 * Returns <code>true</code> if this allegato richiesta is interno.
+	 *
+	 * @return <code>true</code> if this allegato richiesta is interno; <code>false</code> otherwise
+	 */
+	public boolean isInterno();
+
+	/**
+	 * Sets whether this allegato richiesta is interno.
+	 *
+	 * @param interno the interno of this allegato richiesta
+	 */
+	public void setInterno(boolean interno);
+
+	/**
+	 * Returns the visibile of this allegato richiesta.
+	 *
+	 * @return the visibile of this allegato richiesta
+	 */
+	public boolean getVisibile();
+
+	/**
+	 * Returns <code>true</code> if this allegato richiesta is visibile.
+	 *
+	 * @return <code>true</code> if this allegato richiesta is visibile; <code>false</code> otherwise
+	 */
+	public boolean isVisibile();
+
+	/**
+	 * Sets whether this allegato richiesta is visibile.
+	 *
+	 * @param visibile the visibile of this allegato richiesta
+	 */
+	public void setVisibile(boolean visibile);
+
+	/**
+	 * Returns the definizione allegato ID of this allegato richiesta.
+	 *
+	 * @return the definizione allegato ID of this allegato richiesta
+	 */
+	public Long getDefinizioneAllegatoId();
+
+	/**
+	 * Sets the definizione allegato ID of this allegato richiesta.
+	 *
+	 * @param definizioneAllegatoId the definizione allegato ID of this allegato richiesta
+	 */
+	public void setDefinizioneAllegatoId(Long definizioneAllegatoId);
+
+	/**
+	 * Returns the richiesta ID of this allegato richiesta.
+	 *
+	 * @return the richiesta ID of this allegato richiesta
+	 */
+	public long getRichiestaId();
+
+	/**
+	 * Sets the richiesta ID of this allegato richiesta.
+	 *
+	 * @param richiestaId the richiesta ID of this allegato richiesta
+	 */
+	public void setRichiestaId(long richiestaId);
 
 	@Override
 	public AllegatoRichiesta cloneWithOriginalValues();

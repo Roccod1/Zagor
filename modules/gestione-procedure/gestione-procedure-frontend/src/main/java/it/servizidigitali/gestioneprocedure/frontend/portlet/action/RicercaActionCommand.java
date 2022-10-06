@@ -1,6 +1,7 @@
 package it.servizidigitali.gestioneprocedure.frontend.portlet.action;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -62,13 +63,19 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 		String orderByCol = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		String orderByType = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 		
-		List<Procedura> listaProcedure = proceduraLocalService.search(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), delta, cur, orderByCol, orderByType);
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+		
+		List<Procedura> listaProcedure = proceduraLocalService.search(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), inizio, fine, orderByCol, orderByType);
+		long totale = proceduraLocalService.count(nome, attiva, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId());
 		
 		actionRequest.setAttribute(GestioneProcedurePortletKeys.LISTA_PROCEDURE, listaProcedure);
 		actionRequest.setAttribute(GestioneProcedurePortletKeys.NOME_RICERCA, nome);
 		actionRequest.setAttribute(GestioneProcedurePortletKeys.STATO_RICERCA, attiva);
 		actionRequest.setAttribute(GestioneProcedurePortletKeys.DATA_INSERIMENTO_DA, dataInserimentoDaString);
 		actionRequest.setAttribute(GestioneProcedurePortletKeys.DATA_INSERIMENTO_A, dataInserimentoAString);
+		actionRequest.setAttribute("totaleElementi", totale);
 		
 	}
 	

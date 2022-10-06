@@ -289,6 +289,13 @@ public class ComuneLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<it.servizidigitali.common.model.Comune>
+		getComuniByProvinciaId(long provinciaId) {
+
+		return _comuneLocalService.getComuniByProvinciaId(provinciaId);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery
 		getIndexableActionableDynamicQuery() {
 

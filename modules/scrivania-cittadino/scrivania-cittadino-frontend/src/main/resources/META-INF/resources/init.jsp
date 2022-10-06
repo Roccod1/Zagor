@@ -15,6 +15,8 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@page import="javax.portlet.RenderRequest"%>
 <%@page import="com.liferay.portal.kernel.util.PortalUtil"%>
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
+<%@page import="it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta"%>
+<%@page import="it.servizidigitali.scrivaniaoperatore.model.AttivitaRichiesta"%>
 
 <liferay-theme:defineObjects />
 

@@ -49,6 +49,11 @@ import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalServiceUtil;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.AllegatoRichiestaPersistence;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.AttivitaRichiestaPersistence;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.CommentoRichiestaPersistence;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.DestinazioneUsoFinder;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.DestinazioneUsoPersistence;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.DestinazioneUsoServizioEntePersistence;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.IstanzaFormPersistence;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.RichiestaFinder;
 import it.servizidigitali.scrivaniaoperatore.service.persistence.RichiestaPersistence;
@@ -596,6 +601,22 @@ public abstract class IstanzaFormLocalServiceBaseImpl
 
 	@Reference
 	protected AllegatoRichiestaPersistence allegatoRichiestaPersistence;
+
+	@Reference
+	protected AttivitaRichiestaPersistence attivitaRichiestaPersistence;
+
+	@Reference
+	protected CommentoRichiestaPersistence commentoRichiestaPersistence;
+
+	@Reference
+	protected DestinazioneUsoPersistence destinazioneUsoPersistence;
+
+	@Reference
+	protected DestinazioneUsoFinder destinazioneUsoFinder;
+
+	@Reference
+	protected DestinazioneUsoServizioEntePersistence
+		destinazioneUsoServizioEntePersistence;
 
 	protected IstanzaFormLocalService istanzaFormLocalService;
 

@@ -62,7 +62,7 @@ public class TipologiaCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -90,6 +90,8 @@ public class TipologiaCacheModel
 		sb.append(invioEmailCittadino);
 		sb.append(", chatbotInlineIntent=");
 		sb.append(chatbotInlineIntent);
+		sb.append(", codice=");
+		sb.append(codice);
 		sb.append("}");
 
 		return sb.toString();
@@ -156,6 +158,13 @@ public class TipologiaCacheModel
 			tipologiaImpl.setChatbotInlineIntent(chatbotInlineIntent);
 		}
 
+		if (codice == null) {
+			tipologiaImpl.setCodice("");
+		}
+		else {
+			tipologiaImpl.setCodice(codice);
+		}
+
 		tipologiaImpl.resetOriginalValues();
 
 		return tipologiaImpl;
@@ -182,6 +191,7 @@ public class TipologiaCacheModel
 
 		invioEmailCittadino = objectInput.readBoolean();
 		chatbotInlineIntent = objectInput.readUTF();
+		codice = objectInput.readUTF();
 	}
 
 	@Override
@@ -235,6 +245,13 @@ public class TipologiaCacheModel
 		else {
 			objectOutput.writeUTF(chatbotInlineIntent);
 		}
+
+		if (codice == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(codice);
+		}
 	}
 
 	public String uuid;
@@ -250,5 +267,6 @@ public class TipologiaCacheModel
 	public boolean visibile;
 	public boolean invioEmailCittadino;
 	public String chatbotInlineIntent;
+	public String codice;
 
 }

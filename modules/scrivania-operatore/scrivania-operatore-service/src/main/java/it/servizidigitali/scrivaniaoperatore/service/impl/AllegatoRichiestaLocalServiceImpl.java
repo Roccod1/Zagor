@@ -29,9 +29,9 @@ import it.servizidigitali.scrivaniaoperatore.service.base.AllegatoRichiestaLocal
 public class AllegatoRichiestaLocalServiceImpl extends AllegatoRichiestaLocalServiceBaseImpl {
 
 	@Override
-	public AllegatoRichiesta getAllegatoRichiesta(long richiestaId, boolean principale, long groupId) {
+	public AllegatoRichiesta getAllegatoRichiestaByRichiestaIdPrincipale(long richiestaId, boolean principale) {
 		try {
-			return allegatoRichiestaPersistence.findByR_P_G(richiestaId, principale, groupId);
+			return allegatoRichiestaPersistence.findByRichiestaIdPrincipale(richiestaId, principale);
 		}
 		catch (NoSuchAllegatoRichiestaException e) {
 		}
@@ -39,8 +39,33 @@ public class AllegatoRichiestaLocalServiceImpl extends AllegatoRichiestaLocalSer
 	}
 
 	@Override
-	public List<AllegatoRichiesta> getAllegatiRichiesta(long richiestaId, long groupId) {
-		return allegatoRichiestaPersistence.findByR_G(richiestaId, groupId);
+	public List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaId(long richiestaId) {
+		return allegatoRichiestaPersistence.findByRichiestaId(richiestaId);
 
+	}
+
+	@Override
+	public List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaIdGroupIdInterno(long richiestaId, boolean interno) {
+		return allegatoRichiestaPersistence.findByRichiestaIdInterno(richiestaId, interno);
+	}
+
+	@Override
+	public List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaIdGroupIdVisibile(long richiestaId, boolean visibile) {
+		return allegatoRichiestaPersistence.findByRichiestaIdVisibile(richiestaId, visibile);
+	}
+
+	public void updateVisibilitaAllegatiRichiesta(List<String> ids, boolean visibile) {
+
+		if (ids != null && !ids.isEmpty()) {
+			for (String id : ids) {
+				try {
+					AllegatoRichiesta allegatoRichiesta = allegatoRichiestaPersistence.findByIdDocumentale(id);
+					allegatoRichiesta.setVisibile(visibile);
+					allegatoRichiestaPersistence.update(allegatoRichiesta);
+				}
+				catch (NoSuchAllegatoRichiestaException e) {
+				}
+			}
+		}
 	}
 }

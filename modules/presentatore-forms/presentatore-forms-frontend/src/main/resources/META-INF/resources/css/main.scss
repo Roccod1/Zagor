@@ -1,3 +1,25 @@
 .hidden{
 	display:none;
 }
+
+.btn-default{
+	background-color: var(--btn-primary-background-color, #0066cc);
+    border-color: var(--btn-primary-border-color, #0066cc);
+    color: var(--btn-primary-color, #fff);
+    border-style: solid;
+    border-width: 0.0625rem;
+    border-radius: 0.25rem;
+    box-shadow: none;
+    display: inline-block;
+    font-weight: var(--font-weight-semi-bold, 600);
+    line-height: 1.5;
+    padding-bottom: 0.4375rem;
+    padding-left: 0.9375rem;
+    padding-right: 0.9375rem;
+    padding-top: 0.4375rem;
+    text-align: center;
+    text-transform: none;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    user-select: none;
+    vertical-align: middle;
+}

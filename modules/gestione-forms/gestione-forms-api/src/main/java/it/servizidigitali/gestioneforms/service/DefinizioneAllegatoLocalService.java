@@ -79,8 +79,6 @@ public interface DefinizioneAllegatoLocalService
 	public DefinizioneAllegato addDefinizioneAllegato(
 		DefinizioneAllegato definizioneAllegato);
 
-	public DefinizioneAllegato cancellaAllegati(String[] allegatiDaEliminare);
-
 	/**
 	 * Creates a new definizione allegato with the primary key. Does not add the definizione allegato to the database.
 	 *
@@ -96,6 +94,8 @@ public interface DefinizioneAllegatoLocalService
 	 */
 	public PersistedModel createPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
+
+	public void deleteAllegati(List<Long> ids);
 
 	/**
 	 * Deletes the definizione allegato from the database. Also notifies the appropriate model listeners.

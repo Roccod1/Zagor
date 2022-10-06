@@ -1,5 +1,6 @@
-<%@page import="it.servizidigitali.scrivaniacittadino.frontend.constants.ScrivaniaCittadinoPortletKeys"%>
 <%@ include file="init.jsp" %>
+
+<liferay-ui:error key="<%=ScrivaniaCittadinoPortletKeys.ERROR_IMPOSSIBILE_OTTENERE_DETTAGLIO %>" message="non-e-stato-possibile-ottenere-il-dettaglio-della-richiesta-selezionata"/>
 
 <div>
 	<h5>${themeDisplay.realUser.fullName}</h5>
@@ -11,6 +12,8 @@
 	type="tabs nav-tabs-default"
 	param="tabs" 
 	refresh="false"
+	tabsValues="<%=ScrivaniaCittadinoPortletKeys.SEZIONE_SCRIVANIA+','+ScrivaniaCittadinoPortletKeys.SEZIONE_ATTIVITA+','+ScrivaniaCittadinoPortletKeys.SEZIONE_MESSAGGI+','+ScrivaniaCittadinoPortletKeys.SEZIONE_SERVIZI %>"
+	value="${tabAttiva }"
 	>
 		<liferay-ui:section>
 			<%@ include file="scrivania.jsp" %>

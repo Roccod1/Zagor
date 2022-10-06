@@ -1,12 +1,14 @@
 package it.servizidigitali.gestioneenti.frontend.portlet.action;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
 
@@ -47,8 +49,16 @@ public class RicercaEntiActionCommand extends BaseMVCActionCommand {
 
 		String codiceIpa = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_CODICE_IPA_RICERCA);
 		String nome = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_NOME_RICERCA);
+		
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+		if (Validator.isNull(orderByCol)) {
+			_log.debug("Nessun ordinamento impostato. Uso di default organizationId");
+			orderByCol = "organizationId";
+		}
 
-		List<Organization> listaOrganization = servizioEnteLocalService.findOrganizationsByParams(nome, codiceIpa, cur, delta, orderByCol, orderByType);
+		List<Organization> listaOrganization = servizioEnteLocalService.search(nome, codiceIpa, inizio, fine, orderByCol, orderByType);
 		actionRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONI, listaOrganization);
 
 	}

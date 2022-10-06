@@ -78,6 +78,8 @@ public interface AreaTematicaLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public AreaTematica addAreaTematica(AreaTematica areaTematica);
 
+	public long count() throws Exception;
+
 	/**
 	 * Creates a new area tematica with the primary key. Does not add the area tematica to the database.
 	 *
@@ -297,10 +299,8 @@ public interface AreaTematicaLocalService
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<AreaTematica> getListaAreeTematicheOrdinata(
-			int cur, int delta, String nomeOrdinamento,
-			String direzioneOrdinamento)
-		throws Exception;
+	public List<AreaTematica> getListaAreeTematiche(
+		int inizio, int fine, String orderByCol, String orderByType);
 
 	/**
 	 * Returns the OSGi service identifier.

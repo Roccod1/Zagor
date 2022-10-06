@@ -257,6 +257,10 @@ public class ComuneLocalServiceUtil {
 		return getService().getComunesCount();
 	}
 
+	public static List<Comune> getComuniByProvinciaId(long provinciaId) {
+		return getService().getComuniByProvinciaId(provinciaId);
+	}
+
 	public static
 		com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery
 			getIndexableActionableDynamicQuery() {

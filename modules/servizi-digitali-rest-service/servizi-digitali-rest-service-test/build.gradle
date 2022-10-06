@@ -12,6 +12,7 @@ dependencies {
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.petra.io"
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.petra.reflect"
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.petra.string"
+	testIntegrationCompile group: "com.liferay", name: "com.liferay.petra.function"
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.portal.odata.api"
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.portal.vulcan.api", version: "9.3.1"
 	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel"
@@ -27,4 +28,12 @@ dependencies {
 	testIntegrationCompile group: "org.slf4j", name: "slf4j-api"
 	testIntegrationCompile project(":modules:servizi-digitali-rest-service:servizi-digitali-rest-service-api")
 	testIntegrationCompile project(":modules:servizi-digitali-rest-service:servizi-digitali-rest-service-client")
+	compileOnly project(":modules:scrivania-operatore:scrivania-operatore-api")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-backoffice-integration")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-api")	
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-utility")
+}
+
+test {
+    exclude 'src/testIntegration/java/**'
 }

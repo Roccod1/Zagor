@@ -14,6 +14,7 @@ import javax.portlet.RenderResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 import it.servizidigitali.gestionetipologieservizio.frontend.constants.GestioneTipologieServizioPortletKeys;
@@ -57,6 +58,7 @@ public class AggiungiModificaTipologiaRenderCommand implements MVCRenderCommand{
 		
 		renderRequest.setAttribute(GestioneTipologieServizioPortletKeys.TIPOLOGIA, tipologia);
 		renderRequest.setAttribute(GestioneTipologieServizioPortletKeys.INDIRIZZO_PRECEDENTE, indirizzoPrecedente);
+		renderRequest.setAttribute(GestioneTipologieServizioPortletKeys.CODICI, TipoServizio.values());
 		
 		return GestioneTipologieServizioPortletKeys.JSP_INSERIMENTO_MODIFICA_TIPOLOGIA;
 	}

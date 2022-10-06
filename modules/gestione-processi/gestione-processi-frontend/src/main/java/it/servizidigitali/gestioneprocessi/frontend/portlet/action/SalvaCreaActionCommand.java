@@ -130,6 +130,11 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 				actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaProcesso.jsp");
 				return;
 			}
+		}else {
+			_log.error("Modello non valido per processo con codice: " + codice);
+			SessionErrors.add(actionRequest, GestioneProcessiPortletKeys.SESSION_MESSAGE_ERRORE_MODELLO_NON_VALIDO);
+			actionResponse.getRenderParameters().setValue("jspPage", "/aggiungiModificaProcesso.jsp");
+			return;
 		}
 
 		processo.setCodice(codice);

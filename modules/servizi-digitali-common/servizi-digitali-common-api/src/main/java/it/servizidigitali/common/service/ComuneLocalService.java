@@ -242,6 +242,9 @@ public interface ComuneLocalService
 	public int getComunesCount();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Comune> getComuniByProvinciaId(long provinciaId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
 	/**

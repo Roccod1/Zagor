@@ -211,26 +211,16 @@ public class TemplatePdfLocalServiceUtil {
 	}
 
 	/**
-	 * Returns the template pdf with the matching UUID and company.
+	 * Returns the template pdf matching the UUID and group.
 	 *
 	 * @param uuid the template pdf's UUID
-	 * @param companyId the primary key of the company
+	 * @param groupId the primary key of the group
 	 * @return the matching template pdf, or <code>null</code> if a matching template pdf could not be found
 	 */
-	public static TemplatePdf fetchTemplatePdfByUuidAndCompanyId(
-		String uuid, long companyId) {
+	public static TemplatePdf fetchTemplatePdfByUuidAndGroupId(
+		String uuid, long groupId) {
 
-		return getService().fetchTemplatePdfByUuidAndCompanyId(uuid, companyId);
-	}
-
-	public static List<TemplatePdf> findByProceduraId(long proceduraId) {
-		return getService().findByProceduraId(proceduraId);
-	}
-
-	public static List<TemplatePdf> findByProceduraIdAndAttivo(
-		long proceduraId, boolean attivo) {
-
-		return getService().findByProceduraIdAndAttivo(proceduraId, attivo);
+		return getService().fetchTemplatePdfByUuidAndGroupId(uuid, groupId);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
@@ -285,19 +275,25 @@ public class TemplatePdfLocalServiceUtil {
 		return getService().getTemplatePdf(templatePdfId);
 	}
 
+	public static List<TemplatePdf> getTemplatePdfByProceduraId(
+		long proceduraId) {
+
+		return getService().getTemplatePdfByProceduraId(proceduraId);
+	}
+
 	/**
-	 * Returns the template pdf with the matching UUID and company.
+	 * Returns the template pdf matching the UUID and group.
 	 *
 	 * @param uuid the template pdf's UUID
-	 * @param companyId the primary key of the company
+	 * @param groupId the primary key of the group
 	 * @return the matching template pdf
 	 * @throws PortalException if a matching template pdf could not be found
 	 */
-	public static TemplatePdf getTemplatePdfByUuidAndCompanyId(
-			String uuid, long companyId)
+	public static TemplatePdf getTemplatePdfByUuidAndGroupId(
+			String uuid, long groupId)
 		throws PortalException {
 
-		return getService().getTemplatePdfByUuidAndCompanyId(uuid, companyId);
+		return getService().getTemplatePdfByUuidAndGroupId(uuid, groupId);
 	}
 
 	/**
@@ -313,6 +309,37 @@ public class TemplatePdfLocalServiceUtil {
 	 */
 	public static List<TemplatePdf> getTemplatePdfs(int start, int end) {
 		return getService().getTemplatePdfs(start, end);
+	}
+
+	/**
+	 * Returns all the template pdfs matching the UUID and company.
+	 *
+	 * @param uuid the UUID of the template pdfs
+	 * @param companyId the primary key of the company
+	 * @return the matching template pdfs, or an empty list if no matches were found
+	 */
+	public static List<TemplatePdf> getTemplatePdfsByUuidAndCompanyId(
+		String uuid, long companyId) {
+
+		return getService().getTemplatePdfsByUuidAndCompanyId(uuid, companyId);
+	}
+
+	/**
+	 * Returns a range of template pdfs matching the UUID and company.
+	 *
+	 * @param uuid the UUID of the template pdfs
+	 * @param companyId the primary key of the company
+	 * @param start the lower bound of the range of template pdfs
+	 * @param end the upper bound of the range of template pdfs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the range of matching template pdfs, or an empty list if no matches were found
+	 */
+	public static List<TemplatePdf> getTemplatePdfsByUuidAndCompanyId(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator<TemplatePdf> orderByComparator) {
+
+		return getService().getTemplatePdfsByUuidAndCompanyId(
+			uuid, companyId, start, end, orderByComparator);
 	}
 
 	/**

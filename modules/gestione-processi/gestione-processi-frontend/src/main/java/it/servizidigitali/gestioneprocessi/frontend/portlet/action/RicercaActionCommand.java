@@ -1,6 +1,7 @@
 package it.servizidigitali.gestioneprocessi.frontend.portlet.action;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -54,7 +55,7 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 		
 		Date dataInserimentoDa = null;
 		Date dataInserimentoA = null;
-		
+
 		if(Validator.isNotNull(dataInserimentoDaString)) {
 			dataInserimentoDa = GestioneProcessiPortlet.simpleDateFormat.parse(dataInserimentoDaString);
 		}
@@ -68,13 +69,19 @@ public class RicercaActionCommand extends BaseMVCActionCommand{
 		String orderByCol = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		String orderByType = ParamUtil.getString(actionRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 		
-		List<Processo> listaProcessi = processoLocalService.search(nome, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), delta, cur, orderByCol, orderByType);
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+		
+		List<Processo> listaProcessi = processoLocalService.search(nome, dataInserimentoDa, dataInserimentoA, themeDisplay.getSiteGroupId(), inizio, fine, orderByCol, orderByType);
+		long totale = processoLocalService.count(nome, dataInserimentoDa, dataInserimentoA);
 		
 		actionRequest.setAttribute(GestioneProcessiPortletKeys.LISTA_PROCESSI, listaProcessi);
 		
 		actionRequest.setAttribute(GestioneProcessiPortletKeys.NOME_RICERCA, nome);
 		actionRequest.setAttribute(GestioneProcessiPortletKeys.DATA_INSERIMENTO_DA, dataInserimentoDaString);
 		actionRequest.setAttribute(GestioneProcessiPortletKeys.DATA_INSERIMENTO_A, dataInserimentoAString);
+		actionRequest.setAttribute("totaleElementi", totale);
 		
 	}
 

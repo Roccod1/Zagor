@@ -85,6 +85,10 @@ public class TipologiaLocalServiceUtil {
 		getService().clearServizioTipologias(servizioId);
 	}
 
+	public static long count() throws Exception {
+		return getService().count();
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -293,15 +297,6 @@ public class TipologiaLocalServiceUtil {
 		return getService().getIndexableActionableDynamicQuery();
 	}
 
-	public static List<Tipologia> getListaTipologiaOrdinata(
-			int cur, int delta, String nomeOrdinamento,
-			String direzioneOrdinamento)
-		throws Exception {
-
-		return getService().getListaTipologiaOrdinata(
-			cur, delta, nomeOrdinamento, direzioneOrdinamento);
-	}
-
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -363,6 +358,10 @@ public class TipologiaLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getTipologia(tipologiaId);
+	}
+
+	public static Tipologia getTipologiaByCodice(String codice) {
+		return getService().getTipologiaByCodice(codice);
 	}
 
 	/**
@@ -433,6 +432,12 @@ public class TipologiaLocalServiceUtil {
 	 */
 	public static int getTipologiasCount() {
 		return getService().getTipologiasCount();
+	}
+
+	public static List<Tipologia> getTipologie(
+		int inizio, int fine, String orderByCol, String orderByType) {
+
+		return getService().getTipologie(inizio, fine, orderByCol, orderByType);
 	}
 
 	public static boolean hasServizioTipologia(

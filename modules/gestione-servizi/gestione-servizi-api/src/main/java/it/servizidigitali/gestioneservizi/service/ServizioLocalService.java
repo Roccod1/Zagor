@@ -92,8 +92,7 @@ public interface ServizioLocalService
 
 	public void clearTipologiaServizios(long tipologiaId);
 
-	public int countSearchServizio(
-		String nome, String codice, Boolean soloServiziAttivi);
+	public int count(String nome, String codice, Boolean soloServiziAttivi);
 
 	/**
 	 * @throws PortalException
@@ -274,6 +273,9 @@ public interface ServizioLocalService
 	public Servizio getServizio(long servizioId) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Servizio getServizioByCodice(String codice);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Servizio getServizioById(Long servizioId) throws Exception;
 
 	/**
@@ -338,7 +340,7 @@ public interface ServizioLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Servizio> getServiziUtilizzabili(
-		List<Object> listaServiziEnte, String nome, long areaTematicaId,
+		List<Long> serviziEnteId, String nome, long areaTematicaId,
 		long tipologiaId, int cur, int delta, String orderByCol,
 		String orderByType);
 
@@ -380,16 +382,17 @@ public interface ServizioLocalService
 	 * @param nome
 	 * @param codice
 	 * @param soloServiziAttivi
-	 * @param cur: pagina attuale
-	 * @param delta: numero elementi per pagina
-	 * @param nomeOrdinamento
-	 * @param direzioneOrdinamento
+	 * @param inizio
+	 * @param fine
+	 * @param orderByCol
+	 * @param orderByType
 	 * @return
+	 * @throws Exception
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<Servizio> searchServizio(
-			String nome, String codice, Boolean soloServiziAttivi, int cur,
-			int delta, String nomeOrdinamento, String direzioneOrdinamento)
+	public List<Servizio> search(
+			String nome, String codice, Boolean soloServiziAttivi, int inizio,
+			int fine, String orderByCol, String orderByType)
 		throws Exception;
 
 	public void setTipologiaServizios(long tipologiaId, long[] servizioIds);

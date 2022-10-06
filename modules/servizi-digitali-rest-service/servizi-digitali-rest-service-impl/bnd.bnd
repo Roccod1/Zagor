@@ -1,3 +1,7 @@
 Bundle-Name: servizi-digitali-rest-service-impl
 Bundle-SymbolicName: it.servizidigitali.restservice.impl
 Bundle-Version: 1.0.0
+Import-Package: \
+	!com.google.crypto.tink.*,\
+	!org.bouncycastle.*,\
+	*

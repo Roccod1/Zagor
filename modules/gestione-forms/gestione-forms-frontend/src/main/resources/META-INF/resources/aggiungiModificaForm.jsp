@@ -10,11 +10,10 @@
 </portlet:resourceURL>
 
 <liferay-ui:error key="<%=GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO %>" message="compilare-tutti-i-campi-obbligatori" />
-
-
+<liferay-ui:error key="<%=GestioneFormsPortletKeys.SESSION_MESSAGE_ERRORE_SALVATAGGIO_ALLEGATI %>" message="errore-durante-il-caricamento-dell-allegato"/>
 
 <div class="page-header">
-				<h2><liferay-ui:message key="form"/></h2>
+	<h2><liferay-ui:message key="form"/></h2>
 </div>
 
 <aui:form action="${salvaModificaURL}" id="formPrincipale" name="formPrincipale" enctype="multipart/form-data">

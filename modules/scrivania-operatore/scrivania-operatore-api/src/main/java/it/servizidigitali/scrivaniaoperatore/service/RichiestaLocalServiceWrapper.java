@@ -400,6 +400,16 @@ public class RichiestaLocalServiceWrapper
 
 	@Override
 	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
+		getRichiesteByCodiceFiscaleStatoProceduraId(
+			String codiceFiscale, String stato, long proceduraId) {
+
+		return _richiestaLocalService.
+			getRichiesteByCodiceFiscaleStatoProceduraId(
+				codiceFiscale, stato, proceduraId);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.scrivaniaoperatore.model.Richiesta>
 			getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(
 				String codiceFiscale, long organizationGroupId, int cur,
 				int delta, String orderByCol, String orderByType)
@@ -462,6 +472,16 @@ public class RichiestaLocalServiceWrapper
 			NoSuchRichiestaException {
 
 		_richiestaLocalService.updateStatoRichiesta(richiestaId, stato);
+	}
+
+	@Override
+	public void updateStatoRichiesta(
+			long richiestaId, String stato, String noteToAppend)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchRichiestaException {
+
+		_richiestaLocalService.updateStatoRichiesta(
+			richiestaId, stato, noteToAppend);
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import java.util.Set;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
@@ -53,8 +54,7 @@ public class ScrivaniaCittadinoMiddlewareService {
 			List<Long> serviziIds = new ArrayList<Long>();
 			Set<Long> procedureIds = new HashSet<Long>();
 
-			// FIXME trovare un modo x caricare la tipologia
-			Tipologia tipologia = tipologiaLocalService.getTipologia(69332);
+			Tipologia tipologia = tipologiaLocalService.getTipologiaByCodice(TipoServizio.PAGAMENTO.name());
 
 			List<Servizio> listServiziByTipologia = servizioLocalService.getTipologiaServizios(tipologia.getTipologiaId());
 			listServiziByTipologia.stream().forEach(servizio -> serviziIds.add(servizio.getServizioId()));

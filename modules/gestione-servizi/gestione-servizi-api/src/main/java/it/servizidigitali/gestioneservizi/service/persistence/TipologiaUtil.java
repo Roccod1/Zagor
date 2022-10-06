@@ -710,6 +710,66 @@ public class TipologiaUtil {
 	}
 
 	/**
+	 * Returns the tipologia where codice = &#63; or throws a <code>NoSuchTipologiaException</code> if it could not be found.
+	 *
+	 * @param codice the codice
+	 * @return the matching tipologia
+	 * @throws NoSuchTipologiaException if a matching tipologia could not be found
+	 */
+	public static Tipologia findByCodice(String codice)
+		throws it.servizidigitali.gestioneservizi.exception.
+			NoSuchTipologiaException {
+
+		return getPersistence().findByCodice(codice);
+	}
+
+	/**
+	 * Returns the tipologia where codice = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param codice the codice
+	 * @return the matching tipologia, or <code>null</code> if a matching tipologia could not be found
+	 */
+	public static Tipologia fetchByCodice(String codice) {
+		return getPersistence().fetchByCodice(codice);
+	}
+
+	/**
+	 * Returns the tipologia where codice = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param codice the codice
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching tipologia, or <code>null</code> if a matching tipologia could not be found
+	 */
+	public static Tipologia fetchByCodice(
+		String codice, boolean useFinderCache) {
+
+		return getPersistence().fetchByCodice(codice, useFinderCache);
+	}
+
+	/**
+	 * Removes the tipologia where codice = &#63; from the database.
+	 *
+	 * @param codice the codice
+	 * @return the tipologia that was removed
+	 */
+	public static Tipologia removeByCodice(String codice)
+		throws it.servizidigitali.gestioneservizi.exception.
+			NoSuchTipologiaException {
+
+		return getPersistence().removeByCodice(codice);
+	}
+
+	/**
+	 * Returns the number of tipologias where codice = &#63;.
+	 *
+	 * @param codice the codice
+	 * @return the number of matching tipologias
+	 */
+	public static int countByCodice(String codice) {
+		return getPersistence().countByCodice(codice);
+	}
+
+	/**
 	 * Caches the tipologia in the entity cache if it is enabled.
 	 *
 	 * @param tipologia the tipologia

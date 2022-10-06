@@ -79,7 +79,7 @@ public class TipologiaModelImpl
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"nome", Types.VARCHAR}, {"descrizione", Types.VARCHAR},
 		{"visibile", Types.BOOLEAN}, {"invioEmailCittadino", Types.BOOLEAN},
-		{"chatbotInlineIntent", Types.VARCHAR}
+		{"chatbotInlineIntent", Types.VARCHAR}, {"codice", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -99,10 +99,11 @@ public class TipologiaModelImpl
 		TABLE_COLUMNS_MAP.put("visibile", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("invioEmailCittadino", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("chatbotInlineIntent", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("codice", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table tipologia (uuid_ VARCHAR(75) null,tipologiaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,visibile BOOLEAN,invioEmailCittadino BOOLEAN,chatbotInlineIntent VARCHAR(75) null)";
+		"create table tipologia (uuid_ VARCHAR(75) null,tipologiaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,visibile BOOLEAN,invioEmailCittadino BOOLEAN,chatbotInlineIntent VARCHAR(75) null,codice VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP = "drop table tipologia";
 
@@ -120,32 +121,38 @@ public class TipologiaModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long COMPANYID_COLUMN_BITMASK = 1L;
+	public static final long CODICE_COLUMN_BITMASK = 1L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long GROUPID_COLUMN_BITMASK = 2L;
+	public static final long COMPANYID_COLUMN_BITMASK = 2L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 4L;
+	public static final long GROUPID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long VISIBILE_COLUMN_BITMASK = 8L;
+	public static final long UUID_COLUMN_BITMASK = 8L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long VISIBILE_COLUMN_BITMASK = 16L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long NOME_COLUMN_BITMASK = 16L;
+	public static final long NOME_COLUMN_BITMASK = 32L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -343,6 +350,9 @@ public class TipologiaModelImpl
 		attributeSetterBiConsumers.put(
 			"chatbotInlineIntent",
 			(BiConsumer<Tipologia, String>)Tipologia::setChatbotInlineIntent);
+		attributeGetterFunctions.put("codice", Tipologia::getCodice);
+		attributeSetterBiConsumers.put(
+			"codice", (BiConsumer<Tipologia, String>)Tipologia::setCodice);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -628,6 +638,34 @@ public class TipologiaModelImpl
 	}
 
 	@Override
+	public String getCodice() {
+		if (_codice == null) {
+			return "";
+		}
+		else {
+			return _codice;
+		}
+	}
+
+	@Override
+	public void setCodice(String codice) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_codice = codice;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public String getOriginalCodice() {
+		return getColumnOriginalValue("codice");
+	}
+
+	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
 			PortalUtil.getClassNameId(Tipologia.class.getName()));
@@ -702,6 +740,7 @@ public class TipologiaModelImpl
 		tipologiaImpl.setVisibile(isVisibile());
 		tipologiaImpl.setInvioEmailCittadino(isInvioEmailCittadino());
 		tipologiaImpl.setChatbotInlineIntent(getChatbotInlineIntent());
+		tipologiaImpl.setCodice(getCodice());
 
 		tipologiaImpl.resetOriginalValues();
 
@@ -734,6 +773,7 @@ public class TipologiaModelImpl
 			this.<Boolean>getColumnOriginalValue("invioEmailCittadino"));
 		tipologiaImpl.setChatbotInlineIntent(
 			this.<String>getColumnOriginalValue("chatbotInlineIntent"));
+		tipologiaImpl.setCodice(this.<String>getColumnOriginalValue("codice"));
 
 		return tipologiaImpl;
 	}
@@ -881,6 +921,14 @@ public class TipologiaModelImpl
 			tipologiaCacheModel.chatbotInlineIntent = null;
 		}
 
+		tipologiaCacheModel.codice = getCodice();
+
+		String codice = tipologiaCacheModel.codice;
+
+		if ((codice != null) && (codice.length() == 0)) {
+			tipologiaCacheModel.codice = null;
+		}
+
 		return tipologiaCacheModel;
 	}
 
@@ -985,6 +1033,7 @@ public class TipologiaModelImpl
 	private boolean _visibile;
 	private boolean _invioEmailCittadino;
 	private String _chatbotInlineIntent;
+	private String _codice;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1028,6 +1077,7 @@ public class TipologiaModelImpl
 		_columnOriginalValues.put("visibile", _visibile);
 		_columnOriginalValues.put("invioEmailCittadino", _invioEmailCittadino);
 		_columnOriginalValues.put("chatbotInlineIntent", _chatbotInlineIntent);
+		_columnOriginalValues.put("codice", _codice);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1076,6 +1126,8 @@ public class TipologiaModelImpl
 		columnBitmasks.put("invioEmailCittadino", 2048L);
 
 		columnBitmasks.put("chatbotInlineIntent", 4096L);
+
+		columnBitmasks.put("codice", 8192L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

@@ -244,6 +244,10 @@ public interface ComuneEsteroLocalService
 	public int getComuneEsterosCount();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<ComuneEstero> getComuniEsteriByDenominazione(
+		String denominazione);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
 	/**

@@ -11,7 +11,6 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -33,6 +32,7 @@ import it.servizidigitali.presentatoreforms.frontend.service.integration.input.j
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
+import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
 import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 
 /**
@@ -76,14 +76,14 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 
 		try {
 			procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
-			alpacaStructure = getAlpacaJsonStructure(procedura);
+			alpacaStructure = getAlpacaJsonStructure(procedura, themeDisplay);
 
 			String step2TipoServizio = procedura.getStep2TipoServizio();
 
 			TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
 
 			if (Validator.isNotNull(alpacaStructure)) {
-				actionRequest.setAttribute("alpacaStructure", alpacaStructure);
+				actionRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 			}
 
 			String codiceFiscaleComponente = ParamUtil.getString(actionRequest, PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE);
@@ -118,10 +118,10 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 
 			actionRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 
+			// Aggiunta destinazioni d'uso in pagina se certificato
 			if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
-				List<String> lstDestinazioniUso = getListaDestinazioniUso();
-				actionRequest.setAttribute("destinazioniUso", lstDestinazioniUso);
-				// TODO
+				List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
+				actionRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONI_USO, destinazioniUso);
 			}
 		}
 		catch (Exception e) {
@@ -133,23 +133,15 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 
 	}
 
-	private AlpacaJsonStructure getAlpacaJsonStructure(Procedura procedura) {
+	private AlpacaJsonStructure getAlpacaJsonStructure(Procedura procedura, ThemeDisplay themeDisplay) {
 
 		Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 
-		FormData formData = AlpacaUtil.loadFormData(form, null, true);
+		FormData formData = AlpacaUtil.loadFormData(form, null, true, themeDisplay.getPortalURL());
 		AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
 
 		return alpacaStructure;
 
-	}
-
-	private List<String> getListaDestinazioniUso() {
-		List<String> lstDestinazioniUso = new ArrayList<String>();
-		lstDestinazioniUso.add("Bollo");
-		lstDestinazioniUso.add("Esenzione");
-
-		return lstDestinazioniUso;
 	}
 
 }

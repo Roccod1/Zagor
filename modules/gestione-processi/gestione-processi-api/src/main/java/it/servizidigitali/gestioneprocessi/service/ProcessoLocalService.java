@@ -80,6 +80,10 @@ public interface ProcessoLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public Processo addProcesso(Processo processo);
 
+	public long count(
+			String nome, Date dataInserimentoDa, Date dataInserimentoA)
+		throws PortalException;
+
 	/**
 	 * @throws PortalException
 	 */
@@ -326,7 +330,7 @@ public interface ProcessoLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Processo> search(
 			String nome, Date dataInserimentoDa, Date dataInserimentoA,
-			long groupId, int delta, int cur, String orderByCol,
+			long groupId, int inizio, int fine, String orderByCol,
 			String orderByType)
 		throws PortalException;
 

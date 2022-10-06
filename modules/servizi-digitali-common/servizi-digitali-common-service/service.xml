@@ -62,11 +62,11 @@
 		</finder>
 
 		<finder name="idRegione" return-type="Collection">
-			<finder-column name="idProvincia" />
+			<finder-column name="idRegione" />
 		</finder>
 
 		<finder name="IdProvincia" return-type="Collection">
-			<finder-column name="idRegione" />
+			<finder-column name="idProvincia" />
 		</finder>
 	</entity>
 
@@ -96,7 +96,7 @@
 		
 		<!-- Order -->
 		<order by="asc">
-			<order-column name="denominazioneRegione" />
+			<order-column name="sigla" />
 		</order>
 
 		<!-- Finder methods -->

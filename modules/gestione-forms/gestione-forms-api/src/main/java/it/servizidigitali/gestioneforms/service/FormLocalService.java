@@ -79,6 +79,10 @@ public interface FormLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public Form addForm(Form form);
 
+	public long count(
+			String nome, Date dataInserimentoDa, Date dataInserimentoA)
+		throws PortalException;
+
 	/**
 	 * Creates a new form with the primary key. Does not add the form to the database.
 	 *
@@ -315,7 +319,7 @@ public interface FormLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Form> search(
 			String nome, Date dataInserimentoDa, Date dataInserimentoA,
-			long groupId, int delta, int cur, String orderByCol,
+			long groupId, int inizio, int fine, String orderByCol,
 			String orderByType)
 		throws PortalException;
 

@@ -32,6 +32,10 @@ public class ProfiloUtentePreferenzePortletKeys {
 	public static final String UTENTE_EXPANDO_ACCETTA_PRIVACY = UserCustomAttributes.ACCETTA_PRIVACY.getNomeAttributo();
 	public static final String PRIVACY_ARTICLE_ID = "privacyArticleId";
 	public static final String PRIVACY_ARTICLE_GROUP_ID = "privacyArticleGroupId";
+	
+	// search container
+	public static final int DEFAULT_CUR = 1;
+	public static final int DEFAULT_DELTA = 10;
 
 	// nomi jsp
 	public static final String JSP_PREFERENZE = "/preferenze.jsp";

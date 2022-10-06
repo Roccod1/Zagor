@@ -109,8 +109,14 @@
 		<column name="richiestaId" type="long" />
 		
 		<!-- Finder methods -->
-		<finder name="RichiestaId" return-type="IstanzaForm">
+		<finder name="RichiestaId" return-type="Collection">
 			<finder-column name="richiestaId" />
+		</finder>
+
+		<!-- Finder methods -->
+		<finder name="RichiestaIdFormId" return-type="IstanzaForm">
+			<finder-column name="richiestaId" />
+			<finder-column name="formId" />
 		</finder>
 
 		<finder name="FormId" return-type="Collection">
@@ -129,8 +135,155 @@
 		>
 
 		<!-- PK fields -->
-		<column name="richiestaId" primary="true" type="long" />
-		<column name="fileEntryId" primary="true" type="long" />
+		<column name="allegatoRichiestaId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="idDocumentale" type="String" />
+		<column name="nome" type="String" />
+		<column name="url" type="String" />
+		<column name="principale" type="boolean" />
+		<column name="interno" type="boolean" />
+		<column name="visibile" type="boolean" />
+		<column name="definizioneAllegatoId" type="Long" convert-null="false"/>
+		<column name="richiestaId" type="long" />
+		
+		<!-- Finder methods -->
+		<finder name="IdDocumentale" return-type="AllegatoRichiesta">
+			<finder-column name="idDocumentale" />
+		</finder>
+
+		<finder name="Url" return-type="AllegatoRichiesta">
+			<finder-column name="url" />
+		</finder>
+
+		<finder name="RichiestaIdPrincipale" return-type="AllegatoRichiesta">
+			<finder-column name="richiestaId" />
+			<finder-column name="principale" />
+		</finder>
+
+		<finder name="RichiestaId" return-type="Collection">
+			<finder-column name="richiestaId" />
+		</finder>
+
+		<finder name="RichiestaIdInterno" return-type="Collection">
+			<finder-column name="richiestaId" />
+			<finder-column name="interno" />
+		</finder>
+
+		<finder name="RichiestaIdVisibile" return-type="Collection">
+			<finder-column name="richiestaId" />
+			<finder-column name="visibile" />
+		</finder>
+
+		<finder name="RichiestaIdInternoVisibile" return-type="Collection">
+			<finder-column name="richiestaId" />
+			<finder-column name="interno" />
+			<finder-column name="visibile" />
+		</finder>
+	</entity>
+	
+	<entity 
+		name="CommentoRichiesta"
+		table="commento_richiesta"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="commentoRichiestaId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="testo" type="String" />
+		<column name="taskId" type="String" />
+		<column name="visibile" type="boolean" />
+		
+		<column name="richiestaId" type="long" />
+		
+		<!-- Finder methods -->
+		<finder name="RichiestaId" return-type="Collection">
+			<finder-column name="richiestaId" />
+		</finder>
+
+		<finder name="RichiestaIdVisibile" return-type="Collection">
+			<finder-column name="richiestaId" />
+			<finder-column name="visibile" />
+		</finder>
+		
+		<finder name="TaskId" return-type="Collection">
+			<finder-column name="taskId" />
+		</finder>
+	</entity>
+	
+	<entity 
+		name="AttivitaRichiesta"
+		table="attivita_richiesta"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="attivitaRichiestaId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="note" type="String" />
+		<column name="stato" type="String" />
+		
+		<column name="richiestaId" type="long" />
+		
+		<!-- Finder methods -->
+		<finder name="RichiestaId" return-type="Collection">
+			<finder-column name="richiestaId" />
+		</finder>
+	</entity>
+
+	<entity 
+		name="DestinazioneUso"
+		table="destinazione_uso"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="destinazioneUsoId" primary="true" type="long" />
 
 		<!-- Group instance -->
 		<column name="groupId" type="long" />
@@ -144,28 +297,63 @@
 
 		<!-- Other fields -->
 		<column name="nome" type="String" />
-		<column name="idDocumentale" type="String" />
-		<column name="url" type="String" />
-		<column name="principale" type="boolean" />
+		<column name="descrizione" type="String" />
+		<column name="pagamentoBollo" type="boolean" />
+		<column name="importo" type="BigDecimal" />
 		
 		<!-- Finder methods -->
-		<finder name="IdDocumentale" return-type="AllegatoRichiesta">
-			<finder-column name="idDocumentale" />
-		</finder>
-
-		<finder name="Url" return-type="AllegatoRichiesta">
-			<finder-column name="url" />
-		</finder>
-
-		<finder name="R_P_G" return-type="AllegatoRichiesta">
-			<finder-column name="richiestaId" />
-			<finder-column name="principale" />
+		<finder name="GroupId" return-type="Collection">
 			<finder-column name="groupId" />
 		</finder>
 
-		<finder name="R_G" return-type="Collection">
-			<finder-column name="richiestaId" />
+		<finder name="PagamentoBollo" return-type="Collection">
+			<finder-column name="pagamentoBollo" />
+		</finder>
+	</entity>
+
+	<entity 
+		name="DestinazioneUsoServizioEnte"
+		table="destinazione_uso_servizio_ente"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="destinazioneUsoId" primary="true" type="long" />
+		<column name="servizioId" primary="true" type="long" />
+		<column name="organizationId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+		
+		<!-- Finder methods -->
+		<finder name="DestinazioneUsoIdServizioIdOrganizationId" return-type="DestinazioneUsoServizio">
+			<finder-column name="destinazioneUsoId" />
+			<finder-column name="servizioId" />
+			<finder-column name="organizationId" />
+		</finder>
+
+		<finder name="OrganizationIdGroupIdCompanyId" return-type="Collection">
+			<finder-column name="organizationId" />
 			<finder-column name="groupId" />
+			<finder-column name="companyId" />
+		</finder>
+
+		<finder name="S_O_G_C" return-type="Collection">
+			<finder-column name="servizioId" />
+			<finder-column name="organizationId" />
+			<finder-column name="groupId" />
+			<finder-column name="companyId" />
 		</finder>
 	</entity>
 </service-builder>

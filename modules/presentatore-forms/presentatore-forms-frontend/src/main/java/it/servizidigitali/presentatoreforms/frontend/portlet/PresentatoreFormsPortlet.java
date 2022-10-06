@@ -34,8 +34,6 @@ import it.servizidigitali.backoffice.integration.model.commmon.IntegrationPrefer
 import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletService;
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
-import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
-import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
@@ -46,8 +44,8 @@ import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
-import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalServiceUtil;
 
 /**
  * @author pindi
@@ -60,11 +58,11 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalServiceUtil;
 				"com.liferay.portlet.header-portlet-css=/libs/alpaca-custom/alpaca.css", //
 				"com.liferay.portlet.header-portlet-css=/libs/jquery.handsontable/jquery.handsontable.full.css", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/handlebars/handlebars.min.js", //
+				"com.liferay.portlet.footer-portlet-javascript=/libs/moment/moment-with-locales.min.js", //
+				"com.liferay.portlet.footer-portlet-javascript=/libs/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/jquery-ui-dist/jquery-ui.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/jquery-blockui/jquery.blockUI.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/jquery.handsontable/jquery.handsontable.full.js", //
-				"com.liferay.portlet.footer-portlet-javascript=/libs/moment/moment-with-locales.min.js", //
-				"com.liferay.portlet.footer-portlet-javascript=/libs/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/alpaca-custom/alpaca.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/dist/custom-fields.min.js", //
 				"com.liferay.portlet.instanceable=true", "javax.portlet.display-name=PresentatoreForms", //
@@ -81,12 +79,6 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 	public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Reference
-	private FormLocalService formLocalService;
-
-	@Reference
-	private DefinizioneAllegatoLocalService definizioneAllegatoLocalService;
-
-	@Reference
 	private AlpacaService alpacaService;
 
 	@Reference
@@ -98,7 +90,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
 
-		log.debug("render presentatore forms");
+		log.debug("render presentatore forms.");
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
@@ -109,37 +101,39 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
 				return;
 			}
-			
-			// TODO: Recuperare richiesta bozza per l'utente
-			
-			Richiesta richiesta = RichiestaLocalServiceUtil.createRichiesta(14);
-			richiesta.setStato(StatoRichiesta.BOZZA.name());
+
+			String screenName = themeDisplay.getUser().getScreenName();
+
+			Richiesta richiesta = presentatoreFormFrontendService.getRichiestaBozza(screenName, procedura.getProceduraId());
+
+			String step2TipoServizio = procedura.getStep2TipoServizio();
+			TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
+
 			boolean stepComponentiFamiliari = procedura.getStep1Attivo();
 			String filtroComponentiFamiliari = procedura.getStep1TipoComponentiNucleoFamiliare();
 
-			if (Validator.isNotNull(richiesta) && richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
-				renderRequest.setAttribute("richiestaId", richiesta.getRichiestaId());
-				include("/home.jsp", renderRequest, renderResponse);
-				presentatoreFormFrontendService.deleteRichiesteBozzaUtente(themeDisplay.getUser().getScreenName(), procedura.getProceduraId());
-			}
-			else {
-				String mvcRenderCommandName = ParamUtil.getString(renderRequest, "mvcRenderCommandName");
-				String mvcPath = ParamUtil.getString(renderRequest, "mvcPath");
-				if (Validator.isNull(mvcRenderCommandName) && Validator.isNull(mvcPath)) {
+			String mvcRenderCommandName = ParamUtil.getString(renderRequest, "mvcRenderCommandName");
+			String mvcPath = ParamUtil.getString(renderRequest, "mvcPath");
+			if (Validator.isNull(mvcRenderCommandName) && Validator.isNull(mvcPath)) {
+				if (Validator.isNotNull(richiesta) && richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.RICHIESTA_ID, richiesta.getRichiestaId());
+					include(PresentatoreFormsPortletKeys.JSP_HOME, renderRequest, renderResponse);
+				}
+				else {
 					try {
 
 						if (stepComponentiFamiliari) {
 							Long organizationId = themeDisplay.getSiteGroup().getOrganizationId();
-							String codiceFiscale = themeDisplay.getUser().getScreenName();
+							String codiceFiscale = screenName;
 
 							IntegrationPreferences integrationPreferences = new IntegrationPreferences();
 							integrationPreferences.setUsaCache(procedura.isAbilitaCacheIntegrazioneBackoffice());
 
 							List<ComponenteNucleoFamiliare> componentiNucleoFamiliare = datiAnagraficiPortletService.getComponentiNucleoFamiliare(codiceFiscale, organizationId,
 									integrationPreferences);
-							renderRequest.setAttribute("componentiNucleoFamiliare", componentiNucleoFamiliare);
-							renderRequest.setAttribute("codiceFiscaleManuale", codiceFiscale);
-							renderRequest.setAttribute("filtroComponentiFamiliari", filtroComponentiFamiliari);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.COMPONENTI_NUCLEO_FAMILIARE, componentiNucleoFamiliare);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.CODICE_FISCALE_MANUALE, codiceFiscale);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.FILTRO_COMPONENTI_FAMILIARI, filtroComponentiFamiliari);
 
 							include(PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO, renderRequest, renderResponse);
 
@@ -148,11 +142,11 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 
 							Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 
-							FormData formData = AlpacaUtil.loadFormData(form, null, true);
+							FormData formData = AlpacaUtil.loadFormData(form, null, true, themeDisplay.getPortalURL());
 							AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
 
 							UserPreferences userPreferences = new UserPreferences();
-							userPreferences.setCodiceFiscaleRichiedente(themeDisplay.getUser().getScreenName());
+							userPreferences.setCodiceFiscaleRichiedente(screenName);
 
 							if (PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME) != null) {
 								userPreferences = (UserPreferences) PortalUtil.getHttpServletRequest(renderRequest).getSession()
@@ -173,8 +167,6 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 								if (e.getConditionCode() != 0) {
 									throw e;
 								}
-								String step2TipoServizio = procedura.getStep2TipoServizio();
-								TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
 								if (tipoServizio != null && tipoServizio.equals(TipoServizio.VISURA) || tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 									log.error("renderizzaAlpacaForm :: impossibile caricare le informazioni dal backoffice per il Comune : " + themeDisplay.getScopeGroup().getName() + " :: "
 											+ e.getMessage(), e);
@@ -188,13 +180,19 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 							alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
 
 							renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
-							include(PresentatoreFormsPortletKeys.JSP_COMPILA_FORM, renderRequest, renderResponse);
 
+							// Aggiunta destinazioni d'uso in pagina se certificato
+							if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
+								List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
+								renderRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONI_USO, destinazioniUso);
+							}
+
+							include(PresentatoreFormsPortletKeys.JSP_COMPILA_FORM, renderRequest, renderResponse);
 						}
 
 					}
 					catch (Exception e) {
-						log.error(e.getMessage());
+						log.error(e.getMessage(), e);
 						// TODO gestire errori in pagina
 					}
 				}

@@ -12,6 +12,7 @@
 
 package it.servizidigitali.common.service.impl;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 
 import java.util.List;
@@ -40,12 +41,19 @@ public class ComuneEsteroLocalServiceImpl extends ComuneEsteroLocalServiceBaseIm
 		return comuneEstero;
 	}
 
+	@Override
 	public ComuneEstero getComuneEsteroByDenominazione(String denominazione) {
-		List<ComuneEstero> comuniEsteri = comuneEsteroPersistence.findByDenominazioneLike(denominazione);
+		List<ComuneEstero> comuniEsteri = comuneEsteroPersistence.findByDenominazioneLike(StringPool.PERCENT + denominazione + StringPool.PERCENT);
 		if (comuniEsteri != null && !comuniEsteri.isEmpty()) {
 			return comuniEsteri.get(0);
 		}
 		return null;
+	}
+
+	@Override
+	public List<ComuneEstero> getComuniEsteriByDenominazione(String denominazione) {
+		List<ComuneEstero> comuniEsteri = comuneEsteroPersistence.findByDenominazioneLike(StringPool.PERCENT + denominazione + StringPool.PERCENT);
+		return comuniEsteri;
 	}
 
 }

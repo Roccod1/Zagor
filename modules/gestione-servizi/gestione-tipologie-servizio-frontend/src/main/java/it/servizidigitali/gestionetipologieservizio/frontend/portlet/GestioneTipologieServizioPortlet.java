@@ -1,13 +1,17 @@
 package it.servizidigitali.gestionetipologieservizio.frontend.portlet;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,15 +63,26 @@ public class GestioneTipologieServizioPortlet extends MVCPortlet {
 		String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 		
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+		int inizio = posizioni[0];
+		int fine = posizioni[1];
+		
+		if(Validator.isNull(orderByCol)) {
+			orderByCol = "tipologiaId";
+		}
+		
 		List<Tipologia> listaTipologie = new ArrayList<Tipologia>();
+		long totaleElementi = 0;
 		
 		try{
-			listaTipologie = tipologiaLocalService.getListaTipologiaOrdinata(cur, delta, orderByCol, orderByType);
+			listaTipologie = tipologiaLocalService.getTipologie(inizio, fine, orderByCol, orderByType);
+			totaleElementi = tipologiaLocalService.count();
 		}catch(Exception e) {
 			_log.error("Impossibile ottenere la lista delle tipologie", e);
 		}
 		
 		renderRequest.setAttribute(GestioneTipologieServizioPortletKeys.LISTA_TIPOLOGIE, listaTipologie);
+		renderRequest.setAttribute("totaleElementi", totaleElementi);
 		
 		//rimuovo messaggi success e error default
 		PortletConfig portletConfig = (PortletConfig) renderRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);

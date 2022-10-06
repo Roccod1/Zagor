@@ -27,12 +27,12 @@ public class AllegatoRichiestaPK
 	implements Comparable<AllegatoRichiestaPK>, Serializable {
 
 	public long richiestaId;
-	public long fileEntryId;
+	public String fileEntryId;
 
 	public AllegatoRichiestaPK() {
 	}
 
-	public AllegatoRichiestaPK(long richiestaId, long fileEntryId) {
+	public AllegatoRichiestaPK(long richiestaId, String fileEntryId) {
 		this.richiestaId = richiestaId;
 		this.fileEntryId = fileEntryId;
 	}
@@ -45,11 +45,11 @@ public class AllegatoRichiestaPK
 		this.richiestaId = richiestaId;
 	}
 
-	public long getFileEntryId() {
+	public String getFileEntryId() {
 		return fileEntryId;
 	}
 
-	public void setFileEntryId(long fileEntryId) {
+	public void setFileEntryId(String fileEntryId) {
 		this.fileEntryId = fileEntryId;
 	}
 
@@ -75,15 +75,7 @@ public class AllegatoRichiestaPK
 			return value;
 		}
 
-		if (fileEntryId < pk.fileEntryId) {
-			value = -1;
-		}
-		else if (fileEntryId > pk.fileEntryId) {
-			value = 1;
-		}
-		else {
-			value = 0;
-		}
+		value = fileEntryId.compareTo(pk.fileEntryId);
 
 		if (value != 0) {
 			return value;
@@ -105,7 +97,7 @@ public class AllegatoRichiestaPK
 		AllegatoRichiestaPK pk = (AllegatoRichiestaPK)object;
 
 		if ((richiestaId == pk.richiestaId) &&
-			(fileEntryId == pk.fileEntryId)) {
+			fileEntryId.equals(pk.fileEntryId)) {
 
 			return true;
 		}

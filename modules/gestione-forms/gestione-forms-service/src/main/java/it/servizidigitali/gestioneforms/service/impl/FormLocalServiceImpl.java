@@ -12,7 +12,11 @@
 
 package it.servizidigitali.gestioneforms.service.impl;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -24,7 +28,6 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,17 +43,18 @@ import it.servizidigitali.gestioneforms.service.base.FormLocalServiceBaseImpl;
  */
 @Component(property = "model.class.name=it.servizidigitali.gestioneforms.model.Form", service = AopService.class)
 public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
-	
+
 	@Reference
 	private OrganizationLocalService organizationLocalService;
-	
+
 	@Reference
 	private GroupLocalService groupLocalService;
 
 	public static final Log _log = LogFactoryUtil.getLog(FormLocalServiceImpl.class);
 
 	@Override
-	public List<Form> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, long groupId, int delta, int cur, String orderByCol, String orderByType) throws PortalException {
+	public List<Form> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, long groupId, int inizio, int fine, String orderByCol, String orderByType) throws PortalException {
+
 		boolean direzione = false;
 
 		if (orderByType.equalsIgnoreCase("asc")) {
@@ -63,49 +67,52 @@ public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
 
 		OrderByComparator<Form> comparator = OrderByComparatorFactoryUtil.create("Form", orderByCol, direzione);
 
-		List<Form> listaForm = formFinder.findFormByFilter(nome, dataInserimentoDa, dataInserimentoA, cur, delta, comparator);
-		List<Form> listaFormFiltrata = new ArrayList<Form>();
+		List<Form> listaForm = formFinder.findByFilter(nome, dataInserimentoDa, dataInserimentoA, inizio, fine, comparator);
 		Group group = null;
 		Organization organization = null;
 
 		for (Form form : listaForm) {
 			group = groupLocalService.getGroup(form.getGroupId());
 			long organizationIdSite = groupLocalService.getGroup(groupId).getOrganizationId();
-			
-			if(organizationIdSite==0) {
-				
+
+			if (organizationIdSite == 0) {
+
 				if (group.getOrganizationId() > 0) {
 					organization = organizationLocalService.getOrganization(group.getOrganizationId());
 					form.setNomeEnte(organization.getName());
-				}else {
+				}
+				else {
 					form.setNomeEnte("-");
 				}
-				
-				listaFormFiltrata.add(form);
-			}else {
-				if(group.getGroupId()==groupId) {
-					
-					if (group.getOrganizationId() > 0) {
-						organization = organizationLocalService.getOrganization(group.getOrganizationId());
-						form.setNomeEnte(organization.getName());
-					}else {
-						form.setNomeEnte("-");
-					}
-					
-					listaFormFiltrata.add(form);	
 
-				}
-				
-				if(group.getOrganizationId()==0) {
-					if(!listaFormFiltrata.contains(form)) {
-						form.setNomeEnte("-");
-						listaFormFiltrata.add(form);
-					}
-				}
 			}
 		}
 
-		return listaFormFiltrata;
+		return listaForm;
+	}
+
+	@Override
+	public long count(String nome, Date dataInserimentoDa, Date dataInserimentoA) throws PortalException {
+
+		ClassLoader classLoader = getClass().getClassLoader();
+
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Form.class, classLoader);
+
+		if (Validator.isNotNull(nome)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));
+		}
+
+		if (Validator.isNotNull(dataInserimentoDa)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.ge("createDate", dataInserimentoDa));
+		}
+
+		if (Validator.isNotNull(dataInserimentoA)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.le("createDate", dataInserimentoA));
+		}
+
+		long totale = formPersistence.countWithDynamicQuery(dynamicQuery);
+
+		return totale;
 	}
 
 	@Override
@@ -115,7 +122,7 @@ public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
 
 		if (Validator.isNotNull(listaForm) && !listaForm.isEmpty()) {
 			for (Form form : listaForm) {
-				List<DefinizioneAllegato> listaAllegati = definizioneAllegatoPersistence.findByformIdAndEliminato(form.getFormId(), false);
+				List<DefinizioneAllegato> listaAllegati = definizioneAllegatoPersistence.findByFormId(form.getFormId());
 
 				if (Validator.isNotNull(listaAllegati)) {
 					form.setListaDefinizioneAllegato(listaAllegati);

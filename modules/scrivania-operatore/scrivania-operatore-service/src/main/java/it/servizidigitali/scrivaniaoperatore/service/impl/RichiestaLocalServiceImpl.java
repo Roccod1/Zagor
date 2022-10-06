@@ -12,9 +12,11 @@
 
 package it.servizidigitali.scrivaniaoperatore.service.impl;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,25 @@ public class RichiestaLocalServiceImpl extends RichiestaLocalServiceBaseImpl {
 	}
 
 	@Override
+	public void updateStatoRichiesta(long richiestaId, String stato, String noteToAppend) throws NoSuchRichiestaException {
+		Richiesta richiesta = richiestaPersistence.findByPrimaryKey(richiestaId);
+		richiesta.setStato(stato);
+
+		if (noteToAppend != null) {
+			String note = richiesta.getNote();
+			if (Validator.isNull(note)) {
+				richiesta.setNote(noteToAppend);
+			}
+			else {
+				note += StringPool.NEW_LINE + noteToAppend;
+				richiesta.setNote(note);
+			}
+		}
+
+		richiestaPersistence.update(richiesta);
+	}
+
+	@Override
 	public List<Richiesta> getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(String codiceFiscale, long organizationGroupId, int cur, int delta, String orderByCol, String orderByType)
 			throws Exception {
 		List<Richiesta> listaRichieste = new ArrayList<Richiesta>();
@@ -77,5 +98,11 @@ public class RichiestaLocalServiceImpl extends RichiestaLocalServiceBaseImpl {
 		Richiesta richiesta = richiestaPersistence.findByPrimaryKey(richiestaId);
 		richiesta.setProcessInstanceId(processInstanceId);
 		richiestaPersistence.update(richiesta);
+	}
+	
+	public List<Richiesta> getRichiesteByCodiceFiscaleStatoProceduraId(String codiceFiscale, String stato, long proceduraId){		
+		List<Richiesta> listaRichieste = new ArrayList<Richiesta>();
+		listaRichieste = richiestaFinder.findRichiestaByCodiceFiscaleStatoProceduraId(codiceFiscale, stato, proceduraId);
+		return listaRichieste;	
 	}
 }

@@ -22,11 +22,4 @@ import org.osgi.annotation.versioning.ProviderType;
  */
 @ProviderType
 public interface AreaTematicaFinder {
-
-	public java.util.List<it.servizidigitali.gestioneservizi.model.AreaTematica>
-		getListaAreeTematicheOrdinata(
-			int inizio, int fine,
-			com.liferay.portal.kernel.util.OrderByComparator
-				<it.servizidigitali.gestioneservizi.model.AreaTematica> ordine);
-
 }

@@ -16,12 +16,15 @@ package com.liferay.saml.opensaml.integration.internal.servlet.profile;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
+import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.service.UserLocalService;
@@ -165,6 +168,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
+import it.servizidigitali.gestioneenti.model.ServizioEnte;
+import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
 
 /**
@@ -172,6 +177,8 @@ import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
  */
 @Component(configurationPid = "com.liferay.saml.runtime.configuration.SamlConfiguration", configurationPolicy = ConfigurationPolicy.OPTIONAL, immediate = true, service = WebSsoProfile.class)
 public class WebSsoProfileImpl extends BaseProfile implements WebSsoProfile {
+
+	private static final String SPID_LEVEL_PREFIX = "https://www.spid.gov.it/SpidL";
 
 	@Override
 	public void processAuthnRequest(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws PortalException {
@@ -442,6 +449,9 @@ public class WebSsoProfileImpl extends BaseProfile implements WebSsoProfile {
 		boolean requstedAuthnContext = samlSpIdpConnection.getRequestedAuthnContext();
 		String authnClassContextRef = samlSpIdpConnection.getAuthnContextClassRef();
 		if (requstedAuthnContext) {
+
+			authnClassContextRef = updateAuthnClassContext(httpServletRequest, relayState, authnClassContextRef);
+
 			var requestedAuthnContext = new RequestedAuthnContextBuilder().buildObject();
 			requestedAuthnContext.setComparison(AuthnContextComparisonTypeEnumeration.MINIMUM);
 			var authnContextClassRef = new AuthnContextClassRefBuilder().buildObject();
@@ -474,6 +484,42 @@ public class WebSsoProfileImpl extends BaseProfile implements WebSsoProfile {
 		_samlSpAuthRequestLocalService.addSamlSpAuthRequest(samlPeerEntityContext.getEntityId(), authnRequest.getID(), serviceContext);
 
 		sendSamlMessage(messageContext, httpServletResponse);
+	}
+
+	/**
+	 * Aggiorna il valore dell'authnClassContextRef in base alle configurazioni del servizio, se
+	 * presente.
+	 *
+	 * @param httpServletRequest
+	 * @param relayState
+	 * @param authnClassContextRef
+	 * @return
+	 * @throws PortalException
+	 */
+	private String updateAuthnClassContext(HttpServletRequest httpServletRequest, String relayState, String authnClassContextRef) throws PortalException {
+		ThemeDisplay themeDisplay = (ThemeDisplay) httpServletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+		long organizationId = themeDisplay.getScopeGroup().getOrganizationId();
+		String friendlyUrl = relayState.substring(relayState.lastIndexOf("/"));
+
+		try {
+			Layout layoutByFriendlyURL = layoutLocalService.getLayoutByFriendlyURL(themeDisplay.getScopeGroupId(), false, friendlyUrl);
+
+			long layoutId = layoutByFriendlyURL.getLayoutId();
+
+			ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnteByOrganizationIdLayoutId(organizationId, layoutId);
+
+			if (servizioEnte != null && servizioEnte.isAttivo()) {
+				int livelloAutenticazione = servizioEnte.getLivelloAutenticazione();
+				if (livelloAutenticazione != 0) {
+					authnClassContextRef = SPID_LEVEL_PREFIX + livelloAutenticazione;
+				}
+			}
+		}
+		catch (NoSuchLayoutException e) {
+			_log.warn("doSendAuthnRequest :: " + e.getMessage());
+		}
+		return authnClassContextRef;
 	}
 
 	protected AudienceRestriction getSuccessAudienceRestriction(String entityId) {
@@ -1652,6 +1698,12 @@ public class WebSsoProfileImpl extends BaseProfile implements WebSsoProfile {
 
 	@Reference
 	private UserLocalService _userLocalService;
+
+	@Reference
+	private ServizioEnteLocalService servizioEnteLocalService;
+
+	@Reference
+	private LayoutLocalService layoutLocalService;
 
 	private UserResolver _userResolver;
 

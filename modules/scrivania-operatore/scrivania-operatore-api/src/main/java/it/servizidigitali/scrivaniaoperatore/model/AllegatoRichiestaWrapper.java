@@ -44,18 +44,21 @@ public class AllegatoRichiestaWrapper
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("uuid", getUuid());
-		attributes.put("richiestaId", getRichiestaId());
-		attributes.put("fileEntryId", getFileEntryId());
+		attributes.put("allegatoRichiestaId", getAllegatoRichiestaId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("userId", getUserId());
 		attributes.put("userName", getUserName());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
-		attributes.put("nome", getNome());
 		attributes.put("idDocumentale", getIdDocumentale());
+		attributes.put("nome", getNome());
 		attributes.put("url", getUrl());
 		attributes.put("principale", isPrincipale());
+		attributes.put("interno", isInterno());
+		attributes.put("visibile", isVisibile());
+		attributes.put("definizioneAllegatoId", getDefinizioneAllegatoId());
+		attributes.put("richiestaId", getRichiestaId());
 
 		return attributes;
 	}
@@ -68,16 +71,10 @@ public class AllegatoRichiestaWrapper
 			setUuid(uuid);
 		}
 
-		Long richiestaId = (Long)attributes.get("richiestaId");
+		Long allegatoRichiestaId = (Long)attributes.get("allegatoRichiestaId");
 
-		if (richiestaId != null) {
-			setRichiestaId(richiestaId);
-		}
-
-		Long fileEntryId = (Long)attributes.get("fileEntryId");
-
-		if (fileEntryId != null) {
-			setFileEntryId(fileEntryId);
+		if (allegatoRichiestaId != null) {
+			setAllegatoRichiestaId(allegatoRichiestaId);
 		}
 
 		Long groupId = (Long)attributes.get("groupId");
@@ -116,16 +113,16 @@ public class AllegatoRichiestaWrapper
 			setModifiedDate(modifiedDate);
 		}
 
-		String nome = (String)attributes.get("nome");
-
-		if (nome != null) {
-			setNome(nome);
-		}
-
 		String idDocumentale = (String)attributes.get("idDocumentale");
 
 		if (idDocumentale != null) {
 			setIdDocumentale(idDocumentale);
+		}
+
+		String nome = (String)attributes.get("nome");
+
+		if (nome != null) {
+			setNome(nome);
 		}
 
 		String url = (String)attributes.get("url");
@@ -139,11 +136,46 @@ public class AllegatoRichiestaWrapper
 		if (principale != null) {
 			setPrincipale(principale);
 		}
+
+		Boolean interno = (Boolean)attributes.get("interno");
+
+		if (interno != null) {
+			setInterno(interno);
+		}
+
+		Boolean visibile = (Boolean)attributes.get("visibile");
+
+		if (visibile != null) {
+			setVisibile(visibile);
+		}
+
+		Long definizioneAllegatoId = (Long)attributes.get(
+			"definizioneAllegatoId");
+
+		if (definizioneAllegatoId != null) {
+			setDefinizioneAllegatoId(definizioneAllegatoId);
+		}
+
+		Long richiestaId = (Long)attributes.get("richiestaId");
+
+		if (richiestaId != null) {
+			setRichiestaId(richiestaId);
+		}
 	}
 
 	@Override
 	public AllegatoRichiesta cloneWithOriginalValues() {
 		return wrap(model.cloneWithOriginalValues());
+	}
+
+	/**
+	 * Returns the allegato richiesta ID of this allegato richiesta.
+	 *
+	 * @return the allegato richiesta ID of this allegato richiesta
+	 */
+	@Override
+	public long getAllegatoRichiestaId() {
+		return model.getAllegatoRichiestaId();
 	}
 
 	/**
@@ -167,13 +199,13 @@ public class AllegatoRichiestaWrapper
 	}
 
 	/**
-	 * Returns the file entry ID of this allegato richiesta.
+	 * Returns the definizione allegato ID of this allegato richiesta.
 	 *
-	 * @return the file entry ID of this allegato richiesta
+	 * @return the definizione allegato ID of this allegato richiesta
 	 */
 	@Override
-	public long getFileEntryId() {
-		return model.getFileEntryId();
+	public Long getDefinizioneAllegatoId() {
+		return model.getDefinizioneAllegatoId();
 	}
 
 	/**
@@ -194,6 +226,16 @@ public class AllegatoRichiestaWrapper
 	@Override
 	public String getIdDocumentale() {
 		return model.getIdDocumentale();
+	}
+
+	/**
+	 * Returns the interno of this allegato richiesta.
+	 *
+	 * @return the interno of this allegato richiesta
+	 */
+	@Override
+	public boolean getInterno() {
+		return model.getInterno();
 	}
 
 	/**
@@ -222,9 +264,7 @@ public class AllegatoRichiestaWrapper
 	 * @return the primary key of this allegato richiesta
 	 */
 	@Override
-	public it.servizidigitali.scrivaniaoperatore.service.persistence.
-		AllegatoRichiestaPK getPrimaryKey() {
-
+	public long getPrimaryKey() {
 		return model.getPrimaryKey();
 	}
 
@@ -299,6 +339,26 @@ public class AllegatoRichiestaWrapper
 	}
 
 	/**
+	 * Returns the visibile of this allegato richiesta.
+	 *
+	 * @return the visibile of this allegato richiesta
+	 */
+	@Override
+	public boolean getVisibile() {
+		return model.getVisibile();
+	}
+
+	/**
+	 * Returns <code>true</code> if this allegato richiesta is interno.
+	 *
+	 * @return <code>true</code> if this allegato richiesta is interno; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isInterno() {
+		return model.isInterno();
+	}
+
+	/**
 	 * Returns <code>true</code> if this allegato richiesta is principale.
 	 *
 	 * @return <code>true</code> if this allegato richiesta is principale; <code>false</code> otherwise
@@ -308,9 +368,29 @@ public class AllegatoRichiestaWrapper
 		return model.isPrincipale();
 	}
 
+	/**
+	 * Returns <code>true</code> if this allegato richiesta is visibile.
+	 *
+	 * @return <code>true</code> if this allegato richiesta is visibile; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isVisibile() {
+		return model.isVisibile();
+	}
+
 	@Override
 	public void persist() {
 		model.persist();
+	}
+
+	/**
+	 * Sets the allegato richiesta ID of this allegato richiesta.
+	 *
+	 * @param allegatoRichiestaId the allegato richiesta ID of this allegato richiesta
+	 */
+	@Override
+	public void setAllegatoRichiestaId(long allegatoRichiestaId) {
+		model.setAllegatoRichiestaId(allegatoRichiestaId);
 	}
 
 	/**
@@ -334,13 +414,13 @@ public class AllegatoRichiestaWrapper
 	}
 
 	/**
-	 * Sets the file entry ID of this allegato richiesta.
+	 * Sets the definizione allegato ID of this allegato richiesta.
 	 *
-	 * @param fileEntryId the file entry ID of this allegato richiesta
+	 * @param definizioneAllegatoId the definizione allegato ID of this allegato richiesta
 	 */
 	@Override
-	public void setFileEntryId(long fileEntryId) {
-		model.setFileEntryId(fileEntryId);
+	public void setDefinizioneAllegatoId(Long definizioneAllegatoId) {
+		model.setDefinizioneAllegatoId(definizioneAllegatoId);
 	}
 
 	/**
@@ -361,6 +441,16 @@ public class AllegatoRichiestaWrapper
 	@Override
 	public void setIdDocumentale(String idDocumentale) {
 		model.setIdDocumentale(idDocumentale);
+	}
+
+	/**
+	 * Sets whether this allegato richiesta is interno.
+	 *
+	 * @param interno the interno of this allegato richiesta
+	 */
+	@Override
+	public void setInterno(boolean interno) {
+		model.setInterno(interno);
 	}
 
 	/**
@@ -389,10 +479,7 @@ public class AllegatoRichiestaWrapper
 	 * @param primaryKey the primary key of this allegato richiesta
 	 */
 	@Override
-	public void setPrimaryKey(
-		it.servizidigitali.scrivaniaoperatore.service.persistence.
-			AllegatoRichiestaPK primaryKey) {
-
+	public void setPrimaryKey(long primaryKey) {
 		model.setPrimaryKey(primaryKey);
 	}
 
@@ -464,6 +551,16 @@ public class AllegatoRichiestaWrapper
 	@Override
 	public void setUuid(String uuid) {
 		model.setUuid(uuid);
+	}
+
+	/**
+	 * Sets whether this allegato richiesta is visibile.
+	 *
+	 * @param visibile the visibile of this allegato richiesta
+	 */
+	@Override
+	public void setVisibile(boolean visibile) {
+		model.setVisibile(visibile);
 	}
 
 	@Override

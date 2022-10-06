@@ -17,10 +17,18 @@ dependencies {
 	compileOnly (group: "org.osgi", name: "org.osgi.service.component", version: "1.3.0") {force = true}
 	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations"
 	compileOnly group: "org.osgi", name: "org.osgi.core"
-	compile project(":modules:scrivania-operatore:scrivania-operatore-api")
-
 	restBuilder group: "com.liferay", name: "com.liferay.portal.tools.rest.builder", version: "1.0.222"
 	
+	compileOnly project(":modules:scrivania-operatore:scrivania-operatore-api")
+	compileOnly project(":modules:gestione-servizi:gestione-servizi-api")
+	compileOnly project(":modules:gestione-enti:gestione-enti-api")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-backoffice-integration")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-api")	
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-utility")
+	
+	compileInclude group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '8.14.1'
+	
+	compileOnly project(":modules:servizi-digitali-rest-service:servizi-digitali-rest-service-jwt-utility")
 }
 
 group = "it.servizidigitali.restservice"

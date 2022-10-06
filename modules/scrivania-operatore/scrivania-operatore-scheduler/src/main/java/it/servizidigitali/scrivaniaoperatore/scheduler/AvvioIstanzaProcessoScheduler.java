@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +53,7 @@ import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.scheduler.configuration.AvvioIstanzaProcessoSchedulerConfiguration;
+import it.servizidigitali.scrivaniaoperatore.scheduler.model.FileAllegato;
 import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
@@ -65,6 +67,8 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 				"it.servizidigitali.camunda.integration.configuration.CamundaConfiguration" }//
 )
 public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
+
+	private static final String ALLEGATO_PDF_FIRMATO = "allegato-pdf-firmato";
 
 	private static final Log _log = LogFactoryUtil.getLog(AvvioIstanzaProcessoScheduler.class);
 
@@ -183,16 +187,18 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 
 						// Allegati
 						String allegatiJson = "";
-						List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiesta(richiesta.getRichiestaId(), groupId);
-						if (allegatiRichiesta != null) {
-							allegatiJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(allegatiRichiesta);
+						List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaId(richiesta.getRichiestaId());
+						List<FileAllegato> datiFileAllegati = getAllegati(allegatiRichiesta);
+						if (datiFileAllegati != null) {
+							allegatiJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(datiFileAllegati);
 						}
 
 						// PDF principale
 						String pdfFirmatoJson = "";
-						AllegatoRichiesta allegatoPrincipaleRichiesta = allegatoRichiestaLocalService.getAllegatoRichiesta(richiesta.getRichiestaId(), true, groupId);
-						if (allegatoPrincipaleRichiesta != null) {
-							pdfFirmatoJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(allegatoPrincipaleRichiesta);
+						AllegatoRichiesta allegatoPrincipaleRichiesta = allegatoRichiestaLocalService.getAllegatoRichiestaByRichiestaIdPrincipale(richiesta.getRichiestaId(), true);
+						FileAllegato allegatoPrincipale = getAllegatoPrincipale(allegatoPrincipaleRichiesta);
+						if (allegatoPrincipale != null) {
+							pdfFirmatoJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(allegatoPrincipale);
 						}
 
 						Map<String, Object> variables = new HashMap<String, Object>();
@@ -207,7 +213,7 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 						variables.put(CustomProcessVariables.OGGETTO, richiesta.getOggetto());
 
 						variables.put(CustomProcessVariables.FILE_ALLEGATI, allegatiJson);
-						variables.put(CustomProcessVariables.NOME_FILE_FIRMATO, "allegato-pdf-firmato");
+						variables.put(CustomProcessVariables.NOME_FILE_FIRMATO, ALLEGATO_PDF_FIRMATO);
 						variables.put(CustomProcessVariables.PDF_FIRMATO, pdfFirmatoJson);
 
 						variables.put(CustomProcessVariables.CODICE_IPA_COMUNE, codiceIPA);
@@ -232,6 +238,47 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param allegatoPrincipaleRichiesta
+	 * @return
+	 */
+	private FileAllegato getAllegatoPrincipale(AllegatoRichiesta allegatoPrincipaleRichiesta) {
+		if (allegatoPrincipaleRichiesta != null) {
+			FileAllegato datiFileAllegato = new FileAllegato();
+			datiFileAllegato.setDataInserimento(allegatoPrincipaleRichiesta.getCreateDate());
+			datiFileAllegato.setFileName(allegatoPrincipaleRichiesta.getNome());
+			datiFileAllegato.setId(allegatoPrincipaleRichiesta.getAllegatoRichiestaId());
+			datiFileAllegato.setIdDocumentale(allegatoPrincipaleRichiesta.getIdDocumentale());
+			datiFileAllegato.setIdTemporaneo(ALLEGATO_PDF_FIRMATO);
+			datiFileAllegato.setIdDefinizioneAllegato(-1);
+			return datiFileAllegato;
+		}
+		return null;
+	}
+
+	/**
+	 * @param allegatiRichiesta
+	 * @return
+	 */
+	private List<FileAllegato> getAllegati(List<AllegatoRichiesta> allegatiRichiesta) {
+		List<FileAllegato> results = null;
+		if (allegatiRichiesta != null && !allegatiRichiesta.isEmpty()) {
+			results = new ArrayList<FileAllegato>();
+			for (AllegatoRichiesta allegatoRichiesta : allegatiRichiesta) {
+				if (!allegatoRichiesta.isPrincipale()) {
+					FileAllegato datiFileAllegato = new FileAllegato();
+					datiFileAllegato.setDataInserimento(allegatoRichiesta.getCreateDate());
+					datiFileAllegato.setFileName(allegatoRichiesta.getNome());
+					datiFileAllegato.setId(allegatoRichiesta.getAllegatoRichiestaId());
+					datiFileAllegato.setIdDocumentale(allegatoRichiesta.getIdDocumentale());
+					datiFileAllegato.setIdDefinizioneAllegato(allegatoRichiesta.getDefinizioneAllegatoId());
+					results.add(datiFileAllegato);
+				}
+			}
+		}
+		return results;
 	}
 
 	@Activate

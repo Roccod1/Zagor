@@ -131,8 +131,7 @@ public class ProvinciaModelArgumentsResolver implements ArgumentsResolver {
 	static {
 		long orderByColumnsBitmask = 0;
 
-		orderByColumnsBitmask |= ProvinciaModelImpl.getColumnBitmask(
-			"denominazioneRegione");
+		orderByColumnsBitmask |= ProvinciaModelImpl.getColumnBitmask("sigla");
 
 		_ORDER_BY_COLUMNS_BITMASK = orderByColumnsBitmask;
 	}

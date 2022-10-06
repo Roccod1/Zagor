@@ -3,8 +3,52 @@
 <model-hints>
 	<model name="it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta">
 		<field name="uuid" type="String" />
+		<field name="allegatoRichiestaId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="idDocumentale" type="String" />
+		<field name="nome" type="String" />
+		<field name="url" type="String" />
+		<field name="principale" type="boolean" />
+		<field name="interno" type="boolean" />
+		<field name="visibile" type="boolean" />
+		<field name="definizioneAllegatoId" type="Long" />
 		<field name="richiestaId" type="long" />
-		<field name="fileEntryId" type="long" />
+	</model>
+	<model name="it.servizidigitali.scrivaniaoperatore.model.AttivitaRichiesta">
+		<field name="uuid" type="String" />
+		<field name="attivitaRichiestaId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="note" type="String" />
+		<field name="stato" type="String" />
+		<field name="richiestaId" type="long" />
+	</model>
+	<model name="it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta">
+		<field name="uuid" type="String" />
+		<field name="commentoRichiestaId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="testo" type="String" />
+		<field name="taskId" type="String" />
+		<field name="visibile" type="boolean" />
+		<field name="richiestaId" type="long" />
+	</model>
+	<model name="it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso">
+		<field name="uuid" type="String" />
+		<field name="destinazioneUsoId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="userId" type="long" />
@@ -12,9 +56,21 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="nome" type="String" />
-		<field name="idDocumentale" type="String" />
-		<field name="url" type="String" />
-		<field name="principale" type="boolean" />
+		<field name="descrizione" type="String" />
+		<field name="pagamentoBollo" type="boolean" />
+		<field name="importo" type="BigDecimal" />
+	</model>
+	<model name="it.servizidigitali.scrivaniaoperatore.model.DestinazioneUsoServizioEnte">
+		<field name="uuid" type="String" />
+		<field name="destinazioneUsoId" type="long" />
+		<field name="servizioId" type="long" />
+		<field name="organizationId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
 	</model>
 	<model name="it.servizidigitali.scrivaniaoperatore.model.IstanzaForm">
 		<field name="uuid" type="String" />

@@ -30,7 +30,7 @@
 	
 		<div class="container pl-0 pr-0 mb-4 mt-4">
 			<liferay-ui:search-container delta="10" emptyResultsMessage="non-ci-sono-dati-da-visualizzare" total="<%=listaComponentiNucleoFamiliare.size()%>"  iteratorURL="${iteratorURL}" >
-				<liferay-ui:search-container-results results="<%=ListUtil.subList(listaComponentiNucleoFamiliare, searchContainer.getStart(), searchContainer.getEnd()) %>"/>
+				<liferay-ui:search-container-results results="<%=listaComponentiNucleoFamiliare%>"/>
 				<liferay-ui:search-container-row className="it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici.ComponenteNucleoFamiliare" modelVar="componente" >
 					<liferay-ui:search-container-column-text property="codiceFiscale" name="codice-fiscale"/>
 					<liferay-ui:search-container-column-text property="cognome" name="cognome"/>

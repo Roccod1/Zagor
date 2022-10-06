@@ -12,6 +12,7 @@
 
 package it.servizidigitali.gestioneprocessi.service.impl;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -27,7 +28,6 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -53,20 +53,21 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 	private GroupLocalService groupLocalService;
 
 	@Override
-	public List<Processo> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, long groupId, int delta, int cur, String orderByCol, String orderByType) throws PortalException {
-		boolean direzione = true;
+	public List<Processo> search(String nome, Date dataInserimentoDa, Date dataInserimentoA, long groupId, int inizio, int fine, String orderByCol, String orderByType) throws PortalException {
 
-		if (orderByType.equalsIgnoreCase("desc")) {
-			direzione = false;
+		boolean direzione = false;
+
+		if (orderByType.equalsIgnoreCase("asc")) {
+			direzione = true;
 		}
 
 		if (Validator.isNull(orderByCol)) {
-			orderByCol = "nome";
+			orderByCol = "processoId";
 		}
 
 		OrderByComparator<Processo> comparator = OrderByComparatorFactoryUtil.create("Processo", orderByCol, direzione);
-		List<Processo> listaProcesso = processoFinder.findByFilters(nome, dataInserimentoDa, dataInserimentoA, cur, delta, comparator);
-		List<Processo> listaProcessoFiltrata = new ArrayList<Processo>();
+
+		List<Processo> listaProcesso = processoFinder.findByFilters(nome, dataInserimentoDa, dataInserimentoA, inizio, fine, comparator);
 		Group group = null;
 		Organization organization = null;
 
@@ -84,34 +85,35 @@ public class ProcessoLocalServiceImpl extends ProcessoLocalServiceBaseImpl {
 					processo.setNomeEnte("-");
 				}
 
-				listaProcessoFiltrata.add(processo);
-			}
-			else {
-				if (group.getGroupId() == groupId) {
-
-					if (group.getOrganizationId() > 0) {
-						organization = organizationLocalService.getOrganization(group.getOrganizationId());
-						processo.setNomeEnte(organization.getName());
-					}
-					else {
-						processo.setNomeEnte("-");
-					}
-
-					listaProcessoFiltrata.add(processo);
-
-				}
-
-				if (group.getOrganizationId() == 0) {
-					if (!listaProcessoFiltrata.contains(processo)) {
-						processo.setNomeEnte("-");
-						listaProcessoFiltrata.add(processo);
-					}
-				}
 			}
 
 		}
 
-		return listaProcessoFiltrata;
+		return listaProcesso;
+	}
+
+	@Override
+	public long count(String nome, Date dataInserimentoDa, Date dataInserimentoA) throws PortalException {
+
+		ClassLoader classLoader = getClass().getClassLoader();
+
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Processo.class, classLoader);
+
+		if (Validator.isNotNull(nome)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.like("nome", StringPool.PERCENT + nome + StringPool.PERCENT));
+		}
+
+		if (Validator.isNotNull(dataInserimentoDa)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.ge("createDate", dataInserimentoDa));
+		}
+
+		if (Validator.isNotNull(dataInserimentoA)) {
+			dynamicQuery.add(RestrictionsFactoryUtil.le("createDate", dataInserimentoA));
+		}
+
+		long count = processoPersistence.countWithDynamicQuery(dynamicQuery);
+
+		return count;
 	}
 
 	@Override

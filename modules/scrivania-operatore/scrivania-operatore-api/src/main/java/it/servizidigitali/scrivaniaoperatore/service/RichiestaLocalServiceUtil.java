@@ -351,6 +351,13 @@ public class RichiestaLocalServiceUtil {
 		return getService().getRichiestasCount();
 	}
 
+	public static List<Richiesta> getRichiesteByCodiceFiscaleStatoProceduraId(
+		String codiceFiscale, String stato, long proceduraId) {
+
+		return getService().getRichiesteByCodiceFiscaleStatoProceduraId(
+			codiceFiscale, stato, proceduraId);
+	}
+
 	public static List<Richiesta>
 			getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(
 				String codiceFiscale, long organizationGroupId, int cur,
@@ -402,6 +409,14 @@ public class RichiestaLocalServiceUtil {
 			NoSuchRichiestaException {
 
 		getService().updateStatoRichiesta(richiestaId, stato);
+	}
+
+	public static void updateStatoRichiesta(
+			long richiestaId, String stato, String noteToAppend)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchRichiestaException {
+
+		getService().updateStatoRichiesta(richiestaId, stato, noteToAppend);
 	}
 
 	public static RichiestaLocalService getService() {
