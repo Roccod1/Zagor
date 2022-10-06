@@ -81,11 +81,11 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 
 					Folder richiestaIdFolder = null;
 					try {
-						richiestaIdFolder = dlAppService.getFolder(defaultRepoId, codiceFiscaleFolder.getFolderId(), String.valueOf(richiestaId));
+						richiestaIdFolder = dlAppService.getFolder(defaultRepoId, codiceServizioFolder.getFolderId(), String.valueOf(richiestaId));
 					}
 					catch (NoSuchFolderException e) {
 						log.warn("saveRequestFile :: folder richiesta id non esistente: " + e.getMessage() + ". Creazione folder: " + richiestaId);
-						richiestaIdFolder = dlAppService.addFolder(defaultRepoId, codiceFiscaleFolder.getFolderId(), String.valueOf(richiestaId), null, serviceContext);
+						richiestaIdFolder = dlAppService.addFolder(defaultRepoId, codiceServizioFolder.getFolderId(), String.valueOf(richiestaId), null, serviceContext);
 					}
 
 					if (richiestaIdFolder != null) {
