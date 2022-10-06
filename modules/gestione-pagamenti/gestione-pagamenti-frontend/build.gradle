@@ -5,6 +5,8 @@ dependencies {
 	compileOnly project(":modules:gestione-pagamenti:gestione-pagamenti-common")
 	compileOnly project(":modules:gestione-servizi:gestione-servizi-api")
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-utility") 
+	
+	compileInclude group: 'org.apache.commons', name: 'commons-csv', version: '1.9.0'
 
 	cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.0.3"
 }
