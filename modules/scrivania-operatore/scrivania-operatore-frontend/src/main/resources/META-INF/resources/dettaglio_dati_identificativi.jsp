@@ -155,7 +155,7 @@
 				</portlet:resourceURL>
 				
 				<aui:button-row cssClass="text-right">
-					<aui:button value="scarica-visualizza-modello-compilato-cittadino" href="${downloadFileModelloCompilatoUrl}"/>
+					<aui:button value="scarica-visualizza-modello-compilato-cittadino" type="button" href="${downloadFileModelloCompilatoUrl}" target="_blank"/>
 					<aui:button type="submit" value="salva-dati-protocollo"/>
 				</aui:button-row>
 			</div>
