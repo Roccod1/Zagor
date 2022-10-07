@@ -292,6 +292,8 @@ public class ScrivaniaOperatoreFrontendService {
 							e.setDescrizione("Rilascia");
 							azioniUtente.add(e);
 						}
+
+						break;
 					}
 				}
 			}
@@ -446,7 +448,8 @@ public class ScrivaniaOperatoreFrontendService {
 	 */
 	public List<AllegatoRichiesta> getAllegatiRichiestaRichiedente(long richiestaId) {
 		List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdGroupIdInterno(richiestaId, false);
-		return allegatiRichiesta;
+		List<AllegatoRichiesta> filteredList = allegatiRichiesta.stream().filter(allegato -> !allegato.isPrincipale()).collect(Collectors.toList());
+		return filteredList;
 	}
 
 	/**
@@ -576,6 +579,18 @@ public class ScrivaniaOperatoreFrontendService {
 
 		User currentUser = userLocalService.getUser(serviceContext.getUserId());
 
+		// Completa task
+		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId));
+		if (tasksByBusinessKey != null) {
+
+			for (Task task : tasksByBusinessKey) {
+				if (taskId.equalsIgnoreCase(task.getId()) && currentUser.getScreenName().equalsIgnoreCase(task.getAssignee())) {
+					List<Entry<String, String>> variables = new ArrayList<Entry<String, String>>();
+					camundaClient.completeTask(taskId, variables);
+				}
+			}
+		}
+
 		if (fileEntryIds != null && !fileEntryIds.isEmpty()) {
 			allegatoRichiestaLocalService.updateVisibilitaAllegatiRichiesta(fileEntryIds, true);
 		}
@@ -609,17 +624,6 @@ public class ScrivaniaOperatoreFrontendService {
 			EsitoComunicazione esito = communicationSender.send(comunicazione, canale);
 			log.debug("Comunicazione tramite canale '" + canale.getName() + "' a '" + currentUser.getScreenName() + "' inviata. MessageID: " + esito.getMessageId());
 
-		}
-
-		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId));
-		if (tasksByBusinessKey != null) {
-
-			for (Task task : tasksByBusinessKey) {
-				if (taskId.equalsIgnoreCase(task.getId()) && currentUser.getScreenName().equalsIgnoreCase(task.getAssignee())) {
-					List<Entry<String, String>> variables = new ArrayList<Entry<String, String>>();
-					camundaClient.completeTask(taskId, variables);
-				}
-			}
 		}
 	}
 
