@@ -86,7 +86,6 @@ public class PrivatePagesRedirectFilter extends BasePortalFilter {
 			}
 		}
 		catch (NoSuchLayoutException e) {
-			_log.warn("processFilter :: " + e.getMessage());
 		}
 
 		super.processFilter(request, response, filterChain);
