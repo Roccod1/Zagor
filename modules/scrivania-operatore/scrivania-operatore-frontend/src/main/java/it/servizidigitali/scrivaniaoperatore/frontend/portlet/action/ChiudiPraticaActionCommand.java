@@ -7,10 +7,9 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.WebKeys;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -31,10 +30,10 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 		service = MVCActionCommand.class, //
 		property = { //
 				"javax.portlet.name=" + ScrivaniaOperatorePortletKeys.SCRIVANIAOPERATORE, //
-				"mvc.command.name=/action/rilasciaPratica"//
+				"mvc.command.name=/action/chiudiPratica"//
 		}//
-)
-public class RilasciaPraticaActionCommand extends BaseMVCActionCommand {
+) //
+public class ChiudiPraticaActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private ScrivaniaOperatoreFrontendService scrivaniaOperatoreFrontendService;
@@ -46,6 +45,10 @@ public class RilasciaPraticaActionCommand extends BaseMVCActionCommand {
 	protected void doProcessAction(ActionRequest request, ActionResponse response) throws Exception {
 		long richiestaId = ParamUtil.getLong(request, "richiestaId");
 		String dettaglioTab = ParamUtil.getString(request, "dettaglioTab");
+		String commento = ParamUtil.getString(request, "commento");
+		String[] selezionati = ParamUtil.getStringValues(request, "selezionati");
+		String variabileSet = ParamUtil.getString(request, "variabileSet");
+		String variabileVal = ParamUtil.getString(request, "variabileVal");
 
 		try {
 			ServiceContext context = ServiceContextFactory.getInstance(request);
@@ -54,11 +57,7 @@ public class RilasciaPraticaActionCommand extends BaseMVCActionCommand {
 			Map<String, Task> tasks = scrivaniaOperatoreFrontendService.getUserTasks(context);
 			String taskId = tasks.get(richiesta.getProcessInstanceId()).getId();
 
-			_log.debug("Task Id: " + taskId);
-
-			ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-
-			scrivaniaOperatoreFrontendService.rilasciaTask(themeDisplay.getUser().getScreenName(), taskId);
+			scrivaniaOperatoreFrontendService.completaTask(richiestaId, taskId, variabileSet, variabileVal, commento, Arrays.asList(selezionati), context);
 		}
 		catch (Exception e) {
 			_log.error(e);
@@ -72,5 +71,5 @@ public class RilasciaPraticaActionCommand extends BaseMVCActionCommand {
 		renderParameters.setValue("isMain", String.valueOf(false));
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(RilasciaPraticaActionCommand.class);
+	private static final Log _log = LogFactoryUtil.getLog(ChiudiPraticaActionCommand.class);
 }

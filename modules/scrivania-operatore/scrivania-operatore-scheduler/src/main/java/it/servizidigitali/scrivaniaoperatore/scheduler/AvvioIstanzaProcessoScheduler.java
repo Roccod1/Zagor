@@ -43,6 +43,9 @@ import it.servizidigitali.camunda.integration.client.CamundaClient;
 import it.servizidigitali.camunda.integration.client.constant.CustomProcessVariables;
 import it.servizidigitali.camunda.integration.configuration.CamundaConfiguration;
 import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
+import it.servizidigitali.gestioneenti.model.ServizioEnte;
+import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
+import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneprocessi.model.Processo;
@@ -91,6 +94,9 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 
 	@Reference
 	private ServizioLocalService servizioLocalService;
+
+	@Reference
+	private ServizioEnteLocalService servizioEnteLocalService;
 
 	@Reference
 	private CamundaClient camundaClient;
@@ -167,22 +173,13 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 					if (processo != null && processo.isAttivo()) {
 
 						Servizio servizio = servizioLocalService.getServizioById(procedura.getServizioId());
+						ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnte(new ServizioEntePK(procedura.getServizioId(), organizationId));
+						long subOrganizationId = servizioEnte.getSubOrganizationId();
 
-						String candidateGroups = "";
-						List<Organization> suborganizations = organization.getSuborganizations();
-						if (suborganizations != null) {
-							for (Organization subOrganization : suborganizations) {
-								boolean existsGroup = camundaClient.existsGroup(String.valueOf(subOrganization.getOrganizationId()));
-								if (!existsGroup) {
-									throw new Exception("Impossibile assegnare il Gruppo Destinatario.");
-								}
-
-								if (candidateGroups.length() > 0) {
-									candidateGroups += ",";
-								}
-
-								candidateGroups += subOrganization.getOrganizationId();
-							}
+						String candidateGroup = String.valueOf(subOrganizationId);
+						boolean existsGroup = camundaClient.existsGroup(candidateGroup);
+						if (!existsGroup) {
+							throw new Exception("Impossibile assegnare il Gruppo Destinatario.");
 						}
 
 						// Allegati
@@ -203,7 +200,7 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 
 						Map<String, Object> variables = new HashMap<String, Object>();
 						variables.put(CustomProcessVariables.ID_RICHIESTA_SERVIZIO, richiesta.getRichiestaId());
-						variables.put(CustomProcessVariables.ID_GRUPPO_REFERENTI, candidateGroups);
+						variables.put(CustomProcessVariables.ID_GRUPPO_REFERENTI, candidateGroup);
 
 						variables.put(CustomProcessVariables.DENOMINAZIONE_RICHIEDENTE, userRichiesta.getFullName());
 						variables.put(CustomProcessVariables.COD_FISCALE_RICHIEDENTE, richiesta.getCodiceFiscale().toUpperCase());
