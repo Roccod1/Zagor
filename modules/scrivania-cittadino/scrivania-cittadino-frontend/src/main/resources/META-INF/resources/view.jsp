@@ -1,4 +1,5 @@
 <%@ include file="init.jsp" %>
+<%@ include file="template.jsp" %>
 
 <liferay-ui:error key="<%=ScrivaniaCittadinoPortletKeys.ERROR_IMPOSSIBILE_OTTENERE_DETTAGLIO %>" message="non-e-stato-possibile-ottenere-il-dettaglio-della-richiesta-selezionata"/>
 
