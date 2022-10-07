@@ -65,7 +65,7 @@ public class AllegatoRichiestaService {
 					String mimeType = MimeTypesUtil.getContentType(allegato);
 					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId, stream, mimeType, userId,
 							groupId);
-					creaAllegatoRichiesta(idDocumentale, nomeFile, servizio.getNome(), richiestaId, definizioneAllegatoId, false, userName, groupId, userId);
+					creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, definizioneAllegatoId, false, userName, groupId, userId);
 				}
 			}
 		}
@@ -76,8 +76,8 @@ public class AllegatoRichiestaService {
 
 	}
 
-	public void creaAllegatoRichiesta(String idDocumentale, String nomeFile, String nomeServizio, long richiestaId, Long definizioneAllegatoId, boolean principale, String userName, long groupId,
-			long userId) {
+	public void creaAllegatoRichiesta(String idDocumentale, String nomeFile, String titolo, String descrizione, String nomeServizio, long richiestaId, Long definizioneAllegatoId, boolean principale,
+			String userName, long groupId, long userId) {
 		AllegatoRichiesta allegatoRichiesta = allegatoRichiestaLocalService.createAllegatoRichiesta(counterLocalService.increment());
 
 		if (Validator.isNotNull(idDocumentale)) {
@@ -89,11 +89,13 @@ public class AllegatoRichiestaService {
 			allegatoRichiesta.setDefinizioneAllegatoId(definizioneAllegatoId);
 			allegatoRichiesta.setPrincipale(principale);
 			allegatoRichiesta.setNome(nomeFile);
-			
-			if(!principale) {
+			allegatoRichiesta.setTitolo(titolo);
+			allegatoRichiesta.setDescrizione(descrizione);
+
+			if (!principale) {
 				allegatoRichiesta.setVisibile(true);
 			}
-			
+
 			allegatoRichiestaLocalService.updateAllegatoRichiesta(allegatoRichiesta);
 		}
 	}
@@ -111,7 +113,7 @@ public class AllegatoRichiestaService {
 							groupId);
 
 					if (Validator.isNotNull(idDocumentale)) {
-						creaAllegatoRichiesta(idDocumentale, nomeFile, servizio.getNome(), richiestaId, null, true, userName, groupId, userId);
+						creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, null, true, userName, groupId, userId);
 					}
 				}
 			}
@@ -121,29 +123,29 @@ public class AllegatoRichiestaService {
 			throw e;
 		}
 	}
-	
-	public void salvaCertificato(byte[] certificato, Servizio servizio, long richiestaId, String userName, long userId, long groupId) throws Exception{
+
+	public void salvaCertificato(byte[] certificato, Servizio servizio, long richiestaId, String userName, long userId, long groupId) throws Exception {
 		try {
-			
-			if(Validator.isNotNull(certificato)) {
-			    InputStream is = new ByteArrayInputStream(certificato);
+
+			if (Validator.isNotNull(certificato)) {
+				InputStream is = new ByteArrayInputStream(certificato);
 				String nomeFile = "richiesta-" + richiestaId + ".pdf";
 				String descrizione = "Richiesta servizio '" + servizio.getNome() + "' - ID: " + richiestaId;
 
-			    if(Validator.isNotNull(is)) {
-			    	String mimeType = MimeTypesUtil.getContentType(is, nomeFile);
-			    	String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId, is, mimeType, userId,
-							groupId);
-			    	
-			    	if (Validator.isNotNull(idDocumentale)) {
-						creaAllegatoRichiesta(idDocumentale, nomeFile, servizio.getNome(), richiestaId, null, true, userName, groupId, userId);
+				if (Validator.isNotNull(is)) {
+					String mimeType = MimeTypesUtil.getContentType(is, nomeFile);
+					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId, is, mimeType, userId, groupId);
+
+					if (Validator.isNotNull(idDocumentale)) {
+						creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, null, true, userName, groupId, userId);
 					}
-			    }
-			    
+				}
+
 			}
-			
-		}catch(Exception e) {
-			log.error(e.getMessage(),e);
+
+		}
+		catch (Exception e) {
+			log.error(e.getMessage(), e);
 			throw e;
 		}
 	}
