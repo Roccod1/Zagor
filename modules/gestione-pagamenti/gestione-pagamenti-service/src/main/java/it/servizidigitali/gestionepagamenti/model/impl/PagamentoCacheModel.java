@@ -64,7 +64,7 @@ public class PagamentoCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(51);
+		StringBundler sb = new StringBundler(53);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -92,8 +92,10 @@ public class PagamentoCacheModel
 		sb.append(emailQuietanza);
 		sb.append(", causale=");
 		sb.append(causale);
-		sb.append(", descrizioneServizio=");
-		sb.append(descrizioneServizio);
+		sb.append(", servizioId=");
+		sb.append(servizioId);
+		sb.append(", nomeServizio=");
+		sb.append(nomeServizio);
 		sb.append(", importo=");
 		sb.append(importo);
 		sb.append(", commissioni=");
@@ -193,11 +195,13 @@ public class PagamentoCacheModel
 			pagamentoImpl.setCausale(causale);
 		}
 
-		if (descrizioneServizio == null) {
-			pagamentoImpl.setDescrizioneServizio("");
+		pagamentoImpl.setServizioId(servizioId);
+
+		if (nomeServizio == null) {
+			pagamentoImpl.setNomeServizio("");
 		}
 		else {
-			pagamentoImpl.setDescrizioneServizio(descrizioneServizio);
+			pagamentoImpl.setNomeServizio(nomeServizio);
 		}
 
 		pagamentoImpl.setImporto(importo);
@@ -282,7 +286,9 @@ public class PagamentoCacheModel
 		denominazioneCliente = objectInput.readUTF();
 		emailQuietanza = objectInput.readUTF();
 		causale = objectInput.readUTF();
-		descrizioneServizio = objectInput.readUTF();
+
+		servizioId = objectInput.readLong();
+		nomeServizio = objectInput.readUTF();
 		importo = (BigDecimal)objectInput.readObject();
 		commissioni = (BigDecimal)objectInput.readObject();
 		canale = objectInput.readUTF();
@@ -360,11 +366,13 @@ public class PagamentoCacheModel
 			objectOutput.writeUTF(causale);
 		}
 
-		if (descrizioneServizio == null) {
+		objectOutput.writeLong(servizioId);
+
+		if (nomeServizio == null) {
 			objectOutput.writeUTF("");
 		}
 		else {
-			objectOutput.writeUTF(descrizioneServizio);
+			objectOutput.writeUTF(nomeServizio);
 		}
 
 		objectOutput.writeObject(importo);
@@ -437,7 +445,8 @@ public class PagamentoCacheModel
 	public String denominazioneCliente;
 	public String emailQuietanza;
 	public String causale;
-	public String descrizioneServizio;
+	public long servizioId;
+	public String nomeServizio;
 	public BigDecimal importo;
 	public BigDecimal commissioni;
 	public String canale;

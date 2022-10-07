@@ -58,7 +58,8 @@ public class PagamentoWrapper
 		attributes.put("denominazioneCliente", getDenominazioneCliente());
 		attributes.put("emailQuietanza", getEmailQuietanza());
 		attributes.put("causale", getCausale());
-		attributes.put("descrizioneServizio", getDescrizioneServizio());
+		attributes.put("servizioId", getServizioId());
+		attributes.put("nomeServizio", getNomeServizio());
 		attributes.put("importo", getImporto());
 		attributes.put("commissioni", getCommissioni());
 		attributes.put("canale", getCanale());
@@ -155,11 +156,16 @@ public class PagamentoWrapper
 			setCausale(causale);
 		}
 
-		String descrizioneServizio = (String)attributes.get(
-			"descrizioneServizio");
+		Long servizioId = (Long)attributes.get("servizioId");
 
-		if (descrizioneServizio != null) {
-			setDescrizioneServizio(descrizioneServizio);
+		if (servizioId != null) {
+			setServizioId(servizioId);
+		}
+
+		String nomeServizio = (String)attributes.get("nomeServizio");
+
+		if (nomeServizio != null) {
+			setNomeServizio(nomeServizio);
 		}
 
 		BigDecimal importo = (BigDecimal)attributes.get("importo");
@@ -295,16 +301,6 @@ public class PagamentoWrapper
 	}
 
 	/**
-	 * Returns the descrizione servizio of this pagamento.
-	 *
-	 * @return the descrizione servizio of this pagamento
-	 */
-	@Override
-	public String getDescrizioneServizio() {
-		return model.getDescrizioneServizio();
-	}
-
-	/**
 	 * Returns the email inviata of this pagamento.
 	 *
 	 * @return the email inviata of this pagamento
@@ -420,6 +416,16 @@ public class PagamentoWrapper
 	}
 
 	/**
+	 * Returns the nome servizio of this pagamento.
+	 *
+	 * @return the nome servizio of this pagamento
+	 */
+	@Override
+	public String getNomeServizio() {
+		return model.getNomeServizio();
+	}
+
+	/**
 	 * Returns the pagamento ID of this pagamento.
 	 *
 	 * @return the pagamento ID of this pagamento
@@ -457,6 +463,16 @@ public class PagamentoWrapper
 	@Override
 	public long getRichiestaId() {
 		return model.getRichiestaId();
+	}
+
+	/**
+	 * Returns the servizio ID of this pagamento.
+	 *
+	 * @return the servizio ID of this pagamento
+	 */
+	@Override
+	public long getServizioId() {
+		return model.getServizioId();
 	}
 
 	/**
@@ -585,16 +601,6 @@ public class PagamentoWrapper
 	}
 
 	/**
-	 * Sets the descrizione servizio of this pagamento.
-	 *
-	 * @param descrizioneServizio the descrizione servizio of this pagamento
-	 */
-	@Override
-	public void setDescrizioneServizio(String descrizioneServizio) {
-		model.setDescrizioneServizio(descrizioneServizio);
-	}
-
-	/**
 	 * Sets whether this pagamento is email inviata.
 	 *
 	 * @param emailInviata the email inviata of this pagamento
@@ -710,6 +716,16 @@ public class PagamentoWrapper
 	}
 
 	/**
+	 * Sets the nome servizio of this pagamento.
+	 *
+	 * @param nomeServizio the nome servizio of this pagamento
+	 */
+	@Override
+	public void setNomeServizio(String nomeServizio) {
+		model.setNomeServizio(nomeServizio);
+	}
+
+	/**
 	 * Sets the pagamento ID of this pagamento.
 	 *
 	 * @param pagamentoId the pagamento ID of this pagamento
@@ -747,6 +763,16 @@ public class PagamentoWrapper
 	@Override
 	public void setRichiestaId(long richiestaId) {
 		model.setRichiestaId(richiestaId);
+	}
+
+	/**
+	 * Sets the servizio ID of this pagamento.
+	 *
+	 * @param servizioId the servizio ID of this pagamento
+	 */
+	@Override
+	public void setServizioId(long servizioId) {
+		model.setServizioId(servizioId);
 	}
 
 	/**

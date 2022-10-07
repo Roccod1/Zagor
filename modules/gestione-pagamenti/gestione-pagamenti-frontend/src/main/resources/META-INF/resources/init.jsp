@@ -14,6 +14,8 @@
 <%@page import="it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento"%>
 <%@page import="it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient"%>
 <%@page import="it.servizidigitali.gestionepagamenti.common.enumeration.CanalePagamento"%>
+<%@page import="it.servizidigitali.gestioneservizi.model.Servizio"%>
+<%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
 
 <liferay-theme:defineObjects />
 

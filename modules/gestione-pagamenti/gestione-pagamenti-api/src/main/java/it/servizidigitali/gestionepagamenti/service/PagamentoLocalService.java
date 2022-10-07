@@ -81,7 +81,7 @@ public interface PagamentoLocalService
 
 	public long countByFilters(
 		Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
-		Date dataOperazioneA, long groupId, String categoria, String stato,
+		Date dataOperazioneA, long groupId, long servizioId, String stato,
 		String gateway, String canale, String codiceFiscale, String codiceIuv,
 		long idPagamento);
 
@@ -317,7 +317,7 @@ public interface PagamentoLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Pagamento> search(
 		Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
-		Date dataOperazioneA, long groupId, String categoria, String stato,
+		Date dataOperazioneA, long groupId, long servizioId, String stato,
 		String gateway, String canale, String codiceFiscale, String codiceIuv,
 		long idPagamento, int inizio, int fine, String orderByCol,
 		String orderByType);

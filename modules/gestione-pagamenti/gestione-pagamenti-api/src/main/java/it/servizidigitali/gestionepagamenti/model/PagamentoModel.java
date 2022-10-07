@@ -282,19 +282,33 @@ public interface PagamentoModel
 	public void setCausale(String causale);
 
 	/**
-	 * Returns the descrizione servizio of this pagamento.
+	 * Returns the servizio ID of this pagamento.
 	 *
-	 * @return the descrizione servizio of this pagamento
+	 * @return the servizio ID of this pagamento
 	 */
-	@AutoEscape
-	public String getDescrizioneServizio();
+	public long getServizioId();
 
 	/**
-	 * Sets the descrizione servizio of this pagamento.
+	 * Sets the servizio ID of this pagamento.
 	 *
-	 * @param descrizioneServizio the descrizione servizio of this pagamento
+	 * @param servizioId the servizio ID of this pagamento
 	 */
-	public void setDescrizioneServizio(String descrizioneServizio);
+	public void setServizioId(long servizioId);
+
+	/**
+	 * Returns the nome servizio of this pagamento.
+	 *
+	 * @return the nome servizio of this pagamento
+	 */
+	@AutoEscape
+	public String getNomeServizio();
+
+	/**
+	 * Sets the nome servizio of this pagamento.
+	 *
+	 * @param nomeServizio the nome servizio of this pagamento
+	 */
+	public void setNomeServizio(String nomeServizio);
 
 	/**
 	 * Returns the importo of this pagamento.

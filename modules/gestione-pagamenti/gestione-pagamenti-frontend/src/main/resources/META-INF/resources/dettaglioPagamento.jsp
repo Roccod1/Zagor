@@ -13,6 +13,10 @@
 	<portlet:param name="<%=GestionePagamentiFrontendPortletKeys.CODICE_FISCALE_CERCA %>" value="${codiceFiscaleCerca}"/>
 	<portlet:param name="<%=GestionePagamentiFrontendPortletKeys.CODICE_IUV_CERCA %>" value="${codiceIuvCerca}"/>
 	<portlet:param name="<%=GestionePagamentiFrontendPortletKeys.ID_PAGAMENTO_CERCA %>" value="${idPagamentoCerca}"/>
+	<portlet:param name="<%=SearchContainer.DEFAULT_CUR_PARAM %>" value="${cur}"/>
+	<portlet:param name="<%=SearchContainer.DEFAULT_DELTA_PARAM %>" value="${delta}"/>
+	<portlet:param name="<%=SearchContainer.DEFAULT_ORDER_BY_COL_PARAM %>" value="${orderByCol}"/>
+	<portlet:param name="<%=SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM %>" value="${orderByType}"/>
 	<portlet:param name="mvcPath" value="<%=GestionePagamentiFrontendPortletKeys.HOME_VIEW %>"/>
 </portlet:renderURL>
 
@@ -58,7 +62,7 @@
 	</aui:row>
 	<aui:row>
 		<aui:col md="12">
-			<aui:input cssClass="ml-2" inlineLabel="left" label="gestionePagamenti.dettaglioPagamento.descrizioneServizio" name="dettaglioPagamentoDescrizioneServizio" value="${dettaglioPagamento.descrizioneServizio}"  readonly="true" />
+			<aui:input cssClass="ml-2" inlineLabel="left" label="gestionePagamenti.dettaglioPagamento.servizioId" name="dettaglioPagamentosServizioId" value="${dettaglioPagamento.servizioId}"  readonly="true" />
 		</aui:col>
 	</aui:row>
 	<aui:row>
@@ -78,7 +82,7 @@
 	</aui:row>
 	<aui:row>
 		<aui:col md="12">
-			<aui:input cssClass="ml-2" inlineLabel="left" label="gestionePagamenti.dettaglioPagamento.categoria" name="dettaglioPagamentoCategoria" value="-"  readonly="true" />
+			<aui:input cssClass="ml-2" inlineLabel="left" label="gestionePagamenti.dettaglioPagamento.categoria" name="dettaglioPagamentoCategoria" value="${dettaglioPagamento.nomeServizio}"  readonly="true" />
 		</aui:col>
 	</aui:row>
 	<aui:row>

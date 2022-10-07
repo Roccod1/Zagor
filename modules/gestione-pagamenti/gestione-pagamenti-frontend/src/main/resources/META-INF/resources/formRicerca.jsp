@@ -109,6 +109,10 @@
 								label="gestionePagamenti.cerca.select.categoria"
 								name="<%=GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA%>"
 								showEmptyOption="true">
+								<c:forEach items="${listaServizi}" var="servizioCerca">
+									<aui:option value="${servizioCerca.servizioId}"
+										label="${servizioCerca.nome}" />
+								</c:forEach>
 							</aui:select>
 						</aui:col>
 						<aui:col md="3">

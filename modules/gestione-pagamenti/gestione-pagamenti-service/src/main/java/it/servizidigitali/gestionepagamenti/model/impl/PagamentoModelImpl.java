@@ -82,12 +82,13 @@ public class PagamentoModelImpl
 		{"idCredito", Types.VARCHAR}, {"idFiscaleCliente", Types.VARCHAR},
 		{"denominazioneCliente", Types.VARCHAR},
 		{"emailQuietanza", Types.VARCHAR}, {"causale", Types.VARCHAR},
-		{"descrizioneServizio", Types.VARCHAR}, {"importo", Types.DECIMAL},
-		{"commissioni", Types.DECIMAL}, {"canale", Types.VARCHAR},
-		{"gateway", Types.VARCHAR}, {"iud", Types.VARCHAR},
-		{"iuv", Types.VARCHAR}, {"idSessione", Types.VARCHAR},
-		{"pathAvviso", Types.VARCHAR}, {"emailInviata", Types.BOOLEAN},
-		{"stato", Types.VARCHAR}, {"richiestaId", Types.BIGINT}
+		{"servizioId", Types.BIGINT}, {"nomeServizio", Types.VARCHAR},
+		{"importo", Types.DECIMAL}, {"commissioni", Types.DECIMAL},
+		{"canale", Types.VARCHAR}, {"gateway", Types.VARCHAR},
+		{"iud", Types.VARCHAR}, {"iuv", Types.VARCHAR},
+		{"idSessione", Types.VARCHAR}, {"pathAvviso", Types.VARCHAR},
+		{"emailInviata", Types.BOOLEAN}, {"stato", Types.VARCHAR},
+		{"richiestaId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -107,7 +108,8 @@ public class PagamentoModelImpl
 		TABLE_COLUMNS_MAP.put("denominazioneCliente", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("emailQuietanza", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("causale", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("descrizioneServizio", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("servizioId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("nomeServizio", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("importo", Types.DECIMAL);
 		TABLE_COLUMNS_MAP.put("commissioni", Types.DECIMAL);
 		TABLE_COLUMNS_MAP.put("canale", Types.VARCHAR);
@@ -122,7 +124,7 @@ public class PagamentoModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table pagamento (uuid_ VARCHAR(75) null,pagamentoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,idCredito VARCHAR(75) null,idFiscaleCliente VARCHAR(75) null,denominazioneCliente VARCHAR(75) null,emailQuietanza VARCHAR(75) null,causale VARCHAR(75) null,descrizioneServizio VARCHAR(75) null,importo DECIMAL(30, 16) null,commissioni DECIMAL(30, 16) null,canale VARCHAR(75) null,gateway VARCHAR(75) null,iud VARCHAR(75) null,iuv VARCHAR(75) null,idSessione VARCHAR(75) null,pathAvviso VARCHAR(75) null,emailInviata BOOLEAN,stato VARCHAR(75) null,richiestaId LONG)";
+		"create table pagamento (uuid_ VARCHAR(75) null,pagamentoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,idCredito VARCHAR(75) null,idFiscaleCliente VARCHAR(75) null,denominazioneCliente VARCHAR(75) null,emailQuietanza VARCHAR(75) null,causale VARCHAR(75) null,servizioId LONG,nomeServizio VARCHAR(75) null,importo DECIMAL(30, 16) null,commissioni DECIMAL(30, 16) null,canale VARCHAR(75) null,gateway VARCHAR(75) null,iud VARCHAR(75) null,iuv VARCHAR(75) null,idSessione VARCHAR(75) null,pathAvviso VARCHAR(75) null,emailInviata BOOLEAN,stato VARCHAR(75) null,richiestaId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table pagamento";
 
@@ -398,11 +400,15 @@ public class PagamentoModelImpl
 		attributeGetterFunctions.put("causale", Pagamento::getCausale);
 		attributeSetterBiConsumers.put(
 			"causale", (BiConsumer<Pagamento, String>)Pagamento::setCausale);
-		attributeGetterFunctions.put(
-			"descrizioneServizio", Pagamento::getDescrizioneServizio);
+		attributeGetterFunctions.put("servizioId", Pagamento::getServizioId);
 		attributeSetterBiConsumers.put(
-			"descrizioneServizio",
-			(BiConsumer<Pagamento, String>)Pagamento::setDescrizioneServizio);
+			"servizioId",
+			(BiConsumer<Pagamento, Long>)Pagamento::setServizioId);
+		attributeGetterFunctions.put(
+			"nomeServizio", Pagamento::getNomeServizio);
+		attributeSetterBiConsumers.put(
+			"nomeServizio",
+			(BiConsumer<Pagamento, String>)Pagamento::setNomeServizio);
 		attributeGetterFunctions.put("importo", Pagamento::getImporto);
 		attributeSetterBiConsumers.put(
 			"importo",
@@ -736,22 +742,36 @@ public class PagamentoModelImpl
 	}
 
 	@Override
-	public String getDescrizioneServizio() {
-		if (_descrizioneServizio == null) {
-			return "";
-		}
-		else {
-			return _descrizioneServizio;
-		}
+	public long getServizioId() {
+		return _servizioId;
 	}
 
 	@Override
-	public void setDescrizioneServizio(String descrizioneServizio) {
+	public void setServizioId(long servizioId) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
 
-		_descrizioneServizio = descrizioneServizio;
+		_servizioId = servizioId;
+	}
+
+	@Override
+	public String getNomeServizio() {
+		if (_nomeServizio == null) {
+			return "";
+		}
+		else {
+			return _nomeServizio;
+		}
+	}
+
+	@Override
+	public void setNomeServizio(String nomeServizio) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_nomeServizio = nomeServizio;
 	}
 
 	@Override
@@ -1079,7 +1099,8 @@ public class PagamentoModelImpl
 		pagamentoImpl.setDenominazioneCliente(getDenominazioneCliente());
 		pagamentoImpl.setEmailQuietanza(getEmailQuietanza());
 		pagamentoImpl.setCausale(getCausale());
-		pagamentoImpl.setDescrizioneServizio(getDescrizioneServizio());
+		pagamentoImpl.setServizioId(getServizioId());
+		pagamentoImpl.setNomeServizio(getNomeServizio());
 		pagamentoImpl.setImporto(getImporto());
 		pagamentoImpl.setCommissioni(getCommissioni());
 		pagamentoImpl.setCanale(getCanale());
@@ -1124,8 +1145,10 @@ public class PagamentoModelImpl
 			this.<String>getColumnOriginalValue("emailQuietanza"));
 		pagamentoImpl.setCausale(
 			this.<String>getColumnOriginalValue("causale"));
-		pagamentoImpl.setDescrizioneServizio(
-			this.<String>getColumnOriginalValue("descrizioneServizio"));
+		pagamentoImpl.setServizioId(
+			this.<Long>getColumnOriginalValue("servizioId"));
+		pagamentoImpl.setNomeServizio(
+			this.<String>getColumnOriginalValue("nomeServizio"));
 		pagamentoImpl.setImporto(
 			this.<BigDecimal>getColumnOriginalValue("importo"));
 		pagamentoImpl.setCommissioni(
@@ -1305,14 +1328,14 @@ public class PagamentoModelImpl
 			pagamentoCacheModel.causale = null;
 		}
 
-		pagamentoCacheModel.descrizioneServizio = getDescrizioneServizio();
+		pagamentoCacheModel.servizioId = getServizioId();
 
-		String descrizioneServizio = pagamentoCacheModel.descrizioneServizio;
+		pagamentoCacheModel.nomeServizio = getNomeServizio();
 
-		if ((descrizioneServizio != null) &&
-			(descrizioneServizio.length() == 0)) {
+		String nomeServizio = pagamentoCacheModel.nomeServizio;
 
-			pagamentoCacheModel.descrizioneServizio = null;
+		if ((nomeServizio != null) && (nomeServizio.length() == 0)) {
+			pagamentoCacheModel.nomeServizio = null;
 		}
 
 		pagamentoCacheModel.importo = getImporto();
@@ -1483,7 +1506,8 @@ public class PagamentoModelImpl
 	private String _denominazioneCliente;
 	private String _emailQuietanza;
 	private String _causale;
-	private String _descrizioneServizio;
+	private long _servizioId;
+	private String _nomeServizio;
 	private BigDecimal _importo;
 	private BigDecimal _commissioni;
 	private String _canale;
@@ -1539,7 +1563,8 @@ public class PagamentoModelImpl
 			"denominazioneCliente", _denominazioneCliente);
 		_columnOriginalValues.put("emailQuietanza", _emailQuietanza);
 		_columnOriginalValues.put("causale", _causale);
-		_columnOriginalValues.put("descrizioneServizio", _descrizioneServizio);
+		_columnOriginalValues.put("servizioId", _servizioId);
+		_columnOriginalValues.put("nomeServizio", _nomeServizio);
 		_columnOriginalValues.put("importo", _importo);
 		_columnOriginalValues.put("commissioni", _commissioni);
 		_columnOriginalValues.put("canale", _canale);
@@ -1600,29 +1625,31 @@ public class PagamentoModelImpl
 
 		columnBitmasks.put("causale", 4096L);
 
-		columnBitmasks.put("descrizioneServizio", 8192L);
+		columnBitmasks.put("servizioId", 8192L);
 
-		columnBitmasks.put("importo", 16384L);
+		columnBitmasks.put("nomeServizio", 16384L);
 
-		columnBitmasks.put("commissioni", 32768L);
+		columnBitmasks.put("importo", 32768L);
 
-		columnBitmasks.put("canale", 65536L);
+		columnBitmasks.put("commissioni", 65536L);
 
-		columnBitmasks.put("gateway", 131072L);
+		columnBitmasks.put("canale", 131072L);
 
-		columnBitmasks.put("iud", 262144L);
+		columnBitmasks.put("gateway", 262144L);
 
-		columnBitmasks.put("iuv", 524288L);
+		columnBitmasks.put("iud", 524288L);
 
-		columnBitmasks.put("idSessione", 1048576L);
+		columnBitmasks.put("iuv", 1048576L);
 
-		columnBitmasks.put("pathAvviso", 2097152L);
+		columnBitmasks.put("idSessione", 2097152L);
 
-		columnBitmasks.put("emailInviata", 4194304L);
+		columnBitmasks.put("pathAvviso", 4194304L);
 
-		columnBitmasks.put("stato", 8388608L);
+		columnBitmasks.put("emailInviata", 8388608L);
 
-		columnBitmasks.put("richiestaId", 16777216L);
+		columnBitmasks.put("stato", 16777216L);
+
+		columnBitmasks.put("richiestaId", 33554432L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

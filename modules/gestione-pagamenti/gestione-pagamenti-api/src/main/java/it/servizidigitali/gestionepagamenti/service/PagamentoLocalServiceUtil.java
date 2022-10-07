@@ -63,13 +63,13 @@ public class PagamentoLocalServiceUtil {
 	public static long countByFilters(
 		java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
 		java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
-		long groupId, String categoria, String stato, String gateway,
+		long groupId, long servizioId, String stato, String gateway,
 		String canale, String codiceFiscale, String codiceIuv,
 		long idPagamento) {
 
 		return getService().countByFilters(
 			dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
-			dataOperazioneA, groupId, categoria, stato, gateway, canale,
+			dataOperazioneA, groupId, servizioId, stato, gateway, canale,
 			codiceFiscale, codiceIuv, idPagamento);
 	}
 
@@ -361,13 +361,13 @@ public class PagamentoLocalServiceUtil {
 	public static List<Pagamento> search(
 		java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
 		java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
-		long groupId, String categoria, String stato, String gateway,
+		long groupId, long servizioId, String stato, String gateway,
 		String canale, String codiceFiscale, String codiceIuv, long idPagamento,
 		int inizio, int fine, String orderByCol, String orderByType) {
 
 		return getService().search(
 			dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
-			dataOperazioneA, groupId, categoria, stato, gateway, canale,
+			dataOperazioneA, groupId, servizioId, stato, gateway, canale,
 			codiceFiscale, codiceIuv, idPagamento, inizio, fine, orderByCol,
 			orderByType);
 	}

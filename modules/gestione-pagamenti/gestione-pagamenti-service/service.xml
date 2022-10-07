@@ -33,7 +33,8 @@
 		<column name="denominazioneCliente" type="String" />
 		<column name="emailQuietanza" type="String" />
 		<column name="causale" type="String" />
-		<column name="descrizioneServizio" type="String" />
+		<column name="servizioId" type="long" />
+		<column name="nomeServizio" type="String" />
 		<column name="importo" type="BigDecimal" />
 		<column name="commissioni" type="BigDecimal" />
 		<column name="canale" type="String" />

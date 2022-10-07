@@ -43,4 +43,6 @@ public class GestionePagamentiFrontendPortletKeys {
 
 	public static final String LISTA_ORGANIZZAZIONI = "listaOrganizzazioni";
 	public static final String SITE_ORGANIZATION_ID = "siteOrganizationId";
+	
+	public static final String LISTA_SERVIZI = "listaServizi";
 }

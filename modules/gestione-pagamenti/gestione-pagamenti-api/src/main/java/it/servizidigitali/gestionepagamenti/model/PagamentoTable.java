@@ -62,10 +62,10 @@ public class PagamentoTable extends BaseTable<PagamentoTable> {
 		"emailQuietanza", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<PagamentoTable, String> causale = createColumn(
 		"causale", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<PagamentoTable, String> descrizioneServizio =
-		createColumn(
-			"descrizioneServizio", String.class, Types.VARCHAR,
-			Column.FLAG_DEFAULT);
+	public final Column<PagamentoTable, Long> servizioId = createColumn(
+		"servizioId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<PagamentoTable, String> nomeServizio = createColumn(
+		"nomeServizio", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<PagamentoTable, BigDecimal> importo = createColumn(
 		"importo", BigDecimal.class, Types.DECIMAL, Column.FLAG_DEFAULT);
 	public final Column<PagamentoTable, BigDecimal> commissioni = createColumn(

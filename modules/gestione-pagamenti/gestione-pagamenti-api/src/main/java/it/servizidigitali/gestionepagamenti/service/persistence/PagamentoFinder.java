@@ -27,7 +27,7 @@ public interface PagamentoFinder {
 		findByFilters(
 			java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
 			java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
-			long groupId, String categoria, String stato, String gateway,
+			long groupId, long servizioId, String stato, String gateway,
 			String canale, String codiceFiscale, String codiceIuv,
 			long idPagamento, int inizio, int fine,
 			com.liferay.portal.kernel.util.OrderByComparator
@@ -36,7 +36,7 @@ public interface PagamentoFinder {
 	public long countByFilters(
 		java.util.Date dataInserimentoDa, java.util.Date dataInserimentoA,
 		java.util.Date dataOperazioneDa, java.util.Date dataOperazioneA,
-		long groupId, String categoria, String stato, String gateway,
+		long groupId, long servizioId, String stato, String gateway,
 		String canale, String codiceFiscale, String codiceIuv,
 		long idPagamento);
 

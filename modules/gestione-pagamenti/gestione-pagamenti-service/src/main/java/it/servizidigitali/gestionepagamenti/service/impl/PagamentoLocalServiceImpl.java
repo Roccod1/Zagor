@@ -35,7 +35,7 @@ public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
 
 	@Override
 	public List<Pagamento> search(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
-			Date dataOperazioneA, long groupId, String categoria, String stato, String gateway, String canale,
+			Date dataOperazioneA, long groupId, long servizioId, String stato, String gateway, String canale,
 			String codiceFiscale, String codiceIuv, long idPagamento, int inizio, int fine, String orderByCol, String orderByType) {
 		
 		boolean direzione = true;
@@ -51,17 +51,17 @@ public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
 		OrderByComparator<Pagamento> comparator = OrderByComparatorFactoryUtil.create("Pagamento", orderByCol, direzione);
 		
 		return this.pagamentoFinder.findByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
-				dataOperazioneA, groupId, categoria, stato, gateway, canale, codiceFiscale,
+				dataOperazioneA, groupId, servizioId, stato, gateway, canale, codiceFiscale,
 				codiceIuv, idPagamento, inizio, fine, comparator);
 	}
 	
 	@Override
 	public long countByFilters(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
-			Date dataOperazioneA, long groupId, String categoria, String stato, String gateway, String canale,
+			Date dataOperazioneA, long groupId, long servizioId, String stato, String gateway, String canale,
 			String codiceFiscale, String codiceIuv, long idPagamento) {
 		
 		return this.pagamentoFinder.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
-				dataOperazioneA, groupId, categoria, stato, gateway, canale, codiceFiscale,
+				dataOperazioneA, groupId, servizioId, stato, gateway, canale, codiceFiscale,
 				codiceIuv, idPagamento);
 	}
 }

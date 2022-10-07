@@ -17,7 +17,12 @@ import java.util.List;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
+import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.gestioneservizi.model.Tipologia;
+import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 
 @Component(name = "getOrganizzazioniService", immediate = true, service = GestionePagamentiService.class)
 public class GestionePagamentiService {
@@ -29,6 +34,12 @@ public class GestionePagamentiService {
 	
 	@Reference
 	private GroupLocalService groupLocalService;
+	
+	@Reference
+	private TipologiaLocalService tipologiaLocalService;
+	
+	@Reference
+	private ServizioLocalService servizioLocalService;
 	
 	public List<Organization> getAllParentsOrganizations() {
 		
@@ -49,6 +60,13 @@ public class GestionePagamentiService {
 		}
 		
 		return organization;
+	}
+	
+	public List<Servizio> getAllServizi() {
+		
+		Tipologia tipologia = tipologiaLocalService.getTipologiaByCodice(TipoServizio.PAGAMENTO.name());
+		
+		return servizioLocalService.getTipologiaServizios(tipologia.getTipologiaId());
 	}
 	
 	public void initDataForView(Pagamento pagamento) {

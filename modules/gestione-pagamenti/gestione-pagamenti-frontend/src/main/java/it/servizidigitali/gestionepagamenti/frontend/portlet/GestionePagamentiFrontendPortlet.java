@@ -81,6 +81,8 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			siteGroupId = themeDisplay.getSiteGroupId();
 		}
 		
+		renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.LISTA_SERVIZI, gestionePagamentiService.getAllServizi());
+		
 		List<Pagamento> listaPagamenti = (List<Pagamento>) renderRequest.getAttribute(GestionePagamentiFrontendPortletKeys.LISTA_PAGAMENTI);
 		
 		if (Validator.isNull(listaPagamenti)) {
@@ -105,8 +107,8 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 				siteGroupId = organization.getGroupId();
 			}
 			
-			String categoria = ParamUtil.getString(renderRequest,
-					GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA, null);
+			long servizioId = ParamUtil.getLong(renderRequest,
+					GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA);
 			String stato = ParamUtil.getString(renderRequest, GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA,
 					null);
 			String gateway = ParamUtil.getString(renderRequest, GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA,
@@ -129,24 +131,23 @@ public class GestionePagamentiFrontendPortlet extends MVCPortlet {
 			String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 			String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 			
-			long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale, codiceIuv, idPagamento);
+			long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, servizioId, stato, gateway, canale, codiceFiscale, codiceIuv, idPagamento);
 
 			listaPagamenti = Collections.emptyList();
 			
 			if(totalCountPagamenti != 0) {
-				listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale, codiceIuv, idPagamento, inizio, fine, orderByCol, orderByType);
+				listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, servizioId, stato, gateway, canale, codiceFiscale, codiceIuv, idPagamento, inizio, fine, orderByCol, orderByType);
 				listaPagamenti.forEach(pagamento -> gestionePagamentiService.initDataForView(pagamento));
 			}
 
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.TOTAL_COUNT_PAGAMENTI, totalCountPagamenti);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.LISTA_PAGAMENTI, listaPagamenti);
-			
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_INSERIMENTO_DA_CERCA, dataInserimentoDa == null ? null : dateFormat.format(dataInserimentoDa));
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_INSERIMENTO_A_CERCA, dataInserimentoA == null ? null : dateFormat.format(dataInserimentoA));
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_OPERAZIONE_DA_CERCA, dataOperazioneDa == null ? null : dateFormat.format(dataOperazioneDa));
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_OPERAZIONE_A_CERCA, dataOperazioneA == null ? null : dateFormat.format(dataOperazioneA));
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA, organizzazioneId);
-			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA, categoria);
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA, organizzazioneId != 0 ? organizzazioneId : null);
+			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA, servizioId != 0 ? servizioId : null);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA, stato);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA, gateway);
 			renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA, canale);

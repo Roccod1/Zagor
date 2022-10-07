@@ -63,8 +63,8 @@ public class CercaPagamentiMVCActionCommand extends BaseMVCActionCommand {
 			siteGroupId = organization.getGroupId();
 		}
 		
-		String categoria = ParamUtil.getString(actionRequest,
-				GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA, null);
+		long servizioId = ParamUtil.getLong(actionRequest,
+				GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA);
 		String stato = ParamUtil.getString(actionRequest, GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA,
 				null);
 		String gateway = ParamUtil.getString(actionRequest, GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA,
@@ -85,34 +85,34 @@ public class CercaPagamentiMVCActionCommand extends BaseMVCActionCommand {
 		int inizio = posizioni[0];
 		int fine = posizioni[1];
 		
-		long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale, codiceIuv, idPagamento);
+		long totalCountPagamenti = pagamentoLocalService.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, siteGroupId, servizioId, stato, gateway, canale, codiceFiscale, codiceIuv, idPagamento);
 
 		List<Pagamento> listaPagamenti = Collections.emptyList();
 		
 		if(totalCountPagamenti != 0) {
 			listaPagamenti = pagamentoLocalService.search(dataInserimentoDa, dataInserimentoA,
-					dataOperazioneDa, dataOperazioneA, siteGroupId, categoria, stato, gateway, canale, codiceFiscale,
+					dataOperazioneDa, dataOperazioneA, siteGroupId, servizioId, stato, gateway, canale, codiceFiscale,
 					codiceIuv, idPagamento, inizio, fine, null, null);
 			listaPagamenti.forEach(pagamento -> gestionePagamentiService.initDataForView(pagamento));
 		}
 
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.TOTAL_COUNT_PAGAMENTI, totalCountPagamenti);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.LISTA_PAGAMENTI, listaPagamenti);
-		actionRequest.setAttribute(SearchContainer.DEFAULT_CUR_PARAM, cur);
-		actionRequest.setAttribute(SearchContainer.DEFAULT_DELTA_PARAM, delta);
-		
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_INSERIMENTO_DA_CERCA, dataInserimentoDa == null ? null : dateFormat.format(dataInserimentoDa));
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_INSERIMENTO_A_CERCA, dataInserimentoA == null ? null : dateFormat.format(dataInserimentoA));
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_OPERAZIONE_DA_CERCA, dataOperazioneDa == null ? null : dateFormat.format(dataOperazioneDa));
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_OPERAZIONE_A_CERCA, dataOperazioneA == null ? null : dateFormat.format(dataOperazioneA));
-		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA, organizzazioneId);
-		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA, categoria);
+		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_ORGANIZZAZIONE_CERCA, organizzazioneId != 0 ? organizzazioneId : null);
+		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CATEGORIA_CERCA, servizioId != 0 ? servizioId : null);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_STATO_CERCA, stato);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_GATEWAY_CERCA, gateway);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SELECT_CANALE_CERCA, canale);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.CODICE_FISCALE_CERCA, codiceFiscale);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.CODICE_IUV_CERCA, codiceIuv);
 		actionRequest.setAttribute(GestionePagamentiFrontendPortletKeys.ID_PAGAMENTO_CERCA, idPagamento != 0 ? idPagamento : null);
+		
+		actionRequest.setAttribute(SearchContainer.DEFAULT_CUR_PARAM, cur);
+		actionRequest.setAttribute(SearchContainer.DEFAULT_DELTA_PARAM, delta);
 		
 		SessionMessages.add(actionRequest, GestionePagamentiFrontendPortletKeys.SESSION_MESSAGE_RICERCA_ESEGUITA_CORRETTAMENTE);
 

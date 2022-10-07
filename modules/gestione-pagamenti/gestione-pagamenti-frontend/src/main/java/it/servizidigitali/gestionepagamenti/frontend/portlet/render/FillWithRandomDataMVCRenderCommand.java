@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -17,17 +18,23 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestionepagamenti.common.enumeration.CanalePagamento;
 import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
 import it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient;
 import it.servizidigitali.gestionepagamenti.frontend.constants.GestionePagamentiFrontendPortletKeys;
+import it.servizidigitali.gestionepagamenti.frontend.service.GestionePagamentiService;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalServiceUtil;
+import it.servizidigitali.gestioneservizi.model.Servizio;
 
 @Component(immediate = true, property = { "javax.portlet.name=" + GestionePagamentiFrontendPortletKeys.GESTIONEPAGAMENTIFRONTEND,
 "mvc.command.name=/pagamento/fillWithRandomData" }, service = { MVCRenderCommand.class })
 public class FillWithRandomDataMVCRenderCommand implements MVCRenderCommand {
+	
+	@Reference
+	private GestionePagamentiService gestionePagamentiService;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -48,7 +55,11 @@ public class FillWithRandomDataMVCRenderCommand implements MVCRenderCommand {
 		pagamento.setDenominazioneCliente(randomString(10));
 		pagamento.setEmailQuietanza(randomString(10));
 		pagamento.setCausale(randomString(10));
-		pagamento.setDescrizioneServizio(randomString(10));
+		
+		Servizio servizio = randomServizio();
+		pagamento.setServizioId(servizio.getServizioId());
+		pagamento.setNomeServizio(servizio.getNome());
+		
 		pagamento.setImporto(randomBigDecimal());
 		pagamento.setCommissioni(randomBigDecimal());
 		pagamento.setCanale(randomCanalePagamento().toString());
@@ -131,5 +142,12 @@ public class FillWithRandomDataMVCRenderCommand implements MVCRenderCommand {
 		
 		TipoPagamentiClient[] tipiPagamento = TipoPagamentiClient.values();
 		return tipiPagamento[random.nextInt(tipiPagamento.length)];
+	}
+	
+	private Servizio randomServizio() {
+		Random random = new Random();
+		
+		List<Servizio> listaServizi = gestionePagamentiService.getAllServizi();
+		return listaServizi.get(random.nextInt(listaServizi.size()));
 	}
 }
