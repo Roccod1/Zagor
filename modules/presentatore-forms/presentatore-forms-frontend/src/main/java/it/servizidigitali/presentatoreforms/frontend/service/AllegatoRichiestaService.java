@@ -88,6 +88,11 @@ public class AllegatoRichiestaService {
 			allegatoRichiesta.setDefinizioneAllegatoId(definizioneAllegatoId);
 			allegatoRichiesta.setPrincipale(principale);
 			allegatoRichiesta.setNome(nomeFile);
+			
+			if(!principale) {
+				allegatoRichiesta.setVisibile(true);
+			}
+			
 			allegatoRichiestaLocalService.updateAllegatoRichiesta(allegatoRichiesta);
 		}
 	}
