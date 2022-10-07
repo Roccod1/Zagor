@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -117,6 +118,32 @@ public class AllegatoRichiestaService {
 		}
 		catch (Exception e) {
 			log.error("Errore durante il caricamento del file firmato : " + e.getMessage(), e);
+			throw e;
+		}
+	}
+	
+	public void salvaCertificato(byte[] certificato, Servizio servizio, long richiestaId, String userName, long userId, long groupId) throws Exception{
+		try {
+			
+			if(Validator.isNotNull(certificato)) {
+			    InputStream is = new ByteArrayInputStream(certificato);
+				String nomeFile = "richiesta-" + richiestaId + ".pdf";
+				String descrizione = "Richiesta servizio '" + servizio.getNome() + "' - ID: " + richiestaId;
+
+			    if(Validator.isNotNull(is)) {
+			    	String mimeType = MimeTypesUtil.getContentType(is, nomeFile);
+			    	String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId, is, mimeType, userId,
+							groupId);
+			    	
+			    	if (Validator.isNotNull(idDocumentale)) {
+						creaAllegatoRichiesta(idDocumentale, nomeFile, servizio.getNome(), richiestaId, null, true, userName, groupId, userId);
+					}
+			    }
+			    
+			}
+			
+		}catch(Exception e) {
+			log.error(e.getMessage(),e);
 			throw e;
 		}
 	}

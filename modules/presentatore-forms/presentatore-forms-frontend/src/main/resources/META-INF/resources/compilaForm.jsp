@@ -33,6 +33,8 @@ var listaStatiEsteriUrl = '${apiAlpacaPath}/stati-esteri';
 var listaComuniEsteriUrl = '${apiAlpacaPath}/comuni-esteri';
 var listaStradarioUrl = '${searchStradarioUrl}';
 
+
+
 /* Custom Fields JSON vars */
 var statiEsteriJsonCF = [];
 var provinceJsonCF = [];
@@ -304,6 +306,7 @@ function mainScript() {
 					                                    color: '#ae1d3f',
 					                               } 
 					                       });
+					   	            	   console.log("step3Url : " + step3Url);
 					   	            	   window.location.href = step3Url;
 				   	            	    },
 				   	            	    error: function (jqXHR, exception) {

@@ -125,6 +125,7 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand{
 					if(certificatiPdfPreviewEnabled) {
 						
 						String jsonDataBozza = istanzaForm.getJson();
+						String codiceFiscaleComponente = ParamUtil.getString(renderRequest, "codiceFiscaleComponente");
 						
 						FormData formData = AlpacaUtil.loadFormData(form, jsonDataBozza, true, themeDisplay.getPortalURL());
 						AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
@@ -133,13 +134,14 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand{
 						alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), form.getListaDefinizioneAllegato(), true, themeDisplay.getPortalURL()));
 						alpacaStructure.setData(JsonParser.parseString(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
 						
-						byte[] pdfFile = pdfService.generaPDFCertificato(user.getScreenName(), user.getScreenName(), alpacaStructure, richiesta, null, null, renderRequest);
+						byte[] pdfFile = pdfService.generaPDFCertificato(user.getScreenName(), user.getScreenName(), alpacaStructure, richiesta, destinazioneUso.getDestinazioneUsoId(), null, renderRequest);
 						
 						if(Validator.isNotNull(pdfFile)) {
 							encoded = new String(Base64.getEncoder().encode(pdfFile));
 							
 							renderRequest.setAttribute(PresentatoreFormsPortletKeys.BASE_64_PDF_CERTIFICATO, encoded);
 							renderRequest.setAttribute(PresentatoreFormsPortletKeys.DOWNLOAD_CERTIFICATO, true);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE, codiceFiscaleComponente);
 							
 						}
 

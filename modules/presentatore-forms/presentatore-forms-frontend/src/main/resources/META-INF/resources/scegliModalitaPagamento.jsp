@@ -1,8 +1,12 @@
 <%@ include file="./init.jsp" %>
 
-<portlet:renderURL var="scegliModalitaPagamentoUrl">
-	<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.SCEGLI_MODALITA_PAGAMENTO_RENDER_COMMAND %>" />
+<portlet:renderURL var="generaCertificatoUrl">
+	<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.GENERA_CERTIFICATO_RENDER_COMMAND %>" />
+	<portlet:param name="codiceFiscaleComponente" value="${selectComponentiNucleoFamiliare}" />
 </portlet:renderURL>
+
+<portlet:renderURL var="homeURL"></portlet:renderURL>
+
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/scripts/pdf.js" /></script>
 
@@ -10,7 +14,7 @@
 
 <div class="page-header">
 		<b>${titoloPortletServizio}</b>
-	</div>
+</div>
 
 <aui:row>
 	
@@ -76,12 +80,10 @@
 									</c:otherwise>
 								</c:choose>
 								<c:if test="${certificatiPdfPreviewEnabled}">
-									<div class="mt-10">
+									<div class="mt-3">
 										<div class="row-fluid bg_white">
 											<liferay-ui:message key="label.certificato.ultimoStep.preview"/>
-											<div class="span8 text-center offset2" id="certificatoPdfViewer"> 
-<!-- 												<canvas id="certificatoPdfContainer" class="certificatoPdfContainer" style="margin-top: 20px; margin-bottom: 20px; outline: black 2px solid;"></canvas> -->
-											</div>
+											<div class="span8 text-center offset2" id="certificatoPdfViewer"> </div>
 										</div>
 									</div>
 								</c:if>
@@ -127,14 +129,9 @@
 		
 		<c:choose>
 			<c:when test="${richiestaStatus == bozzaStatus}">
-				<aui:form id="salva-form" method="POST" action="${generaCertificatoUrl}">
-					<aui:input type="hidden" name="idIstanzaForm" value="${idRichiesta}"/>
-					<aui:input type="hidden" name="inBozza" value="true" id="in-bozza"/>
-					<aui:input type="hidden" name="destinazioneUsoId" value="${destinazioneUsoId}"/>
-				</aui:form>
 				
 				<aui:button-row>
-					<aui:button value="label.annulla" id="indietro" href=""/>
+					<aui:button value="label.annulla" id="indietro" href="${homeURL}"/>
 					<aui:button value="label.procedi" id="salva-e-invia"/>
 				</aui:button-row>
 
@@ -183,7 +180,7 @@
 							<div class="modal-footer">
 								<aui:button-row>
 									<aui:button value="label.annulla" data-dismiss="modal"/>
-									<aui:button value="label.procedi" id="salva-invia-modal-button"/>
+									<a id="salva-invia-modal-button" class="btn btn-primary" href="${generaCertificatoUrl}&<portlet:namespace />destinazioneUsoId=${destinazioneUsoId}">Procedi</a>
 								</aui:button-row>
 							</div>
 							
@@ -218,12 +215,6 @@
 				</c:choose>
 				<div class="clearfix"></div>
 			</c:when>
-			<c:otherwise>
-				<div class="row-fluid">
-					<liferay-ui:message key="label.richiesta.non.bozza"/> 
-<!-- 					aggiungere url a scrivania virtuale -->
-				</div>
-			</c:otherwise>
 		</c:choose>
 	
 	</div>
@@ -240,18 +231,9 @@
 		$('#salva-invia-modal').modal('show');
 	});
 	
-
-	//Lancia la richiesta
-	$('#<portlet:namespace />salva-invia-modal-button').click(function() {
-		var $bottone = $(this);
-		$bottone.prop("disabled", true);
-		$("#<portlet:namespace />salva-e-invia").prop("disabled", true);
-		$("#<portlet:namespace />in-bozza").val("false");
-
-		//Submit del form
-		$("#<portlet:namespace />salva-form").submit();
+	$('#salva-invia-modal-button').click(function(e) {
+		$(this).addClass('disabled');
 	});
-	
 	
 	var certificatiPdfPreviewEnabled = '${certificatiPdfPreviewEnabled}';
 	

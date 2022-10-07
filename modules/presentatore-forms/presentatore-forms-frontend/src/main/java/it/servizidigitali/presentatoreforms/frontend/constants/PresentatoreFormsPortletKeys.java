@@ -32,6 +32,7 @@ public class PresentatoreFormsPortletKeys {
 	public static final String INDIETRO_ACTION_COMMAND = "/indietro";
 	public static final String ANNULLA_ACTION_COMMAND = "/annulla";
 	public static final String DOWNLOAD_MODELLO_RESOURCE_COMMAND = "/downloadModello";
+	public static final String GENERA_CERTIFICATO_RENDER_COMMAND = "/generaCertificato";
 
 	// JSP
 	public static final String JSP_SCEGLI_ALLEGATI = "/scegliAllegati.jsp";
@@ -42,6 +43,7 @@ public class PresentatoreFormsPortletKeys {
 	public static final String JSP_HOME = "/home.jsp";
 	public static final String JSP_ESITO_INVIO = "/esitoInvio.jsp";
 	public static final String JSP_VIEW = "/view.jsp";
+	public static final String JSP_DOWNLOAD_CERTIFICATO = "/downloadCertificato.jsp";
 
 	// MESSAGGI DI ERRORE
 	public static final String IMPOSSIBILE_RECUPERARE_RICHIESTA = "impossibile-recuperare-richiesta";

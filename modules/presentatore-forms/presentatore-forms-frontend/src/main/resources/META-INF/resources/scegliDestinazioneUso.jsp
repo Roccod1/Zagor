@@ -9,6 +9,7 @@
 
 <portlet:renderURL var="scegliModalitaPagamentoUrl">
 	<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.SCEGLI_MODALITA_PAGAMENTO_RENDER_COMMAND %>" />
+	<portlet:param name="codiceFiscaleComponente"value="${selectComponentiNucleoFamiliare}" />
 </portlet:renderURL>
 
 <portlet:renderURL var="homeURL"></portlet:renderURL>
@@ -18,8 +19,6 @@
 		${listaErrori}
 	</div>
 </c:if>
-
-${ciao }
 
 <div class="row-fluid">
 	<div class="span12 formpresenter-portlet nuova-istanza">
