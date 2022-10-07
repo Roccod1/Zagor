@@ -187,7 +187,7 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 
 			renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 			renderRequest.setAttribute(PresentatoreFormsPortletKeys.API_ALPACA_PATH, themeDisplay.getPortalURL() + PresentatoreFormsPortletKeys.SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH);
-
+			renderRequest.setAttribute(PresentatoreFormsPortletKeys.TIPO_SERVIZIO_STEP2, procedura.getStep2TipoServizio());
 			return PresentatoreFormsPortletKeys.JSP_COMPILA_FORM;
 
 		}
