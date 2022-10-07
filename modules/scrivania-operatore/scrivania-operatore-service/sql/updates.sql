@@ -117,3 +117,8 @@ CREATE TABLE `destinazione_uso_servizio_ente` (
 -- 20221005
 ALTER TABLE `servizi_digitali`.`allegato_richiesta` 
 ADD COLUMN `definizioneAllegatoId` BIGINT NULL AFTER `visibile`;
+
+-- 20221007
+ALTER TABLE `servizi_digitali`.`allegato_richiesta` 
+ADD COLUMN `titolo` VARCHAR(100) NULL AFTER `nome`,
+ADD COLUMN `descrizione` VARCHAR(500) NULL AFTER `titolo`;

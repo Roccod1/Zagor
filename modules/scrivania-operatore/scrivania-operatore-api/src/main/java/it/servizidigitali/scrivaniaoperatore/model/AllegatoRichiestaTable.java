@@ -57,6 +57,11 @@ public class AllegatoRichiestaTable extends BaseTable<AllegatoRichiestaTable> {
 			"idDocumentale", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<AllegatoRichiestaTable, String> nome = createColumn(
 		"nome", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<AllegatoRichiestaTable, String> titolo = createColumn(
+		"titolo", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<AllegatoRichiestaTable, String> descrizione =
+		createColumn(
+			"descrizione", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<AllegatoRichiestaTable, String> url = createColumn(
 		"url", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<AllegatoRichiestaTable, Boolean> principale =
