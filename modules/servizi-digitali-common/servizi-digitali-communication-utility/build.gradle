@@ -2,5 +2,6 @@ dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.portal.api"
 	compile group: "org.apache.cxf", name: "cxf-rt-rs-client", version: "3.1.6"
 	compile group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version: '2.13.3'
+	compileInclude group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
 	
 }
