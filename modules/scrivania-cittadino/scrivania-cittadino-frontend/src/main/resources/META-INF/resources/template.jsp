@@ -105,20 +105,20 @@
 		</button>
 	</div>
 	<div class="collapse-body" style="padding-bottom: 10px;  padding-top: 0; ">
-		<div>
-			{{if dataInvio}}
-				<div>
-					{{localDate:dataInvio}}
-				<div>
-			{{/if}}
-		</div>	
+
+		{{if dataInvio}}
+			<div>
+				{{localDate:dataInvio}}
+			<div>
+		{{/if}}
+
 		<div id="collapse{{>comunicazioneId}}" class="collapse" role="region" aria-labelledby="heading{{>comunicazioneId}}">
 			{{if descrizione }}
-			<div class="mb-3">
+			<p class="mb-3">
 				{{:descrizione}}
-			</div>
+			</p>
 			{{/if}}  	
-			<a href="{{>uriServizio ? uriServizio : "#" }}"><span class="t-primary underline"><liferay-ui:message key="vai-a-servizio"/></span></a>  
+			<a href="{{>uriServizio ? uriServizio : "#" }}"><span class="t-primary underline"><liferay-ui:message key="vai-al-servizio"/></span></a>  
 		</div>
 	</div>
 </script>

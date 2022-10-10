@@ -28,7 +28,7 @@
 			</aui:select>			
 		</div>
 		
-		<div class="col-12">
+		<div class="col-12 mb-3">
 			<button class="btn btn-primary" type="button" onclick="getComunicazioniUtente(1)"><liferay-ui:message key="cerca"/></button>
 		</div>
 	</div>
@@ -50,7 +50,7 @@
 		<div class="col">
 			<aui:input type="text" name="filterOggettoPrenotazioni" label="titolo-o-descrizione"/>				
 		</div>
-		<div class="col-12">
+		<div class="col-12 mb-3">
 			<button class="btn btn-primary" type="button" onclick="getPrenotazioniUtente(1)"><liferay-ui:message key="cerca"/></button>
 		</div>
 	</div>

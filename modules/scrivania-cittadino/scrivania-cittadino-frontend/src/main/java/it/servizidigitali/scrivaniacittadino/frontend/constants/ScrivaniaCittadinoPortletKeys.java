@@ -42,6 +42,8 @@ public class ScrivaniaCittadinoPortletKeys
     public static final String PARAM_FILE_ID = "fileId";
     public static final String RICHIESTA = "richiesta";
     public static final String ALLEGATI_RICHIESTA = "allegatiRichiesta";
+    public static final String ALLEGATI_PROVVEDIMENTI_FINALI = "allegatiProvvedimentiFinali";
+
     public static final String COMMENTI_RICHIESTA = "commentiRichiesta";
     public static final String COMMENTI_RICHIESTA_COUNT = "commentiRichiestaCount";
     public static final String ATTIVITA_RICHIESTA = "attivitaRichiesta";

@@ -15,7 +15,7 @@
 	</div>
 	<div class="row collapse" id="filterCollapseRichieste">
 		<div class="col-5">
-			<aui:input type="text" name="filterOggettoRichieste" label="titolo-o-descrizione"/>				
+			<aui:input type="text" name="filterOggettoRichiesta" label="titolo-o-descrizione"/>				
 		</div>
 		
 		<div class="col">
@@ -46,7 +46,7 @@
 			</div>			
 		</div>
 		
-		<div class="col-12">
+		<div class="col-12 mb-3">
 			<button class="btn btn-primary" type="button" onclick="getRichiesteUtente(1)"><liferay-ui:message key="cerca"/></button>
 		</div>
 	</div>
@@ -97,7 +97,7 @@
 			</div>			
 		</div>
 		
-		<div class="col-12">
+		<div class="col-12 mb-3">
 			<button class="btn btn-primary" type="button" onclick="getPagamentiUtente(1)"><liferay-ui:message key="cerca"/></button>
 		</div>
 	</div>

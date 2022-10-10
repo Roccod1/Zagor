@@ -8,7 +8,10 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -70,12 +73,20 @@ public class DettaglioRichiestaCittadino implements MVCRenderCommand {
 		if(richiestaId > 0) {
 			
 			Richiesta richiesta = null;
-			List<AllegatoRichiesta> listaAllegatiRichiesta = new ArrayList<AllegatoRichiesta>();
+			List<AllegatoRichiesta> listaAllegatiCittadino = new ArrayList<AllegatoRichiesta>();
+			List<AllegatoRichiesta> listaProvvedimentiFinali = new ArrayList<AllegatoRichiesta>();
 			List<CommentoRichiesta> listaCommentiRichiesta = new ArrayList<CommentoRichiesta>();
 			List<AttivitaRichiesta> listaAttivitaRichiesta = new ArrayList<AttivitaRichiesta>();
 			AllegatoRichiesta pdfRichiesta = null;
 			
+			ServiceContext serviceContext = null;
+			ThemeDisplay themeDisplay = null;
+			
 			try {
+				serviceContext = ServiceContextFactory.getInstance(renderRequest);
+				themeDisplay = serviceContext.getThemeDisplay();
+				long userId = themeDisplay.getUserId();
+				
 				richiesta = richiestaLocalService.getRichiesta(richiestaId);
 				int attivitaRichiestaCount = 0;
 				int commentiRichiestaCount = 0;
@@ -83,7 +94,18 @@ public class DettaglioRichiestaCittadino implements MVCRenderCommand {
 				int posizioni[] = new int[2];
 				
 				if(Validator.isNotNull(richiesta)) {
-					listaAllegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdGroupIdVisibile(richiestaId, true);	
+					List<AllegatoRichiesta> listaAllegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdGroupIdVisibile(richiestaId, true);
+					
+					if(listaAllegatiRichiesta != null) {
+						for(AllegatoRichiesta allegato : listaAllegatiRichiesta) {
+							if(allegato.getUserId() != userId) {
+								listaProvvedimentiFinali.add(allegato);
+							}else {
+								listaAllegatiCittadino.add(allegato);
+							}
+						}						
+					}
+										
 
 					posizioni = calcolaInizioFinePaginazione(ScrivaniaCittadinoPortletKeys.SEARCH_CONTAINER_COMMENTI, searchContainerName, curCommenti, delta);
 					listaCommentiRichiesta = commentoRichiestaLocalService.getCommentiRichiestaByRichiestaIdVisibile(richiestaId, true, posizioni[0], posizioni[1]);
@@ -98,8 +120,10 @@ public class DettaglioRichiestaCittadino implements MVCRenderCommand {
 				}
 
 				
-				renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.ALLEGATI_RICHIESTA, listaAllegatiRichiesta);
+				renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.ALLEGATI_RICHIESTA, listaAllegatiCittadino);
 				renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.PDF_RICHIESTA, pdfRichiesta);
+				renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.ALLEGATI_PROVVEDIMENTI_FINALI, listaProvvedimentiFinali);
+
 
 				renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.ATTIVITA_RICHIESTA, listaAttivitaRichiesta);
 				renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.ATTIVITA_RICHIESTA_COUNT, attivitaRichiestaCount);
