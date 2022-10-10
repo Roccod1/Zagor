@@ -105,7 +105,7 @@ public class GestionePagamentiService {
 	public String[] getCsvHeader() {
 		return new String[] { "ID Pagamento", "Categoria", "Codice IUV", "Stato Pagamento",
 				"C.F. o P.I. Cliente", "Nome Cliente", "Causale", "Data Inserimento", "Data Operazione",
-				"Email Quietanza", /*"Importo Servizio", "Importo Gateway",*/ "Importo Totale"/*, "Codice Fiscale Minori"*/ };
+				"Email Quietanza", "Importo Gateway", "Importo Totale"};
 	}
 	
 	public List<List<String>> getValuesForCsv(List<Pagamento> listaPagamenti) {
@@ -131,6 +131,7 @@ public class GestionePagamentiService {
 			recordValues.add(dateFormat.format(pagamento.getCreateDate()));
 			recordValues.add(dateFormat.format(pagamento.getModifiedDate()));
 			recordValues.add(pagamento.getEmailQuietanza());
+			recordValues.add(decimalFormat.format(pagamento.getCommissioni()));
 			recordValues.add(decimalFormat.format(pagamento.getImporto()));
 			
 			valuesForCsv.add(recordValues);
