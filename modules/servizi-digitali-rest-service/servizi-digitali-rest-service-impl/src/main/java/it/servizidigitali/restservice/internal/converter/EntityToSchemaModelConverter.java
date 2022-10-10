@@ -180,7 +180,7 @@ public class EntityToSchemaModelConverter {
 	 * @param companyId
 	 * @return
 	 */
-	private String getSchedaServizioPath(long servizioId, long organizationId, long companyId) {
+	public String getSchedaServizioPath(long servizioId, long organizationId, long companyId) {
 
 		ServizioEntePK servizioEntePK = new ServizioEntePK(servizioId, organizationId);
 
