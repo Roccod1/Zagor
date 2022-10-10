@@ -53,11 +53,12 @@
 			<aui:input label="gestionePagamenti.dettaglioPagamento.servizioId" name="dettaglioPagamentosServizioId" value="${dettaglioPagamento.servizioId}"  readonly="true" />
 		</aui:col>
 	</aui:row>
+	<fmt:formatNumber type="currency" currencyCode="EUR" value="${dettaglioPagamento.importo}" var="importoFormatted"/>
 	<aui:row>
 		<c:choose>
 			<c:when test="${siteOrganizationId == 0}">
 				<aui:col md="3">
-					<aui:input label="gestionePagamenti.dettaglioPagamento.importoServizio" name="dettaglioPagamentoImportoServizio" value="${dettaglioPagamento.importo}"  readonly="true" />
+					<aui:input label="gestionePagamenti.dettaglioPagamento.importoServizio" name="dettaglioPagamentoImportoServizio" value="${importoFormatted}"  readonly="true" />
 				</aui:col>
 				<aui:col md="3">
 					<aui:input label="gestionePagamenti.dettaglioPagamento.statoPagamento" name="dettaglioPagamentoStatoPagamento" value="<%=StatoPagamento.getDescrizioneByName(dettaglioPagamento.getStato()) %>"  readonly="true" />
@@ -71,7 +72,7 @@
 			</c:when>
 			<c:otherwise>
 				<aui:col md="4">
-					<aui:input label="gestionePagamenti.dettaglioPagamento.importoServizio" name="dettaglioPagamentoImportoServizio" value="${dettaglioPagamento.importo}"  readonly="true" />
+					<aui:input label="gestionePagamenti.dettaglioPagamento.importoServizio" name="dettaglioPagamentoImportoServizio" value="${importoFormatted}"  readonly="true" />
 				</aui:col>
 				<aui:col md="4">
 					<aui:input label="gestionePagamenti.dettaglioPagamento.statoPagamento" name="dettaglioPagamentoStatoPagamento" value="<%=StatoPagamento.getDescrizioneByName(dettaglioPagamento.getStato()) %>"  readonly="true" />

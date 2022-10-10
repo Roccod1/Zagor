@@ -33,7 +33,8 @@
 		<liferay-ui:search-container-column-text name="gestionePagamenti.searchContainer.dataInserimento" orderable="true" orderableProperty="createDate">
 			<fmt:formatDate value="${pagamento.createDate}" pattern="dd/MM/yyyy HH:mm"/>
 		</liferay-ui:search-container-column-text>
-		<liferay-ui:search-container-column-text property="importo" name="gestionePagamenti.searchContainer.importoTotale" orderable="true" orderableProperty="importo"/>
+		<fmt:formatNumber type="currency" currencyCode="EUR" value="${pagamento.importo}" var="importoFormatted"/>
+		<liferay-ui:search-container-column-text value="${importoFormatted}" name="gestionePagamenti.searchContainer.importoTotale" orderable="true" orderableProperty="importo"/>
 		<liferay-ui:search-container-column-text value="<%=StatoPagamento.getDescrizioneByName(pagamento.getStato()) %>" name="gestionePagamenti.searchContainer.stato" orderable="true" orderableProperty="stato"/>
 		<c:if test = "${siteOrganizationId == 0}">
 			<liferay-ui:search-container-column-text property="nomeOrganizzazione" name="gestionePagamenti.searchContainer.nomeOrganizzazione"/>
