@@ -5,7 +5,6 @@ import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -113,8 +112,6 @@ public class CercaPagamentiMVCActionCommand extends BaseMVCActionCommand {
 		
 		actionRequest.setAttribute(SearchContainer.DEFAULT_CUR_PARAM, cur);
 		actionRequest.setAttribute(SearchContainer.DEFAULT_DELTA_PARAM, delta);
-		
-		SessionMessages.add(actionRequest, GestionePagamentiFrontendPortletKeys.SESSION_MESSAGE_RICERCA_ESEGUITA_CORRETTAMENTE);
 
 		actionResponse.getRenderParameters().setValue("mvcPath", "/view.jsp");
 	}

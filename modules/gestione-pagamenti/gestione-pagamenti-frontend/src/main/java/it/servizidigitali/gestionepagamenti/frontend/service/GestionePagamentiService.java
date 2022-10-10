@@ -10,14 +10,20 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
+import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.model.Tipologia;
@@ -94,5 +100,42 @@ public class GestionePagamentiService {
 			nomeOrganizzazione = organization.getName();
 		}
 		pagamento.setNomeOrganizzazione(nomeOrganizzazione);
+	}
+	
+	public String[] getCsvHeader() {
+		return new String[] { "ID Pagamento", "Categoria", "Codice IUV", "Stato Pagamento",
+				"C.F. o P.I. Cliente", "Nome Cliente", "Causale", "Data Inserimento", "Data Operazione",
+				"Email Quietanza", /*"Importo Servizio", "Importo Gateway",*/ "Importo Totale"/*, "Codice Fiscale Minori"*/ };
+	}
+	
+	public List<List<String>> getValuesForCsv(List<Pagamento> listaPagamenti) {
+		
+		DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+		decimalFormatSymbols.setDecimalSeparator('.');
+		DecimalFormat decimalFormat = new DecimalFormat("0.00", decimalFormatSymbols);
+		decimalFormat.setGroupingUsed(false);
+		
+		List<List<String>> valuesForCsv = new ArrayList<>();
+		
+		listaPagamenti.forEach(pagamento -> {
+			List<String> recordValues = new ArrayList<>();
+			recordValues.add(String.valueOf(pagamento.getPagamentoId()));
+			recordValues.add(pagamento.getNomeServizio());
+			recordValues.add(pagamento.getIuv());
+			recordValues.add(StatoPagamento.getDescrizioneByName(pagamento.getStato()));
+			recordValues.add(pagamento.getIdFiscaleCliente());
+			recordValues.add(pagamento.getDenominazioneCliente());
+			recordValues.add(pagamento.getCausale());
+			recordValues.add(dateFormat.format(pagamento.getCreateDate()));
+			recordValues.add(dateFormat.format(pagamento.getModifiedDate()));
+			recordValues.add(pagamento.getEmailQuietanza());
+			recordValues.add(decimalFormat.format(pagamento.getImporto()));
+			
+			valuesForCsv.add(recordValues);
+		});
+		
+		return valuesForCsv;
 	}
 }

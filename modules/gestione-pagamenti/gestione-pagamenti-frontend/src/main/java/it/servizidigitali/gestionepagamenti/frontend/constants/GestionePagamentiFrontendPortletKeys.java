@@ -8,8 +8,6 @@ public class GestionePagamentiFrontendPortletKeys {
 	public static final String GESTIONEPAGAMENTIFRONTEND =
 		"gestione_pagamenti_frontend_GestionePagamentiFrontendPortlet";
 	
-	public static final String SESSION_MESSAGE_RICERCA_ESEGUITA_CORRETTAMENTE = "ricerca-eseguita-correttamente";
-	
 	public static final String HOME_VIEW =
 			"/view.jsp";
 	
@@ -45,4 +43,6 @@ public class GestionePagamentiFrontendPortletKeys {
 	public static final String SITE_ORGANIZATION_ID = "siteOrganizationId";
 	
 	public static final String LISTA_SERVIZI = "listaServizi";
+	
+	public static final String ESPORTA_CSV_RESOURCE_COMMAND = "/esportaCsvPagamenti";
 }
