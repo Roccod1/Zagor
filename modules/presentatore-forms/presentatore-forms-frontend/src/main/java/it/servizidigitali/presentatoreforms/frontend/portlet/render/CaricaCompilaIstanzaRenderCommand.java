@@ -92,7 +92,11 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 			TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
 
 			if (Boolean.valueOf(isBozza) && istanzaFormRichiesta != null) {
-				jsonDataBozza = gson.toJson(gson.fromJson(istanzaFormRichiesta.getJson(), FormData.class));
+				
+				if(!tipoServizio.equals(TipoServizio.CERTIFICATO)) {
+					jsonDataBozza = gson.toJson(gson.fromJson(istanzaFormRichiesta.getJson(), FormData.class));
+				}
+				
 				formData = AlpacaUtil.loadFormData(form, jsonDataBozza, true, themeDisplay.getPortalURL());
 				alpacaStructure = formData.getAlpaca();
 				

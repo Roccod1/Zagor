@@ -14,17 +14,18 @@
 
 <portlet:renderURL var="homeURL"></portlet:renderURL>
 
-<c:if test="${not empty listaErrori}">
-	<div class="alert alert-danger">
-		${listaErrori}
-	</div>
-</c:if>
 
+	
 <div class="row-fluid">
 	<div class="span12 formpresenter-portlet nuova-istanza">
 		<div class="page-header">
 			<h2 class="noMargin">${titoloPortletServizio}</h2>
 		</div>
+		
+		<div id="errorDestinazioneUso" class="hidden alert alert-danger">
+			<liferay-ui:message key="error.destinazioneUso.required" />
+		</div>
+		
 <%-- 		<c:if test="${configurazioneTipoServizioStep2 == CONCORSO && not empty concorsoAttivo}"> --%>
 <!-- 			<div class="row-fluid"> -->
 <!-- 				<div class="span12 text-right"> -->
@@ -188,21 +189,24 @@ function mainScript(){
 								} else {
 									/*console.log("validation: OK!");*/
 								}
-			   	            	
-			   	            	$.blockUI({
-			   	             		message: "<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '> Attendere...</div>",
-			   	                 	baseZ:2000,
-			   	                  	css: {
-			   	                         border: 'none', 
-			   	                         fontFamily: "'Titillium Web',sans-serif",
-			   	                         opacity: .7, 
-			   	                         color: '#ae1d3f',
-			   	                     } 
-			   	           		});
-			   	            	
-			   	            	var submitForm = true;
-								
-			   	            	if(submitForm){
+
+			   	            	var destinazioneUsoId = $('#<portlet:namespace />destinazioneUsoSelect').val();
+
+			   	            	if(destinazioneUsoId>0){
+			   	            		
+			   	            		$.blockUI({
+				   	             		message: "<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '> Attendere...</div>",
+				   	                 	baseZ:2000,
+				   	                  	css: {
+				   	                         border: 'none', 
+				   	                         fontFamily: "'Titillium Web',sans-serif",
+				   	                         opacity: .7, 
+				   	                         color: '#ae1d3f',
+				   	                     } 
+				   	           		});
+			   	            		
+			   	            		$('#errorDestinazioneUso').addClass("hidden");
+			   	            		
 			   	            		$.ajax({
 				   	            	    url: submitFormUrl,
 				   	            	    data: {"<portlet:namespace />dataForm" : dataTosend.dataForm, "<portlet:namespace />destinazioneUsoId" : $('#<portlet:namespace />destinazioneUsoSelect').val()},
@@ -222,9 +226,8 @@ function mainScript(){
 					                               } 
 					                       });
 					   	            	    
-					   	            	  var destinazioneUsoId = $('#<portlet:namespace />destinazioneUsoSelect').val();
-						   	          	  window.location.href = step3Url + '&<portlet:namespace />destinazioneUsoId=' + destinazioneUsoId;
-					   	            	    
+							   	          window.location.href = step3Url + '&<portlet:namespace />destinazioneUsoId=' + destinazioneUsoId;
+					   	            	  
 				   	            	    },
 				   	            	    error: function (jqXHR, exception) {
 				   	            	    	if (isDebugEnabled) {
@@ -235,6 +238,8 @@ function mainScript(){
 				   	            		/*In ogni caso deve essere nascosto il loader*/
 				   	            		$.unblockUI();
 				   	            	});
+			   	            	}else{
+			   	            		$('#errorDestinazioneUso').removeClass("hidden");
 			   	            	}
 
 			   	         	}

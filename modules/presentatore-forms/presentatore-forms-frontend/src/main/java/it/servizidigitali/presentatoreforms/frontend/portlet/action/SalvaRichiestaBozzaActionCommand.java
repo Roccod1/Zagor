@@ -10,12 +10,14 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
@@ -48,13 +50,24 @@ public class SalvaRichiestaBozzaActionCommand extends BaseMVCActionCommand{
 		User user = themeDisplay.getUser();
 		String dataForm = ParamUtil.getString(actionRequest, "dataForm");
 		Procedura procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
+		
+		Servizio servizio = servizioLocalService.getServizio(procedura.getServizioId());
+
 				
 		if(Validator.isNotNull(dataForm) && procedura.getProceduraId() >0){
 			
-			Servizio servizio = servizioLocalService.getServizio(procedura.getServizioId());
+			TipoServizio tipoServizio = TipoServizio.valueOf(procedura.getStep2TipoServizio());
 			
-			presentatoreFormFrontendService.createOrUpdateRichiesta(user, servizio, procedura.getProceduraId(), dataForm, StatoRichiesta.BOZZA.name(), themeDisplay.getSiteGroupId());			
-			
+			if(tipoServizio.equals(TipoServizio.CERTIFICATO)) {
+				long destinazioneUsoId = ParamUtil.getLong(actionRequest, "destinazioneUsoId");
+				
+				if(destinazioneUsoId>0) {
+					presentatoreFormFrontendService.createOrUpdateRichiesta(user, servizio, procedura.getProceduraId(), dataForm, StatoRichiesta.BOZZA.name(), themeDisplay.getSiteGroupId());			
+				}
+			}else {
+				presentatoreFormFrontendService.createOrUpdateRichiesta(user, servizio, procedura.getProceduraId(), dataForm, StatoRichiesta.BOZZA.name(), themeDisplay.getSiteGroupId());			
+			}
+
 		}		
 	}	
 	
