@@ -53,35 +53,28 @@
 			<aui:input label="gestionePagamenti.dettaglioPagamento.servizioId" name="dettaglioPagamentosServizioId" value="${dettaglioPagamento.servizioId}"  readonly="true" />
 		</aui:col>
 	</aui:row>
-	<fmt:formatNumber type="currency" currencyCode="EUR" value="${dettaglioPagamento.importo}" var="importoFormatted"/>
 	<aui:row>
-		<c:choose>
-			<c:when test="${siteOrganizationId == 0}">
-				<aui:col md="3">
-					<aui:input label="gestionePagamenti.dettaglioPagamento.importoServizio" name="dettaglioPagamentoImportoServizio" value="${importoFormatted}"  readonly="true" />
-				</aui:col>
-				<aui:col md="3">
-					<aui:input label="gestionePagamenti.dettaglioPagamento.statoPagamento" name="dettaglioPagamentoStatoPagamento" value="<%=StatoPagamento.getDescrizioneByName(dettaglioPagamento.getStato()) %>"  readonly="true" />
-				</aui:col>
-				<aui:col md="3">
-					<aui:input label="gestionePagamenti.dettaglioPagamento.organizzazione" name="dettaglioPagamentoOrganizzazione" value="${dettaglioPagamento.nomeOrganizzazione}"  readonly="true" />
-				</aui:col>
-				<aui:col md="3">
-					<aui:input label="gestionePagamenti.dettaglioPagamento.categoria" name="dettaglioPagamentoCategoria" value="${dettaglioPagamento.nomeServizio}"  readonly="true" />
-				</aui:col>
-			</c:when>
-			<c:otherwise>
-				<aui:col md="4">
-					<aui:input label="gestionePagamenti.dettaglioPagamento.importoServizio" name="dettaglioPagamentoImportoServizio" value="${importoFormatted}"  readonly="true" />
-				</aui:col>
-				<aui:col md="4">
-					<aui:input label="gestionePagamenti.dettaglioPagamento.statoPagamento" name="dettaglioPagamentoStatoPagamento" value="<%=StatoPagamento.getDescrizioneByName(dettaglioPagamento.getStato()) %>"  readonly="true" />
-				</aui:col>
-				<aui:col md="4">
-					<aui:input label="gestionePagamenti.dettaglioPagamento.categoria" name="dettaglioPagamentoCategoria" value="${dettaglioPagamento.nomeServizio}"  readonly="true" />
-				</aui:col>
-			</c:otherwise>
-		</c:choose>
+		<fmt:formatNumber type="currency" currencyCode="EUR" value="${dettaglioPagamento.importo}" var="importoServizioFormatted"/>
+		<fmt:formatNumber type="currency" currencyCode="EUR" value="${dettaglioPagamento.commissioni}" var="importoCommissioniFormatted"/>
+		<aui:col md="3">
+			<aui:input label="gestionePagamenti.dettaglioPagamento.importoServizio" name="dettaglioPagamentoImportoServizio" value="${importoServizioFormatted}"  readonly="true" />
+		</aui:col>
+		<aui:col md="3">
+			<aui:input label="gestionePagamenti.dettaglioPagamento.importoGateway" name="dettaglioPagamentoImportoGateway" value="${importoCommissioniFormatted}"  readonly="true" />
+		</aui:col>
+		<aui:col md="3">
+			<aui:input label="gestionePagamenti.dettaglioPagamento.statoPagamento" name="dettaglioPagamentoStatoPagamento" value="<%=StatoPagamento.getDescrizioneByName(dettaglioPagamento.getStato()) %>"  readonly="true" />
+		</aui:col>
+		<aui:col md="3">
+			<aui:input label="gestionePagamenti.dettaglioPagamento.categoria" name="dettaglioPagamentoCategoria" value="${dettaglioPagamento.nomeServizio}"  readonly="true" />
+		</aui:col>
+	</aui:row>
+	<aui:row>
+		<c:if test="${siteOrganizationId == 0}">
+			<aui:col md="3">
+				<aui:input label="gestionePagamenti.dettaglioPagamento.organizzazione" name="dettaglioPagamentoOrganizzazione" value="${dettaglioPagamento.nomeOrganizzazione}"  readonly="true" />
+			</aui:col>
+		</c:if>
 	</aui:row>
 	<aui:row>
 		<aui:col md="2">
