@@ -2,6 +2,7 @@ package it.servizidigitali.restservice.internal.resource.v1_0;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
@@ -18,6 +19,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
+import it.servizidigitali.communication.service.CommunicationService;
 import it.servizidigitali.restservice.dto.v1_0.InsertRichiestaServizioRequest;
 import it.servizidigitali.restservice.dto.v1_0.RichiestaServizio;
 import it.servizidigitali.restservice.dto.v1_0.UpdateRichiestaServizioRequest;
@@ -44,8 +46,8 @@ public class RichiesteServizioResourceImpl extends BaseRichiesteServizioResource
 	@Reference
 	private EntityToSchemaModelConverter entityToSchemaModelConverter;
 
-	// @Reference
-	// private CommunicationEngineSender communicationEngineSender;
+	@Reference
+	private CommunicationService communicationService;
 
 	@Reference
 	private GroupLocalService groupLocalService;
@@ -104,39 +106,29 @@ public class RichiesteServizioResourceImpl extends BaseRichiesteServizioResource
 			throw new NotFoundException(message);
 		}
 
+		String statoOriginale = richiesta.getStato();
+		boolean sendEmail = !statoOriginale.equals(updateStatoRichiestaServizioRequest.getStato());
+
 		StatoRichiesta statoRichiesta = StatoRichiesta.valueOf(updateStatoRichiestaServizioRequest.getStato());
 		richiestaLocalService.updateStatoRichiesta(richiesta.getRichiestaId(), statoRichiesta.name(), updateStatoRichiestaServizioRequest.getNote());
 		richiesta = richiestaLocalService.getRichiesta(updateStatoRichiestaServizioRequest.getId());
 
 		RichiestaServizio richiestaServizio = entityToSchemaModelConverter.getRichiestaServizio(richiesta);
-		// try {
-		//
-		// User user = userLocalService.getUser(richiesta.getUserId());
-		// Organization organization =
-		// organizationLocalService.getOrganization(groupLocalService.getGroup(richiesta.getGroupId()).getOrganizationId());
-		//
-		// String oggetto = organization.getName() + "Notifica Cambiamento di stato richiesta " +
-		// richiesta.getRichiestaId();
-		// String testo = "Gentile " + user.getFullName() + ",<br/> La richiesta in oggetto, da lei
-		// inoltrata con descrizione : " + richiesta.getOggetto()
-		// + ", ha subito un aggiornamento dallo stato <b>" +
-		// messageUtil.getMessage("stato-richiesta-" + richiesta.getStato()) + "</b> allo stato <b>"
-		// + messageUtil.getMessage("stato-richiesta-" +
-		// updateStatoRichiestaServizioRequest.getStato()) + "</b>";
-		//
-		// Utente utente = new Utente();
-		// utente.setEmail(user.getEmailAddress());
-		// List<Utente> utenti = Arrays.asList(utente);
-		//
-		// Comunicazione comunicazione = new Comunicazione(oggetto, testo, utenti, null, false,
-		// null);
-		// communicationEngineSender.sendNow(comunicazione, Canale.EMAIL);
-		// }
-		// catch (Exception e) {
-		// log.error("Impossibile aggiornare lo stato delle richiesta " + richiesta.getRichiestaId()
-		// + " : " + e.getMessage(), e);
-		// throw e;
-		// }
+		if (sendEmail) {
+			User user = userLocalService.getUser(richiesta.getUserId());
+			try {
+
+				Organization organization = organizationLocalService.getOrganization(groupLocalService.getGroup(richiesta.getGroupId()).getOrganizationId());
+				communicationService.sendCambioStatoRichiestaCommunication(organization.getName(), richiesta.getRichiestaId(), richiesta.getOggetto(),
+						messageUtil.getMessage("stato-richiesta-" + statoOriginale), messageUtil.getMessage("stato-richiesta-" + updateStatoRichiestaServizioRequest.getStato()), user,
+						richiesta.getCompanyId(), richiesta.getGroupId());
+			}
+			catch (Exception e) {
+				log.error("Impossibile inviare la comunicazione di aggiornamento stato richiesta " + richiesta.getRichiestaId() + " all'indirizzo : " + user.getEmailAddress() + " : " + e.getMessage(),
+						e);
+				throw e;
+			}
+		}
 
 		return richiestaServizio;
 
