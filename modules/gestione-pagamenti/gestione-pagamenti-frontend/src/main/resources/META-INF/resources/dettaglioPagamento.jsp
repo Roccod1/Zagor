@@ -75,11 +75,13 @@
 			<aui:input cssClass="ml-2" inlineLabel="left" label="gestionePagamenti.dettaglioPagamento.statoPagamento" name="dettaglioPagamentoStatoPagamento" value="<%=StatoPagamento.getDescrizioneByName(dettaglioPagamento.getStato()) %>"  readonly="true" />
 		</aui:col>
 	</aui:row>
-	<aui:row>
-		<aui:col md="12">
-			<aui:input cssClass="ml-2" inlineLabel="left" label="gestionePagamenti.dettaglioPagamento.organizzazione" name="dettaglioPagamentoOrganizzazione" value="${dettaglioPagamento.nomeOrganizzazione}"  readonly="true" />
-		</aui:col>
-	</aui:row>
+	<c:if test = "${siteOrganizationId == 0}">
+		<aui:row>
+			<aui:col md="12">
+				<aui:input cssClass="ml-2" inlineLabel="left" label="gestionePagamenti.dettaglioPagamento.organizzazione" name="dettaglioPagamentoOrganizzazione" value="${dettaglioPagamento.nomeOrganizzazione}"  readonly="true" />
+			</aui:col>
+		</aui:row>
+	</c:if>
 	<aui:row>
 		<aui:col md="12">
 			<aui:input cssClass="ml-2" inlineLabel="left" label="gestionePagamenti.dettaglioPagamento.categoria" name="dettaglioPagamentoCategoria" value="${dettaglioPagamento.nomeServizio}"  readonly="true" />

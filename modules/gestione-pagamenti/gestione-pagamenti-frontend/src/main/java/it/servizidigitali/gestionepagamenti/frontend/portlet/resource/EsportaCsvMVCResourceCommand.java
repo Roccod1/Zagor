@@ -6,10 +6,12 @@ import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCResourceCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.StringWriter;
 import java.text.DateFormat;
@@ -47,6 +49,14 @@ public class EsportaCsvMVCResourceCommand extends BaseMVCResourceCommand {
 	@Override
 	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws Exception {
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		long siteOrganizationId = themeDisplay.getSiteGroup().getOrganizationId();
+		
+		boolean mainSite = siteOrganizationId == 0;
+		
+		long siteGroupId = mainSite ? 0 : themeDisplay.getSiteGroupId();
 
 		DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat("yyyy-MM-dd");
 
@@ -64,8 +74,6 @@ public class EsportaCsvMVCResourceCommand extends BaseMVCResourceCommand {
 
 		Organization organization = organizzazioneId != 0 ? gestionePagamentiService.getOrganization(organizzazioneId)
 				: null;
-
-		long siteGroupId = 0;
 
 		if (Validator.isNotNull(organization)) {
 			siteGroupId = organization.getGroupId();
@@ -92,11 +100,11 @@ public class EsportaCsvMVCResourceCommand extends BaseMVCResourceCommand {
 
 		if (!listaPagamenti.isEmpty()) {
 			
-			CSVFormat csvFormat = CSVFormat.Builder.create(CSVFormat.DEFAULT).setHeader(gestionePagamentiService.getCsvHeader()).build();
+			CSVFormat csvFormat = CSVFormat.Builder.create(CSVFormat.DEFAULT).setHeader(gestionePagamentiService.getCsvHeader(mainSite)).build();
 
 			StringWriter stringWriter = new StringWriter();
 			try (CSVPrinter printer = new CSVPrinter(stringWriter, csvFormat)) {
-				printer.printRecords(gestionePagamentiService.getValuesForCsv(listaPagamenti));
+				printer.printRecords(gestionePagamentiService.getValuesForCsv(listaPagamenti, mainSite));
 			}
 			
 			String stringCsv = stringWriter.toString();

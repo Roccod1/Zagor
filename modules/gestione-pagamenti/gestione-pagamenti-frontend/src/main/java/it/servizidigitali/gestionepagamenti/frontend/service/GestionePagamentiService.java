@@ -102,13 +102,27 @@ public class GestionePagamentiService {
 		pagamento.setNomeOrganizzazione(nomeOrganizzazione);
 	}
 	
-	public String[] getCsvHeader() {
-		return new String[] { "ID Pagamento", "Categoria", "Codice IUV", "Stato Pagamento",
-				"C.F. o P.I. Cliente", "Nome Cliente", "Causale", "Data Inserimento", "Data Operazione",
-				"Email Quietanza", "Importo Gateway", "Importo Totale"};
+	public String[] getCsvHeader(boolean mainSite) {
+		List<String> headers = new ArrayList<>();
+		headers.add("ID Pagamento");
+		if (mainSite) {
+			headers.add("Ente");
+		}
+		headers.add("Categoria");
+		headers.add("Codice IUV");
+		headers.add("Stato Pagamento");
+		headers.add("C.F. o P.I. Cliente");
+		headers.add("Nome Cliente");
+		headers.add("Causale");
+		headers.add("Data Inserimento");
+		headers.add("Data Operazione");
+		headers.add("Email Quietanza");
+		headers.add("Importo Gateway");
+		headers.add("Importo Totale");
+		return headers.toArray(new String[0]);
 	}
 	
-	public List<List<String>> getValuesForCsv(List<Pagamento> listaPagamenti) {
+	public List<List<String>> getValuesForCsv(List<Pagamento> listaPagamenti, boolean mainSite) {
 		
 		DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat("dd/MM/yyyy HH:mm");
 		
@@ -122,6 +136,9 @@ public class GestionePagamentiService {
 		listaPagamenti.forEach(pagamento -> {
 			List<String> recordValues = new ArrayList<>();
 			recordValues.add(String.valueOf(pagamento.getPagamentoId()));
+			if (mainSite) {
+				recordValues.add(pagamento.getNomeOrganizzazione());
+			}
 			recordValues.add(pagamento.getNomeServizio());
 			recordValues.add(pagamento.getIuv());
 			recordValues.add(StatoPagamento.getDescrizioneByName(pagamento.getStato()));

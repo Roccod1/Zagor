@@ -41,6 +41,7 @@
 		
 		<portlet:renderURL var="dettaglioPagamentoURL">
 			<portlet:param name="mvcRenderCommandName" value="<%=GestionePagamentiFrontendPortletKeys.DETTAGLIO_PAGAMENTO_RENDER_COMMAND %>" />
+			<portlet:param name="<%=GestionePagamentiFrontendPortletKeys.SITE_ORGANIZATION_ID %>" value="${siteOrganizationId}"/>
 			<portlet:param name="<%=GestionePagamentiFrontendPortletKeys.PAGAMENTO_ID_DETTAGLIO %>" value="${pagamento.pagamentoId}"/>
 			<portlet:param name="<%=GestionePagamentiFrontendPortletKeys.DATA_INSERIMENTO_DA_CERCA %>" value="${dataInserimentoDaCerca}"/>
 			<portlet:param name="<%=GestionePagamentiFrontendPortletKeys.DATA_INSERIMENTO_A_CERCA %>" value="${dataInserimentoACerca}"/>

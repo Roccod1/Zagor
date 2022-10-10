@@ -40,6 +40,9 @@ public class DettaglioPagamentoMVCRenderCommand implements MVCRenderCommand {
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 		
+		long siteOrganizationId = ParamUtil.getLong(renderRequest,
+				GestionePagamentiFrontendPortletKeys.SITE_ORGANIZATION_ID);
+		
 		DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat("yyyy-MM-dd");
 
 		Date dataInserimentoDa = ParamUtil.getDate(renderRequest,
@@ -73,6 +76,7 @@ public class DettaglioPagamentoMVCRenderCommand implements MVCRenderCommand {
 		String orderByCol = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
 		String orderByType = ParamUtil.getString(renderRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
 
+		renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.SITE_ORGANIZATION_ID, siteOrganizationId);
 		renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_INSERIMENTO_DA_CERCA, dataInserimentoDa == null ? null : dateFormat.format(dataInserimentoDa));
 		renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_INSERIMENTO_A_CERCA, dataInserimentoA == null ? null : dateFormat.format(dataInserimentoA));
 		renderRequest.setAttribute(GestionePagamentiFrontendPortletKeys.DATA_OPERAZIONE_DA_CERCA, dataOperazioneDa == null ? null : dateFormat.format(dataOperazioneDa));
