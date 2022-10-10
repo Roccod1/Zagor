@@ -65,8 +65,8 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 				"com.liferay.portlet.footer-portlet-javascript=/libs/jquery.handsontable/jquery.handsontable.full.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/libs/alpaca-custom/alpaca.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/dist/custom-fields.min.js", //
-				"com.liferay.portlet.single-page-application=false", "com.liferay.portlet.instanceable=true", "javax.portlet.display-name=PresentatoreForms", //
-				"javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp", //
+				"com.liferay.portlet.instanceable=true", "javax.portlet.display-name=PresentatoreForms", //
+				"com.liferay.portlet.single-page-application=false", "javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp", //
 				"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
 				"javax.portlet.resource-bundle=content.Language", //
 				"javax.portlet.security-role-ref=power-user,user" }, //
@@ -116,9 +116,8 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 			String mvcPath = ParamUtil.getString(renderRequest, "mvcPath");
 			if (Validator.isNull(mvcRenderCommandName) && Validator.isNull(mvcPath)) {
 				if (Validator.isNotNull(richiesta) && richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
-					renderRequest.setAttribute("richiestaId", richiesta.getRichiestaId());
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.RICHIESTA_ID, richiesta.getRichiestaId());
 					include(PresentatoreFormsPortletKeys.JSP_HOME, renderRequest, renderResponse);
-					presentatoreFormFrontendService.deleteRichiesteBozzaUtente(screenName, procedura.getProceduraId());
 				}
 				else {
 					try {
@@ -132,9 +131,9 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 
 							List<ComponenteNucleoFamiliare> componentiNucleoFamiliare = datiAnagraficiPortletService.getComponentiNucleoFamiliare(codiceFiscale, organizationId,
 									integrationPreferences);
-							renderRequest.setAttribute("componentiNucleoFamiliare", componentiNucleoFamiliare);
-							renderRequest.setAttribute("codiceFiscaleManuale", codiceFiscale);
-							renderRequest.setAttribute("filtroComponentiFamiliari", filtroComponentiFamiliari);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.COMPONENTI_NUCLEO_FAMILIARE, componentiNucleoFamiliare);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.CODICE_FISCALE_MANUALE, codiceFiscale);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.FILTRO_COMPONENTI_FAMILIARI, filtroComponentiFamiliari);
 
 							include(PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO, renderRequest, renderResponse);
 
@@ -181,14 +180,20 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 							alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
 
 							renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.API_ALPACA_PATH,
+									themeDisplay.getPortalURL() + PresentatoreFormsPortletKeys.SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.TIPO_SERVIZIO_STEP2, procedura.getStep2TipoServizio());
 
 							// Aggiunta destinazioni d'uso in pagina se certificato
 							if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 								List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
-								renderRequest.setAttribute("destinazioniUso", destinazioniUso);
+								renderRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONI_USO, destinazioniUso);
+								renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, form.getNome());
+								include(PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO, renderRequest, renderResponse);
+							}else {
+								include(PresentatoreFormsPortletKeys.JSP_COMPILA_FORM, renderRequest, renderResponse);
 							}
 
-							include(PresentatoreFormsPortletKeys.JSP_COMPILA_FORM, renderRequest, renderResponse);
 						}
 
 					}

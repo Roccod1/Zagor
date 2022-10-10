@@ -59,7 +59,6 @@ public class TipoDocumentoWrapper
 		attributes.put("stato", getStato());
 		attributes.put("numeroRequired", getNumeroRequired());
 		attributes.put("dataScadenzaRequired", getDataScadenzaRequired());
-		attributes.put("organizationId", getOrganizationId());
 
 		return attributes;
 	}
@@ -161,12 +160,6 @@ public class TipoDocumentoWrapper
 
 		if (dataScadenzaRequired != null) {
 			setDataScadenzaRequired(dataScadenzaRequired);
-		}
-
-		Long organizationId = (Long)attributes.get("organizationId");
-
-		if (organizationId != null) {
-			setOrganizationId(organizationId);
 		}
 	}
 
@@ -283,16 +276,6 @@ public class TipoDocumentoWrapper
 	@Override
 	public long getNumeroRequired() {
 		return model.getNumeroRequired();
-	}
-
-	/**
-	 * Returns the organization ID of this tipo documento.
-	 *
-	 * @return the organization ID of this tipo documento
-	 */
-	@Override
-	public long getOrganizationId() {
-		return model.getOrganizationId();
 	}
 
 	/**
@@ -478,16 +461,6 @@ public class TipoDocumentoWrapper
 	@Override
 	public void setNumeroRequired(long numeroRequired) {
 		model.setNumeroRequired(numeroRequired);
-	}
-
-	/**
-	 * Sets the organization ID of this tipo documento.
-	 *
-	 * @param organizationId the organization ID of this tipo documento
-	 */
-	@Override
-	public void setOrganizationId(long organizationId) {
-		model.setOrganizationId(organizationId);
 	}
 
 	/**

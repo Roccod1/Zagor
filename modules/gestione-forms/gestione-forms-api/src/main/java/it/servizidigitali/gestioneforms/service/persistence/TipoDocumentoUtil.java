@@ -547,8 +547,8 @@ public class TipoDocumentoUtil {
 	 * @param stato the stato
 	 * @return the matching tipo documentos
 	 */
-	public static List<TipoDocumento> findBystato(String stato) {
-		return getPersistence().findBystato(stato);
+	public static List<TipoDocumento> findByStato(String stato) {
+		return getPersistence().findByStato(stato);
 	}
 
 	/**
@@ -563,10 +563,10 @@ public class TipoDocumentoUtil {
 	 * @param end the upper bound of the range of tipo documentos (not inclusive)
 	 * @return the range of matching tipo documentos
 	 */
-	public static List<TipoDocumento> findBystato(
+	public static List<TipoDocumento> findByStato(
 		String stato, int start, int end) {
 
-		return getPersistence().findBystato(stato, start, end);
+		return getPersistence().findByStato(stato, start, end);
 	}
 
 	/**
@@ -582,11 +582,11 @@ public class TipoDocumentoUtil {
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching tipo documentos
 	 */
-	public static List<TipoDocumento> findBystato(
+	public static List<TipoDocumento> findByStato(
 		String stato, int start, int end,
 		OrderByComparator<TipoDocumento> orderByComparator) {
 
-		return getPersistence().findBystato(
+		return getPersistence().findByStato(
 			stato, start, end, orderByComparator);
 	}
 
@@ -604,12 +604,12 @@ public class TipoDocumentoUtil {
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching tipo documentos
 	 */
-	public static List<TipoDocumento> findBystato(
+	public static List<TipoDocumento> findByStato(
 		String stato, int start, int end,
 		OrderByComparator<TipoDocumento> orderByComparator,
 		boolean useFinderCache) {
 
-		return getPersistence().findBystato(
+		return getPersistence().findByStato(
 			stato, start, end, orderByComparator, useFinderCache);
 	}
 
@@ -621,12 +621,12 @@ public class TipoDocumentoUtil {
 	 * @return the first matching tipo documento
 	 * @throws NoSuchTipoDocumentoException if a matching tipo documento could not be found
 	 */
-	public static TipoDocumento findBystato_First(
+	public static TipoDocumento findByStato_First(
 			String stato, OrderByComparator<TipoDocumento> orderByComparator)
 		throws it.servizidigitali.gestioneforms.exception.
 			NoSuchTipoDocumentoException {
 
-		return getPersistence().findBystato_First(stato, orderByComparator);
+		return getPersistence().findByStato_First(stato, orderByComparator);
 	}
 
 	/**
@@ -636,10 +636,10 @@ public class TipoDocumentoUtil {
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching tipo documento, or <code>null</code> if a matching tipo documento could not be found
 	 */
-	public static TipoDocumento fetchBystato_First(
+	public static TipoDocumento fetchByStato_First(
 		String stato, OrderByComparator<TipoDocumento> orderByComparator) {
 
-		return getPersistence().fetchBystato_First(stato, orderByComparator);
+		return getPersistence().fetchByStato_First(stato, orderByComparator);
 	}
 
 	/**
@@ -650,12 +650,12 @@ public class TipoDocumentoUtil {
 	 * @return the last matching tipo documento
 	 * @throws NoSuchTipoDocumentoException if a matching tipo documento could not be found
 	 */
-	public static TipoDocumento findBystato_Last(
+	public static TipoDocumento findByStato_Last(
 			String stato, OrderByComparator<TipoDocumento> orderByComparator)
 		throws it.servizidigitali.gestioneforms.exception.
 			NoSuchTipoDocumentoException {
 
-		return getPersistence().findBystato_Last(stato, orderByComparator);
+		return getPersistence().findByStato_Last(stato, orderByComparator);
 	}
 
 	/**
@@ -665,10 +665,10 @@ public class TipoDocumentoUtil {
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching tipo documento, or <code>null</code> if a matching tipo documento could not be found
 	 */
-	public static TipoDocumento fetchBystato_Last(
+	public static TipoDocumento fetchByStato_Last(
 		String stato, OrderByComparator<TipoDocumento> orderByComparator) {
 
-		return getPersistence().fetchBystato_Last(stato, orderByComparator);
+		return getPersistence().fetchByStato_Last(stato, orderByComparator);
 	}
 
 	/**
@@ -680,13 +680,13 @@ public class TipoDocumentoUtil {
 	 * @return the previous, current, and next tipo documento
 	 * @throws NoSuchTipoDocumentoException if a tipo documento with the primary key could not be found
 	 */
-	public static TipoDocumento[] findBystato_PrevAndNext(
+	public static TipoDocumento[] findByStato_PrevAndNext(
 			long tipoDocumentoId, String stato,
 			OrderByComparator<TipoDocumento> orderByComparator)
 		throws it.servizidigitali.gestioneforms.exception.
 			NoSuchTipoDocumentoException {
 
-		return getPersistence().findBystato_PrevAndNext(
+		return getPersistence().findByStato_PrevAndNext(
 			tipoDocumentoId, stato, orderByComparator);
 	}
 
@@ -695,8 +695,8 @@ public class TipoDocumentoUtil {
 	 *
 	 * @param stato the stato
 	 */
-	public static void removeBystato(String stato) {
-		getPersistence().removeBystato(stato);
+	public static void removeByStato(String stato) {
+		getPersistence().removeByStato(stato);
 	}
 
 	/**
@@ -705,8 +705,8 @@ public class TipoDocumentoUtil {
 	 * @param stato the stato
 	 * @return the number of matching tipo documentos
 	 */
-	public static int countBystato(String stato) {
-		return getPersistence().countBystato(stato);
+	public static int countByStato(String stato) {
+		return getPersistence().countByStato(stato);
 	}
 
 	/**

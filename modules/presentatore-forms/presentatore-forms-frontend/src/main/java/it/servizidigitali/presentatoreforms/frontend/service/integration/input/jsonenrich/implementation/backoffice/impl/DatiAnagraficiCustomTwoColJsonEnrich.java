@@ -108,7 +108,7 @@ public class DatiAnagraficiCustomTwoColJsonEnrich implements DatiAnagraficiJsonE
 
 							// Codice Fiscale
 							String codiceFiscale = componente.getCodiceFiscale();
-							fieldDataContainer.addProperty("codicefiscale", codiceFiscale);
+							fieldDataContainer.addProperty("codiceFiscale", codiceFiscale);
 							// Sesso
 							String sesso = "F";
 							if (componente.getSesso().equalsIgnoreCase("M")) {
@@ -117,7 +117,7 @@ public class DatiAnagraficiCustomTwoColJsonEnrich implements DatiAnagraficiJsonE
 							fieldDataContainer.addProperty("sesso", sesso);
 
 							// Data nascita //
-							fieldDataContainer.addProperty("datanascita", EnrichmentUtilService.getDataNascitaComponente(componente));
+							fieldDataContainer.addProperty("dataNascita", EnrichmentUtilService.getDataNascitaComponente(componente));
 
 							// Comune Nascita //
 							String nomeComuneNascita = "";

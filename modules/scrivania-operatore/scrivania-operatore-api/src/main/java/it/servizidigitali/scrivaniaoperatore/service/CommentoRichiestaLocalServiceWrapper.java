@@ -57,6 +57,14 @@ public class CommentoRichiestaLocalServiceWrapper
 			commentoRichiesta);
 	}
 
+	@Override
+	public int countCommentiRichiestaByRichiestaIdVisibile(
+		long richiestaId, boolean visibile) {
+
+		return _commentoRichiestaLocalService.
+			countCommentiRichiestaByRichiestaIdVisibile(richiestaId, visibile);
+	}
+
 	/**
 	 * Creates a new commento richiesta with the primary key. Does not add the commento richiesta to the database.
 	 *
@@ -295,6 +303,17 @@ public class CommentoRichiestaLocalServiceWrapper
 
 		return _commentoRichiestaLocalService.
 			getCommentiRichiestaByRichiestaIdVisibile(richiestaId, visibile);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta>
+			getCommentiRichiestaByRichiestaIdVisibile(
+				long richiestaId, boolean visibile, int start, int end) {
+
+		return _commentoRichiestaLocalService.
+			getCommentiRichiestaByRichiestaIdVisibile(
+				richiestaId, visibile, start, end);
 	}
 
 	/**

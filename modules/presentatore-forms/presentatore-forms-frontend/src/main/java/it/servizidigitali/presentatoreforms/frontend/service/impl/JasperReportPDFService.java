@@ -45,8 +45,9 @@ import it.servizidigitali.presentatoreforms.frontend.exception.PDFServiceExcepti
 import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
 import it.servizidigitali.presentatoreforms.frontend.service.integration.output.VocabolariService;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
-import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
+import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.service.DestinazioneUsoLocalService;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -113,6 +114,9 @@ public class JasperReportPDFService implements PDFService {
 
 	@Reference
 	private ImageLocalService imageLocalService;
+	
+	@Reference
+	private DestinazioneUsoLocalService destinazioneUsoLocalService;
 
 	@Override
 	public byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, Long idDestinazioneUso,
@@ -130,6 +134,8 @@ public class JasperReportPDFService implements PDFService {
 			TemplatePdf templatePdfPrincipale = getTemplatePdfPrincipale(templatesPdf);
 
 			List<TemplatePdf> templatesPdfFigli = getTemplatesPdfFigli(templatesPdf);
+			
+			DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
 
 			if (templatePdfPrincipale == null) {
 				throw new PDFServiceException("Report JRXML principale non presente.");
@@ -137,8 +143,7 @@ public class JasperReportPDFService implements PDFService {
 
 			Map<String, Object> param = new HashMap<String, Object>();
 
-			FormData formData = (FormData) alpacaStructure.getData();
-			Object data = formData.getAlpaca().getData();
+			Object data = alpacaStructure.getData();
 
 			Gson gson = new Gson();
 			InputStream stream = new ByteArrayInputStream(gson.toJson(data).getBytes("UTF-8"));
@@ -168,7 +173,9 @@ public class JasperReportPDFService implements PDFService {
 				param.put(JR_PARAMETER_LOGO_COMUNE, logoComune);
 			}
 
-			// TODO destinazione uso
+			if(Validator.isNotNull(destinazioneUso)) {
+				param.put("descrizioneDestinazioneUso", destinazioneUso.getDescrizione());
+			}
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(reportPrincipaleJasperReport, param, jsonDataSource);
 
@@ -188,6 +195,7 @@ public class JasperReportPDFService implements PDFService {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		Image image = imageLocalService.getCompanyLogo(themeDisplay.getCompany().getLogoId());
+		Gson gson = new Gson();
 
 		try {
 			long proceduraId = richiesta.getProceduraId();
@@ -203,11 +211,9 @@ public class JasperReportPDFService implements PDFService {
 			}
 
 			Map<String, Object> param = new HashMap<String, Object>();
+			
+			Object data = alpacaStructure.getData();
 
-			FormData formData = (FormData) alpacaStructure.getData();
-			Object data = formData.getAlpaca().getData();
-
-			Gson gson = new Gson();
 			InputStream stream = new ByteArrayInputStream(gson.toJson(data).getBytes("UTF-8"));
 
 			JRDataSource jsonDataSource = new JsonDataSource(stream);

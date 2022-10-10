@@ -36,6 +36,14 @@ public class CommentoRichiestaLocalServiceImpl extends CommentoRichiestaLocalSer
 	public List<CommentoRichiesta> getCommentiRichiestaByRichiestaIdVisibile(long richiestaId, boolean visibile) {
 		return commentoRichiestaPersistence.findByRichiestaIdVisibile(richiestaId, visibile);
 	}
+	
+	public List<CommentoRichiesta> getCommentiRichiestaByRichiestaIdVisibile(long richiestaId, boolean visibile, int start, int end) {
+		return commentoRichiestaPersistence.findByRichiestaIdVisibile(richiestaId, visibile, start, end);
+	}
+	
+	public int countCommentiRichiestaByRichiestaIdVisibile(long richiestaId, boolean visibile) {
+		return commentoRichiestaPersistence.countByRichiestaIdVisibile(richiestaId, visibile);
+	}
 
 	public long createCommentoRichiesta(String testo, String taskId, boolean visibile, long richiestaId, long userId, String userName, long groupId, long companyId) {
 
@@ -47,6 +55,7 @@ public class CommentoRichiestaLocalServiceImpl extends CommentoRichiestaLocalSer
 		commentoRichiesta.setCompanyId(companyId);
 		commentoRichiesta.setUserId(userId);
 		commentoRichiesta.setUserName(userName);
+		commentoRichiesta.setRichiestaId(richiestaId);
 
 		commentoRichiesta = commentoRichiestaPersistence.update(commentoRichiesta);
 

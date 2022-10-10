@@ -1,6 +1,11 @@
 package it.servizidigitali.restservice.internal.resource.v1_0;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.pagination.Page;
 
@@ -31,11 +36,25 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 @Component(properties = "OSGI-INF/liferay/rest/v1_0/richieste-servizio.properties", scope = ServiceScope.PROTOTYPE, service = RichiesteServizioResource.class)
 public class RichiesteServizioResourceImpl extends BaseRichiesteServizioResourceImpl {
 
+	private static final Log log = LogFactoryUtil.getLog(RichiesteServizioResourceImpl.class.getName());
+
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
 
 	@Reference
 	private EntityToSchemaModelConverter entityToSchemaModelConverter;
+
+	// @Reference
+	// private CommunicationEngineSender communicationEngineSender;
+
+	@Reference
+	private GroupLocalService groupLocalService;
+
+	@Reference
+	private OrganizationLocalService organizationLocalService;
+
+	@Reference
+	private UserLocalService userLocalService;
 
 	@Override
 	public Page<RichiestaServizio> searchRichiesteServizio(Integer page, Integer size, String q) {
@@ -89,7 +108,37 @@ public class RichiesteServizioResourceImpl extends BaseRichiesteServizioResource
 		richiestaLocalService.updateStatoRichiesta(richiesta.getRichiestaId(), statoRichiesta.name(), updateStatoRichiestaServizioRequest.getNote());
 		richiesta = richiestaLocalService.getRichiesta(updateStatoRichiestaServizioRequest.getId());
 
-		return entityToSchemaModelConverter.getRichiestaServizio(richiesta);
+		RichiestaServizio richiestaServizio = entityToSchemaModelConverter.getRichiestaServizio(richiesta);
+		// try {
+		//
+		// User user = userLocalService.getUser(richiesta.getUserId());
+		// Organization organization =
+		// organizationLocalService.getOrganization(groupLocalService.getGroup(richiesta.getGroupId()).getOrganizationId());
+		//
+		// String oggetto = organization.getName() + "Notifica Cambiamento di stato richiesta " +
+		// richiesta.getRichiestaId();
+		// String testo = "Gentile " + user.getFullName() + ",<br/> La richiesta in oggetto, da lei
+		// inoltrata con descrizione : " + richiesta.getOggetto()
+		// + ", ha subito un aggiornamento dallo stato <b>" +
+		// messageUtil.getMessage("stato-richiesta-" + richiesta.getStato()) + "</b> allo stato <b>"
+		// + messageUtil.getMessage("stato-richiesta-" +
+		// updateStatoRichiestaServizioRequest.getStato()) + "</b>";
+		//
+		// Utente utente = new Utente();
+		// utente.setEmail(user.getEmailAddress());
+		// List<Utente> utenti = Arrays.asList(utente);
+		//
+		// Comunicazione comunicazione = new Comunicazione(oggetto, testo, utenti, null, false,
+		// null);
+		// communicationEngineSender.sendNow(comunicazione, Canale.EMAIL);
+		// }
+		// catch (Exception e) {
+		// log.error("Impossibile aggiornare lo stato delle richiesta " + richiesta.getRichiestaId()
+		// + " : " + e.getMessage(), e);
+		// throw e;
+		// }
+
+		return richiestaServizio;
 
 	}
 

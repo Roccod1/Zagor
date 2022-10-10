@@ -3,6 +3,7 @@ package it.servizidigitali.gestioneforms.frontend.service;
 import com.liferay.document.library.kernel.exception.NoSuchFolderException;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppService;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -92,6 +93,15 @@ public class TemplateAllegatoFileService {
 			throw new Exception("saveJasperReport :: errore durante il salvataggio del file '" + nomeFile + "' : " + e.getMessage(), e);
 		}
 		return 0;
+	}
+
+	/**
+	 *
+	 * @param fileEntryId
+	 * @throws PortalException
+	 */
+	public void deleteTemplateAllegato(long fileEntryId) throws PortalException {
+		dlAppService.deleteFileEntry(fileEntryId);
 	}
 
 }

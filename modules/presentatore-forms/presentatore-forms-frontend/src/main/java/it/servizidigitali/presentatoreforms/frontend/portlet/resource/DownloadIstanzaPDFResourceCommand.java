@@ -10,6 +10,8 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.ResourceRequest;
@@ -18,17 +20,20 @@ import javax.portlet.ResourceResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.TipoGenerazionePDF;
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
+import it.servizidigitali.presentatoreforms.frontend.service.PDFServiceFactory;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 @Component(immediate = true, property = { //
 		"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
@@ -42,7 +47,10 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 	private PresentatoreFormFrontendService presentatoreFormFrontendService;
 
 	@Reference
-	private PDFService pdfService;
+	private PDFServiceFactory pdfServiceFactory;
+	
+	@Reference
+	private RichiestaLocalService richiestaLocalService;
 
 	@Override
 	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
@@ -55,17 +63,26 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 		byte[] pdf = null;
 
 		String screenName = themeDisplay.getUser().getScreenName();
+		String codiceFiscaleComponente = ParamUtil.getString(resourceRequest, "codiceFiscaleComponente");
 
 		Gson gson = new Gson();
 
 		try {
+			
 			Procedura procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
+			richiesta = presentatoreFormFrontendService.getRichiestaBozza(screenName, procedura.getProceduraId());
 
-			if (procedura == null) {
+			if(Validator.isNull(richiesta)) {
+				long richiestaId = ParamUtil.getLong(resourceRequest, PresentatoreFormsPortletKeys.RICHIESTA_ID);
+				richiesta = richiestaLocalService.getRichiesta(richiestaId);	
+			}
+			
+			PDFService pdfService = pdfServiceFactory.getPDFService(TipoGenerazionePDF.valueOf(procedura.getTipoGenerazionePDF()));
+
+			if (Validator.isNull(procedura)) {
 				SessionErrors.add(resourceRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
 				return;
 			}
-			richiesta = presentatoreFormFrontendService.getRichiestaBozza(screenName, procedura.getProceduraId());
 
 			Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 			istanzaForm = presentatoreFormFrontendService.getIstanzaFormRichiesta(richiesta.getRichiestaId(), form.getFormId());
@@ -80,7 +97,6 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 			String fileName = "richiesta-" + String.valueOf(richiesta.getRichiestaId()) + ".pdf";
 			String step2TipoServizio = procedura.getStep2TipoServizio();
 			TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
-			String codiceFiscaleComponente = null;
 			String dettagliRichiesta = "";
 			// if (delega != null) {
 			// DateFormat dtfmt = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -90,16 +106,15 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 
 			switch (tipoServizio) {
 			case CERTIFICATO:
-				Long idDestinazioneUso = null;
+				long destinazioneUsoId = ParamUtil.getLong(resourceRequest, PresentatoreFormsPortletKeys.DESTINAZIONE_USO_ID);
 				String numeroBollo = null;
-				pdf = pdfService.generaPDFCertificato(screenName, codiceFiscaleComponente, alpacaStructure, richiesta, idDestinazioneUso, numeroBollo, resourceRequest);
+				pdf = pdfService.generaPDFCertificato(screenName, codiceFiscaleComponente, alpacaStructure, richiesta, destinazioneUsoId, numeroBollo, resourceRequest);
 				break;
 			default:
 				pdf = pdfService.generaPDFAlpacaForm(screenName, codiceFiscaleComponente, alpacaStructure, richiesta, false, dettagliRichiesta, resourceRequest);
 				break;
 			}
 
-			// TODO: Capire se isDelega viene utilizzato
 			PortletResponseUtil.sendFile(resourceRequest, resourceResponse, fileName, pdf, ContentTypes.APPLICATION_PDF);
 
 		}

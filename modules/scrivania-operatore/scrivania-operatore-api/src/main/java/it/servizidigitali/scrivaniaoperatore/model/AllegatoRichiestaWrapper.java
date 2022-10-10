@@ -53,10 +53,13 @@ public class AllegatoRichiestaWrapper
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("idDocumentale", getIdDocumentale());
 		attributes.put("nome", getNome());
+		attributes.put("titolo", getTitolo());
+		attributes.put("descrizione", getDescrizione());
 		attributes.put("url", getUrl());
 		attributes.put("principale", isPrincipale());
 		attributes.put("interno", isInterno());
 		attributes.put("visibile", isVisibile());
+		attributes.put("definizioneAllegatoId", getDefinizioneAllegatoId());
 		attributes.put("richiestaId", getRichiestaId());
 
 		return attributes;
@@ -124,6 +127,18 @@ public class AllegatoRichiestaWrapper
 			setNome(nome);
 		}
 
+		String titolo = (String)attributes.get("titolo");
+
+		if (titolo != null) {
+			setTitolo(titolo);
+		}
+
+		String descrizione = (String)attributes.get("descrizione");
+
+		if (descrizione != null) {
+			setDescrizione(descrizione);
+		}
+
 		String url = (String)attributes.get("url");
 
 		if (url != null) {
@@ -146,6 +161,13 @@ public class AllegatoRichiestaWrapper
 
 		if (visibile != null) {
 			setVisibile(visibile);
+		}
+
+		Long definizioneAllegatoId = (Long)attributes.get(
+			"definizioneAllegatoId");
+
+		if (definizioneAllegatoId != null) {
+			setDefinizioneAllegatoId(definizioneAllegatoId);
 		}
 
 		Long richiestaId = (Long)attributes.get("richiestaId");
@@ -188,6 +210,26 @@ public class AllegatoRichiestaWrapper
 	@Override
 	public Date getCreateDate() {
 		return model.getCreateDate();
+	}
+
+	/**
+	 * Returns the definizione allegato ID of this allegato richiesta.
+	 *
+	 * @return the definizione allegato ID of this allegato richiesta
+	 */
+	@Override
+	public Long getDefinizioneAllegatoId() {
+		return model.getDefinizioneAllegatoId();
+	}
+
+	/**
+	 * Returns the descrizione of this allegato richiesta.
+	 *
+	 * @return the descrizione of this allegato richiesta
+	 */
+	@Override
+	public String getDescrizione() {
+		return model.getDescrizione();
 	}
 
 	/**
@@ -268,6 +310,16 @@ public class AllegatoRichiestaWrapper
 	@Override
 	public long getRichiestaId() {
 		return model.getRichiestaId();
+	}
+
+	/**
+	 * Returns the titolo of this allegato richiesta.
+	 *
+	 * @return the titolo of this allegato richiesta
+	 */
+	@Override
+	public String getTitolo() {
+		return model.getTitolo();
 	}
 
 	/**
@@ -396,6 +448,26 @@ public class AllegatoRichiestaWrapper
 	}
 
 	/**
+	 * Sets the definizione allegato ID of this allegato richiesta.
+	 *
+	 * @param definizioneAllegatoId the definizione allegato ID of this allegato richiesta
+	 */
+	@Override
+	public void setDefinizioneAllegatoId(Long definizioneAllegatoId) {
+		model.setDefinizioneAllegatoId(definizioneAllegatoId);
+	}
+
+	/**
+	 * Sets the descrizione of this allegato richiesta.
+	 *
+	 * @param descrizione the descrizione of this allegato richiesta
+	 */
+	@Override
+	public void setDescrizione(String descrizione) {
+		model.setDescrizione(descrizione);
+	}
+
+	/**
 	 * Sets the group ID of this allegato richiesta.
 	 *
 	 * @param groupId the group ID of this allegato richiesta
@@ -473,6 +545,16 @@ public class AllegatoRichiestaWrapper
 	@Override
 	public void setRichiestaId(long richiestaId) {
 		model.setRichiestaId(richiestaId);
+	}
+
+	/**
+	 * Sets the titolo of this allegato richiesta.
+	 *
+	 * @param titolo the titolo of this allegato richiesta
+	 */
+	@Override
+	public void setTitolo(String titolo) {
+		model.setTitolo(titolo);
 	}
 
 	/**

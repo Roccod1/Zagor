@@ -149,14 +149,15 @@
 	<div class="row">
 		<div class="col-12">
 			<div class="d-flex justify-content-end">
-				<button class="btn btn-primary mr-1">
-					<i class="fas fa-download"></i>
-					<liferay-ui:message key="scarica-visualizza-modello-compilato-cittadino" arguments="${modelloArgs}" />
-				</button>
-				<button type="submit" class="btn btn-primary">
-					<liferay-ui:message key="salva-dati-protocollo" />
-					<i class="far fa-edit"></i>
-				</button>
+				
+				<portlet:resourceURL id="/downloadFileModelloCompilato" var="downloadFileModelloCompilatoUrl">
+					<portlet:param name="richiestaId" value="${richiesta.id}"/>
+				</portlet:resourceURL>
+				
+				<aui:button-row cssClass="text-right">
+					<aui:button value="scarica-visualizza-modello-compilato-cittadino" type="button" href="${downloadFileModelloCompilatoUrl}" target="_blank"/>
+					<aui:button type="submit" value="salva-dati-protocollo"/>
+				</aui:button-row>
 			</div>
 		</div>
 	</div>

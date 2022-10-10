@@ -21,6 +21,7 @@ public interface FileService {
 	 * @param titolo
 	 * @param descrizione
 	 * @param codiceServizio
+	 * @param richiestaId
 	 * @param inputStream
 	 * @param mimeType
 	 * @param userId
@@ -28,7 +29,8 @@ public interface FileService {
 	 * @return
 	 * @throws FileServiceException
 	 */
-	String saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, InputStream inputStream, String mimeType, long userId, long groupId) throws FileServiceException;
+	String saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, long richiestaId, InputStream inputStream, String mimeType, long userId, long groupId)
+			throws FileServiceException;
 
 	/**
 	 *

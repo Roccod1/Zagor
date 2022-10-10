@@ -122,7 +122,7 @@ public class FormLocalServiceImpl extends FormLocalServiceBaseImpl {
 
 		if (Validator.isNotNull(listaForm) && !listaForm.isEmpty()) {
 			for (Form form : listaForm) {
-				List<DefinizioneAllegato> listaAllegati = definizioneAllegatoPersistence.findByformIdAndEliminato(form.getFormId(), false);
+				List<DefinizioneAllegato> listaAllegati = definizioneAllegatoPersistence.findByFormId(form.getFormId());
 
 				if (Validator.isNotNull(listaAllegati)) {
 					form.setListaDefinizioneAllegato(listaAllegati);

@@ -79,6 +79,9 @@ public interface CommentoRichiestaLocalService
 	public CommentoRichiesta addCommentoRichiesta(
 		CommentoRichiesta commentoRichiesta);
 
+	public int countCommentiRichiestaByRichiestaIdVisibile(
+		long richiestaId, boolean visibile);
+
 	/**
 	 * Creates a new commento richiesta with the primary key. Does not add the commento richiesta to the database.
 	 *
@@ -230,6 +233,10 @@ public interface CommentoRichiestaLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<CommentoRichiesta> getCommentiRichiestaByRichiestaIdVisibile(
 		long richiestaId, boolean visibile);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CommentoRichiesta> getCommentiRichiestaByRichiestaIdVisibile(
+		long richiestaId, boolean visibile, int start, int end);
 
 	/**
 	 * Returns the commento richiesta with the primary key.

@@ -396,7 +396,7 @@ public interface TipoDocumentoPersistence
 	 * @param stato the stato
 	 * @return the matching tipo documentos
 	 */
-	public java.util.List<TipoDocumento> findBystato(String stato);
+	public java.util.List<TipoDocumento> findByStato(String stato);
 
 	/**
 	 * Returns a range of all the tipo documentos where stato = &#63;.
@@ -410,7 +410,7 @@ public interface TipoDocumentoPersistence
 	 * @param end the upper bound of the range of tipo documentos (not inclusive)
 	 * @return the range of matching tipo documentos
 	 */
-	public java.util.List<TipoDocumento> findBystato(
+	public java.util.List<TipoDocumento> findByStato(
 		String stato, int start, int end);
 
 	/**
@@ -426,7 +426,7 @@ public interface TipoDocumentoPersistence
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching tipo documentos
 	 */
-	public java.util.List<TipoDocumento> findBystato(
+	public java.util.List<TipoDocumento> findByStato(
 		String stato, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<TipoDocumento>
 			orderByComparator);
@@ -445,7 +445,7 @@ public interface TipoDocumentoPersistence
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching tipo documentos
 	 */
-	public java.util.List<TipoDocumento> findBystato(
+	public java.util.List<TipoDocumento> findByStato(
 		String stato, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator<TipoDocumento>
 			orderByComparator,
@@ -459,7 +459,7 @@ public interface TipoDocumentoPersistence
 	 * @return the first matching tipo documento
 	 * @throws NoSuchTipoDocumentoException if a matching tipo documento could not be found
 	 */
-	public TipoDocumento findBystato_First(
+	public TipoDocumento findByStato_First(
 			String stato,
 			com.liferay.portal.kernel.util.OrderByComparator<TipoDocumento>
 				orderByComparator)
@@ -472,7 +472,7 @@ public interface TipoDocumentoPersistence
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching tipo documento, or <code>null</code> if a matching tipo documento could not be found
 	 */
-	public TipoDocumento fetchBystato_First(
+	public TipoDocumento fetchByStato_First(
 		String stato,
 		com.liferay.portal.kernel.util.OrderByComparator<TipoDocumento>
 			orderByComparator);
@@ -485,7 +485,7 @@ public interface TipoDocumentoPersistence
 	 * @return the last matching tipo documento
 	 * @throws NoSuchTipoDocumentoException if a matching tipo documento could not be found
 	 */
-	public TipoDocumento findBystato_Last(
+	public TipoDocumento findByStato_Last(
 			String stato,
 			com.liferay.portal.kernel.util.OrderByComparator<TipoDocumento>
 				orderByComparator)
@@ -498,7 +498,7 @@ public interface TipoDocumentoPersistence
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching tipo documento, or <code>null</code> if a matching tipo documento could not be found
 	 */
-	public TipoDocumento fetchBystato_Last(
+	public TipoDocumento fetchByStato_Last(
 		String stato,
 		com.liferay.portal.kernel.util.OrderByComparator<TipoDocumento>
 			orderByComparator);
@@ -512,7 +512,7 @@ public interface TipoDocumentoPersistence
 	 * @return the previous, current, and next tipo documento
 	 * @throws NoSuchTipoDocumentoException if a tipo documento with the primary key could not be found
 	 */
-	public TipoDocumento[] findBystato_PrevAndNext(
+	public TipoDocumento[] findByStato_PrevAndNext(
 			long tipoDocumentoId, String stato,
 			com.liferay.portal.kernel.util.OrderByComparator<TipoDocumento>
 				orderByComparator)
@@ -523,7 +523,7 @@ public interface TipoDocumentoPersistence
 	 *
 	 * @param stato the stato
 	 */
-	public void removeBystato(String stato);
+	public void removeByStato(String stato);
 
 	/**
 	 * Returns the number of tipo documentos where stato = &#63;.
@@ -531,7 +531,7 @@ public interface TipoDocumentoPersistence
 	 * @param stato the stato
 	 * @return the number of matching tipo documentos
 	 */
-	public int countBystato(String stato);
+	public int countByStato(String stato);
 
 	/**
 	 * Caches the tipo documento in the entity cache if it is enabled.

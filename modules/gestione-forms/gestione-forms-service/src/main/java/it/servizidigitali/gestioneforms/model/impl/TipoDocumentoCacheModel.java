@@ -63,7 +63,7 @@ public class TipoDocumentoCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(35);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -97,8 +97,6 @@ public class TipoDocumentoCacheModel
 		sb.append(numeroRequired);
 		sb.append(", dataScadenzaRequired=");
 		sb.append(dataScadenzaRequired);
-		sb.append(", organizationId=");
-		sb.append(organizationId);
 		sb.append("}");
 
 		return sb.toString();
@@ -185,7 +183,6 @@ public class TipoDocumentoCacheModel
 
 		tipoDocumentoImpl.setNumeroRequired(numeroRequired);
 		tipoDocumentoImpl.setDataScadenzaRequired(dataScadenzaRequired);
-		tipoDocumentoImpl.setOrganizationId(organizationId);
 
 		tipoDocumentoImpl.resetOriginalValues();
 
@@ -216,8 +213,6 @@ public class TipoDocumentoCacheModel
 		numeroRequired = objectInput.readLong();
 
 		dataScadenzaRequired = objectInput.readLong();
-
-		organizationId = objectInput.readLong();
 	}
 
 	@Override
@@ -292,8 +287,6 @@ public class TipoDocumentoCacheModel
 		objectOutput.writeLong(numeroRequired);
 
 		objectOutput.writeLong(dataScadenzaRequired);
-
-		objectOutput.writeLong(organizationId);
 	}
 
 	public String uuid;
@@ -312,6 +305,5 @@ public class TipoDocumentoCacheModel
 	public String stato;
 	public long numeroRequired;
 	public long dataScadenzaRequired;
-	public long organizationId;
 
 }

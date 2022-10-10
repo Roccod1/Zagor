@@ -65,7 +65,7 @@ public class AllegatoRichiestaCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -87,6 +87,10 @@ public class AllegatoRichiestaCacheModel
 		sb.append(idDocumentale);
 		sb.append(", nome=");
 		sb.append(nome);
+		sb.append(", titolo=");
+		sb.append(titolo);
+		sb.append(", descrizione=");
+		sb.append(descrizione);
 		sb.append(", url=");
 		sb.append(url);
 		sb.append(", principale=");
@@ -95,6 +99,8 @@ public class AllegatoRichiestaCacheModel
 		sb.append(interno);
 		sb.append(", visibile=");
 		sb.append(visibile);
+		sb.append(", definizioneAllegatoId=");
+		sb.append(definizioneAllegatoId);
 		sb.append(", richiestaId=");
 		sb.append(richiestaId);
 		sb.append("}");
@@ -154,6 +160,20 @@ public class AllegatoRichiestaCacheModel
 			allegatoRichiestaImpl.setNome(nome);
 		}
 
+		if (titolo == null) {
+			allegatoRichiestaImpl.setTitolo("");
+		}
+		else {
+			allegatoRichiestaImpl.setTitolo(titolo);
+		}
+
+		if (descrizione == null) {
+			allegatoRichiestaImpl.setDescrizione("");
+		}
+		else {
+			allegatoRichiestaImpl.setDescrizione(descrizione);
+		}
+
 		if (url == null) {
 			allegatoRichiestaImpl.setUrl("");
 		}
@@ -164,6 +184,7 @@ public class AllegatoRichiestaCacheModel
 		allegatoRichiestaImpl.setPrincipale(principale);
 		allegatoRichiestaImpl.setInterno(interno);
 		allegatoRichiestaImpl.setVisibile(visibile);
+		allegatoRichiestaImpl.setDefinizioneAllegatoId(definizioneAllegatoId);
 		allegatoRichiestaImpl.setRichiestaId(richiestaId);
 
 		allegatoRichiestaImpl.resetOriginalValues();
@@ -187,6 +208,8 @@ public class AllegatoRichiestaCacheModel
 		modifiedDate = objectInput.readLong();
 		idDocumentale = objectInput.readUTF();
 		nome = objectInput.readUTF();
+		titolo = objectInput.readUTF();
+		descrizione = objectInput.readUTF();
 		url = objectInput.readUTF();
 
 		principale = objectInput.readBoolean();
@@ -194,6 +217,8 @@ public class AllegatoRichiestaCacheModel
 		interno = objectInput.readBoolean();
 
 		visibile = objectInput.readBoolean();
+
+		definizioneAllegatoId = objectInput.readLong();
 
 		richiestaId = objectInput.readLong();
 	}
@@ -239,6 +264,20 @@ public class AllegatoRichiestaCacheModel
 			objectOutput.writeUTF(nome);
 		}
 
+		if (titolo == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(titolo);
+		}
+
+		if (descrizione == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(descrizione);
+		}
+
 		if (url == null) {
 			objectOutput.writeUTF("");
 		}
@@ -251,6 +290,8 @@ public class AllegatoRichiestaCacheModel
 		objectOutput.writeBoolean(interno);
 
 		objectOutput.writeBoolean(visibile);
+
+		objectOutput.writeLong(definizioneAllegatoId);
 
 		objectOutput.writeLong(richiestaId);
 	}
@@ -265,10 +306,13 @@ public class AllegatoRichiestaCacheModel
 	public long modifiedDate;
 	public String idDocumentale;
 	public String nome;
+	public String titolo;
+	public String descrizione;
 	public String url;
 	public boolean principale;
 	public boolean interno;
 	public boolean visibile;
+	public long definizioneAllegatoId;
 	public long richiestaId;
 
 }

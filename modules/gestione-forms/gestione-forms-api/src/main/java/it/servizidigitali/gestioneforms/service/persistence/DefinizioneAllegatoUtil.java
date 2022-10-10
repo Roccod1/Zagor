@@ -547,197 +547,370 @@ public class DefinizioneAllegatoUtil {
 	}
 
 	/**
-	 * Returns all the definizione allegatos where formId = &#63; and eliminato = &#63;.
+	 * Returns all the definizione allegatos where formId = &#63;.
 	 *
 	 * @param formId the form ID
-	 * @param eliminato the eliminato
 	 * @return the matching definizione allegatos
 	 */
-	public static List<DefinizioneAllegato> findByformIdAndEliminato(
-		long formId, boolean eliminato) {
-
-		return getPersistence().findByformIdAndEliminato(formId, eliminato);
+	public static List<DefinizioneAllegato> findByFormId(long formId) {
+		return getPersistence().findByFormId(formId);
 	}
 
 	/**
-	 * Returns a range of all the definizione allegatos where formId = &#63; and eliminato = &#63;.
+	 * Returns a range of all the definizione allegatos where formId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DefinizioneAllegatoModelImpl</code>.
 	 * </p>
 	 *
 	 * @param formId the form ID
-	 * @param eliminato the eliminato
 	 * @param start the lower bound of the range of definizione allegatos
 	 * @param end the upper bound of the range of definizione allegatos (not inclusive)
 	 * @return the range of matching definizione allegatos
 	 */
-	public static List<DefinizioneAllegato> findByformIdAndEliminato(
-		long formId, boolean eliminato, int start, int end) {
+	public static List<DefinizioneAllegato> findByFormId(
+		long formId, int start, int end) {
 
-		return getPersistence().findByformIdAndEliminato(
-			formId, eliminato, start, end);
+		return getPersistence().findByFormId(formId, start, end);
 	}
 
 	/**
-	 * Returns an ordered range of all the definizione allegatos where formId = &#63; and eliminato = &#63;.
+	 * Returns an ordered range of all the definizione allegatos where formId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DefinizioneAllegatoModelImpl</code>.
 	 * </p>
 	 *
 	 * @param formId the form ID
-	 * @param eliminato the eliminato
 	 * @param start the lower bound of the range of definizione allegatos
 	 * @param end the upper bound of the range of definizione allegatos (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching definizione allegatos
 	 */
-	public static List<DefinizioneAllegato> findByformIdAndEliminato(
-		long formId, boolean eliminato, int start, int end,
+	public static List<DefinizioneAllegato> findByFormId(
+		long formId, int start, int end,
 		OrderByComparator<DefinizioneAllegato> orderByComparator) {
 
-		return getPersistence().findByformIdAndEliminato(
-			formId, eliminato, start, end, orderByComparator);
+		return getPersistence().findByFormId(
+			formId, start, end, orderByComparator);
 	}
 
 	/**
-	 * Returns an ordered range of all the definizione allegatos where formId = &#63; and eliminato = &#63;.
+	 * Returns an ordered range of all the definizione allegatos where formId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DefinizioneAllegatoModelImpl</code>.
 	 * </p>
 	 *
 	 * @param formId the form ID
-	 * @param eliminato the eliminato
 	 * @param start the lower bound of the range of definizione allegatos
 	 * @param end the upper bound of the range of definizione allegatos (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the ordered range of matching definizione allegatos
 	 */
-	public static List<DefinizioneAllegato> findByformIdAndEliminato(
-		long formId, boolean eliminato, int start, int end,
+	public static List<DefinizioneAllegato> findByFormId(
+		long formId, int start, int end,
 		OrderByComparator<DefinizioneAllegato> orderByComparator,
 		boolean useFinderCache) {
 
-		return getPersistence().findByformIdAndEliminato(
-			formId, eliminato, start, end, orderByComparator, useFinderCache);
+		return getPersistence().findByFormId(
+			formId, start, end, orderByComparator, useFinderCache);
 	}
 
 	/**
-	 * Returns the first definizione allegato in the ordered set where formId = &#63; and eliminato = &#63;.
+	 * Returns the first definizione allegato in the ordered set where formId = &#63;.
 	 *
 	 * @param formId the form ID
-	 * @param eliminato the eliminato
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching definizione allegato
 	 * @throws NoSuchDefinizioneAllegatoException if a matching definizione allegato could not be found
 	 */
-	public static DefinizioneAllegato findByformIdAndEliminato_First(
-			long formId, boolean eliminato,
+	public static DefinizioneAllegato findByFormId_First(
+			long formId,
 			OrderByComparator<DefinizioneAllegato> orderByComparator)
 		throws it.servizidigitali.gestioneforms.exception.
 			NoSuchDefinizioneAllegatoException {
 
-		return getPersistence().findByformIdAndEliminato_First(
-			formId, eliminato, orderByComparator);
+		return getPersistence().findByFormId_First(formId, orderByComparator);
 	}
 
 	/**
-	 * Returns the first definizione allegato in the ordered set where formId = &#63; and eliminato = &#63;.
+	 * Returns the first definizione allegato in the ordered set where formId = &#63;.
 	 *
 	 * @param formId the form ID
-	 * @param eliminato the eliminato
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching definizione allegato, or <code>null</code> if a matching definizione allegato could not be found
 	 */
-	public static DefinizioneAllegato fetchByformIdAndEliminato_First(
-		long formId, boolean eliminato,
-		OrderByComparator<DefinizioneAllegato> orderByComparator) {
+	public static DefinizioneAllegato fetchByFormId_First(
+		long formId, OrderByComparator<DefinizioneAllegato> orderByComparator) {
 
-		return getPersistence().fetchByformIdAndEliminato_First(
-			formId, eliminato, orderByComparator);
+		return getPersistence().fetchByFormId_First(formId, orderByComparator);
 	}
 
 	/**
-	 * Returns the last definizione allegato in the ordered set where formId = &#63; and eliminato = &#63;.
+	 * Returns the last definizione allegato in the ordered set where formId = &#63;.
 	 *
 	 * @param formId the form ID
-	 * @param eliminato the eliminato
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching definizione allegato
 	 * @throws NoSuchDefinizioneAllegatoException if a matching definizione allegato could not be found
 	 */
-	public static DefinizioneAllegato findByformIdAndEliminato_Last(
-			long formId, boolean eliminato,
+	public static DefinizioneAllegato findByFormId_Last(
+			long formId,
 			OrderByComparator<DefinizioneAllegato> orderByComparator)
 		throws it.servizidigitali.gestioneforms.exception.
 			NoSuchDefinizioneAllegatoException {
 
-		return getPersistence().findByformIdAndEliminato_Last(
-			formId, eliminato, orderByComparator);
+		return getPersistence().findByFormId_Last(formId, orderByComparator);
 	}
 
 	/**
-	 * Returns the last definizione allegato in the ordered set where formId = &#63; and eliminato = &#63;.
+	 * Returns the last definizione allegato in the ordered set where formId = &#63;.
 	 *
 	 * @param formId the form ID
-	 * @param eliminato the eliminato
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching definizione allegato, or <code>null</code> if a matching definizione allegato could not be found
 	 */
-	public static DefinizioneAllegato fetchByformIdAndEliminato_Last(
-		long formId, boolean eliminato,
-		OrderByComparator<DefinizioneAllegato> orderByComparator) {
+	public static DefinizioneAllegato fetchByFormId_Last(
+		long formId, OrderByComparator<DefinizioneAllegato> orderByComparator) {
 
-		return getPersistence().fetchByformIdAndEliminato_Last(
-			formId, eliminato, orderByComparator);
+		return getPersistence().fetchByFormId_Last(formId, orderByComparator);
 	}
 
 	/**
-	 * Returns the definizione allegatos before and after the current definizione allegato in the ordered set where formId = &#63; and eliminato = &#63;.
+	 * Returns the definizione allegatos before and after the current definizione allegato in the ordered set where formId = &#63;.
 	 *
 	 * @param definizioneAllegatoId the primary key of the current definizione allegato
 	 * @param formId the form ID
-	 * @param eliminato the eliminato
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next definizione allegato
 	 * @throws NoSuchDefinizioneAllegatoException if a definizione allegato with the primary key could not be found
 	 */
-	public static DefinizioneAllegato[] findByformIdAndEliminato_PrevAndNext(
-			long definizioneAllegatoId, long formId, boolean eliminato,
+	public static DefinizioneAllegato[] findByFormId_PrevAndNext(
+			long definizioneAllegatoId, long formId,
 			OrderByComparator<DefinizioneAllegato> orderByComparator)
 		throws it.servizidigitali.gestioneforms.exception.
 			NoSuchDefinizioneAllegatoException {
 
-		return getPersistence().findByformIdAndEliminato_PrevAndNext(
-			definizioneAllegatoId, formId, eliminato, orderByComparator);
+		return getPersistence().findByFormId_PrevAndNext(
+			definizioneAllegatoId, formId, orderByComparator);
 	}
 
 	/**
-	 * Removes all the definizione allegatos where formId = &#63; and eliminato = &#63; from the database.
+	 * Removes all the definizione allegatos where formId = &#63; from the database.
 	 *
 	 * @param formId the form ID
-	 * @param eliminato the eliminato
 	 */
-	public static void removeByformIdAndEliminato(
-		long formId, boolean eliminato) {
-
-		getPersistence().removeByformIdAndEliminato(formId, eliminato);
+	public static void removeByFormId(long formId) {
+		getPersistence().removeByFormId(formId);
 	}
 
 	/**
-	 * Returns the number of definizione allegatos where formId = &#63; and eliminato = &#63;.
+	 * Returns the number of definizione allegatos where formId = &#63;.
 	 *
 	 * @param formId the form ID
-	 * @param eliminato the eliminato
 	 * @return the number of matching definizione allegatos
 	 */
-	public static int countByformIdAndEliminato(
-		long formId, boolean eliminato) {
+	public static int countByFormId(long formId) {
+		return getPersistence().countByFormId(formId);
+	}
 
-		return getPersistence().countByformIdAndEliminato(formId, eliminato);
+	/**
+	 * Returns all the definizione allegatos where formId = &#63; and organizationId = &#63;.
+	 *
+	 * @param formId the form ID
+	 * @param organizationId the organization ID
+	 * @return the matching definizione allegatos
+	 */
+	public static List<DefinizioneAllegato> findByFormIdOrganizationId(
+		long formId, long organizationId) {
+
+		return getPersistence().findByFormIdOrganizationId(
+			formId, organizationId);
+	}
+
+	/**
+	 * Returns a range of all the definizione allegatos where formId = &#63; and organizationId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DefinizioneAllegatoModelImpl</code>.
+	 * </p>
+	 *
+	 * @param formId the form ID
+	 * @param organizationId the organization ID
+	 * @param start the lower bound of the range of definizione allegatos
+	 * @param end the upper bound of the range of definizione allegatos (not inclusive)
+	 * @return the range of matching definizione allegatos
+	 */
+	public static List<DefinizioneAllegato> findByFormIdOrganizationId(
+		long formId, long organizationId, int start, int end) {
+
+		return getPersistence().findByFormIdOrganizationId(
+			formId, organizationId, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the definizione allegatos where formId = &#63; and organizationId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DefinizioneAllegatoModelImpl</code>.
+	 * </p>
+	 *
+	 * @param formId the form ID
+	 * @param organizationId the organization ID
+	 * @param start the lower bound of the range of definizione allegatos
+	 * @param end the upper bound of the range of definizione allegatos (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching definizione allegatos
+	 */
+	public static List<DefinizioneAllegato> findByFormIdOrganizationId(
+		long formId, long organizationId, int start, int end,
+		OrderByComparator<DefinizioneAllegato> orderByComparator) {
+
+		return getPersistence().findByFormIdOrganizationId(
+			formId, organizationId, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the definizione allegatos where formId = &#63; and organizationId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>DefinizioneAllegatoModelImpl</code>.
+	 * </p>
+	 *
+	 * @param formId the form ID
+	 * @param organizationId the organization ID
+	 * @param start the lower bound of the range of definizione allegatos
+	 * @param end the upper bound of the range of definizione allegatos (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching definizione allegatos
+	 */
+	public static List<DefinizioneAllegato> findByFormIdOrganizationId(
+		long formId, long organizationId, int start, int end,
+		OrderByComparator<DefinizioneAllegato> orderByComparator,
+		boolean useFinderCache) {
+
+		return getPersistence().findByFormIdOrganizationId(
+			formId, organizationId, start, end, orderByComparator,
+			useFinderCache);
+	}
+
+	/**
+	 * Returns the first definizione allegato in the ordered set where formId = &#63; and organizationId = &#63;.
+	 *
+	 * @param formId the form ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching definizione allegato
+	 * @throws NoSuchDefinizioneAllegatoException if a matching definizione allegato could not be found
+	 */
+	public static DefinizioneAllegato findByFormIdOrganizationId_First(
+			long formId, long organizationId,
+			OrderByComparator<DefinizioneAllegato> orderByComparator)
+		throws it.servizidigitali.gestioneforms.exception.
+			NoSuchDefinizioneAllegatoException {
+
+		return getPersistence().findByFormIdOrganizationId_First(
+			formId, organizationId, orderByComparator);
+	}
+
+	/**
+	 * Returns the first definizione allegato in the ordered set where formId = &#63; and organizationId = &#63;.
+	 *
+	 * @param formId the form ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching definizione allegato, or <code>null</code> if a matching definizione allegato could not be found
+	 */
+	public static DefinizioneAllegato fetchByFormIdOrganizationId_First(
+		long formId, long organizationId,
+		OrderByComparator<DefinizioneAllegato> orderByComparator) {
+
+		return getPersistence().fetchByFormIdOrganizationId_First(
+			formId, organizationId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last definizione allegato in the ordered set where formId = &#63; and organizationId = &#63;.
+	 *
+	 * @param formId the form ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching definizione allegato
+	 * @throws NoSuchDefinizioneAllegatoException if a matching definizione allegato could not be found
+	 */
+	public static DefinizioneAllegato findByFormIdOrganizationId_Last(
+			long formId, long organizationId,
+			OrderByComparator<DefinizioneAllegato> orderByComparator)
+		throws it.servizidigitali.gestioneforms.exception.
+			NoSuchDefinizioneAllegatoException {
+
+		return getPersistence().findByFormIdOrganizationId_Last(
+			formId, organizationId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last definizione allegato in the ordered set where formId = &#63; and organizationId = &#63;.
+	 *
+	 * @param formId the form ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching definizione allegato, or <code>null</code> if a matching definizione allegato could not be found
+	 */
+	public static DefinizioneAllegato fetchByFormIdOrganizationId_Last(
+		long formId, long organizationId,
+		OrderByComparator<DefinizioneAllegato> orderByComparator) {
+
+		return getPersistence().fetchByFormIdOrganizationId_Last(
+			formId, organizationId, orderByComparator);
+	}
+
+	/**
+	 * Returns the definizione allegatos before and after the current definizione allegato in the ordered set where formId = &#63; and organizationId = &#63;.
+	 *
+	 * @param definizioneAllegatoId the primary key of the current definizione allegato
+	 * @param formId the form ID
+	 * @param organizationId the organization ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next definizione allegato
+	 * @throws NoSuchDefinizioneAllegatoException if a definizione allegato with the primary key could not be found
+	 */
+	public static DefinizioneAllegato[] findByFormIdOrganizationId_PrevAndNext(
+			long definizioneAllegatoId, long formId, long organizationId,
+			OrderByComparator<DefinizioneAllegato> orderByComparator)
+		throws it.servizidigitali.gestioneforms.exception.
+			NoSuchDefinizioneAllegatoException {
+
+		return getPersistence().findByFormIdOrganizationId_PrevAndNext(
+			definizioneAllegatoId, formId, organizationId, orderByComparator);
+	}
+
+	/**
+	 * Removes all the definizione allegatos where formId = &#63; and organizationId = &#63; from the database.
+	 *
+	 * @param formId the form ID
+	 * @param organizationId the organization ID
+	 */
+	public static void removeByFormIdOrganizationId(
+		long formId, long organizationId) {
+
+		getPersistence().removeByFormIdOrganizationId(formId, organizationId);
+	}
+
+	/**
+	 * Returns the number of definizione allegatos where formId = &#63; and organizationId = &#63;.
+	 *
+	 * @param formId the form ID
+	 * @param organizationId the organization ID
+	 * @return the number of matching definizione allegatos
+	 */
+	public static int countByFormIdOrganizationId(
+		long formId, long organizationId) {
+
+		return getPersistence().countByFormIdOrganizationId(
+			formId, organizationId);
 	}
 
 	/**

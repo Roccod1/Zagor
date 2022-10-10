@@ -77,35 +77,34 @@ public class AggiungiAllegatoActionCommand extends BaseMVCActionCommand {
 		try {
 			ServiceContext context = ServiceContextFactory.getInstance(request);
 			UploadPortletRequest upr = portal.getUploadPortletRequest(request);
-	
-			
+
 			Richiesta richiesta = richiestaLocalService.getRichiesta(richiestaId);
 			long proceduraId = richiesta.getProceduraId();
-	
+
 			Servizio servizioByProceduraId = scrivaniaOperatoreFrontendService.getServizioByProceduraId(proceduraId);
 			String titoloDocumento = ParamUtil.getString(request, "titoloDocumento");
 			if (Validator.isNull(titoloDocumento)) {
 				throw new PortletException("allegato vuoto");
 			}
-	
+
 			boolean visibileAlCittadino = ParamUtil.getBoolean(request, "visibileAlCittadino");
-	
+
 			InputStream inputStream = upr.getFileAsStream("allegato");
 			String name = upr.getFileName("allegato");
 			if (name.isEmpty()) {
 				throw new PortletException("allegato vuoto");
 			}
-	
+
 			String fileName = generateFilename(name);
-	
+
 			String contentType = upr.getContentType("allegato");
-	
+
 			FileService activeFileService = fileServiceFactory.getActiveFileService();
-			String idDocumentale = activeFileService.saveRequestFile(fileName, titoloDocumento, null, servizioByProceduraId.getCodice(), inputStream, contentType, richiesta.getUserId(),
-					richiesta.getGroupId());
+			String idDocumentale = activeFileService.saveRequestFile(fileName, titoloDocumento, null, servizioByProceduraId.getCodice(), richiesta.getRichiestaId(), inputStream, contentType,
+					richiesta.getUserId(), richiesta.getGroupId());
 			long userId = context.getUserId();
 			User user = userLocalService.getUser(userId);
-	
+
 			AllegatoRichiesta allegatoRichiesta = allegatoRichiestaLocalService.createAllegatoRichiesta(counterLocalService.increment());
 			allegatoRichiesta.setGroupId(context.getScopeGroupId());
 			allegatoRichiesta.setCompanyId(context.getCompanyId());
@@ -113,18 +112,21 @@ public class AggiungiAllegatoActionCommand extends BaseMVCActionCommand {
 			allegatoRichiesta.setUserName(user.getFullName());
 			allegatoRichiesta.setCreateDate(new Date());
 			allegatoRichiesta.setModifiedDate(new Date());
-			allegatoRichiesta.setNome(name);
+			allegatoRichiesta.setNome(fileName);
+			allegatoRichiesta.setTitolo(titoloDocumento);
+			allegatoRichiesta.setDescrizione(null);
 			allegatoRichiesta.setVisibile(visibileAlCittadino);
 			allegatoRichiesta.setInterno(true);
 			allegatoRichiesta.setIdDocumentale(idDocumentale);
 			allegatoRichiesta.setRichiestaId(richiestaId);
-	
+
 			allegatoRichiestaLocalService.updateAllegatoRichiesta(allegatoRichiesta);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			_log.error(e);
 			SessionErrors.add(request, "errore-generico");
 		}
-		
+
 		MutableRenderParameters renderParameters = response.getRenderParameters();
 		renderParameters.setValue("mvcRenderCommandName", "/render/dettaglio");
 		renderParameters.setValue("id", String.valueOf(richiestaId));
@@ -146,6 +148,6 @@ public class AggiungiAllegatoActionCommand extends BaseMVCActionCommand {
 			return name + datePart + "." + extension;
 		}
 	}
-	
+
 	private static final Log _log = LogFactoryUtil.getLog(AggiungiAllegatoActionCommand.class);
 }

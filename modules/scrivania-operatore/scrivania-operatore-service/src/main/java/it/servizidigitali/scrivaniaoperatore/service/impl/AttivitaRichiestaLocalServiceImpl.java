@@ -30,4 +30,12 @@ public class AttivitaRichiestaLocalServiceImpl extends AttivitaRichiestaLocalSer
 	public List<AttivitaRichiesta> getAttivitaRichiestaByRichiestaId(long richiestaId) {
 		return attivitaRichiestaPersistence.findByRichiestaId(richiestaId);
 	}
+	
+	public List<AttivitaRichiesta> getAttivitaRichiestaByRichiestaId(long richiestaId, int start, int end) {
+		return attivitaRichiestaPersistence.findByRichiestaId(richiestaId, start, end);
+	}
+	
+	public int countAttivitaRichiestaByRichiestaId(long richiestaId) {
+		return attivitaRichiestaPersistence.countByRichiestaId(richiestaId);
+	}
 }

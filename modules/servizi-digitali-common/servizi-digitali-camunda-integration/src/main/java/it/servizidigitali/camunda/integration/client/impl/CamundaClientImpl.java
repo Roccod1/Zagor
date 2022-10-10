@@ -25,6 +25,7 @@ import org.camunda.community.rest.client.api.GroupApi;
 import org.camunda.community.rest.client.api.ProcessDefinitionApi;
 import org.camunda.community.rest.client.api.ProcessInstanceApi;
 import org.camunda.community.rest.client.api.TaskApi;
+import org.camunda.community.rest.client.api.TaskIdentityLinkApi;
 import org.camunda.community.rest.client.api.TenantApi;
 import org.camunda.community.rest.client.api.UserApi;
 import org.camunda.community.rest.client.api.VariableInstanceApi;
@@ -34,6 +35,7 @@ import org.camunda.community.rest.client.dto.DeploymentDto;
 import org.camunda.community.rest.client.dto.DeploymentResourceDto;
 import org.camunda.community.rest.client.dto.DeploymentWithDefinitionsDto;
 import org.camunda.community.rest.client.dto.GroupDto;
+import org.camunda.community.rest.client.dto.IdentityLinkDto;
 import org.camunda.community.rest.client.dto.PatchVariablesDto;
 import org.camunda.community.rest.client.dto.ProcessDefinitionDto;
 import org.camunda.community.rest.client.dto.ProcessInstanceDto;
@@ -201,12 +203,10 @@ public class CamundaClientImpl implements CamundaClient {
 	@Override
 	public List<Task> getTasksByBusinessKey(String tenantId, String businessKey) throws CamundaClientException {
 		TaskApi api = new TaskApi(getApiClient());
-
 		try {
 
 			TaskQueryDto q = new TaskQueryDto();
 			q.setProcessInstanceBusinessKey(businessKey);
-
 			if (Validator.isNotNull(tenantId)) {
 				q.setTenantIdIn(Arrays.asList(tenantId));
 			}
@@ -456,16 +456,29 @@ public class CamundaClientImpl implements CamundaClient {
 	/**
 	 * @param queryTasks
 	 * @return
+	 * @throws ApiException
 	 */
-	private List<Task> getTasks(List<TaskDto> queryTasks) {
+	private List<Task> getTasks(List<TaskDto> queryTasks) throws ApiException {
 
 		if (queryTasks == null) {
 			return null;
 		}
+		TaskIdentityLinkApi taskIdentityLinkApi = new TaskIdentityLinkApi(getApiClient());
 		List<Task> tasks = new ArrayList<Task>();
 		for (TaskDto taskDto : queryTasks) {
 			Task task = new Task();
 			BeanPropertiesUtil.copyProperties(taskDto, task);
+			List<IdentityLinkDto> identityLinks = taskIdentityLinkApi.getIdentityLinks(taskDto.getId(), null);
+			List<String> listGroups = new ArrayList<String>();
+			if (identityLinks != null) {
+				for (IdentityLinkDto identityLinkDto : identityLinks) {
+					listGroups.add(identityLinkDto.getGroupId());
+				}
+			}
+			if (!listGroups.isEmpty()) {
+				task.setCandidateGroups(listGroups);
+			}
+
 			tasks.add(task);
 		}
 		return tasks;

@@ -56,6 +56,7 @@ public class TemplatePdfFileService {
 			serviceContext.setScopeGroupId(groupId);
 			serviceContext.setUserId(userId);
 			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true);
 
 			Folder configurazioniSitoFolder = null;
 			Folder gestioneProcedureFolder = null;

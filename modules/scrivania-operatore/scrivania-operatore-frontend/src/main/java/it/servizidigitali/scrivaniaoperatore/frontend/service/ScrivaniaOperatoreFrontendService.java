@@ -43,7 +43,11 @@ import it.servizidigitali.communication.model.Utente;
 import it.servizidigitali.communication.sender.CommunicationSender;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
+import it.servizidigitali.gestioneforms.model.Form;
+import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
+import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
@@ -51,6 +55,7 @@ import it.servizidigitali.profiloutente.service.UtenteOrganizzazioneCanaleComuni
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.frontend.constants.ScrivaniaOperatorePortletKeys;
 import it.servizidigitali.scrivaniaoperatore.frontend.dto.AzioneUtente;
+import it.servizidigitali.scrivaniaoperatore.frontend.dto.IntegrazioneDTO;
 import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaActionsVariable;
 import it.servizidigitali.scrivaniaoperatore.frontend.enumeration.CamundaCodiciOperazioniUtente;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
@@ -107,6 +112,12 @@ public class ScrivaniaOperatoreFrontendService {
 
 	@Reference
 	private ServizioLocalService servizioLocalService;
+
+	@Reference
+	private ProceduraFormLocalService proceduraFormLocalService;
+
+	@Reference
+	private FormLocalService formLocalService;
 
 	/**
 	 *
@@ -281,6 +292,8 @@ public class ScrivaniaOperatoreFrontendService {
 							e.setDescrizione("Rilascia");
 							azioniUtente.add(e);
 						}
+
+						break;
 					}
 				}
 			}
@@ -291,9 +304,9 @@ public class ScrivaniaOperatoreFrontendService {
 		catch (PortalException e) {
 			log.error("getAzioniUtenteDettaglioRichiesta :: " + e.getMessage(), e);
 		}
-		
+
 		azioniUtente.sort((a, b) -> a.getCodiceAzioneUtente().compareTo(b.getCodiceAzioneUtente()));
-		
+
 		return azioniUtente;
 	}
 
@@ -435,7 +448,8 @@ public class ScrivaniaOperatoreFrontendService {
 	 */
 	public List<AllegatoRichiesta> getAllegatiRichiestaRichiedente(long richiestaId) {
 		List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdGroupIdInterno(richiestaId, false);
-		return allegatiRichiesta;
+		List<AllegatoRichiesta> filteredList = allegatiRichiesta.stream().filter(allegato -> !allegato.isPrincipale()).collect(Collectors.toList());
+		return filteredList;
 	}
 
 	/**
@@ -565,6 +579,18 @@ public class ScrivaniaOperatoreFrontendService {
 
 		User currentUser = userLocalService.getUser(serviceContext.getUserId());
 
+		// Completa task
+		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId));
+		if (tasksByBusinessKey != null) {
+
+			for (Task task : tasksByBusinessKey) {
+				if (taskId.equalsIgnoreCase(task.getId()) && currentUser.getScreenName().equalsIgnoreCase(task.getAssignee())) {
+					List<Entry<String, String>> variables = new ArrayList<Entry<String, String>>();
+					camundaClient.completeTask(taskId, variables);
+				}
+			}
+		}
+
 		if (fileEntryIds != null && !fileEntryIds.isEmpty()) {
 			allegatoRichiestaLocalService.updateVisibilitaAllegatiRichiesta(fileEntryIds, true);
 		}
@@ -598,17 +624,6 @@ public class ScrivaniaOperatoreFrontendService {
 			EsitoComunicazione esito = communicationSender.send(comunicazione, canale);
 			log.debug("Comunicazione tramite canale '" + canale.getName() + "' a '" + currentUser.getScreenName() + "' inviata. MessageID: " + esito.getMessageId());
 
-		}
-
-		List<Task> tasksByBusinessKey = camundaClient.getTasksByBusinessKey(tenantId, String.valueOf(richiestaId));
-		if (tasksByBusinessKey != null) {
-
-			for (Task task : tasksByBusinessKey) {
-				if (taskId.equalsIgnoreCase(task.getId()) && currentUser.getScreenName().equalsIgnoreCase(task.getAssignee())) {
-					List<Entry<String, String>> variables = new ArrayList<Entry<String, String>>();
-					camundaClient.completeTask(taskId, variables);
-				}
-			}
 		}
 	}
 
@@ -653,6 +668,39 @@ public class ScrivaniaOperatoreFrontendService {
 		// Aggiornamento stato pratica con commenti
 		String note = "Pratica rimandata al referente";
 		richiestaLocalService.updateStatoRichiesta(richiestaId, StatoRichiesta.IN_LAVORAZIONE.name(), note);
+	}
+
+	/**
+	 *
+	 * @param procedura
+	 * @return
+	 */
+	public List<IntegrazioneDTO> getIntegrazioniFormProcedura(Procedura procedura) {
+
+		List<ProceduraForm> listaProceduraFormProcedura = proceduraFormLocalService.getListaProceduraFormProcedura(procedura.getProceduraId());
+
+		if (listaProceduraFormProcedura != null) {
+			List<IntegrazioneDTO> integrazioneDTOs = new ArrayList<IntegrazioneDTO>();
+			for (ProceduraForm proceduraForm : listaProceduraFormProcedura) {
+				try {
+					Form form = formLocalService.getForm(proceduraForm.getFormId());
+					if (form.isPrincipale()) {
+						continue;
+					}
+					IntegrazioneDTO integrazioneDTO = new IntegrazioneDTO();
+					integrazioneDTO.setId(proceduraForm.getProceduraId());
+					integrazioneDTO.setNome(form.getNome());
+					integrazioneDTOs.add(integrazioneDTO);
+				}
+				catch (PortalException e) {
+					log.warn("getIntegrazioniProcedura :: " + e.getMessage());
+				}
+			}
+			return integrazioneDTOs;
+		}
+
+		return null;
+
 	}
 
 	public Servizio getServizioByProceduraId(long proceduraId) throws PortalException {

@@ -4,6 +4,9 @@
 <portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_PAGAMENTI %>" var="getPagamentiUtenteResourceCommandUrl">
 </portlet:resourceURL>
 
+<portlet:renderURL var="dettaglioRichiestaURL">
+	<portlet:param name="mvcRenderCommandName" value="<%=ScrivaniaCittadinoPortletKeys.RENDER_COMMAND_DETTAGLIO_RICHIESTA %>" />
+</portlet:renderURL>
 
 <div class="container">
 	<div class="row">
@@ -134,29 +137,28 @@
 	{{props listaRichieste}}
 	<div class="collapse-header" id="heading{{>prop.richiestaId }}">
 		<button data-toggle="collapse" data-target="#collapse{{>prop.richiestaId }}" aria-expanded="false" aria-controls="collapse{{>prop.richiestaId }}">
-			<div class="button-wrapper">
+			<div style="display:flex; justify-content:space-between">
 				<span class="text-uppercase">
 					{{>prop.oggetto}}			         
-			    </span>
-				<div class="icon-wrapper">
-				<svg class="icon icon-xs me-1 icon-primary">
-					<use href="/o/portale-istituzionale-theme/svg/sprite.svg#it-check"></use>
-					<span>{{>prop.stato}}</span>
-				</svg>
+				</span>
+				<span class="text-uppercase">
+					{{>prop.stato.replace("_"," ")}}
+				</span>
 			</div>
 		</button>
 	</div>
-	<div class="collapse-body">
+	<div class="collapse-body" style="padding-bottom: 10px;  padding-top: 0; ">
 		{{if prop.dataProtocollo }}
 		<div>
 			{{localDate:prop.dataProtocollo}}
 		</div>
 		{{/if}}
 		<div id="collapse{{>prop.richiestaId }}" class="collapse" role="region" aria-labelledby="heading{{>prop.richiestaId }}">
-			{{if prop.note }}">
+			{{if prop.note }}
 				<p class="mb-3">{{>prop.note}}</p>
 			{{/if}}
 			<p>Pratica: {{>prop.richiestaId }}</p>
+			<a href="${dettaglioRichiestaURL}&<portlet:namespace/>id={{>prop.richiestaId}}"><span class="t-primary underline"><liferay-ui:message key="dettaglio"/></span></a>  
 			<a href="#"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio"/></span></a>  
 		</div>
 	</div>
@@ -185,29 +187,28 @@
 	{{props listaPagamenti}}
 	<div class="collapse-header" id="heading{{>prop.richiestaId }}">
 		<button data-toggle="collapse" data-target="#collapse{{>prop.richiestaId }}" aria-expanded="false" aria-controls="collapse{{>prop.richiestaId }}">
-			<div class="button-wrapper">
+			<div style="display:flex; justify-content:space-between">
 				<span class="text-uppercase">
 					{{>prop.oggetto}}			         
-			    </span>
-				<div class="icon-wrapper">
-				<svg class="icon icon-xs me-1 icon-primary">
-					<use href="/o/portale-istituzionale-theme/svg/sprite.svg#it-check"></use>
-					<span>{{>prop.stato}}</span>
-				</svg>
+				</span>
+				<span class="text-uppercase">
+					{{>prop.stato.replace("_"," ")}}
+				</span>
 			</div>
 		</button>
 	</div>
-	<div class="collapse-body">
+	<div class="collapse-body" style="padding-bottom: 10px;  padding-top: 0; ">
 		{{if prop.dataProtocollo }}
 		<div>
 			{{localDate:prop.dataProtocollo}}
 		</div>
 		{{/if}}
 		<div id="collapse{{>prop.richiestaId }}" class="collapse" role="region" aria-labelledby="heading{{>prop.richiestaId }}">
-			{{if prop.note }}">
+			{{if prop.note }}
 				<p class="mb-3">{{>prop.note}}</p>
 			{{/if}}
 			<p>Pratica: {{>prop.richiestaId }}</p>
+			<a href="${dettaglioRichiestaURL}&<portlet:namespace/>id={{>prop.richiestaId}}"><span class="t-primary underline"><liferay-ui:message key="dettaglio"/></span></a>  
 			<a href="#"><span class="t-primary underline"><liferay-ui:message key="scheda-servizio"/></span></a>  
 		</div>
 	</div>

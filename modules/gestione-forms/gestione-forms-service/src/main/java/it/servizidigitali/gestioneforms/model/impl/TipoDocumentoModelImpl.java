@@ -80,8 +80,7 @@ public class TipoDocumentoModelImpl
 		{"codice", Types.VARCHAR}, {"nome", Types.VARCHAR},
 		{"descrizione", Types.VARCHAR}, {"categoria", Types.VARCHAR},
 		{"estensioniFile", Types.VARCHAR}, {"stato", Types.VARCHAR},
-		{"numeroRequired", Types.BIGINT},
-		{"dataScadenzaRequired", Types.BIGINT}, {"organizationId", Types.BIGINT}
+		{"numeroRequired", Types.BIGINT}, {"dataScadenzaRequired", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -104,19 +103,18 @@ public class TipoDocumentoModelImpl
 		TABLE_COLUMNS_MAP.put("stato", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("numeroRequired", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("dataScadenzaRequired", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("organizationId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table tipo_documento (uuid_ VARCHAR(75) null,tipoDocumentoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codice VARCHAR(75) null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,categoria VARCHAR(75) null,estensioniFile VARCHAR(75) null,stato VARCHAR(75) null,numeroRequired LONG,dataScadenzaRequired LONG,organizationId LONG)";
+		"create table tipo_documento (uuid_ VARCHAR(75) null,tipoDocumentoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codice VARCHAR(75) null,nome VARCHAR(75) null,descrizione VARCHAR(75) null,categoria VARCHAR(75) null,estensioniFile VARCHAR(75) null,stato VARCHAR(75) null,numeroRequired LONG,dataScadenzaRequired LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table tipo_documento";
 
 	public static final String ORDER_BY_JPQL =
-		" ORDER BY tipoDocumento.tipoDocumentoId ASC";
+		" ORDER BY tipoDocumento.nome ASC";
 
 	public static final String ORDER_BY_SQL =
-		" ORDER BY tipo_documento.tipoDocumentoId ASC";
+		" ORDER BY tipo_documento.nome ASC";
 
 	public static final String DATA_SOURCE = "servizidigitaliDataSource";
 
@@ -153,7 +151,7 @@ public class TipoDocumentoModelImpl
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long TIPODOCUMENTOID_COLUMN_BITMASK = 16L;
+	public static final long NOME_COLUMN_BITMASK = 16L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -364,11 +362,6 @@ public class TipoDocumentoModelImpl
 			"dataScadenzaRequired",
 			(BiConsumer<TipoDocumento, Long>)
 				TipoDocumento::setDataScadenzaRequired);
-		attributeGetterFunctions.put(
-			"organizationId", TipoDocumento::getOrganizationId);
-		attributeSetterBiConsumers.put(
-			"organizationId",
-			(BiConsumer<TipoDocumento, Long>)TipoDocumento::setOrganizationId);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -700,20 +693,6 @@ public class TipoDocumentoModelImpl
 	}
 
 	@Override
-	public long getOrganizationId() {
-		return _organizationId;
-	}
-
-	@Override
-	public void setOrganizationId(long organizationId) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_organizationId = organizationId;
-	}
-
-	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
 			PortalUtil.getClassNameId(TipoDocumento.class.getName()));
@@ -791,7 +770,6 @@ public class TipoDocumentoModelImpl
 		tipoDocumentoImpl.setStato(getStato());
 		tipoDocumentoImpl.setNumeroRequired(getNumeroRequired());
 		tipoDocumentoImpl.setDataScadenzaRequired(getDataScadenzaRequired());
-		tipoDocumentoImpl.setOrganizationId(getOrganizationId());
 
 		tipoDocumentoImpl.resetOriginalValues();
 
@@ -832,25 +810,21 @@ public class TipoDocumentoModelImpl
 			this.<Long>getColumnOriginalValue("numeroRequired"));
 		tipoDocumentoImpl.setDataScadenzaRequired(
 			this.<Long>getColumnOriginalValue("dataScadenzaRequired"));
-		tipoDocumentoImpl.setOrganizationId(
-			this.<Long>getColumnOriginalValue("organizationId"));
 
 		return tipoDocumentoImpl;
 	}
 
 	@Override
 	public int compareTo(TipoDocumento tipoDocumento) {
-		long primaryKey = tipoDocumento.getPrimaryKey();
+		int value = 0;
 
-		if (getPrimaryKey() < primaryKey) {
-			return -1;
+		value = getNome().compareTo(tipoDocumento.getNome());
+
+		if (value != 0) {
+			return value;
 		}
-		else if (getPrimaryKey() > primaryKey) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
+
+		return 0;
 	}
 
 	@Override
@@ -1007,8 +981,6 @@ public class TipoDocumentoModelImpl
 		tipoDocumentoCacheModel.dataScadenzaRequired =
 			getDataScadenzaRequired();
 
-		tipoDocumentoCacheModel.organizationId = getOrganizationId();
-
 		return tipoDocumentoCacheModel;
 	}
 
@@ -1116,7 +1088,6 @@ public class TipoDocumentoModelImpl
 	private String _stato;
 	private long _numeroRequired;
 	private long _dataScadenzaRequired;
-	private long _organizationId;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1164,7 +1135,6 @@ public class TipoDocumentoModelImpl
 		_columnOriginalValues.put("numeroRequired", _numeroRequired);
 		_columnOriginalValues.put(
 			"dataScadenzaRequired", _dataScadenzaRequired);
-		_columnOriginalValues.put("organizationId", _organizationId);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1219,8 +1189,6 @@ public class TipoDocumentoModelImpl
 		columnBitmasks.put("numeroRequired", 16384L);
 
 		columnBitmasks.put("dataScadenzaRequired", 32768L);
-
-		columnBitmasks.put("organizationId", 65536L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

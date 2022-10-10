@@ -16,6 +16,9 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
@@ -24,7 +27,7 @@ import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 @Component(immediate = true, 
 property = { 
 			"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS,
-			"mvc.command.name=" + PresentatoreFormsPortletKeys.SALVA_INVIA_RICHIESTA_ACTION_COMMAND
+			"mvc.command.name=" + PresentatoreFormsPortletKeys.SALVA_RICHIESTA_BOZZA_ACTION_COMMAND
 		}, 
 service = { MVCActionCommand.class }
 )
@@ -33,6 +36,9 @@ public class SalvaRichiestaBozzaActionCommand extends BaseMVCActionCommand{
 	
 	@Reference
 	PresentatoreFormFrontendService presentatoreFormFrontendService;
+	
+	@Reference
+	ServizioLocalService servizioLocalService;
 		
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {			
@@ -40,12 +46,14 @@ public class SalvaRichiestaBozzaActionCommand extends BaseMVCActionCommand{
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
 		User user = themeDisplay.getUser();
-		long proceduraId = ParamUtil.getLong(actionRequest, "proceduraId");
 		String dataForm = ParamUtil.getString(actionRequest, "dataForm");
+		Procedura procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
 				
-		if(Validator.isNotNull(dataForm) && proceduraId >0){
+		if(Validator.isNotNull(dataForm) && procedura.getProceduraId() >0){
 			
-			presentatoreFormFrontendService.createOrUpdateRichiesta(user, proceduraId, dataForm, StatoRichiesta.BOZZA.name());			
+			Servizio servizio = servizioLocalService.getServizio(procedura.getServizioId());
+			
+			presentatoreFormFrontendService.createOrUpdateRichiesta(user, servizio, procedura.getProceduraId(), dataForm, StatoRichiesta.BOZZA.name(), themeDisplay.getSiteGroupId());			
 			
 		}		
 	}	
