@@ -150,6 +150,8 @@
 		<!-- Other fields -->
 		<column name="idDocumentale" type="String" />
 		<column name="nome" type="String" />
+		<column name="titolo" type="String" />
+		<column name="descrizione" type="String" />
 		<column name="url" type="String" />
 		<column name="principale" type="boolean" />
 		<column name="interno" type="boolean" />

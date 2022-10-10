@@ -6,6 +6,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -73,10 +74,14 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 
 		Procedura procedura = null;
 		AlpacaJsonStructure alpacaStructure = null;
+		Form form = null;
 
 		try {
 			procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
-			alpacaStructure = getAlpacaJsonStructure(procedura, themeDisplay);
+			form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
+			
+			FormData formData = AlpacaUtil.loadFormData(form, null, true, themeDisplay.getPortalURL());
+			alpacaStructure = formData.getAlpaca();
 
 			String step2TipoServizio = procedura.getStep2TipoServizio();
 
@@ -87,6 +92,15 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 			}
 
 			String codiceFiscaleComponente = ParamUtil.getString(actionRequest, PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE);
+			
+			if(Validator.isNull(codiceFiscaleComponente)) {
+				SessionErrors.add(actionRequest, PresentatoreFormsPortletKeys.SELEZIONARE_COMPONENTE_NUCLEO);
+				log.error("Selezionare un componente del nucleo familiare!");
+				actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO);
+				return;
+			}
+			
+			
 			UserPreferences userPreferences = new UserPreferences();
 			userPreferences.setCodiceFiscaleRichiedente(themeDisplay.getUser().getScreenName());
 			userPreferences.setCodiceFiscaleComponente(codiceFiscaleComponente);
@@ -117,11 +131,19 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 			alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
 
 			actionRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+			actionRequest.setAttribute(PresentatoreFormsPortletKeys.API_ALPACA_PATH,
+					themeDisplay.getPortalURL() + PresentatoreFormsPortletKeys.SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH);
+			actionRequest.setAttribute(PresentatoreFormsPortletKeys.TIPO_SERVIZIO_STEP2, procedura.getStep2TipoServizio());
 
 			// Aggiunta destinazioni d'uso in pagina se certificato
 			if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 				List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
 				actionRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONI_USO, destinazioniUso);
+				actionRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, form.getNome());
+				actionRequest.setAttribute(PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE, codiceFiscaleComponente);
+				actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO);
+			}else {
+				actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_COMPILA_FORM);
 			}
 		}
 		catch (Exception e) {
@@ -129,19 +151,8 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 			actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO);
 		}
 
-		actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_COMPILA_FORM);
 
 	}
 
-	private AlpacaJsonStructure getAlpacaJsonStructure(Procedura procedura, ThemeDisplay themeDisplay) {
-
-		Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
-
-		FormData formData = AlpacaUtil.loadFormData(form, null, true, themeDisplay.getPortalURL());
-		AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
-
-		return alpacaStructure;
-
-	}
 
 }

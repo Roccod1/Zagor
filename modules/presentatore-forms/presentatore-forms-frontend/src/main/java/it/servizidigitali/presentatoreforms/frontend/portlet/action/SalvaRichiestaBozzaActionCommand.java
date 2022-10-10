@@ -17,6 +17,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
@@ -34,6 +36,9 @@ public class SalvaRichiestaBozzaActionCommand extends BaseMVCActionCommand{
 	
 	@Reference
 	PresentatoreFormFrontendService presentatoreFormFrontendService;
+	
+	@Reference
+	ServizioLocalService servizioLocalService;
 		
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {			
@@ -46,7 +51,9 @@ public class SalvaRichiestaBozzaActionCommand extends BaseMVCActionCommand{
 				
 		if(Validator.isNotNull(dataForm) && procedura.getProceduraId() >0){
 			
-			presentatoreFormFrontendService.createOrUpdateRichiesta(user, procedura.getProceduraId(), dataForm, StatoRichiesta.BOZZA.name(), themeDisplay.getSiteGroupId());			
+			Servizio servizio = servizioLocalService.getServizio(procedura.getServizioId());
+			
+			presentatoreFormFrontendService.createOrUpdateRichiesta(user, servizio, procedura.getProceduraId(), dataForm, StatoRichiesta.BOZZA.name(), themeDisplay.getSiteGroupId());			
 			
 		}		
 	}	

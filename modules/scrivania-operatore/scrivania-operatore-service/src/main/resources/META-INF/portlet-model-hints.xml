@@ -12,6 +12,8 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="idDocumentale" type="String" />
 		<field name="nome" type="String" />
+		<field name="titolo" type="String" />
+		<field name="descrizione" type="String" />
 		<field name="url" type="String" />
 		<field name="principale" type="boolean" />
 		<field name="interno" type="boolean" />

@@ -1,10 +1,15 @@
 package it.servizidigitali.restservice.internal.converter;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +21,20 @@ import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttribute
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
+import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
+import it.servizidigitali.gestioneprocessi.model.Processo;
+import it.servizidigitali.gestioneprocessi.service.ProcessoLocalService;
+import it.servizidigitali.gestioneservizi.model.AreaTematica;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.model.Tipologia;
+import it.servizidigitali.gestioneservizi.service.AreaTematicaLocalService;
+import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 import it.servizidigitali.restservice.dto.v1_0.DestinazioneUso;
 import it.servizidigitali.restservice.dto.v1_0.InfoServizioEnte;
+import it.servizidigitali.restservice.dto.v1_0.RichiestaServizio;
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.service.DestinazioneUsoLocalService;
 
 /**
@@ -49,6 +63,24 @@ public class EntityToSchemaModelConverter {
 	@Reference
 	private DestinazioneUsoLocalService destinazioneUsoLocalService;
 
+	@Reference
+	private UserLocalService userLocalService;
+
+	@Reference
+	private AreaTematicaLocalService areaTematicaLocalService;
+
+	@Reference
+	private ProceduraLocalService proceduraLocalService;
+
+	@Reference
+	private GroupLocalService groupLocalService;
+
+	@Reference
+	private ServizioLocalService servizioLocalService;
+
+	@Reference
+	private ProcessoLocalService processoLocalService;
+
 	/**
 	 *
 	 * @param servizioEnte
@@ -59,7 +91,8 @@ public class EntityToSchemaModelConverter {
 	public InfoServizioEnte getInfoServizioEnte(ServizioEnte servizioEnte, Organization organization, Servizio servizio) {
 
 		InfoServizioEnte infoServizioEnte = new InfoServizioEnte();
-		infoServizioEnte.setCodiceIpa(organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo()).toString());
+		Serializable codIPA = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo());
+		infoServizioEnte.setCodiceIpa(codIPA != null ? codIPA.toString() : null);
 		infoServizioEnte.setActive(servizioEnte.isAttivo());
 		infoServizioEnte.setCode(servizio.getCodice());
 		infoServizioEnte.setDescription(servizioEnte.getDescrizione());
@@ -163,6 +196,55 @@ public class EntityToSchemaModelConverter {
 		}
 
 		return null;
+	}
+
+	/**
+	 *
+	 * @param richiesta
+	 * @return
+	 * @throws PortalException
+	 */
+	public RichiestaServizio getRichiestaServizio(Richiesta richiesta) throws PortalException {
+
+		if (richiesta == null) {
+			return null;
+		}
+
+		User user = userLocalService.getUser(richiesta.getUserId());
+
+		Procedura procedura = proceduraLocalService.getProcedura(richiesta.getProceduraId());
+		Processo processo = processoLocalService.getProcesso(procedura.getProcessoId());
+		Organization organization = organizationLocalService.getOrganization(groupLocalService.getGroup(richiesta.getGroupId()).getOrganizationId());
+
+		Servizio servizio = servizioLocalService.getServizio(procedura.getServizioId());
+
+		AreaTematica areaTematica = areaTematicaLocalService.getAreaTematica(servizio.getAreaTematicaId());
+
+		RichiestaServizio richiestaServizio = new RichiestaServizio();
+		richiestaServizio.setCodiceAreaTematica(areaTematica.getCodice());
+		richiestaServizio.setCodiceFiscaleRichiedente(richiesta.getCodiceFiscale());
+		richiestaServizio.setCodiceFiscaleDelegato(richiesta.getCodiceFiscaleDelegato());
+		richiestaServizio.setCodiceIdentificativoServizio(servizio.getCodice());
+		richiestaServizio.setDataAggiornamento(richiesta.getModifiedDate());
+		richiestaServizio.setDataInserimento(richiesta.getCreateDate());
+		richiestaServizio.setDataProtocollo(richiesta.getDataProtocollo());
+		richiestaServizio.setDataProtocolloEsterno(richiesta.getDataProtocolloEsterno());
+		richiestaServizio.setDenominazioneAreaTematica(areaTematica.getNome());
+		richiestaServizio.setDenominazioneEnte(organization.getName());
+		richiestaServizio.setDenominazioneRichiedente(richiesta.getCodiceFiscale());
+		richiestaServizio.setDenominazioneServizio(servizio.getNome());
+		richiestaServizio.setEmailRichiedente(user.getEmailAddress());
+		richiestaServizio.setId(richiesta.getRichiestaId());
+		richiestaServizio.setIdentificativoEnte(organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo()).toString());
+		richiestaServizio.setIdentificativoProcesso(processo.getCodice());
+		richiestaServizio.setIdProcedura(richiesta.getProceduraId());
+		richiestaServizio.setNote(richiesta.getNote());
+		richiestaServizio.setNumeroProtocollo(richiesta.getNumeroProtocollo());
+		richiestaServizio.setNumeroProtocolloEsterno(richiesta.getNumeroProtocolloEsterno());
+		richiestaServizio.setOggetto(richiesta.getOggetto());
+		richiestaServizio.setPartitaIvaRichiedente(richiesta.getPartitaIva());
+		richiestaServizio.setStato(richiesta.getStato());
+		return richiestaServizio;
 	}
 
 }

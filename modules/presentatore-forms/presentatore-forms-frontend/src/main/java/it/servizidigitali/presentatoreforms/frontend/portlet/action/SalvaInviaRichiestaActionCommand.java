@@ -107,7 +107,7 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand {
 					File fileFirmato = uploadPortletRequest.getFile("uploadFileFirmato");
 
 					if (Validator.isNotNull(fileFirmato)) {
-						allegatoRichiestaService.salvaAllegatoFirmato(fileFirmato, servizio.getCodice(), richiesta.getRichiestaId(), user.getFullName(), user.getUserId(),
+						allegatoRichiestaService.salvaAllegatoFirmato(fileFirmato, servizio, richiesta.getRichiestaId(), user.getFullName(), user.getUserId(),
 								themeDisplay.getSiteGroupId());
 					}
 					else {
@@ -124,7 +124,8 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand {
 							File allegato = uploadPortletRequest.getFile("allegato-" + definizioneAllegato.getDefinizioneAllegatoId());
 
 							if (Validator.isNotNull(allegato)) {
-								allegatoRichiestaService.salvaAllegatiRichiesta(allegato, servizio.getCodice(), richiesta.getRichiestaId(), definizioneAllegato.getDefinizioneAllegatoId(),
+								String nomeFile = uploadPortletRequest.getFileName("allegato-" + definizioneAllegato.getDefinizioneAllegatoId());
+								allegatoRichiestaService.salvaAllegatiRichiesta(allegato, nomeFile, servizio, richiesta.getRichiestaId(), definizioneAllegato.getDefinizioneAllegatoId(),
 										user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
 							}
 							else {

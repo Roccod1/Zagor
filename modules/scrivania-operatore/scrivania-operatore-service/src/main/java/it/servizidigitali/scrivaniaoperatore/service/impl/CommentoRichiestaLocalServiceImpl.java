@@ -55,6 +55,7 @@ public class CommentoRichiestaLocalServiceImpl extends CommentoRichiestaLocalSer
 		commentoRichiesta.setCompanyId(companyId);
 		commentoRichiesta.setUserId(userId);
 		commentoRichiesta.setUserName(userName);
+		commentoRichiesta.setRichiestaId(richiestaId);
 
 		commentoRichiesta = commentoRichiestaPersistence.update(commentoRichiesta);
 

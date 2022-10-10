@@ -3,7 +3,6 @@ package it.servizidigitali.file.utility.service.impl;
 import com.liferay.document.library.kernel.exception.NoSuchFolderException;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppService;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -44,7 +43,7 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 	private UserLocalService userLocalService;
 
 	@Override
-	public String saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, InputStream inputStream, String mimeType, long userId, long groupId)
+	public String saveRequestFile(String nomeFile, String titolo, String descrizione, String codiceServizio, long richiestaId, InputStream inputStream, String mimeType, long userId, long groupId)
 			throws FileServiceException {
 
 		try {
@@ -79,9 +78,22 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 				}
 
 				if (codiceServizioFolder != null) {
-					FileEntry addFileEntry = dlAppService.addFileEntry(null, defaultRepoId, codiceServizioFolder.getFolderId(), nomeFile, mimeType, titolo, null, descrizione, null, inputStream,
-							inputStream.available(), null, null, serviceContext);
-					return String.valueOf(addFileEntry.getFileEntryId());
+
+					Folder richiestaIdFolder = null;
+					try {
+						richiestaIdFolder = dlAppService.getFolder(defaultRepoId, codiceServizioFolder.getFolderId(), String.valueOf(richiestaId));
+					}
+					catch (NoSuchFolderException e) {
+						log.warn("saveRequestFile :: folder richiesta id non esistente: " + e.getMessage() + ". Creazione folder: " + richiestaId);
+						richiestaIdFolder = dlAppService.addFolder(defaultRepoId, codiceServizioFolder.getFolderId(), String.valueOf(richiestaId), null, serviceContext);
+					}
+
+					if (richiestaIdFolder != null) {
+						FileEntry addFileEntry = dlAppService.addFileEntry(null, defaultRepoId, richiestaIdFolder.getFolderId(), nomeFile, mimeType, titolo, null, descrizione, null, inputStream,
+								inputStream.available(), null, null, serviceContext);
+						return String.valueOf(addFileEntry.getFileEntryId());
+					}
+
 				}
 			}
 		}
@@ -184,9 +196,5 @@ public class DocumentLibraryFileServiceImpl implements FileService {
 		file.setEstensione(fileEntry.getExtension());
 		file.setMimeType(fileEntry.getMimeType());
 		return file;
-	}
-
-	private String getDLFileURL(FileEntry file) {
-		return "/documents/" + file.getGroupId() + StringPool.BACK_SLASH + file.getFolderId() + StringPool.BACK_SLASH + file.getTitle() + StringPool.BACK_SLASH + file.getUuid();
 	}
 }
