@@ -123,16 +123,7 @@ public class EntityToSchemaModelConverter {
 			break;
 		}
 
-		long publicLayoutId = servizioEnte.getPublicLayoutId();
-		long privateLayoutId = servizioEnte.getPrivateLayoutId();
-
-		String pathServizio = null;
-		if (publicLayoutId != 0 || (publicLayoutId != 0 && privateLayoutId != 0)) {
-			pathServizio = layoutUtility.getPathByLayoutId(publicLayoutId, organization.getGroupId(), organization.getCompanyId());
-		}
-		else if (privateLayoutId != 0) {
-			pathServizio = layoutUtility.getPathByLayoutId(privateLayoutId, organization.getGroupId(), organization.getCompanyId());
-		}
+		String pathServizio = getPathServizio(servizioEnte, organization);
 
 		infoServizioEnte.setServiceOnlineUrl(pathServizio);
 
@@ -145,6 +136,20 @@ public class EntityToSchemaModelConverter {
 		infoServizioEnte.setServiceCardUrl(getSchedaServizioPath(servizioEnte.getServizioId(), organization.getOrganizationId(), organization.getCompanyId()));
 
 		return infoServizioEnte;
+	}
+
+	public String getPathServizio(ServizioEnte servizioEnte, Organization organization) {
+		long publicLayoutId = servizioEnte.getPublicLayoutId();
+		long privateLayoutId = servizioEnte.getPrivateLayoutId();
+
+		String pathServizio = null;
+		if (publicLayoutId != 0 || (publicLayoutId != 0 && privateLayoutId != 0)) {
+			pathServizio = layoutUtility.getPathByLayoutId(publicLayoutId, organization.getGroupId(), organization.getCompanyId());
+		}
+		else if (privateLayoutId != 0) {
+			pathServizio = layoutUtility.getPathByLayoutId(privateLayoutId, organization.getGroupId(), organization.getCompanyId());
+		}
+		return pathServizio;
 	}
 
 	/**
@@ -180,7 +185,7 @@ public class EntityToSchemaModelConverter {
 	 * @param companyId
 	 * @return
 	 */
-	public String getSchedaServizioPath(long servizioId, long organizationId, long companyId) {
+	private String getSchedaServizioPath(long servizioId, long organizationId, long companyId) {
 
 		ServizioEntePK servizioEntePK = new ServizioEntePK(servizioId, organizationId);
 
