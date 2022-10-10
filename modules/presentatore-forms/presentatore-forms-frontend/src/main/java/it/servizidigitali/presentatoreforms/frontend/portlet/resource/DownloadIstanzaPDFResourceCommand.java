@@ -25,6 +25,7 @@ import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
+import it.servizidigitali.presentatoreforms.frontend.service.AllegatoRichiestaService;
 import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
 import it.servizidigitali.presentatoreforms.frontend.service.PDFServiceFactory;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
@@ -51,6 +52,9 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 	
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
+	
+	@Reference
+	private AllegatoRichiestaService allegatoRichiestaService;
 
 	@Override
 	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
@@ -106,9 +110,12 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 
 			switch (tipoServizio) {
 			case CERTIFICATO:
-				long destinazioneUsoId = ParamUtil.getLong(resourceRequest, PresentatoreFormsPortletKeys.DESTINAZIONE_USO_ID);
-				String numeroBollo = null;
-				pdf = pdfService.generaPDFCertificato(screenName, codiceFiscaleComponente, alpacaStructure, richiesta, destinazioneUsoId, numeroBollo, resourceRequest);
+				String idDocumentale = ParamUtil.getString(resourceRequest, PresentatoreFormsPortletKeys.ID_DOCUMENTALE);
+				
+				if(Validator.isNotNull(idDocumentale)) {
+					pdf = allegatoRichiestaService.getCertificato(idDocumentale);
+				}
+				
 				break;
 			default:
 				pdf = pdfService.generaPDFAlpacaForm(screenName, codiceFiscaleComponente, alpacaStructure, richiesta, false, dettagliRichiesta, resourceRequest);

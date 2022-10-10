@@ -131,7 +131,10 @@ public class AllegatoRichiestaService {
 		}
 	}
 
-	public void salvaCertificato(byte[] certificato, Servizio servizio, long richiestaId, String userName, long userId, long groupId) throws Exception {
+	public String salvaCertificato(byte[] certificato, Servizio servizio, long richiestaId, String userName, long userId, long groupId) throws Exception {
+		
+		String idDocumentale = null;
+		
 		try {
 
 			if (Validator.isNotNull(certificato)) {
@@ -141,7 +144,7 @@ public class AllegatoRichiestaService {
 
 				if (Validator.isNotNull(is)) {
 					String mimeType = MimeTypesUtil.getContentType(is, nomeFile);
-					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId, is, mimeType, userId, groupId);
+					idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId, is, mimeType, userId, groupId);
 
 					if (Validator.isNotNull(idDocumentale)) {
 						creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, null, true, userName, groupId, userId);
@@ -155,6 +158,31 @@ public class AllegatoRichiestaService {
 			log.error(e.getMessage(), e);
 			throw e;
 		}
+		
+		return idDocumentale;
+	}
+	
+	public byte[] getCertificato(String idDocumentale) throws Exception{
+		byte[] certificato = null;
+		
+		try {
+			if(Validator.isNotNull(idDocumentale)) {
+				FileEntry certificatoFileEntry = dlAppService.getFileEntry(Long.valueOf(idDocumentale));
+				
+				if(Validator.isNotNull(certificatoFileEntry)) {
+					InputStream is = certificatoFileEntry.getContentStream();
+					
+					if(Validator.isNotNull(is)) {
+						certificato = is.readAllBytes();
+					}
+				}
+			}
+		}catch(Exception e) {
+			log.error(e.getMessage(),e);
+			throw e;
+		}
+
+		return certificato;
 	}
 
 	public DatiFileAllegato getModelloAllegato(long definizioneAllegatoId) {

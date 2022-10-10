@@ -103,9 +103,10 @@ public class GeneraCertificatoRenderCommand implements MVCRenderCommand{
 			
 			if(Validator.isNotNull(pdfCertificato) && Validator.isNotNull(richiesta)) {
 				richiestaLocalService.updateStatoRichiesta(richiesta.getRichiestaId(), StatoRichiesta.CHIUSA_POSITIVAMENTE.name());
-				allegatoRichiestaService.salvaCertificato(pdfCertificato, servizio, richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
+				String idDocumentale = allegatoRichiestaService.salvaCertificato(pdfCertificato, servizio, richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
 				renderRequest.setAttribute(PresentatoreFormsPortletKeys.RICHIESTA_ID, richiesta.getRichiestaId());
 				renderRequest.setAttribute(PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE, codiceFiscaleComponente);
+				renderRequest.setAttribute(PresentatoreFormsPortletKeys.ID_DOCUMENTALE, idDocumentale);
 				return PresentatoreFormsPortletKeys.JSP_DOWNLOAD_CERTIFICATO;
 			}
 		
