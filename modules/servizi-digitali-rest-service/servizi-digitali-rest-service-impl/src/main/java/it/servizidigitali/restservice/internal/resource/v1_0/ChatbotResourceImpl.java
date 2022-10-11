@@ -2,9 +2,12 @@ package it.servizidigitali.restservice.internal.resource.v1_0;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -18,6 +21,8 @@ import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.util.Validator;
@@ -43,7 +48,8 @@ import it.servizidigitali.restservice.resource.v1_0.ChatbotResource;
 		scope = ServiceScope.PROTOTYPE, service = ChatbotResource.class
 		)
 public class ChatbotResourceImpl extends BaseChatbotResourceImpl {
-
+	private static final Log log = LogFactoryUtil.getLog(ChatbotResourceImpl.class);
+	
 	@Reference
 	private ServizioLocalService servizioLocalService;
 	@Reference
@@ -61,19 +67,16 @@ public class ChatbotResourceImpl extends BaseChatbotResourceImpl {
 		MessageUtil messageUtil = new MessageUtil(ServiziDigitaliRestConstants.BUNDLE_SYMBOLIC_NAME, null);		
 		
 		if ((Validator.isNull(nomeComune) && Validator.isNull(amministrazione)) || (!Validator.isNull(nomeComune) && !Validator.isNull(amministrazione))) {
-
 			throw new BadRequestException("E' obbligatorio compilare solo uno tra i due campi nomeComune e amministrazione");
-
 		}
 		
-		Organization organization;
+		List<Organization> organizations;
 		if (Validator.isNotNull(nomeComune)) {
 			DynamicQuery query = organizationLocalService.dynamicQuery();
 			query.add(RestrictionsFactoryUtil.eq("name", nomeComune));
 			
-			//TODO gestisci risultati multipli
-			organization = organizationLocalService.<Organization>dynamicQuery(query).stream().findFirst().get();
-		} else if (Validator.isNotNull(amministrazione)) {
+			organizations = organizationLocalService.dynamicQuery(query);
+		} else {
 			ClassLoader classLoader = getClass().getClassLoader();
 			
 			DynamicQuery expandoColumn = DynamicQueryFactoryUtil.forClass(ExpandoColumn.class, classLoader);
@@ -88,14 +91,25 @@ public class ChatbotResourceImpl extends BaseChatbotResourceImpl {
 			DynamicQuery query = organizationLocalService.dynamicQuery();
 			query.add(PropertyFactoryUtil.forName("organizationId").in(expandoValue));
 
-			//TODO gestisci risultati multipli
-			organization = organizationLocalService.<Organization>dynamicQuery(query).stream().findFirst().get();
+			organizations = organizationLocalService.dynamicQuery(query);
+		} 
+		
+		Organization organization;
+		if (organizations.size() == 1) {
+			organization = organizations.get(0);
+		} else if (organizations.isEmpty()) {
+			throw new NotFoundException("Ente non trovato");
 		} else {
-			throw new RuntimeException();
+			throw new InternalServerErrorException("Enti multipli per filtro nomeComune o amministrazione");
 		}
 		
 		Servizio servizio = servizioLocalService.getServizioByCodice(codiceServizio);
+		if (servizio == null) {
+			throw new NotFoundException("Servizio non trovato");
+		}
+		
 		ServizioEnte servizioEnte = serviceEnteLocalService.getServizioEnte(new ServizioEntePK(servizio.getServizioId(), organization.getOrganizationId()));
+		
 		String basePath = entityToSchemaModelConverter.getPathServizio(servizioEnte, organization);
 		String path = appendParam(basePath, "codiceFiscaleComponenteNucleoFamiliare", codiceFiscale); 
 		
