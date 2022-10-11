@@ -109,7 +109,7 @@
 		{{if dataInvio}}
 			<div>
 				{{localDate:dataInvio}}
-			<div>
+			</div>
 		{{/if}}
 
 		<div id="collapse{{>comunicazioneId}}" class="collapse" role="region" aria-labelledby="heading{{>comunicazioneId}}">
