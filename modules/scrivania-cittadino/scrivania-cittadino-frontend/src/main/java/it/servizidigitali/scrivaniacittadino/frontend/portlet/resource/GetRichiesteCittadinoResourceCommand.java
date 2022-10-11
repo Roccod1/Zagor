@@ -27,6 +27,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.scrivaniacittadino.frontend.constants.ScrivaniaCittadinoPortletKeys;
+import it.servizidigitali.scrivaniacittadino.frontend.dto.RichiestaAccordionDto;
 import it.servizidigitali.scrivaniacittadino.frontend.service.ScrivaniaCittadinoMiddlewareService;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
@@ -55,6 +56,9 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 	@Reference
 	private ScrivaniaCittadinoMiddlewareService scirvaniaCittadinoMiddlewareService;
 	
+	@Reference
+	private AllegatoRichiestaLocalService allegatoRichiestaLocalService;
+	
 	@Override
 	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
 
@@ -72,6 +76,9 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 		   
 		   List<Richiesta> listaRichieste = new ArrayList<Richiesta>();
 		   List<Richiesta> listaRichiesteModificabile = null;
+		   List<RichiestaAccordionDto> listaRichiestaFinal = new ArrayList<RichiestaAccordionDto>();
+
+		   int listaRichiesteCount = 0;
 		   try {        	   
 				serviceContext = ServiceContextFactory.getInstance(resourceRequest);
 				themeDisplay = serviceContext.getThemeDisplay();
@@ -101,6 +108,9 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 				int startEnd[] = calcolaStartEnd(cur, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
 				listaRichieste =  richiestaLocalService.search(richiestaFilter, startEnd[0], startEnd[1]);
 				
+//				count richieste
+				listaRichiesteCount = richiestaLocalService.count(richiestaFilter);
+				
 				startEnd = calcolaStartEnd(cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
 				List<Richiesta> paginaSuccessiva = richiestaLocalService.getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(loggedUser.getScreenName(), themeDisplay.getSiteGroup().getOrganizationId(), cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA, sortName, sortType);
 
@@ -111,13 +121,31 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 						themeDisplay.getSiteGroup().getOrganizationId(), 
 						themeDisplay.getSiteGroup().getGroupId(), 
 						true, 0, 0, "", "");
-						
 				listaRichiesteModificabile = new ArrayList<Richiesta>(listaRichieste);
 				
 				for(Richiesta pagamento:pagamenti) {
 					if(listaRichiesteModificabile.contains(pagamento)) {
 						listaRichiesteModificabile.remove(pagamento);
+						
+//						rimuovo da count richieste di tipo pagamento
+						listaRichiesteCount--;
 					}
+				}
+				
+				RichiestaAccordionDto ra = null;
+				for(Richiesta richiesta: listaRichiesteModificabile) {
+					List<AllegatoRichiesta> tmp = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdGroupIdVisibile(richiesta.getRichiestaId(), true);
+					AllegatoRichiesta pdfRichiesta = allegatoRichiestaLocalService.getAllegatoRichiestaByRichiestaIdPrincipale(richiesta.getRichiestaId(), true);
+					
+					List<AllegatoRichiesta> listaAllegatiRichiesta = new ArrayList<AllegatoRichiesta>(tmp);
+					if(pdfRichiesta != null) {
+						listaAllegatiRichiesta.add(pdfRichiesta);
+					}
+					ra = new RichiestaAccordionDto();
+					ra.setRichiesta(richiesta);
+					ra.setAllegatiRichiesta(listaAllegatiRichiesta);
+					
+					listaRichiestaFinal.add(ra);
 				}
 				
 				if(Validator.isNotNull(paginaSuccessiva) && !paginaSuccessiva.isEmpty()) {
@@ -129,9 +157,18 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 			   throw new Exception(e);
 		   }
 		   
-		   responseMap.put("listaRichieste", listaRichiesteModificabile != null && !listaRichiesteModificabile.isEmpty() ? listaRichiesteModificabile : listaRichieste);
+//		   responseMap.put("listaRichieste", listaRichiesteModificabile != null && !listaRichiesteModificabile.isEmpty() ? listaRichiesteModificabile : listaRichieste);
+		   responseMap.put("listaRichieste", listaRichiestaFinal);
 		   responseMap.put("hasNext", hasNext);
 		   responseMap.put("cur", cur);
+		   
+//		   dati per visualizzare paginazione
+		   responseMap.put("max", listaRichiesteCount);
+		   
+		   int totalCurrent = ((cur - 1) * ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA) + listaRichiesteModificabile.size(); 
+		   
+		   responseMap.put("currentItems", totalCurrent);
+		   
 		   String jsonObject = JSONFactoryUtil.looseSerializeDeep(responseMap);
 		   resourceResponse.getWriter().write(jsonObject);
 	}

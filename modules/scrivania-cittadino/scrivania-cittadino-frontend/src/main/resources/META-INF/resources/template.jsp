@@ -7,7 +7,7 @@
 
 
 <script id="accordionTpl" type="text/x-jsrender">
-<div id="collapseDivRichieste" class="collapse-div collapse-background-active">
+<div name="collapseDiv" class="collapse-div collapse-background-active">
 	{{for dataToRender tmpl=templateName/}}
 </div>
 <div class="mt-5">
@@ -25,6 +25,8 @@
 		</svg>
 	</button>
 {{/if}}
+
+	<span>{{>currentItems}}/{{>max}}</span>
 </div>
 </script>
 
@@ -32,31 +34,65 @@
 	<portlet:param name="mvcRenderCommandName" value="<%=ScrivaniaCittadinoPortletKeys.RENDER_COMMAND_DETTAGLIO_RICHIESTA %>" />
 </portlet:renderURL>
 
+<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_DOWNLOAD_FILE %>" var="downloadAllegatoURL">
+</portlet:resourceURL>
+
 <script id="richiestaTpl" type="text/x-jsrender">
 
-	<div class="collapse-header" id="heading{{>richiestaId }}">
-		<button data-toggle="collapse" data-target="#collapse{{>richiestaId }}" aria-expanded="false" aria-controls="collapse{{>richiestaId }}">
-			<div style="display:flex; justify-content:space-between">
-				<span class="text-uppercase">
-					{{>oggetto}}			         
-				</span>
-				<span class="text-uppercase">
-					{{>stato.replace("_"," ")}}
-				</span>
-			</div>
-		</button>
+	<div class="collapse-header" id="heading{{>richiesta.richiestaId }}">
+	  <button data-toggle="collapse" data-target="#collapse{{>richiesta.richiestaId }}" aria-expanded="false" aria-controls="collapse{{>richiesta.richiestaId }}">
+	    <div style="display:flex; justify-content:space-between">
+	      <span class="text-uppercase">
+	        {{>richiesta.oggetto}}
+	      </span>
+	      <span class="text-uppercase">
+	        {{>richiesta.stato.replace("_"," ")}}
+	      </span>
+	    </div>
+	  </button>
 	</div>
 	<div class="collapse-body" style="padding-bottom: 10px;  padding-top: 0; ">
-		{{if dataProtocollo }}
-		<div>
-			{{localDate:dataProtocollo}}
-		</div>
-		{{/if}}
-		<div id="collapse{{>richiestaId }}" class="collapse" role="region" aria-labelledby="heading{{>richiestaId }}">
-			<p><liferay-ui:message key="protocollo"/>: {{>numeroProtocollo }}</p>
-			<a class="btn btn-outline-primary" href="${dettaglioRichiestaURL}&<portlet:namespace/>id={{>richiestaId}}"><span class="t-primary underline"><liferay-ui:message key="dettaglio"/></span></a>  
-			<a class="btn btn-outline-primary" href="#"><span class="t-primary underline"><liferay-ui:message key="vai-al-servizio"/></span></a>  
-		</div>
+	  {{if richiesta.dataProtocollo }}
+	  <div>
+	    {{localDate:richiesta.dataProtocollo}}
+	  </div>
+	  {{/if}}
+	  
+	  <div id="collapse{{>richiesta.richiestaId }}" class="collapse" role="region" aria-labelledby="heading{{>richiesta.richiestaId }}">
+	    <p>
+	      <liferay-ui:message key="protocollo" />: {{>richiesta.numeroProtocollo }}
+	    </p>
+
+{{if allegatiRichiesta.length > 0}}
+<div class="card-wrapper card-teaser-wrapper">
+{{for allegatiRichiesta}}
+
+	   <div class="card card-teaser rounded shadow py-1">
+    <svg class="icon">
+      <use href="/o/portale-istituzionale-theme/svg/sprite.svg#it-clip"></use>
+    </svg>
+    <div class="card-body">
+      <h5 class="card-title">
+        <a target="_blank" href="${downloadAllegatoURL}&<portlet:namespace/>fileId={{>idDocumentale}}">{{>titolo ? titolo : nome}}</a>
+      </h5>
+    </div>
+  </div>
+	  {{/for}}
+</div>
+{{/if}}
+
+
+	    <a class="btn btn-outline-primary" href="${dettaglioRichiestaURL}&<portlet:namespace/>id={{>richiesta.richiestaId}}">
+	      <span class="t-primary underline">
+	        <liferay-ui:message key="dettaglio" />
+	      </span>
+	    </a>
+	    <a class="btn btn-outline-primary" href="#">
+	      <span class="t-primary underline">
+	        <liferay-ui:message key="vai-al-servizio" />
+	      </span>
+	    </a>
+	  </div>
 	</div>
 	
 </script>
