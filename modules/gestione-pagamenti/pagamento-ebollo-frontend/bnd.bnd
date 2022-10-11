@@ -1,0 +1,4 @@
+Bundle-Name: pagamento-ebollo-frontend
+Bundle-SymbolicName: it.servizidigitali.pagamento.ebollo.frontend
+Bundle-Version: 1.0.0
+Export-Package: it.servizidigitali.pagamento.ebollo.frontend
