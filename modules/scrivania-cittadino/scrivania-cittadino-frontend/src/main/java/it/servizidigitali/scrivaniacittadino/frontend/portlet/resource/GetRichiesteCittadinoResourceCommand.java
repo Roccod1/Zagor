@@ -78,7 +78,6 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 		   List<Richiesta> listaRichiesteModificabile = null;
 		   List<RichiestaAccordionDto> listaRichiestaFinal = new ArrayList<RichiestaAccordionDto>();
 
-		   int listaRichiesteCount = 0;
 		   try {        	   
 				serviceContext = ServiceContextFactory.getInstance(resourceRequest);
 				themeDisplay = serviceContext.getThemeDisplay();
@@ -108,9 +107,6 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 				int startEnd[] = calcolaStartEnd(cur, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
 				listaRichieste =  richiestaLocalService.search(richiestaFilter, startEnd[0], startEnd[1]);
 				
-//				count richieste
-				listaRichiesteCount = richiestaLocalService.count(richiestaFilter);
-				
 				startEnd = calcolaStartEnd(cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
 				List<Richiesta> paginaSuccessiva = richiestaLocalService.getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(loggedUser.getScreenName(), themeDisplay.getSiteGroup().getOrganizationId(), cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA, sortName, sortType);
 
@@ -126,9 +122,6 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 				for(Richiesta pagamento:pagamenti) {
 					if(listaRichiesteModificabile.contains(pagamento)) {
 						listaRichiesteModificabile.remove(pagamento);
-						
-//						rimuovo da count richieste di tipo pagamento
-						listaRichiesteCount--;
 					}
 				}
 				
@@ -162,12 +155,6 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 		   responseMap.put("hasNext", hasNext);
 		   responseMap.put("cur", cur);
 		   
-//		   dati per visualizzare paginazione
-		   responseMap.put("max", listaRichiesteCount);
-		   
-		   int totalCurrent = ((cur - 1) * ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA) + listaRichiesteModificabile.size(); 
-		   
-		   responseMap.put("currentItems", totalCurrent);
 		   
 		   String jsonObject = JSONFactoryUtil.looseSerializeDeep(responseMap);
 		   resourceResponse.getWriter().write(jsonObject);

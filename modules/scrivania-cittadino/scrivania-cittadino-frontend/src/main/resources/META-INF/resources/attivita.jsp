@@ -150,8 +150,6 @@
 							cur:result.cur,
 							hasNext:result.hasNext,
 							methodName:"getRichiesteUtente",
-							max:result.max,
-							currentItems:result.currentItems
 						});
 				}else{
 					html = $.render.alert({tipo: "secondary", message: messages.noResult});

@@ -26,7 +26,6 @@
 	</button>
 {{/if}}
 
-	<span>{{>currentItems}}/{{>max}}</span>
 </div>
 </script>
 

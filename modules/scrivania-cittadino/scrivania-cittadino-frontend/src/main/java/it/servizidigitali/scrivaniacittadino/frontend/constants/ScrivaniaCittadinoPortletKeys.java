@@ -62,5 +62,9 @@ public class ScrivaniaCittadinoPortletKeys
     
 	public static final int DEFAULT_DELTA = 10;
 	public static final String CUR_ATTIVITA = "curAttivita";
+	public static final String DELTA_ATTIVITA = "deltaAttivita";
+
 	public static final String CUR_COMMENTI = "curCommenti";
+	public static final String DELTA_COMMENTI = "deltaCommenti";
+
 }

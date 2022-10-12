@@ -68,7 +68,8 @@ public class DettaglioRichiestaCittadino implements MVCRenderCommand {
 		long richiestaId = ParamUtil.getLong(renderRequest, ScrivaniaCittadinoPortletKeys.PARAM_ID);
 		int curCommenti = ParamUtil.getInteger(renderRequest, ScrivaniaCittadinoPortletKeys.CUR_COMMENTI);
 		int curAttivita = ParamUtil.getInteger(renderRequest, ScrivaniaCittadinoPortletKeys.CUR_ATTIVITA);
-		int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
+		int deltaCommenti = ParamUtil.getInteger(renderRequest, ScrivaniaCittadinoPortletKeys.DELTA_COMMENTI, 5);
+		int deltaAttivita = ParamUtil.getInteger(renderRequest, ScrivaniaCittadinoPortletKeys.DELTA_ATTIVITA, 5);
 		String searchContainerName = ParamUtil.getString(renderRequest, ScrivaniaCittadinoPortletKeys.SEARCH_CONTAINER_NAME, StringPool.BLANK);
 		if(richiestaId > 0) {
 			
@@ -107,11 +108,11 @@ public class DettaglioRichiestaCittadino implements MVCRenderCommand {
 					}
 										
 
-					posizioni = calcolaInizioFinePaginazione(ScrivaniaCittadinoPortletKeys.SEARCH_CONTAINER_COMMENTI, searchContainerName, curCommenti, delta);
+					posizioni = calcolaInizioFinePaginazione(ScrivaniaCittadinoPortletKeys.SEARCH_CONTAINER_COMMENTI, searchContainerName, curCommenti, deltaCommenti);
 					listaCommentiRichiesta = commentoRichiestaLocalService.getCommentiRichiestaByRichiestaIdVisibile(richiestaId, true, posizioni[0], posizioni[1]);
 					commentiRichiestaCount = commentoRichiestaLocalService.countCommentiRichiestaByRichiestaIdVisibile(richiestaId, true);
 					
-					posizioni = calcolaInizioFinePaginazione(ScrivaniaCittadinoPortletKeys.SEARCH_CONTAINER_ATTIVITA, searchContainerName, curAttivita, delta);
+					posizioni = calcolaInizioFinePaginazione(ScrivaniaCittadinoPortletKeys.SEARCH_CONTAINER_ATTIVITA, searchContainerName, curAttivita, deltaAttivita);
 					listaAttivitaRichiesta = attivitaRichiestaLocalService.getAttivitaRichiestaByRichiestaId(richiestaId,posizioni[0],posizioni[1]);
 					attivitaRichiestaCount = attivitaRichiestaLocalService.countAttivitaRichiestaByRichiestaId(richiestaId);
 	
@@ -147,16 +148,12 @@ public class DettaglioRichiestaCittadino implements MVCRenderCommand {
 	
 	private int[] calcolaInizioFinePaginazione(String searchContainerName, String searchContainerNameParam, int cur, int delta) {
 		int posizioni[] = new int[2];
-		
-		if(searchContainerName.equalsIgnoreCase(searchContainerNameParam)) {
-			if(cur <= 0) {
-				cur = 1;
-			}
-			posizioni = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
-		}else {
-			posizioni[0] = QueryUtil.ALL_POS;
-			posizioni[1] = QueryUtil.ALL_POS;
+
+		if (cur <= 0) {
+			cur = 1;
 		}
+
+		posizioni = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
 		return posizioni;
 	}
 }

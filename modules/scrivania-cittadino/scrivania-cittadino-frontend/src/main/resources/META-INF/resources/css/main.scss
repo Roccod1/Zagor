@@ -49,3 +49,9 @@
 	color: #000000 !important;
 	background-color: #ffffff !important;
 }
+
+.disable-after{
+	&::after{
+		content: none !important;
+	}
+}
