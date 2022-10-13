@@ -36,7 +36,8 @@
 			<aui:input label="gestionePagamenti.dettaglioPagamento.dataOperazione" name="dettaglioPagamentoDataOperazione" value="${formattedDataOperazione}" readonly="true"/>
 		</aui:col>
 		<aui:col md="3">
-			<aui:input label="gestionePagamenti.dettaglioPagamento.statoPagamento" name="dettaglioPagamentoStatoPagamento" value="<%=StatoPagamento.getDescrizioneByName(dettaglioPagamento.getStato()) %>"  readonly="true" />
+			<c:set var="statoLabeled"><liferay-ui:message key="label.statoPagamento.${dettaglioPagamento.stato}"/></c:set>
+			<aui:input label="gestionePagamenti.dettaglioPagamento.statoPagamento" name="dettaglioPagamentoStatoPagamento" value="${statoLabeled}"  readonly="true" />
 		</aui:col>
 	</aui:row>
 	<aui:row>

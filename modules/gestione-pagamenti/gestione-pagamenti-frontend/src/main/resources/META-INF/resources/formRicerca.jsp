@@ -74,7 +74,7 @@
 								showEmptyOption="true">
 								<c:forEach items="<%=StatoPagamento.values()%>" var="statoCerca">
 									<aui:option value="${statoCerca}"
-										label="${statoCerca.descrizione}" />
+										label="label.statoPagamento.${statoCerca}" />
 								</c:forEach>
 							</aui:select>
 						</aui:col>
@@ -122,7 +122,7 @@
 								showEmptyOption="true">
 								<c:forEach items="<%=StatoPagamento.values()%>" var="statoCerca">
 									<aui:option value="${statoCerca}"
-										label="${statoCerca.descrizione}" />
+										label="label.statoPagamento.${statoCerca}" />
 								</c:forEach>
 							</aui:select>
 						</aui:col>

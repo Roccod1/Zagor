@@ -35,7 +35,7 @@
 		</liferay-ui:search-container-column-text>
 		<fmt:formatNumber type="currency" currencyCode="EUR" value="${pagamento.importo}" var="importoFormatted"/>
 		<liferay-ui:search-container-column-text value="${importoFormatted}" name="gestionePagamenti.searchContainer.importoTotale" orderable="true" orderableProperty="importo"/>
-		<liferay-ui:search-container-column-text value="<%=StatoPagamento.getDescrizioneByName(pagamento.getStato()) %>" name="gestionePagamenti.searchContainer.stato" orderable="true" orderableProperty="stato"/>
+		<liferay-ui:search-container-column-text translate="true" value="label.statoPagamento.${pagamento.stato}" name="gestionePagamenti.searchContainer.stato" orderable="true" orderableProperty="stato"/>
 		<c:if test = "${siteOrganizationId == 0}">
 			<liferay-ui:search-container-column-text property="nomeOrganizzazione" name="gestionePagamenti.searchContainer.nomeOrganizzazione"/>
 		</c:if>

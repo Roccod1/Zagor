@@ -148,7 +148,7 @@ public class PagamentoEBolloService {
 		
 		User user = themeDisplay.getUser();
 		
-		String idFiscaleCliente = user.getScreenName();
+		String idFiscaleCliente = "DSAYSR00D01A056E"; //user.getScreenName();
 		String denominazioneCliente = user.getFullName() + " (" + idFiscaleCliente + ")";
 		String emailQuietanza = user.getEmailAddress();
 
