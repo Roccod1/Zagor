@@ -1,9 +1,9 @@
 package it.servizidigitali.gestionepagamenti.common.client;
 
 import it.servizidigitali.gestionepagamenti.common.client.exeption.PagamentiClientException;
+import it.servizidigitali.gestionepagamenti.common.client.model.Dovuto;
 import it.servizidigitali.gestionepagamenti.common.client.model.PagamentoDovutoRisposta;
 import it.servizidigitali.gestionepagamenti.common.client.model.VerificaPagamentoRisposta;
-import it.servizidigitali.gestionepagamenti.common.client.model.Dovuto;
 import it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient;
 
 /**
@@ -24,8 +24,17 @@ public interface PagamentiClient {
 	 */
 	PagamentoDovutoRisposta pagaDovuto(Dovuto dovuto, String username, String password, String wsdlUrl, String rispostaPagamentoUrl) throws PagamentiClientException;
 
-	VerificaPagamentoRisposta verificaPagamento(String idSession, String identificativoPag, String username, String password, String wsdlUrl, String basePath) throws PagamentiClientException;
-	
+	/**
+	 *
+	 * @param iud
+	 * @param username
+	 * @param password
+	 * @param wsdlUrl
+	 * @return
+	 * @throws PagamentiClientException
+	 */
+	VerificaPagamentoRisposta verificaPagamento(String iuv, String username, String password, String wsdlUrl) throws PagamentiClientException;
+
 	/**
 	 *
 	 * @return

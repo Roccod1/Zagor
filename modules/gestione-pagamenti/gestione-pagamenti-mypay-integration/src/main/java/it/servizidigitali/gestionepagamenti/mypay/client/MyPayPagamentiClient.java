@@ -82,7 +82,7 @@ public class MyPayPagamentiClient implements PagamentiClient {
 			log.error("paaSILInviaDovuti :: " + e.getMessage(), e);
 			throw new PagamentiClientException("paaSILInviaDovuti :: " + e.getMessage(), e);
 		}
-		
+
 		if ((paaSILInviaDovuti.getEsito() != null) && paaSILInviaDovuti.getEsito().equalsIgnoreCase("OK")) {
 			PagamentoDovutoRisposta invioPagamentoRisposta = new PagamentoDovutoRisposta();
 			invioPagamentoRisposta.setIdSessione(paaSILInviaDovuti.getIdSession());
@@ -98,12 +98,13 @@ public class MyPayPagamentiClient implements PagamentiClient {
 			throw new PagamentiClientException("Errore durante la chiamata al WS per l'invio dei dovuti.");
 		}
 	}
-	
-	
-	@Override //aggiungere anche iuv e iud come parametro dato che il metodo permette di verificare anche con questi valori il pagamento
-	public VerificaPagamentoRisposta verificaPagamento(String idSession, String identificativoPag, String username, String password, String wsdlUrl, String basePath) throws PagamentiClientException {
+
+	@Override
+	public VerificaPagamentoRisposta verificaPagamento(String iuv, String username, String password, String wsdlUrl) throws PagamentiClientException {
+
 		PagamentiTelematiciDovutiPagati pagamentiServicePort = null;
-		VerificaPagamentoRisposta resp = new VerificaPagamentoRisposta();
+
+		VerificaPagamentoRisposta verificaPagamentoRisposta = new VerificaPagamentoRisposta();
 
 		try {
 			pagamentiServicePort = getMyPayPort(wsdlUrl);
@@ -114,67 +115,66 @@ public class MyPayPagamentiClient implements PagamentiClient {
 		}
 
 		CtPagatiConRicevuta ctPagati = null;
-		
+
 		PaaSILChiediPagatiConRicevutaRisposta chiediPagatiResp = null;
 		try {
-//			String codIpaEnte, String password, String idSession, String identificativoUnivocoVersamento, String identificativoUnivocoDovuto
-			chiediPagatiResp = pagamentiServicePort.paaSILChiediPagatiConRicevuta(username, password, idSession, null, null);
-		}catch (Exception ex) {
+			chiediPagatiResp = pagamentiServicePort.paaSILChiediPagatiConRicevuta(username, password, null, iuv, null);
+		}
+		catch (Exception ex) {
 			throw new PagamentiClientException("Errore durate la chiamata al servizio " + "per richiedere lo stato dei pagati", ex);
 		}
-					
-		if(chiediPagatiResp.getFault() != null) {
-			resp.setCodiceErrore(chiediPagatiResp.getFault().getFaultCode());
-			resp.setDescrizioneErrore(chiediPagatiResp.getFault().getFaultString());
-		}else {
-			
-//			TODO serviziDigitaliFileUtility FileService.saveRequestFile(...)
+
+		if (chiediPagatiResp.getFault() != null) {
+			verificaPagamentoRisposta.setCodiceErrore(chiediPagatiResp.getFault().getFaultCode());
+			verificaPagamentoRisposta.setDescrizioneErrore(chiediPagatiResp.getFault().getFaultString());
+		}
+		else {
+
 			InputStream rtInputStream = null;
-			if(chiediPagatiResp.getRt() == null) {
-				log.warn("Errore durante la lettura della RT per idSession " + idSession + " : rt e' null");
-			}else {
-				rtInputStream = new ByteArrayInputStream(chiediPagatiResp.getRt());
-				resp.setRicevutaPagamento(rtInputStream);
+			if (chiediPagatiResp.getRt() == null) {
+				log.warn("Errore durante la lettura della RT per iuv " + iuv + " : rt e' null");
 			}
-		
-			if(chiediPagatiResp.getPagati() != null) {
+			else {
+				rtInputStream = new ByteArrayInputStream(chiediPagatiResp.getRt());
+				verificaPagamentoRisposta.setRicevutaPagamento(rtInputStream);
+			}
+
+			if (chiediPagatiResp.getPagati() != null) {
 				ByteArrayInputStream pagatiInputStream = null;
 				try {
 					byte[] pagati = Base64.getDecoder().decode(chiediPagatiResp.getPagati());
-					if(pagati == null) {
+					if (pagati == null) {
 						pagatiInputStream = new ByteArrayInputStream(pagati);
-						if(pagatiInputStream != null) {
-							ctPagati = CtPagatiConRicevuta.Factory.parse(pagatiInputStream);							
-							if(ctPagati.getDatiPagamento() != null) {
-								resp.setCodiceIuv(ctPagati.getDatiPagamento().getIdentificativoUnivocoVersamento());
+						if (pagatiInputStream != null) {
+							ctPagati = CtPagatiConRicevuta.Factory.parse(pagatiInputStream);
+							if (ctPagati.getDatiPagamento() != null) {
+								verificaPagamentoRisposta.setCodiceIuv(ctPagati.getDatiPagamento().getIdentificativoUnivocoVersamento());
 							}
-							resp.setIdRichiesta(ctPagati.getRiferimentoMessaggioRichiesta());
+							verificaPagamentoRisposta.setIdRichiesta(ctPagati.getRiferimentoMessaggioRichiesta());
 						}
 					}
-				}catch(Exception e) {
-					log.warn("Errore durante la lettura della lista pagati per idSession " + idSession + " : pagati e' null");
+				}
+				catch (Exception e) {
+					log.warn("Errore durante la lettura della lista pagati per iuv " + iuv + " : pagati e' null");
 				}
 			}
-			
-		}
-		
-		return null;
-	}
-	
 
+		}
+
+		return verificaPagamentoRisposta;
+	}
 
 	private PagamentiTelematiciDovutiPagati getMyPayPort(final String wsMyPayEndpoint) throws Exception {
 
 		URL url = new URL(wsMyPayEndpoint);
 		PagamentiTelematiciDovutiPagatiServiceLocator pagamentiTelematiciDovutiPagatiServiceLocator = new PagamentiTelematiciDovutiPagatiServiceLocator();
-
-		return pagamentiTelematiciDovutiPagatiServiceLocator.getPagamentiTelematiciDovutiPagatiPort(url);
+		PagamentiTelematiciDovutiPagati pagamentiTelematiciDovutiPagatiPort = pagamentiTelematiciDovutiPagatiServiceLocator.getPagamentiTelematiciDovutiPagatiPort(url);
+		return pagamentiTelematiciDovutiPagatiPort;
 	}
 
 	@Override
 	public TipoPagamentiClient getTipoPagamentiClient() {
 		return TipoPagamentiClient.MYPAY;
 	}
-
 
 }
