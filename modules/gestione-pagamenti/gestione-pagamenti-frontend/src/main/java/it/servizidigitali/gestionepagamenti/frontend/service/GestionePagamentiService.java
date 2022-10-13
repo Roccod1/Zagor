@@ -32,64 +32,66 @@ import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 
 @Component(name = "getOrganizzazioniService", immediate = true, service = GestionePagamentiService.class)
 public class GestionePagamentiService {
-	
+
 	public static final Log LOG = LogFactoryUtil.getLog(GestionePagamentiService.class);
 
 	@Reference
 	private OrganizationLocalService organizationLocalService;
-	
+
 	@Reference
 	private GroupLocalService groupLocalService;
-	
+
 	@Reference
 	private TipologiaLocalService tipologiaLocalService;
-	
+
 	@Reference
 	private ServizioLocalService servizioLocalService;
-	
+
 	public List<Organization> getAllParentsOrganizations() {
-		
+
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Organization.class, this.getClass().getClassLoader());
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("parentOrganizationId", 0L));
-		
+
 		return organizationLocalService.dynamicQuery(dynamicQuery);
 	}
-	
+
 	public Organization getOrganization(long organizationId) {
-		
+
 		Organization organization = null;
-		
+
 		try {
 			organization = organizationLocalService.getOrganization(organizationId);
-		} catch (PortalException e) {
+		}
+		catch (PortalException e) {
 			LOG.error(e.getMessage(), e);
 		}
-		
+
 		return organization;
 	}
-	
+
 	public List<Servizio> getAllServizi() {
-		
+
 		Tipologia tipologia = tipologiaLocalService.getTipologiaByCodice(TipoServizio.PAGAMENTO.name());
-		
+
 		return servizioLocalService.getTipologiaServizios(tipologia.getTipologiaId());
 	}
-	
+
 	public void initDataForView(Pagamento pagamento) {
-		
+
 		String nomeOrganizzazione = "-";
-		
+
 		long groupId = pagamento.getGroupId();
 		long organizationId = 0;
 		Organization organization = null;
-		
+
 		if (groupId != 0) {
 			try {
 				Group group = groupLocalService.getGroup(groupId);
-				
+
 				organizationId = group.getOrganizationId();
-				
-			} catch (PortalException e) {
+
+			}
+			catch (PortalException e) {
 				LOG.error(e.getMessage(), e);
 			}
 		}
@@ -101,7 +103,7 @@ public class GestionePagamentiService {
 		}
 		pagamento.setNomeOrganizzazione(nomeOrganizzazione);
 	}
-	
+
 	public String[] getCsvHeader(boolean mainSite) {
 		List<String> headers = new ArrayList<>();
 		headers.add("ID Pagamento");
@@ -121,18 +123,18 @@ public class GestionePagamentiService {
 		headers.add("Importo Totale");
 		return headers.toArray(new String[0]);
 	}
-	
+
 	public List<List<String>> getValuesForCsv(List<Pagamento> listaPagamenti, boolean mainSite) {
-		
+
 		DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat("dd/MM/yyyy HH:mm");
-		
+
 		DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
 		decimalFormatSymbols.setDecimalSeparator('.');
 		DecimalFormat decimalFormat = new DecimalFormat("0.00", decimalFormatSymbols);
 		decimalFormat.setGroupingUsed(false);
-		
+
 		List<List<String>> valuesForCsv = new ArrayList<>();
-		
+
 		listaPagamenti.forEach(pagamento -> {
 			List<String> recordValues = new ArrayList<>();
 			recordValues.add(String.valueOf(pagamento.getPagamentoId()));
@@ -141,7 +143,7 @@ public class GestionePagamentiService {
 			}
 			recordValues.add(pagamento.getNomeServizio());
 			recordValues.add(pagamento.getIuv());
-			recordValues.add(StatoPagamento.getDescrizioneByName(pagamento.getStato()));
+			recordValues.add(StatoPagamento.valueOf(pagamento.getStato()).name());
 			recordValues.add(pagamento.getIdFiscaleCliente());
 			recordValues.add(pagamento.getDenominazioneCliente());
 			recordValues.add(pagamento.getCausale());
@@ -150,10 +152,10 @@ public class GestionePagamentiService {
 			recordValues.add(pagamento.getEmailQuietanza());
 			recordValues.add(decimalFormat.format(pagamento.getCommissioni()));
 			recordValues.add(decimalFormat.format(pagamento.getImporto()));
-			
+
 			valuesForCsv.add(recordValues);
 		});
-		
+
 		return valuesForCsv;
 	}
 }
