@@ -54,6 +54,11 @@ public class ServizioEnteLocalServiceWrapper
 		return _servizioEnteLocalService.addServizioEnte(servizioEnte);
 	}
 
+	@Override
+	public long countServiziEnteAttivi(long organizationId) {
+		return _servizioEnteLocalService.countServiziEnteAttivi(organizationId);
+	}
+
 	/**
 	 * @throws PortalException
 	 */

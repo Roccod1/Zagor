@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.model.Organization;
@@ -143,8 +144,20 @@ public class ServiziResourceImpl extends BaseServiziResourceImpl {
 
 	@Override
 	public Page<CountServizioEnte> getCountServizioEnte(String codiceServizio) throws Exception {
-		// TODO Auto-generated method stub
-		return super.getCountServizioEnte(codiceServizio);
+		List<Organization> organizations = organizationLocalService.getOrganizations(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		
+		//TODO gestire codice servizio come filtro
+		
+		List<CountServizioEnte> results = new ArrayList<>(organizations.size());
+		for (Organization organization : organizations) {
+			CountServizioEnte cse = new CountServizioEnte();
+			cse.setId(organization.getOrganizationId());
+			cse.setTitle(organization.getName());
+			cse.setServiceCount(servizioEnteLocalService.countServiziEnteAttivi(organization.getOrganizationId()));
+			
+			results.add(cse);
+		}
+		return Page.of(results);
 	}
 
 	@Override

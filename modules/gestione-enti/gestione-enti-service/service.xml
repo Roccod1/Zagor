@@ -67,5 +67,10 @@
 			<finder-column name="groupId" />
 			<finder-column name="publicLayoutId" />
 		</finder>
+		
+		<finder return-type="Collection" name="OrganizationIdAttivo">
+			<finder-column name="organizationId" />
+			<finder-column name="attivo" />
+		</finder>
 	</entity>
 </service-builder>

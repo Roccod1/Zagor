@@ -181,4 +181,8 @@ public class ServizioEnteLocalServiceImpl extends ServizioEnteLocalServiceBaseIm
 		ServizioEnte servizioEnte = servizioEnteFinder.findServizioEnteByOrganizationIdLayoutId(organizationId, layoutId);
 		return servizioEnte;
 	}
+	
+	public long countServiziEnteAttivi(long organizationId) {
+		return servizioEntePersistence.countByOrganizationIdAttivo(organizationId, true);
+	}
 }

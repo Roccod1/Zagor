@@ -60,6 +60,10 @@ public class ServizioEnteLocalServiceUtil {
 		return getService().addServizioEnte(servizioEnte);
 	}
 
+	public static long countServiziEnteAttivi(long organizationId) {
+		return getService().countServiziEnteAttivi(organizationId);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
