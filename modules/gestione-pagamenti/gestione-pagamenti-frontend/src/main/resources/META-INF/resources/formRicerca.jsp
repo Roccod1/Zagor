@@ -86,7 +86,7 @@
 								<c:forEach items="<%=TipoPagamentiClient.values()%>"
 									var="gatewayCerca">
 									<aui:option value="${gatewayCerca}"
-										label="${gatewayCerca.descrizione}" />
+										label="${gatewayCerca}" />
 								</c:forEach>
 							</aui:select>
 						</aui:col>
@@ -134,7 +134,7 @@
 								<c:forEach items="<%=TipoPagamentiClient.values()%>"
 									var="gatewayCerca">
 									<aui:option value="${gatewayCerca}"
-										label="${gatewayCerca.descrizione}" />
+										label="${gatewayCerca}" />
 								</c:forEach>
 							</aui:select>
 						</aui:col>
