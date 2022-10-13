@@ -18,9 +18,6 @@ public class Dovuto {
 	private String denominazioneCliente;
 	private String emailQuietanza;
 
-	private String idServizio;
-	private String descrizioneServizio;
-
 	private BigDecimal importo;
 
 	private Date dataScadenza;
@@ -124,34 +121,6 @@ public class Dovuto {
 	 */
 	public void setEmailQuietanza(String emailQuietanza) {
 		this.emailQuietanza = emailQuietanza;
-	}
-
-	/**
-	 * @return the idServizio
-	 */
-	public String getIdServizio() {
-		return idServizio;
-	}
-
-	/**
-	 * @param idServizio the idServizio to set
-	 */
-	public void setIdServizio(String idServizio) {
-		this.idServizio = idServizio;
-	}
-
-	/**
-	 * @return the descrizioneServizio
-	 */
-	public String getDescrizioneServizio() {
-		return descrizioneServizio;
-	}
-
-	/**
-	 * @param descrizioneServizio the descrizioneServizio to set
-	 */
-	public void setDescrizioneServizio(String descrizioneServizio) {
-		this.descrizioneServizio = descrizioneServizio;
 	}
 
 	/**

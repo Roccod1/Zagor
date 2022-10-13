@@ -1,5 +1,7 @@
 package it.servizidigitali.gestionepagamenti.mypay.converter;
 
+import java.math.RoundingMode;
+
 import org.osgi.service.component.annotations.Component;
 
 import it.servizidigitali.gestionepagamenti.common.client.model.Dovuto;
@@ -47,7 +49,7 @@ public class MyPayConverter {
 		datiVersamentoDovuti.setTipoVersamento("ALL");
 
 		CtDatiSingoloVersamentoDovuti datiSingoloVersamento = CtDatiSingoloVersamentoDovuti.Factory.newInstance();
-		datiSingoloVersamento.setImportoSingoloVersamento(dovuto.getImporto());
+		datiSingoloVersamento.setImportoSingoloVersamento(dovuto.getImporto().setScale(2, RoundingMode.HALF_EVEN));
 		datiSingoloVersamento.setCausaleVersamento(dovuto.getCausale());
 
 		// Calcolo IUD

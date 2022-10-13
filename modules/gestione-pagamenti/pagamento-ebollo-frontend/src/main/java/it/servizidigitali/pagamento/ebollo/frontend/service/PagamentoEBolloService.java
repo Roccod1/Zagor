@@ -57,10 +57,10 @@ public class PagamentoEBolloService {
 	private volatile ClientPagamentiEnteConfiguration accountClientPagamentiEnteConfiguration;
 
 	private ConfigurationProvider configurationProvider;
-	
+
 	@Reference
 	private OrganizationLocalService organizationLocalService;
-	
+
 	@Reference
 	private ComuneLocalService comuneLocalService;
 
@@ -79,57 +79,59 @@ public class PagamentoEBolloService {
 	}
 
 	public String pagaBollo(ActionRequest actionRequest) throws ConfigurationException, PagamentiClientException {
-		
+
 		// TODO loggare parametri ingresso
 		LOG.debug("pagaBollo: ");
-		
+
 		long requestTime = Timestamp.from(Instant.now()).getTime();
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		
+
 		long siteOrganizationId = themeDisplay.getSiteGroup().getOrganizationId();
-		
+
 		String codiceOrganizzazione = null;
-		
+
 		String provinciaResidenza = null;
-		
+
 		if (siteOrganizationId != 0) {
 			try {
 				Organization organization = organizationLocalService.getOrganization(siteOrganizationId);
 				codiceOrganizzazione = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo()).toString();
-				
+
 				String codiceIstat = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_ISTAT.getNomeAttributo()).toString();
 				Comune comune = comuneLocalService.getComuneByCodiceISTAT(codiceIstat);
 				if (Validator.isNotNull(comune)) {
 					provinciaResidenza = comune.getProvincia().getSigla();
 				}
-			} catch (PortalException e) {
+			}
+			catch (PortalException e) {
 				LOG.error(e.getMessage(), e);
 			}
 		}
-		
+
 		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
-		
+
 		File file = uploadPortletRequest.getFile(PagamentoEbolloFrontendPortletKeys.FILE_TO_UPLOAD_ATTRIBUTE);
-		
+
 		String fileName = uploadPortletRequest.getFileName(PagamentoEbolloFrontendPortletKeys.FILE_TO_UPLOAD_ATTRIBUTE);
-		
+
 		String hashDocumento = null;
-		
+
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
-	        
-	        byte[] result = md.digest(Files.readAllBytes(file.toPath()));
-	        
-	        StringBuilder builder = new StringBuilder();
-	        
-	        for (byte b : result) {
-	        	builder.append(String.format("%02x", b));
+
+			byte[] result = md.digest(Files.readAllBytes(file.toPath()));
+
+			StringBuilder builder = new StringBuilder();
+
+			for (byte b : result) {
+				builder.append(String.format("%02x", b));
 			}
-	        
-	        hashDocumento = builder.toString();
-	        
-		} catch (Exception e) {
+
+			hashDocumento = builder.toString();
+
+		}
+		catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 
@@ -138,18 +140,16 @@ public class PagamentoEBolloService {
 		String username = accountClientPagamentiEnteConfiguration.clientUsername();
 		String password = accountClientPagamentiEnteConfiguration.clientPassword();
 		String wsdlUrl = accountClientPagamentiEnteConfiguration.clientWsdlUrl();
-		BigDecimal importoBollo = accountClientPagamentiEnteConfiguration.importoBollo();
-		String codiceDovuto = accountClientPagamentiEnteConfiguration.codiceDovuto();
-		String prefissoCausale = accountClientPagamentiEnteConfiguration.prefissoCausale();
-		String idServizio = accountClientPagamentiEnteConfiguration.idServizio();
-		String descrizioneServizio = accountClientPagamentiEnteConfiguration.descrizioneServizio();
-		String causale = prefissoCausale + fileName;
+		BigDecimal importoBollo = accountClientPagamentiEnteConfiguration.importoPagamentoMarcaBolloDigitale();
+		String codiceDovuto = accountClientPagamentiEnteConfiguration.codiceDovutoPagamentoMarcaBolloDigitale();
+		String prefissoCausale = accountClientPagamentiEnteConfiguration.prefissoCausalePagamentoMarcaBolloDigitale();
+		String causale = prefissoCausale + "-" + fileName;
 		String idCredito = codiceOrganizzazione + "-" + prefissoCausale + "-" + " - " + fileName + "_" + requestTime;
-		
+
 		User user = themeDisplay.getUser();
-		
-		String idFiscaleCliente = "DSAYSR00D01A056E"; //user.getScreenName();
-		String denominazioneCliente = user.getFullName() + " (" + idFiscaleCliente + ")";
+
+		String idFiscaleCliente = user.getScreenName();
+		String denominazioneCliente = user.getFullName();
 		String emailQuietanza = user.getEmailAddress();
 
 		MarcaDaBollo marcaDaBollo = new MarcaDaBollo();
@@ -160,36 +160,31 @@ public class PagamentoEBolloService {
 		marcaDaBollo.setIdFiscaleCliente(idFiscaleCliente);
 		marcaDaBollo.setDenominazioneCliente(denominazioneCliente);
 		marcaDaBollo.setEmailQuietanza(emailQuietanza);
-		marcaDaBollo.setIdServizio(idServizio);
-		marcaDaBollo.setDescrizioneServizio(descrizioneServizio);
 		marcaDaBollo.setCausale(causale);
 		marcaDaBollo.setIdCredito(idCredito);
 		marcaDaBollo.setStato(StatoPagamento.NUOVO.toString());
 		marcaDaBollo.setIud(randomString(35));
 		marcaDaBollo.setProvinciaResidenza(provinciaResidenza);
-		
+
 		LiferayPortletURL portletURL = PortletURLFactoryUtil.create(actionRequest, themeDisplay.getPpid(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
-		 
-        portletURL.getRenderParameters().setValue("mvcRenderCommandName", PagamentoEbolloFrontendPortletKeys.ESITO_PAGAMENTO_RENDER_COMMAND);
-		
+
+		portletURL.getRenderParameters().setValue("mvcRenderCommandName", PagamentoEbolloFrontendPortletKeys.ESITO_PAGAMENTO_RENDER_COMMAND);
+
 		PagamentoDovutoRisposta pagamentoDovutoRisposta = pagamentiClient.pagaDovuto(marcaDaBollo, username, password, wsdlUrl, portletURL.toString());
 
 		return pagamentoDovutoRisposta.getRedirectUrl();
 
 	}
-	
+
 	private String randomString(int length) {
 		int leftLimit = 48; // numeral '0'
-	    int rightLimit = 122; // letter 'z'
-	    Random random = new Random();
+		int rightLimit = 122; // letter 'z'
+		Random random = new Random();
 
-	    String generatedString = random.ints(leftLimit, rightLimit + 1)
-	      .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-	      .limit(length)
-	      .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-	      .toString();
-	    
-	    return generatedString;
+		String generatedString = random.ints(leftLimit, rightLimit + 1).filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(length)
+				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
+
+		return generatedString;
 	}
 
 }
