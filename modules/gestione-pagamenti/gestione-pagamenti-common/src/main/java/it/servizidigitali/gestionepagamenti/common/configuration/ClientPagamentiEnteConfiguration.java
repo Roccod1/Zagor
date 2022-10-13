@@ -15,6 +15,9 @@ import aQute.bnd.annotation.metatype.Meta;
 @Meta.OCD(id = "it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration", name = "Configurazione parametri accesso client pagamenti Ente")
 public interface ClientPagamentiEnteConfiguration {
 
+	@Meta.AD(required = false, deflt = "MYPAY", name = "Tipo client pagamenti")
+	String tipoPagamentiClient();
+
 	@Meta.AD(required = false)
 	String clientUsername();
 
