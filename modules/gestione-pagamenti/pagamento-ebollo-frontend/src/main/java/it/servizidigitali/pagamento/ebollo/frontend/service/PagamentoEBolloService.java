@@ -14,6 +14,7 @@ import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.File;
@@ -23,6 +24,7 @@ import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Map;
+import java.util.Random;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletRequest;
@@ -32,11 +34,15 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.model.Comune;
+import it.servizidigitali.common.service.ComuneLocalService;
+import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
 import it.servizidigitali.gestionepagamenti.common.client.PagamentiClient;
 import it.servizidigitali.gestionepagamenti.common.client.exeption.PagamentiClientException;
 import it.servizidigitali.gestionepagamenti.common.client.model.MarcaDaBollo;
 import it.servizidigitali.gestionepagamenti.common.client.model.PagamentoDovutoRisposta;
 import it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration;
+import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
 import it.servizidigitali.pagamento.ebollo.frontend.constants.PagamentoEbolloFrontendPortletKeys;
 
 /**
@@ -54,6 +60,9 @@ public class PagamentoEBolloService {
 	
 	@Reference
 	private OrganizationLocalService organizationLocalService;
+	
+	@Reference
+	private ComuneLocalService comuneLocalService;
 
 	@Reference
 	private PagamentiClient pagamentiClient;
@@ -82,10 +91,18 @@ public class PagamentoEBolloService {
 		
 		String codiceOrganizzazione = null;
 		
+		String provinciaResidenza = null;
+		
 		if (siteOrganizationId != 0) {
 			try {
 				Organization organization = organizationLocalService.getOrganization(siteOrganizationId);
-				codiceOrganizzazione = "-";
+				codiceOrganizzazione = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo()).toString();
+				
+				String codiceIstat = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_ISTAT.getNomeAttributo()).toString();
+				Comune comune = comuneLocalService.getComuneByCodiceISTAT(codiceIstat);
+				if (Validator.isNotNull(comune)) {
+					provinciaResidenza = comune.getProvincia().getSigla();
+				}
 			} catch (PortalException e) {
 				LOG.error(e.getMessage(), e);
 			}
@@ -147,6 +164,9 @@ public class PagamentoEBolloService {
 		marcaDaBollo.setDescrizioneServizio(descrizioneServizio);
 		marcaDaBollo.setCausale(causale);
 		marcaDaBollo.setIdCredito(idCredito);
+		marcaDaBollo.setStato(StatoPagamento.NUOVO.toString());
+		marcaDaBollo.setIud(randomString(35));
+		marcaDaBollo.setProvinciaResidenza(provinciaResidenza);
 		
 		LiferayPortletURL portletURL = PortletURLFactoryUtil.create(actionRequest, themeDisplay.getPpid(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 		 
@@ -156,6 +176,20 @@ public class PagamentoEBolloService {
 
 		return pagamentoDovutoRisposta.getRedirectUrl();
 
+	}
+	
+	private String randomString(int length) {
+		int leftLimit = 48; // numeral '0'
+	    int rightLimit = 122; // letter 'z'
+	    Random random = new Random();
+
+	    String generatedString = random.ints(leftLimit, rightLimit + 1)
+	      .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+	      .limit(length)
+	      .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+	      .toString();
+	    
+	    return generatedString;
 	}
 
 }
