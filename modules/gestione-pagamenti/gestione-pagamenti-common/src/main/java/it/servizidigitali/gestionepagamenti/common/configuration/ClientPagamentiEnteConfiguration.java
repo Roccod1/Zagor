@@ -2,6 +2,8 @@ package it.servizidigitali.gestionepagamenti.common.configuration;
 
 import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClassDefinition;
 
+import java.math.BigDecimal;
+
 import aQute.bnd.annotation.metatype.Meta;
 
 /**
@@ -21,5 +23,19 @@ public interface ClientPagamentiEnteConfiguration {
 
 	@Meta.AD(required = false)
 	String clientWsdlUrl();
+	
+	@Meta.AD(required = false)
+	BigDecimal importoBollo();
+	
+	@Meta.AD(required = false)
+	String codiceDovuto();
 
+	@Meta.AD(required = false)
+	String prefissoCausale();
+	
+	@Meta.AD(required = false)
+	String idServizio();
+	
+	@Meta.AD(required = false)
+	String descrizioneServizio();
 }

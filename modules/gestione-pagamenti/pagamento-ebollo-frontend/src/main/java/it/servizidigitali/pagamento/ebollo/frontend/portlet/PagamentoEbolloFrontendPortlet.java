@@ -22,7 +22,8 @@ import it.servizidigitali.pagamento.ebollo.frontend.constants.PagamentoEbolloFro
 				"javax.portlet.init-param.view-template=/view.jsp", //
 				"javax.portlet.name=" + PagamentoEbolloFrontendPortletKeys.PAGAMENTOEBOLLOFRONTEND, //
 				"javax.portlet.resource-bundle=content.Language", //
-				"javax.portlet.security-role-ref=power-user,user"//
+				"javax.portlet.security-role-ref=power-user,user",//
+				"javax.portlet.version=3.0"//
 		}, //
 		service = Portlet.class//
 ) //
