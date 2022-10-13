@@ -23,19 +23,13 @@ public interface ClientPagamentiEnteConfiguration {
 
 	@Meta.AD(required = false)
 	String clientWsdlUrl();
-	
+
 	@Meta.AD(required = false)
-	BigDecimal importoBollo();
-	
+	BigDecimal importoPagamentoMarcaBolloDigitale();
+
 	@Meta.AD(required = false, name = "Codice dovuto Pagamento Bollo Digitale")
-	String codiceDovuto();
+	String codiceDovutoPagamentoMarcaBolloDigitale();
 
 	@Meta.AD(required = false, name = "Prefisso causale Pagamento Bollo Digitale", deflt = "MARCA_BOLLO_DIGITALE")
-	String prefissoCausale();
-	
-	@Meta.AD(required = false, name = "Codice servizio Pagamento Bollo Digitale", deflt = "MARCA_BOLLO_DIGITALE")
-	String idServizio();
-	
-	@Meta.AD(required = false)
-	String descrizioneServizio();
+	String prefissoCausalePagamentoMarcaBolloDigitale();
 }
