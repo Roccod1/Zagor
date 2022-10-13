@@ -55,6 +55,14 @@ public abstract class BaseServiziResourceImpl implements ServiziResource {
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "page"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "size"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
 				name = "codiceTipologiaServizio"
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -74,6 +82,12 @@ public abstract class BaseServiziResourceImpl implements ServiziResource {
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.ws.rs.QueryParam("nomeComune")
 			String nomeComune,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.DefaultValue("0") @javax.ws.rs.QueryParam("page")
+			Integer page,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.DefaultValue("10") @javax.ws.rs.QueryParam("size")
+			Integer size,
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull
 			@javax.ws.rs.QueryParam("codiceTipologiaServizio")

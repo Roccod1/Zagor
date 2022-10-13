@@ -98,7 +98,8 @@ public abstract class BaseServiziResourceTestCase {
 	@Test
 	public void testGetServiziEnte() throws Exception {
 		Page<Servizi> page = serviziResource.getServiziEnte(
-			RandomTestUtil.randomString(), null, RandomTestUtil.randomString());
+			RandomTestUtil.randomString(), null, null, null,
+			RandomTestUtil.randomString());
 
 		long totalCount = page.getTotalCount();
 
@@ -106,7 +107,7 @@ public abstract class BaseServiziResourceTestCase {
 
 		Servizi servizi2 = testGetServiziEnte_addServizi(randomServizi());
 
-		page = serviziResource.getServiziEnte(null, null, null);
+		page = serviziResource.getServiziEnte(null, null, null, null, null);
 
 		Assert.assertEquals(totalCount + 2, page.getTotalCount());
 

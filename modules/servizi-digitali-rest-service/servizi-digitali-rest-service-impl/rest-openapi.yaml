@@ -525,6 +525,8 @@ paths:
         tags: ['Servizi']
         parameters:
           - $ref: '#/components/parameters/queryNomeComune'
+          - $ref: '#/components/parameters/pageParam'
+          - $ref: '#/components/parameters/sizeParam'
           - name: codiceTipologiaServizio
             in: query
             required: true
