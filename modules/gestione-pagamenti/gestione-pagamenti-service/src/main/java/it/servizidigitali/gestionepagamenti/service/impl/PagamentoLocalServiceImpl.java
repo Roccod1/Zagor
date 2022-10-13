@@ -1,15 +1,13 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
  */
 
 package it.servizidigitali.gestionepagamenti.service.impl;
@@ -22,10 +20,10 @@ import com.liferay.portal.kernel.util.Validator;
 import java.util.Date;
 import java.util.List;
 
+import org.osgi.service.component.annotations.Component;
+
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.base.PagamentoLocalServiceBaseImpl;
-
-import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Brian Wing Shun Chan
@@ -34,10 +32,9 @@ import org.osgi.service.component.annotations.Component;
 public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
 
 	@Override
-	public List<Pagamento> search(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
-			Date dataOperazioneA, long groupId, long servizioId, String stato, String gateway, String canale,
-			String codiceFiscale, String codiceIuv, long idPagamento, int inizio, int fine, String orderByCol, String orderByType) {
-		
+	public List<Pagamento> search(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa, Date dataOperazioneA, long groupId, long servizioId, String stato, String gateway,
+			String canale, String codiceFiscale, String codiceIuv, long idPagamento, int inizio, int fine, String orderByCol, String orderByType) {
+
 		boolean direzione = true;
 
 		if ("desc".equalsIgnoreCase(orderByType)) {
@@ -49,19 +46,21 @@ public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
 		}
 
 		OrderByComparator<Pagamento> comparator = OrderByComparatorFactoryUtil.create("Pagamento", orderByCol, direzione);
-		
-		return this.pagamentoFinder.findByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
-				dataOperazioneA, groupId, servizioId, stato, gateway, canale, codiceFiscale,
-				codiceIuv, idPagamento, inizio, fine, comparator);
+
+		return this.pagamentoFinder.findByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, groupId, servizioId, stato, gateway, canale, codiceFiscale, codiceIuv,
+				idPagamento, inizio, fine, comparator);
 	}
-	
+
 	@Override
-	public long countByFilters(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
-			Date dataOperazioneA, long groupId, long servizioId, String stato, String gateway, String canale,
+	public long countByFilters(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa, Date dataOperazioneA, long groupId, long servizioId, String stato, String gateway, String canale,
 			String codiceFiscale, String codiceIuv, long idPagamento) {
-		
-		return this.pagamentoFinder.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
-				dataOperazioneA, groupId, servizioId, stato, gateway, canale, codiceFiscale,
-				codiceIuv, idPagamento);
+
+		return this.pagamentoFinder.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, groupId, servizioId, stato, gateway, canale, codiceFiscale, codiceIuv,
+				idPagamento);
+	}
+
+	@Override
+	public List<Pagamento> getPagamentiByStato(String stato) {
+		return pagamentoPersistence.findByStato(stato);
 	}
 }

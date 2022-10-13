@@ -296,6 +296,13 @@ public class PagamentoLocalServiceWrapper
 		return _pagamentoLocalService.getOSGiServiceIdentifier();
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.gestionepagamenti.model.Pagamento>
+		getPagamentiByStato(String stato) {
+
+		return _pagamentoLocalService.getPagamentiByStato(stato);
+	}
+
 	/**
 	 * Returns the pagamento with the primary key.
 	 *

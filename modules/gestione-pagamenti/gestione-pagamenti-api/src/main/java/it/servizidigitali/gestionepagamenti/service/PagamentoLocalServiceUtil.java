@@ -266,6 +266,10 @@ public class PagamentoLocalServiceUtil {
 		return getService().getOSGiServiceIdentifier();
 	}
 
+	public static List<Pagamento> getPagamentiByStato(String stato) {
+		return getService().getPagamentiByStato(stato);
+	}
+
 	/**
 	 * Returns the pagamento with the primary key.
 	 *

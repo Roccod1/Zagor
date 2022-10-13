@@ -236,6 +236,9 @@ public interface PagamentoLocalService
 	 */
 	public String getOSGiServiceIdentifier();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Pagamento> getPagamentiByStato(String stato);
+
 	/**
 	 * Returns the pagamento with the primary key.
 	 *
