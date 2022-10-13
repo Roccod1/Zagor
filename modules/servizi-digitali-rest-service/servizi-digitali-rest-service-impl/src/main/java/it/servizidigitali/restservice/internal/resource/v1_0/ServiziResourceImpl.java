@@ -146,14 +146,31 @@ public class ServiziResourceImpl extends BaseServiziResourceImpl {
 	public Page<CountServizioEnte> getCountServizioEnte(String codiceServizio) throws Exception {
 		List<Organization> organizations = organizationLocalService.getOrganizations(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 		
-		//TODO gestire codice servizio come filtro
-		
 		List<CountServizioEnte> results = new ArrayList<>(organizations.size());
 		for (Organization organization : organizations) {
 			CountServizioEnte cse = new CountServizioEnte();
 			cse.setId(organization.getOrganizationId());
 			cse.setTitle(organization.getName());
-			cse.setServiceCount(servizioEnteLocalService.countServiziEnteAttivi(organization.getOrganizationId()));
+			
+			long count;
+			if (codiceServizio != null) {
+				DynamicQuery servizioQuery = servizioLocalService.dynamicQuery();
+				servizioQuery.add(RestrictionsFactoryUtil.eq("attivo", true));
+				servizioQuery.add(RestrictionsFactoryUtil.eq("codice", codiceServizio));
+				servizioQuery.setProjection(ProjectionFactoryUtil.property("servizioId"));
+				List<Long> servizi = servizioLocalService.dynamicQuery(servizioQuery);
+				
+				
+				DynamicQuery query = servizioEnteLocalService.dynamicQuery();
+				query.add(RestrictionsFactoryUtil.eq("primaryKey.organizationId", organization.getOrganizationId()));
+				query.add(RestrictionsFactoryUtil.in("primaryKey.servizioId", servizi));
+				
+				count = servizioEnteLocalService.dynamicQueryCount(query);
+			} else {
+				count = servizioEnteLocalService.countServiziEnteAttivi(organization.getOrganizationId());
+			}
+			
+			cse.setServiceCount(count);
 			
 			results.add(cse);
 		}
