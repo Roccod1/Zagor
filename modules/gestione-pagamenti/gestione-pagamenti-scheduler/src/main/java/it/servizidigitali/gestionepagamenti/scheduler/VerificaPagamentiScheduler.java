@@ -6,6 +6,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
 import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
@@ -16,6 +17,7 @@ import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Activate;
@@ -24,7 +26,15 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.gestionepagamenti.common.client.PagamentiClient;
+import it.servizidigitali.gestionepagamenti.common.client.model.VerificaPagamentoRisposta;
+import it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration;
+import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
+import it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient;
+import it.servizidigitali.gestionepagamenti.common.factory.PagamentiClientFactory;
 import it.servizidigitali.gestionepagamenti.configuration.PagamentiSchedulerConfiguration;
+import it.servizidigitali.gestionepagamenti.model.Pagamento;
+import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
 
 /**
  * Scheduler per la verifica ed aggiornamento dello stato dei pagamenti sulla piattaforma esterna.
@@ -34,7 +44,8 @@ import it.servizidigitali.gestionepagamenti.configuration.PagamentiSchedulerConf
  */
 @Component(immediate = true, //
 		service = VerificaPagamentiScheduler.class, //
-		configurationPid = "it.servizidigitali.gestionepagamenti.configuration.PagamentiSchedulerConfiguration"//
+		configurationPid = { "it.servizidigitali.gestionepagamenti.configuration.PagamentiSchedulerConfiguration",
+				"it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration" }//
 )
 public class VerificaPagamentiScheduler extends BaseMessageListener {
 
@@ -46,11 +57,37 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 	private SchedulerEntryImpl _schedulerEntryImpl = null;
 
 	private volatile PagamentiSchedulerConfiguration pagamentiSchedulerConfiguration;
+	private volatile ClientPagamentiEnteConfiguration accountClientPagamentiEnteConfiguration;
+	private ConfigurationProvider configurationProvider;
+
+	@Reference
+	private PagamentoLocalService pagamentoLocalService;
+
+	@Reference
+	private PagamentiClientFactory pagamentiClientFactory;
+
+	@Reference
+	protected void setConfigurationProvider(ConfigurationProvider configurationProvider) {
+		this.configurationProvider = configurationProvider;
+	}
 
 	@Override
 	protected void doReceive(Message message) throws Exception {
 
 		// TODO implementare verifica pagamenti
+		List<Pagamento> pagamentiInAttesa = pagamentoLocalService.getPagamentiByStato(StatoPagamento.IN_ATTESA.name());
+		if (pagamentiInAttesa != null) {
+			for (Pagamento pagamento : pagamentiInAttesa) {
+
+				accountClientPagamentiEnteConfiguration = configurationProvider.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, pagamento.getGroupId());
+				PagamentiClient pagamentiClient = pagamentiClientFactory.getPagamentiClient(TipoPagamentiClient.valueOf(accountClientPagamentiEnteConfiguration.tipoPagamentiClient()));
+				VerificaPagamentoRisposta verificaPagamento = pagamentiClient.verificaPagamento(pagamento.getIuv(), accountClientPagamentiEnteConfiguration.clientUsername(),
+						accountClientPagamentiEnteConfiguration.clientPassword(), accountClientPagamentiEnteConfiguration.clientWsdlUrl());
+
+				_log.info("verificaPagamento: " + verificaPagamento.getStatoPagamento());
+			}
+		}
+
 	}
 
 	@Activate
@@ -66,6 +103,8 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 				deactivate();
 				return;
 			}
+
+			accountClientPagamentiEnteConfiguration = ConfigurableUtil.createConfigurable(ClientPagamentiEnteConfiguration.class, properties);
 
 			String cronExpression = pagamentiSchedulerConfiguration.verificaPagamentiSchedulerCronExpression();
 
