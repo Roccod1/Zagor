@@ -37,20 +37,15 @@ public class PagamentiClientFactory {
 	}
 
 	/**
-	 * @return the pagamentiClientMap
-	 */
-	private Map<TipoPagamentiClient, PagamentiClient> getPagamentiClientMap() {
-		init();
-		return pagamentiClientMap;
-	}
-
-	/**
 	 *
 	 * @param tipoPagamentiClient
 	 * @return
 	 */
 	public PagamentiClient getPagamentiClient(TipoPagamentiClient tipoPagamentiClient) {
-		return pagamentiClientMap.get(tipoPagamentiClient);
+		init();
+		if (pagamentiClientMap != null && !pagamentiClientMap.isEmpty()) {
+			return pagamentiClientMap.get(tipoPagamentiClient);
+		}
+		return null;
 	}
-
 }
