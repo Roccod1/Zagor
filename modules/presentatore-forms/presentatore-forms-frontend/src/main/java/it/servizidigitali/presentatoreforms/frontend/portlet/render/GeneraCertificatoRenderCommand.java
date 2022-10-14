@@ -94,18 +94,19 @@ public class GeneraCertificatoRenderCommand implements MVCRenderCommand{
 
 			FormData formData = AlpacaUtil.loadFormData(form, istanzaForm.getJson(), true, themeDisplay.getPortalURL());
 			AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
-			
+			JsonParser jsonParser = new JsonParser();
 			alpacaStructure.setSchema(AlpacaUtil.addAttachmentsToSchema(gson.toJson(alpacaStructure.getSchema()), form.getListaDefinizioneAllegato()));
 			alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), form.getListaDefinizioneAllegato(), true, themeDisplay.getPortalURL()));
-			alpacaStructure.setData(JsonParser.parseString(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
+			alpacaStructure.setData(jsonParser.parse(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
 			
 			pdfCertificato = pdfService.generaPDFCertificato(user.getScreenName(), codiceFiscaleComponente, alpacaStructure, richiesta, destinazioneUsoId, null, renderRequest);
 			
 			if(Validator.isNotNull(pdfCertificato) && Validator.isNotNull(richiesta)) {
 				richiestaLocalService.updateStatoRichiesta(richiesta.getRichiestaId(), StatoRichiesta.CHIUSA_POSITIVAMENTE.name());
-				allegatoRichiestaService.salvaCertificato(pdfCertificato, servizio, richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
+				String idDocumentale = allegatoRichiestaService.salvaCertificato(pdfCertificato, servizio, richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
 				renderRequest.setAttribute(PresentatoreFormsPortletKeys.RICHIESTA_ID, richiesta.getRichiestaId());
 				renderRequest.setAttribute(PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE, codiceFiscaleComponente);
+				renderRequest.setAttribute(PresentatoreFormsPortletKeys.ID_DOCUMENTALE, idDocumentale);
 				return PresentatoreFormsPortletKeys.JSP_DOWNLOAD_CERTIFICATO;
 			}
 		

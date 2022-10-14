@@ -25,11 +25,11 @@ import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.presentatoreforms.common.service.AlpacaService;
+import it.servizidigitali.presentatoreforms.common.service.integration.exception.BackofficeServiceException;
+import it.servizidigitali.presentatoreforms.common.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
-import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.exception.BackofficeServiceException;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
@@ -79,7 +79,7 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 		try {
 			procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
 			form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
-			
+
 			FormData formData = AlpacaUtil.loadFormData(form, null, true, themeDisplay.getPortalURL());
 			alpacaStructure = formData.getAlpaca();
 
@@ -92,15 +92,14 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 			}
 
 			String codiceFiscaleComponente = ParamUtil.getString(actionRequest, PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE);
-			
-			if(Validator.isNull(codiceFiscaleComponente)) {
+
+			if (Validator.isNull(codiceFiscaleComponente)) {
 				SessionErrors.add(actionRequest, PresentatoreFormsPortletKeys.SELEZIONARE_COMPONENTE_NUCLEO);
 				log.error("Selezionare un componente del nucleo familiare!");
 				actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO);
 				return;
 			}
-			
-			
+
 			UserPreferences userPreferences = new UserPreferences();
 			userPreferences.setCodiceFiscaleRichiedente(themeDisplay.getUser().getScreenName());
 			userPreferences.setCodiceFiscaleComponente(codiceFiscaleComponente);
@@ -131,8 +130,7 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 			alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
 
 			actionRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
-			actionRequest.setAttribute(PresentatoreFormsPortletKeys.API_ALPACA_PATH,
-					themeDisplay.getPortalURL() + PresentatoreFormsPortletKeys.SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH);
+			actionRequest.setAttribute(PresentatoreFormsPortletKeys.API_ALPACA_PATH, themeDisplay.getPortalURL() + PresentatoreFormsPortletKeys.SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH);
 			actionRequest.setAttribute(PresentatoreFormsPortletKeys.TIPO_SERVIZIO_STEP2, procedura.getStep2TipoServizio());
 
 			// Aggiunta destinazioni d'uso in pagina se certificato
@@ -142,7 +140,8 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 				actionRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, form.getNome());
 				actionRequest.setAttribute(PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE, codiceFiscaleComponente);
 				actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO);
-			}else {
+			}
+			else {
 				actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_COMPILA_FORM);
 			}
 		}
@@ -151,8 +150,6 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 			actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO);
 		}
 
-
 	}
-
 
 }

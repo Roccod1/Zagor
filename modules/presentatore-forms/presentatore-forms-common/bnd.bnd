@@ -1,0 +1,8 @@
+Bundle-Name: presentatore-forms-common
+Bundle-SymbolicName: it.servizidigitali.presentatoreforms.common
+Bundle-Version: 1.0.0
+
+Export-Package: \
+	it.servizidigitali.presentatoreforms.common.*
+
+ -fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning

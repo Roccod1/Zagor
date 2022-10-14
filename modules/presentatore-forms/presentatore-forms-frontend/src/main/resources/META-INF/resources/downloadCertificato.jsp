@@ -51,6 +51,7 @@
 			<portlet:param name="destinazioneUsoId"value="${destinazioneUsoId}" />
 			<portlet:param name="richiestaId"value="${richiestaId}" />
 			<portlet:param name="codiceFiscaleComponente"value="${selectComponentiNucleoFamiliare}" />
+			<portlet:param name="idDocumentale"value="${idDocumentale}" />
 		</portlet:resourceURL>
 						
 		<button class="btn btn-primary" type="button" onclick="window.open('${downloadIstanzaUrl}');">
