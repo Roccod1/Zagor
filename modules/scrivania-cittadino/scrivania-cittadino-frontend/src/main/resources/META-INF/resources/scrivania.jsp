@@ -1,9 +1,6 @@
 <portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_COMUNICAZIONI %>" var="getComunicazioniUtenteResourceCommandUrl">
 </portlet:resourceURL>
 
-<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_PRENOTAZIONI %>" var="getPrenotazioniUtenteResourceCommandUrl">
-</portlet:resourceURL>
-
 
 <div class="container">
 	<div class="row">
@@ -51,12 +48,13 @@
 		</div>
 	</div>
 
-	<c:set var="appuntamentiLightInstanceId" value="${themeDisplay.portletDisplay.instanceId }"/>
-	<liferay-portlet:runtime 
-		portletName="it_linksmt_portlets_appuntamenti_portlet_AppuntamentiLightPortlet" 
-		instanceId="${appuntamentiLightInstanceId }"
-	/>
 </div>
+
+<c:set var="appuntamentiLightInstanceId" value="${themeDisplay.portletDisplay.instanceId }"/>
+<liferay-portlet:runtime 
+	portletName="it_linksmt_portlets_appuntamenti_portlet_AppuntamentiLightPortlet" 
+	instanceId="${appuntamentiLightInstanceId }"
+/>
 
 
 <script type="text/javascript">
@@ -65,7 +63,6 @@
 // 	on documentReady
 	$(function(){
 		getComunicazioniUtente(1);
-		getPrenotazioniUtente(1);
 	});
 	
 	
