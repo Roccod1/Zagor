@@ -219,9 +219,9 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 						}
 						
 						String tipoTemplateNativo = ParamUtil.getString(actionRequest, "tipoTemplateNativo" + i);
-						String nomeFile = uploadPortletRequest.getFileName("templateNativoFile" + i);
 						
 						if(Validator.isNotNull(allegato)) {
+							String nomeFile = uploadPortletRequest.getFileName("templateNativoFile" + i);
 							templateNativoCaricato = gestioneProcedureMiddlewareService.caricaTemplateNativoPdf(allegato, nomeFile, procedura.getProceduraId(), templatePdfId, 
 									tipoTemplateNativo, userFullName, userId, siteGroupId, companyGroupId);
 						}
