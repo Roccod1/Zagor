@@ -8,28 +8,41 @@
 <div class="container">
 	<div class="row">
 		<div class="col-11">
-			<h3><liferay-ui:message key="comunicazioni"/></h3>						
-		</div>	
+			<h3>
+				<liferay-ui:message key="comunicazioni" />
+			</h3>
+		</div>
 		<div class="col-1">
-			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#filterCollapse" aria-expanded="false"><liferay-ui:message key="filtri"/></button>
+			<button class="btn btn-primary" type="button" data-toggle="collapse"
+				data-target="#filterCollapse" aria-expanded="false">
+				<liferay-ui:message key="filtri" />
+			</button>
 		</div>
 	</div>
 	<div class="row collapse" id="filterCollapse">
 		<div class="col">
-			<aui:input type="text" name="filterOggettoComunicazione" label="titolo-o-descrizione"/>				
+			<aui:input type="text" name="filterOggettoComunicazione"
+				label="titolo-o-descrizione" />
 		</div>
-		
+
 		<div class="col">
 			<aui:select name="filterTipoComunicazione" label="tipo-comunicazione">
-				<aui:option value=""><liferay-ui:message key="seleziona-opzione"/></aui:option>
-				<c:forEach items="${listaTipologiaComunicazione }" var="tipologiaComunicazione">
-					<aui:option value="${tipologiaComunicazione.tipologiaComunicazioneId}">${tipologiaComunicazione.nome}</aui:option>
+				<aui:option value="">
+					<liferay-ui:message key="seleziona-opzione" />
+				</aui:option>
+				<c:forEach items="${listaTipologiaComunicazione }"
+					var="tipologiaComunicazione">
+					<aui:option
+						value="${tipologiaComunicazione.tipologiaComunicazioneId}">${tipologiaComunicazione.nome}</aui:option>
 				</c:forEach>
-			</aui:select>			
+			</aui:select>
 		</div>
-		
+
 		<div class="col-12 mb-3">
-			<button class="btn btn-primary" type="button" onclick="getComunicazioniUtente(1)"><liferay-ui:message key="cerca"/></button>
+			<button class="btn btn-primary" type="button"
+				onclick="getComunicazioniUtente(1)">
+				<liferay-ui:message key="cerca" />
+			</button>
 		</div>
 	</div>
 	<div class="row">
@@ -37,28 +50,12 @@
 			<div id="<portlet:namespace/>accordionContainerComunicazioni"></div>
 		</div>
 	</div>
-	
-	<div class="row">
-		<div class="col-11">
-			<h3><liferay-ui:message key="le-mie-prenotazioni"/></h3>						
-		</div>
-		<div class="col-1">
-			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#filterCollapsePrenotazioni" aria-expanded="false"><liferay-ui:message key="filtri"/></button>
-		</div>
-	</div>
-	<div class="row collapse" id="filterCollapsePrenotazioni">
-		<div class="col">
-			<aui:input type="text" name="filterOggettoPrenotazioni" label="titolo-o-descrizione"/>				
-		</div>
-		<div class="col-12 mb-3">
-			<button class="btn btn-primary" type="button" onclick="getPrenotazioniUtente(1)"><liferay-ui:message key="cerca"/></button>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col">
-			<div id="<portlet:namespace/>accordionContainerPrenotazioni"></div>
-		</div>
-	</div>
+
+	<c:set var="appuntamentiLightInstanceId" value="${themeDisplay.portletDisplay.instanceId }"/>
+	<liferay-portlet:runtime 
+		portletName="it_linksmt_portlets_appuntamenti_portlet_AppuntamentiLightPortlet" 
+		instanceId="${appuntamentiLightInstanceId }"
+	/>
 </div>
 
 
