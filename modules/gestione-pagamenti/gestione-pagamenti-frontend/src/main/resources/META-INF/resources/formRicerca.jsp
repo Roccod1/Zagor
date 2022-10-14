@@ -98,7 +98,7 @@
 								<c:forEach items="<%=CanalePagamento.values()%>"
 									var="canaleCerca">
 									<aui:option value="${canaleCerca}"
-										label="${canaleCerca.descrizione}" />
+										label="${canaleCerca}" />
 								</c:forEach>
 							</aui:select>
 						</aui:col>
@@ -146,7 +146,7 @@
 								<c:forEach items="<%=CanalePagamento.values()%>"
 									var="canaleCerca">
 									<aui:option value="${canaleCerca}"
-										label="${canaleCerca.descrizione}" />
+										label="${canaleCerca}" />
 								</c:forEach>
 							</aui:select>
 						</aui:col>
