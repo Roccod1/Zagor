@@ -149,6 +149,18 @@
 
 				</div>
 				
+				<div id="alertTemplateDefault" class="alert alert-success hidden" role="alert">
+					<liferay-ui:message key="alert-template-default"/>
+				</div>
+				
+				<div id="alertTemplateCertificato" class="alert alert-success hidden" role="alert">
+					<liferay-ui:message key="alert-template-certificato"/>
+				</div>
+				
+				<div id="alertTemplateAutodichiarazione" class="alert alert-success hidden" role="alert">
+					<liferay-ui:message key="alert-template-autodichiarazione"/>
+				</div>
+				
 				<aui:input type="hidden" id="countJasperReport" name="countJasperReport"/>
 				
 				<div id="container-allegati-template" class="hidden">
@@ -216,7 +228,7 @@
 										<div  id="allegatoTemplateNativo${loop.index}">
 											<aui:input type="hidden" id="idAllegatoTemplateNativo${loop.index}" name="idAllegatoTemplateNativo${loop.index}" value="${templatePdf.templatePdfId}" />
 											
-											<p class="mt-3">${templatePdf.nomeFile}</p>
+											<p id="nomeFileTemplateNativo${loop.index}" class="mt-3">${templatePdf.nomeFile}</p>
 											
 											<aui:input type="hidden" id="tipoTemplateNativo${loop.index}" name="tipoTemplateNativo${loop.index}" value="${templatePdf.tipoTemplateNativo}"/>
 											
@@ -444,39 +456,35 @@
 	function rimuoviTemplateNativo(btn){
 		var id = $(btn).attr('id').replace('rimuoviTemplateNativo','');
 		var indexRiga = parseInt(id);
-		var countTemplateNativi = $("#container-allegati-template-nativi > div").length;
+		var tipoTemplateNativo = $("#<portlet:namespace />tipoTemplateNativo" + indexRiga).val();
 		
-		if(countTemplateNativi>1){
-			$('#allegatoTemplateNativo' + id).remove();
-			shiftRowTemplateNativi(indexRiga, countTemplateNativi);
+		$("#<portlet:namespace />idAllegatoTemplateNativo" + indexRiga).val('');
+		$("#nomeFileTemplateNativo" + indexRiga).remove();
+		
+		if(tipoTemplateNativo == 'DEFAULT'){
+			$('#alertTemplateDefault').removeClass('hidden');
 			
-			var totaleTemplateNativi = $("#container-allegati-template-nativi > div").length;
-			$("#<portlet:namespace />countTemplateNativi").val(totaleTemplateNativi);
+			setTimeout(function() {
+				  $("#alertTemplateDefault").fadeOut().empty();
+			}, 5000);
 		}
-	}
-	
-	// TODO : MODIFICARE NAME E ID CON PORTLETNAMESPACE AI CAMPI AGGIUNTI DINAMICAMENTE
-	
-	function shiftRowTemplateNativi(index, countTemplateNativi){
-		let i = index + 1;
 		
-		while(i<countTemplateNativi){
-	    	let newIndex = i - 1;
-	    	
-	    	$("#<portlet:namespace />idAllegatoTemplateNativo" + i).attr("name","<portlet:namespace />idAllegatoTemplateNativo" + newIndex);
-	        $("#<portlet:namespace />idAllegatoTemplateNativo" + i).attr("id","<portlet:namespace />idAllegatoTemplateNativo" + newIndex);
-	        
-	        $("#<portlet:namespace />tipoTemplateNativo" + i).attr("name","<portlet:namespace />tipoTemplateNativo" + newIndex);
-	        $("#<portlet:namespace />tipoTemplateNativo" + i).attr("id","<portlet:namespace />tipoTemplateNativo" + newIndex);
-	        
-	        $("#<portlet:namespace />templateNativoFile" + i).attr("name","<portlet:namespace />templateNativoFile" + newIndex);
-	        $("#<portlet:namespace />templateNativoFile" + i).attr("id","<portlet:namespace />templateNativoFile" + newIndex);
-	        
- 			$("#allegatoTemplateNativo" + i).attr("id","allegatoTemplateNativo" + newIndex);
-	        
-	        $("#rimuoviTemplateNativo" + i).attr("id","rimuoviTemplateNativo" + newIndex);
-	        
-	        i++;
+		if(tipoTemplateNativo == 'CERTIFICATO'){
+			
+			$('#alertTemplateCertificato').removeClass('hidden');
+			
+			setTimeout(function() {
+				  $("#alertTemplateCertificato").fadeOut().empty();
+			}, 5000);
+		}
+		
+		if(tipoTemplateNativo == 'AUTO_DICHIARAZIONE'){
+			
+			$('#alertTemplateAutodichiarazione').removeClass('hidden');
+			
+			setTimeout(function() {
+				  $("#alertTemplateAutodichiarazione").fadeOut().empty();
+			}, 5000);
 		}
 	}
 	
