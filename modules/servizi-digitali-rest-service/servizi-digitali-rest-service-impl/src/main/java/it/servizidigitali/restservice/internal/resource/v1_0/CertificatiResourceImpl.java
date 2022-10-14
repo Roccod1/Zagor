@@ -177,6 +177,7 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
 				if (destinazioneUso != null && destinazioneUso.isPagamentoBollo()) {
 					richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
+					// TODO spostare in Language.properties
 					String messaggio = "Non &eacute; stato possibile procedere con la generazione automatica del {{nomeServizio}} in quanto la destinazione d'uso scelta prevede l'esecuzione di un pagamento elettronico. Accedi al servizio disponibile via web ({{linkServizio}}) per procedere con questa operazione.";
 					messaggio = messaggio.replace("{{nomeServizio}}", servizio.getNome());
 					String uri = layoutUtility.getPathByLayoutId(servizioEnte.getPrivateLayoutId(), organization.getGroupId(), organization.getCompanyId());
@@ -257,6 +258,7 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
 				if (destinazioneUso != null && destinazioneUso.isPagamentoBollo()) {
 					richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
+					// TODO spostare in Language.properties
 					String messaggio = "Non &eacute; stato possibile procedere con la generazione automatica del {{nomeServizio}} in quanto la destinazione d'uso scelta prevede l'esecuzione di un pagamento elettronico. Accedi al servizio disponibile via web ({{linkServizio}}) per procedere con questa operazione.";
 					messaggio = messaggio.replace("{{nomeServizio}}", servizio.getNome());
 					String uri = layoutUtility.getPathByLayoutId(servizioEnte.getPrivateLayoutId(), organization.getGroupId(), organization.getCompanyId());
@@ -266,6 +268,7 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				}
 			}
 
+			// TODO implementare servizio salvataggio richiesta certificato
 			// richiestaCertificato.setDataInserimento(new Date());
 			// richiestaCertificato.setStato(StatoRichiestaCertificato.NUOVA.name());
 			// richiestaCertificato.setProfiloUtenteCittadino(profiloUtenteCittadino);
