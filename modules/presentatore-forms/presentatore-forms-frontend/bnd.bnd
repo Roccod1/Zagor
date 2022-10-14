@@ -39,6 +39,5 @@ Import-Package: \
   	!org.olap4j.*, \
   	!org.w3c.dom.svg.*, \
   	*
-  	
-  	
+  	  	
  -fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning

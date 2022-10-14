@@ -35,11 +35,11 @@ import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletSe
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.presentatoreforms.common.service.AlpacaService;
+import it.servizidigitali.presentatoreforms.common.service.integration.exception.BackofficeServiceException;
+import it.servizidigitali.presentatoreforms.common.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
-import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.exception.BackofficeServiceException;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
@@ -190,7 +190,8 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 								renderRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONI_USO, destinazioniUso);
 								renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, form.getNome());
 								include(PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO, renderRequest, renderResponse);
-							}else {
+							}
+							else {
 								include(PresentatoreFormsPortletKeys.JSP_COMPILA_FORM, renderRequest, renderResponse);
 							}
 

@@ -43,7 +43,7 @@ import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneprocedure.service.TemplatePdfLocalService;
 import it.servizidigitali.presentatoreforms.frontend.exception.PDFServiceException;
 import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.output.VocabolariService;
+import it.servizidigitali.presentatoreforms.frontend.service.VocabolariService;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;

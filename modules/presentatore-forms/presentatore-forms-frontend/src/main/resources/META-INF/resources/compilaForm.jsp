@@ -33,6 +33,16 @@ var listaStatiEsteriUrl = '${apiAlpacaPath}/stati-esteri';
 var listaComuniEsteriUrl = '${apiAlpacaPath}/comuni-esteri';
 var listaStradarioUrl = '${searchStradarioUrl}';
 
+var checkIvaUrl;
+var listaEventiFiereUrl;
+var listAllEventiFiereUrl;
+var getOrganizzatoriFieraUrl;
+var getAllComuniFiereUrl;
+var getAllRegioniFiereUrl;
+var getAllNazioniFiereUrl;
+var getAllProvinceUrl;
+var getComuniFiereUrl;
+var getQualificheUrl;
 
 
 /* Custom Fields JSON vars */
@@ -65,10 +75,6 @@ $(document).ready(function() {
 	
 });
 
-
-
-
-
 function mainScript() {
 	console.log("timeout over in the jsp script");
 		
@@ -78,12 +84,9 @@ function mainScript() {
 	var datiAnagrafici = "";
 	var invioFormIscrizioneUrl = '';
 	var submitFormUrl = '${salvaBozzaUrl}';
-
-	var idRichiestaServizio = '';
 	
 	var optJson = ${alpacaStructure.options};
-	var dataJson = ${alpacaStructure.data};
-	
+	var dataJson = ${alpacaStructure.data};	
 	
 	var configurazioneTipoServizioStep2 = '${configurazioneTipoServizioStep2}';
 	

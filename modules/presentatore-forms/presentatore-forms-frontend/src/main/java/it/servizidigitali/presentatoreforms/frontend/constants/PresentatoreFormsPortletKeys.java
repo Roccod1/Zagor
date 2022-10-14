@@ -77,6 +77,7 @@ public class PresentatoreFormsPortletKeys {
 	public static final String DESTINAZIONE_USO_ID = "destinazioneUsoId";
 	public static final String TIPO_SERVIZIO_STEP2 = "configurazioneTipoServizioStep2";
 	public static final String API_ALPACA_PATH = "apiAlpacaPath";
+	public static final String ID_DOCUMENTALE = "idDocumentale";
 
 	// JSON
 	public static final String STATUS = "status";

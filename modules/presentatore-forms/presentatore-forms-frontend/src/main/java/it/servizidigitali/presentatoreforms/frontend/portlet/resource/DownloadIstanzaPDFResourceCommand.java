@@ -25,6 +25,7 @@ import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
+import it.servizidigitali.presentatoreforms.frontend.service.AllegatoRichiestaService;
 import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
 import it.servizidigitali.presentatoreforms.frontend.service.PDFServiceFactory;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
@@ -48,9 +49,12 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 
 	@Reference
 	private PDFServiceFactory pdfServiceFactory;
-	
+
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
+
+	@Reference
+	private AllegatoRichiestaService allegatoRichiestaService;
 
 	@Override
 	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
@@ -68,15 +72,15 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 		Gson gson = new Gson();
 
 		try {
-			
+
 			Procedura procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
 			richiesta = presentatoreFormFrontendService.getRichiestaBozza(screenName, procedura.getProceduraId());
 
-			if(Validator.isNull(richiesta)) {
+			if (Validator.isNull(richiesta)) {
 				long richiestaId = ParamUtil.getLong(resourceRequest, PresentatoreFormsPortletKeys.RICHIESTA_ID);
-				richiesta = richiestaLocalService.getRichiesta(richiestaId);	
+				richiesta = richiestaLocalService.getRichiesta(richiestaId);
 			}
-			
+
 			PDFService pdfService = pdfServiceFactory.getPDFService(TipoGenerazionePDF.valueOf(procedura.getTipoGenerazionePDF()));
 
 			if (Validator.isNull(procedura)) {
@@ -90,9 +94,10 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 			FormData formData = AlpacaUtil.loadFormData(form, istanzaForm.getJson(), true, themeDisplay.getPortalURL());
 			AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
 
+			JsonParser jsonParser = new JsonParser();
 			alpacaStructure.setSchema(AlpacaUtil.addAttachmentsToSchema(gson.toJson(alpacaStructure.getSchema()), form.getListaDefinizioneAllegato()));
 			alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), form.getListaDefinizioneAllegato(), true, themeDisplay.getPortalURL()));
-			alpacaStructure.setData(JsonParser.parseString(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
+			alpacaStructure.setData(jsonParser.parse(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
 
 			String fileName = "richiesta-" + String.valueOf(richiesta.getRichiestaId()) + ".pdf";
 			String step2TipoServizio = procedura.getStep2TipoServizio();
@@ -106,9 +111,12 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 
 			switch (tipoServizio) {
 			case CERTIFICATO:
-				long destinazioneUsoId = ParamUtil.getLong(resourceRequest, PresentatoreFormsPortletKeys.DESTINAZIONE_USO_ID);
-				String numeroBollo = null;
-				pdf = pdfService.generaPDFCertificato(screenName, codiceFiscaleComponente, alpacaStructure, richiesta, destinazioneUsoId, numeroBollo, resourceRequest);
+				String idDocumentale = ParamUtil.getString(resourceRequest, PresentatoreFormsPortletKeys.ID_DOCUMENTALE);
+
+				if (Validator.isNotNull(idDocumentale)) {
+					pdf = allegatoRichiestaService.getCertificato(idDocumentale);
+				}
+
 				break;
 			default:
 				pdf = pdfService.generaPDFAlpacaForm(screenName, codiceFiscaleComponente, alpacaStructure, richiesta, false, dettagliRichiesta, resourceRequest);
