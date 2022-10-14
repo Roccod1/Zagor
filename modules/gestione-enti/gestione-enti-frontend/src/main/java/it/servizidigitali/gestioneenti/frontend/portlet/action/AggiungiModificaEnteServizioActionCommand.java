@@ -3,6 +3,7 @@ package it.servizidigitali.gestioneenti.frontend.portlet.action;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
@@ -24,6 +25,7 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneenti.frontend.constants.GestioneEntiPortletKeys;
 import it.servizidigitali.gestioneenti.frontend.portlet.GestioneEntiPortlet;
+import it.servizidigitali.gestioneenti.frontend.service.GestioneEntiMiddlewareService;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
@@ -52,6 +54,9 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 
 	@Reference
 	private ServizioLocalService servizioLocalService;
+	
+	@Reference
+	private GestioneEntiMiddlewareService gestioneEntiMiddlewareService;
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
@@ -78,6 +83,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		String uriEsterna = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI_ESTERNA);
 		Boolean richiestaFirma = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.RICHIESTA_FIRMA);
 		String[] formatiFirmaDigitale = ParamUtil.getStringValues(actionRequest, GestioneEntiPortletKeys.FORMATI_FIRMA_DIGITALE);
+		String[] destinazioniUsoSelezionate = ParamUtil.getStringValues(actionRequest, GestioneEntiPortletKeys.DESTINAZIONI_USO_SELEZIONATE);
 		Long subOrganizationId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_SOTTO_ORGANIZZAZIONE_ID);
 
 		String redirect = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.INDIRIZZO_REDIRECT);
@@ -88,9 +94,14 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		ServizioEntePK servizioEntePK = new ServizioEntePK();
 		servizioEntePK.setServizioId(servizioId);
 		servizioEntePK.setOrganizationId(organizationId);
+		
+		Organization organizzazione = null;
 
 		ServizioEnte servizioEnte = null;
 		try {
+			
+			organizzazione = organizationLocalService.fetchOrganization(organizationId);
+			
 			if (servizioId > 0 && organizationId > 0) {
 				try {
 					servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);
@@ -162,6 +173,12 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 			servizioEnte.setUserName(themeDisplay.getUser().getFullName());
 
 			servizioEnteLocalService.updateServizioEnte(servizioEnte);
+			
+			if(Validator.isNotNull(destinazioniUsoSelezionate)) {
+				gestioneEntiMiddlewareService.salvaDestinazioniUso(destinazioniUsoSelezionate, servizioId, themeDisplay.getUser().getFullName(), 
+						themeDisplay.getUser().getUserId(), organizationId, organizzazione.getGroupId(), organizzazione.getCompanyId());
+			}
+			
 			SessionMessages.add(actionRequest, GestioneEntiPortletKeys.SALVATAGGIO_SUCCESSO);
 			actionResponse.sendRedirect(redirect);
 		}
@@ -169,7 +186,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 			_log.error("Impossibile salvare/aggiornare il servizio con ID: " + servizioId + " > " + e.getMessage(), e);
 			SessionErrors.add(actionRequest, GestioneEntiPortletKeys.ERRORE_SALVATAGGIO);
 			actionRequest.setAttribute(GestioneEntiPortletKeys.SERVIZIO_ENTE, servizioEnte);
-			actionRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONE, organizationLocalService.fetchOrganization(organizationId));
+			actionRequest.setAttribute(GestioneEntiPortletKeys.ORGANIZZAZIONE, organizzazione);
 			actionRequest.setAttribute(GestioneEntiPortletKeys.LISTA_SERVIZI, servizioLocalService.getServizios(QueryUtil.ALL_POS, QueryUtil.ALL_POS));
 		}
 	}

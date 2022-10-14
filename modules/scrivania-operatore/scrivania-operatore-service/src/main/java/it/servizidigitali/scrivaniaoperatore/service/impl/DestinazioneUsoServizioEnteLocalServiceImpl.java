@@ -14,8 +14,11 @@ package it.servizidigitali.scrivaniaoperatore.service.impl;
 
 import com.liferay.portal.aop.AopService;
 
+import java.util.List;
+
 import org.osgi.service.component.annotations.Component;
 
+import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUsoServizioEnte;
 import it.servizidigitali.scrivaniaoperatore.service.base.DestinazioneUsoServizioEnteLocalServiceBaseImpl;
 
 /**
@@ -23,4 +26,11 @@ import it.servizidigitali.scrivaniaoperatore.service.base.DestinazioneUsoServizi
  */
 @Component(property = "model.class.name=it.servizidigitali.scrivaniaoperatore.model.DestinazioneUsoServizioEnte", service = AopService.class)
 public class DestinazioneUsoServizioEnteLocalServiceImpl extends DestinazioneUsoServizioEnteLocalServiceBaseImpl {
+	
+	@Override
+	public List<DestinazioneUsoServizioEnte> getDestinazioniUsoServizioEnteByServizioIdOrganizationId(long servizioId, long organizationId, long groupId, long companyId) {
+		List<DestinazioneUsoServizioEnte> destinazioniUsoServizioEnte = destinazioneUsoServizioEntePersistence.findByS_O_G_C(servizioId, organizationId, groupId, companyId);
+		return destinazioniUsoServizioEnte;
+	}
+	
 }

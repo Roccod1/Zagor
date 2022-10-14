@@ -302,6 +302,11 @@ public interface DestinazioneUsoServizioEnteLocalService
 	public int getDestinazioneUsoServizioEntesCount();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<DestinazioneUsoServizioEnte>
+		getDestinazioniUsoServizioEnteByServizioIdOrganizationId(
+			long servizioId, long organizationId, long groupId, long companyId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ExportActionableDynamicQuery getExportActionableDynamicQuery(
 		PortletDataContext portletDataContext);
 
