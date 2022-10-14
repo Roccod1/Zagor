@@ -253,7 +253,7 @@ public class GestioneEntiMiddlewareService {
 		
 		if(Validator.isNotNull(listaDestinazioniUsoServizio) && !listaDestinazioniUsoServizio.isEmpty()) {
 			
-			if(Validator.isNotNull(listaDestinazioniUsoForm) && !listaDestinazioniUsoForm.isEmpty()) {
+			if(Validator.isNotNull(listaDestinazioniUsoForm)) {
 				List<DestinazioneUsoServizioEnte> elementiDaEliminare = listaDestinazioniUsoServizio.stream()
 						.filter(destinazioneUsoServizioEnte -> !listaDestinazioniUsoForm.contains(destinazioneUsoServizioEnte))
 						.collect(Collectors.toList());
