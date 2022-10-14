@@ -27,11 +27,11 @@ import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletSe
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.presentatoreforms.common.service.AlpacaService;
+import it.servizidigitali.presentatoreforms.common.service.integration.exception.BackofficeServiceException;
+import it.servizidigitali.presentatoreforms.common.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
-import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.exception.BackofficeServiceException;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
@@ -92,15 +92,15 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 			TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
 
 			if (Boolean.valueOf(isBozza) && istanzaFormRichiesta != null) {
-				
-				if(!tipoServizio.equals(TipoServizio.CERTIFICATO)) {
+
+				if (!tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 					jsonDataBozza = gson.toJson(gson.fromJson(istanzaFormRichiesta.getJson(), FormData.class));
 				}
-				
+
 				formData = AlpacaUtil.loadFormData(form, jsonDataBozza, true, themeDisplay.getPortalURL());
 				alpacaStructure = formData.getAlpaca();
-				
-				if(tipoServizio.equals(tipoServizio.CERTIFICATO)) {
+
+				if (tipoServizio.equals(tipoServizio.CERTIFICATO)) {
 					List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
 					renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 					renderRequest.setAttribute(PresentatoreFormsPortletKeys.API_ALPACA_PATH, themeDisplay.getPortalURL() + PresentatoreFormsPortletKeys.SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH);

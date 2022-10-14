@@ -30,12 +30,12 @@ import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.presentatoreforms.common.service.AlpacaService;
+import it.servizidigitali.presentatoreforms.common.service.integration.input.jsonenrich.model.UserPreferences;
+import it.servizidigitali.presentatoreforms.common.service.integration.output.model.DichiarazioneRisposta;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.AllegatoRichiestaService;
-import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.UserPreferences;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.output.model.DichiarazioneRisposta;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
@@ -81,9 +81,9 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand {
 		Procedura procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
 
 		Servizio servizio = servizioLocalService.getServizio(procedura.getServizioId());
-		
+
 		// TODO: recuperare da db
-		
+
 		boolean firmaDigitaleAbilitata = true;
 		List<String> listaFormatiFirma = new ArrayList<String>();
 		listaFormatiFirma.add("PADES");
@@ -113,26 +113,27 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand {
 					File fileFirmato = uploadPortletRequest.getFile("uploadFileFirmato");
 
 					if (Validator.isNotNull(fileFirmato)) {
-						
-						if(firmaDigitaleAbilitata) {
+
+						if (firmaDigitaleAbilitata) {
 							listaErrori = allegatoRichiestaService.checkFirmaDigitaleDocumentoPrincipale(fileFirmato, listaErrori, listaFormatiFirma, richiesta.getRichiestaId());
-							
-							if(Validator.isNotNull(listaErrori) && !listaErrori.isEmpty()) {
+
+							if (Validator.isNotNull(listaErrori) && !listaErrori.isEmpty()) {
 								_log.error("SalvaInviaRichiestaActionCommand :: Errore durante il controllo della firma digitale!");
 								String errori = String.join(StringPool.PERIOD + StringPool.SPACE, listaErrori);
 								actionRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_ERRORI, errori);
 								actionResponse.getRenderParameters().setValue("mvcRenderCommandName", PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND);
 								return;
-							}else {
-								allegatoRichiestaService.salvaAllegatoFirmato(fileFirmato, servizio, richiesta.getRichiestaId(), user.getFullName(), user.getUserId(),
-										themeDisplay.getSiteGroupId());	
 							}
-						}else {
-							allegatoRichiestaService.salvaAllegatoFirmato(fileFirmato, servizio, richiesta.getRichiestaId(), user.getFullName(), user.getUserId(),
-									themeDisplay.getSiteGroupId());	
+							else {
+								allegatoRichiestaService.salvaAllegatoFirmato(fileFirmato, servizio, richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
+							}
 						}
-						
-					}else {
+						else {
+							allegatoRichiestaService.salvaAllegatoFirmato(fileFirmato, servizio, richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
+						}
+
+					}
+					else {
 						_log.error("SalvaInviaRichiestaActionCommand :: Allegato firmato non presente!");
 						listaErrori.add(resourceBundleLoader.loadResourceBundle(themeDisplay.getLocale()).getString("errore-durante-il-salvataggio-del-file-principale"));
 						String errori = String.join(StringPool.PERIOD + StringPool.SPACE, listaErrori);
