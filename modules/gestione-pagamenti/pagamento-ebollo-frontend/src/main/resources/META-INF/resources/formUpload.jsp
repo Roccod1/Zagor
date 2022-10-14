@@ -3,7 +3,9 @@
 	var="uploadFileURL" />
 
 <c:if test="${errorOccurredOnPagaBollo}">
-	<p><liferay-ui:message key="pagaBollo.errorMessage.prefix" />${errorMessageOnPagaBollo}</p>
+	<div class="alert alert-danger" role="alert">
+		<p><liferay-ui:message key="pagaBollo.errorMessage.prefix" />${errorMessageOnPagaBollo}</p>
+	</div>
 </c:if>
 
 <aui:form action="${uploadFileURL}" id="uploadFileForm"
