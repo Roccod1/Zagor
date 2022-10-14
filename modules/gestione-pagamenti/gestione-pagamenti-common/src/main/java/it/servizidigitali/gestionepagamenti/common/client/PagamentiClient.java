@@ -26,6 +26,8 @@ public interface PagamentiClient {
 
 	/**
 	 *
+	 * @param idSessione
+	 * @param iuv
 	 * @param iud
 	 * @param username
 	 * @param password
@@ -33,7 +35,7 @@ public interface PagamentiClient {
 	 * @return
 	 * @throws PagamentiClientException
 	 */
-	VerificaPagamentoRisposta verificaPagamento(String iuv, String username, String password, String wsdlUrl) throws PagamentiClientException;
+	VerificaPagamentoRisposta verificaPagamento(String idSessione, String iuv, String iud, String username, String password, String wsdlUrl) throws PagamentiClientException;
 
 	/**
 	 *

@@ -81,7 +81,7 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 
 				accountClientPagamentiEnteConfiguration = configurationProvider.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, pagamento.getGroupId());
 				PagamentiClient pagamentiClient = pagamentiClientFactory.getPagamentiClient(TipoPagamentiClient.valueOf(accountClientPagamentiEnteConfiguration.tipoPagamentiClient()));
-				VerificaPagamentoRisposta verificaPagamento = pagamentiClient.verificaPagamento(pagamento.getIuv(), accountClientPagamentiEnteConfiguration.clientUsername(),
+				VerificaPagamentoRisposta verificaPagamento = pagamentiClient.verificaPagamento(pagamento.getIdSessione(), null, null, accountClientPagamentiEnteConfiguration.clientUsername(),
 						accountClientPagamentiEnteConfiguration.clientPassword(), accountClientPagamentiEnteConfiguration.clientWsdlUrl());
 
 				_log.info("verificaPagamento: " + verificaPagamento.getStatoPagamento());

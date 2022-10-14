@@ -100,7 +100,7 @@ public class MyPayPagamentiClient implements PagamentiClient {
 	}
 
 	@Override
-	public VerificaPagamentoRisposta verificaPagamento(String iuv, String username, String password, String wsdlUrl) throws PagamentiClientException {
+	public VerificaPagamentoRisposta verificaPagamento(String idSessione, String iuv, String iud, String username, String password, String wsdlUrl) throws PagamentiClientException {
 
 		PagamentiTelematiciDovutiPagati pagamentiServicePort = null;
 
@@ -116,9 +116,14 @@ public class MyPayPagamentiClient implements PagamentiClient {
 
 		CtPagatiConRicevuta ctPagati = null;
 
+		if (idSessione != null) {
+			iuv = null;
+			iud = null;
+		}
+
 		PaaSILChiediPagatiConRicevutaRisposta chiediPagatiResp = null;
 		try {
-			chiediPagatiResp = pagamentiServicePort.paaSILChiediPagatiConRicevuta(username, password, null, iuv, null);
+			chiediPagatiResp = pagamentiServicePort.paaSILChiediPagatiConRicevuta(username, password, idSessione, iuv, iud);
 		}
 		catch (Exception ex) {
 			throw new PagamentiClientException("Errore durate la chiamata al servizio " + "per richiedere lo stato dei pagati", ex);
