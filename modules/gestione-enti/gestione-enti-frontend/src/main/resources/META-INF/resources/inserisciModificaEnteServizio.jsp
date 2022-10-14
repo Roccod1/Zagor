@@ -83,7 +83,7 @@
 			<div class="col">
 				<div class="form-group">
 					<c:choose>
-						<c:when test="${empty listaUriPubblica }">'
+						<c:when test="${empty listaUriPubblica }">
 							<div class="alert alert-warning" role="alert">
 							  <liferay-ui:message key="nessun-uri-pubblica-disponibile"/>
 							</div>
