@@ -66,11 +66,13 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 		Long organizationId = ParamUtil.getLong(renderRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_ID);
 		Long servizioId = ParamUtil.getLong(renderRequest, GestioneEntiPortletKeys.SERVIZIO_ID);
 		List<Servizio> listaServizi = new ArrayList<Servizio>();
-
+		String listaFormatiFirmaDigitaleString = "";
+		
 		ServiceContext serviceContext = null;
 		ThemeDisplay themeDisplay = null;
 		List<JournalArticle> listaArticoliCatalogoServizi = new ArrayList<JournalArticle>();
 		Map<String, List<Layout>> pagineDisponibili = null;
+		
 		try {
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
 			themeDisplay = serviceContext.getThemeDisplay();
@@ -97,8 +99,18 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 				if (Validator.isNotNull(servizioId)) {
 					ServizioEntePK servizioEntePK = new ServizioEntePK(servizioId, organizationId);
 					ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);
+					
+					if(Validator.isNotNull(servizioEnte.getFormatiFirmaDigitale())) {
+						listaFormatiFirmaDigitaleString = gestioneEntiMiddlewareService.getStringSelectMultipla(servizioEnte.getFormatiFirmaDigitale());
+						renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_FORMATI_FIRMA_DIGITALE, listaFormatiFirmaDigitaleString);
+					}else {
+						renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_FORMATI_FIRMA_DIGITALE, GestioneEntiPortletKeys.LISTA_VUOTA);
+					}
+					
 					renderRequest.setAttribute(GestioneEntiPortletKeys.SERVIZIO_ENTE, servizioEnte);
 					tempServizioId = null;
+				}else {
+					renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_FORMATI_FIRMA_DIGITALE, GestioneEntiPortletKeys.LISTA_VUOTA);
 				}
 
 			}
@@ -114,6 +126,7 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 		renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_URI_PRIVATE, pagineDisponibili.get(GestioneEntiPortletKeys.LISTA_URI_PRIVATE));
 		renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_SERVIZI, listaServizi);
 		renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_ARTICLE_CATALOGO_SERVIZI, listaArticoliCatalogoServizi);
+
 		return GestioneEntiPortletKeys.JSP_INSERIMENTO_MODIFICA;
 	}
 }

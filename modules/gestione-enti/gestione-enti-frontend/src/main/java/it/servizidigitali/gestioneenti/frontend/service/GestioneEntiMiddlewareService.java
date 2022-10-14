@@ -7,6 +7,9 @@ import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleLocalService;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Layout;
@@ -195,6 +198,14 @@ public class GestioneEntiMiddlewareService {
 		}
 
 		return listaArticoliCatalogoServizi;
+	}
+	
+	public String getStringSelectMultipla(String string) throws JSONException {
+		string = "[" + string + "]";
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(string);
+		String jsonArrayString = JSONFactoryUtil.createJSONSerializer().serialize(jsonArray);
+
+		return jsonArrayString;
 	}
 
 }

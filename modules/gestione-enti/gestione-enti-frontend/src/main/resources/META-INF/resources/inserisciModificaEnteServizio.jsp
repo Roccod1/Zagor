@@ -83,7 +83,7 @@
 			<div class="col">
 				<div class="form-group">
 					<c:choose>
-						<c:when test="${empty listaUriPubblica }">
+						<c:when test="${empty listaUriPubblica }">'
 							<div class="alert alert-warning" role="alert">
 							  <liferay-ui:message key="nessun-uri-pubblica-disponibile"/>
 							</div>
@@ -249,6 +249,23 @@
 			</div>
 		</div>		
 		
+		<div class="row">
+			<div class="col">
+				<div class="form-group form-check">
+			        <aui:input name="<%=GestioneEntiPortletKeys.RICHIESTA_FIRMA %>" label="documento-principale-firmato" type="checkbox" checked="${servizioEnte.richiestaFirma}"/>
+				</div>
+			</div>
+			
+			<div class="col">
+				<div class="form-group">
+			        <aui:select label="formato-firma-digitale" id="<%=GestioneEntiPortletKeys.FORMATI_FIRMA_DIGITALE %>" name="<%=GestioneEntiPortletKeys.FORMATI_FIRMA_DIGITALE %>" multiple="true" showEmptyOption="true">
+						<aui:option value="PADES" label="pades"></aui:option>
+						<aui:option value="CADES" label="cades"></aui:option>
+					</aui:select>
+				</div>
+			</div>
+		</div>	
+		
 		
 		<aui:button-row cssClass="text-right">
 			<c:set value="${empty listaServizi}" var="disabilitaSeNessunServizioAttivabile" />
@@ -259,6 +276,8 @@
 </div>
 
 <script type="text/javascript">
+
+	var listaFormatiFirmaDigitale = ${listaFormatiFirmaDigitale};
 
 	$(function(){
 		impostaDataMinimaDataFine();
@@ -275,5 +294,11 @@
 	$("#<portlet:namespace/>dataInizioAttivazione").change(() => {
 		impostaDataMinimaDataFine();
 	});
+	
+	if (listaFormatiFirmaDigitale !== "listaVuota") {
+		var arrayFormatiFirmaDigitale = JSON.stringify(listaFormatiFirmaDigitale);
+		var jsonArray = JSON.parse(arrayFormatiFirmaDigitale);
+		$('#<portlet:namespace />formatiFirmaDigitale').val(jsonArray);
+	}
 
 </script>

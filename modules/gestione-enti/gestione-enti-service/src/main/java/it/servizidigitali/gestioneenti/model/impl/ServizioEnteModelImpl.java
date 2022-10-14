@@ -86,7 +86,8 @@ public class ServizioEnteModelImpl
 		{"chatbot", Types.BOOLEAN}, {"prenotabile", Types.BOOLEAN},
 		{"privacyDelega", Types.BOOLEAN}, {"allegatoDelega", Types.BOOLEAN},
 		{"timbroCertificato", Types.BOOLEAN}, {"iseeInps", Types.BOOLEAN},
-		{"attivo", Types.BOOLEAN}
+		{"attivo", Types.BOOLEAN}, {"richiestaFirma", Types.BOOLEAN},
+		{"formatiFirmaDigitale", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -121,10 +122,12 @@ public class ServizioEnteModelImpl
 		TABLE_COLUMNS_MAP.put("timbroCertificato", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("iseeInps", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("attivo", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("richiestaFirma", Types.BOOLEAN);
+		TABLE_COLUMNS_MAP.put("formatiFirmaDigitale", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table servizio_ente (uuid_ VARCHAR(75) null,servizioId LONG not null,organizationId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,privateLayoutId LONG,publicLayoutId LONG,uriEsterna VARCHAR(75) null,catalogoServizioArticleId LONG,subOrganizationId LONG,autenticazione BOOLEAN,livelloAutenticazione INTEGER,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,prenotabile BOOLEAN,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,iseeInps BOOLEAN,attivo BOOLEAN,primary key (servizioId, organizationId))";
+		"create table servizio_ente (uuid_ VARCHAR(75) null,servizioId LONG not null,organizationId LONG not null,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,privateLayoutId LONG,publicLayoutId LONG,uriEsterna VARCHAR(75) null,catalogoServizioArticleId LONG,subOrganizationId LONG,autenticazione BOOLEAN,livelloAutenticazione INTEGER,dataInizioAttivazione DATE null,dataFineAttivazione DATE null,cittadino BOOLEAN,azienda BOOLEAN,delega BOOLEAN,chatbot BOOLEAN,prenotabile BOOLEAN,privacyDelega BOOLEAN,allegatoDelega BOOLEAN,timbroCertificato BOOLEAN,iseeInps BOOLEAN,attivo BOOLEAN,richiestaFirma BOOLEAN,formatiFirmaDigitale VARCHAR(75) null,primary key (servizioId, organizationId))";
 
 	public static final String TABLE_SQL_DROP = "drop table servizio_ente";
 
@@ -451,6 +454,17 @@ public class ServizioEnteModelImpl
 		attributeSetterBiConsumers.put(
 			"attivo",
 			(BiConsumer<ServizioEnte, Boolean>)ServizioEnte::setAttivo);
+		attributeGetterFunctions.put(
+			"richiestaFirma", ServizioEnte::getRichiestaFirma);
+		attributeSetterBiConsumers.put(
+			"richiestaFirma",
+			(BiConsumer<ServizioEnte, Boolean>)ServizioEnte::setRichiestaFirma);
+		attributeGetterFunctions.put(
+			"formatiFirmaDigitale", ServizioEnte::getFormatiFirmaDigitale);
+		attributeSetterBiConsumers.put(
+			"formatiFirmaDigitale",
+			(BiConsumer<ServizioEnte, String>)
+				ServizioEnte::setFormatiFirmaDigitale);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -1011,6 +1025,44 @@ public class ServizioEnteModelImpl
 	}
 
 	@Override
+	public boolean getRichiestaFirma() {
+		return _richiestaFirma;
+	}
+
+	@Override
+	public boolean isRichiestaFirma() {
+		return _richiestaFirma;
+	}
+
+	@Override
+	public void setRichiestaFirma(boolean richiestaFirma) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_richiestaFirma = richiestaFirma;
+	}
+
+	@Override
+	public String getFormatiFirmaDigitale() {
+		if (_formatiFirmaDigitale == null) {
+			return "";
+		}
+		else {
+			return _formatiFirmaDigitale;
+		}
+	}
+
+	@Override
+	public void setFormatiFirmaDigitale(String formatiFirmaDigitale) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_formatiFirmaDigitale = formatiFirmaDigitale;
+	}
+
+	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
 			PortalUtil.getClassNameId(ServizioEnte.class.getName()));
@@ -1088,6 +1140,8 @@ public class ServizioEnteModelImpl
 		servizioEnteImpl.setTimbroCertificato(isTimbroCertificato());
 		servizioEnteImpl.setIseeInps(isIseeInps());
 		servizioEnteImpl.setAttivo(isAttivo());
+		servizioEnteImpl.setRichiestaFirma(isRichiestaFirma());
+		servizioEnteImpl.setFormatiFirmaDigitale(getFormatiFirmaDigitale());
 
 		servizioEnteImpl.resetOriginalValues();
 
@@ -1152,6 +1206,10 @@ public class ServizioEnteModelImpl
 			this.<Boolean>getColumnOriginalValue("iseeInps"));
 		servizioEnteImpl.setAttivo(
 			this.<Boolean>getColumnOriginalValue("attivo"));
+		servizioEnteImpl.setRichiestaFirma(
+			this.<Boolean>getColumnOriginalValue("richiestaFirma"));
+		servizioEnteImpl.setFormatiFirmaDigitale(
+			this.<String>getColumnOriginalValue("formatiFirmaDigitale"));
 
 		return servizioEnteImpl;
 	}
@@ -1330,6 +1388,19 @@ public class ServizioEnteModelImpl
 
 		servizioEnteCacheModel.attivo = isAttivo();
 
+		servizioEnteCacheModel.richiestaFirma = isRichiestaFirma();
+
+		servizioEnteCacheModel.formatiFirmaDigitale = getFormatiFirmaDigitale();
+
+		String formatiFirmaDigitale =
+			servizioEnteCacheModel.formatiFirmaDigitale;
+
+		if ((formatiFirmaDigitale != null) &&
+			(formatiFirmaDigitale.length() == 0)) {
+
+			servizioEnteCacheModel.formatiFirmaDigitale = null;
+		}
+
 		return servizioEnteCacheModel;
 	}
 
@@ -1449,6 +1520,8 @@ public class ServizioEnteModelImpl
 	private boolean _timbroCertificato;
 	private boolean _iseeInps;
 	private boolean _attivo;
+	private boolean _richiestaFirma;
+	private String _formatiFirmaDigitale;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1510,6 +1583,9 @@ public class ServizioEnteModelImpl
 		_columnOriginalValues.put("timbroCertificato", _timbroCertificato);
 		_columnOriginalValues.put("iseeInps", _iseeInps);
 		_columnOriginalValues.put("attivo", _attivo);
+		_columnOriginalValues.put("richiestaFirma", _richiestaFirma);
+		_columnOriginalValues.put(
+			"formatiFirmaDigitale", _formatiFirmaDigitale);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1588,6 +1664,10 @@ public class ServizioEnteModelImpl
 		columnBitmasks.put("iseeInps", 67108864L);
 
 		columnBitmasks.put("attivo", 134217728L);
+
+		columnBitmasks.put("richiestaFirma", 268435456L);
+
+		columnBitmasks.put("formatiFirmaDigitale", 536870912L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

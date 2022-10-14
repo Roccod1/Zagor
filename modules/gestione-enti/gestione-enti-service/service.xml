@@ -48,6 +48,8 @@
 		<column name="timbroCertificato" type="boolean" />
 		<column name="iseeInps" type="boolean" />
 		<column name="attivo" type="boolean" />
+		<column name="richiestaFirma" type="boolean" />
+		<column name="formatiFirmaDigitale" type="String" />
 		
 		<!-- Finder methods -->
 		<finder name="OrganizationId" return-type="Collection">

@@ -76,10 +76,14 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 		Boolean iseeInps = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_ISEE_INPS);
 		Boolean timbroCertificato = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.SERVIZIO_TIMBRO_CERTIFICATO);
 		String uriEsterna = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.SERVIZIO_URI_ESTERNA);
+		Boolean richiestaFirma = ParamUtil.getBoolean(actionRequest, GestioneEntiPortletKeys.RICHIESTA_FIRMA);
+		String[] formatiFirmaDigitale = ParamUtil.getStringValues(actionRequest, GestioneEntiPortletKeys.FORMATI_FIRMA_DIGITALE);
 		Long subOrganizationId = ParamUtil.getLong(actionRequest, GestioneEntiPortletKeys.SERVIZIO_SOTTO_ORGANIZZAZIONE_ID);
 
 		String redirect = ParamUtil.getString(actionRequest, GestioneEntiPortletKeys.INDIRIZZO_REDIRECT);
-
+		
+		String formatiFirmaDigitaleString = "";
+		
 		// creo la pk della entity
 		ServizioEntePK servizioEntePK = new ServizioEntePK();
 		servizioEntePK.setServizioId(servizioId);
@@ -124,6 +128,11 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 					}
 				}
 			}
+			
+			if(Validator.isNotNull(formatiFirmaDigitale)) {
+				formatiFirmaDigitaleString = String.join(",", formatiFirmaDigitale);
+				servizioEnte.setFormatiFirmaDigitale(formatiFirmaDigitaleString);
+			}
 
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(actionRequest);
 			ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
@@ -148,6 +157,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 			servizioEnte.setChatbot(chatBot);
 			servizioEnte.setIseeInps(iseeInps);
 			servizioEnte.setTimbroCertificato(timbroCertificato);
+			servizioEnte.setRichiestaFirma(richiestaFirma);
 			servizioEnte.setUriEsterna(uriEsterna);
 			servizioEnte.setUserName(themeDisplay.getUser().getFullName());
 
