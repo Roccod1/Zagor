@@ -151,16 +151,16 @@
 				
 				<aui:input type="hidden" id="countJasperReport" name="countJasperReport"/>
 				
-				<div id="container-allegati-template" class="invisible">
+				<div id="container-allegati-template" class="hidden">
 						
 						<aui:row>
 							<aui:col span="12" id="container-upload-allegati">
 							
 									<c:choose>
 									
-										<c:when test="${not empty listaTemplatePdf}">
-											<c:forEach items="${listaTemplatePdf}" var="templatePdf" varStatus="loop">
-												<div class="lfr-form-row lfr-form-row-inline" id="jasperDiv${loop.index}">
+										<c:when test="${not empty listaTemplateJasperReportPdf}">
+											<c:forEach items="${listaTemplateJasperReportPdf}" var="templatePdf" varStatus="loop">
+												<div  id="jasperDiv${loop.index}">
 													<aui:input type="hidden" name="idAllegatoJasper${loop.index}" value="${templatePdf.templatePdfId}"/>
 													<p>${templatePdf.nomeFile}</p>
 													<aui:input type="file" name="jasperReportFile${loop.index}" label="allegato-jasper-report">
@@ -204,6 +204,140 @@
 					
 				</div>
 				
+				<aui:input type="hidden" id="countTemplateNativi" name="countTemplateNativi"/>
+				
+				<div id="container-allegati-template-nativi" class="hidden">
+					
+					<c:choose>
+					
+						<c:when test="${not empty listaTemplatePdf}">
+							<c:forEach items="${listaTemplatePdf}" var="templatePdf" varStatus="loop">
+							
+										<div  id="allegatoTemplateNativo${loop.index}">
+											<aui:input type="hidden" id="idAllegatoTemplateNativo${loop.index}" name="idAllegatoTemplateNativo${loop.index}" value="${templatePdf.templatePdfId}" />
+											
+											<p class="mt-3">${templatePdf.nomeFile}</p>
+											
+											<aui:input type="hidden" id="tipoTemplateNativo${loop.index}" name="tipoTemplateNativo${loop.index}" value="${templatePdf.tipoTemplateNativo}"/>
+											
+											<c:choose>
+												<c:when test="${templatePdf.tipoTemplateNativo == 'DEFAULT'}">
+													<aui:input type="file" id="templateNativoFile${loop.index}" name="templateNativoFile${loop.index}" label="template-default">
+													<aui:validator name="acceptFiles">
+													'ftl'
+													</aui:validator>	
+													</aui:input>
+													
+													<aui:row>
+														
+														<aui:col span="1">
+                											<a id="rimuoviTemplateNativo${loop.index}" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a>
+														</aui:col>
+														
+            										</aui:row>			
+												</c:when>	
+												
+												<c:when test="${templatePdf.tipoTemplateNativo == 'CERTIFICATO'}">
+													<aui:input type="file" id="templateNativoFile${loop.index}" name="templateNativoFile${loop.index}" label="template-certificato">
+													<aui:validator name="acceptFiles">
+													'ftl'
+													</aui:validator>	
+													</aui:input>	
+													
+													<aui:row>
+														
+														<aui:col span="1">
+                											<a id="rimuoviTemplateNativo${loop.index}" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a>
+														</aui:col>
+														
+            										</aui:row>		
+												</c:when>
+												
+												<c:when test="${templatePdf.tipoTemplateNativo == 'AUTO_DICHIARAZIONE'}">
+													<aui:input type="file" id="templateNativoFile${loop.index}" name="templateNativoFile${loop.index}" label="template-autodichiarazione">
+													<aui:validator name="acceptFiles">
+													'ftl'
+													</aui:validator>	
+													</aui:input>
+													
+													<aui:row>
+														
+														<aui:col span="1">
+                											<a id="rimuoviTemplateNativo${loop.index}" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a>
+														</aui:col>
+														
+            										</aui:row>	
+												</c:when>
+											</c:choose>												
+																						
+											
+										
+										</div>								
+							</c:forEach>				
+										
+						</c:when>
+						
+						<c:otherwise>
+							<div id="allegatoTemplateNativo0">
+								<aui:input type="hidden" id="idAllegatoTemplateNativo0" name="idAllegatoTemplateNativo0" value="0" />
+							
+								<aui:input type="hidden" id="tipoTemplateNativo0" name="tipoTemplateNativo0" value="<%=TipoTemplateNativo.DEFAULT.name() %>"/>
+								<aui:input type="file" id="templateNativoFile0" name="templateNativoFile0" label="template-default">
+								<aui:validator name="acceptFiles">
+								'ftl'
+								</aui:validator>	
+								</aui:input>
+								
+								<aui:row>
+									<aui:col span="1">
+										<a id="rimuoviTemplateNativo0" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a>
+									</aui:col>
+								</aui:row>
+
+							</div>
+					
+							<div id="allegatoTemplateNativo1">
+								<aui:input type="hidden" id="idAllegatoTemplateNativo1" name="idAllegatoTemplateNativo1" value="0" />
+							
+								<aui:input type="hidden" id="tipoTemplateNativo1" name="tipoTemplateNativo1" value="<%=TipoTemplateNativo.CERTIFICATO.name() %>"/>
+								<aui:input type="file" id="templateNativoFile1" name="templateNativoFile1" label="template-certificato">
+								<aui:validator name="acceptFiles">
+								'ftl'
+								</aui:validator>	
+								</aui:input>
+								
+								<aui:row>
+									<aui:col span="1">
+										<a id="rimuoviTemplateNativo1" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a>
+									</aui:col>
+								</aui:row>
+							</div>
+					
+							<div id="allegatoTemplateNativo2">
+								<aui:input type="hidden" id="idAllegatoTemplateNativo2" name="idAllegatoTemplateNativo2" value="0" />
+							
+								<aui:input type="hidden" id="tipoTemplateNativo2" name="tipoTemplateNativo2" value="<%=TipoTemplateNativo.AUTO_DICHIARAZIONE.name() %>"/>
+								<aui:input type="file" id="templateNativoFile2" name="templateNativoFile2" label="template-auto-dichiarazione">
+								<aui:validator name="acceptFiles">
+								'ftl'
+								</aui:validator>	
+								</aui:input>
+								
+								<aui:row>
+									<aui:col span="1">
+										<a id="rimuoviTemplateNativo2" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a>
+									</aui:col>
+								</aui:row>
+
+							</div>
+						
+						</c:otherwise>
+					
+					</c:choose>
+					
+				
+				</div>
+				
 			</fieldset>
 			<aui:button-row cssClass="text-right">
 				<aui:button value="annulla" id="annulla" href="${homeURL}"/>
@@ -222,33 +356,129 @@
 	var listaTipiIntegrazioneBackoffice = ${listaTipoIntegrazioneBackofficeProcedura};
 	var valueSelectAllegati = $('#<portlet:namespace />tipiGenerazioneTemplate').val();
 	indexJasperReport = 0;
+	indexTemplateNativi = 0;
 	
 	 
 	$(document).ready(function() {
 		
 		if (valueSelectAllegati == "JASPER_REPORT") {
-			$('#container-allegati-template').removeClass("invisible");
+			$('#container-allegati-template').removeClass("hidden");
+		}
+		
+		if(valueSelectAllegati == "NATIVA"){
+			$('#container-allegati-template-nativi').removeClass("hidden");
+			
+			 var countTemplateNativi = $("#container-allegati-template-nativi > div").length;
+			 $("#<portlet:namespace />countTemplateNativi").val(countTemplateNativi);
 		}
 		
 		var conteggioJasperPresenti = $("#<portlet:namespace />container-upload-allegati > div").length; 
 		
+		var countTemplateNativi = $("#container-allegati-template-nativi > div").length;
+		$("#<portlet:namespace />countTemplateNativi").val(countTemplateNativi);
+
 		if(conteggioJasperPresenti>0){
 			indexJasperReport = conteggioJasperPresenti;
 			$("#<portlet:namespace />countJasperReport").val(conteggioJasperPresenti);
+		}
+		
+		if(countTemplateNativi==1){
+			var tipoTemplateNativo = $("#<portlet:namespace />tipoTemplateNativo0").val();
+			var divTemplate = $("#container-allegati-template-nativi");
+			
+			if(tipoTemplateNativo == 'DEFAULT'){
+				var campiDaAggiungere = '<div id="allegatoTemplateNativo1"> <div class="form-group input-text-wrapper"> <input type="hidden" id="<portlet:namespace />tipoTemplateNativo1" name="<portlet:namespace />tipoTemplateNativo1" value="CERTIFICATO"> <label class=" control-label" for="templateNativoFile1"> Template certificato </label> <input class="field form-control" id="<portlet:namespace />templateNativoFile1" name="<portlet:namespace />templateNativoFile1" type="file"> <div class="row"> <div class="col-md-1"> <a id="rimuoviTemplateNativo1" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a> </div> </div> </div> </div> <div id="allegatoTemplateNativo2"> <div class="form-group input-text-wrapper"> <input type="hidden" id="<portlet:namespace />tipoTemplateNativo2" name="<portlet:namespace />tipoTemplateNativo2" value="AUTO_DICHIARAZIONE"> <label class=" control-label" for="templateNativoFile2"> Template autodichiarazione </label> <input class="field form-control" id="<portlet:namespace />templateNativoFile2" name="<portlet:namespace />templateNativoFile2" type="file"> <div class="row"> <div class="col-md-1"> <a id="rimuoviTemplateNativo2" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a> </div> </div> </div> </div>';
+				divTemplate.append(campiDaAggiungere);
+			}
+			
+			if(tipoTemplateNativo == 'CERTIFICATO'){
+				var campiDaAggiungere = '<div id="allegatoTemplateNativo1"> <div class="form-group input-text-wrapper"> <input type="hidden" id="<portlet:namespace />tipoTemplateNativo1" name="<portlet:namespace />tipoTemplateNativo1" value="DEFAULT"> <label class=" control-label" for="templateNativoFile1"> Template default </label> <input class="field form-control" id="<portlet:namespace />templateNativoFile1" name="<portlet:namespace />templateNativoFile1" type="file"> <div class="row"> <div class="col-md-1"> <a id="rimuoviTemplateNativo1" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a> </div> </div> </div> </div> <div id="allegatoTemplateNativo2"> <div class="form-group input-text-wrapper"> <input type="hidden" id="<portlet:namespace />tipoTemplateNativo2" name="<portlet:namespace />tipoTemplateNativo2" value="AUTO_DICHIARAZIONE"> <label class=" control-label" for="templateNativoFile2"> Template autodichiarazione </label> <input class="field form-control" id="<portlet:namespace />templateNativoFile2" name="<portlet:namespace />templateNativoFile2" type="file"> <div class="row"> <div class="col-md-1"> <a id="rimuoviTemplateNativo2" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a> </div> </div> </div> </div>';
+				divTemplate.append(campiDaAggiungere);
+			}
+			
+			if(tipoTemplateNativo == 'AUTO_DICHIARAZIONE'){
+				var campiDaAggiungere = '<div id="allegatoTemplateNativo1"> <div class="form-group input-text-wrapper"> <input type="hidden" id="<portlet:namespace />tipoTemplateNativo1" name="<portlet:namespace />tipoTemplateNativo1" value="CERTIFICATO"> <label class=" control-label" for="templateNativoFile1"> Template certificato </label> <input class="field form-control" id="<portlet:namespace />templateNativoFile1" name="<portlet:namespace />templateNativoFile1" type="file"> <div class="row"> <div class="col-md-1"> <a id="rimuoviTemplateNativo1" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a> </div> </div> </div> </div> <div id="allegatoTemplateNativo2"> <div class="form-group input-text-wrapper"> <input type="hidden" id="<portlet:namespace />tipoTemplateNativo2" name="<portlet:namespace />tipoTemplateNativo2" value="DEFAULT"> <label class=" control-label" for="templateNativoFile2"> Template default </label> <input class="field form-control" id="<portlet:namespace />templateNativoFile2" name="<portlet:namespace />templateNativoFile2" type="file"> <div class="row"> <div class="col-md-1"> <a id="rimuoviTemplateNativo2" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a> </div> </div> </div> </div>';
+				divTemplate.append(campiDaAggiungere);
+			}
+			
+			var countTemplateNativi = $("#container-allegati-template-nativi > div").length;
+			$("#<portlet:namespace />countTemplateNativi").val(countTemplateNativi);
+		}
+		
+		if(countTemplateNativi==2){
+			var tipoTemplateNativo1 = $("#<portlet:namespace />tipoTemplateNativo0").val();
+			var tipoTemplateNativo2 = $("#<portlet:namespace />tipoTemplateNativo1").val();
+			var ultimoDiv = $("#container-allegati-template-nativi");
+
+			if(tipoTemplateNativo1 == 'AUTO_DICHIARAZIONE' && tipoTemplateNativo2 == 'CERTIFICATO' || tipoTemplateNativo1 == 'CERTIFICATO' && tipoTemplateNativo2 == 'AUTO_DICHIARAZIONE'){
+				var campoDaAggiungere = '<div id="allegatoTemplateNativo2"> <div class="form-group input-text-wrapper"> <input type="hidden" id="<portlet:namespace />tipoTemplateNativo2" name="<portlet:namespace />tipoTemplateNativo2" value="DEFAULT"> <label class=" control-label" for="templateNativoFile2"> Template default </label> <input class="field form-control" id="<portlet:namespace />templateNativoFile2" name="<portlet:namespace />templateNativoFile2" type="file"> <div class="row"> <div class="col-md-1"> <a id="rimuoviTemplateNativo2" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a> </div> </div> </div> </div>';
+				ultimoDiv.append(campoDaAggiungere);
+			}
+			
+			if(tipoTemplateNativo1 == 'AUTO_DICHIARAZIONE' && tipoTemplateNativo2 == 'DEFAULT' || tipoTemplateNativo1 == 'DEFAULT' && tipoTemplateNativo2 == 'AUTO_DICHIARAZIONE'){
+				var campoDaAggiungere = '<div id="allegatoTemplateNativo2"> <div class="form-group input-text-wrapper"> <input type="hidden" id="<portlet:namespace />tipoTemplateNativo2" name="<portlet:namespace />tipoTemplateNativo2" value="CERTIFICATO"> <label class=" control-label" for="templateNativoFile2"> Template certificato </label> <input class="field form-control" id="<portlet:namespace />templateNativoFile2" name="<portlet:namespace />templateNativoFile2" type="file"> <div class="row"> <div class="col-md-1"> <a id="rimuoviTemplateNativo2" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a> </div> </div> </div> </div>';
+				ultimoDiv.append(campoDaAggiungere);
+			}
+			
+			if(tipoTemplateNativo1 == 'CERTIFICATO' && tipoTemplateNativo2 == 'DEFAULT' || tipoTemplateNativo1 == 'DEFAULT' && tipoTemplateNativo2 == 'CERTIFICATO'){
+				var campoDaAggiungere = '<div id="allegatoTemplateNativo2"> <div class="form-group input-text-wrapper"> <input type="hidden" id="<portlet:namespace />tipoTemplateNativo2" name="<portlet:namespace />tipoTemplateNativo2" value="AUTO_DICHIARAZIONE"> <label class=" control-label" for="templateNativoFile2"> Template autodichiarazione </label> <input class="field form-control" id="<portlet:namespace />templateNativoFile2" name="<portlet:namespace />templateNativoFile2" type="file"> <div class="row"> <div class="col-md-1"> <a id="rimuoviTemplateNativo2" onclick="rimuoviTemplateNativo(this); ">Rimuovi</a> </div> </div> </div> </div>';
+				ultimoDiv.append(campoDaAggiungere);
+			}
+			
+			var countTemplateNativi = $("#container-allegati-template-nativi > div").length;
+			$("#<portlet:namespace />countTemplateNativi").val(countTemplateNativi);
 		}
 
 	});
 	
 	
 	function aggiungiRigaJasper(){
-		 var nuovaDiv = '<div class="lfr-form-row lfr-form-row-inline" id="jasperDiv'+ indexJasperReport +'"> <input type="hidden" id="idAllegatoJasper'+ indexJasperReport +'" name="<portlet:namespace />idAllegatoJasper'+ indexJasperReport +'" value="0"> <div class="form-group input-text-wrapper"> <label class="control-label">Allegato Jasper Report</label> <input type="file" class="field form-control" id="jasperReportFile'+ indexJasperReport +'" name="<portlet:namespace />jasperReportFile'+ indexJasperReport +'"> </div> <div class="form-group form-inline input-checkbox-wrapper"> <input type="checkbox" class="checkboxPrincipaleAllegati" id="allegatoPrincipale'+ indexJasperReport +'" name="<portlet:namespace />allegatoPrincipale'+ indexJasperReport +'" onClick="checkboxJasperReport(this);"/> <label class="ml-1">Principale</label> </div> <div class="row"> <div class="col-md-1"> <a class="aggiungiJasper" onclick="aggiungiRigaJasper();">Aggiungi</a> </div> <div class="col-md-1"> <a id="rimuoviJasper'+ indexJasperReport +'" onclick="eliminaRigaJasperReport(this);">Rimuovi</a> </div> </div> </div>';
+		 var nuovaDiv = '<div  id="jasperDiv'+ indexJasperReport +'"> <input type="hidden" id="idAllegatoJasper'+ indexJasperReport +'" name="<portlet:namespace />idAllegatoJasper'+ indexJasperReport +'" value="0"> <div class="form-group input-text-wrapper"> <label class="control-label">Allegato Jasper Report</label> <input type="file" class="field form-control" id="jasperReportFile'+ indexJasperReport +'" name="<portlet:namespace />jasperReportFile'+ indexJasperReport +'"> </div> <div class="form-group form-inline input-checkbox-wrapper"> <input type="checkbox" class="checkboxPrincipaleAllegati" id="allegatoPrincipale'+ indexJasperReport +'" name="<portlet:namespace />allegatoPrincipale'+ indexJasperReport +'" onClick="checkboxJasperReport(this);"/> <label class="ml-1">Principale</label> </div> <div class="row"> <div class="col-md-1"> <a class="aggiungiJasper" onclick="aggiungiRigaJasper();">Aggiungi</a> </div> <div class="col-md-1"> <a id="rimuoviJasper'+ indexJasperReport +'" onclick="eliminaRigaJasperReport(this);">Rimuovi</a> </div> </div> </div>';
 		 indexJasperReport++;
 		 $('#<portlet:namespace />container-upload-allegati').append(nuovaDiv);
 		 
 		 var countJasperReport = $("#<portlet:namespace />container-upload-allegati > div").length;
 		 $("#<portlet:namespace />countJasperReport").val(countJasperReport);
 	}
-
+	
+	function rimuoviTemplateNativo(btn){
+		var id = $(btn).attr('id').replace('rimuoviTemplateNativo','');
+		var indexRiga = parseInt(id);
+		var countTemplateNativi = $("#container-allegati-template-nativi > div").length;
+		
+		if(countTemplateNativi>1){
+			$('#allegatoTemplateNativo' + id).remove();
+			shiftRowTemplateNativi(indexRiga, countTemplateNativi);
+			
+			var totaleTemplateNativi = $("#container-allegati-template-nativi > div").length;
+			$("#<portlet:namespace />countTemplateNativi").val(totaleTemplateNativi);
+		}
+	}
+	
+	// TODO : MODIFICARE NAME E ID CON PORTLETNAMESPACE AI CAMPI AGGIUNTI DINAMICAMENTE
+	
+	function shiftRowTemplateNativi(index, countTemplateNativi){
+		let i = index + 1;
+		
+		while(i<countTemplateNativi){
+	    	let newIndex = i - 1;
+	    	
+	    	$("#<portlet:namespace />idAllegatoTemplateNativo" + i).attr("name","<portlet:namespace />idAllegatoTemplateNativo" + newIndex);
+	        $("#<portlet:namespace />idAllegatoTemplateNativo" + i).attr("id","<portlet:namespace />idAllegatoTemplateNativo" + newIndex);
+	        
+	        $("#<portlet:namespace />tipoTemplateNativo" + i).attr("name","<portlet:namespace />tipoTemplateNativo" + newIndex);
+	        $("#<portlet:namespace />tipoTemplateNativo" + i).attr("id","<portlet:namespace />tipoTemplateNativo" + newIndex);
+	        
+	        $("#<portlet:namespace />templateNativoFile" + i).attr("name","<portlet:namespace />templateNativoFile" + newIndex);
+	        $("#<portlet:namespace />templateNativoFile" + i).attr("id","<portlet:namespace />templateNativoFile" + newIndex);
+	        
+ 			$("#allegatoTemplateNativo" + i).attr("id","allegatoTemplateNativo" + newIndex);
+	        
+	        $("#rimuoviTemplateNativo" + i).attr("id","rimuoviTemplateNativo" + newIndex);
+	        
+	        i++;
+		}
+	}
 	
 	function eliminaRigaJasperReport(btn){
 		var id = $(btn).attr('id').replace('rimuoviJasper','');
@@ -320,7 +550,7 @@
 
 	function handleAttachments(selectObj) {
 		if (selectObj.value === "JASPER_REPORT") {
-			$('#container-allegati-template').removeClass("invisible");
+			$('#container-allegati-template').removeClass("hidden");
 			
 			var conteggioJasperPresenti = $("#<portlet:namespace />container-upload-allegati > div").length; 
 			
@@ -331,7 +561,17 @@
 			$('#allegatoPrincipale0')
 					.prop("checked", true);
 		} else {
-			$('#container-allegati-template').addClass("invisible");
+			$('#container-allegati-template').addClass("hidden");
+		}
+		
+		if(selectObj.value === "NATIVA"){
+			$('#container-allegati-template-nativi').removeClass("hidden");
+			var countTemplateNativi = $("#container-allegati-template-nativi > div").length;
+			$("#<portlet:namespace />countTemplateNativi").val(countTemplateNativi);
+		}else{
+			$('#container-allegati-template-nativi').addClass("hidden");
+			var countTemplateNativi = $("#container-allegati-template-nativi > div").length;
+			$("#<portlet:namespace />countTemplateNativi").val(countTemplateNativi);
 		}
 	}
 

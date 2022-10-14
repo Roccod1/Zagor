@@ -39,4 +39,14 @@ public class TemplatePdfLocalServiceImpl extends TemplatePdfLocalServiceBaseImpl
 		return listaTemplatePdf;
 	}
 
+	@Override
+	public List<TemplatePdf> getTemplatePdfByProceduraIdAndTipoTemplate(long proceduraId, String tipoTemplate) {
+		List<TemplatePdf> listaTemplatePdf = null;
+		if (proceduraId > 0) {
+			listaTemplatePdf = new ArrayList<TemplatePdf>();
+			listaTemplatePdf = templatePdfPersistence.findByProceduraIdAndTipoTemplate(proceduraId, tipoTemplate);
+		}
+
+		return listaTemplatePdf;
+	}
 }

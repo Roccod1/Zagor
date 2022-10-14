@@ -16,6 +16,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.common.utility.enumeration.TipoGenerazionePDF;
+import it.servizidigitali.common.utility.enumeration.TipoTemplate;
 import it.servizidigitali.gestioneprocedure.frontend.constants.GestioneProcedurePortletKeys;
 import it.servizidigitali.gestioneprocedure.frontend.service.GestioneProcedureMiddlewareService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
@@ -147,6 +149,10 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 
 		if (Validator.isNotNull(tipoGenerazioneTemplate)) {
 			if (tipoGenerazioneTemplate.equalsIgnoreCase(TipoGenerazionePDF.JASPER_REPORT.name())) {
+				
+				// Eliminazione template nativi se presenti
+				gestioneProcedureMiddlewareService.deleteTemplatePdfProcedura(idProcedura, TipoTemplate.FREEMARKER.name());
+				
 				List<Long> listaReportDaMantenere = new ArrayList<Long>();
 				TemplatePdf templateCaricato = null;
 				TemplatePdf templatePrincipaleProcedura = null;
@@ -198,7 +204,35 @@ public class SalvaCreaActionCommand extends BaseMVCActionCommand {
 			}
 			else if (tipoGenerazioneTemplate.equalsIgnoreCase(TipoGenerazionePDF.NATIVA.name())) {
 				// Eliminazione Jasper report, se presenti
-				gestioneProcedureMiddlewareService.deleteTemplatePdfProcedura(idProcedura);
+				gestioneProcedureMiddlewareService.deleteTemplatePdfProcedura(idProcedura, TipoTemplate.JASPER_REPORT.name());
+				
+				long countTemplateNativi = ParamUtil.getLong(actionRequest, "countTemplateNativi");
+				List<Long> listaReportDaMantenere = new ArrayList<Long>();
+				TemplatePdf templateNativoCaricato = null;
+				
+				for(int i=0;i<countTemplateNativi;i++) {
+						InputStream allegato = uploadPortletRequest.getFileAsStream("templateNativoFile" + i);
+						long templatePdfId = ParamUtil.getLong(actionRequest, "idAllegatoTemplateNativo" + i);
+						
+						if(templatePdfId>0) {
+							listaReportDaMantenere.add(templatePdfId);
+						}
+						
+						String tipoTemplateNativo = ParamUtil.getString(actionRequest, "tipoTemplateNativo" + i);
+						String nomeFile = uploadPortletRequest.getFileName("templateNativoFile" + i);
+						
+						if(Validator.isNotNull(allegato)) {
+							templateNativoCaricato = gestioneProcedureMiddlewareService.caricaTemplateNativoPdf(allegato, nomeFile, procedura.getProceduraId(), templatePdfId, 
+									tipoTemplateNativo, userFullName, userId, siteGroupId, companyGroupId);
+						}
+						
+						if (Validator.isNotNull(templateNativoCaricato)) {
+							listaReportDaMantenere.add(templateNativoCaricato.getTemplatePdfId());
+						}
+
+				}
+				
+				gestioneProcedureMiddlewareService.deleteTemplatePdf(listaReportDaMantenere, procedura.getProceduraId());
 			}
 		}
 	}

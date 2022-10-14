@@ -56,6 +56,12 @@ public class TemplatePdfTable extends BaseTable<TemplatePdfTable> {
 		createColumn(
 			"templatePdfParentId", Long.class, Types.BIGINT,
 			Column.FLAG_DEFAULT);
+	public final Column<TemplatePdfTable, String> tipoTemplate = createColumn(
+		"tipoTemplate", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<TemplatePdfTable, String> tipoTemplateNativo =
+		createColumn(
+			"tipoTemplateNativo", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
 
 	private TemplatePdfTable() {
 		super("template_pdf", TemplatePdfTable::new);

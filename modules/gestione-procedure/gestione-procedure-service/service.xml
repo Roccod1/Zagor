@@ -118,9 +118,16 @@
 		<column name="fileEntryId" type="long" />
 		<column name="proceduraId" type="long" />
 		<column name="templatePdfParentId" type="long" convert-null="false"/>
+		<column name="tipoTemplate" type="String" />
+		<column name="tipoTemplateNativo" type="String" />
 
         <finder name="TemplatePdfParentId" return-type="Collection">
             <finder-column name="templatePdfParentId"/>
+        </finder>
+        
+        <finder name="ProceduraIdAndTipoTemplate" return-type="Collection">
+            <finder-column name="proceduraId"></finder-column>
+            <finder-column name="tipoTemplate"/>
         </finder>
         
         <finder name="ProceduraId" return-type="Collection">

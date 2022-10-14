@@ -246,6 +246,36 @@ public interface TemplatePdfModel
 	 */
 	public void setTemplatePdfParentId(long templatePdfParentId);
 
+	/**
+	 * Returns the tipo template of this template pdf.
+	 *
+	 * @return the tipo template of this template pdf
+	 */
+	@AutoEscape
+	public String getTipoTemplate();
+
+	/**
+	 * Sets the tipo template of this template pdf.
+	 *
+	 * @param tipoTemplate the tipo template of this template pdf
+	 */
+	public void setTipoTemplate(String tipoTemplate);
+
+	/**
+	 * Returns the tipo template nativo of this template pdf.
+	 *
+	 * @return the tipo template nativo of this template pdf
+	 */
+	@AutoEscape
+	public String getTipoTemplateNativo();
+
+	/**
+	 * Sets the tipo template nativo of this template pdf.
+	 *
+	 * @param tipoTemplateNativo the tipo template nativo of this template pdf
+	 */
+	public void setTipoTemplateNativo(String tipoTemplateNativo);
+
 	@Override
 	public TemplatePdf cloneWithOriginalValues();
 

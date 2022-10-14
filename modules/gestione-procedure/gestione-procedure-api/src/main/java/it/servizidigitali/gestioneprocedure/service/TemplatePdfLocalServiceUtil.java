@@ -281,6 +281,13 @@ public class TemplatePdfLocalServiceUtil {
 		return getService().getTemplatePdfByProceduraId(proceduraId);
 	}
 
+	public static List<TemplatePdf> getTemplatePdfByProceduraIdAndTipoTemplate(
+		long proceduraId, String tipoTemplate) {
+
+		return getService().getTemplatePdfByProceduraIdAndTipoTemplate(
+			proceduraId, tipoTemplate);
+	}
+
 	/**
 	 * Returns the template pdf matching the UUID and group.
 	 *

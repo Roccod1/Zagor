@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.TipoTemplate;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
@@ -304,7 +305,7 @@ public class GestioneProcedureMiddlewareService {
 			}
 			else {
 				fileCaricato = new DataInputStream(new FileInputStream(file));
-				fileEntryId = templatePdfFileService.saveJasperReport(nomeFile, nomeFile, nomeFile, proceduraId, fileCaricato, null, userId, groupId);
+				fileEntryId = templatePdfFileService.saveTemplate(nomeFile, nomeFile, nomeFile, proceduraId, fileCaricato, null, userId, groupId);
 			}
 		}
 		catch (Exception e) {
@@ -314,6 +315,65 @@ public class GestioneProcedureMiddlewareService {
 		TemplatePdf templatePdf = aggiornaCreaTemplatePdf(templatePdfId, proceduraId, principale, userId, groupId, companyId, userFullName, fileEntryId);
 
 		return templatePdf;
+	}
+	
+	public TemplatePdf caricaTemplateNativoPdf(InputStream file, String nomeFile, long proceduraId, long templatePdfId, String tipoTemplateNativo, String userFullName, long userId, long groupId,
+			long companyId) {
+
+		long fileEntryId = 0;
+
+		try {
+			if (templatePdfId > 0 && Validator.isNotNull(file)) {
+				byte[] fileAggiornato = FileUtil.getBytes(file);
+				FileEntry fileRecuperato = getFileEntryTemplatePdf(templatePdfId);
+				fileEntryId = templatePdfFileService.updateFileEntry(fileRecuperato, fileAggiornato, nomeFile, groupId, userId);
+			}
+			else {
+				fileEntryId = templatePdfFileService.saveTemplate(nomeFile, nomeFile, nomeFile, proceduraId, file, null, userId, groupId);
+			}
+		}
+		catch (Exception e) {
+			_log.error("Errore durante l'aggiornamento del file del template nativo con ID : " + templatePdfId);
+		}
+
+		TemplatePdf templatePdf = aggiornaCreaTemplateNativoPdf(templatePdfId, proceduraId, tipoTemplateNativo, userId, groupId, companyId, userFullName, fileEntryId);
+
+		return templatePdf;
+	}
+	
+	public TemplatePdf aggiornaCreaTemplateNativoPdf(long templatePdfId, long proceduraId, String tipoTemplateNativo, long userId, long groupId, long companyId, String userFullName, long fileEntryId) {
+		TemplatePdf templatePdf = null;
+		try {
+			if (templatePdfId > 0) {
+				templatePdf = templatePdfLocalService.getTemplatePdf(templatePdfId);
+			}
+			else {
+				templatePdf = templatePdfLocalService.createTemplatePdf(counterLocalService.increment());
+			}
+
+			templatePdf.setUserId(userId);
+			templatePdf.setGroupId(groupId);
+			templatePdf.setCompanyId(companyId);
+			templatePdf.setUserName(userFullName);
+
+			if (fileEntryId > 0) {
+				templatePdf.setFileEntryId(fileEntryId);
+			}
+
+			templatePdf.setProceduraId(proceduraId);
+			templatePdf.setTipoTemplate(TipoTemplate.FREEMARKER.name());
+			templatePdf.setTipoTemplateNativo(tipoTemplateNativo);
+
+			templatePdfLocalService.updateTemplatePdf(templatePdf);
+			return templatePdf;
+
+		}
+		catch (Exception e) {
+			_log.error("Errore durante il salvataggio/aggiornamento del templatePdf nativo! : " + e.getMessage());
+		}
+
+		return templatePdf;
+
 	}
 
 	public TemplatePdf aggiornaCreaTemplatePdf(long templatePdfId, long proceduraId, boolean principale, long userId, long groupId, long companyId, String userFullName, long fileEntryId) {
@@ -336,7 +396,8 @@ public class GestioneProcedureMiddlewareService {
 			if (fileEntryId > 0) {
 				templatePdf.setFileEntryId(fileEntryId);
 			}
-
+			
+			templatePdf.setTipoTemplate(TipoTemplate.JASPER_REPORT.name());
 			templatePdf.setProceduraId(proceduraId);
 
 			if (principale && idTemplatePdfPrincipale == 0) {
@@ -369,7 +430,7 @@ public class GestioneProcedureMiddlewareService {
 
 	public void aggiornaPrincipaleTemplatePdf(TemplatePdf templatePrincipale, long templatePdfId) throws Exception {
 
-		List<TemplatePdf> listaTemplateProcedura = recuperaTemplatePdfProceduraAttivo(templatePrincipale.getProceduraId(), true);
+		List<TemplatePdf> listaTemplateProcedura = recuperaTemplatePdfProcedura(templatePrincipale.getProceduraId());
 
 		try {
 
@@ -404,7 +465,7 @@ public class GestioneProcedureMiddlewareService {
 
 	}
 
-	public List<TemplatePdf> recuperaTemplatePdfProceduraAttivo(long proceduraId, boolean attivo) throws Exception {
+	public List<TemplatePdf> recuperaTemplatePdfProcedura(long proceduraId) throws Exception {
 		List<TemplatePdf> listaTemplatePdfNomeFile = null;
 
 		try {
@@ -463,8 +524,8 @@ public class GestioneProcedureMiddlewareService {
 
 	}
 
-	public void deleteTemplatePdfProcedura(long proceduraId) throws Exception {
-		List<TemplatePdf> findByProceduraId = templatePdfLocalService.getTemplatePdfByProceduraId(proceduraId);
+	public void deleteTemplatePdfProcedura(long proceduraId, String tipoTemplate) throws Exception {
+		List<TemplatePdf> findByProceduraId = templatePdfLocalService.getTemplatePdfByProceduraIdAndTipoTemplate(proceduraId, tipoTemplate);
 		if (findByProceduraId != null) {
 			for (TemplatePdf templatePdf : findByProceduraId) {
 				try {
