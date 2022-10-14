@@ -19,5 +19,5 @@ DROP COLUMN `attivo`;
 
   -- 20221013
 ALTER TABLE `servizi_digitali`.`template_pdf` 
-ADD COLUMN `tipoTemplate` VARCHAR(75) NULL DEFAULT NULL AFTER `templatePdfParentId`;
+ADD COLUMN `tipoTemplate` VARCHAR(75) NULL DEFAULT NULL AFTER `templatePdfParentId`,
 ADD COLUMN `tipoTemplateNativo` VARCHAR(75) NULL DEFAULT NULL AFTER `tipoTemplate`;
