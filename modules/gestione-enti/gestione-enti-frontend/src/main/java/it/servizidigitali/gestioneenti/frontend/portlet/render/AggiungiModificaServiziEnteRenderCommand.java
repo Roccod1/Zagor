@@ -1,7 +1,6 @@
 package it.servizidigitali.gestioneenti.frontend.portlet.render;
 
 import com.liferay.journal.model.JournalArticle;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Layout;
@@ -12,6 +11,7 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -34,8 +34,6 @@ import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
-import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
-import it.servizidigitali.scrivaniaoperatore.service.DestinazioneUsoLocalService;
 
 /**
  * @author pindi
@@ -63,9 +61,6 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 
 	@Reference
 	private GestioneEntiMiddlewareService gestioneEntiMiddlewareService;
-	
-	@Reference
-	private DestinazioneUsoLocalService destinazioneUsoLocalService;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -73,7 +68,7 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 		Long organizationId = ParamUtil.getLong(renderRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_ID);
 		Long servizioId = ParamUtil.getLong(renderRequest, GestioneEntiPortletKeys.SERVIZIO_ID);
 		List<Servizio> listaServizi = new ArrayList<Servizio>();
-		List<DestinazioneUso> listaDestinazioniUso = new ArrayList<DestinazioneUso>();
+		List<KeyValuePair> listaDestinazioniUso = new ArrayList<KeyValuePair>();
 		
 		String listaFormatiFirmaDigitaleString = "";
 		
@@ -86,7 +81,7 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
 			themeDisplay = serviceContext.getThemeDisplay();
 			listaArticoliCatalogoServizi = gestioneEntiMiddlewareService.getListaArticleIdDisponibili(organizationId, servizioId);
-			listaDestinazioniUso = destinazioneUsoLocalService.getDestinazioneUsos(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			listaDestinazioniUso = gestioneEntiMiddlewareService.getListaDestinazioniUsoDisponibili();
 
 			pagineDisponibili = gestioneEntiMiddlewareService.getListaPagineUtilizzabili(organizationId, servizioId, themeDisplay.getCompanyId());
 			
@@ -110,7 +105,7 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 					ServizioEntePK servizioEntePK = new ServizioEntePK(servizioId, organizationId);
 					ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);
 					
-					List<DestinazioneUso> listaDestinazioniUsoServizio = gestioneEntiMiddlewareService.getListaDestinazioniUsoServizio(servizioId, organizationId, organization.getGroupId(), organization.getCompanyId());
+					List<KeyValuePair> listaDestinazioniUsoServizio = gestioneEntiMiddlewareService.getListaDestinazioniUsoServizio(servizioId, organizationId, organization.getGroupId(), organization.getCompanyId());
 					
 					if(Validator.isNotNull(servizioEnte.getFormatiFirmaDigitale())) {
 						listaFormatiFirmaDigitaleString = gestioneEntiMiddlewareService.getStringSelectMultipla(servizioEnte.getFormatiFirmaDigitale());
@@ -125,11 +120,14 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 																   .collect(Collectors.toList());
 												
 						renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_DESTINAZIONI_USO_SERVIZIO, listaDestinazioniUsoServizio);
+					}else {
+						renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_DESTINAZIONI_USO_SERVIZIO, new ArrayList<KeyValuePair>());
 					}
 					
 					renderRequest.setAttribute(GestioneEntiPortletKeys.SERVIZIO_ENTE, servizioEnte);
 					tempServizioId = null;
 				}else {
+					renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_DESTINAZIONI_USO_SERVIZIO, new ArrayList<KeyValuePair>());
 					renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_FORMATI_FIRMA_DIGITALE, GestioneEntiPortletKeys.LISTA_VUOTA);
 				}
 

@@ -18,7 +18,7 @@
 		</div>
 	</div>
 
-	<aui:form method="post" action="${salvaURL}" onsubmit="selezionaDestinazioniUso();">
+	<aui:form method="post" action="${salvaURL}">
 		<aui:input type="hidden" name="<%=GestioneEntiPortletKeys.ORGANIZZAZIONE_ID %>" value="${organizzazione.organizationId}"/>
 		
 		<div class="row">
@@ -266,48 +266,26 @@
 			</div>
 		</div>	
 		
-		<div class="row align-items-center">
-			<div class="col-5">
-				<div class="form-group">
-			        <aui:select id="listaDestinazioniUso" name="listaDestinazioniUso" label="lista-destinazioni-uso" multiple="true" showEmptyOption="true">
-			        	<c:forEach items="${listaDestinazioniUso}" var="destinazioneUso">
-			        		<aui:option value="${destinazioneUso.destinazioneUsoId}">${destinazioneUso.nome}</aui:option>
-			        	</c:forEach>
-			        </aui:select>
-				</div>
-			</div>
+		<div class="row">
 			
-			<div class="col-1">
-				<aui:button onclick="select1move();" value="&gt;&gt;"/>
-			</div>
+			<div class="col">
+				<aui:input id="destinazioniUsoSelezionate" name="destinazioniUsoSelezionate" type="hidden"/>
+		
+				<liferay-ui:input-move-boxes
+	        		leftBoxName="availableValues"
+	        		leftList="${listaDestinazioniUso}"
+	        		leftTitle="lista-destinazioni-uso"
+	        		leftReorder="true"
+	        		rightBoxName="destinazioniUsoSelezionateSelect"
+	        		rightList="${listaDestinazioniUsoServizio}"
+	        		rightTitle="lista-destinazioni-uso-selezionate"
+	        		rightReorder="true"
+	    		/>
 			
-			<div class="col-1">
-				<aui:button onclick="select2move();" value="&lt;&lt;"/>
 			</div>
-			
-			<div class="col-5">
-				<div class="form-group">
-				
-					<c:choose>
-						<c:when test="${not empty listaDestinazioniUsoServizio}">
-							<aui:select id="<%=GestioneEntiPortletKeys.DESTINAZIONI_USO_SELEZIONATE %>" name="<%=GestioneEntiPortletKeys.DESTINAZIONI_USO_SELEZIONATE %>" label="lista-destinazioni-uso-selezionate" multiple="true">
-			       		 		<c:forEach items="${listaDestinazioniUsoServizio}" var="destinazioneUso">
-			        				<aui:option value="${destinazioneUso.destinazioneUsoId}">${destinazioneUso.nome}</aui:option>
-			        			</c:forEach>
-			       		 	</aui:select>
-						</c:when>
-						
-						<c:otherwise>
-						 <aui:select id="<%=GestioneEntiPortletKeys.DESTINAZIONI_USO_SELEZIONATE %>" name="<%=GestioneEntiPortletKeys.DESTINAZIONI_USO_SELEZIONATE %>" label="lista-destinazioni-uso-selezionate" multiple="true">
-			       		 </aui:select>
-						</c:otherwise>
-					
-					</c:choose>
-			       
-				</div>
-			</div>
-			
+
 		</div>
+		
 		
 		
 		<aui:button-row cssClass="text-right">
@@ -318,21 +296,18 @@
 	</aui:form>
 </div>
 
+<aui:script use="liferay-util-list-fields">
+
+A.one('#<portlet:namespace/>fm').on('submit', function(event) {
+    var selectedValues = Liferay.Util.listSelect('#<portlet:namespace/>destinazioniUsoSelezionateSelect');
+    A.one('#<portlet:namespace/>destinazioniUsoSelezionate').val(selectedValues);
+    submitForm('#<portlet:namespace/>fm');
+});
+</aui:script>
+
 <script type="text/javascript">
 
 	var listaFormatiFirmaDigitale = ${listaFormatiFirmaDigitale};
-	
-	function select1move(){
-		 !$('#<portlet:namespace/>listaDestinazioniUso option:selected').remove().appendTo('#<portlet:namespace/>destinazioniUsoSelezionate');  
-	}
-	
-	function select2move(){
-		  return !$('#<portlet:namespace/>destinazioniUsoSelezionate option:selected').remove().appendTo('#<portlet:namespace/>listaDestinazioniUso');  
-	}
-	
-	function selezionaDestinazioniUso(){
-		$('#<portlet:namespace/>destinazioniUsoSelezionate option').prop('selected', true);	
-	}
 
 	$(function(){
 		impostaDataMinimaDataFine();

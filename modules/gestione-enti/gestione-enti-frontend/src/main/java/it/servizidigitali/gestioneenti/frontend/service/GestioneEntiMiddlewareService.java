@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.service.permission.LayoutPermissionUtil;
+import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
@@ -224,9 +225,27 @@ public class GestioneEntiMiddlewareService {
 		return jsonArrayString;
 	}
 	
-	public List<DestinazioneUso> getListaDestinazioniUsoServizio(long servizioId, long organizationId, long groupId, long companyId){
-		List<DestinazioneUso> listaDestinazioniUso = new ArrayList<DestinazioneUso>();
-		listaDestinazioniUso = destinazioneUsoLocalService.getDestinazioniUsoByServizioIdOrganizationId(servizioId, organizationId, groupId, companyId);
+	public List<KeyValuePair> getListaDestinazioniUsoServizio(long servizioId, long organizationId, long groupId, long companyId){
+		List<DestinazioneUso> listaDestinazioniUsoServizio = destinazioneUsoLocalService.getDestinazioniUsoByServizioIdOrganizationId(servizioId, organizationId, groupId, companyId);
+		List<KeyValuePair> listaDestinazioniUso = new ArrayList<KeyValuePair>();
+
+		if(Validator.isNotNull(listaDestinazioniUsoServizio) && !listaDestinazioniUsoServizio.isEmpty()) {
+			for(DestinazioneUso destinazione : listaDestinazioniUsoServizio) {
+				listaDestinazioniUso.add(new KeyValuePair(String.valueOf(destinazione.getDestinazioneUsoId()),destinazione.getNome()));
+			}
+		}
+		
+		return listaDestinazioniUso;
+	}
+	
+	public List<KeyValuePair> getListaDestinazioniUsoDisponibili(){
+		List<KeyValuePair> listaDestinazioniUso = new ArrayList<KeyValuePair>();
+		List<DestinazioneUso> listaDestinazioniDisponibili = destinazioneUsoLocalService.getDestinazioneUsos(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		
+		for(DestinazioneUso destinazione : listaDestinazioniDisponibili) {
+			listaDestinazioniUso.add(new KeyValuePair(String.valueOf(destinazione.getDestinazioneUsoId()),destinazione.getNome()));
+		}
+		
 		return listaDestinazioniUso;
 	}
 	
