@@ -67,6 +67,23 @@ public class PagamentoLocalServiceWrapper
 			codiceFiscale, codiceIuv, idPagamento);
 	}
 
+	@Override
+	public it.servizidigitali.gestionepagamenti.model.Pagamento create(
+		long groupId, long userId, String userName, String idCredito,
+		String idFiscaleCliente, String denominazioneCliente,
+		String emailQuietanza, String causale, long servizioId,
+		String nomeServizio, java.math.BigDecimal importo,
+		java.math.BigDecimal commissioni, String canale, String gateway,
+		String iud, String iuv, String idSessione, String pathAvviso,
+		boolean emailInviata, String stato, long richiestaId) {
+
+		return _pagamentoLocalService.create(
+			groupId, userId, userName, idCredito, idFiscaleCliente,
+			denominazioneCliente, emailQuietanza, causale, servizioId,
+			nomeServizio, importo, commissioni, canale, gateway, iud, iuv,
+			idSessione, pathAvviso, emailInviata, stato, richiestaId);
+	}
+
 	/**
 	 * Creates a new pagamento with the primary key. Does not add the pagamento to the database.
 	 *
