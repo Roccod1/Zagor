@@ -21,7 +21,11 @@ import it.servizidigitali.gestionepagamenti.common.client.exeption.PagamentiClie
 import it.servizidigitali.gestionepagamenti.common.client.model.MarcaDaBollo;
 import it.servizidigitali.gestionepagamenti.common.client.model.PagamentoDovutoRisposta;
 import it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration;
+import it.servizidigitali.gestionepagamenti.common.enumeration.CanalePagamento;
 import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
+import it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient;
+import it.servizidigitali.gestionepagamenti.model.Pagamento;
+import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
 
 /**
  * @author pindi
@@ -38,6 +42,9 @@ public class PagamentoEBolloService {
 
 	@Reference
 	private PagamentiClient pagamentiClient;
+	
+	@Reference
+	private PagamentoLocalService pagamentoLocalService;
 
 	@Activate
 	@Modified
@@ -51,16 +58,16 @@ public class PagamentoEBolloService {
 		this.configurationProvider = configurationProvider;
 	}
 
-	public String pagaBollo(long requestTimeMillis, byte[] fileBytes, String fileName, long siteGroupId,
+	public String pagaBollo(long requestTimeMillis, byte[] fileBytes, String fileName, long siteGroupId, long userId,
 			String codiceOrganizzazione, String provinciaResidenza, String idFiscaleCliente,
 			String denominazioneCliente, String emailQuietanza, String callbackUrl)
 			throws ConfigurationException, PagamentiClientException {
 
-		LOG.debug("pagaBollo debug params | requestTimeMillis: " + requestTimeMillis + ", fileBytesLength: " + fileBytes.length + ", fileName: "
-				+ fileName + ", siteGroupId: " + siteGroupId + ", codiceOrganizzazione: " + codiceOrganizzazione
-				+ ", provinciaResidenza: " + provinciaResidenza + ", idFiscaleCliente: " + idFiscaleCliente
-				+ ", denominazioneCliente: " + denominazioneCliente + ", emailQuietanza: " + emailQuietanza
-				+ ", callbackUrl" + callbackUrl);
+		LOG.debug("pagaBollo debug params | requestTimeMillis: " + requestTimeMillis + ", fileBytesLength: "
+				+ fileBytes.length + ", fileName: " + fileName + ", siteGroupId: " + siteGroupId
+				+ ", codiceOrganizzazione: " + codiceOrganizzazione + ", provinciaResidenza: " + provinciaResidenza
+				+ ", idFiscaleCliente: " + idFiscaleCliente + ", denominazioneCliente: " + denominazioneCliente
+				+ ", emailQuietanza: " + emailQuietanza + ", callbackUrl" + callbackUrl);
 
 		accountClientPagamentiEnteConfiguration = configurationProvider
 				.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, siteGroupId);
@@ -74,6 +81,7 @@ public class PagamentoEBolloService {
 		String causale = prefissoCausale + "-" + fileName;
 		String idCredito = codiceOrganizzazione + "-" + prefissoCausale + "-" + " - " + fileName + "_"
 				+ requestTimeMillis;
+		String iud = randomString(35);
 
 		MarcaDaBollo marcaDaBollo = new MarcaDaBollo();
 		marcaDaBollo.setHashDocumento(getHashFromBytes(fileBytes));
@@ -86,11 +94,17 @@ public class PagamentoEBolloService {
 		marcaDaBollo.setCausale(causale);
 		marcaDaBollo.setIdCredito(idCredito);
 		marcaDaBollo.setStato(StatoPagamento.NUOVO.toString());
-		marcaDaBollo.setIud(randomString(35));
+		marcaDaBollo.setIud(iud);
 		marcaDaBollo.setProvinciaResidenza(provinciaResidenza);
 
 		PagamentoDovutoRisposta pagamentoDovutoRisposta = pagamentiClient.pagaDovuto(marcaDaBollo, username, password,
 				wsdlUrl, callbackUrl);
+		
+		Pagamento pagamento = this.createPagamento(siteGroupId, userId, denominazioneCliente, idCredito, idFiscaleCliente,
+				denominazioneCliente, emailQuietanza, causale, 0, null, importoBollo, null, CanalePagamento.WEB.toString(),
+				TipoPagamentiClient.MYPAY.toString(), iud, null, null, null, false, StatoPagamento.IN_ATTESA.toString(), 0);
+
+		LOG.info("Created new pagamento with id: " + pagamento.getPagamentoId()); 
 
 		return pagamentoDovutoRisposta.getRedirectUrl();
 
@@ -131,4 +145,14 @@ public class PagamentoEBolloService {
 		return generatedString;
 	}
 
+	public Pagamento createPagamento(long groupId, long userId, String userName, String idCredito,
+			String idFiscaleCliente, String denominazioneCliente, String emailQuietanza, String causale,
+			long servizioId, String nomeServizio, BigDecimal importo, BigDecimal commissioni, String canale,
+			String gateway, String iud, String iuv, String idSessione, String pathAvviso, boolean emailInviata,
+			String stato, long richiestaId) {
+
+		return pagamentoLocalService.create(groupId, userId, userName, idCredito, idFiscaleCliente,
+				denominazioneCliente, emailQuietanza, causale, servizioId, nomeServizio, importo, commissioni, canale,
+				gateway, iud, iuv, idSessione, pathAvviso, emailInviata, stato, richiestaId);
+	}
 }

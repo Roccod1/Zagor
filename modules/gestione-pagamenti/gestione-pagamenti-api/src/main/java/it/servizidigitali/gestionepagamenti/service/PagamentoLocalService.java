@@ -37,6 +37,8 @@ import it.servizidigitali.gestionepagamenti.model.Pagamento;
 
 import java.io.Serializable;
 
+import java.math.BigDecimal;
+
 import java.util.Date;
 import java.util.List;
 
@@ -84,6 +86,15 @@ public interface PagamentoLocalService
 		Date dataOperazioneA, long groupId, long servizioId, String stato,
 		String gateway, String canale, String codiceFiscale, String codiceIuv,
 		long idPagamento);
+
+	public Pagamento create(
+		long groupId, long userId, String userName, String idCredito,
+		String idFiscaleCliente, String denominazioneCliente,
+		String emailQuietanza, String causale, long servizioId,
+		String nomeServizio, BigDecimal importo, BigDecimal commissioni,
+		String canale, String gateway, String iud, String iuv,
+		String idSessione, String pathAvviso, boolean emailInviata,
+		String stato, long richiestaId);
 
 	/**
 	 * Creates a new pagamento with the primary key. Does not add the pagamento to the database.

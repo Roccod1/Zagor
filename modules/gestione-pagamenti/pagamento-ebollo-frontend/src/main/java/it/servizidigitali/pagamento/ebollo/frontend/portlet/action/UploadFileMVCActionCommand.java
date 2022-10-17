@@ -57,6 +57,8 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 		long requestTime = Timestamp.from(Instant.now()).getTime();
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		long siteGroupId = themeDisplay.getSiteGroupId();
 
 		long siteOrganizationId = themeDisplay.getSiteGroup().getOrganizationId();
 
@@ -94,6 +96,7 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 		String idFiscaleCliente = user.getScreenName();
 		String denominazioneCliente = user.getFullName();
 		String emailQuietanza = user.getEmailAddress();
+		long userId = user.getUserId();
 
 		LiferayPortletURL portletURL = PortletURLFactoryUtil.create(actionRequest, themeDisplay.getPpid(),
 				themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
@@ -102,7 +105,7 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 
 		try {
 			String redirectPagamentoBolloUrl = pagamentoEBolloService.pagaBollo(requestTime, fileBytes, fileName,
-					themeDisplay.getSiteGroupId(), codiceOrganizzazione, provinciaResidenza, idFiscaleCliente,
+					siteGroupId, userId, codiceOrganizzazione, provinciaResidenza, idFiscaleCliente,
 					denominazioneCliente, emailQuietanza, portletURL.toString());
 			
 			actionRequest.setAttribute(PagamentoEbolloFrontendPortletKeys.REDIRECT_PAGAMENTO_BOLLO_URL,
@@ -119,6 +122,8 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 			actionRequest.setAttribute(PagamentoEbolloFrontendPortletKeys.ERROR_MESSAGE_ON_PAGA_BOLLO,
 					errorMessage);
 			actionResponse.getRenderParameters().setValue("mvcPath", "/view.jsp");
+			
+			return;
 		}
 	}
 }
