@@ -42,7 +42,7 @@ public class PagamentoEBolloService {
 
 	@Reference
 	private PagamentiClient pagamentiClient;
-	
+
 	@Reference
 	private PagamentoLocalService pagamentoLocalService;
 
@@ -64,7 +64,7 @@ public class PagamentoEBolloService {
 			throws ConfigurationException, PagamentiClientException {
 
 		LOG.debug("pagaBollo debug params | requestTimeMillis: " + requestTimeMillis + ", fileBytesLength: "
-				+ fileBytes.length + ", fileName: " + fileName + ", siteGroupId: " + siteGroupId
+				+ fileBytes.length + ", fileName: " + fileName + ", siteGroupId: " + siteGroupId + ", userId: " + userId
 				+ ", codiceOrganizzazione: " + codiceOrganizzazione + ", provinciaResidenza: " + provinciaResidenza
 				+ ", idFiscaleCliente: " + idFiscaleCliente + ", denominazioneCliente: " + denominazioneCliente
 				+ ", emailQuietanza: " + emailQuietanza + ", callbackUrl" + callbackUrl);
@@ -99,12 +99,13 @@ public class PagamentoEBolloService {
 
 		PagamentoDovutoRisposta pagamentoDovutoRisposta = pagamentiClient.pagaDovuto(marcaDaBollo, username, password,
 				wsdlUrl, callbackUrl);
-		
-		Pagamento pagamento = this.createPagamento(siteGroupId, userId, denominazioneCliente, idCredito, idFiscaleCliente,
-				denominazioneCliente, emailQuietanza, causale, 0, null, importoBollo, null, CanalePagamento.WEB.toString(),
-				TipoPagamentiClient.MYPAY.toString(), iud, null, null, null, false, StatoPagamento.IN_ATTESA.toString(), 0);
 
-		LOG.info("Created new pagamento with id: " + pagamento.getPagamentoId()); 
+		Pagamento pagamento = this.createPagamento(siteGroupId, userId, denominazioneCliente, idCredito,
+				idFiscaleCliente, denominazioneCliente, emailQuietanza, causale, 0, null, importoBollo, null,
+				CanalePagamento.WEB.toString(), TipoPagamentiClient.MYPAY.toString(), iud, null, null, null, false,
+				StatoPagamento.IN_ATTESA.toString(), 0);
+
+		LOG.info("Created new pagamento with id: " + pagamento.getPagamentoId());
 
 		return pagamentoDovutoRisposta.getRedirectUrl();
 
