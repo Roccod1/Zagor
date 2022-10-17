@@ -104,8 +104,6 @@ public class MyPayPagamentiClient implements PagamentiClient {
 
 		PagamentiTelematiciDovutiPagati pagamentiServicePort = null;
 
-		VerificaPagamentoRisposta verificaPagamentoRisposta = new VerificaPagamentoRisposta();
-
 		try {
 			pagamentiServicePort = getMyPayPort(wsdlUrl);
 		}
@@ -113,6 +111,8 @@ public class MyPayPagamentiClient implements PagamentiClient {
 			log.error("Errore nella lettura del wsdl.", e);
 			throw new PagamentiClientException("Errore nella lettura del wsdl.", e);
 		}
+
+		VerificaPagamentoRisposta verificaPagamentoRisposta = new VerificaPagamentoRisposta();
 
 		CtPagatiConRicevuta ctPagati = null;
 
