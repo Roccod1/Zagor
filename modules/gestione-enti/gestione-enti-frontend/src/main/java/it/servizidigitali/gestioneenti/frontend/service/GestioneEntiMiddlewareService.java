@@ -1,5 +1,6 @@
 package it.servizidigitali.gestioneenti.frontend.service;
 
+import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil;
@@ -7,6 +8,9 @@ import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleLocalService;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Layout;
@@ -18,6 +22,7 @@ import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.service.permission.LayoutPermissionUtil;
+import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
@@ -25,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -34,6 +40,11 @@ import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
+import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUsoServizioEnte;
+import it.servizidigitali.scrivaniaoperatore.service.DestinazioneUsoLocalService;
+import it.servizidigitali.scrivaniaoperatore.service.DestinazioneUsoServizioEnteLocalService;
+import it.servizidigitali.scrivaniaoperatore.service.persistence.DestinazioneUsoServizioEntePK;
 
 @Component(name = "gestioneEntiMiddlewareService", immediate = true, service = GestioneEntiMiddlewareService.class)
 public class GestioneEntiMiddlewareService {
@@ -58,6 +69,15 @@ public class GestioneEntiMiddlewareService {
 
 	@Reference
 	private UserLocalService userLocalService;
+	
+	@Reference
+	private DestinazioneUsoLocalService destinazioneUsoLocalService;
+	
+	@Reference
+	private DestinazioneUsoServizioEnteLocalService destinazioneUsoServizioEnteLocalService;
+	
+	@Reference
+	private CounterLocalService counterLocalService;
 
 	private static final Log _log = LogFactoryUtil.getLog(GestioneEntiMiddlewareService.class);
 
@@ -195,6 +215,92 @@ public class GestioneEntiMiddlewareService {
 		}
 
 		return listaArticoliCatalogoServizi;
+	}
+	
+	public String getStringSelectMultipla(String string) throws JSONException {
+		string = "[" + string + "]";
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(string);
+		String jsonArrayString = JSONFactoryUtil.createJSONSerializer().serialize(jsonArray);
+
+		return jsonArrayString;
+	}
+	
+	public List<KeyValuePair> getListaDestinazioniUsoServizio(long servizioId, long organizationId, long groupId, long companyId){
+		List<DestinazioneUso> listaDestinazioniUsoServizio = destinazioneUsoLocalService.getDestinazioniUsoByServizioIdOrganizationId(servizioId, organizationId, groupId, companyId);
+		List<KeyValuePair> listaDestinazioniUso = new ArrayList<KeyValuePair>();
+
+		if(Validator.isNotNull(listaDestinazioniUsoServizio) && !listaDestinazioniUsoServizio.isEmpty()) {
+			for(DestinazioneUso destinazione : listaDestinazioniUsoServizio) {
+				listaDestinazioniUso.add(new KeyValuePair(String.valueOf(destinazione.getDestinazioneUsoId()),destinazione.getNome()));
+			}
+		}
+		
+		return listaDestinazioniUso;
+	}
+	
+	public List<KeyValuePair> getListaDestinazioniUsoDisponibili(){
+		List<KeyValuePair> listaDestinazioniUso = new ArrayList<KeyValuePair>();
+		List<DestinazioneUso> listaDestinazioniDisponibili = destinazioneUsoLocalService.getDestinazioneUsos(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		
+		for(DestinazioneUso destinazione : listaDestinazioniDisponibili) {
+			listaDestinazioniUso.add(new KeyValuePair(String.valueOf(destinazione.getDestinazioneUsoId()),destinazione.getNome()));
+		}
+		
+		return listaDestinazioniUso;
+	}
+	
+	public void salvaDestinazioniUso(String[] destinazioniUsoSelezionate, long servizioId, String userName, long userId, long organizationId, long groupId, long companyId) {
+		List<DestinazioneUsoServizioEnte> listaDestinazioniUsoServizio = destinazioneUsoServizioEnteLocalService.getDestinazioniUsoServizioEnteByServizioIdOrganizationId(servizioId, organizationId, groupId, companyId);
+		List<DestinazioneUsoServizioEnte> listaDestinazioniUsoForm = new ArrayList<DestinazioneUsoServizioEnte>();
+		
+		for(String destinazioneUsoId : destinazioniUsoSelezionate) {
+			DestinazioneUsoServizioEntePK pk = new DestinazioneUsoServizioEntePK();
+			DestinazioneUsoServizioEnte destinazioneUsoServizioEnte = null;
+			pk.setServizioId(servizioId);
+			pk.setOrganizationId(organizationId);
+			pk.setDestinazioneUsoId(Long.valueOf(destinazioneUsoId));
+			
+			if(Validator.isNotNull(pk)) {
+				destinazioneUsoServizioEnte = destinazioneUsoServizioEnteLocalService.createDestinazioneUsoServizioEnte(pk);
+				destinazioneUsoServizioEnte.setGroupId(groupId);
+				destinazioneUsoServizioEnte.setUserId(userId);
+				destinazioneUsoServizioEnte.setUserName(userName);
+				listaDestinazioniUsoForm.add(destinazioneUsoServizioEnte);
+			}
+		}
+		
+		
+		if(Validator.isNotNull(listaDestinazioniUsoServizio) && !listaDestinazioniUsoServizio.isEmpty()) {
+			
+			if(Validator.isNotNull(listaDestinazioniUsoForm)) {
+				List<DestinazioneUsoServizioEnte> elementiDaEliminare = listaDestinazioniUsoServizio.stream()
+						.filter(destinazioneUsoServizioEnte -> !listaDestinazioniUsoForm.contains(destinazioneUsoServizioEnte))
+						.collect(Collectors.toList());
+				
+				List<DestinazioneUsoServizioEnte> elementiDaAggiungere = listaDestinazioniUsoForm.stream()
+						.filter(destinazioneUsoServizioEnte -> !listaDestinazioniUsoServizio.contains(destinazioneUsoServizioEnte))
+						.collect(Collectors.toList());
+				
+				for(DestinazioneUsoServizioEnte destinazioneUsoServizioEnte : elementiDaAggiungere) {
+					destinazioneUsoServizioEnteLocalService.updateDestinazioneUsoServizioEnte(destinazioneUsoServizioEnte);
+				}
+				
+				for(DestinazioneUsoServizioEnte destinazioneUsoServizioEnte : elementiDaEliminare) {
+					destinazioneUsoServizioEnteLocalService.deleteDestinazioneUsoServizioEnte(destinazioneUsoServizioEnte);
+				}
+			}
+			
+		}else {	
+			
+			if(Validator.isNotNull(listaDestinazioniUsoForm) && !listaDestinazioniUsoForm.isEmpty()) {
+				
+				for(DestinazioneUsoServizioEnte destinazioneUsoServizioEnte : listaDestinazioniUsoForm) {
+					destinazioneUsoServizioEnteLocalService.updateDestinazioneUsoServizioEnte(destinazioneUsoServizioEnte);
+				}
+				
+			}
+			
+		}
 	}
 
 }

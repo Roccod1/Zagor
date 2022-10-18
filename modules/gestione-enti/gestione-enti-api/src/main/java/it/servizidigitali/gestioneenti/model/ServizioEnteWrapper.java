@@ -72,6 +72,8 @@ public class ServizioEnteWrapper
 		attributes.put("timbroCertificato", isTimbroCertificato());
 		attributes.put("iseeInps", isIseeInps());
 		attributes.put("attivo", isAttivo());
+		attributes.put("richiestaFirma", isRichiestaFirma());
+		attributes.put("formatiFirmaDigitale", getFormatiFirmaDigitale());
 
 		return attributes;
 	}
@@ -249,6 +251,19 @@ public class ServizioEnteWrapper
 		if (attivo != null) {
 			setAttivo(attivo);
 		}
+
+		Boolean richiestaFirma = (Boolean)attributes.get("richiestaFirma");
+
+		if (richiestaFirma != null) {
+			setRichiestaFirma(richiestaFirma);
+		}
+
+		String formatiFirmaDigitale = (String)attributes.get(
+			"formatiFirmaDigitale");
+
+		if (formatiFirmaDigitale != null) {
+			setFormatiFirmaDigitale(formatiFirmaDigitale);
+		}
 	}
 
 	@Override
@@ -387,6 +402,16 @@ public class ServizioEnteWrapper
 	}
 
 	/**
+	 * Returns the formati firma digitale of this servizio ente.
+	 *
+	 * @return the formati firma digitale of this servizio ente
+	 */
+	@Override
+	public String getFormatiFirmaDigitale() {
+		return model.getFormatiFirmaDigitale();
+	}
+
+	/**
 	 * Returns the group ID of this servizio ente.
 	 *
 	 * @return the group ID of this servizio ente
@@ -496,6 +521,16 @@ public class ServizioEnteWrapper
 	@Override
 	public long getPublicLayoutId() {
 		return model.getPublicLayoutId();
+	}
+
+	/**
+	 * Returns the richiesta firma of this servizio ente.
+	 *
+	 * @return the richiesta firma of this servizio ente
+	 */
+	@Override
+	public boolean getRichiestaFirma() {
+		return model.getRichiestaFirma();
 	}
 
 	/**
@@ -679,6 +714,16 @@ public class ServizioEnteWrapper
 	}
 
 	/**
+	 * Returns <code>true</code> if this servizio ente is richiesta firma.
+	 *
+	 * @return <code>true</code> if this servizio ente is richiesta firma; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isRichiestaFirma() {
+		return model.isRichiestaFirma();
+	}
+
+	/**
 	 * Returns <code>true</code> if this servizio ente is timbro certificato.
 	 *
 	 * @return <code>true</code> if this servizio ente is timbro certificato; <code>false</code> otherwise
@@ -824,6 +869,16 @@ public class ServizioEnteWrapper
 	}
 
 	/**
+	 * Sets the formati firma digitale of this servizio ente.
+	 *
+	 * @param formatiFirmaDigitale the formati firma digitale of this servizio ente
+	 */
+	@Override
+	public void setFormatiFirmaDigitale(String formatiFirmaDigitale) {
+		model.setFormatiFirmaDigitale(formatiFirmaDigitale);
+	}
+
+	/**
 	 * Sets the group ID of this servizio ente.
 	 *
 	 * @param groupId the group ID of this servizio ente
@@ -936,6 +991,16 @@ public class ServizioEnteWrapper
 	@Override
 	public void setPublicLayoutId(long publicLayoutId) {
 		model.setPublicLayoutId(publicLayoutId);
+	}
+
+	/**
+	 * Sets whether this servizio ente is richiesta firma.
+	 *
+	 * @param richiestaFirma the richiesta firma of this servizio ente
+	 */
+	@Override
+	public void setRichiestaFirma(boolean richiestaFirma) {
+		model.setRichiestaFirma(richiestaFirma);
 	}
 
 	/**

@@ -223,6 +223,7 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl {
 		Servizio servizio = null;
 		try {
 			servizio = servizioPersistence.findByCodice(codice);
+			setAreaTematica(servizio);
 		}
 		catch (NoSuchServizioException e) {
 		}

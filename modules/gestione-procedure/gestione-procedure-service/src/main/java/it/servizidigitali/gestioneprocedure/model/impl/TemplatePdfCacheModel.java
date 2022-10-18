@@ -63,7 +63,7 @@ public class TemplatePdfCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -87,6 +87,10 @@ public class TemplatePdfCacheModel
 		sb.append(proceduraId);
 		sb.append(", templatePdfParentId=");
 		sb.append(templatePdfParentId);
+		sb.append(", tipoTemplate=");
+		sb.append(tipoTemplate);
+		sb.append(", tipoTemplateNativo=");
+		sb.append(tipoTemplateNativo);
 		sb.append("}");
 
 		return sb.toString();
@@ -133,6 +137,20 @@ public class TemplatePdfCacheModel
 		templatePdfImpl.setProceduraId(proceduraId);
 		templatePdfImpl.setTemplatePdfParentId(templatePdfParentId);
 
+		if (tipoTemplate == null) {
+			templatePdfImpl.setTipoTemplate("");
+		}
+		else {
+			templatePdfImpl.setTipoTemplate(tipoTemplate);
+		}
+
+		if (tipoTemplateNativo == null) {
+			templatePdfImpl.setTipoTemplateNativo("");
+		}
+		else {
+			templatePdfImpl.setTipoTemplateNativo(tipoTemplateNativo);
+		}
+
 		templatePdfImpl.resetOriginalValues();
 
 		return templatePdfImpl;
@@ -158,6 +176,8 @@ public class TemplatePdfCacheModel
 		proceduraId = objectInput.readLong();
 
 		templatePdfParentId = objectInput.readLong();
+		tipoTemplate = objectInput.readUTF();
+		tipoTemplateNativo = objectInput.readUTF();
 	}
 
 	@Override
@@ -192,6 +212,20 @@ public class TemplatePdfCacheModel
 		objectOutput.writeLong(proceduraId);
 
 		objectOutput.writeLong(templatePdfParentId);
+
+		if (tipoTemplate == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(tipoTemplate);
+		}
+
+		if (tipoTemplateNativo == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(tipoTemplateNativo);
+		}
 	}
 
 	public String uuid;
@@ -205,5 +239,7 @@ public class TemplatePdfCacheModel
 	public long fileEntryId;
 	public long proceduraId;
 	public long templatePdfParentId;
+	public String tipoTemplate;
+	public String tipoTemplateNativo;
 
 }

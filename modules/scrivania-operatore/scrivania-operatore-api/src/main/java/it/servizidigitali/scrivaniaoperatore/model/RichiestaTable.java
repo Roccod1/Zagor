@@ -94,6 +94,8 @@ public class RichiestaTable extends BaseTable<RichiestaTable> {
 			Column.FLAG_DEFAULT);
 	public final Column<RichiestaTable, Long> proceduraId = createColumn(
 		"proceduraId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<RichiestaTable, Long> servizioId = createColumn(
+		"servizioId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 
 	private RichiestaTable() {
 		super("richiesta", RichiestaTable::new);

@@ -112,7 +112,9 @@ public class AggiungiAllegatoActionCommand extends BaseMVCActionCommand {
 			allegatoRichiesta.setUserName(user.getFullName());
 			allegatoRichiesta.setCreateDate(new Date());
 			allegatoRichiesta.setModifiedDate(new Date());
-			allegatoRichiesta.setNome(name);
+			allegatoRichiesta.setNome(fileName);
+			allegatoRichiesta.setTitolo(titoloDocumento);
+			allegatoRichiesta.setDescrizione(null);
 			allegatoRichiesta.setVisibile(visibileAlCittadino);
 			allegatoRichiesta.setInterno(true);
 			allegatoRichiesta.setIdDocumentale(idDocumentale);

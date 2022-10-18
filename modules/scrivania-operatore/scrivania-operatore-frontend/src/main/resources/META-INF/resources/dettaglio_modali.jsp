@@ -107,12 +107,14 @@
 			
 			<c:when test="${azione.codiceAzioneUtente == 'ESITO_PROCEDIMENTO_POSITIVO'}">
 				<div class="modal fade" tabindex="-1" id="<portlet:namespace />chiudiEsitoPositivoModal" style="display: none;">
-					<portlet:actionURL var="chiudiEsitoPositivoURL" name="/action/chiudiEsitoPositivo">
+					<portlet:actionURL var="chiudiEsitoPositivoURL" name="/action/chiudiPratica">
 					</portlet:actionURL>
 					
 					<aui:form action="${chiudiEsitoPositivoURL}" name="chiudiEsitoPositivoForm">
 						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
+						<aui:input type="hidden" name="variabileSet" value="${azione.variableSet}" />
+						<aui:input type="hidden" name="variabileVal" value="${azione.variableValue}" />
 						
 						<div class="modal-dialog">
 							<div class="modal-content">
@@ -135,7 +137,7 @@
 		                                    <liferay-ui:search-container-column-text name="#">
 												<div class="form-group form-check">
 													<c:set var="checkedAttr" value="${elem.visibileAlCittadino ? 'checked' : '' }" />
-													<input type="checkbox" class="form-check-input" value="${elem.id}" name="<portlet:namespace />selezionati" ${checkedAttr}>
+													<input type="checkbox" class="form-check-input" value="${elem.idDocumentale}" name="<portlet:namespace />selezionati" ${checkedAttr}>
 												</div>
 				                            </liferay-ui:search-container-column-text>
 											<liferay-ui:search-container-column-text name="nome-file" value="${elem.nomeFile}" />
@@ -167,12 +169,14 @@
 			
 			<c:when test="${azione.codiceAzioneUtente == 'ESITO_PROCEDIMENTO_NEGATIVO'}">
 				<div class="modal fade" tabindex="-1" id="<portlet:namespace />chiudiEsitoNegativoModal" style="display: none;">
-					<portlet:actionURL var="chiudiEsitoNegativoURL" name="/action/chiudiEsitoNegativo">
+					<portlet:actionURL var="chiudiEsitoNegativoURL" name="/action/chiudiPratica">
 					</portlet:actionURL>
 					
 					<aui:form action="${chiudiEsitoNegativoURL}" name="chiudiEsitoNegativoForm">
 						<aui:input type="hidden" name="richiestaId" value="${richiesta.id}" />
 						<aui:input type="hidden" name="dettaglioTab" value="${dettaglioTab}" />
+						<aui:input type="hidden" name="variabileSet" value="${azione.variableSet}" />
+						<aui:input type="hidden" name="variabileVal" value="${azione.variableValue}" />
 						
 						<div class="modal-dialog">
 							<div class="modal-content">
@@ -195,7 +199,7 @@
 				                            <liferay-ui:search-container-column-text name="#">
 												<div class="form-group form-check">
 													<c:set var="checkedAttr" value="${elem.visibileAlCittadino ? 'checked' : '' }" />
-													<input type="checkbox" class="form-check-input" value="${elem.id}" name="<portlet:namespace />selezionati" ${checkedAttr}>
+													<input type="checkbox" class="form-check-input" value="${elem.idDocumentale}" name="<portlet:namespace />selezionati" ${checkedAttr}>
 												</div>
 				                            </liferay-ui:search-container-column-text>
 											<liferay-ui:search-container-column-text name="nome-file" value="${elem.nomeFile}" />

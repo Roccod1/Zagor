@@ -4875,6 +4875,503 @@ public class RichiestaPersistenceImpl
 	private static final String _FINDER_COLUMN_PROCEDURAID_PROCEDURAID_2 =
 		"richiesta.proceduraId = ?";
 
+	private FinderPath _finderPathWithPaginationFindByServizioId;
+	private FinderPath _finderPathWithoutPaginationFindByServizioId;
+	private FinderPath _finderPathCountByServizioId;
+
+	/**
+	 * Returns all the richiestas where servizioId = &#63;.
+	 *
+	 * @param servizioId the servizio ID
+	 * @return the matching richiestas
+	 */
+	@Override
+	public List<Richiesta> findByServizioId(long servizioId) {
+		return findByServizioId(
+			servizioId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the richiestas where servizioId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>RichiestaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param servizioId the servizio ID
+	 * @param start the lower bound of the range of richiestas
+	 * @param end the upper bound of the range of richiestas (not inclusive)
+	 * @return the range of matching richiestas
+	 */
+	@Override
+	public List<Richiesta> findByServizioId(
+		long servizioId, int start, int end) {
+
+		return findByServizioId(servizioId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the richiestas where servizioId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>RichiestaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param servizioId the servizio ID
+	 * @param start the lower bound of the range of richiestas
+	 * @param end the upper bound of the range of richiestas (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching richiestas
+	 */
+	@Override
+	public List<Richiesta> findByServizioId(
+		long servizioId, int start, int end,
+		OrderByComparator<Richiesta> orderByComparator) {
+
+		return findByServizioId(
+			servizioId, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the richiestas where servizioId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>RichiestaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param servizioId the servizio ID
+	 * @param start the lower bound of the range of richiestas
+	 * @param end the upper bound of the range of richiestas (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching richiestas
+	 */
+	@Override
+	public List<Richiesta> findByServizioId(
+		long servizioId, int start, int end,
+		OrderByComparator<Richiesta> orderByComparator,
+		boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByServizioId;
+				finderArgs = new Object[] {servizioId};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByServizioId;
+			finderArgs = new Object[] {
+				servizioId, start, end, orderByComparator
+			};
+		}
+
+		List<Richiesta> list = null;
+
+		if (useFinderCache) {
+			list = (List<Richiesta>)finderCache.getResult(
+				finderPath, finderArgs);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (Richiesta richiesta : list) {
+					if (servizioId != richiesta.getServizioId()) {
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(3);
+			}
+
+			sb.append(_SQL_SELECT_RICHIESTA_WHERE);
+
+			sb.append(_FINDER_COLUMN_SERVIZIOID_SERVIZIOID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(RichiestaModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(servizioId);
+
+				list = (List<Richiesta>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first richiesta in the ordered set where servizioId = &#63;.
+	 *
+	 * @param servizioId the servizio ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching richiesta
+	 * @throws NoSuchRichiestaException if a matching richiesta could not be found
+	 */
+	@Override
+	public Richiesta findByServizioId_First(
+			long servizioId, OrderByComparator<Richiesta> orderByComparator)
+		throws NoSuchRichiestaException {
+
+		Richiesta richiesta = fetchByServizioId_First(
+			servizioId, orderByComparator);
+
+		if (richiesta != null) {
+			return richiesta;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("servizioId=");
+		sb.append(servizioId);
+
+		sb.append("}");
+
+		throw new NoSuchRichiestaException(sb.toString());
+	}
+
+	/**
+	 * Returns the first richiesta in the ordered set where servizioId = &#63;.
+	 *
+	 * @param servizioId the servizio ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching richiesta, or <code>null</code> if a matching richiesta could not be found
+	 */
+	@Override
+	public Richiesta fetchByServizioId_First(
+		long servizioId, OrderByComparator<Richiesta> orderByComparator) {
+
+		List<Richiesta> list = findByServizioId(
+			servizioId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last richiesta in the ordered set where servizioId = &#63;.
+	 *
+	 * @param servizioId the servizio ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching richiesta
+	 * @throws NoSuchRichiestaException if a matching richiesta could not be found
+	 */
+	@Override
+	public Richiesta findByServizioId_Last(
+			long servizioId, OrderByComparator<Richiesta> orderByComparator)
+		throws NoSuchRichiestaException {
+
+		Richiesta richiesta = fetchByServizioId_Last(
+			servizioId, orderByComparator);
+
+		if (richiesta != null) {
+			return richiesta;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("servizioId=");
+		sb.append(servizioId);
+
+		sb.append("}");
+
+		throw new NoSuchRichiestaException(sb.toString());
+	}
+
+	/**
+	 * Returns the last richiesta in the ordered set where servizioId = &#63;.
+	 *
+	 * @param servizioId the servizio ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching richiesta, or <code>null</code> if a matching richiesta could not be found
+	 */
+	@Override
+	public Richiesta fetchByServizioId_Last(
+		long servizioId, OrderByComparator<Richiesta> orderByComparator) {
+
+		int count = countByServizioId(servizioId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Richiesta> list = findByServizioId(
+			servizioId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the richiestas before and after the current richiesta in the ordered set where servizioId = &#63;.
+	 *
+	 * @param richiestaId the primary key of the current richiesta
+	 * @param servizioId the servizio ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next richiesta
+	 * @throws NoSuchRichiestaException if a richiesta with the primary key could not be found
+	 */
+	@Override
+	public Richiesta[] findByServizioId_PrevAndNext(
+			long richiestaId, long servizioId,
+			OrderByComparator<Richiesta> orderByComparator)
+		throws NoSuchRichiestaException {
+
+		Richiesta richiesta = findByPrimaryKey(richiestaId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Richiesta[] array = new RichiestaImpl[3];
+
+			array[0] = getByServizioId_PrevAndNext(
+				session, richiesta, servizioId, orderByComparator, true);
+
+			array[1] = richiesta;
+
+			array[2] = getByServizioId_PrevAndNext(
+				session, richiesta, servizioId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Richiesta getByServizioId_PrevAndNext(
+		Session session, Richiesta richiesta, long servizioId,
+		OrderByComparator<Richiesta> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(3);
+		}
+
+		sb.append(_SQL_SELECT_RICHIESTA_WHERE);
+
+		sb.append(_FINDER_COLUMN_SERVIZIOID_SERVIZIOID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(RichiestaModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(servizioId);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(richiesta)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<Richiesta> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the richiestas where servizioId = &#63; from the database.
+	 *
+	 * @param servizioId the servizio ID
+	 */
+	@Override
+	public void removeByServizioId(long servizioId) {
+		for (Richiesta richiesta :
+				findByServizioId(
+					servizioId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
+			remove(richiesta);
+		}
+	}
+
+	/**
+	 * Returns the number of richiestas where servizioId = &#63;.
+	 *
+	 * @param servizioId the servizio ID
+	 * @return the number of matching richiestas
+	 */
+	@Override
+	public int countByServizioId(long servizioId) {
+		FinderPath finderPath = _finderPathCountByServizioId;
+
+		Object[] finderArgs = new Object[] {servizioId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_RICHIESTA_WHERE);
+
+			sb.append(_FINDER_COLUMN_SERVIZIOID_SERVIZIOID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(servizioId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_SERVIZIOID_SERVIZIOID_2 =
+		"richiesta.servizioId = ?";
+
 	private FinderPath _finderPathFetchByProcessInstanceId;
 	private FinderPath _finderPathCountByProcessInstanceId;
 
@@ -5885,6 +6382,24 @@ public class RichiestaPersistenceImpl
 		_finderPathCountByProceduraId = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByProceduraId",
 			new String[] {Long.class.getName()}, new String[] {"proceduraId"},
+			false);
+
+		_finderPathWithPaginationFindByServizioId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByServizioId",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {"servizioId"}, true);
+
+		_finderPathWithoutPaginationFindByServizioId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByServizioId",
+			new String[] {Long.class.getName()}, new String[] {"servizioId"},
+			true);
+
+		_finderPathCountByServizioId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByServizioId",
+			new String[] {Long.class.getName()}, new String[] {"servizioId"},
 			false);
 
 		_finderPathFetchByProcessInstanceId = new FinderPath(

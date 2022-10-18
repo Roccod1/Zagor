@@ -54,6 +54,8 @@ public class TemplatePdfWrapper
 		attributes.put("fileEntryId", getFileEntryId());
 		attributes.put("proceduraId", getProceduraId());
 		attributes.put("templatePdfParentId", getTemplatePdfParentId());
+		attributes.put("tipoTemplate", getTipoTemplate());
+		attributes.put("tipoTemplateNativo", getTipoTemplateNativo());
 
 		return attributes;
 	}
@@ -124,6 +126,19 @@ public class TemplatePdfWrapper
 
 		if (templatePdfParentId != null) {
 			setTemplatePdfParentId(templatePdfParentId);
+		}
+
+		String tipoTemplate = (String)attributes.get("tipoTemplate");
+
+		if (tipoTemplate != null) {
+			setTipoTemplate(tipoTemplate);
+		}
+
+		String tipoTemplateNativo = (String)attributes.get(
+			"tipoTemplateNativo");
+
+		if (tipoTemplateNativo != null) {
+			setTipoTemplateNativo(tipoTemplateNativo);
 		}
 	}
 
@@ -225,6 +240,26 @@ public class TemplatePdfWrapper
 	@Override
 	public long getTemplatePdfParentId() {
 		return model.getTemplatePdfParentId();
+	}
+
+	/**
+	 * Returns the tipo template of this template pdf.
+	 *
+	 * @return the tipo template of this template pdf
+	 */
+	@Override
+	public String getTipoTemplate() {
+		return model.getTipoTemplate();
+	}
+
+	/**
+	 * Returns the tipo template nativo of this template pdf.
+	 *
+	 * @return the tipo template nativo of this template pdf
+	 */
+	@Override
+	public String getTipoTemplateNativo() {
+		return model.getTipoTemplateNativo();
 	}
 
 	/**
@@ -365,6 +400,26 @@ public class TemplatePdfWrapper
 	@Override
 	public void setTemplatePdfParentId(long templatePdfParentId) {
 		model.setTemplatePdfParentId(templatePdfParentId);
+	}
+
+	/**
+	 * Sets the tipo template of this template pdf.
+	 *
+	 * @param tipoTemplate the tipo template of this template pdf
+	 */
+	@Override
+	public void setTipoTemplate(String tipoTemplate) {
+		model.setTipoTemplate(tipoTemplate);
+	}
+
+	/**
+	 * Sets the tipo template nativo of this template pdf.
+	 *
+	 * @param tipoTemplateNativo the tipo template nativo of this template pdf
+	 */
+	@Override
+	public void setTipoTemplateNativo(String tipoTemplateNativo) {
+		model.setTipoTemplateNativo(tipoTemplateNativo);
 	}
 
 	/**

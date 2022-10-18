@@ -91,6 +91,9 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 		Richiesta richiesta = null;
 		IstanzaForm istanzaForm = null;
 		
+		// TODO : recuperare da db
+		
+		boolean firmaDocumentoAbilitata = true;
 		
 		try {
 			uploadFileRichiesteEnteConfiguration = configurationProvider.getGroupConfiguration(UploadFileRichiesteEnteConfiguration.class, themeDisplay.getScopeGroupId());
@@ -107,9 +110,6 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 		List<DatiAllegato> allegati = AllegatoUtil.mergeDefinizioneAndData(definizioneAllegati, new ArrayList<DatiFileAllegato>());
 		
 		String jsonAlpaca = istanzaForm.getJson();
-		
-		// TODO: Implementare recupero firmaDocumentoAbilitata da db in base al servizio/procedura
-		boolean firmaDocumentoAbilitata = false;
 
 		if(Validator.isNotNull(jsonAlpaca)) {
 			JsonObject jsonAlpacaObject = gson.fromJson(jsonAlpaca, JsonObject.class);
@@ -144,7 +144,7 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 		}
 		
 		renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO,form.getNome());
-		renderRequest.setAttribute(PresentatoreFormsPortletKeys.FIRMA_DOCUMENTO_ABILITATA,true);	
+		renderRequest.setAttribute(PresentatoreFormsPortletKeys.FIRMA_DOCUMENTO_ABILITATA,firmaDocumentoAbilitata);	
 		renderRequest.setAttribute(PresentatoreFormsPortletKeys.UPLOAD_FILE_MAX_SIZE,uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize());
 		renderRequest.setAttribute(PresentatoreFormsPortletKeys.UPLOAD_FILE_MAX_SIZE_LABEL,Long.toString(uploadFileRichiesteEnteConfiguration.maxUploadRichiesteFileSize() / 1000000) + " MB");
 		renderRequest.setAttribute(PresentatoreFormsPortletKeys.LISTA_ALLEGATI, allegati);

@@ -235,6 +235,36 @@ public interface AllegatoRichiestaModel
 	public void setNome(String nome);
 
 	/**
+	 * Returns the titolo of this allegato richiesta.
+	 *
+	 * @return the titolo of this allegato richiesta
+	 */
+	@AutoEscape
+	public String getTitolo();
+
+	/**
+	 * Sets the titolo of this allegato richiesta.
+	 *
+	 * @param titolo the titolo of this allegato richiesta
+	 */
+	public void setTitolo(String titolo);
+
+	/**
+	 * Returns the descrizione of this allegato richiesta.
+	 *
+	 * @return the descrizione of this allegato richiesta
+	 */
+	@AutoEscape
+	public String getDescrizione();
+
+	/**
+	 * Sets the descrizione of this allegato richiesta.
+	 *
+	 * @param descrizione the descrizione of this allegato richiesta
+	 */
+	public void setDescrizione(String descrizione);
+
+	/**
 	 * Returns the url of this allegato richiesta.
 	 *
 	 * @return the url of this allegato richiesta

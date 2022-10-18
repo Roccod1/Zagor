@@ -11,12 +11,14 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -66,18 +68,24 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 		Long organizationId = ParamUtil.getLong(renderRequest, GestioneEntiPortletKeys.ORGANIZZAZIONE_ID);
 		Long servizioId = ParamUtil.getLong(renderRequest, GestioneEntiPortletKeys.SERVIZIO_ID);
 		List<Servizio> listaServizi = new ArrayList<Servizio>();
-
+		List<KeyValuePair> listaDestinazioniUso = new ArrayList<KeyValuePair>();
+		
+		String listaFormatiFirmaDigitaleString = "";
+		
 		ServiceContext serviceContext = null;
 		ThemeDisplay themeDisplay = null;
 		List<JournalArticle> listaArticoliCatalogoServizi = new ArrayList<JournalArticle>();
 		Map<String, List<Layout>> pagineDisponibili = null;
+		
 		try {
+			
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
 			themeDisplay = serviceContext.getThemeDisplay();
 			listaArticoliCatalogoServizi = gestioneEntiMiddlewareService.getListaArticleIdDisponibili(organizationId, servizioId);
+			listaDestinazioniUso = gestioneEntiMiddlewareService.getListaDestinazioniUsoDisponibili();
 
 			pagineDisponibili = gestioneEntiMiddlewareService.getListaPagineUtilizzabili(organizationId, servizioId, themeDisplay.getCompanyId());
-
+			
 			// creo copia servizioId per non sovrascrivere l'originale
 			Long tempServizioId = servizioId;
 
@@ -97,8 +105,31 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 				if (Validator.isNotNull(servizioId)) {
 					ServizioEntePK servizioEntePK = new ServizioEntePK(servizioId, organizationId);
 					ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);
+					
+					List<KeyValuePair> listaDestinazioniUsoServizio = gestioneEntiMiddlewareService.getListaDestinazioniUsoServizio(servizioId, organizationId, organization.getGroupId(), organization.getCompanyId());
+					
+					if(Validator.isNotNull(servizioEnte.getFormatiFirmaDigitale())) {
+						listaFormatiFirmaDigitaleString = gestioneEntiMiddlewareService.getStringSelectMultipla(servizioEnte.getFormatiFirmaDigitale());
+						renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_FORMATI_FIRMA_DIGITALE, listaFormatiFirmaDigitaleString);
+					}else {
+						renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_FORMATI_FIRMA_DIGITALE, GestioneEntiPortletKeys.LISTA_VUOTA);
+					}
+					
+					if(Validator.isNotNull(listaDestinazioniUsoServizio) && !listaDestinazioniUsoServizio.isEmpty()) {
+						listaDestinazioniUso = listaDestinazioniUso.stream()
+																   .filter(destinazioneUso -> !listaDestinazioniUsoServizio.contains(destinazioneUso))
+																   .collect(Collectors.toList());
+												
+						renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_DESTINAZIONI_USO_SERVIZIO, listaDestinazioniUsoServizio);
+					}else {
+						renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_DESTINAZIONI_USO_SERVIZIO, new ArrayList<KeyValuePair>());
+					}
+					
 					renderRequest.setAttribute(GestioneEntiPortletKeys.SERVIZIO_ENTE, servizioEnte);
 					tempServizioId = null;
+				}else {
+					renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_DESTINAZIONI_USO_SERVIZIO, new ArrayList<KeyValuePair>());
+					renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_FORMATI_FIRMA_DIGITALE, GestioneEntiPortletKeys.LISTA_VUOTA);
 				}
 
 			}
@@ -109,11 +140,13 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 			SessionErrors.add(renderRequest, GestioneEntiPortletKeys.ERRORE_IMPOSSIBILE_CARICARE_I_DATI);
 			return GestioneEntiPortletKeys.JSP_LISTA_SERVIZI_ENTE;
 		}
-
+		
 		renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_URI_PUBBLICHE, pagineDisponibili.get(GestioneEntiPortletKeys.LISTA_URI_PUBBLICHE));
 		renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_URI_PRIVATE, pagineDisponibili.get(GestioneEntiPortletKeys.LISTA_URI_PRIVATE));
 		renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_SERVIZI, listaServizi);
+		renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_DESTINAZIONI_USO, listaDestinazioniUso);
 		renderRequest.setAttribute(GestioneEntiPortletKeys.LISTA_ARTICLE_CATALOGO_SERVIZI, listaArticoliCatalogoServizi);
+
 		return GestioneEntiPortletKeys.JSP_INSERIMENTO_MODIFICA;
 	}
 }

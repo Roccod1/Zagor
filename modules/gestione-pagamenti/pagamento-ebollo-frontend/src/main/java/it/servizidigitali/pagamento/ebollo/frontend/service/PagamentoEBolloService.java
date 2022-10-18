@@ -1,10 +1,13 @@
 package it.servizidigitali.pagamento.ebollo.frontend.service;
 
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 
 import java.math.BigDecimal;
 import java.security.MessageDigest;
@@ -16,6 +19,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.gestioneenti.model.ServizioEnte;
+import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestionepagamenti.common.client.PagamentiClient;
 import it.servizidigitali.gestionepagamenti.common.client.exeption.PagamentiClientException;
 import it.servizidigitali.gestionepagamenti.common.client.model.MarcaDaBollo;
@@ -28,6 +33,9 @@ import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
+import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
+import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 
 /**
  * @author pindi
@@ -47,9 +55,18 @@ public class PagamentoEBolloService {
 
 	@Reference
 	private PagamentoLocalService pagamentoLocalService;
-	
+
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
+
+	@Reference
+	private ServizioEnteLocalService servizioEnteLocalService;
+
+	@Reference
+	private ServizioLocalService servizioLocalService;
+
+	@Reference
+	private ProceduraLocalService proceduraLocalService;
 
 	@Activate
 	@Modified
@@ -104,7 +121,7 @@ public class PagamentoEBolloService {
 
 		PagamentoDovutoRisposta pagamentoDovutoRisposta = pagamentiClient.pagaDovuto(marcaDaBollo, username, password,
 				wsdlUrl, callbackUrl);
-		
+
 		long proceduraId = accountClientPagamentiEnteConfiguration.idProceduraPagamento();
 
 		Pagamento pagamento = this.manageRichiestaAndPagamento(siteGroupId, userId, denominazioneCliente, idCredito,
@@ -158,8 +175,8 @@ public class PagamentoEBolloService {
 			long servizioId, String nomeServizio, BigDecimal importo, BigDecimal commissioni, String canale,
 			String gateway, String iud, String iuv, String idSessione, String pathAvviso, boolean emailInviata,
 			String stato, long proceduraId) {
-		
-		Richiesta richiesta =  richiestaLocalService.createRichiesta(0);
+
+		Richiesta richiesta = richiestaLocalService.createRichiesta(0);
 		richiesta.setGroupId(groupId);
 		richiesta.setUserId(userId);
 		richiesta.setUserName(userName);
@@ -167,11 +184,35 @@ public class PagamentoEBolloService {
 		richiesta.setEmail(emailQuietanza);
 		richiesta.setStato(stato);
 		richiesta.setProceduraId(proceduraId);
-		
+
 		richiesta = richiestaLocalService.updateRichiesta(richiesta);
 
 		return pagamentoLocalService.create(groupId, userId, userName, idCredito, idFiscaleCliente,
 				denominazioneCliente, emailQuietanza, causale, servizioId, nomeServizio, importo, commissioni, canale,
 				gateway, iud, iuv, idSessione, pathAvviso, emailInviata, stato, richiesta.getRichiestaId());
+	}
+
+	/**
+	 * Carica il servizio corrente in base alla pagina in cui è in esecuzione la
+	 * portlet.
+	 *
+	 * @param themeDisplay
+	 * @return
+	 * @throws PortalException
+	 */
+	public Servizio getCurrentServizio(ThemeDisplay themeDisplay) throws PortalException {
+
+		Layout layout = themeDisplay.getLayout();
+
+		long organizationId = themeDisplay.getScopeGroup().getOrganizationId();
+		long layoutId = layout.getLayoutId();
+
+		ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnteByOrganizationIdLayoutId(organizationId,
+				layoutId);
+		if (servizioEnte != null) {
+			return servizioLocalService.getServizio(servizioEnte.getServizioId());
+		}
+
+		return null;
 	}
 }

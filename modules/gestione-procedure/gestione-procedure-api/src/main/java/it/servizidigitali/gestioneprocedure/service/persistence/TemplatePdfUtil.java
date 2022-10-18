@@ -719,6 +719,204 @@ public class TemplatePdfUtil {
 	}
 
 	/**
+	 * Returns all the template pdfs where proceduraId = &#63; and tipoTemplate = &#63;.
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param tipoTemplate the tipo template
+	 * @return the matching template pdfs
+	 */
+	public static List<TemplatePdf> findByProceduraIdAndTipoTemplate(
+		long proceduraId, String tipoTemplate) {
+
+		return getPersistence().findByProceduraIdAndTipoTemplate(
+			proceduraId, tipoTemplate);
+	}
+
+	/**
+	 * Returns a range of all the template pdfs where proceduraId = &#63; and tipoTemplate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>TemplatePdfModelImpl</code>.
+	 * </p>
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param tipoTemplate the tipo template
+	 * @param start the lower bound of the range of template pdfs
+	 * @param end the upper bound of the range of template pdfs (not inclusive)
+	 * @return the range of matching template pdfs
+	 */
+	public static List<TemplatePdf> findByProceduraIdAndTipoTemplate(
+		long proceduraId, String tipoTemplate, int start, int end) {
+
+		return getPersistence().findByProceduraIdAndTipoTemplate(
+			proceduraId, tipoTemplate, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the template pdfs where proceduraId = &#63; and tipoTemplate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>TemplatePdfModelImpl</code>.
+	 * </p>
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param tipoTemplate the tipo template
+	 * @param start the lower bound of the range of template pdfs
+	 * @param end the upper bound of the range of template pdfs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching template pdfs
+	 */
+	public static List<TemplatePdf> findByProceduraIdAndTipoTemplate(
+		long proceduraId, String tipoTemplate, int start, int end,
+		OrderByComparator<TemplatePdf> orderByComparator) {
+
+		return getPersistence().findByProceduraIdAndTipoTemplate(
+			proceduraId, tipoTemplate, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the template pdfs where proceduraId = &#63; and tipoTemplate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>TemplatePdfModelImpl</code>.
+	 * </p>
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param tipoTemplate the tipo template
+	 * @param start the lower bound of the range of template pdfs
+	 * @param end the upper bound of the range of template pdfs (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching template pdfs
+	 */
+	public static List<TemplatePdf> findByProceduraIdAndTipoTemplate(
+		long proceduraId, String tipoTemplate, int start, int end,
+		OrderByComparator<TemplatePdf> orderByComparator,
+		boolean useFinderCache) {
+
+		return getPersistence().findByProceduraIdAndTipoTemplate(
+			proceduraId, tipoTemplate, start, end, orderByComparator,
+			useFinderCache);
+	}
+
+	/**
+	 * Returns the first template pdf in the ordered set where proceduraId = &#63; and tipoTemplate = &#63;.
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param tipoTemplate the tipo template
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching template pdf
+	 * @throws NoSuchTemplatePdfException if a matching template pdf could not be found
+	 */
+	public static TemplatePdf findByProceduraIdAndTipoTemplate_First(
+			long proceduraId, String tipoTemplate,
+			OrderByComparator<TemplatePdf> orderByComparator)
+		throws it.servizidigitali.gestioneprocedure.exception.
+			NoSuchTemplatePdfException {
+
+		return getPersistence().findByProceduraIdAndTipoTemplate_First(
+			proceduraId, tipoTemplate, orderByComparator);
+	}
+
+	/**
+	 * Returns the first template pdf in the ordered set where proceduraId = &#63; and tipoTemplate = &#63;.
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param tipoTemplate the tipo template
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching template pdf, or <code>null</code> if a matching template pdf could not be found
+	 */
+	public static TemplatePdf fetchByProceduraIdAndTipoTemplate_First(
+		long proceduraId, String tipoTemplate,
+		OrderByComparator<TemplatePdf> orderByComparator) {
+
+		return getPersistence().fetchByProceduraIdAndTipoTemplate_First(
+			proceduraId, tipoTemplate, orderByComparator);
+	}
+
+	/**
+	 * Returns the last template pdf in the ordered set where proceduraId = &#63; and tipoTemplate = &#63;.
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param tipoTemplate the tipo template
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching template pdf
+	 * @throws NoSuchTemplatePdfException if a matching template pdf could not be found
+	 */
+	public static TemplatePdf findByProceduraIdAndTipoTemplate_Last(
+			long proceduraId, String tipoTemplate,
+			OrderByComparator<TemplatePdf> orderByComparator)
+		throws it.servizidigitali.gestioneprocedure.exception.
+			NoSuchTemplatePdfException {
+
+		return getPersistence().findByProceduraIdAndTipoTemplate_Last(
+			proceduraId, tipoTemplate, orderByComparator);
+	}
+
+	/**
+	 * Returns the last template pdf in the ordered set where proceduraId = &#63; and tipoTemplate = &#63;.
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param tipoTemplate the tipo template
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching template pdf, or <code>null</code> if a matching template pdf could not be found
+	 */
+	public static TemplatePdf fetchByProceduraIdAndTipoTemplate_Last(
+		long proceduraId, String tipoTemplate,
+		OrderByComparator<TemplatePdf> orderByComparator) {
+
+		return getPersistence().fetchByProceduraIdAndTipoTemplate_Last(
+			proceduraId, tipoTemplate, orderByComparator);
+	}
+
+	/**
+	 * Returns the template pdfs before and after the current template pdf in the ordered set where proceduraId = &#63; and tipoTemplate = &#63;.
+	 *
+	 * @param templatePdfId the primary key of the current template pdf
+	 * @param proceduraId the procedura ID
+	 * @param tipoTemplate the tipo template
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next template pdf
+	 * @throws NoSuchTemplatePdfException if a template pdf with the primary key could not be found
+	 */
+	public static TemplatePdf[] findByProceduraIdAndTipoTemplate_PrevAndNext(
+			long templatePdfId, long proceduraId, String tipoTemplate,
+			OrderByComparator<TemplatePdf> orderByComparator)
+		throws it.servizidigitali.gestioneprocedure.exception.
+			NoSuchTemplatePdfException {
+
+		return getPersistence().findByProceduraIdAndTipoTemplate_PrevAndNext(
+			templatePdfId, proceduraId, tipoTemplate, orderByComparator);
+	}
+
+	/**
+	 * Removes all the template pdfs where proceduraId = &#63; and tipoTemplate = &#63; from the database.
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param tipoTemplate the tipo template
+	 */
+	public static void removeByProceduraIdAndTipoTemplate(
+		long proceduraId, String tipoTemplate) {
+
+		getPersistence().removeByProceduraIdAndTipoTemplate(
+			proceduraId, tipoTemplate);
+	}
+
+	/**
+	 * Returns the number of template pdfs where proceduraId = &#63; and tipoTemplate = &#63;.
+	 *
+	 * @param proceduraId the procedura ID
+	 * @param tipoTemplate the tipo template
+	 * @return the number of matching template pdfs
+	 */
+	public static int countByProceduraIdAndTipoTemplate(
+		long proceduraId, String tipoTemplate) {
+
+		return getPersistence().countByProceduraIdAndTipoTemplate(
+			proceduraId, tipoTemplate);
+	}
+
+	/**
 	 * Returns all the template pdfs where proceduraId = &#63;.
 	 *
 	 * @param proceduraId the procedura ID
