@@ -56,6 +56,8 @@ import it.servizidigitali.presentatoreforms.common.service.integration.exception
 import it.servizidigitali.presentatoreforms.common.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.common.util.AlpacaUtil;
 import it.servizidigitali.restservice.dto.v1_0.RichiestaCertificato;
+import it.servizidigitali.restservice.internal.constant.ServiziDigitaliRestConstants;
+import it.servizidigitali.restservice.internal.util.MessageUtil;
 import it.servizidigitali.restservice.jwt.utility.api.JwtUtilityService;
 import it.servizidigitali.restservice.jwt.utility.constant.JWTUtilityConstant;
 import it.servizidigitali.restservice.jwt.utility.exception.JwtException;
@@ -116,7 +118,7 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 	@Override
 	public RichiestaCertificato checkInvioCertificato(@NotNull String userToken, String nomeComune, Long idDestinazioneUso, String codiceServizio, String amministrazione, String codiceFiscale)
 			throws Exception {
-
+		MessageUtil messageUtil = new MessageUtil(ServiziDigitaliRestConstants.BUNDLE_SYMBOLIC_NAME, null);
 		RichiestaCertificato richiestaCertificato = new RichiestaCertificato();
 
 		try {
@@ -168,18 +170,24 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				return richiestaCertificato;
 			}
 
-			List<DestinazioneUso> destinazioniUso = destinazioneUsoLocalService.getDestinazioniUsoByServizioIdOrganizationId(servizio.getServizioId(), organization.getOrganizationId(),
-					organization.getGroupId(), organization.getCompanyId());
+			List<DestinazioneUso> destinazioniUso = destinazioneUsoLocalService
+					.getDestinazioniUsoByServizioIdOrganizationId(
+							servizio.getServizioId(), 
+							organization.getOrganizationId(),
+							organization.getGroupId(), 
+							organization.getCompanyId());
 
 			if (destinazioniUso != null && !destinazioniUso.isEmpty()) {
 				DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
 				if (destinazioneUso != null && destinazioneUso.isPagamentoBollo()) {
 					richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
-					// TODO spostare in Language.properties
-					String messaggio = "Non &eacute; stato possibile procedere con la generazione automatica del {{nomeServizio}} in quanto la destinazione d'uso scelta prevede l'esecuzione di un pagamento elettronico. Accedi al servizio disponibile via web ({{linkServizio}}) per procedere con questa operazione.";
-					messaggio = messaggio.replace("{{nomeServizio}}", servizio.getNome());
 					String uri = layoutUtility.getPathByLayoutId(servizioEnte.getPrivateLayoutId(), organization.getGroupId(), organization.getCompanyId());
-					messaggio = messaggio.replace("{{linkServizio}}", uri);
+					
+					String messaggio = messageUtil.getMessage(
+							"errorePagamentoElettonico", 
+							servizio.getNome(),
+							uri);
+					
 					richiestaCertificato.setMessaggio(messaggio);
 					return richiestaCertificato;
 				}
