@@ -6,8 +6,10 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Image;
+import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.ImageLocalService;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -117,6 +119,9 @@ public class JasperReportPDFService implements PDFService {
 
 	@Reference
 	private DestinazioneUsoLocalService destinazioneUsoLocalService;
+	
+	@Reference
+	private OrganizationLocalService organizationLocalService;
 
 	@Override
 	public byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, Long idDestinazioneUso,
@@ -136,6 +141,8 @@ public class JasperReportPDFService implements PDFService {
 			List<TemplatePdf> templatesPdfFigli = getTemplatesPdfFigli(templatesPdf);
 
 			DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
+			
+			Organization organization = organizationLocalService.getOrganization(themeDisplay.getScopeGroup().getOrganizationId());
 
 			if (templatePdfPrincipale == null) {
 				throw new PDFServiceException("Report JRXML principale non presente.");
@@ -176,6 +183,8 @@ public class JasperReportPDFService implements PDFService {
 			if (Validator.isNotNull(destinazioneUso)) {
 				param.put("descrizioneDestinazioneUso", destinazioneUso.getDescrizione());
 			}
+			
+			param.put(JR_PARAMETER_COMUNE, organization.getName());
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(reportPrincipaleJasperReport, param, jsonDataSource);
 
@@ -215,6 +224,8 @@ public class JasperReportPDFService implements PDFService {
 			Object data = alpacaStructure.getData();
 
 			InputStream stream = new ByteArrayInputStream(gson.toJson(data).getBytes("UTF-8"));
+			
+			Organization organization = organizationLocalService.getOrganization(themeDisplay.getScopeGroup().getOrganizationId());
 
 			JRDataSource jsonDataSource = new JsonDataSource(stream);
 
@@ -240,6 +251,8 @@ public class JasperReportPDFService implements PDFService {
 				ByteArrayInputStream logoComune = new ByteArrayInputStream(image.getTextObj());
 				param.put(JR_PARAMETER_LOGO_COMUNE, logoComune);
 			}
+			
+			param.put(JR_PARAMETER_COMUNE, organization.getName());
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(reportPrincipaleJasperReport, param, jsonDataSource);
 

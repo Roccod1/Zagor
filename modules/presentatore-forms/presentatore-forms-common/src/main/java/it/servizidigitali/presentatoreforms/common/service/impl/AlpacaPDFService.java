@@ -283,17 +283,19 @@ public class AlpacaPDFService implements PDFService {
 				boolean templateTrovato = false;
 
 				while (i < listaTemplate.size() && templateTrovato == false) {
-
-					if (listaTemplate.get(i).getTipoTemplateNativo().equalsIgnoreCase(TipoTemplateNativo.DEFAULT.name())) {
-						templateTrovato = true;
-						templatePdf = listaTemplate.get(i);
+					
+					if (procedura.getStep2TipoServizio().equalsIgnoreCase(TipoServizio.AUTO_DICHIARAZIONE.name())) {
+						if (listaTemplate.get(i).getTipoTemplateNativo().equalsIgnoreCase(TipoTemplateNativo.AUTO_DICHIARAZIONE.name())) {
+							templateTrovato = true;
+							templatePdf = listaTemplate.get(i);
+						}					
+					}else {
+						if (listaTemplate.get(i).getTipoTemplateNativo().equalsIgnoreCase(TipoTemplateNativo.DEFAULT.name())) {
+							templateTrovato = true;
+							templatePdf = listaTemplate.get(i);
+						}					
 					}
-
-					if (listaTemplate.get(i).getTipoTemplateNativo().equalsIgnoreCase(TipoTemplateNativo.AUTO_DICHIARAZIONE.name())) {
-						templateTrovato = true;
-						templatePdf = listaTemplate.get(i);
-					}
-
+					
 					i++;
 				}
 
