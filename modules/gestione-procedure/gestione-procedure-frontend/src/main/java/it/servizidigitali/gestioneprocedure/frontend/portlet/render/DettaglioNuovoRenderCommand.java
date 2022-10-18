@@ -112,7 +112,7 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand {
 				procedura = proceduraLocalService.getProcedura(idProcedura);
 				listaFormIntegrativiProcedura = gestioneProcedureMiddlewareService.getFormIntegrativiProcedura(idProcedura);
 				formPrincipale = gestioneProcedureMiddlewareService.getFormPrincipaleProcedura(idProcedura);
-				listaTemplatePdf = gestioneProcedureMiddlewareService.recuperaTemplatePdfProceduraAttivo(idProcedura, true);
+				listaTemplatePdf = gestioneProcedureMiddlewareService.recuperaTemplatePdfProcedura(idProcedura);
 				String tipiIntegrazioneBackoffice = null;
 
 				if (Validator.isNotNull(formPrincipale) && formPrincipale.getFormId() > 0) {
@@ -135,7 +135,13 @@ public class DettaglioNuovoRenderCommand implements MVCRenderCommand {
 				}
 
 				if (Validator.isNotNull(listaTemplatePdf)) {
-					renderRequest.setAttribute("listaTemplatePdf", listaTemplatePdf);
+					if(procedura.getTipoGenerazionePDF().equalsIgnoreCase(TipoGenerazionePDF.NATIVA.name())) {
+						renderRequest.setAttribute("listaTemplatePdf", listaTemplatePdf);
+					}
+					
+					if(procedura.getTipoGenerazionePDF().equalsIgnoreCase(TipoGenerazionePDF.JASPER_REPORT.name())) {
+						renderRequest.setAttribute("listaTemplateJasperReportPdf", listaTemplatePdf);
+					}
 				}
 
 				renderRequest.setAttribute(GestioneProcedurePortletKeys.PROCEDURA, procedura);

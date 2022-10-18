@@ -14,6 +14,7 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
 <%@page import="it.servizidigitali.gestioneprocedure.frontend.constants.GestioneProcedurePortletKeys"%>
 <%@page import="it.servizidigitali.gestioneprocedure.model.Procedura"%>
+<%@page import="it.servizidigitali.common.utility.enumeration.TipoTemplateNativo"%>
 
 <liferay-theme:defineObjects />
 
