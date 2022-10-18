@@ -362,6 +362,12 @@ public class RichiestaCertificatoLocalServiceUtil {
 		return getService().getRichiestaCertificatosCount();
 	}
 
+	public static List<RichiestaCertificato> getRichiesteCertificatoByStato(
+		String stato) {
+
+		return getService().getRichiesteCertificatoByStato(stato);
+	}
+
 	/**
 	 * Updates the richiesta certificato in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

@@ -411,6 +411,14 @@ public class RichiestaCertificatoLocalServiceWrapper
 			getRichiestaCertificatosCount();
 	}
 
+	@Override
+	public java.util.List<it.servizidigitali.chatbot.model.RichiestaCertificato>
+		getRichiesteCertificatoByStato(String stato) {
+
+		return _richiestaCertificatoLocalService.getRichiesteCertificatoByStato(
+			stato);
+	}
+
 	/**
 	 * Updates the richiesta certificato in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

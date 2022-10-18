@@ -319,6 +319,10 @@ public interface RichiestaCertificatoLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getRichiestaCertificatosCount();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<RichiestaCertificato> getRichiesteCertificatoByStato(
+		String stato);
+
 	/**
 	 * Updates the richiesta certificato in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
