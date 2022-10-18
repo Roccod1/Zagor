@@ -232,5 +232,25 @@ public class AlpacaRestApplication extends Application {
 
 		return alpacaDatasources;
 	}
+	
+	@GET
+	@Path("/comuni/{denominazione}")
+	@Produces("application/json")
+	public List<AlpacaDatasource> getComuniByRegione(@PathParam(value = "denominazione") String denominazione) {
+
+		List<AlpacaDatasource> alpacaDatasources = new ArrayList<AlpacaDatasource>();
+
+		List<Provincia> provinceByRegione = provinciaLocalService.getProvinciaByDenominazioneRegione(denominazione);
+		
+		if (provinceByRegione != null) {
+			long idRegione = provinceByRegione.get(0).getCodiceRegione();
+			List<Comune> comuni = comuneLocalService.getComuniByIdRegione(idRegione);
+			for (Comune comune : comuni) {
+				alpacaDatasources.add(new AlpacaDatasource(comune.getDenominazione(), String.valueOf(comune.getComuneId())));
+			}
+		}
+
+		return alpacaDatasources;
+	}
 
 }

@@ -284,6 +284,14 @@ public class ProvinciaLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<it.servizidigitali.common.model.Provincia>
+		getProvinciaByDenominazioneRegione(String denominazioneRegione) {
+
+		return _provinciaLocalService.getProvinciaByDenominazioneRegione(
+			denominazioneRegione);
+	}
+
+	@Override
 	public it.servizidigitali.common.model.Provincia getProvinciaBySigla(
 		String sigla) {
 

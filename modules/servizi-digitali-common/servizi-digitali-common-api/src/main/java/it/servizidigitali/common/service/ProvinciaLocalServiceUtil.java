@@ -254,6 +254,13 @@ public class ProvinciaLocalServiceUtil {
 		return getService().getProvincia(provinciaId);
 	}
 
+	public static List<Provincia> getProvinciaByDenominazioneRegione(
+		String denominazioneRegione) {
+
+		return getService().getProvinciaByDenominazioneRegione(
+			denominazioneRegione);
+	}
+
 	public static Provincia getProvinciaBySigla(String sigla) {
 		return getService().getProvinciaBySigla(sigla);
 	}

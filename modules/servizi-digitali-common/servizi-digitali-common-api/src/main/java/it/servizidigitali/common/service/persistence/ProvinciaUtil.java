@@ -348,6 +348,187 @@ public class ProvinciaUtil {
 	}
 
 	/**
+	 * Returns all the provincias where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @return the matching provincias
+	 */
+	public static List<Provincia> findByDenominazioneRegione(
+		String denominazioneRegione) {
+
+		return getPersistence().findByDenominazioneRegione(
+			denominazioneRegione);
+	}
+
+	/**
+	 * Returns a range of all the provincias where denominazioneRegione = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProvinciaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param start the lower bound of the range of provincias
+	 * @param end the upper bound of the range of provincias (not inclusive)
+	 * @return the range of matching provincias
+	 */
+	public static List<Provincia> findByDenominazioneRegione(
+		String denominazioneRegione, int start, int end) {
+
+		return getPersistence().findByDenominazioneRegione(
+			denominazioneRegione, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the provincias where denominazioneRegione = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProvinciaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param start the lower bound of the range of provincias
+	 * @param end the upper bound of the range of provincias (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching provincias
+	 */
+	public static List<Provincia> findByDenominazioneRegione(
+		String denominazioneRegione, int start, int end,
+		OrderByComparator<Provincia> orderByComparator) {
+
+		return getPersistence().findByDenominazioneRegione(
+			denominazioneRegione, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the provincias where denominazioneRegione = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProvinciaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param start the lower bound of the range of provincias
+	 * @param end the upper bound of the range of provincias (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching provincias
+	 */
+	public static List<Provincia> findByDenominazioneRegione(
+		String denominazioneRegione, int start, int end,
+		OrderByComparator<Provincia> orderByComparator,
+		boolean useFinderCache) {
+
+		return getPersistence().findByDenominazioneRegione(
+			denominazioneRegione, start, end, orderByComparator,
+			useFinderCache);
+	}
+
+	/**
+	 * Returns the first provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching provincia
+	 * @throws NoSuchProvinciaException if a matching provincia could not be found
+	 */
+	public static Provincia findByDenominazioneRegione_First(
+			String denominazioneRegione,
+			OrderByComparator<Provincia> orderByComparator)
+		throws it.servizidigitali.common.exception.NoSuchProvinciaException {
+
+		return getPersistence().findByDenominazioneRegione_First(
+			denominazioneRegione, orderByComparator);
+	}
+
+	/**
+	 * Returns the first provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching provincia, or <code>null</code> if a matching provincia could not be found
+	 */
+	public static Provincia fetchByDenominazioneRegione_First(
+		String denominazioneRegione,
+		OrderByComparator<Provincia> orderByComparator) {
+
+		return getPersistence().fetchByDenominazioneRegione_First(
+			denominazioneRegione, orderByComparator);
+	}
+
+	/**
+	 * Returns the last provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching provincia
+	 * @throws NoSuchProvinciaException if a matching provincia could not be found
+	 */
+	public static Provincia findByDenominazioneRegione_Last(
+			String denominazioneRegione,
+			OrderByComparator<Provincia> orderByComparator)
+		throws it.servizidigitali.common.exception.NoSuchProvinciaException {
+
+		return getPersistence().findByDenominazioneRegione_Last(
+			denominazioneRegione, orderByComparator);
+	}
+
+	/**
+	 * Returns the last provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching provincia, or <code>null</code> if a matching provincia could not be found
+	 */
+	public static Provincia fetchByDenominazioneRegione_Last(
+		String denominazioneRegione,
+		OrderByComparator<Provincia> orderByComparator) {
+
+		return getPersistence().fetchByDenominazioneRegione_Last(
+			denominazioneRegione, orderByComparator);
+	}
+
+	/**
+	 * Returns the provincias before and after the current provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param provinciaId the primary key of the current provincia
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next provincia
+	 * @throws NoSuchProvinciaException if a provincia with the primary key could not be found
+	 */
+	public static Provincia[] findByDenominazioneRegione_PrevAndNext(
+			long provinciaId, String denominazioneRegione,
+			OrderByComparator<Provincia> orderByComparator)
+		throws it.servizidigitali.common.exception.NoSuchProvinciaException {
+
+		return getPersistence().findByDenominazioneRegione_PrevAndNext(
+			provinciaId, denominazioneRegione, orderByComparator);
+	}
+
+	/**
+	 * Removes all the provincias where denominazioneRegione = &#63; from the database.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 */
+	public static void removeByDenominazioneRegione(
+		String denominazioneRegione) {
+
+		getPersistence().removeByDenominazioneRegione(denominazioneRegione);
+	}
+
+	/**
+	 * Returns the number of provincias where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @return the number of matching provincias
+	 */
+	public static int countByDenominazioneRegione(String denominazioneRegione) {
+		return getPersistence().countByDenominazioneRegione(
+			denominazioneRegione);
+	}
+
+	/**
 	 * Returns the provincia where sigla = &#63; or throws a <code>NoSuchProvinciaException</code> if it could not be found.
 	 *
 	 * @param sigla the sigla
