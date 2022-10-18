@@ -23,6 +23,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
+import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
@@ -90,10 +91,9 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 		Procedura procedura = null;
 		Richiesta richiesta = null;
 		IstanzaForm istanzaForm = null;
+		ServizioEnte servizioEnte = null;
 		
-		// TODO : recuperare da db
-		
-		boolean firmaDocumentoAbilitata = true;
+		boolean firmaDocumentoAbilitata = false;
 		
 		try {
 			uploadFileRichiesteEnteConfiguration = configurationProvider.getGroupConfiguration(UploadFileRichiesteEnteConfiguration.class, themeDisplay.getScopeGroupId());
@@ -101,6 +101,12 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 			form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 			richiesta = presentatoreFormFrontendService.getRichiestaBozza(user.getScreenName(), procedura.getProceduraId());
 			istanzaForm = presentatoreFormFrontendService.getIstanzaFormRichiesta(richiesta.getRichiestaId(), form.getFormId());
+			servizioEnte = presentatoreFormFrontendService.getServizioEnteByPage(themeDisplay);
+			
+			if(Validator.isNotNull(servizioEnte)) {
+				firmaDocumentoAbilitata = servizioEnte.getRichiestaFirma();
+			}
+			
 		} catch (Exception e) {
 			_log.error("errore nel recupero del form: " + form.getFormId() + " :: ERORR MESSAGE: " + e.getMessage());
 		}

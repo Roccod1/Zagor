@@ -16,6 +16,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -24,6 +25,7 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
@@ -78,15 +80,14 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand {
 		ResourceBundleLoader resourceBundleLoader = ResourceBundleLoaderUtil.getResourceBundleLoaderByBundleSymbolicName(PresentatoreFormsPortletKeys.BUNDLE_SYMBOLIC_NAME);
 
 		User user = themeDisplay.getUser();
-		Procedura procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
+		Procedura procedura = null;
+		Form form = null;
 
-		Servizio servizio = servizioLocalService.getServizio(procedura.getServizioId());
+		Servizio servizio = null;
+		ServizioEnte servizioEnte = null;
 
-		// TODO: recuperare da db
-
-		boolean firmaDigitaleAbilitata = true;
-		List<String> listaFormatiFirma = new ArrayList<String>();
-		listaFormatiFirma.add("PADES");
+		boolean firmaDigitaleAbilitata = false;
+		List<String> listaFormatiFirma = null;
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 
@@ -100,8 +101,21 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand {
 		}
 
 		try {
-			Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
-
+			procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
+			servizio = servizioLocalService.getServizio(procedura.getServizioId());
+			form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
+			servizioEnte = presentatoreFormFrontendService.getServizioEnteByPage(themeDisplay);
+			
+			
+			if(Validator.isNotNull(servizioEnte)) {
+				String listaFormatiFirmaDigitale = servizioEnte.getFormatiFirmaDigitale();
+				
+				if(Validator.isNotNull(listaFormatiFirmaDigitale) && servizioEnte.getRichiestaFirma()) {
+					listaFormatiFirma = new ArrayList<String>(Arrays.asList(listaFormatiFirmaDigitale.split(" , ")));
+					firmaDigitaleAbilitata = true;
+				}
+			}
+			
 			if (Validator.isNotNull(procedura) && procedura.getProceduraId() > 0) {
 
 				Richiesta richiesta = presentatoreFormFrontendService.getRichiestaBozza(user.getScreenName(), procedura.getProceduraId());

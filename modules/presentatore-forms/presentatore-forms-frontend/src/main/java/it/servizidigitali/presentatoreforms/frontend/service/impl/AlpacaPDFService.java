@@ -1,10 +1,12 @@
 package it.servizidigitali.presentatoreforms.frontend.service.impl;
 
+import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutSetLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
@@ -13,12 +15,14 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.portlet.PortletRequest;
@@ -33,9 +37,13 @@ import it.servizidigitali.common.service.ComuneLocalService;
 import it.servizidigitali.common.service.ProvinciaLocalService;
 import it.servizidigitali.common.service.StatoEsteroLocalService;
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
+import it.servizidigitali.common.utility.enumeration.TipoTemplate;
+import it.servizidigitali.common.utility.enumeration.TipoTemplateNativo;
 import it.servizidigitali.file.utility.converter.pdf.PDFConverter;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.gestioneprocedure.model.TemplatePdf;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
+import it.servizidigitali.gestioneprocedure.service.TemplatePdfLocalService;
 import it.servizidigitali.presentatoreforms.frontend.configuration.FreemarkerTemplateEnteConfiguration;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.exception.PDFServiceException;
@@ -97,6 +105,12 @@ public class AlpacaPDFService implements PDFService {
 
 	@Reference
 	private PDFConverter pdfConverter;
+	
+	@Reference
+	private TemplatePdfLocalService templatePdfLocalService;
+
+	@Reference
+	private DLAppService dlAppService;
 
 	@Override
 	public byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, Long idDestinazioneUso,
@@ -125,6 +139,12 @@ public class AlpacaPDFService implements PDFService {
 			Organization organization = organizationLocalService.getOrganization(organizationId);
 
 			LayoutSet layout = layoutSetLocalService.getLayoutSet(themeDisplay.getSiteGroupId(), true);
+			
+			List<TemplatePdf> listaTemplate = templatePdfLocalService.getTemplatePdfByProceduraIdAndTipoTemplate(procedura.getProceduraId(), TipoTemplate.FREEMARKER.name());
+			
+			TemplatePdf templatePdf = null;
+			
+			Template template = null;
 
 			String numeroBolloDescrizione = "";
 
@@ -158,7 +178,41 @@ public class AlpacaPDFService implements PDFService {
 			addParametriAggiuntivi(data, themeDisplay);
 
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			Template template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.certificatiAlpacaTemplate()), config);
+			
+			if(Validator.isNotNull(listaTemplate) && !listaTemplate.isEmpty()) {
+				
+				int i = 0;
+				boolean templateCertificato = false;
+				
+				while(i<listaTemplate.size() && templateCertificato == false) {
+					
+					if(listaTemplate.get(i).getTipoTemplateNativo().equalsIgnoreCase(TipoTemplateNativo.CERTIFICATO.name())) {
+						templateCertificato = true;
+						templatePdf = listaTemplate.get(i);
+					}
+					
+					i++;
+				}
+				
+				if(Validator.isNotNull(templatePdf)) {
+					long fileEntryId = templatePdf.getFileEntryId();
+					FileEntry feTemplate = dlAppService.getFileEntry(fileEntryId);
+					
+					if(Validator.isNotNull(feTemplate)) {
+						InputStream isTemplate = feTemplate.getContentStream();
+						String templateCustom = new String(isTemplate.readAllBytes(), StandardCharsets.UTF_8);
+						template = new Template("templateName", new StringReader(templateCustom), config);
+					}
+					
+				}else {
+					template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.certificatiAlpacaTemplate()), config);
+				}
+				
+				
+			}else {
+				template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.certificatiAlpacaTemplate()), config);
+			}
+			
 			template.process(data, new OutputStreamWriter(os));
 
 			htmlContent = os.toString(StandardCharsets.UTF_8);
@@ -199,6 +253,11 @@ public class AlpacaPDFService implements PDFService {
 			Organization organization = organizationLocalService.getOrganization(organizationId);
 
 			LayoutSet layout = layoutSetLocalService.getLayoutSet(themeDisplay.getSiteGroupId(), true);
+			
+			List<TemplatePdf> listaTemplate = templatePdfLocalService.getTemplatePdfByProceduraIdAndTipoTemplate(procedura.getProceduraId(), TipoTemplate.FREEMARKER.name());
+			
+			TemplatePdf templatePdf = null;
+			
 			long logoId = layout.getLogoId();
 			data.put("logoId", logoId);
 
@@ -216,14 +275,60 @@ public class AlpacaPDFService implements PDFService {
 
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			Template template = null;
-
-			if (procedura.getStep2TipoServizio().equalsIgnoreCase(TipoServizio.AUTO_DICHIARAZIONE.name())) {
-				template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.autoDichiarazioniAlpacaTemplate()), config);
+			
+			if(Validator.isNotNull(listaTemplate) && !listaTemplate.isEmpty()) {
+				
+				int i = 0;
+				boolean templateTrovato = false;
+				
+				while(i<listaTemplate.size() && templateTrovato == false) {
+					
+					if(listaTemplate.get(i).getTipoTemplateNativo().equalsIgnoreCase(TipoTemplateNativo.DEFAULT.name())) {
+						templateTrovato = true;
+						templatePdf = listaTemplate.get(i);
+					}
+					
+					if(listaTemplate.get(i).getTipoTemplateNativo().equalsIgnoreCase(TipoTemplateNativo.AUTO_DICHIARAZIONE.name())) {
+						templateTrovato = true;
+						templatePdf = listaTemplate.get(i);
+					}
+					
+					i++;
+				}
+				
+				if(Validator.isNotNull(templatePdf)) {
+					long fileEntryId = templatePdf.getFileEntryId();
+					FileEntry feTemplate = dlAppService.getFileEntry(fileEntryId);
+					
+					if(Validator.isNotNull(feTemplate)) {
+						InputStream isTemplate = feTemplate.getContentStream();
+						String templateCustom = new String(isTemplate.readAllBytes(), StandardCharsets.UTF_8);
+						template = new Template("templateName", new StringReader(templateCustom), config);
+					}
+					
+				}else {
+					
+					if (procedura.getStep2TipoServizio().equalsIgnoreCase(TipoServizio.AUTO_DICHIARAZIONE.name())) {
+						template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.autoDichiarazioniAlpacaTemplate()), config);
+					}
+					else {
+						template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.defaultAlpacaTemplate()), config);
+					}
+					
+				}
+				
+				
+			}else {
+				
+				if (procedura.getStep2TipoServizio().equalsIgnoreCase(TipoServizio.AUTO_DICHIARAZIONE.name())) {
+					template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.autoDichiarazioniAlpacaTemplate()), config);
+				}
+				else {
+					template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.defaultAlpacaTemplate()), config);
+				}
+				
 			}
-			else {
-				template = new Template("templateName", new StringReader(freemarkerTemplateEnteConfiguration.defaultAlpacaTemplate()), config);
-			}
-
+			
 			template.process(data, new OutputStreamWriter(os));
 
 			htmlContent = os.toString(StandardCharsets.UTF_8);
