@@ -35,6 +35,7 @@ dependencies {
 	compileOnly project(":modules:presentatore-forms:presentatore-forms-common")
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-communication-utility") 
 	compileOnly project(":modules:servizi-digitali-rest-service:servizi-digitali-rest-service-jwt-utility")
+	compileOnly project(":modules:chatbot:chatbot-api")
 }
 
 group = "it.servizidigitali.restservice"
