@@ -1,5 +1,17 @@
 package it.servizidigitali.restservice.internal.resource.v1_0;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.liferay.expando.kernel.model.ExpandoColumn;
@@ -19,21 +31,10 @@ import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.ForbiddenException;
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.NotFoundException;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ServiceScope;
-
 import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletService;
 import it.servizidigitali.common.utility.LayoutUtility;
 import it.servizidigitali.common.utility.enumeration.StatoRichiestaCertificato;
+import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
@@ -45,6 +46,7 @@ import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 import it.servizidigitali.presentatoreforms.common.model.AlpacaJsonStructure;
@@ -139,27 +141,23 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				return richiestaCertificato;
 			}
 
-			// TODO verificare come mai non carica le tipologie
-			// List<Tipologia> tipologie = servizio.getListaTipologie();
-			// if (tipologie == null || tipologie.isEmpty()) {
-			// richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
-			// richiestaCertificato.setMessaggio("Servizio " + codiceServizio + " non trovato.");
-			// return richiestaCertificato;
-			// }
+			List<Tipologia> tipologie = tipologiaLocalService.getServizioTipologias(servizio.getServizioId());
+			if (tipologie == null || tipologie.isEmpty()) {
+				richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
+				richiestaCertificato.setMessaggio("Tipologie non trovate.");
+				return richiestaCertificato;
+			}
 
-			// boolean checkTipologia = false;
-			// for (Tipologia tipologia : tipologie) {
-			// if (tipologia.getCodice() != null &&
-			// tipologia.getCodice().equals(TipoServizio.CERTIFICATO)) {
-			// checkTipologia = true;
-			// }
-			// }
+			boolean checkTipologia = tipologie.stream()
+					.filter(x -> TipoServizio.CERTIFICATO.equals(TipoServizio.valueOf(x.getCodice())))
+					.findFirst()
+					.isPresent();
 
-			// if (!checkTipologia) {
-			// richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
-			// richiestaCertificato.setMessaggio("Servizio " + codiceServizio + " non trovato.");
-			// return richiestaCertificato;
-			// }
+			if (!checkTipologia) {
+				richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
+				richiestaCertificato.setMessaggio("Tipologia certificato non trovato.");
+				return richiestaCertificato;
+			}
 
 			ServizioEntePK servizioEntePK = new ServizioEntePK(servizio.getServizioId(), organization.getOrganizationId());
 			ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);
