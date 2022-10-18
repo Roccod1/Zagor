@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
@@ -19,6 +20,7 @@ import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.scheduler.StorageTypeAware;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 
@@ -95,6 +97,9 @@ public class InvioCertificatiScheduler extends BaseMessageListener {
 	private OrganizationLocalService organizationLocalService;
 
 	@Reference
+	private GroupLocalService groupLocalService;
+
+	@Reference
 	private LayoutUtility layoutUtility;
 
 	@Override
@@ -118,7 +123,9 @@ public class InvioCertificatiScheduler extends BaseMessageListener {
 
 			Form form = getFormPrincipaleProcedura(procedura.getProceduraId());
 
-			Organization organization = organizationLocalService.getOrganization(richiestaCertificato.getOrganizationId());
+			Group group = groupLocalService.getGroup(richiestaCertificato.getGroupId());
+
+			Organization organization = organizationLocalService.getOrganization(group.getOrganizationId());
 			String portalUrl = layoutUtility.getSitePath(organization.getGroupId(), organization.getCompanyId());
 
 			Gson gson = new Gson();
