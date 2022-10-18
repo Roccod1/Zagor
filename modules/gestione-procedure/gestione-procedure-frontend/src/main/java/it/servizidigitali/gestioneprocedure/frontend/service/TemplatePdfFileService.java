@@ -48,7 +48,7 @@ public class TemplatePdfFileService {
 	 * @return
 	 * @throws Exception
 	 */
-	public long saveJasperReport(String nomeFile, String titolo, String descrizione, long proceduraId, InputStream inputStream, String mimeType, long userId, long groupId) throws Exception {
+	public long saveTemplate(String nomeFile, String titolo, String descrizione, long proceduraId, InputStream inputStream, String mimeType, long userId, long groupId) throws Exception {
 
 		try {
 			long defaultRepoId = DLFolderConstants.getDataRepositoryId(groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);

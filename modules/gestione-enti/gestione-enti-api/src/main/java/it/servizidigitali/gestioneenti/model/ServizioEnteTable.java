@@ -104,6 +104,14 @@ public class ServizioEnteTable extends BaseTable<ServizioEnteTable> {
 		"iseeInps", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<ServizioEnteTable, Boolean> attivo = createColumn(
 		"attivo", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
+	public final Column<ServizioEnteTable, Boolean> richiestaFirma =
+		createColumn(
+			"richiestaFirma", Boolean.class, Types.BOOLEAN,
+			Column.FLAG_DEFAULT);
+	public final Column<ServizioEnteTable, String> formatiFirmaDigitale =
+		createColumn(
+			"formatiFirmaDigitale", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
 
 	private ServizioEnteTable() {
 		super("servizio_ente", ServizioEnteTable::new);

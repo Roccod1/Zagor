@@ -41,7 +41,9 @@ import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreForms
 import it.servizidigitali.presentatoreforms.frontend.exception.PDFServiceException;
 import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
+import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.service.DestinazioneUsoLocalService;
 
 /**
  * @author pindi
@@ -50,7 +52,7 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 @Component(name = "alpacaPDFService", immediate = true, service = PDFService.class, configurationPid = "it.servizidigitali.presentatoreforms.frontend.configuration.FreemarkerTemplateEnteConfiguration")
 public class AlpacaPDFService implements PDFService {
 
-	private static final String SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH = "/o/api/alpaca";
+	private static final String SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH = PresentatoreFormsPortletKeys.SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH;
 
 	private static final Log log = LogFactoryUtil.getLog(AlpacaPDFService.class.getName());
 
@@ -90,8 +92,8 @@ public class AlpacaPDFService implements PDFService {
 	// @Autowired
 	// private JwtTokenUtil jwtTokenUtil;
 
-	// @Autowired
-	// private DestinazioneUsoService destinazioneUsoService;
+	@Reference
+	private DestinazioneUsoLocalService destinazioneUsoLocalService;
 
 	@Reference
 	private PDFConverter pdfConverter;
@@ -117,6 +119,8 @@ public class AlpacaPDFService implements PDFService {
 			long groupId = procedura.getGroupId();
 
 			long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
+			
+			DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
 
 			Organization organization = organizationLocalService.getOrganization(organizationId);
 
@@ -134,10 +138,13 @@ public class AlpacaPDFService implements PDFService {
 			// Attributi impostati attraverso le destinazioni uso
 
 			data.put("certificatoId", richiesta.getRichiestaId());
-			data.put("descrizioneDestinazioneUso", "");
 			data.put("pagamentoBollo", "false");
 			data.put("timbraCertificato", "false");
-			data.put("showDescrizioneEsenzioneBollo", "false");
+			data.put("showDescrizioneEsenzioneBollo", "true");
+			
+			if(Validator.isNotNull(destinazioneUso)) {
+				data.put("descrizioneDestinazioneUso", destinazioneUso.getDescrizione());
+			}
 
 			if (Validator.isNotNull(numeroBollo)) {
 				numeroBolloDescrizione = "Identificativo Bollo: " + numeroBollo;

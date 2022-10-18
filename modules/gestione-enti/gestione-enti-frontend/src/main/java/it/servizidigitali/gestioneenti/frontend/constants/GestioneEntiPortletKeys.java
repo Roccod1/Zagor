@@ -48,6 +48,13 @@ public class GestioneEntiPortletKeys {
 	public static final String SERVIZIO_ISEE_INPS = "iseeInps";
 	public static final String SERVIZIO_ATTIVO = "attivo";
 	public static final String SERVIZIO_AZIENDA = "azienda";
+	public static final String RICHIESTA_FIRMA = "richiestaFirma";
+	public static final String FORMATI_FIRMA_DIGITALE = "formatiFirmaDigitale";
+	public static final String LISTA_FORMATI_FIRMA_DIGITALE = "listaFormatiFirmaDigitale";
+	public static final String LISTA_VUOTA = "'listaVuota'";
+	public static final String LISTA_DESTINAZIONI_USO = "listaDestinazioniUso";
+	public static final String LISTA_DESTINAZIONI_USO_SERVIZIO = "listaDestinazioniUsoServizio";
+	public static final String DESTINAZIONI_USO_SELEZIONATE = "destinazioniUsoSelezionate";
 
 	// path jsp
 	public static final String JSP_INSERIMENTO_MODIFICA = "/inserisciModificaEnteServizio.jsp";

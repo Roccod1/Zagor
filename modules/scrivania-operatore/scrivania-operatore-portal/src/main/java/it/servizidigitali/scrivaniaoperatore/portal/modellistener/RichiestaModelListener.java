@@ -41,6 +41,7 @@ public class RichiestaModelListener extends BaseModelListener<Richiesta> {
 		attivitaRichiesta.setUserId(model.getUserId());
 		attivitaRichiesta.setUserName(model.getUserName());
 		attivitaRichiesta.setStato(model.getStato());
+		attivitaRichiesta.setRichiestaId(model.getRichiestaId());
 
 		attivitaRichiesta.setNote("Nuovo inserimento");
 
@@ -61,6 +62,7 @@ public class RichiestaModelListener extends BaseModelListener<Richiesta> {
 			attivitaRichiesta.setUserId(model.getUserId());
 			attivitaRichiesta.setUserName(model.getUserName());
 			attivitaRichiesta.setStato(nuovoStato);
+			attivitaRichiesta.setRichiestaId(model.getRichiestaId());
 			attivitaRichiestaLocalService.updateAttivitaRichiesta(attivitaRichiesta);
 		}
 	}

@@ -64,7 +64,7 @@ public class ServizioEnteCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(57);
+		StringBundler sb = new StringBundler(61);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -122,6 +122,10 @@ public class ServizioEnteCacheModel
 		sb.append(iseeInps);
 		sb.append(", attivo=");
 		sb.append(attivo);
+		sb.append(", richiestaFirma=");
+		sb.append(richiestaFirma);
+		sb.append(", formatiFirmaDigitale=");
+		sb.append(formatiFirmaDigitale);
 		sb.append("}");
 
 		return sb.toString();
@@ -207,6 +211,14 @@ public class ServizioEnteCacheModel
 		servizioEnteImpl.setTimbroCertificato(timbroCertificato);
 		servizioEnteImpl.setIseeInps(iseeInps);
 		servizioEnteImpl.setAttivo(attivo);
+		servizioEnteImpl.setRichiestaFirma(richiestaFirma);
+
+		if (formatiFirmaDigitale == null) {
+			servizioEnteImpl.setFormatiFirmaDigitale("");
+		}
+		else {
+			servizioEnteImpl.setFormatiFirmaDigitale(formatiFirmaDigitale);
+		}
 
 		servizioEnteImpl.resetOriginalValues();
 
@@ -264,6 +276,9 @@ public class ServizioEnteCacheModel
 		iseeInps = objectInput.readBoolean();
 
 		attivo = objectInput.readBoolean();
+
+		richiestaFirma = objectInput.readBoolean();
+		formatiFirmaDigitale = objectInput.readUTF();
 
 		servizioEntePK = new ServizioEntePK(servizioId, organizationId);
 	}
@@ -337,6 +352,15 @@ public class ServizioEnteCacheModel
 		objectOutput.writeBoolean(iseeInps);
 
 		objectOutput.writeBoolean(attivo);
+
+		objectOutput.writeBoolean(richiestaFirma);
+
+		if (formatiFirmaDigitale == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(formatiFirmaDigitale);
+		}
 	}
 
 	public String uuid;
@@ -367,6 +391,8 @@ public class ServizioEnteCacheModel
 	public boolean timbroCertificato;
 	public boolean iseeInps;
 	public boolean attivo;
+	public boolean richiestaFirma;
+	public String formatiFirmaDigitale;
 	public transient ServizioEntePK servizioEntePK;
 
 }

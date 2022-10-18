@@ -40,5 +40,7 @@
 		<field name="fileEntryId" type="long" />
 		<field name="proceduraId" type="long" />
 		<field name="templatePdfParentId" type="long" />
+		<field name="tipoTemplate" type="String" />
+		<field name="tipoTemplateNativo" type="String" />
 	</model>
 </model-hints>

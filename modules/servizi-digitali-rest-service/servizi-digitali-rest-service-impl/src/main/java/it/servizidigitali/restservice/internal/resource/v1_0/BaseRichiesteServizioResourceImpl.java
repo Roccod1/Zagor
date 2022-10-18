@@ -19,6 +19,7 @@ import com.liferay.portal.vulcan.util.TransformUtil;
 import it.servizidigitali.restservice.dto.v1_0.InsertRichiestaServizioRequest;
 import it.servizidigitali.restservice.dto.v1_0.RichiestaServizio;
 import it.servizidigitali.restservice.dto.v1_0.UpdateRichiestaServizioRequest;
+import it.servizidigitali.restservice.dto.v1_0.UpdateStatoRichiestaServizioRequest;
 import it.servizidigitali.restservice.resource.v1_0.RichiesteServizioResource;
 
 import java.util.Collections;
@@ -89,6 +90,31 @@ public abstract class BaseRichiesteServizioResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
+	 * curl -X 'PATCH' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/richieste-servizio' -d $'{"id": ___, "stato": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 */
+	@io.swagger.v3.oas.annotations.Operation(
+		description = "Modifica di una richiesta servizio"
+	)
+	@io.swagger.v3.oas.annotations.tags.Tags(
+		value = {
+			@io.swagger.v3.oas.annotations.tags.Tag(name = "RichiesteServizio")
+		}
+	)
+	@javax.ws.rs.Consumes({"application/json", "application/xml"})
+	@javax.ws.rs.PATCH
+	@javax.ws.rs.Path("/richieste-servizio")
+	@javax.ws.rs.Produces({"application/json", "application/xml"})
+	@Override
+	public RichiestaServizio patchRichiestaServizio(
+			UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
+		throws Exception {
+
+		return new RichiestaServizio();
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
 	 * curl -X 'POST' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/richieste-servizio' -d $'{"stato": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.tags.Tags(
@@ -103,6 +129,32 @@ public abstract class BaseRichiesteServizioResourceImpl
 	@Override
 	public RichiestaServizio insertRichiestaServizio(
 			InsertRichiestaServizioRequest insertRichiestaServizioRequest)
+		throws Exception {
+
+		return new RichiestaServizio();
+	}
+
+	/**
+	 * Invoke this method with the command line:
+	 *
+	 * curl -X 'PUT' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/richieste-servizio' -d $'{"id": ___, "note": ___, "stato": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 */
+	@io.swagger.v3.oas.annotations.Operation(
+		description = "Modifica lo stato di una richiesta servizio"
+	)
+	@io.swagger.v3.oas.annotations.tags.Tags(
+		value = {
+			@io.swagger.v3.oas.annotations.tags.Tag(name = "RichiesteServizio")
+		}
+	)
+	@javax.ws.rs.Consumes({"application/json", "application/xml"})
+	@javax.ws.rs.Path("/richieste-servizio")
+	@javax.ws.rs.Produces({"application/json", "application/xml"})
+	@javax.ws.rs.PUT
+	@Override
+	public RichiestaServizio updateStatoRichiestaServizio(
+			UpdateStatoRichiestaServizioRequest
+				updateStatoRichiestaServizioRequest)
 		throws Exception {
 
 		return new RichiestaServizio();
@@ -134,78 +186,6 @@ public abstract class BaseRichiesteServizioResourceImpl
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.validation.constraints.NotNull @javax.ws.rs.PathParam("id")
 			Long id)
-		throws Exception {
-
-		return new RichiestaServizio();
-	}
-
-	/**
-	 * Invoke this method with the command line:
-	 *
-	 * curl -X 'PATCH' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/richieste-servizio/{id}' -d $'{"id": ___, "stato": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
-	 */
-	@io.swagger.v3.oas.annotations.Operation(
-		description = "Modifica di una richiesta servizio"
-	)
-	@io.swagger.v3.oas.annotations.Parameters(
-		value = {
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "id"
-			)
-		}
-	)
-	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {
-			@io.swagger.v3.oas.annotations.tags.Tag(name = "RichiesteServizio")
-		}
-	)
-	@javax.ws.rs.Consumes({"application/json", "application/xml"})
-	@javax.ws.rs.PATCH
-	@javax.ws.rs.Path("/richieste-servizio/{id}")
-	@javax.ws.rs.Produces({"application/json", "application/xml"})
-	@Override
-	public RichiestaServizio patchRichiestaServizio(
-			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-			@javax.validation.constraints.NotNull @javax.ws.rs.PathParam("id")
-			Long id,
-			UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
-		throws Exception {
-
-		return new RichiestaServizio();
-	}
-
-	/**
-	 * Invoke this method with the command line:
-	 *
-	 * curl -X 'PUT' 'http://localhost:8080/o/servizi-digitali-rest-service/v1.0/richieste-servizio/{id}' -d $'{"id": ___, "stato": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
-	 */
-	@io.swagger.v3.oas.annotations.Operation(
-		description = "Modifica di una richiesta servizio"
-	)
-	@io.swagger.v3.oas.annotations.Parameters(
-		value = {
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
-				name = "id"
-			)
-		}
-	)
-	@io.swagger.v3.oas.annotations.tags.Tags(
-		value = {
-			@io.swagger.v3.oas.annotations.tags.Tag(name = "RichiesteServizio")
-		}
-	)
-	@javax.ws.rs.Consumes({"application/json", "application/xml"})
-	@javax.ws.rs.Path("/richieste-servizio/{id}")
-	@javax.ws.rs.Produces({"application/json", "application/xml"})
-	@javax.ws.rs.PUT
-	@Override
-	public RichiestaServizio updateRichiestaServizio(
-			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
-			@javax.validation.constraints.NotNull @javax.ws.rs.PathParam("id")
-			Long id,
-			UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
 		throws Exception {
 
 		return new RichiestaServizio();

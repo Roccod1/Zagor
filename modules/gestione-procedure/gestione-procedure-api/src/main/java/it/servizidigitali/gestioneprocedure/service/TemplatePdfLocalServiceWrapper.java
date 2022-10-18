@@ -322,6 +322,17 @@ public class TemplatePdfLocalServiceWrapper
 			proceduraId);
 	}
 
+	@Override
+	public java.util.List
+		<it.servizidigitali.gestioneprocedure.model.TemplatePdf>
+			getTemplatePdfByProceduraIdAndTipoTemplate(
+				long proceduraId, String tipoTemplate) {
+
+		return _templatePdfLocalService.
+			getTemplatePdfByProceduraIdAndTipoTemplate(
+				proceduraId, tipoTemplate);
+	}
+
 	/**
 	 * Returns the template pdf matching the UUID and group.
 	 *

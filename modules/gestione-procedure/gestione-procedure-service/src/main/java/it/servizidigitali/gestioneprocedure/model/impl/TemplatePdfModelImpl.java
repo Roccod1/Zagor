@@ -78,7 +78,8 @@ public class TemplatePdfModelImpl
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"fileEntryId", Types.BIGINT}, {"proceduraId", Types.BIGINT},
-		{"templatePdfParentId", Types.BIGINT}
+		{"templatePdfParentId", Types.BIGINT}, {"tipoTemplate", Types.VARCHAR},
+		{"tipoTemplateNativo", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -96,10 +97,12 @@ public class TemplatePdfModelImpl
 		TABLE_COLUMNS_MAP.put("fileEntryId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("proceduraId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("templatePdfParentId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("tipoTemplate", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("tipoTemplateNativo", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table template_pdf (uuid_ VARCHAR(75) null,templatePdfId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,fileEntryId LONG,proceduraId LONG,templatePdfParentId LONG)";
+		"create table template_pdf (uuid_ VARCHAR(75) null,templatePdfId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,fileEntryId LONG,proceduraId LONG,templatePdfParentId LONG,tipoTemplate VARCHAR(75) null,tipoTemplateNativo VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP = "drop table template_pdf";
 
@@ -143,14 +146,20 @@ public class TemplatePdfModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 16L;
+	public static final long TIPOTEMPLATE_COLUMN_BITMASK = 16L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 32L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long TEMPLATEPDFID_COLUMN_BITMASK = 32L;
+	public static final long TEMPLATEPDFID_COLUMN_BITMASK = 64L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -336,6 +345,17 @@ public class TemplatePdfModelImpl
 		attributeSetterBiConsumers.put(
 			"templatePdfParentId",
 			(BiConsumer<TemplatePdf, Long>)TemplatePdf::setTemplatePdfParentId);
+		attributeGetterFunctions.put(
+			"tipoTemplate", TemplatePdf::getTipoTemplate);
+		attributeSetterBiConsumers.put(
+			"tipoTemplate",
+			(BiConsumer<TemplatePdf, String>)TemplatePdf::setTipoTemplate);
+		attributeGetterFunctions.put(
+			"tipoTemplateNativo", TemplatePdf::getTipoTemplateNativo);
+		attributeSetterBiConsumers.put(
+			"tipoTemplateNativo",
+			(BiConsumer<TemplatePdf, String>)
+				TemplatePdf::setTipoTemplateNativo);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -578,6 +598,53 @@ public class TemplatePdfModelImpl
 	}
 
 	@Override
+	public String getTipoTemplate() {
+		if (_tipoTemplate == null) {
+			return "";
+		}
+		else {
+			return _tipoTemplate;
+		}
+	}
+
+	@Override
+	public void setTipoTemplate(String tipoTemplate) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_tipoTemplate = tipoTemplate;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public String getOriginalTipoTemplate() {
+		return getColumnOriginalValue("tipoTemplate");
+	}
+
+	@Override
+	public String getTipoTemplateNativo() {
+		if (_tipoTemplateNativo == null) {
+			return "";
+		}
+		else {
+			return _tipoTemplateNativo;
+		}
+	}
+
+	@Override
+	public void setTipoTemplateNativo(String tipoTemplateNativo) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_tipoTemplateNativo = tipoTemplateNativo;
+	}
+
+	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
 			PortalUtil.getClassNameId(TemplatePdf.class.getName()));
@@ -650,6 +717,8 @@ public class TemplatePdfModelImpl
 		templatePdfImpl.setFileEntryId(getFileEntryId());
 		templatePdfImpl.setProceduraId(getProceduraId());
 		templatePdfImpl.setTemplatePdfParentId(getTemplatePdfParentId());
+		templatePdfImpl.setTipoTemplate(getTipoTemplate());
+		templatePdfImpl.setTipoTemplateNativo(getTipoTemplateNativo());
 
 		templatePdfImpl.resetOriginalValues();
 
@@ -680,6 +749,10 @@ public class TemplatePdfModelImpl
 			this.<Long>getColumnOriginalValue("proceduraId"));
 		templatePdfImpl.setTemplatePdfParentId(
 			this.<Long>getColumnOriginalValue("templatePdfParentId"));
+		templatePdfImpl.setTipoTemplate(
+			this.<String>getColumnOriginalValue("tipoTemplate"));
+		templatePdfImpl.setTipoTemplateNativo(
+			this.<String>getColumnOriginalValue("tipoTemplateNativo"));
 
 		return templatePdfImpl;
 	}
@@ -806,6 +879,24 @@ public class TemplatePdfModelImpl
 
 		templatePdfCacheModel.templatePdfParentId = getTemplatePdfParentId();
 
+		templatePdfCacheModel.tipoTemplate = getTipoTemplate();
+
+		String tipoTemplate = templatePdfCacheModel.tipoTemplate;
+
+		if ((tipoTemplate != null) && (tipoTemplate.length() == 0)) {
+			templatePdfCacheModel.tipoTemplate = null;
+		}
+
+		templatePdfCacheModel.tipoTemplateNativo = getTipoTemplateNativo();
+
+		String tipoTemplateNativo = templatePdfCacheModel.tipoTemplateNativo;
+
+		if ((tipoTemplateNativo != null) &&
+			(tipoTemplateNativo.length() == 0)) {
+
+			templatePdfCacheModel.tipoTemplateNativo = null;
+		}
+
 		return templatePdfCacheModel;
 	}
 
@@ -908,6 +999,8 @@ public class TemplatePdfModelImpl
 	private long _fileEntryId;
 	private long _proceduraId;
 	private long _templatePdfParentId;
+	private String _tipoTemplate;
+	private String _tipoTemplateNativo;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -949,6 +1042,8 @@ public class TemplatePdfModelImpl
 		_columnOriginalValues.put("fileEntryId", _fileEntryId);
 		_columnOriginalValues.put("proceduraId", _proceduraId);
 		_columnOriginalValues.put("templatePdfParentId", _templatePdfParentId);
+		_columnOriginalValues.put("tipoTemplate", _tipoTemplate);
+		_columnOriginalValues.put("tipoTemplateNativo", _tipoTemplateNativo);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -993,6 +1088,10 @@ public class TemplatePdfModelImpl
 		columnBitmasks.put("proceduraId", 512L);
 
 		columnBitmasks.put("templatePdfParentId", 1024L);
+
+		columnBitmasks.put("tipoTemplate", 2048L);
+
+		columnBitmasks.put("tipoTemplateNativo", 4096L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

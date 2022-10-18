@@ -404,6 +404,19 @@ public class DestinazioneUsoServizioEnteLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List
+		<it.servizidigitali.scrivaniaoperatore.model.
+			DestinazioneUsoServizioEnte>
+				getDestinazioniUsoServizioEnteByServizioIdOrganizationId(
+					long servizioId, long organizationId, long groupId,
+					long companyId) {
+
+		return _destinazioneUsoServizioEnteLocalService.
+			getDestinazioniUsoServizioEnteByServizioIdOrganizationId(
+				servizioId, organizationId, groupId, companyId);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery
 		getExportActionableDynamicQuery(
 			com.liferay.exportimport.kernel.lar.PortletDataContext

@@ -134,8 +134,59 @@ public abstract class BaseRichiesteServizioResourceTestCase {
 	}
 
 	@Test
+	public void testPatchRichiestaServizio() throws Exception {
+		RichiesteServizio postRichiesteServizio =
+			testPatchRichiesteServizio_addRichiesteServizio();
+
+		testPatchRichiestaServizio_addRichiestaServizio(
+			postRichiesteServizio.getId(), randomRichiestaServizio());
+
+		RichiestaServizio randomRichiestaServizio = randomRichiestaServizio();
+
+		RichiestaServizio patchRichiestaServizio =
+			richiesteServizioResource.patchRichiestaServizio(null);
+
+		assertEquals(randomRichiestaServizio, patchRichiestaServizio);
+		assertValid(patchRichiestaServizio);
+	}
+
+	protected RichiestaServizio testPatchRichiestaServizio_addRichiestaServizio(
+			long richiesteServizioId, RichiestaServizio richiestaServizio)
+		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
+	}
+
+	@Test
 	public void testInsertRichiestaServizio() throws Exception {
 		Assert.assertTrue(true);
+	}
+
+	@Test
+	public void testUpdateStatoRichiestaServizio() throws Exception {
+		RichiesteServizio postRichiesteServizio =
+			testPutRichiesteServizio_addRichiesteServizio();
+
+		testUpdateStatoRichiestaServizio_addRichiestaServizio(
+			postRichiesteServizio.getId(), randomRichiestaServizio());
+
+		RichiestaServizio randomRichiestaServizio = randomRichiestaServizio();
+
+		RichiestaServizio putRichiestaServizio =
+			richiesteServizioResource.updateStatoRichiestaServizio(null);
+
+		assertEquals(randomRichiestaServizio, putRichiestaServizio);
+		assertValid(putRichiestaServizio);
+	}
+
+	protected RichiestaServizio
+			testUpdateStatoRichiestaServizio_addRichiestaServizio(
+				long richiesteServizioId, RichiestaServizio richiestaServizio)
+		throws Exception {
+
+		return richiesteServizioResource.updateStatoRichiestaServizio(
+			richiesteServizioId, richiestaServizio);
 	}
 
 	@Test
@@ -161,57 +212,6 @@ public abstract class BaseRichiesteServizioResourceTestCase {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
-	}
-
-	@Test
-	public void testPatchRichiestaServizio() throws Exception {
-		RichiesteServizio postRichiesteServizio =
-			testPatchRichiesteServizio_addRichiesteServizio();
-
-		testPatchRichiestaServizio_addRichiestaServizio(
-			postRichiesteServizio.getId(), randomRichiestaServizio());
-
-		RichiestaServizio randomRichiestaServizio = randomRichiestaServizio();
-
-		RichiestaServizio patchRichiestaServizio =
-			richiesteServizioResource.patchRichiestaServizio(null, null);
-
-		assertEquals(randomRichiestaServizio, patchRichiestaServizio);
-		assertValid(patchRichiestaServizio);
-	}
-
-	protected RichiestaServizio testPatchRichiestaServizio_addRichiestaServizio(
-			long richiesteServizioId, RichiestaServizio richiestaServizio)
-		throws Exception {
-
-		throw new UnsupportedOperationException(
-			"This method needs to be implemented");
-	}
-
-	@Test
-	public void testUpdateRichiestaServizio() throws Exception {
-		RichiesteServizio postRichiesteServizio =
-			testPutRichiesteServizio_addRichiesteServizio();
-
-		testUpdateRichiestaServizio_addRichiestaServizio(
-			postRichiesteServizio.getId(), randomRichiestaServizio());
-
-		RichiestaServizio randomRichiestaServizio = randomRichiestaServizio();
-
-		RichiestaServizio putRichiestaServizio =
-			richiesteServizioResource.updateRichiestaServizio(null, null);
-
-		assertEquals(randomRichiestaServizio, putRichiestaServizio);
-		assertValid(putRichiestaServizio);
-	}
-
-	protected RichiestaServizio
-			testUpdateRichiestaServizio_addRichiestaServizio(
-				long richiesteServizioId, RichiestaServizio richiestaServizio)
-		throws Exception {
-
-		return richiesteServizioResource.updateRichiestaServizio(
-			richiesteServizioId, richiestaServizio);
 	}
 
 	protected void assertContains(
@@ -335,6 +335,205 @@ public abstract class BaseRichiesteServizioResourceTestCase {
 		for (String additionalAssertFieldName :
 				getAdditionalRichiestaServizioAssertFieldNames()) {
 
+			if (Objects.equals(
+					"codiceAreaTematica", additionalAssertFieldName)) {
+
+				if (richiestaServizio.getCodiceAreaTematica() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"codiceFiscaleDelegato", additionalAssertFieldName)) {
+
+				if (richiestaServizio.getCodiceFiscaleDelegato() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"codiceFiscaleRichiedente", additionalAssertFieldName)) {
+
+				if (richiestaServizio.getCodiceFiscaleRichiedente() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"codiceIdentificativoServizio",
+					additionalAssertFieldName)) {
+
+				if (richiestaServizio.getCodiceIdentificativoServizio() ==
+						null) {
+
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"dataAggiornamento", additionalAssertFieldName)) {
+
+				if (richiestaServizio.getDataAggiornamento() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("dataInserimento", additionalAssertFieldName)) {
+				if (richiestaServizio.getDataInserimento() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("dataProtocollo", additionalAssertFieldName)) {
+				if (richiestaServizio.getDataProtocollo() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"dataProtocolloEsterno", additionalAssertFieldName)) {
+
+				if (richiestaServizio.getDataProtocolloEsterno() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"denominazioneAreaTematica", additionalAssertFieldName)) {
+
+				if (richiestaServizio.getDenominazioneAreaTematica() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"denominazioneEnte", additionalAssertFieldName)) {
+
+				if (richiestaServizio.getDenominazioneEnte() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"denominazioneRichiedente", additionalAssertFieldName)) {
+
+				if (richiestaServizio.getDenominazioneRichiedente() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"denominazioneServizio", additionalAssertFieldName)) {
+
+				if (richiestaServizio.getDenominazioneServizio() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("emailRichiedente", additionalAssertFieldName)) {
+				if (richiestaServizio.getEmailRichiedente() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("idProcedura", additionalAssertFieldName)) {
+				if (richiestaServizio.getIdProcedura() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"identificativoEnte", additionalAssertFieldName)) {
+
+				if (richiestaServizio.getIdentificativoEnte() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"identificativoProcesso", additionalAssertFieldName)) {
+
+				if (richiestaServizio.getIdentificativoProcesso() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("note", additionalAssertFieldName)) {
+				if (richiestaServizio.getNote() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("numeroProtocollo", additionalAssertFieldName)) {
+				if (richiestaServizio.getNumeroProtocollo() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"numeroProtocolloEsterno", additionalAssertFieldName)) {
+
+				if (richiestaServizio.getNumeroProtocolloEsterno() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("oggetto", additionalAssertFieldName)) {
+				if (richiestaServizio.getOggetto() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"partitaIvaRichiedente", additionalAssertFieldName)) {
+
+				if (richiestaServizio.getPartitaIvaRichiedente() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("stato", additionalAssertFieldName)) {
 				if (richiestaServizio.getStato() == null) {
 					valid = false;
@@ -454,10 +653,270 @@ public abstract class BaseRichiesteServizioResourceTestCase {
 		for (String additionalAssertFieldName :
 				getAdditionalRichiestaServizioAssertFieldNames()) {
 
+			if (Objects.equals(
+					"codiceAreaTematica", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getCodiceAreaTematica(),
+						richiestaServizio2.getCodiceAreaTematica())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"codiceFiscaleDelegato", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getCodiceFiscaleDelegato(),
+						richiestaServizio2.getCodiceFiscaleDelegato())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"codiceFiscaleRichiedente", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getCodiceFiscaleRichiedente(),
+						richiestaServizio2.getCodiceFiscaleRichiedente())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"codiceIdentificativoServizio",
+					additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getCodiceIdentificativoServizio(),
+						richiestaServizio2.getCodiceIdentificativoServizio())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"dataAggiornamento", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getDataAggiornamento(),
+						richiestaServizio2.getDataAggiornamento())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("dataInserimento", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						richiestaServizio1.getDataInserimento(),
+						richiestaServizio2.getDataInserimento())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("dataProtocollo", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						richiestaServizio1.getDataProtocollo(),
+						richiestaServizio2.getDataProtocollo())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"dataProtocolloEsterno", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getDataProtocolloEsterno(),
+						richiestaServizio2.getDataProtocolloEsterno())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"denominazioneAreaTematica", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getDenominazioneAreaTematica(),
+						richiestaServizio2.getDenominazioneAreaTematica())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"denominazioneEnte", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getDenominazioneEnte(),
+						richiestaServizio2.getDenominazioneEnte())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"denominazioneRichiedente", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getDenominazioneRichiedente(),
+						richiestaServizio2.getDenominazioneRichiedente())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"denominazioneServizio", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getDenominazioneServizio(),
+						richiestaServizio2.getDenominazioneServizio())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("emailRichiedente", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						richiestaServizio1.getEmailRichiedente(),
+						richiestaServizio2.getEmailRichiedente())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("id", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
 						richiestaServizio1.getId(),
 						richiestaServizio2.getId())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("idProcedura", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						richiestaServizio1.getIdProcedura(),
+						richiestaServizio2.getIdProcedura())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"identificativoEnte", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getIdentificativoEnte(),
+						richiestaServizio2.getIdentificativoEnte())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"identificativoProcesso", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getIdentificativoProcesso(),
+						richiestaServizio2.getIdentificativoProcesso())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("note", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						richiestaServizio1.getNote(),
+						richiestaServizio2.getNote())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("numeroProtocollo", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						richiestaServizio1.getNumeroProtocollo(),
+						richiestaServizio2.getNumeroProtocollo())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"numeroProtocolloEsterno", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getNumeroProtocolloEsterno(),
+						richiestaServizio2.getNumeroProtocolloEsterno())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("oggetto", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						richiestaServizio1.getOggetto(),
+						richiestaServizio2.getOggetto())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"partitaIvaRichiedente", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						richiestaServizio1.getPartitaIvaRichiedente(),
+						richiestaServizio2.getPartitaIvaRichiedente())) {
 
 					return false;
 				}
@@ -591,7 +1050,27 @@ public abstract class BaseRichiesteServizioResourceTestCase {
 	protected RichiestaServizio randomRichiestaServizio() throws Exception {
 		return new RichiestaServizio() {
 			{
+				codiceAreaTematica = RandomTestUtil.randomString();
+				codiceFiscaleDelegato = RandomTestUtil.randomString();
+				codiceFiscaleRichiedente = RandomTestUtil.randomString();
+				codiceIdentificativoServizio = RandomTestUtil.randomString();
+				dataAggiornamento = RandomTestUtil.nextDate();
+				dataInserimento = RandomTestUtil.nextDate();
+				dataProtocollo = RandomTestUtil.nextDate();
+				dataProtocolloEsterno = RandomTestUtil.nextDate();
+				denominazioneAreaTematica = RandomTestUtil.randomString();
+				denominazioneEnte = RandomTestUtil.randomString();
+				denominazioneRichiedente = RandomTestUtil.randomString();
+				denominazioneServizio = RandomTestUtil.randomString();
+				emailRichiedente = RandomTestUtil.randomString();
 				id = RandomTestUtil.randomLong();
+				identificativoEnte = RandomTestUtil.randomString();
+				identificativoProcesso = RandomTestUtil.randomString();
+				note = RandomTestUtil.randomString();
+				numeroProtocollo = RandomTestUtil.randomString();
+				numeroProtocolloEsterno = RandomTestUtil.randomString();
+				oggetto = RandomTestUtil.randomString();
+				partitaIvaRichiedente = RandomTestUtil.randomString();
 				stato = RandomTestUtil.randomString();
 			}
 		};

@@ -253,6 +253,10 @@ public interface TemplatePdfLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<TemplatePdf> getTemplatePdfByProceduraId(long proceduraId);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<TemplatePdf> getTemplatePdfByProceduraIdAndTipoTemplate(
+		long proceduraId, String tipoTemplate);
+
 	/**
 	 * Returns the template pdf matching the UUID and group.
 	 *

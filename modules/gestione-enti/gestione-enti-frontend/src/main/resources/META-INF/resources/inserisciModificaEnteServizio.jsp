@@ -249,6 +249,43 @@
 			</div>
 		</div>		
 		
+		<div class="row">
+			<div class="col">
+				<div class="form-group form-check">
+			        <aui:input name="<%=GestioneEntiPortletKeys.RICHIESTA_FIRMA %>" label="documento-principale-firmato" type="checkbox" checked="${servizioEnte.richiestaFirma}"/>
+				</div>
+			</div>
+			
+			<div class="col">
+				<div class="form-group">
+			        <aui:select label="formato-firma-digitale" id="<%=GestioneEntiPortletKeys.FORMATI_FIRMA_DIGITALE %>" name="<%=GestioneEntiPortletKeys.FORMATI_FIRMA_DIGITALE %>" multiple="true" showEmptyOption="true">
+						<aui:option value="PADES" label="pades"></aui:option>
+						<aui:option value="CADES" label="cades"></aui:option>
+					</aui:select>
+				</div>
+			</div>
+		</div>	
+		
+		<div class="row">
+			
+			<div class="col">
+				<aui:input id="destinazioniUsoSelezionate" name="destinazioniUsoSelezionate" type="hidden"/>
+		
+				<liferay-ui:input-move-boxes
+	        		leftBoxName="availableValues"
+	        		leftList="${listaDestinazioniUso}"
+	        		leftTitle="lista-destinazioni-uso"
+	        		rightBoxName="destinazioniUsoSelezionateSelect"
+	        		rightList="${listaDestinazioniUsoServizio}"
+	        		rightTitle="lista-destinazioni-uso-selezionate"
+	    		/>
+			
+			</div>
+			
+
+		</div>
+		
+		
 		
 		<aui:button-row cssClass="text-right">
 			<c:set value="${empty listaServizi}" var="disabilitaSeNessunServizioAttivabile" />
@@ -258,7 +295,18 @@
 	</aui:form>
 </div>
 
+<aui:script use="liferay-util-list-fields">
+
+A.one('#<portlet:namespace/>fm').on('submit', function(event) {
+    var selectedValues = Liferay.Util.listSelect('#<portlet:namespace/>destinazioniUsoSelezionateSelect');
+    A.one('#<portlet:namespace/>destinazioniUsoSelezionate').val(selectedValues);
+    submitForm('#<portlet:namespace/>fm');
+});
+</aui:script>
+
 <script type="text/javascript">
+
+	var listaFormatiFirmaDigitale = ${listaFormatiFirmaDigitale};
 
 	$(function(){
 		impostaDataMinimaDataFine();
@@ -275,5 +323,11 @@
 	$("#<portlet:namespace/>dataInizioAttivazione").change(() => {
 		impostaDataMinimaDataFine();
 	});
+	
+	if (listaFormatiFirmaDigitale !== "listaVuota") {
+		var arrayFormatiFirmaDigitale = JSON.stringify(listaFormatiFirmaDigitale);
+		var jsonArray = JSON.parse(arrayFormatiFirmaDigitale);
+		$('#<portlet:namespace />formatiFirmaDigitale').val(jsonArray);
+	}
 
 </script>

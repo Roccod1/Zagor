@@ -35,11 +35,11 @@ import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletSe
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.presentatoreforms.common.service.AlpacaService;
+import it.servizidigitali.presentatoreforms.common.service.integration.exception.BackofficeServiceException;
+import it.servizidigitali.presentatoreforms.common.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
-import it.servizidigitali.presentatoreforms.frontend.service.AlpacaService;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.exception.BackofficeServiceException;
-import it.servizidigitali.presentatoreforms.frontend.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
@@ -66,7 +66,7 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 				"com.liferay.portlet.footer-portlet-javascript=/libs/alpaca-custom/alpaca.min.js", //
 				"com.liferay.portlet.footer-portlet-javascript=/dist/custom-fields.min.js", //
 				"com.liferay.portlet.instanceable=true", "javax.portlet.display-name=PresentatoreForms", //
-				"javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp", //
+				"com.liferay.portlet.single-page-application=false", "javax.portlet.init-param.template-path=/", "javax.portlet.init-param.view-template=/view.jsp", //
 				"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
 				"javax.portlet.resource-bundle=content.Language", //
 				"javax.portlet.security-role-ref=power-user,user" }, //
@@ -180,14 +180,21 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 							alpacaStructure.setData(gson.toJsonTree(jsonData).getAsJsonObject());
 
 							renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.API_ALPACA_PATH,
+									themeDisplay.getPortalURL() + PresentatoreFormsPortletKeys.SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.TIPO_SERVIZIO_STEP2, procedura.getStep2TipoServizio());
 
 							// Aggiunta destinazioni d'uso in pagina se certificato
 							if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 								List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
 								renderRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONI_USO, destinazioniUso);
+								renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, form.getNome());
+								include(PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO, renderRequest, renderResponse);
+							}
+							else {
+								include(PresentatoreFormsPortletKeys.JSP_COMPILA_FORM, renderRequest, renderResponse);
 							}
 
-							include(PresentatoreFormsPortletKeys.JSP_COMPILA_FORM, renderRequest, renderResponse);
 						}
 
 					}

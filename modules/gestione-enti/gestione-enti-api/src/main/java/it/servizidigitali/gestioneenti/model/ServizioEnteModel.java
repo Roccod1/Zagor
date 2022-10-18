@@ -564,6 +564,42 @@ public interface ServizioEnteModel
 	 */
 	public void setAttivo(boolean attivo);
 
+	/**
+	 * Returns the richiesta firma of this servizio ente.
+	 *
+	 * @return the richiesta firma of this servizio ente
+	 */
+	public boolean getRichiestaFirma();
+
+	/**
+	 * Returns <code>true</code> if this servizio ente is richiesta firma.
+	 *
+	 * @return <code>true</code> if this servizio ente is richiesta firma; <code>false</code> otherwise
+	 */
+	public boolean isRichiestaFirma();
+
+	/**
+	 * Sets whether this servizio ente is richiesta firma.
+	 *
+	 * @param richiestaFirma the richiesta firma of this servizio ente
+	 */
+	public void setRichiestaFirma(boolean richiestaFirma);
+
+	/**
+	 * Returns the formati firma digitale of this servizio ente.
+	 *
+	 * @return the formati firma digitale of this servizio ente
+	 */
+	@AutoEscape
+	public String getFormatiFirmaDigitale();
+
+	/**
+	 * Sets the formati firma digitale of this servizio ente.
+	 *
+	 * @param formatiFirmaDigitale the formati firma digitale of this servizio ente
+	 */
+	public void setFormatiFirmaDigitale(String formatiFirmaDigitale);
+
 	@Override
 	public ServizioEnte cloneWithOriginalValues();
 

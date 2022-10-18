@@ -13,6 +13,7 @@ import com.liferay.portal.vulcan.pagination.Page;
 import it.servizidigitali.restservice.dto.v1_0.InsertRichiestaServizioRequest;
 import it.servizidigitali.restservice.dto.v1_0.RichiestaServizio;
 import it.servizidigitali.restservice.dto.v1_0.UpdateRichiestaServizioRequest;
+import it.servizidigitali.restservice.dto.v1_0.UpdateStatoRichiestaServizioRequest;
 
 import java.util.Collections;
 import java.util.List;
@@ -48,21 +49,20 @@ public interface RichiesteServizioResource {
 			Integer page, Integer size, String q)
 		throws Exception;
 
+	public RichiestaServizio patchRichiestaServizio(
+			UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
+		throws Exception;
+
 	public RichiestaServizio insertRichiestaServizio(
 			InsertRichiestaServizioRequest insertRichiestaServizioRequest)
 		throws Exception;
 
+	public RichiestaServizio updateStatoRichiestaServizio(
+			UpdateStatoRichiestaServizioRequest
+				updateStatoRichiestaServizioRequest)
+		throws Exception;
+
 	public RichiestaServizio getRichiestaServizio(Long id) throws Exception;
-
-	public RichiestaServizio patchRichiestaServizio(
-			Long id,
-			UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
-		throws Exception;
-
-	public RichiestaServizio updateRichiestaServizio(
-			Long id,
-			UpdateRichiestaServizioRequest updateRichiestaServizioRequest)
-		throws Exception;
 
 	public default void setContextAcceptLanguage(
 		AcceptLanguage contextAcceptLanguage) {

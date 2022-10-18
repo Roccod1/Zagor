@@ -1,15 +1,17 @@
 package it.servizidigitali.presentatoreforms.frontend.portlet.render;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Base64;
 
 import javax.portlet.PortletException;
@@ -19,14 +21,23 @@ import javax.portlet.RenderResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.TipoGenerazionePDF;
+import it.servizidigitali.common.utility.enumeration.TipoServizio;
+import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
-import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
+import it.servizidigitali.presentatoreforms.frontend.service.PDFService;
+import it.servizidigitali.presentatoreforms.frontend.service.PDFServiceFactory;
+import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
+import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
+import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
+import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
+import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
-import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 @Component(
 		immediate = true,
@@ -41,117 +52,114 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand{
 	public static final Log _log = LogFactoryUtil.getLog(ModalitaPagamentoRenderCommand.class);
 	
 	@Reference
-	private RichiestaLocalService richiestaLocalService;
-	
-	@Reference
-	private ProceduraLocalService proceduraLocalService;
+	private PresentatoreFormFrontendService presentatoreFormFrontendService;
 	
 	@Reference
 	private ServizioLocalService servizioLocalService;
 	
+	@Reference
+	private PDFServiceFactory pdfServiceFactory;
+	
 	boolean certificatiPdfPreviewEnabled = true; // Valore viene preso da configurazione d'ambiente
-
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 		
-		long idRichiesta = ParamUtil.getLong(renderRequest, "idRichiesta");
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		User user = themeDisplay.getUser();
+		long organizationId = themeDisplay.getScopeGroup().getOrganizationId();
+		long groupId = themeDisplay.getSiteGroupId();
+		long companyId = themeDisplay.getCompanyId();
+		
 		Richiesta richiesta = null;
 		Procedura procedura = null;
 		Servizio servizio = null;
+		Form form = null;
+		IstanzaForm istanzaForm = null;
 		boolean daPagare = false;
+		boolean invioIstanza = true;
 		
-		String tmpDir = System.getProperty("java.io.tmpdir");
-		String percorsoFile = tmpDir + File.separator + "test.pdf";
-		File file = new File(percorsoFile);
-		byte[] fileArray = null;
+		String encoded = null;
+		
+		String destinazioneUsoId = ParamUtil.getString(renderRequest, "destinazioneUsoId");
+		
+		Gson gson = new Gson();
 		
 		try {
-			fileArray = FileUtil.getBytes(file);
-		} catch (IOException e) {
-			_log.error("Impossibile ottenere il byte array del file!");
-		}
-		
-		String encoded = new String(Base64.getEncoder().encode(fileArray));
-				
-		if(Validator.isNotNull(idRichiesta)) {
-			try {
-				richiesta = richiestaLocalService.getRichiesta(idRichiesta);
-			} catch (Exception e) {
-				_log.error("Impossibile recuperare la richiesta con ID: " + idRichiesta + "a causa di: " + e.getMessage());
-				// capire a quale jsp deve puntare in caso di errore
-				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_RICHIESTA);
-			}
 			
-			try {
-				procedura = proceduraLocalService.getProcedura(richiesta.getProceduraId());
-			} catch (Exception e) {
-				_log.error("Impossibile recuperare la procedura con ID: " + idRichiesta + "a causa di: " + e.getMessage());
-				// capire a quale jsp deve puntare in caso di errore
+			procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
+			
+			if(Validator.isNull(procedura)) {
 				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
+				return PresentatoreFormsPortletKeys.JSP_VIEW;
 			}
 			
-			try {
-				servizio = servizioLocalService.getServizioById(procedura.getServizioId());
-			} catch (Exception e) {
-				_log.error("Impossibile recuperare il servizio con ID: " + idRichiesta + "a causa di: " + e.getMessage());
-				// capire a quale jsp deve puntare in caso di errore
-				SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_SERVIZIO);
-			}
-		}else {
-			_log.error("Non è stato possibile recuperare l'id della richiesta!");
-			SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_RICHIESTA);
-			// capire a quale jsp deve puntare in caso di errore
-		}
-		
-		// TODO: Delega
-		
-		// TODO: Da Pagare
-		
-		
-		if(richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
+			form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
+			richiesta = presentatoreFormFrontendService.getRichiestaBozza(user.getScreenName(), procedura.getProceduraId());
+			servizio = servizioLocalService.getServizio(procedura.getServizioId());
+			istanzaForm = presentatoreFormFrontendService.getIstanzaFormRichiesta(richiesta.getRichiestaId(), form.getFormId());
 			
-			// TODO: Controllare se firmaDocumentoAbilitata
+			PDFService pdfService = pdfServiceFactory.getPDFService(TipoGenerazionePDF.valueOf(procedura.getTipoGenerazionePDF()));
 			
-			String tipoServizio = procedura.getStep2TipoServizio();
+			// Controllo se la destinazione uso è associata al servizio
 			
-			if(Validator.isNotNull(tipoServizio)) {
-				renderRequest.setAttribute("configurazione_tipo_servizio_step2_2", tipoServizio);
-				
-				// TODO: Capire se utilizzare uno switch case per tutti i tipi di servizi o no 
-				
-				// CERTIFICATO
-				
-				renderRequest.setAttribute(PresentatoreFormsPortletKeys.ANTEPRIMA_CERTIFICATI, certificatiPdfPreviewEnabled); 
-				
-				if(certificatiPdfPreviewEnabled) {
-					/*
-					 * TODO: Realizzare un metodo in ProceduraLocalServiceImpl che dato l'idProcedura
-					 * mi restituisca il json pulito del form principale
-					 */
-					
-					/*
-					 * TODO: Realizzare un metodo in IstanzaFormLocalSerivceImpl che dato l'idRichiesta
-					 * mi restituisca il json del form con i dati (utilizzare il finder già definito)
-					 */
+			DestinazioneUso destinazioneUso = presentatoreFormFrontendService.checkDestinazioneUso(Long.valueOf(destinazioneUsoId), servizio.getServizioId(), organizationId, groupId, companyId);
+			
+			if(Validator.isNotNull(destinazioneUso)) {
+				if(destinazioneUso.isPagamentoBollo()) {
+					daPagare = true;
 				}
 			}
+
+			if(richiesta.getStato().equalsIgnoreCase(StatoRichiesta.BOZZA.name())) {
+				
+				// TODO: Controllare se firmaDocumentoAbilitata
+				
+				TipoServizio tipoServizio = TipoServizio.valueOf(procedura.getStep2TipoServizio());
+				
+				if(Validator.isNotNull(tipoServizio)) {
+										
+					// CERTIFICATO
+					
+					
+					if(certificatiPdfPreviewEnabled) {
+						
+						String jsonDataBozza = istanzaForm.getJson();
+						String codiceFiscaleComponente = ParamUtil.getString(renderRequest, "codiceFiscaleComponente");
+						
+						FormData formData = AlpacaUtil.loadFormData(form, jsonDataBozza, true, themeDisplay.getPortalURL());
+						AlpacaJsonStructure alpacaStructure = formData.getAlpaca();
+						JsonParser jsonParser = new JsonParser();
+						alpacaStructure.setSchema(AlpacaUtil.addAttachmentsToSchema(gson.toJson(alpacaStructure.getSchema()), form.getListaDefinizioneAllegato()));
+						alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), form.getListaDefinizioneAllegato(), true, themeDisplay.getPortalURL()));
+						alpacaStructure.setData(jsonParser.parse(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
+						
+						byte[] pdfFile = pdfService.generaPDFCertificato(user.getScreenName(), user.getScreenName(), alpacaStructure, richiesta, destinazioneUso.getDestinazioneUsoId(), null, renderRequest);
+						
+						if(Validator.isNotNull(pdfFile)) {
+							encoded = new String(Base64.getEncoder().encode(pdfFile));
+							
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.BASE_64_PDF_CERTIFICATO, encoded);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.DOWNLOAD_CERTIFICATO, true);
+							renderRequest.setAttribute(PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE, codiceFiscaleComponente);
+							
+						}
+
+					}
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, servizio.getNome());
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.INVIO_ISTANZA, invioIstanza);
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.DA_PAGARE, daPagare);
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONE_USO_ID, destinazioneUsoId);
+					renderRequest.setAttribute(PresentatoreFormsPortletKeys.ANTEPRIMA_CERTIFICATI, certificatiPdfPreviewEnabled); 
+				}				
+			}
+			
+		}catch(Exception e) {
+			_log.error(e.getMessage(),e);
 		}
 		
-//		renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, servizio.getNome());
-//		renderRequest.setAttribute(PresentatoreFormsPortletKeys.DA_PAGARE, daPagare);
-//		renderRequest.setAttribute("downloadCertificato", true);
-//		renderRequest.setAttribute(PresentatoreFormsPortletKeys.RICHIESTA_STATUS, richiesta.getStato());
-//		renderRequest.setAttribute(PresentatoreFormsPortletKeys.BOZZA_STATUS, StatoRichiesta.BOZZA.name());
-		
-		renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, "Test Servizio");
-		renderRequest.setAttribute(PresentatoreFormsPortletKeys.DA_PAGARE, true);
-		renderRequest.setAttribute("downloadCertificato", true);
-		renderRequest.setAttribute(PresentatoreFormsPortletKeys.RICHIESTA_STATUS, "bozza");
-		renderRequest.setAttribute(PresentatoreFormsPortletKeys.BOZZA_STATUS, "bozza");
-		renderRequest.setAttribute("certificatiPdfPreviewEnabled", certificatiPdfPreviewEnabled);
-		renderRequest.setAttribute("base64PDFCertificato", encoded);
 		return PresentatoreFormsPortletKeys.JSP_SCEGLI_MODALITA_PAGAMENTO;
+
 	}
 
 }
