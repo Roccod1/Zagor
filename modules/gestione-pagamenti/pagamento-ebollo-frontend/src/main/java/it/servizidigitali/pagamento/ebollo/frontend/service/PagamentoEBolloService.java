@@ -26,6 +26,8 @@ import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
 import it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
  * @author pindi
@@ -45,6 +47,9 @@ public class PagamentoEBolloService {
 
 	@Reference
 	private PagamentoLocalService pagamentoLocalService;
+	
+	@Reference
+	private RichiestaLocalService richiestaLocalService;
 
 	@Activate
 	@Modified
@@ -99,11 +104,13 @@ public class PagamentoEBolloService {
 
 		PagamentoDovutoRisposta pagamentoDovutoRisposta = pagamentiClient.pagaDovuto(marcaDaBollo, username, password,
 				wsdlUrl, callbackUrl);
+		
+		long proceduraId = accountClientPagamentiEnteConfiguration.idProceduraPagamento();
 
-		Pagamento pagamento = this.createPagamento(siteGroupId, userId, denominazioneCliente, idCredito,
+		Pagamento pagamento = this.manageRichiestaAndPagamento(siteGroupId, userId, denominazioneCliente, idCredito,
 				idFiscaleCliente, denominazioneCliente, emailQuietanza, causale, 0, null, importoBollo, null,
 				CanalePagamento.WEB.toString(), TipoPagamentiClient.MYPAY.toString(), iud, null, null, null, false,
-				StatoPagamento.IN_ATTESA.toString(), 0);
+				StatoPagamento.IN_ATTESA.toString(), proceduraId);
 
 		LOG.info("Created new pagamento with id: " + pagamento.getPagamentoId());
 
@@ -146,14 +153,25 @@ public class PagamentoEBolloService {
 		return generatedString;
 	}
 
-	public Pagamento createPagamento(long groupId, long userId, String userName, String idCredito,
+	public Pagamento manageRichiestaAndPagamento(long groupId, long userId, String userName, String idCredito,
 			String idFiscaleCliente, String denominazioneCliente, String emailQuietanza, String causale,
 			long servizioId, String nomeServizio, BigDecimal importo, BigDecimal commissioni, String canale,
 			String gateway, String iud, String iuv, String idSessione, String pathAvviso, boolean emailInviata,
-			String stato, long richiestaId) {
+			String stato, long proceduraId) {
+		
+		Richiesta richiesta =  richiestaLocalService.createRichiesta(0);
+		richiesta.setGroupId(groupId);
+		richiesta.setUserId(userId);
+		richiesta.setUserName(userName);
+		richiesta.setCodiceFiscale(idFiscaleCliente);
+		richiesta.setEmail(emailQuietanza);
+		richiesta.setStato(stato);
+		richiesta.setProceduraId(proceduraId);
+		
+		richiesta = richiestaLocalService.updateRichiesta(richiesta);
 
 		return pagamentoLocalService.create(groupId, userId, userName, idCredito, idFiscaleCliente,
 				denominazioneCliente, emailQuietanza, causale, servizioId, nomeServizio, importo, commissioni, canale,
-				gateway, iud, iuv, idSessione, pathAvviso, emailInviata, stato, richiestaId);
+				gateway, iud, iuv, idSessione, pathAvviso, emailInviata, stato, richiesta.getRichiestaId());
 	}
 }
