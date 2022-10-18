@@ -462,6 +462,20 @@ public interface RichiestaModel
 	 */
 	public void setProceduraId(long proceduraId);
 
+	/**
+	 * Returns the servizio ID of this richiesta.
+	 *
+	 * @return the servizio ID of this richiesta
+	 */
+	public long getServizioId();
+
+	/**
+	 * Sets the servizio ID of this richiesta.
+	 *
+	 * @param servizioId the servizio ID of this richiesta
+	 */
+	public void setServizioId(long servizioId);
+
 	@Override
 	public Richiesta cloneWithOriginalValues();
 

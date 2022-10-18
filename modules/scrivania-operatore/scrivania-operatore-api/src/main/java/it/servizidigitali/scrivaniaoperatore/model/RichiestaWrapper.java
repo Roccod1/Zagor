@@ -69,6 +69,7 @@ public class RichiestaWrapper
 		attributes.put("delegaId", getDelegaId());
 		attributes.put("processInstanceId", getProcessInstanceId());
 		attributes.put("proceduraId", getProceduraId());
+		attributes.put("servizioId", getServizioId());
 
 		return attributes;
 	}
@@ -228,6 +229,12 @@ public class RichiestaWrapper
 
 		if (proceduraId != null) {
 			setProceduraId(proceduraId);
+		}
+
+		Long servizioId = (Long)attributes.get("servizioId");
+
+		if (servizioId != null) {
+			setServizioId(servizioId);
 		}
 	}
 
@@ -444,6 +451,16 @@ public class RichiestaWrapper
 	@Override
 	public long getRichiestaId() {
 		return model.getRichiestaId();
+	}
+
+	/**
+	 * Returns the servizio ID of this richiesta.
+	 *
+	 * @return the servizio ID of this richiesta
+	 */
+	@Override
+	public long getServizioId() {
+		return model.getServizioId();
 	}
 
 	/**
@@ -731,6 +748,16 @@ public class RichiestaWrapper
 	@Override
 	public void setRichiestaId(long richiestaId) {
 		model.setRichiestaId(richiestaId);
+	}
+
+	/**
+	 * Sets the servizio ID of this richiesta.
+	 *
+	 * @param servizioId the servizio ID of this richiesta
+	 */
+	@Override
+	public void setServizioId(long servizioId) {
+		model.setServizioId(servizioId);
 	}
 
 	/**

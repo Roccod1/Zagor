@@ -45,6 +45,7 @@
 		<column name="delegaId" type="Long" />
 		<column name="processInstanceId" type="String" />
 		<column name="proceduraId" type="long" />
+		<column name="servizioId" type="long" />
 		
 		<!-- Finder methods -->
 		<finder name="CodiceFiscale" return-type="Collection">
@@ -73,6 +74,10 @@
 		
 		<finder name="ProceduraId" return-type="Collection">
 			<finder-column name="proceduraId" />
+		</finder>
+
+		<finder name="ServizioId" return-type="Collection">
+			<finder-column name="servizioId" />
 		</finder>
 
 		<finder name="ProcessInstanceId" return-type="Richiesta">
