@@ -27,14 +27,14 @@ import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletSe
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.presentatoreforms.common.model.AlpacaJsonStructure;
+import it.servizidigitali.presentatoreforms.common.model.FormData;
 import it.servizidigitali.presentatoreforms.common.service.AlpacaService;
 import it.servizidigitali.presentatoreforms.common.service.integration.exception.BackofficeServiceException;
 import it.servizidigitali.presentatoreforms.common.service.integration.input.jsonenrich.model.UserPreferences;
+import it.servizidigitali.presentatoreforms.common.util.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
-import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AlpacaUtil;
-import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
-import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
 import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
 import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;

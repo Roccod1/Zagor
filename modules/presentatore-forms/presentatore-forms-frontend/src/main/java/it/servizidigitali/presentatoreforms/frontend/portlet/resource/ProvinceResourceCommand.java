@@ -19,8 +19,8 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.common.model.Provincia;
 import it.servizidigitali.common.service.ProvinciaLocalService;
+import it.servizidigitali.presentatoreforms.common.model.ProvinceDatasource;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
-import it.servizidigitali.presentatoreforms.frontend.util.model.ProvinceDatasource;
 
 @Component(immediate = true, property = { //
 		"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //

@@ -9,7 +9,6 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
@@ -17,10 +16,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
+import it.servizidigitali.presentatoreforms.common.model.DatiFileAllegato;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.AllegatoRichiestaService;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
-import it.servizidigitali.presentatoreforms.frontend.util.model.DatiFileAllegato;
 
 @Component(immediate = true, property = { //
 		"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
