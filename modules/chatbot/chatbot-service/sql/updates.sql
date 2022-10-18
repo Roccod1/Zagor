@@ -13,3 +13,6 @@ CREATE TABLE `servizi_digitali`.`richiesta_certificato` (
   `servizioId` BIGINT NULL,
   `organizationId` BIGINT NULL,
   PRIMARY KEY (`richiestaCertificatoId`));
+  
+ALTER TABLE `servizi_digitali`.`richiesta_certificato` 
+CHANGE COLUMN `organizationId` `destinazioneUsoId` BIGINT NULL DEFAULT NULL ;

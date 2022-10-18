@@ -80,7 +80,7 @@ public class RichiestaCertificatoModelImpl
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"codiceFiscale", Types.VARCHAR}, {"stato", Types.VARCHAR},
 		{"errore", Types.VARCHAR}, {"servizioId", Types.BIGINT},
-		{"organizationId", Types.BIGINT}
+		{"destinazioneUsoId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -99,11 +99,11 @@ public class RichiestaCertificatoModelImpl
 		TABLE_COLUMNS_MAP.put("stato", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("errore", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("servizioId", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("organizationId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("destinazioneUsoId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table richiesta_certificato (uuid_ VARCHAR(75) null,richiestaCertificatoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codiceFiscale VARCHAR(75) null,stato VARCHAR(75) null,errore VARCHAR(75) null,servizioId LONG,organizationId LONG)";
+		"create table richiesta_certificato (uuid_ VARCHAR(75) null,richiestaCertificatoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codiceFiscale VARCHAR(75) null,stato VARCHAR(75) null,errore VARCHAR(75) null,servizioId LONG,destinazioneUsoId LONG)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table richiesta_certificato";
@@ -375,11 +375,11 @@ public class RichiestaCertificatoModelImpl
 			(BiConsumer<RichiestaCertificato, Long>)
 				RichiestaCertificato::setServizioId);
 		attributeGetterFunctions.put(
-			"organizationId", RichiestaCertificato::getOrganizationId);
+			"destinazioneUsoId", RichiestaCertificato::getDestinazioneUsoId);
 		attributeSetterBiConsumers.put(
-			"organizationId",
+			"destinazioneUsoId",
 			(BiConsumer<RichiestaCertificato, Long>)
-				RichiestaCertificato::setOrganizationId);
+				RichiestaCertificato::setDestinazioneUsoId);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -659,17 +659,17 @@ public class RichiestaCertificatoModelImpl
 	}
 
 	@Override
-	public long getOrganizationId() {
-		return _organizationId;
+	public long getDestinazioneUsoId() {
+		return _destinazioneUsoId;
 	}
 
 	@Override
-	public void setOrganizationId(long organizationId) {
+	public void setDestinazioneUsoId(long destinazioneUsoId) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
 
-		_organizationId = organizationId;
+		_destinazioneUsoId = destinazioneUsoId;
 	}
 
 	@Override
@@ -749,7 +749,7 @@ public class RichiestaCertificatoModelImpl
 		richiestaCertificatoImpl.setStato(getStato());
 		richiestaCertificatoImpl.setErrore(getErrore());
 		richiestaCertificatoImpl.setServizioId(getServizioId());
-		richiestaCertificatoImpl.setOrganizationId(getOrganizationId());
+		richiestaCertificatoImpl.setDestinazioneUsoId(getDestinazioneUsoId());
 
 		richiestaCertificatoImpl.resetOriginalValues();
 
@@ -785,8 +785,8 @@ public class RichiestaCertificatoModelImpl
 			this.<String>getColumnOriginalValue("errore"));
 		richiestaCertificatoImpl.setServizioId(
 			this.<Long>getColumnOriginalValue("servizioId"));
-		richiestaCertificatoImpl.setOrganizationId(
-			this.<Long>getColumnOriginalValue("organizationId"));
+		richiestaCertificatoImpl.setDestinazioneUsoId(
+			this.<Long>getColumnOriginalValue("destinazioneUsoId"));
 
 		return richiestaCertificatoImpl;
 	}
@@ -936,7 +936,8 @@ public class RichiestaCertificatoModelImpl
 
 		richiestaCertificatoCacheModel.servizioId = getServizioId();
 
-		richiestaCertificatoCacheModel.organizationId = getOrganizationId();
+		richiestaCertificatoCacheModel.destinazioneUsoId =
+			getDestinazioneUsoId();
 
 		return richiestaCertificatoCacheModel;
 	}
@@ -1043,7 +1044,7 @@ public class RichiestaCertificatoModelImpl
 	private String _stato;
 	private String _errore;
 	private long _servizioId;
-	private long _organizationId;
+	private long _destinazioneUsoId;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1087,7 +1088,7 @@ public class RichiestaCertificatoModelImpl
 		_columnOriginalValues.put("stato", _stato);
 		_columnOriginalValues.put("errore", _errore);
 		_columnOriginalValues.put("servizioId", _servizioId);
-		_columnOriginalValues.put("organizationId", _organizationId);
+		_columnOriginalValues.put("destinazioneUsoId", _destinazioneUsoId);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1135,7 +1136,7 @@ public class RichiestaCertificatoModelImpl
 
 		columnBitmasks.put("servizioId", 2048L);
 
-		columnBitmasks.put("organizationId", 4096L);
+		columnBitmasks.put("destinazioneUsoId", 4096L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

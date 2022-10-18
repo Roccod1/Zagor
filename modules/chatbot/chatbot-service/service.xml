@@ -32,7 +32,7 @@
 		<column name="stato" type="String" />
 		<column name="errore" type="String" />
 		<column name="servizioId" type="long" />
-		<column name="organizationId" type="long" />
+		<column name="destinazioneUsoId" type="long" />
 		
 		<!-- Finder methods -->
 		<finder name="CodiceFiscale" return-type="Collection">

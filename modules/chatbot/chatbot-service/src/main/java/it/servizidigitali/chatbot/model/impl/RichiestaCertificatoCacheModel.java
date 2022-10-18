@@ -91,8 +91,8 @@ public class RichiestaCertificatoCacheModel
 		sb.append(errore);
 		sb.append(", servizioId=");
 		sb.append(servizioId);
-		sb.append(", organizationId=");
-		sb.append(organizationId);
+		sb.append(", destinazioneUsoId=");
+		sb.append(destinazioneUsoId);
 		sb.append("}");
 
 		return sb.toString();
@@ -159,7 +159,7 @@ public class RichiestaCertificatoCacheModel
 		}
 
 		richiestaCertificatoImpl.setServizioId(servizioId);
-		richiestaCertificatoImpl.setOrganizationId(organizationId);
+		richiestaCertificatoImpl.setDestinazioneUsoId(destinazioneUsoId);
 
 		richiestaCertificatoImpl.resetOriginalValues();
 
@@ -186,7 +186,7 @@ public class RichiestaCertificatoCacheModel
 
 		servizioId = objectInput.readLong();
 
-		organizationId = objectInput.readLong();
+		destinazioneUsoId = objectInput.readLong();
 	}
 
 	@Override
@@ -239,7 +239,7 @@ public class RichiestaCertificatoCacheModel
 
 		objectOutput.writeLong(servizioId);
 
-		objectOutput.writeLong(organizationId);
+		objectOutput.writeLong(destinazioneUsoId);
 	}
 
 	public String uuid;
@@ -254,6 +254,6 @@ public class RichiestaCertificatoCacheModel
 	public String stato;
 	public String errore;
 	public long servizioId;
-	public long organizationId;
+	public long destinazioneUsoId;
 
 }

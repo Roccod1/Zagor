@@ -264,18 +264,18 @@ public interface RichiestaCertificatoModel
 	public void setServizioId(long servizioId);
 
 	/**
-	 * Returns the organization ID of this richiesta certificato.
+	 * Returns the destinazione uso ID of this richiesta certificato.
 	 *
-	 * @return the organization ID of this richiesta certificato
+	 * @return the destinazione uso ID of this richiesta certificato
 	 */
-	public long getOrganizationId();
+	public long getDestinazioneUsoId();
 
 	/**
-	 * Sets the organization ID of this richiesta certificato.
+	 * Sets the destinazione uso ID of this richiesta certificato.
 	 *
-	 * @param organizationId the organization ID of this richiesta certificato
+	 * @param destinazioneUsoId the destinazione uso ID of this richiesta certificato
 	 */
-	public void setOrganizationId(long organizationId);
+	public void setDestinazioneUsoId(long destinazioneUsoId);
 
 	@Override
 	public RichiestaCertificato cloneWithOriginalValues();

@@ -57,7 +57,7 @@ public class RichiestaCertificatoWrapper
 		attributes.put("stato", getStato());
 		attributes.put("errore", getErrore());
 		attributes.put("servizioId", getServizioId());
-		attributes.put("organizationId", getOrganizationId());
+		attributes.put("destinazioneUsoId", getDestinazioneUsoId());
 
 		return attributes;
 	}
@@ -137,10 +137,10 @@ public class RichiestaCertificatoWrapper
 			setServizioId(servizioId);
 		}
 
-		Long organizationId = (Long)attributes.get("organizationId");
+		Long destinazioneUsoId = (Long)attributes.get("destinazioneUsoId");
 
-		if (organizationId != null) {
-			setOrganizationId(organizationId);
+		if (destinazioneUsoId != null) {
+			setDestinazioneUsoId(destinazioneUsoId);
 		}
 	}
 
@@ -180,6 +180,16 @@ public class RichiestaCertificatoWrapper
 	}
 
 	/**
+	 * Returns the destinazione uso ID of this richiesta certificato.
+	 *
+	 * @return the destinazione uso ID of this richiesta certificato
+	 */
+	@Override
+	public long getDestinazioneUsoId() {
+		return model.getDestinazioneUsoId();
+	}
+
+	/**
 	 * Returns the errore of this richiesta certificato.
 	 *
 	 * @return the errore of this richiesta certificato
@@ -207,16 +217,6 @@ public class RichiestaCertificatoWrapper
 	@Override
 	public Date getModifiedDate() {
 		return model.getModifiedDate();
-	}
-
-	/**
-	 * Returns the organization ID of this richiesta certificato.
-	 *
-	 * @return the organization ID of this richiesta certificato
-	 */
-	@Override
-	public long getOrganizationId() {
-		return model.getOrganizationId();
 	}
 
 	/**
@@ -335,6 +335,16 @@ public class RichiestaCertificatoWrapper
 	}
 
 	/**
+	 * Sets the destinazione uso ID of this richiesta certificato.
+	 *
+	 * @param destinazioneUsoId the destinazione uso ID of this richiesta certificato
+	 */
+	@Override
+	public void setDestinazioneUsoId(long destinazioneUsoId) {
+		model.setDestinazioneUsoId(destinazioneUsoId);
+	}
+
+	/**
 	 * Sets the errore of this richiesta certificato.
 	 *
 	 * @param errore the errore of this richiesta certificato
@@ -362,16 +372,6 @@ public class RichiestaCertificatoWrapper
 	@Override
 	public void setModifiedDate(Date modifiedDate) {
 		model.setModifiedDate(modifiedDate);
-	}
-
-	/**
-	 * Sets the organization ID of this richiesta certificato.
-	 *
-	 * @param organizationId the organization ID of this richiesta certificato
-	 */
-	@Override
-	public void setOrganizationId(long organizationId) {
-		model.setOrganizationId(organizationId);
 	}
 
 	/**
