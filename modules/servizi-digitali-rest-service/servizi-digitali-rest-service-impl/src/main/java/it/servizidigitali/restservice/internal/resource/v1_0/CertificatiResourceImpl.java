@@ -1,24 +1,6 @@
 package it.servizidigitali.restservice.internal.resource.v1_0;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.liferay.expando.kernel.model.ExpandoColumn;
-import com.liferay.expando.kernel.model.ExpandoValue;
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
-import com.liferay.portal.kernel.exception.NoSuchUserException;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Organization;
-import com.liferay.portal.kernel.service.GroupLocalService;
-import com.liferay.portal.kernel.service.OrganizationLocalService;
-import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.portal.kernel.util.Validator;
-
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +13,29 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.expando.kernel.model.ExpandoColumn;
+import com.liferay.expando.kernel.model.ExpandoValue;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.NoSuchUserException;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.Validator;
+
 import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletService;
+import it.servizidigitali.chatbot.service.RichiestaCertificatoLocalService;
 import it.servizidigitali.common.utility.LayoutUtility;
 import it.servizidigitali.common.utility.enumeration.StatoRichiestaCertificato;
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
@@ -114,6 +118,8 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 
 	@Reference
 	private TipologiaLocalService tipologiaLocalService;
+	@Reference
+	private RichiestaCertificatoLocalService richiestaCertificatoLocalService;
 
 	@Override
 	public RichiestaCertificato checkInvioCertificato(@NotNull String userToken, String nomeComune, Long idDestinazioneUso, String codiceServizio, String amministrazione, String codiceFiscale)
@@ -264,18 +270,37 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				}
 			}
 
-			// TODO implementare servizio salvataggio richiesta certificato
-			// richiestaCertificato.setDataInserimento(new Date());
-			// richiestaCertificato.setStato(StatoRichiestaCertificato.NUOVA.name());
-			// richiestaCertificato.setProfiloUtenteCittadino(profiloUtenteCittadino);
-			// richiestaCertificato.setCodiceFiscale(codiceFiscale);
-			// richiestaCertificato.setServizio(servizio);
-			// richiestaCertificato.setComuneIsa(comuneIsa);
+			User user = userLocalService.getUserByScreenName(organization.getCompanyId(), codiceFiscaleFromToken);
+			Date now = new Date();
+			
+			long id = CounterLocalServiceUtil.increment(
+					it.servizidigitali.chatbot.model.RichiestaCertificato.class.getName());
+			it.servizidigitali.chatbot.model.RichiestaCertificato rc = richiestaCertificatoLocalService
+					.createRichiestaCertificato(id);
+			rc.setGroupId(organization.getGroupId());
+			rc.setCompanyId(organization.getCompanyId());
+			rc.setUserId(user.getUserId());
+			rc.setUserName(user.getFullName());
+			rc.setCreateDate(now);
+			rc.setModifiedDate(now);
+			rc.setCodiceFiscale(codiceFiscaleFromToken);
+			rc.setStato(StatoRichiestaCertificato.NUOVA.name());
+			rc.setErrore(null);
+			rc.setServizioId(servizio.getServizioId());
+			rc.setOrganizationId(organization.getOrganizationId());
+			
+			rc = richiestaCertificatoLocalService.updateRichiestaCertificato(rc);
+			
+			richiestaCertificato.setDataInserimento(rc.getCreateDate());
+			richiestaCertificato.setDataAggiornamento(rc.getModifiedDate());
+			richiestaCertificato.setEmail(user.getEmailAddress());
+			richiestaCertificato.setId(id);
+			richiestaCertificato.setStato(rc.getStato());
 
 			if (idDestinazioneUso != null) {
 				DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
 				if (destinazioneUso != null) {
-					// richiestaCertificato.setDestinazioneUso(destinazioneUso);
+					//richiestaCertificato.setDestinazioneUso(destinazioneUso);
 				}
 			}
 
