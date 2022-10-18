@@ -275,11 +275,9 @@
 	        		leftBoxName="availableValues"
 	        		leftList="${listaDestinazioniUso}"
 	        		leftTitle="lista-destinazioni-uso"
-	        		leftReorder="true"
 	        		rightBoxName="destinazioniUsoSelezionateSelect"
 	        		rightList="${listaDestinazioniUsoServizio}"
 	        		rightTitle="lista-destinazioni-uso-selezionate"
-	        		rightReorder="true"
 	    		/>
 			
 			</div>
