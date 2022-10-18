@@ -181,6 +181,7 @@ public class AggiungiModificaEnteServizioActionCommand extends BaseMVCActionComm
 			
 			SessionMessages.add(actionRequest, GestioneEntiPortletKeys.SALVATAGGIO_SUCCESSO);
 			actionResponse.sendRedirect(redirect);
+			
 		}
 		catch (Exception e) {
 			_log.error("Impossibile salvare/aggiornare il servizio con ID: " + servizioId + " > " + e.getMessage(), e);

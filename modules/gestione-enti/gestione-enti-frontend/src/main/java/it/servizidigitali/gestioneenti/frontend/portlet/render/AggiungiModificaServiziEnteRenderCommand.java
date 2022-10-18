@@ -78,6 +78,7 @@ public class AggiungiModificaServiziEnteRenderCommand implements MVCRenderComman
 		Map<String, List<Layout>> pagineDisponibili = null;
 		
 		try {
+			
 			serviceContext = ServiceContextFactory.getInstance(renderRequest);
 			themeDisplay = serviceContext.getThemeDisplay();
 			listaArticoliCatalogoServizi = gestioneEntiMiddlewareService.getListaArticleIdDisponibili(organizationId, servizioId);
