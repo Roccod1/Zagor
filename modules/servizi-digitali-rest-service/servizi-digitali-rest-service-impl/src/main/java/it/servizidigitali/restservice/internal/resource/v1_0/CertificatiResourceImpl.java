@@ -1,17 +1,5 @@
 package it.servizidigitali.restservice.internal.resource.v1_0;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.ForbiddenException;
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.NotFoundException;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ServiceScope;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.liferay.expando.kernel.model.ExpandoColumn;
@@ -30,6 +18,18 @@ import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Validator;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
 
 import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletService;
 import it.servizidigitali.common.utility.LayoutUtility;
@@ -150,10 +150,7 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				return richiestaCertificato;
 			}
 
-			boolean checkTipologia = tipologie.stream()
-					.filter(x -> TipoServizio.CERTIFICATO.equals(TipoServizio.valueOf(x.getCodice())))
-					.findFirst()
-					.isPresent();
+			boolean checkTipologia = tipologie.stream().filter(x -> TipoServizio.CERTIFICATO.equals(TipoServizio.valueOf(x.getCodice()))).findFirst().isPresent();
 
 			if (!checkTipologia) {
 				richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
@@ -170,24 +167,17 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				return richiestaCertificato;
 			}
 
-			List<DestinazioneUso> destinazioniUso = destinazioneUsoLocalService
-					.getDestinazioniUsoByServizioIdOrganizationId(
-							servizio.getServizioId(), 
-							organization.getOrganizationId(),
-							organization.getGroupId(), 
-							organization.getCompanyId());
+			List<DestinazioneUso> destinazioniUso = destinazioneUsoLocalService.getDestinazioniUsoByServizioIdOrganizationId(servizio.getServizioId(), organization.getOrganizationId(),
+					organization.getGroupId(), organization.getCompanyId());
 
 			if (destinazioniUso != null && !destinazioniUso.isEmpty()) {
 				DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
 				if (destinazioneUso != null && destinazioneUso.isPagamentoBollo()) {
 					richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
 					String uri = layoutUtility.getPathByLayoutId(servizioEnte.getPrivateLayoutId(), organization.getGroupId(), organization.getCompanyId());
-					
-					String messaggio = messageUtil.getMessage(
-							"errorePagamentoElettonico", 
-							servizio.getNome(),
-							uri);
-					
+
+					String messaggio = messageUtil.getMessage("errorePagamentoElettonico", servizio.getNome(), uri);
+
 					richiestaCertificato.setMessaggio(messaggio);
 					return richiestaCertificato;
 				}
@@ -246,7 +236,7 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 	public RichiestaCertificato invioCertificato(@NotNull String userToken, String nomeComune, Long idDestinazioneUso, String codiceServizio, String amministrazione, String codiceFiscale)
 			throws Exception {
 		MessageUtil messageUtil = new MessageUtil(ServiziDigitaliRestConstants.BUNDLE_SYMBOLIC_NAME, null);
-		
+
 		try {
 
 			RichiestaCertificato richiestaCertificato = new RichiestaCertificato();
@@ -266,12 +256,9 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				if (destinazioneUso != null && destinazioneUso.isPagamentoBollo()) {
 					richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
 					String uri = layoutUtility.getPathByLayoutId(servizioEnte.getPrivateLayoutId(), organization.getGroupId(), organization.getCompanyId());
-					
-					String messaggio = messageUtil.getMessage(
-							"errorePagamentoElettonico", 
-							servizio.getNome(),
-							uri);
-					
+
+					String messaggio = messageUtil.getMessage("errorePagamentoElettonico", servizio.getNome(), uri);
+
 					richiestaCertificato.setMessaggio(messaggio);
 					return richiestaCertificato;
 				}
@@ -291,8 +278,6 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 					// richiestaCertificato.setDestinazioneUso(destinazioneUso);
 				}
 			}
-			
-			richiestaSer
 
 			return richiestaCertificato;
 
