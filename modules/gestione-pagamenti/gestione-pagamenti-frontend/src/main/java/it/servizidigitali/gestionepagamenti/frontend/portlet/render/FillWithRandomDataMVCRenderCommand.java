@@ -1,5 +1,6 @@
 package it.servizidigitali.gestionepagamenti.frontend.portlet.render;
 
+import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
@@ -35,13 +36,16 @@ public class FillWithRandomDataMVCRenderCommand implements MVCRenderCommand {
 	
 	@Reference
 	private GestionePagamentiService gestionePagamentiService;
+	
+	@Reference
+	private CounterLocalService counterLocalService;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		
-		Pagamento pagamento = PagamentoLocalServiceUtil.createPagamento(0);
+		Pagamento pagamento = PagamentoLocalServiceUtil.createPagamento(counterLocalService.increment());
 		
 		pagamento.setGroupId(themeDisplay.getSiteGroupId());
 		pagamento.setUserId(themeDisplay.getUserId());

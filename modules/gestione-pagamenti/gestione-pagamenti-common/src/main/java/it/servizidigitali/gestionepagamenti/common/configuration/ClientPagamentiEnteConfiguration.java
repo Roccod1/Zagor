@@ -35,7 +35,4 @@ public interface ClientPagamentiEnteConfiguration {
 
 	@Meta.AD(required = false, name = "Prefisso causale Pagamento Bollo Digitale", deflt = "MARCA_BOLLO_DIGITALE")
 	String prefissoCausalePagamentoMarcaBolloDigitale();
-	
-	@Meta.AD(required = false)
-	long idProceduraPagamento();
 }

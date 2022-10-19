@@ -31,7 +31,7 @@ import it.servizidigitali.gestionepagamenti.service.base.PagamentoLocalServiceBa
  */
 @Component(property = "model.class.name=it.servizidigitali.gestionepagamenti.model.Pagamento", service = AopService.class)
 public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
-
+	
 	@Override
 	public List<Pagamento> search(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
 			Date dataOperazioneA, long groupId, long servizioId, String stato, String gateway, String canale,
@@ -76,7 +76,7 @@ public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
 			BigDecimal importo, BigDecimal commissioni, String canale, String gateway, String iud, String iuv,
 			String idSessione, String pathAvviso, boolean emailInviata, String stato, long richiestaId) {
 		
-		Pagamento pagamento = pagamentoPersistence.create(0);
+		Pagamento pagamento = pagamentoPersistence.create(counterLocalService.increment());
 
 		pagamento.setGroupId(groupId);
 		pagamento.setUserId(userId);

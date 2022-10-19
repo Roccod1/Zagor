@@ -1,5 +1,6 @@
 package it.servizidigitali.pagamento.ebollo.frontend.service;
 
+import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -67,6 +68,9 @@ public class PagamentoEBolloService {
 
 	@Reference
 	private ProceduraLocalService proceduraLocalService;
+	
+	@Reference
+	private CounterLocalService counterLocalService;
 
 	@Activate
 	@Modified
@@ -80,7 +84,7 @@ public class PagamentoEBolloService {
 		this.configurationProvider = configurationProvider;
 	}
 
-	public String pagaBollo(long requestTimeMillis, byte[] fileBytes, String fileName, long siteGroupId, long userId,
+	public String pagaBollo(long requestTimeMillis, byte[] fileBytes, String fileName, long siteGroupId, long servizioId, String nomeServizio, long userId,
 			String codiceOrganizzazione, String provinciaResidenza, String idFiscaleCliente,
 			String denominazioneCliente, String emailQuietanza, String callbackUrl)
 			throws ConfigurationException, PagamentiClientException {
@@ -122,12 +126,10 @@ public class PagamentoEBolloService {
 		PagamentoDovutoRisposta pagamentoDovutoRisposta = pagamentiClient.pagaDovuto(marcaDaBollo, username, password,
 				wsdlUrl, callbackUrl);
 
-		long proceduraId = accountClientPagamentiEnteConfiguration.idProceduraPagamento();
-
 		Pagamento pagamento = this.manageRichiestaAndPagamento(siteGroupId, userId, denominazioneCliente, idCredito,
-				idFiscaleCliente, denominazioneCliente, emailQuietanza, causale, 0, null, importoBollo, null,
+				idFiscaleCliente, denominazioneCliente, emailQuietanza, causale, servizioId, nomeServizio, importoBollo, null,
 				CanalePagamento.WEB.toString(), TipoPagamentiClient.MYPAY.toString(), iud, null, null, null, false,
-				StatoPagamento.IN_ATTESA.toString(), proceduraId);
+				StatoPagamento.IN_ATTESA.toString(), 0);
 
 		LOG.info("Created new pagamento with id: " + pagamento.getPagamentoId());
 
@@ -176,7 +178,7 @@ public class PagamentoEBolloService {
 			String gateway, String iud, String iuv, String idSessione, String pathAvviso, boolean emailInviata,
 			String stato, long proceduraId) {
 
-		Richiesta richiesta = richiestaLocalService.createRichiesta(0);
+		Richiesta richiesta = richiestaLocalService.createRichiesta(counterLocalService.increment());
 		richiesta.setGroupId(groupId);
 		richiesta.setUserId(userId);
 		richiesta.setUserName(userName);
@@ -184,6 +186,7 @@ public class PagamentoEBolloService {
 		richiesta.setEmail(emailQuietanza);
 		richiesta.setStato(stato);
 		richiesta.setProceduraId(proceduraId);
+		richiesta.setServizioId(servizioId);
 
 		richiesta = richiestaLocalService.updateRichiesta(richiesta);
 

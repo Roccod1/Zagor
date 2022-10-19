@@ -31,6 +31,7 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.common.model.Comune;
 import it.servizidigitali.common.service.ComuneLocalService;
 import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
+import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.pagamento.ebollo.frontend.constants.PagamentoEbolloFrontendPortletKeys;
 import it.servizidigitali.pagamento.ebollo.frontend.service.PagamentoEBolloService;
 
@@ -102,10 +103,19 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 				themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 		portletURL.getRenderParameters().setValue("mvcRenderCommandName",
 				PagamentoEbolloFrontendPortletKeys.ESITO_PAGAMENTO_RENDER_COMMAND);
+		
+		long servizioId = 0;
+		String nomeServizio = null;
+		
+		Servizio servizio = pagamentoEBolloService.getCurrentServizio(themeDisplay);
+		if (Validator.isNotNull(servizio)) {
+			servizioId = servizio.getServizioId();
+			nomeServizio = servizio.getNome();
+		}
 
 		try {
 			String redirectPagamentoBolloUrl = pagamentoEBolloService.pagaBollo(requestTime, fileBytes, fileName,
-					siteGroupId, userId, codiceOrganizzazione, provinciaResidenza, idFiscaleCliente,
+					siteGroupId, servizioId, nomeServizio, userId, codiceOrganizzazione, provinciaResidenza, idFiscaleCliente,
 					denominazioneCliente, emailQuietanza, portletURL.toString());
 			
 			actionRequest.setAttribute(PagamentoEbolloFrontendPortletKeys.REDIRECT_PAGAMENTO_BOLLO_URL,

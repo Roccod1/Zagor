@@ -1,6 +1,6 @@
 CREATE TABLE `pagamento` (
   `uuid_` varchar(75) DEFAULT NULL,
-  `pagamentoId` bigint NOT NULL AUTO_INCREMENT,
+  `pagamentoId` bigint NOT NULL,
   `groupId` bigint DEFAULT NULL,
   `companyId` bigint DEFAULT NULL,
   `userId` bigint DEFAULT NULL,
