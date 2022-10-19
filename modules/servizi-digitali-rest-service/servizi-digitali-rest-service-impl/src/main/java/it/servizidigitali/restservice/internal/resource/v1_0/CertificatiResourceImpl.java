@@ -287,7 +287,7 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 			rc.setStato(StatoRichiestaCertificato.NUOVA.name());
 			rc.setErrore(null);
 			rc.setServizioId(servizio.getServizioId());
-			rc.setOrganizationId(organization.getOrganizationId());
+			rc.setDestinazioneUsoId(idDestinazioneUso);
 			
 			rc = richiestaCertificatoLocalService.updateRichiestaCertificato(rc);
 			
@@ -296,13 +296,6 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 			richiestaCertificato.setEmail(user.getEmailAddress());
 			richiestaCertificato.setId(id);
 			richiestaCertificato.setStato(rc.getStato());
-
-			if (idDestinazioneUso != null) {
-				DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
-				if (destinazioneUso != null) {
-					//richiestaCertificato.setDestinazioneUso(destinazioneUso);
-				}
-			}
 
 			return richiestaCertificato;
 
