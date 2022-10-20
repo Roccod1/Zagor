@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 
 import org.camunda.community.rest.client.api.DeploymentApi;
 import org.camunda.community.rest.client.api.GroupApi;
+import org.camunda.community.rest.client.api.MessageApi;
 import org.camunda.community.rest.client.api.ProcessDefinitionApi;
 import org.camunda.community.rest.client.api.ProcessInstanceApi;
 import org.camunda.community.rest.client.api.TaskApi;
@@ -30,6 +31,7 @@ import org.camunda.community.rest.client.api.TenantApi;
 import org.camunda.community.rest.client.api.UserApi;
 import org.camunda.community.rest.client.api.VariableInstanceApi;
 import org.camunda.community.rest.client.dto.CompleteTaskDto;
+import org.camunda.community.rest.client.dto.CorrelationMessageDto;
 import org.camunda.community.rest.client.dto.CountResultDto;
 import org.camunda.community.rest.client.dto.DeploymentDto;
 import org.camunda.community.rest.client.dto.DeploymentResourceDto;
@@ -1097,5 +1099,24 @@ public class CamundaClientImpl implements CamundaClient {
 			log.error("getDeploymentResources: " + e.getResponseBody(), e);
 			throw new CamundaClientException("getDeploymentResources :: " + e.getResponseBody(), e);
 		}
+	}
+
+	@Override
+	public void correlateMessage(String tenantId, String message, String businessKey) {
+		try {
+			ApiClient client = getApiClient();
+			CorrelationMessageDto correlationMessageDto = new CorrelationMessageDto();
+			correlationMessageDto.setTenantId(tenantId);
+			correlationMessageDto.setBusinessKey(businessKey);
+			correlationMessageDto.setMessageName(message);
+			MessageApi messageApi = new MessageApi(client);
+
+			messageApi.deliverMessage(correlationMessageDto);
+		}
+		catch (ApiException e) {
+			log.error("correlateMessage :: " + e.getMessage(), e);
+			throw new CamundaClientException("getDeploymentResources :: " + e.getResponseBody(), e);
+		}
+
 	}
 }

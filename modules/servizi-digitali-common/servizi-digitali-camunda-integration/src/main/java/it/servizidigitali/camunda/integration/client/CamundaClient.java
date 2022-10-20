@@ -343,4 +343,12 @@ public interface CamundaClient {
 	 */
 	boolean existsGroup(String groupId);
 
+	/**
+	 *
+	 * @param tenantId
+	 * @param message
+	 * @param businessKey
+	 */
+	void correlateMessage(String tenantId, String message, String businessKey);
+
 }
