@@ -55,7 +55,7 @@ import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
-import it.servizidigitali.scrivaniaoperatore.scheduler.configuration.AvvioIstanzaProcessoSchedulerConfiguration;
+import it.servizidigitali.scrivaniaoperatore.scheduler.configuration.IstanzaProcessoSchedulerConfiguration;
 import it.servizidigitali.scrivaniaoperatore.scheduler.model.FileAllegato;
 import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
@@ -66,7 +66,7 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
  */
 @Component(immediate = true, //
 		service = AvvioIstanzaProcessoScheduler.class, //
-		configurationPid = { "it.servizidigitali.scrivaniaoperatore.scheduler.configuration.AvvioIstanzaProcessoSchedulerConfiguration",
+		configurationPid = { "it.servizidigitali.scrivaniaoperatore.scheduler.configuration.IstanzaProcessoSchedulerConfiguration",
 				"it.servizidigitali.camunda.integration.configuration.CamundaConfiguration" }//
 )
 public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
@@ -80,7 +80,7 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 	private SchedulerEngineHelper _schedulerEngineHelper;
 	private SchedulerEntryImpl _schedulerEntryImpl = null;
 
-	private volatile AvvioIstanzaProcessoSchedulerConfiguration avvioIstanzaProcessoSchedulerConfiguration;
+	private volatile IstanzaProcessoSchedulerConfiguration avvioIstanzaProcessoSchedulerConfiguration;
 	private volatile CamundaConfiguration camundaConfiguration;
 
 	@Reference
@@ -289,7 +289,7 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 
 		// extract the cron expression from the properties
 		try {
-			avvioIstanzaProcessoSchedulerConfiguration = ConfigurableUtil.createConfigurable(AvvioIstanzaProcessoSchedulerConfiguration.class, properties);
+			avvioIstanzaProcessoSchedulerConfiguration = ConfigurableUtil.createConfigurable(IstanzaProcessoSchedulerConfiguration.class, properties);
 			camundaConfiguration = ConfigurableUtil.createConfigurable(CamundaConfiguration.class, properties);
 
 			if (!avvioIstanzaProcessoSchedulerConfiguration.avvioIstanzaProcessoSchedulerEnabled()) {
