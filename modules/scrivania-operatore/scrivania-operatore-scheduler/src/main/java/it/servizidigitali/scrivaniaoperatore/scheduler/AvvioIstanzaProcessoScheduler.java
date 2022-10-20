@@ -128,110 +128,115 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 			ObjectMapper objectMapper = new ObjectMapper();
 			for (Richiesta richiesta : richieste) {
 
-				long businessKey = richiesta.getRichiestaId();
-				if (Validator.isNotNull(richiesta.getProcessInstanceId())) {
-					_log.debug("Esiste già una istanza di processo assegnata alla richiesta: " + businessKey);
-					continue;
-				}
+				try {
+					long businessKey = richiesta.getRichiestaId();
+					if (Validator.isNotNull(richiesta.getProcessInstanceId())) {
+						_log.debug("Esiste già una istanza di processo assegnata alla richiesta: " + businessKey);
+						continue;
+					}
 
-				// verifica processo già avviato
-				long groupId = richiesta.getGroupId();
-				long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
+					// verifica processo già avviato
+					long groupId = richiesta.getGroupId();
+					long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
 
-				String tenantId = String.valueOf(organizationId);
-				boolean existProcessByBusinessKey = camundaClient.existProcessByBusinessKey(tenantId, String.valueOf(businessKey));
+					String tenantId = String.valueOf(organizationId);
+					boolean existProcessByBusinessKey = camundaClient.existProcessByBusinessKey(tenantId, String.valueOf(businessKey));
 
-				if (existProcessByBusinessKey) {
-					_log.debug("Esiste già una istanza di processo attiva per organizationId " + organizationId + " e businessKey " + businessKey);
-					continue;
-				}
+					if (existProcessByBusinessKey) {
+						_log.debug("Esiste già una istanza di processo attiva per organizationId " + organizationId + " e businessKey " + businessKey);
+						continue;
+					}
 
-				long proceduraId = richiesta.getProceduraId();
+					long proceduraId = richiesta.getProceduraId();
 
-				Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
-				User userRichiesta = userLocalService.getUserByScreenName(richiesta.getCompanyId(), richiesta.getCodiceFiscale().toLowerCase());
+					Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
+					User userRichiesta = userLocalService.getUserByScreenName(richiesta.getCompanyId(), richiesta.getCodiceFiscale().toLowerCase());
 
-				PrincipalThreadLocal.setName(userRichiesta.getUserId());
-				PermissionChecker permissionChecker = PermissionCheckerFactoryUtil.create(userRichiesta);
-				PermissionThreadLocal.setPermissionChecker(permissionChecker);
+					PrincipalThreadLocal.setName(userRichiesta.getUserId());
+					PermissionChecker permissionChecker = PermissionCheckerFactoryUtil.create(userRichiesta);
+					PermissionThreadLocal.setPermissionChecker(permissionChecker);
 
-				Organization organization = organizationLocalService.getOrganization(organizationId);
-				Serializable codiceIPACustomAttribute = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo());
+					Organization organization = organizationLocalService.getOrganization(organizationId);
+					Serializable codiceIPACustomAttribute = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo());
 
-				String codiceIPA = null;
-				if (codiceIPACustomAttribute != null) {
-					codiceIPA = (String) codiceIPACustomAttribute;
-				}
+					String codiceIPA = null;
+					if (codiceIPACustomAttribute != null) {
+						codiceIPA = (String) codiceIPACustomAttribute;
+					}
 
-				long processoId = procedura.getProcessoId();
-				if (procedura != null && procedura.isAttiva() && processoId != 0) {
+					long processoId = procedura.getProcessoId();
+					if (procedura != null && procedura.isAttiva() && processoId != 0) {
 
-					// Avvio istanza processo
+						// Avvio istanza processo
 
-					Processo processo = processoLocalService.getProcesso(processoId);
+						Processo processo = processoLocalService.getProcesso(processoId);
 
-					if (processo != null && processo.isAttivo()) {
+						if (processo != null && processo.isAttivo()) {
 
-						Servizio servizio = servizioLocalService.getServizioById(procedura.getServizioId());
-						ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnte(new ServizioEntePK(procedura.getServizioId(), organizationId));
-						long subOrganizationId = servizioEnte.getSubOrganizationId();
+							Servizio servizio = servizioLocalService.getServizioById(procedura.getServizioId());
+							ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnte(new ServizioEntePK(procedura.getServizioId(), organizationId));
+							long subOrganizationId = servizioEnte.getSubOrganizationId();
 
-						String candidateGroup = String.valueOf(subOrganizationId);
-						boolean existsGroup = camundaClient.existsGroup(candidateGroup);
-						if (!existsGroup) {
-							throw new Exception("Impossibile assegnare il Gruppo Destinatario.");
+							String candidateGroup = String.valueOf(subOrganizationId);
+							boolean existsGroup = camundaClient.existsGroup(candidateGroup);
+							if (!existsGroup) {
+								throw new Exception("Impossibile assegnare il Gruppo Destinatario.");
+							}
+
+							// Allegati
+							String allegatiJson = "";
+							List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaId(richiesta.getRichiestaId());
+							List<FileAllegato> datiFileAllegati = getAllegati(allegatiRichiesta);
+							if (datiFileAllegati != null) {
+								allegatiJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(datiFileAllegati);
+							}
+
+							// PDF principale
+							String pdfFirmatoJson = "";
+							AllegatoRichiesta allegatoPrincipaleRichiesta = allegatoRichiestaLocalService.getAllegatoRichiestaByRichiestaIdPrincipale(richiesta.getRichiestaId(), true);
+							FileAllegato allegatoPrincipale = getAllegatoPrincipale(allegatoPrincipaleRichiesta);
+							if (allegatoPrincipale != null) {
+								pdfFirmatoJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(allegatoPrincipale);
+							}
+
+							Map<String, Object> variables = new HashMap<String, Object>();
+							variables.put(CustomProcessVariables.ID_RICHIESTA_SERVIZIO, richiesta.getRichiestaId());
+							variables.put(CustomProcessVariables.ID_GRUPPO_REFERENTI, candidateGroup);
+
+							variables.put(CustomProcessVariables.DENOMINAZIONE_RICHIEDENTE, userRichiesta.getFullName());
+							variables.put(CustomProcessVariables.COD_FISCALE_RICHIEDENTE, richiesta.getCodiceFiscale().toUpperCase());
+							variables.put(CustomProcessVariables.EMAIL_RICHIEDENTE, richiesta.getEmail());
+							variables.put(CustomProcessVariables.PARTITA_IVA_RICHIEDENTE, richiesta.getPartitaIva());
+
+							variables.put(CustomProcessVariables.OGGETTO, richiesta.getOggetto());
+
+							variables.put(CustomProcessVariables.FILE_ALLEGATI, allegatiJson);
+							variables.put(CustomProcessVariables.NOME_FILE_FIRMATO, ALLEGATO_PDF_FIRMATO);
+							variables.put(CustomProcessVariables.PDF_FIRMATO, pdfFirmatoJson);
+
+							variables.put(CustomProcessVariables.CODICE_IPA_COMUNE, codiceIPA);
+							variables.put(CustomProcessVariables.DENOMINAZIONE_COMUNE, organization.getName());
+
+							variables.put(CustomProcessVariables.CODICE_SERVIZIO, servizio.getCodice());
+							variables.put(CustomProcessVariables.DENOMINAZIONE_SERVIZIO, servizio.getNome());
+
+							variables.put(CustomProcessVariables.CODICE_AREA_TEMATICA, servizio.getAreaTematica().getCodice());
+							variables.put(CustomProcessVariables.DENOMINAZIONE_AREA_TEMATICA, servizio.getAreaTematica().getNome());
+
+							variables.put(CustomProcessVariables.DATA_CREAZIONE_RICHIESTA, richiesta.getCreateDate());
+							variables.put(CustomProcessVariables.STATO_RICHIESTA, richiesta.getStato());
+
+							String processInstanceId = camundaClient.startProcessInstance(tenantId, processo.getCodice(), String.valueOf(businessKey), variables);
+							richiestaLocalService.updateProcessiInstanceIdRichiesta(richiesta.getRichiestaId(), processInstanceId);
 						}
-
-						// Allegati
-						String allegatiJson = "";
-						List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaId(richiesta.getRichiestaId());
-						List<FileAllegato> datiFileAllegati = getAllegati(allegatiRichiesta);
-						if (datiFileAllegati != null) {
-							allegatiJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(datiFileAllegati);
-						}
-
-						// PDF principale
-						String pdfFirmatoJson = "";
-						AllegatoRichiesta allegatoPrincipaleRichiesta = allegatoRichiestaLocalService.getAllegatoRichiestaByRichiestaIdPrincipale(richiesta.getRichiestaId(), true);
-						FileAllegato allegatoPrincipale = getAllegatoPrincipale(allegatoPrincipaleRichiesta);
-						if (allegatoPrincipale != null) {
-							pdfFirmatoJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(allegatoPrincipale);
-						}
-
-						Map<String, Object> variables = new HashMap<String, Object>();
-						variables.put(CustomProcessVariables.ID_RICHIESTA_SERVIZIO, richiesta.getRichiestaId());
-						variables.put(CustomProcessVariables.ID_GRUPPO_REFERENTI, candidateGroup);
-
-						variables.put(CustomProcessVariables.DENOMINAZIONE_RICHIEDENTE, userRichiesta.getFullName());
-						variables.put(CustomProcessVariables.COD_FISCALE_RICHIEDENTE, richiesta.getCodiceFiscale().toUpperCase());
-						variables.put(CustomProcessVariables.EMAIL_RICHIEDENTE, richiesta.getEmail());
-						variables.put(CustomProcessVariables.PARTITA_IVA_RICHIEDENTE, richiesta.getPartitaIva());
-
-						variables.put(CustomProcessVariables.OGGETTO, richiesta.getOggetto());
-
-						variables.put(CustomProcessVariables.FILE_ALLEGATI, allegatiJson);
-						variables.put(CustomProcessVariables.NOME_FILE_FIRMATO, ALLEGATO_PDF_FIRMATO);
-						variables.put(CustomProcessVariables.PDF_FIRMATO, pdfFirmatoJson);
-
-						variables.put(CustomProcessVariables.CODICE_IPA_COMUNE, codiceIPA);
-						variables.put(CustomProcessVariables.DENOMINAZIONE_COMUNE, organization.getName());
-
-						variables.put(CustomProcessVariables.CODICE_SERVIZIO, servizio.getCodice());
-						variables.put(CustomProcessVariables.DENOMINAZIONE_SERVIZIO, servizio.getNome());
-
-						variables.put(CustomProcessVariables.CODICE_AREA_TEMATICA, servizio.getAreaTematica().getCodice());
-						variables.put(CustomProcessVariables.DENOMINAZIONE_AREA_TEMATICA, servizio.getAreaTematica().getNome());
-
-						variables.put(CustomProcessVariables.DATA_CREAZIONE_RICHIESTA, richiesta.getCreateDate());
-						variables.put(CustomProcessVariables.STATO_RICHIESTA, richiesta.getStato());
-
-						String processInstanceId = camundaClient.startProcessInstance(tenantId, processo.getCodice(), String.valueOf(businessKey), variables);
-						richiestaLocalService.updateProcessiInstanceIdRichiesta(richiesta.getRichiestaId(), processInstanceId);
+					}
+					else {
+						// Cambio stato in INVIATA
+						richiestaLocalService.updateStatoRichiesta(richiesta.getRichiestaId(), StatoRichiesta.INVIATA.name());
 					}
 				}
-				else {
-					// Cambio stato in INVIATA
-					richiestaLocalService.updateStatoRichiesta(richiesta.getRichiestaId(), StatoRichiesta.INVIATA.name());
+				catch (Exception e) {
+					_log.error("Impossibile avviare il processo con ID: " + richiesta.getRichiestaId(), e);
 				}
 			}
 		}
