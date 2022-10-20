@@ -249,7 +249,7 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 
 			Map<String, Object> claims = _jwtUtilityService.verifyJwtAndGetClaims(userToken);
 			String codiceFiscaleFromToken = (String) claims.get(JWTUtilityConstant.CLAIM_USERNAME);
-			Organization organization = getOrganization(null, amministrazione);
+			Organization organization = getOrganization(nomeComune, amministrazione);
 
 			Servizio servizio = servizioLocalService.getServizioByCodice(codiceServizio);
 			List<DestinazioneUso> destinazioniUso = destinazioneUsoLocalService.getDestinazioniUsoByServizioIdOrganizationId(servizio.getServizioId(), organization.getOrganizationId(),
