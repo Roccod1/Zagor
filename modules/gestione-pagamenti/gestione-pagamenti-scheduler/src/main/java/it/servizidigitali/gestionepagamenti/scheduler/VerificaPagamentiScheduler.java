@@ -26,13 +26,13 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
-import it.servizidigitali.gestionepagamenti.common.client.PagamentiClient;
-import it.servizidigitali.gestionepagamenti.common.client.model.VerificaPagamentoRisposta;
 import it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration;
 import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
-import it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient;
 import it.servizidigitali.gestionepagamenti.common.factory.PagamentiClientFactory;
 import it.servizidigitali.gestionepagamenti.configuration.PagamentiSchedulerConfiguration;
+import it.servizidigitali.gestionepagamenti.integration.common.client.PagamentiClient;
+import it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.TipoPagamentiClient;
+import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoRisposta;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
 
