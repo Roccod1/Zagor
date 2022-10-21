@@ -128,7 +128,7 @@ public class PagamentoEBolloService {
 
 		Pagamento pagamento = this.manageRichiestaAndPagamento(siteGroupId, userId, denominazioneCliente, idCredito,
 				idFiscaleCliente, denominazioneCliente, emailQuietanza, causale, servizioId, nomeServizio, importoBollo, null,
-				CanalePagamento.WEB.toString(), TipoPagamentiClient.MYPAY.toString(), iud, null, null, null, false,
+				CanalePagamento.WEB.toString(), TipoPagamentiClient.MYPAY.toString(), iud, null, pagamentoDovutoRisposta.getIdSessione(), null, false,
 				StatoPagamento.IN_ATTESA.toString(), 0);
 
 		LOG.info("Created new pagamento with id: " + pagamento.getPagamentoId());
