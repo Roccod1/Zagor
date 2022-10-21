@@ -6,11 +6,6 @@
 	<portlet:param name="mvcPath" value="<%=GestionePagamentiFrontendPortletKeys.HOME_VIEW %>" />
 </portlet:renderURL>
 
-<portlet:renderURL var="fillWithRandomDataURL">
-	<portlet:param name="mvcRenderCommandName"
-		value="/pagamento/fillWithRandomData" />
-</portlet:renderURL>
-
 <aui:form method="post" action="${cercaPagamentiActionURL}"
 	name="formCercaPagamenti">
 	<aui:fieldset>
@@ -180,7 +175,5 @@
 		<aui:button type="submit" value="gestionePagamenti.cerca.button" />
 		<aui:button type="button" value="gestionePagamenti.reset.button"
 			id="resetButton" href="${homeURL}" />
-		<aui:button type="button" value="Fill With Random Data"
-			id="fillWithRandomDataButton" href="${fillWithRandomDataURL}" />
 	</aui:button-row>
 </aui:form>

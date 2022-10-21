@@ -22,21 +22,21 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
-import it.servizidigitali.gestionepagamenti.common.client.PagamentiClient;
-import it.servizidigitali.gestionepagamenti.common.client.exeption.PagamentiClientException;
-import it.servizidigitali.gestionepagamenti.common.client.model.MarcaDaBollo;
-import it.servizidigitali.gestionepagamenti.common.client.model.PagamentoDovutoRisposta;
 import it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration;
 import it.servizidigitali.gestionepagamenti.common.enumeration.CanalePagamento;
 import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
-import it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient;
+import it.servizidigitali.gestionepagamenti.integration.common.client.PagamentiClient;
+import it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.TipoPagamentiClient;
+import it.servizidigitali.gestionepagamenti.integration.common.client.exception.PagamentiClientException;
+import it.servizidigitali.gestionepagamenti.integration.common.client.model.MarcaDaBollo;
+import it.servizidigitali.gestionepagamenti.integration.common.client.model.PagamentoDovutoRisposta;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
-import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
-import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
  * @author pindi
@@ -68,15 +68,14 @@ public class PagamentoEBolloService {
 
 	@Reference
 	private ProceduraLocalService proceduraLocalService;
-	
+
 	@Reference
 	private CounterLocalService counterLocalService;
 
 	@Activate
 	@Modified
 	private void activate(Map<String, Object> props) {
-		accountClientPagamentiEnteConfiguration = ConfigurableUtil
-				.createConfigurable(ClientPagamentiEnteConfiguration.class, props);
+		accountClientPagamentiEnteConfiguration = ConfigurableUtil.createConfigurable(ClientPagamentiEnteConfiguration.class, props);
 	}
 
 	@Reference
@@ -84,19 +83,14 @@ public class PagamentoEBolloService {
 		this.configurationProvider = configurationProvider;
 	}
 
-	public String pagaBollo(long requestTimeMillis, byte[] fileBytes, String fileName, long siteGroupId, long servizioId, String nomeServizio, long userId,
-			String codiceOrganizzazione, String provinciaResidenza, String idFiscaleCliente,
-			String denominazioneCliente, String emailQuietanza, String callbackUrl)
-			throws ConfigurationException, PagamentiClientException {
+	public String pagaBollo(long requestTimeMillis, byte[] fileBytes, String fileName, long siteGroupId, long servizioId, String nomeServizio, long userId, String codiceOrganizzazione,
+			String provinciaResidenza, String idFiscaleCliente, String denominazioneCliente, String emailQuietanza, String callbackUrl) throws ConfigurationException, PagamentiClientException {
 
-		LOG.debug("pagaBollo debug params | requestTimeMillis: " + requestTimeMillis + ", fileBytesLength: "
-				+ fileBytes.length + ", fileName: " + fileName + ", siteGroupId: " + siteGroupId + ", userId: " + userId
-				+ ", codiceOrganizzazione: " + codiceOrganizzazione + ", provinciaResidenza: " + provinciaResidenza
-				+ ", idFiscaleCliente: " + idFiscaleCliente + ", denominazioneCliente: " + denominazioneCliente
-				+ ", emailQuietanza: " + emailQuietanza + ", callbackUrl" + callbackUrl);
+		LOG.debug("pagaBollo debug params | requestTimeMillis: " + requestTimeMillis + ", fileBytesLength: " + fileBytes.length + ", fileName: " + fileName + ", siteGroupId: " + siteGroupId
+				+ ", userId: " + userId + ", codiceOrganizzazione: " + codiceOrganizzazione + ", provinciaResidenza: " + provinciaResidenza + ", idFiscaleCliente: " + idFiscaleCliente
+				+ ", denominazioneCliente: " + denominazioneCliente + ", emailQuietanza: " + emailQuietanza + ", callbackUrl" + callbackUrl);
 
-		accountClientPagamentiEnteConfiguration = configurationProvider
-				.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, siteGroupId);
+		accountClientPagamentiEnteConfiguration = configurationProvider.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, siteGroupId);
 
 		String username = accountClientPagamentiEnteConfiguration.clientUsername();
 		String password = accountClientPagamentiEnteConfiguration.clientPassword();
@@ -105,8 +99,7 @@ public class PagamentoEBolloService {
 		String codiceDovuto = accountClientPagamentiEnteConfiguration.codiceDovutoPagamentoMarcaBolloDigitale();
 		String prefissoCausale = accountClientPagamentiEnteConfiguration.prefissoCausalePagamentoMarcaBolloDigitale();
 		String causale = prefissoCausale + "-" + fileName;
-		String idCredito = codiceOrganizzazione + "-" + prefissoCausale + "-" + " - " + fileName + "_"
-				+ requestTimeMillis;
+		String idCredito = codiceOrganizzazione + "-" + prefissoCausale + "-" + " - " + fileName + "_" + requestTimeMillis;
 		String iud = randomString(35);
 
 		MarcaDaBollo marcaDaBollo = new MarcaDaBollo();
@@ -123,12 +116,10 @@ public class PagamentoEBolloService {
 		marcaDaBollo.setIud(iud);
 		marcaDaBollo.setProvinciaResidenza(provinciaResidenza);
 
-		PagamentoDovutoRisposta pagamentoDovutoRisposta = pagamentiClient.pagaDovuto(marcaDaBollo, username, password,
-				wsdlUrl, callbackUrl);
+		PagamentoDovutoRisposta pagamentoDovutoRisposta = pagamentiClient.pagaDovuto(marcaDaBollo, username, password, wsdlUrl, callbackUrl);
 
-		Pagamento pagamento = this.manageRichiestaAndPagamento(siteGroupId, userId, denominazioneCliente, idCredito,
-				idFiscaleCliente, denominazioneCliente, emailQuietanza, causale, servizioId, nomeServizio, importoBollo, null,
-				CanalePagamento.WEB.toString(), TipoPagamentiClient.MYPAY.toString(), iud, null, pagamentoDovutoRisposta.getIdSessione(), null, false,
+		Pagamento pagamento = this.manageRichiestaAndPagamento(siteGroupId, userId, denominazioneCliente, idCredito, idFiscaleCliente, denominazioneCliente, emailQuietanza, causale, servizioId,
+				nomeServizio, importoBollo, null, CanalePagamento.WEB.toString(), TipoPagamentiClient.MYPAY.toString(), iud, null, pagamentoDovutoRisposta.getIdSessione(), null, false,
 				StatoPagamento.IN_ATTESA.toString(), 0);
 
 		LOG.info("Created new pagamento with id: " + pagamento.getPagamentoId());
@@ -153,7 +144,8 @@ public class PagamentoEBolloService {
 
 			hashDocumento = builder.toString();
 
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 
@@ -165,18 +157,15 @@ public class PagamentoEBolloService {
 		int rightLimit = 122; // letter 'z'
 		Random random = new Random();
 
-		String generatedString = random.ints(leftLimit, rightLimit + 1)
-				.filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(length)
+		String generatedString = random.ints(leftLimit, rightLimit + 1).filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(length)
 				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
 
 		return generatedString;
 	}
 
-	public Pagamento manageRichiestaAndPagamento(long groupId, long userId, String userName, String idCredito,
-			String idFiscaleCliente, String denominazioneCliente, String emailQuietanza, String causale,
-			long servizioId, String nomeServizio, BigDecimal importo, BigDecimal commissioni, String canale,
-			String gateway, String iud, String iuv, String idSessione, String pathAvviso, boolean emailInviata,
-			String stato, long proceduraId) {
+	public Pagamento manageRichiestaAndPagamento(long groupId, long userId, String userName, String idCredito, String idFiscaleCliente, String denominazioneCliente, String emailQuietanza,
+			String causale, long servizioId, String nomeServizio, BigDecimal importo, BigDecimal commissioni, String canale, String gateway, String iud, String iuv, String idSessione,
+			String pathAvviso, boolean emailInviata, String stato, long proceduraId) {
 
 		Richiesta richiesta = richiestaLocalService.createRichiesta(counterLocalService.increment());
 		richiesta.setGroupId(groupId);
@@ -190,14 +179,12 @@ public class PagamentoEBolloService {
 
 		richiesta = richiestaLocalService.updateRichiesta(richiesta);
 
-		return pagamentoLocalService.create(groupId, userId, userName, idCredito, idFiscaleCliente,
-				denominazioneCliente, emailQuietanza, causale, servizioId, nomeServizio, importo, commissioni, canale,
-				gateway, iud, iuv, idSessione, pathAvviso, emailInviata, stato, richiesta.getRichiestaId());
+		return pagamentoLocalService.create(groupId, userId, userName, idCredito, idFiscaleCliente, denominazioneCliente, emailQuietanza, causale, servizioId, nomeServizio, importo, commissioni,
+				canale, gateway, iud, iuv, idSessione, pathAvviso, emailInviata, stato, richiesta.getRichiestaId());
 	}
 
 	/**
-	 * Carica il servizio corrente in base alla pagina in cui è in esecuzione la
-	 * portlet.
+	 * Carica il servizio corrente in base alla pagina in cui è in esecuzione la portlet.
 	 *
 	 * @param themeDisplay
 	 * @return
@@ -210,8 +197,7 @@ public class PagamentoEBolloService {
 		long organizationId = themeDisplay.getScopeGroup().getOrganizationId();
 		long layoutId = layout.getLayoutId();
 
-		ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnteByOrganizationIdLayoutId(organizationId,
-				layoutId);
+		ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnteByOrganizationIdLayoutId(organizationId, layoutId);
 		if (servizioEnte != null) {
 			return servizioLocalService.getServizio(servizioEnte.getServizioId());
 		}

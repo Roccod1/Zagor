@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -23,7 +24,6 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
-import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.model.Tipologia;
@@ -143,14 +143,17 @@ public class GestionePagamentiService {
 			}
 			recordValues.add(pagamento.getNomeServizio());
 			recordValues.add(pagamento.getIuv());
-			recordValues.add(StatoPagamento.valueOf(pagamento.getStato()).name());
+			recordValues.add(pagamento.getStato());
 			recordValues.add(pagamento.getIdFiscaleCliente());
 			recordValues.add(pagamento.getDenominazioneCliente());
 			recordValues.add(pagamento.getCausale());
 			recordValues.add(dateFormat.format(pagamento.getCreateDate()));
 			recordValues.add(dateFormat.format(pagamento.getModifiedDate()));
 			recordValues.add(pagamento.getEmailQuietanza());
-			recordValues.add(decimalFormat.format(pagamento.getCommissioni()));
+			BigDecimal commissioni = pagamento.getCommissioni();
+			if (commissioni != null) {
+				recordValues.add(decimalFormat.format(commissioni));
+			}
 			recordValues.add(decimalFormat.format(pagamento.getImporto()));
 
 			valuesForCsv.add(recordValues);

@@ -12,7 +12,7 @@
 <%@page import="com.liferay.portal.kernel.model.Organization"%>
 <%@page import="it.servizidigitali.gestionepagamenti.model.Pagamento"%>
 <%@page import="it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento"%>
-<%@page import="it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient"%>
+<%@page import="it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.TipoPagamentiClient"%>
 <%@page import="it.servizidigitali.gestionepagamenti.common.enumeration.CanalePagamento"%>
 <%@page import="it.servizidigitali.gestioneservizi.model.Servizio"%>
 <%@page import="com.liferay.portal.kernel.dao.search.SearchContainer"%>
