@@ -4,8 +4,8 @@ import java.math.RoundingMode;
 
 import org.osgi.service.component.annotations.Component;
 
-import it.servizidigitali.gestionepagamenti.common.client.model.Dovuto;
-import it.servizidigitali.gestionepagamenti.common.client.model.MarcaDaBollo;
+import it.servizidigitali.gestionepagamenti.integration.common.client.model.Dovuto;
+import it.servizidigitali.gestionepagamenti.integration.common.client.model.MarcaDaBollo;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.CtDatiMarcaBolloDigitale;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.CtDatiSingoloVersamentoDovuti;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.CtDatiVersamentoDovuti;

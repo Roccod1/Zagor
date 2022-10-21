@@ -10,19 +10,32 @@ import java.util.Base64;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.Handler;
+import org.apache.axis.SimpleChain;
+import org.apache.axis.SimpleTargetedChain;
+import org.apache.axis.client.AxisClient;
+import org.apache.axis.configuration.SimpleProvider;
+import org.apache.axis.transport.http.HTTPSender;
+import org.apache.axis.transport.http.HTTPTransport;
 import org.apache.xmlbeans.XmlOptions;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import it.servizidigitali.gestionepagamenti.common.client.PagamentiClient;
-import it.servizidigitali.gestionepagamenti.common.client.exeption.PagamentiClientException;
-import it.servizidigitali.gestionepagamenti.common.client.model.Dovuto;
-import it.servizidigitali.gestionepagamenti.common.client.model.PagamentoDovutoRisposta;
-import it.servizidigitali.gestionepagamenti.common.client.model.VerificaPagamentoRisposta;
-import it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient;
+import it.servizidigitali.gestionepagamenti.integration.common.client.PagamentiClient;
+import it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.StatoPagamento;
+import it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.TipoPagamentiClient;
+import it.servizidigitali.gestionepagamenti.integration.common.client.exception.PagamentiClientException;
+import it.servizidigitali.gestionepagamenti.integration.common.client.model.Dovuto;
+import it.servizidigitali.gestionepagamenti.integration.common.client.model.PagamentoDovutoRisposta;
+import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoRisposta;
 import it.servizidigitali.gestionepagamenti.mypay.converter.MyPayConverter;
+import it.servizidigitali.gestionepagamenti.mypay.handler.LogHandler;
+import it.servizidigitali.gestionepagamenti.mypay.handler.PaaSILChiediPagatiConRicevutaHandler;
+import it.veneto.regione.schemas.x2012.pagamenti.ente.CtDatiVersamentoPagatiConRicevuta;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.CtDovuti;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.CtPagatiConRicevuta;
+import it.veneto.regione.schemas.x2012.pagamenti.ente.StCodiceEsitoPagamento.Enum;
+import it.veneto.regione.www.pagamenti.ente.FaultBean;
 import it.veneto.regione.www.pagamenti.ente.PaaSILChiediPagatiConRicevutaRisposta;
 import it.veneto.regione.www.pagamenti.ente.PaaSILInviaDovuti;
 import it.veneto.regione.www.pagamenti.ente.PaaSILInviaDovutiRisposta;
@@ -105,7 +118,7 @@ public class MyPayPagamentiClient implements PagamentiClient {
 		PagamentiTelematiciDovutiPagati pagamentiServicePort = null;
 
 		try {
-			pagamentiServicePort = getMyPayPort(wsdlUrl);
+			pagamentiServicePort = getPaaSILChiediPagatiConRicevutaMyPayPort(wsdlUrl);
 		}
 		catch (Exception e) {
 			log.error("Errore nella lettura del wsdl.", e);
@@ -113,8 +126,6 @@ public class MyPayPagamentiClient implements PagamentiClient {
 		}
 
 		VerificaPagamentoRisposta verificaPagamentoRisposta = new VerificaPagamentoRisposta();
-
-		CtPagatiConRicevuta ctPagati = null;
 
 		if (idSessione != null) {
 			iuv = null;
@@ -129,9 +140,27 @@ public class MyPayPagamentiClient implements PagamentiClient {
 			throw new PagamentiClientException("Errore durate la chiamata al servizio " + "per richiedere lo stato dei pagati", ex);
 		}
 
-		if (chiediPagatiResp.getFault() != null) {
-			verificaPagamentoRisposta.setCodiceErrore(chiediPagatiResp.getFault().getFaultCode());
-			verificaPagamentoRisposta.setDescrizioneErrore(chiediPagatiResp.getFault().getFaultString());
+		FaultBean fault = chiediPagatiResp.getFault();
+		if (fault != null) {
+			verificaPagamentoRisposta.setCodiceErrore(fault.getFaultCode());
+			verificaPagamentoRisposta.setDescrizioneErrore(fault.getFaultString());
+			StatoPagamento statoPagamento;
+			if (fault.getFaultCode().equals("PAA_PAGAMENTO_ANNULLATO")) {
+				statoPagamento = StatoPagamento.ANNULLATO;
+			}
+			else if (fault.getFaultCode().equals("PAA_PAGAMENTO_SCADUTO")) {
+				statoPagamento = StatoPagamento.SCADUTO;
+			}
+			else if (fault.getFaultCode().equals("PAA_PAGAMENTO_IN_CORSO")) {
+				statoPagamento = StatoPagamento.IN_CORSO;
+			}
+			else if (fault.getFaultCode().equals("PAA_PAGAMENTO_NON_INIZIATO")) {
+				statoPagamento = StatoPagamento.NON_INIZIATO;
+			}
+			else {
+				statoPagamento = StatoPagamento.ERRORE;
+			}
+			verificaPagamentoRisposta.setStatoPagamento(statoPagamento);
 		}
 		else {
 
@@ -144,18 +173,29 @@ public class MyPayPagamentiClient implements PagamentiClient {
 				verificaPagamentoRisposta.setRicevutaPagamento(rtInputStream);
 			}
 
-			if (chiediPagatiResp.getPagati() != null) {
+			byte[] pagatiBytes = chiediPagatiResp.getPagati();
+			if (pagatiBytes != null) {
 				ByteArrayInputStream pagatiInputStream = null;
 				try {
-					byte[] pagati = Base64.getDecoder().decode(chiediPagatiResp.getPagati());
+					byte[] pagati = Base64.getDecoder().decode(pagatiBytes);
 					if (pagati == null) {
 						pagatiInputStream = new ByteArrayInputStream(pagati);
 						if (pagatiInputStream != null) {
-							ctPagati = CtPagatiConRicevuta.Factory.parse(pagatiInputStream);
-							if (ctPagati.getDatiPagamento() != null) {
-								verificaPagamentoRisposta.setCodiceIuv(ctPagati.getDatiPagamento().getIdentificativoUnivocoVersamento());
+							CtPagatiConRicevuta ctPagati = CtPagatiConRicevuta.Factory.parse(pagatiInputStream);
+							CtDatiVersamentoPagatiConRicevuta datiPagamento = ctPagati.getDatiPagamento();
+							if (datiPagamento != null) {
+								verificaPagamentoRisposta.setCodiceIuv(datiPagamento.getIdentificativoUnivocoVersamento());
 							}
 							verificaPagamentoRisposta.setIdRichiesta(ctPagati.getRiferimentoMessaggioRichiesta());
+							Enum codiceEsitoPagamento = datiPagamento.getCodiceEsitoPagamento();
+							StatoPagamento statoPagamento;
+							if (codiceEsitoPagamento.intValue() == 0) {
+								statoPagamento = StatoPagamento.COMPLETATO;
+							}
+							else {
+								statoPagamento = StatoPagamento.ERRORE;
+							}
+							verificaPagamentoRisposta.setStatoPagamento(statoPagamento);
 						}
 					}
 				}
@@ -172,7 +212,54 @@ public class MyPayPagamentiClient implements PagamentiClient {
 	private PagamentiTelematiciDovutiPagati getMyPayPort(final String wsMyPayEndpoint) throws Exception {
 
 		URL url = new URL(wsMyPayEndpoint);
-		PagamentiTelematiciDovutiPagatiServiceLocator pagamentiTelematiciDovutiPagatiServiceLocator = new PagamentiTelematiciDovutiPagatiServiceLocator();
+
+		SimpleProvider clientConfig = new SimpleProvider();
+
+		SimpleChain requestHandler = new SimpleChain();
+		SimpleChain responsepHandler = new SimpleChain();
+
+		if (log.isDebugEnabled()) {
+			LogHandler logHandler = new LogHandler();
+			requestHandler.addHandler(logHandler);
+			responsepHandler.addHandler(logHandler);
+		}
+
+		Handler pivot = new HTTPSender();
+		Handler transport = new SimpleTargetedChain(requestHandler, pivot, responsepHandler);
+		clientConfig.deployTransport(HTTPTransport.DEFAULT_TRANSPORT_NAME, transport);
+
+		PagamentiTelematiciDovutiPagatiServiceLocator pagamentiTelematiciDovutiPagatiServiceLocator = new PagamentiTelematiciDovutiPagatiServiceLocator(clientConfig);
+		pagamentiTelematiciDovutiPagatiServiceLocator.setEngine(new AxisClient(clientConfig));
+
+		PagamentiTelematiciDovutiPagati pagamentiTelematiciDovutiPagatiPort = pagamentiTelematiciDovutiPagatiServiceLocator.getPagamentiTelematiciDovutiPagatiPort(url);
+		return pagamentiTelematiciDovutiPagatiPort;
+	}
+
+	private PagamentiTelematiciDovutiPagati getPaaSILChiediPagatiConRicevutaMyPayPort(final String wsMyPayEndpoint) throws Exception {
+
+		URL url = new URL(wsMyPayEndpoint);
+
+		SimpleProvider clientConfig = new SimpleProvider();
+
+		SimpleChain requestHandler = new SimpleChain();
+		SimpleChain responsepHandler = new SimpleChain();
+
+		PaaSILChiediPagatiConRicevutaHandler paaSILChiediPagatiConRicevutaHandler = new PaaSILChiediPagatiConRicevutaHandler();
+		requestHandler.addHandler(paaSILChiediPagatiConRicevutaHandler);
+
+		if (log.isDebugEnabled()) {
+			LogHandler logHandler = new LogHandler();
+			requestHandler.addHandler(logHandler);
+			responsepHandler.addHandler(logHandler);
+		}
+
+		Handler pivot = new HTTPSender();
+		Handler transport = new SimpleTargetedChain(requestHandler, pivot, responsepHandler);
+		clientConfig.deployTransport(HTTPTransport.DEFAULT_TRANSPORT_NAME, transport);
+
+		PagamentiTelematiciDovutiPagatiServiceLocator pagamentiTelematiciDovutiPagatiServiceLocator = new PagamentiTelematiciDovutiPagatiServiceLocator(clientConfig);
+		pagamentiTelematiciDovutiPagatiServiceLocator.setEngine(new AxisClient(clientConfig));
+
 		PagamentiTelematiciDovutiPagati pagamentiTelematiciDovutiPagatiPort = pagamentiTelematiciDovutiPagatiServiceLocator.getPagamentiTelematiciDovutiPagatiPort(url);
 		return pagamentiTelematiciDovutiPagatiPort;
 	}

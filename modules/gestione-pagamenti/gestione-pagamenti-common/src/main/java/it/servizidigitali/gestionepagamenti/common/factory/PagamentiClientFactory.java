@@ -9,8 +9,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-import it.servizidigitali.gestionepagamenti.common.client.PagamentiClient;
-import it.servizidigitali.gestionepagamenti.common.enumeration.TipoPagamentiClient;
+import it.servizidigitali.gestionepagamenti.integration.common.client.PagamentiClient;
+import it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.TipoPagamentiClient;
 
 /**
  * @author pindi

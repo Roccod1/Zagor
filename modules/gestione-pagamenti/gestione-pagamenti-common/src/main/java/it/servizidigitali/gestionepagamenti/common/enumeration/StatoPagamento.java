@@ -6,5 +6,5 @@ package it.servizidigitali.gestionepagamenti.common.enumeration;
  */
 public enum StatoPagamento {
 
-	NUOVO, IN_ATTESA, CONFERMATO, COMPLETATO, ERRORE, NON_CONFERMATO;
+	NUOVO, IN_ATTESA, CONFERMATO, COMPLETATO, ERRORE, NON_CONFERMATO, ANNULLATO, SCADUTO;
 }

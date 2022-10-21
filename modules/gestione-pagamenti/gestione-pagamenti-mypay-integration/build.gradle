@@ -6,7 +6,7 @@ repositories {
 
 dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.portal.api"
-	compileOnly project(":modules:gestione-pagamenti:gestione-pagamenti-common")
+	compileOnly project(":modules:gestione-pagamenti:gestione-pagamenti-integration-common")
 	
 	compileInclude group: 'javax.xml.rpc', name: 'javax.xml.rpc-api', version: '1.1.2'
 	compileInclude group: 'com.liferay', name: 'javax.xml.ws', version: '2.3.0.LIFERAY-PATCHED-1'
