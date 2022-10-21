@@ -44,8 +44,10 @@ import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
  */
 @Component(immediate = true, //
 		service = VerificaPagamentiScheduler.class, //
-		configurationPid = { "it.servizidigitali.gestionepagamenti.configuration.PagamentiSchedulerConfiguration",
-				"it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration" }//
+		configurationPid = { //
+				"it.servizidigitali.gestionepagamenti.configuration.PagamentiSchedulerConfiguration", //
+				"it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration" //
+		}//
 )
 public class VerificaPagamentiScheduler extends BaseMessageListener {
 
@@ -74,7 +76,6 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 	@Override
 	protected void doReceive(Message message) throws Exception {
 
-		// TODO implementare verifica pagamenti
 		List<Pagamento> pagamentiInAttesa = pagamentoLocalService.getPagamentiByStato(StatoPagamento.IN_ATTESA.name());
 		if (pagamentiInAttesa != null) {
 			for (Pagamento pagamento : pagamentiInAttesa) {
@@ -84,10 +85,28 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 				VerificaPagamentoRisposta verificaPagamento = pagamentiClient.verificaPagamento(pagamento.getIdSessione(), null, null, accountClientPagamentiEnteConfiguration.clientUsername(),
 						accountClientPagamentiEnteConfiguration.clientPassword(), accountClientPagamentiEnteConfiguration.clientWsdlUrl());
 
-				_log.info("verificaPagamento: " + verificaPagamento.getStatoPagamento());
+				it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.StatoPagamento statoPagamento = verificaPagamento.getStatoPagamento();
+				_log.info("verificaPagamento: " + pagamento.getPagamentoId() + ", stato: " + statoPagamento);
+
+				switch (statoPagamento) {
+				case ERRORE:
+					pagamento.setErrore(verificaPagamento.getCodiceErrore() + " - " + verificaPagamento.getDescrizioneErrore());
+					pagamento.setStato(StatoPagamento.ERRORE.name());
+					break;
+				case COMPLETATO:
+					pagamento.setIud(verificaPagamento.getCodiceIuv());
+					// TODO implementare salvataggio stato pagamento bollo (salvataggio RT )
+					pagamento.setStato(StatoPagamento.CONFERMATO.name());
+					pagamento.setCommissioni(verificaPagamento.getImportoCommissioni());
+					// TODO implementare invio email?
+					break;
+
+				default:
+					break;
+				}
+
 			}
 		}
-
 	}
 
 	@Activate
