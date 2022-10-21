@@ -86,6 +86,8 @@ public class PagamentoTable extends BaseTable<PagamentoTable> {
 		"emailInviata", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<PagamentoTable, String> stato = createColumn(
 		"stato", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<PagamentoTable, String> errore = createColumn(
+		"errore", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<PagamentoTable, Long> richiestaId = createColumn(
 		"richiestaId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 

@@ -64,7 +64,7 @@ public class PagamentoCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(53);
+		StringBundler sb = new StringBundler(55);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -116,6 +116,8 @@ public class PagamentoCacheModel
 		sb.append(emailInviata);
 		sb.append(", stato=");
 		sb.append(stato);
+		sb.append(", errore=");
+		sb.append(errore);
 		sb.append(", richiestaId=");
 		sb.append(richiestaId);
 		sb.append("}");
@@ -258,6 +260,13 @@ public class PagamentoCacheModel
 			pagamentoImpl.setStato(stato);
 		}
 
+		if (errore == null) {
+			pagamentoImpl.setErrore("");
+		}
+		else {
+			pagamentoImpl.setErrore(errore);
+		}
+
 		pagamentoImpl.setRichiestaId(richiestaId);
 
 		pagamentoImpl.resetOriginalValues();
@@ -300,6 +309,7 @@ public class PagamentoCacheModel
 
 		emailInviata = objectInput.readBoolean();
 		stato = objectInput.readUTF();
+		errore = objectInput.readUTF();
 
 		richiestaId = objectInput.readLong();
 	}
@@ -429,6 +439,13 @@ public class PagamentoCacheModel
 			objectOutput.writeUTF(stato);
 		}
 
+		if (errore == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(errore);
+		}
+
 		objectOutput.writeLong(richiestaId);
 	}
 
@@ -457,6 +474,7 @@ public class PagamentoCacheModel
 	public String pathAvviso;
 	public boolean emailInviata;
 	public String stato;
+	public String errore;
 	public long richiestaId;
 
 }

@@ -27,6 +27,7 @@
 		<field name="pathAvviso" type="String" />
 		<field name="emailInviata" type="boolean" />
 		<field name="stato" type="String" />
+		<field name="errore" type="String" />
 		<field name="richiestaId" type="long" />
 	</model>
 </model-hints>

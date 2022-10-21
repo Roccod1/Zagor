@@ -465,6 +465,21 @@ public interface PagamentoModel
 	public void setStato(String stato);
 
 	/**
+	 * Returns the errore of this pagamento.
+	 *
+	 * @return the errore of this pagamento
+	 */
+	@AutoEscape
+	public String getErrore();
+
+	/**
+	 * Sets the errore of this pagamento.
+	 *
+	 * @param errore the errore of this pagamento
+	 */
+	public void setErrore(String errore);
+
+	/**
 	 * Returns the richiesta ID of this pagamento.
 	 *
 	 * @return the richiesta ID of this pagamento

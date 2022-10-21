@@ -45,6 +45,7 @@
 		<column name="pathAvviso" type="String" />
 		<column name="emailInviata" type="boolean" />
 		<column name="stato" type="String" />
+		<column name="errore" type="String" />
 		<column name="richiestaId" type="long" />
 		
 		<!-- Finder methods -->

@@ -70,6 +70,7 @@ public class PagamentoWrapper
 		attributes.put("pathAvviso", getPathAvviso());
 		attributes.put("emailInviata", isEmailInviata());
 		attributes.put("stato", getStato());
+		attributes.put("errore", getErrore());
 		attributes.put("richiestaId", getRichiestaId());
 
 		return attributes;
@@ -228,6 +229,12 @@ public class PagamentoWrapper
 			setStato(stato);
 		}
 
+		String errore = (String)attributes.get("errore");
+
+		if (errore != null) {
+			setErrore(errore);
+		}
+
 		Long richiestaId = (Long)attributes.get("richiestaId");
 
 		if (richiestaId != null) {
@@ -318,6 +325,16 @@ public class PagamentoWrapper
 	@Override
 	public String getEmailQuietanza() {
 		return model.getEmailQuietanza();
+	}
+
+	/**
+	 * Returns the errore of this pagamento.
+	 *
+	 * @return the errore of this pagamento
+	 */
+	@Override
+	public String getErrore() {
+		return model.getErrore();
 	}
 
 	/**
@@ -618,6 +635,16 @@ public class PagamentoWrapper
 	@Override
 	public void setEmailQuietanza(String emailQuietanza) {
 		model.setEmailQuietanza(emailQuietanza);
+	}
+
+	/**
+	 * Sets the errore of this pagamento.
+	 *
+	 * @param errore the errore of this pagamento
+	 */
+	@Override
+	public void setErrore(String errore) {
+		model.setErrore(errore);
 	}
 
 	/**

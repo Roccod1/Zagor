@@ -27,3 +27,8 @@ CREATE TABLE `pagamento` (
   `richiestaId` bigint DEFAULT NULL,
   PRIMARY KEY (`pagamentoId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- 20221021
+ALTER TABLE `servizi_digitali`.`pagamento` 
+CHANGE COLUMN `idCredito` `idCredito` VARCHAR(255) NULL DEFAULT NULL ;
+
