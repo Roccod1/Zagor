@@ -21,6 +21,8 @@ import org.apache.xmlbeans.XmlOptions;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.gov.agenziaentrate.x2014.marcaDaBollo.MarcaDaBolloDocument;
+import it.gov.agenziaentrate.x2014.marcaDaBollo.MarcaDaBolloDocument.MarcaDaBollo;
 import it.servizidigitali.gestionepagamenti.integration.common.client.PagamentiClient;
 import it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.StatoPagamento;
 import it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.TipoPagamentiClient;
@@ -31,10 +33,14 @@ import it.servizidigitali.gestionepagamenti.integration.common.client.model.Veri
 import it.servizidigitali.gestionepagamenti.mypay.converter.MyPayConverter;
 import it.servizidigitali.gestionepagamenti.mypay.handler.LogHandler;
 import it.servizidigitali.gestionepagamenti.mypay.handler.PaaSILChiediPagatiConRicevutaHandler;
+import it.veneto.regione.schemas.x2012.pagamenti.ente.CtAllegatoRicevuta;
+import it.veneto.regione.schemas.x2012.pagamenti.ente.CtDatiSingoloPagamentoPagatiConRicevuta;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.CtDatiVersamentoPagatiConRicevuta;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.CtDovuti;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.CtPagatiConRicevuta;
+import it.veneto.regione.schemas.x2012.pagamenti.ente.PagatiConRicevutaDocument;
 import it.veneto.regione.schemas.x2012.pagamenti.ente.StCodiceEsitoPagamento.Enum;
+import it.veneto.regione.schemas.x2012.pagamenti.ente.StTipoAllegatoRicevuta;
 import it.veneto.regione.www.pagamenti.ente.FaultBean;
 import it.veneto.regione.www.pagamenti.ente.PaaSILChiediPagatiConRicevutaRisposta;
 import it.veneto.regione.www.pagamenti.ente.PaaSILInviaDovuti;
@@ -178,24 +184,46 @@ public class MyPayPagamentiClient implements PagamentiClient {
 				ByteArrayInputStream pagatiInputStream = null;
 				try {
 					byte[] pagati = Base64.getDecoder().decode(pagatiBytes);
-					if (pagati == null) {
+					if (pagati != null) {
 						pagatiInputStream = new ByteArrayInputStream(pagati);
 						if (pagatiInputStream != null) {
-							CtPagatiConRicevuta ctPagati = CtPagatiConRicevuta.Factory.parse(pagatiInputStream);
-							CtDatiVersamentoPagatiConRicevuta datiPagamento = ctPagati.getDatiPagamento();
+							PagatiConRicevutaDocument pagatiConRicevutaDocument = PagatiConRicevutaDocument.Factory.parse(pagatiInputStream);
+							CtPagatiConRicevuta pagatiConRicevuta = pagatiConRicevutaDocument.getPagatiConRicevuta();
+							CtDatiVersamentoPagatiConRicevuta datiPagamento = pagatiConRicevuta.getDatiPagamento();
 							if (datiPagamento != null) {
 								verificaPagamentoRisposta.setCodiceIuv(datiPagamento.getIdentificativoUnivocoVersamento());
 							}
-							verificaPagamentoRisposta.setIdRichiesta(ctPagati.getRiferimentoMessaggioRichiesta());
+							verificaPagamentoRisposta.setIdRichiesta(pagatiConRicevuta.getRiferimentoMessaggioRichiesta());
 							Enum codiceEsitoPagamento = datiPagamento.getCodiceEsitoPagamento();
 							StatoPagamento statoPagamento;
-							if (codiceEsitoPagamento.intValue() == 0) {
+							if (codiceEsitoPagamento.toString().equals("0")) {
 								statoPagamento = StatoPagamento.COMPLETATO;
 							}
 							else {
 								statoPagamento = StatoPagamento.ERRORE;
 							}
 							verificaPagamentoRisposta.setStatoPagamento(statoPagamento);
+							verificaPagamentoRisposta.setImportoCommissioni(null);
+
+							CtDatiSingoloPagamentoPagatiConRicevuta[] datiSingoloPagamentoArray = datiPagamento.getDatiSingoloPagamentoArray();
+							if (datiSingoloPagamentoArray != null) {
+								for (CtDatiSingoloPagamentoPagatiConRicevuta ctDatiSingoloPagamentoPagatiConRicevuta : datiSingoloPagamentoArray) {
+									CtAllegatoRicevuta allegatoRicevuta = ctDatiSingoloPagamentoPagatiConRicevuta.getAllegatoRicevuta();
+									if (allegatoRicevuta != null) {
+										it.veneto.regione.schemas.x2012.pagamenti.ente.StTipoAllegatoRicevuta.Enum tipoAllegatoRicevuta = allegatoRicevuta.getTipoAllegatoRicevuta();
+										if (tipoAllegatoRicevuta.equals(StTipoAllegatoRicevuta.BD)) {
+											byte[] testoAllegato = allegatoRicevuta.getTestoAllegato();
+											MarcaDaBolloDocument marcaDaBolloDocument = MarcaDaBolloDocument.Factory.parse(new ByteArrayInputStream(testoAllegato));
+											if (marcaDaBolloDocument != null) {
+												MarcaDaBollo marcaDaBollo = marcaDaBolloDocument.getMarcaDaBollo();
+												if (marcaDaBollo != null) {
+													// TODO cosa fare?
+												}
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 				}
