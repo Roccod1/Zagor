@@ -20,6 +20,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.file.utility.factory.FileServiceFactory;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration;
@@ -36,6 +37,7 @@ import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
@@ -61,6 +63,9 @@ public class PagamentoEBolloService {
 	private RichiestaLocalService richiestaLocalService;
 
 	@Reference
+	private AllegatoRichiestaLocalService allegatoRichiestaLocalService;
+
+	@Reference
 	private ServizioEnteLocalService servizioEnteLocalService;
 
 	@Reference
@@ -71,6 +76,9 @@ public class PagamentoEBolloService {
 
 	@Reference
 	private CounterLocalService counterLocalService;
+
+	@Reference
+	private FileServiceFactory fileServiceFactory;
 
 	@Activate
 	@Modified
@@ -177,7 +185,27 @@ public class PagamentoEBolloService {
 		richiesta.setProceduraId(proceduraId);
 		richiesta.setServizioId(servizioId);
 
-		richiesta = richiestaLocalService.updateRichiesta(richiesta);
+		// TODO salvare documento upload in allegato_richiesta
+		// AllegatoRichiesta allegatoRichiesta =
+		// allegatoRichiestaLocalService.createAllegatoRichiesta(counterLocalService.increment());
+		// allegatoRichiesta.setCompanyId(companyId);
+		// allegatoRichiesta.setDefinizioneAllegatoId(definizioneAllegatoId);
+		// allegatoRichiesta.setDescrizione(descrizione);
+		// allegatoRichiesta.setGroupId(groupId);
+		// allegatoRichiesta.setIdDocumentale(idDocumentale);
+		// allegatoRichiesta.setInterno(interno);
+		// allegatoRichiesta.setNome(nome);
+		// allegatoRichiesta.setPrincipale(principale);
+		// allegatoRichiesta.setRichiestaId(richiestaId);
+		// allegatoRichiesta.setTitolo(titolo);
+		// allegatoRichiesta.setUserId(userId);
+		// allegatoRichiesta.setUserName(userName);
+		// allegatoRichiesta.setVisibile(visibile);
+		//
+		//
+		// fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, titolo, descrizione,
+		// codiceServizio, richiestaId, inputStream, mimeType, userId, groupId);
+		// richiesta = richiestaLocalService.updateRichiesta(richiesta);
 
 		return pagamentoLocalService.create(groupId, userId, userName, idCredito, idFiscaleCliente, denominazioneCliente, emailQuietanza, causale, servizioId, nomeServizio, importo, commissioni,
 				canale, gateway, iud, iuv, idSessione, pathAvviso, emailInviata, stato, richiesta.getRichiestaId());
