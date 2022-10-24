@@ -23,18 +23,19 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
+import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneforms.service.FormLocalService;
 import it.servizidigitali.gestioneforms.service.TipoDocumentoLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
+import it.servizidigitali.presentatoreforms.common.model.DatiAllegato;
+import it.servizidigitali.presentatoreforms.common.model.DatiFileAllegato;
+import it.servizidigitali.presentatoreforms.common.util.AllegatoUtil;
 import it.servizidigitali.presentatoreforms.frontend.configuration.UploadFileRichiesteEnteConfiguration;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
-import it.servizidigitali.presentatoreforms.frontend.util.alpaca.AllegatoUtil;
-import it.servizidigitali.presentatoreforms.frontend.util.model.DatiAllegato;
-import it.servizidigitali.presentatoreforms.frontend.util.model.DatiFileAllegato;
 import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 
@@ -44,7 +45,7 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
  *
  */
 @Component(
-		immediate = true,
+		immediate = true, 
 		property = {
 			"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS,
 			"mvc.command.name=" + PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND
@@ -90,10 +91,9 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 		Procedura procedura = null;
 		Richiesta richiesta = null;
 		IstanzaForm istanzaForm = null;
+		ServizioEnte servizioEnte = null;
 		
-		// TODO : recuperare da db
-		
-		boolean firmaDocumentoAbilitata = true;
+		boolean firmaDocumentoAbilitata = false;
 		
 		try {
 			uploadFileRichiesteEnteConfiguration = configurationProvider.getGroupConfiguration(UploadFileRichiesteEnteConfiguration.class, themeDisplay.getScopeGroupId());
@@ -101,6 +101,12 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand{
 			form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 			richiesta = presentatoreFormFrontendService.getRichiestaBozza(user.getScreenName(), procedura.getProceduraId());
 			istanzaForm = presentatoreFormFrontendService.getIstanzaFormRichiesta(richiesta.getRichiestaId(), form.getFormId());
+			servizioEnte = presentatoreFormFrontendService.getServizioEnteByPage(themeDisplay);
+			
+			if(Validator.isNotNull(servizioEnte)) {
+				firmaDocumentoAbilitata = servizioEnte.getRichiestaFirma();
+			}
+			
 		} catch (Exception e) {
 			_log.error("errore nel recupero del form: " + form.getFormId() + " :: ERORR MESSAGE: " + e.getMessage());
 		}

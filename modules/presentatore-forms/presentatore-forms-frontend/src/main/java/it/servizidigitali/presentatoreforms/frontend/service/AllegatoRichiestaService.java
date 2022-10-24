@@ -26,7 +26,7 @@ import it.servizidigitali.file.utility.signature.SignatureVerification;
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
-import it.servizidigitali.presentatoreforms.frontend.util.model.DatiFileAllegato;
+import it.servizidigitali.presentatoreforms.common.model.DatiFileAllegato;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
 

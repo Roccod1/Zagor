@@ -25,9 +25,8 @@ import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
-import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
-import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaJsonStructure;
-import it.servizidigitali.presentatoreforms.frontend.util.model.FormData;
+import it.servizidigitali.presentatoreforms.common.model.AlpacaJsonStructure;
+import it.servizidigitali.presentatoreforms.common.model.FormData;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
 import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
@@ -71,9 +70,6 @@ public class PresentatoreFormFrontendService {
 	
 	@Reference
 	private CounterLocalService counterLocalService;
-	
-	@Reference
-	private ServizioLocalService servizioLocalService;
 
 	/**
 	 * Ritorna il servizio attuale sulla base della pagina in cui è in esecuzione la portlet.
