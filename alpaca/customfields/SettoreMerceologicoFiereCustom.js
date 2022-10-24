@@ -524,6 +524,7 @@ function removeFlagPrincipale(element){
 												settore.options.fieldClass += " settorePrincipale";
 												settore.getFieldEl().addClass("settorePrincipale");												
 											} else {
+												
 												/* is checked */
 												settore.options.disabled = true;
 												settore.disable();
