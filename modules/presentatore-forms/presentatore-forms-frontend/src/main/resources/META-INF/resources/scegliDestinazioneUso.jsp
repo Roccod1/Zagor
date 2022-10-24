@@ -25,32 +25,28 @@
 		<div id="errorDestinazioneUso" class="hidden alert alert-danger">
 			<liferay-ui:message key="error.destinazioneUso.required" />
 		</div>
-		
-<%-- 		<c:if test="${configurazioneTipoServizioStep2 == CONCORSO && not empty concorsoAttivo}"> --%>
-<!-- 			<div class="row-fluid"> -->
-<!-- 				<div class="span12 text-right"> -->
-<!-- 					<spring:message code="label.concorso.validita" />:&nbsp; -->
-<%-- 					<spring:message code="label.concorso.validita.da" />&nbsp;<fmt:formatDate value="${concorsoAttivo.dataApertura}" pattern="dd/MM/yyyy HH:mm"/>&nbsp; --%>
-<%-- 					<spring:message code="label.concorso.validita.a" />&nbsp;<fmt:formatDate value="${concorsoAttivo.dataChiusura}" pattern="dd/MM/yyyy HH:mm"/> --%>
-<!-- 				</div> -->
-<!-- 			</div> -->
-<%-- 		</c:if> --%>
-				<c:if test="${configurazioneTipoServizioStep2 == 'CERTIFICATO' && not empty  destinazioniUso  }">
-					<div class="row-fluid">
-						<div class="span12 text-center" id="destinazioneUsoContainer">
-							<aui:select name="destinazioneUso" id="destinazioneUsoSelect" label="label.destinazioneUso">
-							    <aui:option label="label.destinazioneUso.select.default" disabled="true" selected="true"/>
-										<c:forEach items="${destinazioniUso }" var="destinazioniUso">
-											<aui:option value="${destinazioniUso.destinazioneUsoId}" label="${destinazioniUso.nome}"/>
-										</c:forEach>
-								<aui:validator name="required"/>
-							</aui:select>
-						</div>
-					</div>
-					<div class="row-fluid text-center" id="destinazioneUsoMsg">
-					</div>
-				</c:if>
-				<div id="formIscrizione"></div>
+		<c:if test="${configurazioneTipoServizioStep2 == 'CERTIFICATO' && not empty destinazioniUso}">
+			<div class="row-fluid">
+				<div class="span12 text-center" id="destinazioneUsoContainer">
+					<aui:select name="destinazioneUso" id="destinazioneUsoSelect" label="label.destinazioneUso">
+					    <aui:option label="label.destinazioneUso.select.default" disabled="true" selected="true"/>
+						<c:forEach items="${destinazioniUso}" var="destinazioneUso">
+							<c:set var="denominazioneDestinazioneUso" value="${destinazioneUso.nome}"/>
+							<c:choose>
+								<c:when test="${fn:length(denominazioneDestinazioneUso) gt 100}">
+									<c:set var="denominazioneDestinazioneUso" value="${fn:substring(denominazioneDestinazioneUso, 0, 100)}..."/>
+								</c:when>
+							</c:choose>
+							<option value="${destinazioneUso.destinazioneUsoId}" title="${destinazioneUso.nome}">${denominazioneDestinazioneUso}</option>
+						</c:forEach>
+						<aui:validator name="required"/>
+					</aui:select>
+				</div>
+			</div>
+			<div class="row-fluid text-center" id="destinazioneUsoMsg">
+			</div>
+		</c:if>
+		<div id="formIscrizione"></div>
 	</div>
 </div>
 
