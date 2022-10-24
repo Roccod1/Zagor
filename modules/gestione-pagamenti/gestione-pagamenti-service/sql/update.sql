@@ -32,3 +32,7 @@ CREATE TABLE `pagamento` (
 ALTER TABLE `servizi_digitali`.`pagamento` 
 CHANGE COLUMN `idCredito` `idCredito` VARCHAR(255) NULL DEFAULT NULL ;
 
+ALTER TABLE `servizi_digitali`.`pagamento` 
+ADD COLUMN `errore` LONGTEXT NULL AFTER `emailInviata`;
+
+
