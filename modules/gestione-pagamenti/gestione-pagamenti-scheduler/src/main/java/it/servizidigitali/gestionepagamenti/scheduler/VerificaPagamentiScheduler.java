@@ -95,15 +95,19 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 					break;
 				case COMPLETATO:
 					pagamento.setIud(verificaPagamento.getCodiceIuv());
-					// TODO implementare salvataggio stato pagamento bollo (salvataggio RT )
-					pagamento.setStato(StatoPagamento.CONFERMATO.name());
+					pagamento.setStato(StatoPagamento.COMPLETATO.name());
 					pagamento.setCommissioni(verificaPagamento.getImportoCommissioni());
+					// TODO implementare salvataggio stato pagamento bollo (salvataggio XML bollo
+					// accanto a documento inviato)
 					// TODO implementare invio email?
 					break;
 
 				default:
 					break;
 				}
+
+				// Salvataggio
+				// pagamentoLocalService.updatePagamento(pagamento);
 
 			}
 		}

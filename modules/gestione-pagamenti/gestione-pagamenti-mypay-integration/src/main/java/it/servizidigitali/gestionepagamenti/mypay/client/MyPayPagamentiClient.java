@@ -5,6 +5,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Base64;
 
@@ -29,6 +30,9 @@ import it.servizidigitali.gestionepagamenti.integration.common.client.enumeratio
 import it.servizidigitali.gestionepagamenti.integration.common.client.exception.PagamentiClientException;
 import it.servizidigitali.gestionepagamenti.integration.common.client.model.Dovuto;
 import it.servizidigitali.gestionepagamenti.integration.common.client.model.PagamentoDovutoRisposta;
+import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoMarcaDaBolloRisposta;
+import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoMarcaDaBolloRisposta.ImprontaDocumento;
+import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoMarcaDaBolloRisposta.PSP;
 import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoRisposta;
 import it.servizidigitali.gestionepagamenti.mypay.converter.MyPayConverter;
 import it.servizidigitali.gestionepagamenti.mypay.handler.LogHandler;
@@ -213,11 +217,30 @@ public class MyPayPagamentiClient implements PagamentiClient {
 										it.veneto.regione.schemas.x2012.pagamenti.ente.StTipoAllegatoRicevuta.Enum tipoAllegatoRicevuta = allegatoRicevuta.getTipoAllegatoRicevuta();
 										if (tipoAllegatoRicevuta.equals(StTipoAllegatoRicevuta.BD)) {
 											byte[] testoAllegato = allegatoRicevuta.getTestoAllegato();
-											MarcaDaBolloDocument marcaDaBolloDocument = MarcaDaBolloDocument.Factory.parse(new ByteArrayInputStream(testoAllegato));
+											ByteArrayInputStream marcaDaBolloInputStream = new ByteArrayInputStream(testoAllegato);
+											MarcaDaBolloDocument marcaDaBolloDocument = MarcaDaBolloDocument.Factory.parse(marcaDaBolloInputStream);
 											if (marcaDaBolloDocument != null) {
 												MarcaDaBollo marcaDaBollo = marcaDaBolloDocument.getMarcaDaBollo();
 												if (marcaDaBollo != null) {
-													// TODO cosa fare?
+													VerificaPagamentoMarcaDaBolloRisposta verificaPagamentoMarcaDaBolloRisposta = new VerificaPagamentoMarcaDaBolloRisposta();
+
+													verificaPagamentoMarcaDaBolloRisposta.setCodiceIuv(verificaPagamentoRisposta.getCodiceIuv());
+													verificaPagamentoMarcaDaBolloRisposta.setIdRichiesta(verificaPagamentoRisposta.getIdRichiesta());
+													verificaPagamentoMarcaDaBolloRisposta.setStatoPagamento(verificaPagamentoRisposta.getStatoPagamento());
+
+													verificaPagamentoMarcaDaBolloRisposta.setIubd(String.valueOf(marcaDaBollo.getIUBD()));
+													verificaPagamentoMarcaDaBolloRisposta.setOraAcquisto(marcaDaBollo.getOraAcquisto().getTime());
+													verificaPagamentoMarcaDaBolloRisposta.setImporto(new BigDecimal(marcaDaBollo.getImporto()));
+													ImprontaDocumento improntaDocumento = verificaPagamentoMarcaDaBolloRisposta.new ImprontaDocumento();
+													improntaDocumento.setAlgoritmo(marcaDaBollo.getImprontaDocumento().getDigestMethod().getAlgorithm());
+													improntaDocumento.setValore(marcaDaBollo.getImprontaDocumento().getDigestValue());
+													verificaPagamentoMarcaDaBolloRisposta.setImprontaDocumento(improntaDocumento);
+													PSP psp = verificaPagamentoMarcaDaBolloRisposta.new PSP();
+													psp.setCodiceFiscale(String.valueOf(marcaDaBollo.getPSP().getCodiceFiscale()));
+													psp.setDenominazione(marcaDaBollo.getPSP().getDenominazione());
+													verificaPagamentoMarcaDaBolloRisposta.setPsp(psp);
+													verificaPagamentoMarcaDaBolloRisposta.setMarcaDaBollo(marcaDaBolloInputStream);
+													return verificaPagamentoMarcaDaBolloRisposta;
 												}
 											}
 										}
@@ -228,10 +251,9 @@ public class MyPayPagamentiClient implements PagamentiClient {
 					}
 				}
 				catch (Exception e) {
-					log.warn("Errore durante la lettura della lista pagati per iuv " + iuv + " : pagati e' null");
+					log.error("Errore durante la lettura della lista pagati per iuv " + iuv + " : " + e.getMessage(), e);
 				}
 			}
-
 		}
 
 		return verificaPagamentoRisposta;
