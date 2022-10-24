@@ -17,7 +17,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.time.Instant;
 
@@ -58,7 +57,7 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 		long requestTime = Timestamp.from(Instant.now()).getTime();
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		
+
 		long siteGroupId = themeDisplay.getSiteGroupId();
 
 		long siteOrganizationId = themeDisplay.getSiteGroup().getOrganizationId();
@@ -90,8 +89,6 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 
 		String fileName = uploadPortletRequest.getFileName(PagamentoEbolloFrontendPortletKeys.FILE_TO_UPLOAD_ATTRIBUTE);
 
-		byte[] fileBytes = Files.readAllBytes(file.toPath());
-
 		User user = themeDisplay.getUser();
 
 		String idFiscaleCliente = user.getScreenName();
@@ -103,36 +100,37 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 				themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 		portletURL.getRenderParameters().setValue("mvcRenderCommandName",
 				PagamentoEbolloFrontendPortletKeys.ESITO_PAGAMENTO_RENDER_COMMAND);
-		
+
 		long servizioId = 0;
 		String nomeServizio = null;
-		
+		String codiceServizio = null;
+
 		Servizio servizio = pagamentoEBolloService.getCurrentServizio(themeDisplay);
 		if (Validator.isNotNull(servizio)) {
 			servizioId = servizio.getServizioId();
 			nomeServizio = servizio.getNome();
+			codiceServizio = servizio.getCodice();
 		}
 
 		try {
-			String redirectPagamentoBolloUrl = pagamentoEBolloService.pagaBollo(requestTime, fileBytes, fileName,
-					siteGroupId, servizioId, nomeServizio, userId, codiceOrganizzazione, provinciaResidenza, idFiscaleCliente,
-					denominazioneCliente, emailQuietanza, portletURL.toString());
-			
+			String redirectPagamentoBolloUrl = pagamentoEBolloService.pagaBollo(requestTime, file, fileName,
+					siteGroupId, themeDisplay.getCompanyId(), servizioId, nomeServizio, codiceServizio, userId,
+					codiceOrganizzazione, provinciaResidenza, idFiscaleCliente, denominazioneCliente, emailQuietanza,
+					portletURL.toString());
+
 			actionRequest.setAttribute(PagamentoEbolloFrontendPortletKeys.REDIRECT_PAGAMENTO_BOLLO_URL,
 					redirectPagamentoBolloUrl);
-			
+
 			actionResponse.getRenderParameters().setValue("mvcPath", "/redirect.jsp");
-			
+
 		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			LOG.error(errorMessage, e);
-			
-			actionRequest.setAttribute(PagamentoEbolloFrontendPortletKeys.ERROR_OCCURRED_ON_PAGA_BOLLO,
-					true);
-			actionRequest.setAttribute(PagamentoEbolloFrontendPortletKeys.ERROR_MESSAGE_ON_PAGA_BOLLO,
-					errorMessage);
+
+			actionRequest.setAttribute(PagamentoEbolloFrontendPortletKeys.ERROR_OCCURRED_ON_PAGA_BOLLO, true);
+			actionRequest.setAttribute(PagamentoEbolloFrontendPortletKeys.ERROR_MESSAGE_ON_PAGA_BOLLO, errorMessage);
 			actionResponse.getRenderParameters().setValue("mvcPath", "/view.jsp");
-			
+
 			return;
 		}
 	}

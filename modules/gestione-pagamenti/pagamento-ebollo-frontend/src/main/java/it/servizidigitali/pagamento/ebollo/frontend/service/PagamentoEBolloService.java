@@ -9,8 +9,12 @@ import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ContentTypes;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.util.Map;
 import java.util.Random;
@@ -36,6 +40,7 @@ import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
@@ -80,10 +85,13 @@ public class PagamentoEBolloService {
 	@Reference
 	private FileServiceFactory fileServiceFactory;
 
+	private static final String DESCRIZIONE_RICHIESTA = "Richiesta pagamento Marca da Bollo - ID: %s";
+
 	@Activate
 	@Modified
 	private void activate(Map<String, Object> props) {
-		accountClientPagamentiEnteConfiguration = ConfigurableUtil.createConfigurable(ClientPagamentiEnteConfiguration.class, props);
+		accountClientPagamentiEnteConfiguration = ConfigurableUtil
+				.createConfigurable(ClientPagamentiEnteConfiguration.class, props);
 	}
 
 	@Reference
@@ -91,14 +99,19 @@ public class PagamentoEBolloService {
 		this.configurationProvider = configurationProvider;
 	}
 
-	public String pagaBollo(long requestTimeMillis, byte[] fileBytes, String fileName, long siteGroupId, long servizioId, String nomeServizio, long userId, String codiceOrganizzazione,
-			String provinciaResidenza, String idFiscaleCliente, String denominazioneCliente, String emailQuietanza, String callbackUrl) throws ConfigurationException, PagamentiClientException {
+	public String pagaBollo(long requestTimeMillis, File file, String fileName, long siteGroupId, long companyId,
+			long servizioId, String nomeServizio, String codiceServizio, long userId, String codiceOrganizzazione,
+			String provinciaResidenza, String idFiscaleCliente, String denominazioneCliente, String emailQuietanza,
+			String callbackUrl) throws ConfigurationException, PagamentiClientException {
 
-		LOG.debug("pagaBollo debug params | requestTimeMillis: " + requestTimeMillis + ", fileBytesLength: " + fileBytes.length + ", fileName: " + fileName + ", siteGroupId: " + siteGroupId
-				+ ", userId: " + userId + ", codiceOrganizzazione: " + codiceOrganizzazione + ", provinciaResidenza: " + provinciaResidenza + ", idFiscaleCliente: " + idFiscaleCliente
-				+ ", denominazioneCliente: " + denominazioneCliente + ", emailQuietanza: " + emailQuietanza + ", callbackUrl" + callbackUrl);
+		LOG.debug("pagaBollo debug params | requestTimeMillis: " + requestTimeMillis + ", file: " + file.toString()
+				+ ", fileName: " + fileName + ", siteGroupId: " + siteGroupId + ", userId: " + userId
+				+ ", codiceOrganizzazione: " + codiceOrganizzazione + ", provinciaResidenza: " + provinciaResidenza
+				+ ", idFiscaleCliente: " + idFiscaleCliente + ", denominazioneCliente: " + denominazioneCliente
+				+ ", emailQuietanza: " + emailQuietanza + ", callbackUrl" + callbackUrl);
 
-		accountClientPagamentiEnteConfiguration = configurationProvider.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, siteGroupId);
+		accountClientPagamentiEnteConfiguration = configurationProvider
+				.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, siteGroupId);
 
 		String username = accountClientPagamentiEnteConfiguration.clientUsername();
 		String password = accountClientPagamentiEnteConfiguration.clientPassword();
@@ -107,11 +120,12 @@ public class PagamentoEBolloService {
 		String codiceDovuto = accountClientPagamentiEnteConfiguration.codiceDovutoPagamentoMarcaBolloDigitale();
 		String prefissoCausale = accountClientPagamentiEnteConfiguration.prefissoCausalePagamentoMarcaBolloDigitale();
 		String causale = prefissoCausale + "-" + fileName;
-		String idCredito = codiceOrganizzazione + "-" + prefissoCausale + "-" + " - " + fileName + "_" + requestTimeMillis;
+		String idCredito = codiceOrganizzazione + "-" + prefissoCausale + "-" + " - " + fileName + "_"
+				+ requestTimeMillis;
 		String iud = randomString(35);
 
 		MarcaDaBollo marcaDaBollo = new MarcaDaBollo();
-		marcaDaBollo.setHashDocumento(getHashFromBytes(fileBytes));
+		marcaDaBollo.setHashDocumento(getFileHash(file));
 		marcaDaBollo.setImporto(importoBollo);
 		marcaDaBollo.setCodiceDovuto(codiceDovuto);
 		marcaDaBollo.setCodiceOrganizzazione(codiceOrganizzazione);
@@ -124,10 +138,13 @@ public class PagamentoEBolloService {
 		marcaDaBollo.setIud(iud);
 		marcaDaBollo.setProvinciaResidenza(provinciaResidenza);
 
-		PagamentoDovutoRisposta pagamentoDovutoRisposta = pagamentiClient.pagaDovuto(marcaDaBollo, username, password, wsdlUrl, callbackUrl);
+		PagamentoDovutoRisposta pagamentoDovutoRisposta = pagamentiClient.pagaDovuto(marcaDaBollo, username, password,
+				wsdlUrl, callbackUrl);
 
-		Pagamento pagamento = this.manageRichiestaAndPagamento(siteGroupId, userId, denominazioneCliente, idCredito, idFiscaleCliente, denominazioneCliente, emailQuietanza, causale, servizioId,
-				nomeServizio, importoBollo, null, CanalePagamento.WEB.toString(), TipoPagamentiClient.MYPAY.toString(), iud, null, pagamentoDovutoRisposta.getIdSessione(), null, false,
+		Pagamento pagamento = this.manageRichiestaAndPagamento(file, fileName, siteGroupId, companyId, userId,
+				denominazioneCliente, idCredito, idFiscaleCliente, denominazioneCliente, emailQuietanza, causale,
+				servizioId, nomeServizio, codiceServizio, importoBollo, null, CanalePagamento.WEB.toString(),
+				TipoPagamentiClient.MYPAY.toString(), iud, null, pagamentoDovutoRisposta.getIdSessione(), null, false,
 				StatoPagamento.IN_ATTESA.toString(), 0);
 
 		LOG.info("Created new pagamento with id: " + pagamento.getPagamentoId());
@@ -136,10 +153,13 @@ public class PagamentoEBolloService {
 
 	}
 
-	private String getHashFromBytes(byte[] fileBytes) {
+	private String getFileHash(File file) {
 		String hashDocumento = null;
 
 		try {
+
+			byte[] fileBytes = Files.readAllBytes(file.toPath());
+
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
 
 			byte[] result = md.digest(fileBytes);
@@ -152,8 +172,7 @@ public class PagamentoEBolloService {
 
 			hashDocumento = builder.toString();
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 
@@ -165,15 +184,20 @@ public class PagamentoEBolloService {
 		int rightLimit = 122; // letter 'z'
 		Random random = new Random();
 
-		String generatedString = random.ints(leftLimit, rightLimit + 1).filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(length)
+		String generatedString = random.ints(leftLimit, rightLimit + 1)
+				.filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(length)
 				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
 
 		return generatedString;
 	}
 
-	public Pagamento manageRichiestaAndPagamento(long groupId, long userId, String userName, String idCredito, String idFiscaleCliente, String denominazioneCliente, String emailQuietanza,
-			String causale, long servizioId, String nomeServizio, BigDecimal importo, BigDecimal commissioni, String canale, String gateway, String iud, String iuv, String idSessione,
-			String pathAvviso, boolean emailInviata, String stato, long proceduraId) {
+	public Pagamento manageRichiestaAndPagamento(File file, String fileName, long groupId, long companyId, long userId,
+			String userName, String idCredito, String idFiscaleCliente, String denominazioneCliente,
+			String emailQuietanza, String causale, long servizioId, String nomeServizio, String codiceServizio,
+			BigDecimal importo, BigDecimal commissioni, String canale, String gateway, String iud, String iuv,
+			String idSessione, String pathAvviso, boolean emailInviata, String stato, long proceduraId) {
+
+		long richiestaId = counterLocalService.increment();
 
 		Richiesta richiesta = richiestaLocalService.createRichiesta(counterLocalService.increment());
 		richiesta.setGroupId(groupId);
@@ -184,35 +208,46 @@ public class PagamentoEBolloService {
 		richiesta.setStato(stato);
 		richiesta.setProceduraId(proceduraId);
 		richiesta.setServizioId(servizioId);
+		
+		richiesta = richiestaLocalService.updateRichiesta(richiesta);
 
-		// TODO salvare documento upload in allegato_richiesta
-		// AllegatoRichiesta allegatoRichiesta =
-		// allegatoRichiestaLocalService.createAllegatoRichiesta(counterLocalService.increment());
-		// allegatoRichiesta.setCompanyId(companyId);
-		// allegatoRichiesta.setDefinizioneAllegatoId(definizioneAllegatoId);
-		// allegatoRichiesta.setDescrizione(descrizione);
-		// allegatoRichiesta.setGroupId(groupId);
-		// allegatoRichiesta.setIdDocumentale(idDocumentale);
-		// allegatoRichiesta.setInterno(interno);
-		// allegatoRichiesta.setNome(nome);
-		// allegatoRichiesta.setPrincipale(principale);
-		// allegatoRichiesta.setRichiestaId(richiestaId);
-		// allegatoRichiesta.setTitolo(titolo);
-		// allegatoRichiesta.setUserId(userId);
-		// allegatoRichiesta.setUserName(userName);
-		// allegatoRichiesta.setVisibile(visibile);
-		//
-		//
-		// fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, titolo, descrizione,
-		// codiceServizio, richiestaId, inputStream, mimeType, userId, groupId);
-		// richiesta = richiestaLocalService.updateRichiesta(richiesta);
+		String descrizioneAllegatoRichiesta = String.format(DESCRIZIONE_RICHIESTA, richiestaId);
 
-		return pagamentoLocalService.create(groupId, userId, userName, idCredito, idFiscaleCliente, denominazioneCliente, emailQuietanza, causale, servizioId, nomeServizio, importo, commissioni,
-				canale, gateway, iud, iuv, idSessione, pathAvviso, emailInviata, stato, richiesta.getRichiestaId());
+		String idDocumentale = null;
+		try {
+			idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(fileName, fileName,
+					descrizioneAllegatoRichiesta, codiceServizio, richiestaId, new FileInputStream(file),
+					ContentTypes.APPLICATION_OCTET_STREAM, userId, groupId);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+		}
+
+		AllegatoRichiesta allegatoRichiesta = allegatoRichiestaLocalService
+				.createAllegatoRichiesta(counterLocalService.increment());
+		allegatoRichiesta.setCompanyId(companyId);
+		allegatoRichiesta.setDefinizioneAllegatoId(null);
+		allegatoRichiesta.setDescrizione(descrizioneAllegatoRichiesta);
+		allegatoRichiesta.setGroupId(groupId);
+		allegatoRichiesta.setIdDocumentale(idDocumentale);
+		allegatoRichiesta.setInterno(false);
+		allegatoRichiesta.setNome(fileName);
+		allegatoRichiesta.setPrincipale(true);
+		allegatoRichiesta.setRichiestaId(richiestaId);
+		allegatoRichiesta.setTitolo(fileName);
+		allegatoRichiesta.setUserId(userId);
+		allegatoRichiesta.setUserName(userName);
+		allegatoRichiesta.setVisibile(true);
+		
+		allegatoRichiestaLocalService.updateAllegatoRichiesta(allegatoRichiesta);
+
+		return pagamentoLocalService.create(groupId, userId, userName, idCredito, idFiscaleCliente,
+				denominazioneCliente, emailQuietanza, causale, servizioId, nomeServizio, importo, commissioni, canale,
+				gateway, iud, iuv, idSessione, pathAvviso, emailInviata, stato, richiesta.getRichiestaId());
 	}
 
 	/**
-	 * Carica il servizio corrente in base alla pagina in cui è in esecuzione la portlet.
+	 * Carica il servizio corrente in base alla pagina in cui è in esecuzione la
+	 * portlet.
 	 *
 	 * @param themeDisplay
 	 * @return
@@ -225,7 +260,8 @@ public class PagamentoEBolloService {
 		long organizationId = themeDisplay.getScopeGroup().getOrganizationId();
 		long layoutId = layout.getLayoutId();
 
-		ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnteByOrganizationIdLayoutId(organizationId, layoutId);
+		ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnteByOrganizationIdLayoutId(organizationId,
+				layoutId);
 		if (servizioEnte != null) {
 			return servizioLocalService.getServizio(servizioEnte.getServizioId());
 		}
