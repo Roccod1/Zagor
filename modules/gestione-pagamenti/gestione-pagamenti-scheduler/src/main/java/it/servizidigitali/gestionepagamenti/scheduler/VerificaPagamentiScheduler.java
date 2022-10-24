@@ -32,6 +32,7 @@ import it.servizidigitali.gestionepagamenti.common.factory.PagamentiClientFactor
 import it.servizidigitali.gestionepagamenti.configuration.PagamentiSchedulerConfiguration;
 import it.servizidigitali.gestionepagamenti.integration.common.client.PagamentiClient;
 import it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.TipoPagamentiClient;
+import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoMarcaDaBolloRisposta;
 import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoRisposta;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
@@ -99,14 +100,17 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 					pagamento.setCommissioni(verificaPagamento.getImportoCommissioni());
 					// TODO implementare salvataggio stato pagamento bollo (salvataggio XML bollo
 					// accanto a documento inviato)
-					// TODO implementare invio email?
+					if (verificaPagamento instanceof VerificaPagamentoMarcaDaBolloRisposta) {
+						// TODO salvataggio file marca da bollo
+						// TODO implementare invio email?
+					}
 					break;
 
 				default:
 					break;
 				}
 
-				// Salvataggio
+				// Aggiornamento pagamento + richiesta corrispondente
 				// pagamentoLocalService.updatePagamento(pagamento);
 
 			}
