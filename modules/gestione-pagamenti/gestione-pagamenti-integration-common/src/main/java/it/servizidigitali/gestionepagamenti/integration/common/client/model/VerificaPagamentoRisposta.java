@@ -13,12 +13,15 @@ import it.servizidigitali.gestionepagamenti.integration.common.client.enumeratio
 public class VerificaPagamentoRisposta {
 
 	private String codiceIuv;
+	private String codiceIud;
 	private StatoPagamento statoPagamento;
 	private String idRichiesta;
 	private BigDecimal importoCommissioni;
 	private String codiceErrore;
 	private String descrizioneErrore;
-	private InputStream ricevutaPagamento;
+	private InputStream ricevutaTelematicaXml;
+
+	private String ricevutaTelematicaPdfUrl;
 
 	/**
 	 * @return the codiceIuv
@@ -32,6 +35,20 @@ public class VerificaPagamentoRisposta {
 	 */
 	public void setCodiceIuv(String codiceIuv) {
 		this.codiceIuv = codiceIuv;
+	}
+
+	/**
+	 * @return the codiceIud
+	 */
+	public String getCodiceIud() {
+		return codiceIud;
+	}
+
+	/**
+	 * @param codiceIud the codiceIud to set
+	 */
+	public void setCodiceIud(String codiceIud) {
+		this.codiceIud = codiceIud;
 	}
 
 	/**
@@ -105,17 +122,31 @@ public class VerificaPagamentoRisposta {
 	}
 
 	/**
-	 * @return the ricevutaPagamento
+	 * @return the ricevutaTelematicaXml
 	 */
-	public InputStream getRicevutaPagamento() {
-		return ricevutaPagamento;
+	public InputStream getRicevutaTelematicaXml() {
+		return ricevutaTelematicaXml;
 	}
 
 	/**
-	 * @param ricevutaPagamento the ricevutaPagamento to set
+	 * @param ricevutaTelematicaXml the ricevutaTelematicaXml to set
 	 */
-	public void setRicevutaPagamento(InputStream ricevutaPagamento) {
-		this.ricevutaPagamento = ricevutaPagamento;
+	public void setRicevutaTelematicaXml(InputStream ricevutaTelematicaXml) {
+		this.ricevutaTelematicaXml = ricevutaTelematicaXml;
+	}
+
+	/**
+	 * @return the ricevutaTelematicaPdfUrl
+	 */
+	public String getRicevutaTelematicaPdfUrl() {
+		return ricevutaTelematicaPdfUrl;
+	}
+
+	/**
+	 * @param ricevutaTelematicaPdfUrl the ricevutaTelematicaPdfUrl to set
+	 */
+	public void setRicevutaTelematicaPdfUrl(String ricevutaTelematicaPdfUrl) {
+		this.ricevutaTelematicaPdfUrl = ricevutaTelematicaPdfUrl;
 	}
 
 }

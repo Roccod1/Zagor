@@ -11,7 +11,6 @@ public class Dovuto {
 
 	private String iud;
 	private String idCredito;
-	private String stato;
 	private String causale;
 
 	private String idFiscaleCliente;
@@ -51,20 +50,6 @@ public class Dovuto {
 	 */
 	public void setIdCredito(String idCredito) {
 		this.idCredito = idCredito;
-	}
-
-	/**
-	 * @return the stato
-	 */
-	public String getStato() {
-		return stato;
-	}
-
-	/**
-	 * @param stato the stato to set
-	 */
-	public void setStato(String stato) {
-		this.stato = stato;
 	}
 
 	/**
