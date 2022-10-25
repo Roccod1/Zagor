@@ -1,11 +1,13 @@
 package it.servizidigitali.gestionepagamenti.scheduler;
 
+import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
@@ -15,7 +17,14 @@ import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.scheduler.StorageTypeAware;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactory;
+import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
+import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.ContentTypes;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +46,12 @@ import it.servizidigitali.gestionepagamenti.integration.common.client.model.Veri
 import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoRisposta;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
+import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
+import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
@@ -55,6 +69,12 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 )
 public class VerificaPagamentiScheduler extends BaseMessageListener {
 
+	private static final String RICEVUTA_TELEMATICA_PAGAMENTO_FILE_PREFIX = "ricevuta-telematica-pagamento-";
+	private static final String MARCA_DA_BOLLO_PAGAMENTO_FILE_PREFIX = "marca-da-bollo-pagamento-";
+	private static final String DESCRIZIONE_ALLEGATO_RICEVUTA_TELEMATICA_XML = "Ricevuta telematica XML pagamento ID: %s";
+	private static final String DESCRIZIONE_ALLEGATO_RICEVUTA_TELEMATICA_PDF = "Ricevuta telematica PDF pagamento ID: %s";
+	private static final String DESCRIZIONE_ALLEGATO_MARCA_DA_BOLLO = "Marca da Bollo - ID pagamento: %s";
+
 	private static final Log _log = LogFactoryUtil.getLog(VerificaPagamentiScheduler.class);
 
 	private volatile boolean _initialized;
@@ -71,12 +91,24 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 
 	@Reference
 	private PagamentiClientFactory pagamentiClientFactory;
-	
+
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
-	
+
 	@Reference
 	private FileServiceFactory fileServiceFactory;
+
+	@Reference
+	private AllegatoRichiestaLocalService allegatoRichiestaLocalService;
+
+	@Reference
+	private ServizioLocalService servizioLocalService;
+
+	@Reference
+	private CounterLocalService counterLocalService;
+
+	@Reference
+	private UserLocalService userLocalService;
 
 	@Reference
 	protected void setConfigurationProvider(ConfigurationProvider configurationProvider) {
@@ -90,45 +122,112 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 		if (pagamentiInAttesa != null) {
 			for (Pagamento pagamento : pagamentiInAttesa) {
 
-				accountClientPagamentiEnteConfiguration = configurationProvider.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, pagamento.getGroupId());
-				PagamentiClient pagamentiClient = pagamentiClientFactory.getPagamentiClient(TipoPagamentiClient.valueOf(accountClientPagamentiEnteConfiguration.tipoPagamentiClient()));
-				VerificaPagamentoRisposta verificaPagamento = pagamentiClient.verificaPagamento(pagamento.getIdSessione(), null, null, accountClientPagamentiEnteConfiguration.clientUsername(),
-						accountClientPagamentiEnteConfiguration.clientPassword(), accountClientPagamentiEnteConfiguration.clientWsdlUrl());
+				long pagamentoId = pagamento.getPagamentoId();
+				try {
+					accountClientPagamentiEnteConfiguration = configurationProvider.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, pagamento.getGroupId());
+					PagamentiClient pagamentiClient = pagamentiClientFactory.getPagamentiClient(TipoPagamentiClient.valueOf(accountClientPagamentiEnteConfiguration.tipoPagamentiClient()));
+					VerificaPagamentoRisposta verificaPagamento = pagamentiClient.verificaPagamento(pagamento.getIdSessione(), null, null, accountClientPagamentiEnteConfiguration.clientUsername(),
+							accountClientPagamentiEnteConfiguration.clientPassword(), accountClientPagamentiEnteConfiguration.clientWsdlUrl());
 
-				it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.StatoPagamento statoPagamento = verificaPagamento.getStatoPagamento();
-				_log.info("verificaPagamento: " + pagamento.getPagamentoId() + ", stato: " + statoPagamento);
+					it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.StatoPagamento statoPagamento = verificaPagamento.getStatoPagamento();
+					_log.info("verificaPagamento :: ID: " + pagamentoId + ", stato: " + statoPagamento);
 
-				switch (statoPagamento) {
-				case ERRORE:
-					pagamento.setErrore(verificaPagamento.getCodiceErrore() + " - " + verificaPagamento.getDescrizioneErrore());
-					pagamento.setStato(StatoPagamento.ERRORE.name());
-					break;
-				case COMPLETATO:
-					pagamento.setIud(verificaPagamento.getCodiceIuv());
-					pagamento.setStato(StatoPagamento.COMPLETATO.name());
-					pagamento.setCommissioni(verificaPagamento.getImportoCommissioni());
-					// TODO implementare salvataggio stato pagamento bollo (salvataggio XML bollo
-					// accanto a documento inviato)
-					if (verificaPagamento instanceof VerificaPagamentoMarcaDaBolloRisposta) {
-						// TODO salvataggio file marca da bollo
-						// TODO implementare invio email?
+					String statoRichiesta = StatoRichiesta.CHIUSA_POSITIVAMENTE.name();
+
+					long richiestaId = pagamento.getRichiestaId();
+					Richiesta richiesta = richiestaLocalService.getRichiesta(richiestaId);
+					Servizio servizio = servizioLocalService.getServizio(richiesta.getServizioId());
+
+					switch (statoPagamento) {
+					case ERRORE:
+						pagamento.setErrore(verificaPagamento.getCodiceErrore() + " - " + verificaPagamento.getDescrizioneErrore());
+						pagamento.setStato(StatoPagamento.ERRORE.name());
+						statoRichiesta = StatoRichiesta.CHIUSA_NEGATIVAMENTE.name();
+						break;
+					case ANNULLATO:
+						pagamento.setStato(StatoPagamento.ANNULLATO.name());
+						statoRichiesta = StatoRichiesta.ANNULLATA.name();
+						break;
+					case COMPLETATO:
+						pagamento.setIud(verificaPagamento.getCodiceIuv());
+						pagamento.setStato(StatoPagamento.COMPLETATO.name());
+						pagamento.setCommissioni(verificaPagamento.getImportoCommissioni());
+						pagamento.setRiferimentoEsternoId(verificaPagamento.getIdRichiesta());
+
+						// Salvataggio RT XML
+						InputStream ricevutaTelematicaXmlInputStream = verificaPagamento.getRicevutaTelematicaXml();
+						if (ricevutaTelematicaXmlInputStream != null) {
+							String fileNameRicevutaPagamentoXML = RICEVUTA_TELEMATICA_PAGAMENTO_FILE_PREFIX + pagamentoId + ".xml";
+							String descrizioneAllegatoRicevutaTelematicaXML = String.format(DESCRIZIONE_ALLEGATO_RICEVUTA_TELEMATICA_XML, pagamentoId);
+
+							salvaAllegato(pagamento, richiesta, servizio, fileNameRicevutaPagamentoXML, descrizioneAllegatoRicevutaTelematicaXML, ricevutaTelematicaXmlInputStream,
+									ContentTypes.TEXT_XML);
+						}
+
+						if (verificaPagamento instanceof VerificaPagamentoMarcaDaBolloRisposta) {
+							InputStream marcaDaBolloInputStream = ((VerificaPagamentoMarcaDaBolloRisposta) verificaPagamento).getMarcaDaBollo();
+
+							// XML
+							String descrizioneAllegatoMarcaDaBollo = String.format(DESCRIZIONE_ALLEGATO_MARCA_DA_BOLLO, pagamentoId);
+							String fileNameMarcaDaBollo = MARCA_DA_BOLLO_PAGAMENTO_FILE_PREFIX + pagamentoId + ".xml";
+
+							salvaAllegato(pagamento, richiesta, servizio, fileNameMarcaDaBollo, descrizioneAllegatoMarcaDaBollo, marcaDaBolloInputStream, ContentTypes.TEXT_XML);
+						}
+						break;
+
+					default:
+						break;
 					}
-					break;
 
-				default:
-					break;
+					richiesta.setStato(statoRichiesta);
+					richiestaLocalService.updateRichiesta(richiesta);
+					pagamentoLocalService.updatePagamento(pagamento);
 				}
-				
-				Richiesta richiesta = richiestaLocalService.getRichiesta(pagamento.getRichiestaId());
-
-				richiesta.setStato(pagamento.getStato());
-				
-				richiestaLocalService.updateRichiesta(richiesta);
-				
-				pagamentoLocalService.updatePagamento(pagamento);
-
+				catch (Exception e) {
+					_log.error("doReceive :: errore durante la verifica del pagamento : " + pagamentoId + " :: " + e.getMessage(), e);
+				}
 			}
 		}
+	}
+
+	/**
+	 *
+	 * @param pagamento
+	 * @param richiesta
+	 * @param servizio
+	 * @param nomeAllegato
+	 * @param descrizioneAllegato
+	 * @param inputStream
+	 * @param contentType
+	 * @throws Exception
+	 */
+	private void salvaAllegato(Pagamento pagamento, Richiesta richiesta, Servizio servizio, String nomeAllegato, String descrizioneAllegato, InputStream inputStream, String contentType)
+			throws Exception {
+		User user = userLocalService.getUser(pagamento.getUserId());
+		PrincipalThreadLocal.setName(user.getUserId());
+		PermissionChecker permissionChecker = PermissionCheckerFactoryUtil.create(user);
+		PermissionThreadLocal.setPermissionChecker(permissionChecker);
+
+		long richiestaId = richiesta.getRichiestaId();
+		String idDocumentaleRicevutaTelematica = fileServiceFactory.getActiveFileService().saveRequestFile(nomeAllegato, nomeAllegato, descrizioneAllegato, servizio.getCodice(), richiestaId,
+				inputStream, contentType, pagamento.getUserId(), pagamento.getGroupId());
+
+		AllegatoRichiesta allegatoRichiestaRicevutaTelematica = allegatoRichiestaLocalService.createAllegatoRichiesta(counterLocalService.increment());
+		allegatoRichiestaRicevutaTelematica.setCompanyId(pagamento.getCompanyId());
+		allegatoRichiestaRicevutaTelematica.setDefinizioneAllegatoId(null);
+		allegatoRichiestaRicevutaTelematica.setDescrizione(descrizioneAllegato);
+		allegatoRichiestaRicevutaTelematica.setGroupId(pagamento.getGroupId());
+		allegatoRichiestaRicevutaTelematica.setIdDocumentale(idDocumentaleRicevutaTelematica);
+		allegatoRichiestaRicevutaTelematica.setInterno(false);
+		allegatoRichiestaRicevutaTelematica.setNome(nomeAllegato);
+		allegatoRichiestaRicevutaTelematica.setPrincipale(false);
+		allegatoRichiestaRicevutaTelematica.setRichiestaId(richiestaId);
+		allegatoRichiestaRicevutaTelematica.setTitolo(nomeAllegato);
+		allegatoRichiestaRicevutaTelematica.setUserId(pagamento.getUserId());
+		allegatoRichiestaRicevutaTelematica.setUserName(pagamento.getUserName());
+		allegatoRichiestaRicevutaTelematica.setVisibile(true);
+
+		allegatoRichiestaLocalService.updateAllegatoRichiesta(allegatoRichiestaRicevutaTelematica);
 	}
 
 	@Activate

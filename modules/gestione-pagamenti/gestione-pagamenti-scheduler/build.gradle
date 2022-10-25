@@ -5,5 +5,7 @@ dependencies {
 	compileOnly project(":modules:gestione-pagamenti:gestione-pagamenti-integration-common")
 	compileOnly project(":modules:gestione-pagamenti:gestione-pagamenti-api")
 	compileOnly project(":modules:scrivania-operatore:scrivania-operatore-api")
+	compileOnly project(":modules:gestione-servizi:gestione-servizi-api")
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-file-utility")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-richieste-common")
 }
