@@ -21,8 +21,6 @@ public class VerificaPagamentoRisposta {
 	private String descrizioneErrore;
 	private InputStream ricevutaTelematicaXml;
 
-	private String ricevutaTelematicaPdfUrl;
-
 	/**
 	 * @return the codiceIuv
 	 */
@@ -134,19 +132,4 @@ public class VerificaPagamentoRisposta {
 	public void setRicevutaTelematicaXml(InputStream ricevutaTelematicaXml) {
 		this.ricevutaTelematicaXml = ricevutaTelematicaXml;
 	}
-
-	/**
-	 * @return the ricevutaTelematicaPdfUrl
-	 */
-	public String getRicevutaTelematicaPdfUrl() {
-		return ricevutaTelematicaPdfUrl;
-	}
-
-	/**
-	 * @param ricevutaTelematicaPdfUrl the ricevutaTelematicaPdfUrl to set
-	 */
-	public void setRicevutaTelematicaPdfUrl(String ricevutaTelematicaPdfUrl) {
-		this.ricevutaTelematicaPdfUrl = ricevutaTelematicaPdfUrl;
-	}
-
 }
