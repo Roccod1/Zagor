@@ -180,7 +180,7 @@ public class MyPayPagamentiClient implements PagamentiClient {
 			}
 			else {
 				rtInputStream = new ByteArrayInputStream(chiediPagatiResp.getRt());
-				verificaPagamentoRisposta.setRicevutaPagamento(rtInputStream);
+				verificaPagamentoRisposta.setRicevutaTelematicaXml(rtInputStream);
 			}
 
 			byte[] pagatiBytes = chiediPagatiResp.getPagati();
@@ -198,6 +198,7 @@ public class MyPayPagamentiClient implements PagamentiClient {
 								verificaPagamentoRisposta.setCodiceIuv(datiPagamento.getIdentificativoUnivocoVersamento());
 							}
 							verificaPagamentoRisposta.setIdRichiesta(pagatiConRicevuta.getRiferimentoMessaggioRichiesta());
+
 							Enum codiceEsitoPagamento = datiPagamento.getCodiceEsitoPagamento();
 							StatoPagamento statoPagamento;
 							if (codiceEsitoPagamento.toString().equals("0")) {
@@ -212,6 +213,7 @@ public class MyPayPagamentiClient implements PagamentiClient {
 							CtDatiSingoloPagamentoPagatiConRicevuta[] datiSingoloPagamentoArray = datiPagamento.getDatiSingoloPagamentoArray();
 							if (datiSingoloPagamentoArray != null) {
 								for (CtDatiSingoloPagamentoPagatiConRicevuta ctDatiSingoloPagamentoPagatiConRicevuta : datiSingoloPagamentoArray) {
+									verificaPagamentoRisposta.setCodiceIud(ctDatiSingoloPagamentoPagatiConRicevuta.getIdentificativoUnivocoDovuto());
 									CtAllegatoRicevuta allegatoRicevuta = ctDatiSingoloPagamentoPagatiConRicevuta.getAllegatoRicevuta();
 									if (allegatoRicevuta != null) {
 										it.veneto.regione.schemas.x2012.pagamenti.ente.StTipoAllegatoRicevuta.Enum tipoAllegatoRicevuta = allegatoRicevuta.getTipoAllegatoRicevuta();
@@ -227,6 +229,7 @@ public class MyPayPagamentiClient implements PagamentiClient {
 													verificaPagamentoMarcaDaBolloRisposta.setCodiceIuv(verificaPagamentoRisposta.getCodiceIuv());
 													verificaPagamentoMarcaDaBolloRisposta.setIdRichiesta(verificaPagamentoRisposta.getIdRichiesta());
 													verificaPagamentoMarcaDaBolloRisposta.setStatoPagamento(verificaPagamentoRisposta.getStatoPagamento());
+													verificaPagamentoMarcaDaBolloRisposta.setRicevutaTelematicaXml(verificaPagamentoRisposta.getRicevutaTelematicaXml());
 
 													verificaPagamentoMarcaDaBolloRisposta.setIubd(String.valueOf(marcaDaBollo.getIUBD()));
 													verificaPagamentoMarcaDaBolloRisposta.setOraAcquisto(marcaDaBollo.getOraAcquisto().getTime());
