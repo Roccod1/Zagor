@@ -19,11 +19,11 @@ import it.servizidigitali.verifica.ebollo.frontend.constants.VerificaEbolloFront
 				"javax.portlet.display-name=VerificaEbolloPortelt", //
 				"javax.portlet.init-param.template-path=/", //
 				"javax.portlet.init-param.view-template=/view.jsp", //
-				"javax.portlet.name=" + VerificaEbolloFrontendPortletKeys.VERIFICAEBOLLOPORTELT, //
+				"javax.portlet.name=" + VerificaEbolloFrontendPortletKeys.VERIFICAEBOLLOPORTLET, //
 				"javax.portlet.resource-bundle=content.Language", //
 				"javax.portlet.security-role-ref=power-user,user"//
 		}, //
 		service = Portlet.class//
 ) //
-public class VerificaEbolloFrontendPortel extends MVCPortlet {
+public class VerificaEbolloFrontendPortlet extends MVCPortlet {
 }

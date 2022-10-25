@@ -5,7 +5,6 @@ package it.servizidigitali.verifica.ebollo.frontend.constants;
  */
 public class VerificaEbolloFrontendPortletKeys {
 
-	public static final String VERIFICAEBOLLOPORTELT =
-		"it_servizidigitali_gestionepagamenti_verificaebollo_VerificaEbolloPorteltPortlet";
+	public static final String VERIFICAEBOLLOPORTLET = "it_servizidigitali_verificaebollo_VerificaEbolloPortlet";
 
 }
