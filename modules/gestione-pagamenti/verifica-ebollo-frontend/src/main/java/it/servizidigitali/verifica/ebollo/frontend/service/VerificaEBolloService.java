@@ -2,6 +2,7 @@ package it.servizidigitali.verifica.ebollo.frontend.service;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,13 +29,53 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-@Component(immediate = true, service = VerificaEBolloService.class)
-public class VerificaEBolloService {
+import it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration;
+import it.servizidigitali.gestionepagamenti.common.factory.PagamentiServiceFactory;
+import it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.TipoPagamentiClient;
+import it.servizidigitali.gestionepagamenti.integration.common.model.MarcaDaBollo;
+import it.servizidigitali.gestionepagamenti.integration.common.service.PagamentiService;
 
+@Component(immediate = true, service = VerificaEBolloService.class, configurationPid = {"it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration"})
+public class VerificaEBolloService {
+	
+	@Reference
+	private PagamentiServiceFactory pagamentiServiceFactory;
+
+	private volatile ClientPagamentiEnteConfiguration accountClientPagamentiEnteConfiguration;
+	private ConfigurationProvider configurationProvider;
+	
 	private static final Log LOG = LogFactoryUtil.getLog(VerificaEBolloService.class.getName());
+
+	@Reference
+	protected void setConfigurationProvider(ConfigurationProvider configurationProvider) {
+		this.configurationProvider = configurationProvider;
+	}
+	
+	public boolean checkFileHashMatch(long groupId, File documento, File xmlBollo) {
+		
+		boolean match = false;
+		
+		try {
+			accountClientPagamentiEnteConfiguration = configurationProvider.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, groupId);
+			PagamentiService pagamentiService = pagamentiServiceFactory.getPagamentiService(TipoPagamentiClient.valueOf(accountClientPagamentiEnteConfiguration.tipoPagamentiClient()));
+			
+			MarcaDaBollo marcaDaBollo = pagamentiService.unmarshal(new FileInputStream(xmlBollo));
+			String xmlHashImpronta = new String(marcaDaBollo.getImprontaDocumento().getValore());
+			
+			String hashDocumento = this.getFileHash(documento);
+			
+			match = hashDocumento.equals(xmlHashImpronta);
+			
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
+		}
+		
+		return match;
+	}
 
 	private String getFileHash(File file) {
 		String hashDocumento = null;
@@ -62,27 +103,35 @@ public class VerificaEBolloService {
 		return hashDocumento;
 	}
 
-	private boolean checkSignature(File xmlBollo) throws Exception {
+	public boolean checkSignature(File xmlBollo) throws Exception {
 
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		boolean isValid = false;
+		
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
-		dbf.setNamespaceAware(true);
+			dbf.setNamespaceAware(true);
 
-		DocumentBuilder builder = dbf.newDocumentBuilder();
-		Document doc = builder.parse(new FileInputStream(xmlBollo));
+			DocumentBuilder builder = dbf.newDocumentBuilder();
+			Document doc = builder.parse(new FileInputStream(xmlBollo));
 
-		NodeList nl = doc.getElementsByTagNameNS(XMLSignature.XMLNS, "Signature");
-		if (nl.getLength() == 0) {
-			throw new Exception("Cannot find Signature element");
+			NodeList nl = doc.getElementsByTagNameNS(XMLSignature.XMLNS, "Signature");
+			if (nl.getLength() == 0) {
+				throw new Exception("Cannot find Signature element");
+			}
+
+			DOMValidateContext valContext = new DOMValidateContext(new KeyValueKeySelector(), nl.item(0));
+
+			XMLSignatureFactory factory = XMLSignatureFactory.getInstance("DOM");
+
+			XMLSignature signature = factory.unmarshalXMLSignature(valContext);
+			
+			isValid = signature.validate(valContext);
+		} catch (Exception e) {
+			LOG.error(e.getMessage(), e);
 		}
 
-		DOMValidateContext valContext = new DOMValidateContext(new KeyValueKeySelector(), nl.item(0));
-
-		XMLSignatureFactory factory = XMLSignatureFactory.getInstance("DOM");
-
-		XMLSignature signature = factory.unmarshalXMLSignature(valContext);
-
-		return signature.validate(valContext);
+		return isValid;
 	}
 
 	/**
@@ -109,7 +158,7 @@ public class VerificaEBolloService {
 				throw new KeySelectorException("Null KeyInfo object!");
 			}
 			SignatureMethod sm = (SignatureMethod) method;
-			List list = keyInfo.getContent();
+			List<XMLStructure> list = keyInfo.getContent();
 
 			for (int i = 0; i < list.size(); i++) {
 				XMLStructure xmlStructure = (XMLStructure) list.get(i);
