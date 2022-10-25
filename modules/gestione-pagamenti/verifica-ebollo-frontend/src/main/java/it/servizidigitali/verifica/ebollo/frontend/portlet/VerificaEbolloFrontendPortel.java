@@ -1,4 +1,4 @@
-package it.servizidigitali.verifica.ebollo.portlet;
+package it.servizidigitali.verifica.ebollo.frontend.portlet;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
@@ -6,7 +6,7 @@ import javax.portlet.Portlet;
 
 import org.osgi.service.component.annotations.Component;
 
-import it.servizidigitali.verifica.ebollo.constants.VerificaEbolloPorteltPortletKeys;
+import it.servizidigitali.verifica.ebollo.frontend.constants.VerificaEbolloFrontendPortletKeys;
 
 /**
  * @author pindi
@@ -19,11 +19,11 @@ import it.servizidigitali.verifica.ebollo.constants.VerificaEbolloPorteltPortlet
 				"javax.portlet.display-name=VerificaEbolloPortelt", //
 				"javax.portlet.init-param.template-path=/", //
 				"javax.portlet.init-param.view-template=/view.jsp", //
-				"javax.portlet.name=" + VerificaEbolloPorteltPortletKeys.VERIFICAEBOLLOPORTELT, //
+				"javax.portlet.name=" + VerificaEbolloFrontendPortletKeys.VERIFICAEBOLLOPORTELT, //
 				"javax.portlet.resource-bundle=content.Language", //
 				"javax.portlet.security-role-ref=power-user,user"//
 		}, //
 		service = Portlet.class//
 ) //
-public class VerificaEbolloPorteltPortlet extends MVCPortlet {
+public class VerificaEbolloFrontendPortel extends MVCPortlet {
 }
