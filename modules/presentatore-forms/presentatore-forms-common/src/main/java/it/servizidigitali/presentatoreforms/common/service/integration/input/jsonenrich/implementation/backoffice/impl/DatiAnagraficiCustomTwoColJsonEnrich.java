@@ -145,7 +145,7 @@ public class DatiAnagraficiCustomTwoColJsonEnrich implements DatiAnagraficiJsonE
 								// Se non riesco a recuperare lo stato estero dalle info, mantengo
 								// la
 								// descrizione che mi arriva dal BO
-								if (statoEsteroByCodiceOrDenominazione == null || Validator.isNotNull(statoEsteroByCodiceOrDenominazione.getDenominazione())) {
+								if (statoEsteroByCodiceOrDenominazione == null || Validator.isBlank(statoEsteroByCodiceOrDenominazione.getDenominazione())) {
 									statoEsteroByCodiceOrDenominazione = StatoEsteroLocalServiceUtil.createStatoEstero(0);
 									statoEsteroByCodiceOrDenominazione.setDenominazione(componente.getDescrizioneStatoEsteroNascita());
 								}
