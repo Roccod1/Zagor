@@ -26,6 +26,7 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.file.utility.factory.FileServiceFactory;
 import it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration;
 import it.servizidigitali.gestionepagamenti.common.enumeration.StatoPagamento;
 import it.servizidigitali.gestionepagamenti.common.factory.PagamentiClientFactory;
@@ -36,6 +37,8 @@ import it.servizidigitali.gestionepagamenti.integration.common.client.model.Veri
 import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoRisposta;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.PagamentoLocalService;
+import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
+import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
  * Scheduler per la verifica ed aggiornamento dello stato dei pagamenti sulla piattaforma esterna.
@@ -68,6 +71,12 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 
 	@Reference
 	private PagamentiClientFactory pagamentiClientFactory;
+	
+	@Reference
+	private RichiestaLocalService richiestaLocalService;
+	
+	@Reference
+	private FileServiceFactory fileServiceFactory;
 
 	@Reference
 	protected void setConfigurationProvider(ConfigurationProvider configurationProvider) {
@@ -109,9 +118,14 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 				default:
 					break;
 				}
+				
+				Richiesta richiesta = richiestaLocalService.getRichiesta(pagamento.getRichiestaId());
 
-				// Aggiornamento pagamento + richiesta corrispondente
-				// pagamentoLocalService.updatePagamento(pagamento);
+				richiesta.setStato(pagamento.getStato());
+				
+				richiestaLocalService.updateRichiesta(richiesta);
+				
+				pagamentoLocalService.updatePagamento(pagamento);
 
 			}
 		}
