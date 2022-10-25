@@ -196,7 +196,7 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 					richiestaLocalService.updateRichiesta(richiesta);
 					Pagamento pagamentoAggiornato = pagamentoLocalService.updatePagamento(pagamento);
 
-					_log.info("verificaPagamento :: pagamento con ID: " + pagamentoId + " aggiornato dallo stato: " + statoIniziale + " allo stato " + pagamentoAggiornato.getStato());
+					_log.info("verificaPagamento :: pagamento con ID: " + pagamentoId + " aggiornato dallo stato " + statoIniziale + " allo stato " + pagamentoAggiornato.getStato());
 				}
 				catch (Exception e) {
 					_log.error("doReceive :: errore durante la verifica del pagamento : " + pagamentoId + " :: " + e.getMessage(), e);
