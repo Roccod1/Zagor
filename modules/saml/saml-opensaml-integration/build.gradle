@@ -52,6 +52,7 @@ dependencies {
 	compileOnly project(":modules:saml:saml-api")
 	compileOnly project(":modules:saml:saml-persistence-api")
 	compileOnly project(":modules:gestione-enti:gestione-enti-api")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-utility")
 }
 
 liferayOSGi {

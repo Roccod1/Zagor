@@ -55,6 +55,8 @@ import java.util.Map;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.UserCustomAttributes;
+
 /**
  * @author Mika Koivisto
  */
@@ -129,8 +131,16 @@ public class DefaultUserResolver implements UserResolver {
 					emailAddress);
 			}
 		}
+		
+		boolean userSenzaEmail = false;
+		if (Validator.isNull(emailAddress)) {
+			//Generazione email fake + set custom attributes
+			emailAddress = _getValueAsString("screenName", attributesMap) + "@emailfakeservizidigitali.com";
+			userSenzaEmail = true;
+		}
 
 		User user = _userLocalService.createUser(0);
+		user.setEmailAddress(emailAddress);
 
 		user.setCompanyId(companyId);
 
@@ -138,6 +148,10 @@ public class DefaultUserResolver implements UserResolver {
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("Added user " + user.toString());
+		}
+		
+		if (userSenzaEmail) {
+			user.getExpandoBridge().setAttribute(UserCustomAttributes.LOGIN_SENZA_EMAIL.getNomeAttributo(), true);
 		}
 
 		return user;
