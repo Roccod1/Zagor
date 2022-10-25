@@ -105,10 +105,12 @@ public class PagamentoEBolloService {
 			String callbackUrl) throws ConfigurationException, PagamentiClientException {
 
 		LOG.debug("pagaBollo debug params | requestTimeMillis: " + requestTimeMillis + ", file: " + file.toString()
-				+ ", fileName: " + fileName + ", siteGroupId: " + siteGroupId + ", userId: " + userId
-				+ ", codiceOrganizzazione: " + codiceOrganizzazione + ", provinciaResidenza: " + provinciaResidenza
-				+ ", idFiscaleCliente: " + idFiscaleCliente + ", denominazioneCliente: " + denominazioneCliente
-				+ ", emailQuietanza: " + emailQuietanza + ", callbackUrl" + callbackUrl);
+				+ ", fileName: " + fileName + ", siteGroupId: " + siteGroupId + ", companyId: " + companyId
+				+ ", servizioId: " + servizioId + ", nomeServizio: " + nomeServizio + ", codiceServizio: "
+				+ codiceServizio + ", userId: " + userId + ", codiceOrganizzazione: " + codiceOrganizzazione
+				+ ", provinciaResidenza: " + provinciaResidenza + ", idFiscaleCliente: " + idFiscaleCliente
+				+ ", denominazioneCliente: " + denominazioneCliente + ", emailQuietanza: " + emailQuietanza
+				+ ", callbackUrl" + callbackUrl);
 
 		accountClientPagamentiEnteConfiguration = configurationProvider
 				.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, siteGroupId);
@@ -208,7 +210,7 @@ public class PagamentoEBolloService {
 		richiesta.setStato(stato);
 		richiesta.setProceduraId(proceduraId);
 		richiesta.setServizioId(servizioId);
-		
+
 		richiesta = richiestaLocalService.updateRichiesta(richiesta);
 
 		String descrizioneAllegatoRichiesta = String.format(DESCRIZIONE_RICHIESTA, richiestaId);
@@ -237,7 +239,7 @@ public class PagamentoEBolloService {
 		allegatoRichiesta.setUserId(userId);
 		allegatoRichiesta.setUserName(userName);
 		allegatoRichiesta.setVisibile(true);
-		
+
 		allegatoRichiestaLocalService.updateAllegatoRichiesta(allegatoRichiesta);
 
 		return pagamentoLocalService.create(groupId, userId, userName, idCredito, idFiscaleCliente,
