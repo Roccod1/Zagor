@@ -31,9 +31,9 @@ import it.servizidigitali.gestionepagamenti.integration.common.client.exception.
 import it.servizidigitali.gestionepagamenti.integration.common.client.model.Dovuto;
 import it.servizidigitali.gestionepagamenti.integration.common.client.model.PagamentoDovutoRisposta;
 import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoMarcaDaBolloRisposta;
-import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoMarcaDaBolloRisposta.ImprontaDocumento;
-import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoMarcaDaBolloRisposta.PSP;
 import it.servizidigitali.gestionepagamenti.integration.common.client.model.VerificaPagamentoRisposta;
+import it.servizidigitali.gestionepagamenti.integration.common.model.MarcaDaBollo.ImprontaDocumento;
+import it.servizidigitali.gestionepagamenti.integration.common.model.MarcaDaBollo.PSP;
 import it.servizidigitali.gestionepagamenti.mypay.converter.MyPayConverter;
 import it.servizidigitali.gestionepagamenti.mypay.handler.LogHandler;
 import it.servizidigitali.gestionepagamenti.mypay.handler.PaaSILChiediPagatiConRicevutaHandler;
@@ -231,18 +231,22 @@ public class MyPayPagamentiClient implements PagamentiClient {
 													verificaPagamentoMarcaDaBolloRisposta.setStatoPagamento(verificaPagamentoRisposta.getStatoPagamento());
 													verificaPagamentoMarcaDaBolloRisposta.setRicevutaTelematicaXml(verificaPagamentoRisposta.getRicevutaTelematicaXml());
 
-													verificaPagamentoMarcaDaBolloRisposta.setIubd(String.valueOf(marcaDaBollo.getIUBD()));
-													verificaPagamentoMarcaDaBolloRisposta.setOraAcquisto(marcaDaBollo.getOraAcquisto().getTime());
-													verificaPagamentoMarcaDaBolloRisposta.setImporto(new BigDecimal(marcaDaBollo.getImporto()));
-													ImprontaDocumento improntaDocumento = verificaPagamentoMarcaDaBolloRisposta.new ImprontaDocumento();
+													it.servizidigitali.gestionepagamenti.integration.common.model.MarcaDaBollo marcaDaBollo2 = new it.servizidigitali.gestionepagamenti.integration.common.model.MarcaDaBollo();
+
+													marcaDaBollo2.setIubd(String.valueOf(marcaDaBollo.getIUBD()));
+													marcaDaBollo2.setOraAcquisto(marcaDaBollo.getOraAcquisto().getTime());
+													marcaDaBollo2.setImporto(new BigDecimal(marcaDaBollo.getImporto()));
+													ImprontaDocumento improntaDocumento = marcaDaBollo2.new ImprontaDocumento();
 													improntaDocumento.setAlgoritmo(marcaDaBollo.getImprontaDocumento().getDigestMethod().getAlgorithm());
 													improntaDocumento.setValore(marcaDaBollo.getImprontaDocumento().getDigestValue());
-													verificaPagamentoMarcaDaBolloRisposta.setImprontaDocumento(improntaDocumento);
-													PSP psp = verificaPagamentoMarcaDaBolloRisposta.new PSP();
+													marcaDaBollo2.setImprontaDocumento(improntaDocumento);
+													PSP psp = marcaDaBollo2.new PSP();
 													psp.setCodiceFiscale(String.valueOf(marcaDaBollo.getPSP().getCodiceFiscale()));
 													psp.setDenominazione(marcaDaBollo.getPSP().getDenominazione());
-													verificaPagamentoMarcaDaBolloRisposta.setPsp(psp);
-													verificaPagamentoMarcaDaBolloRisposta.setMarcaDaBollo(marcaDaBolloInputStream);
+													marcaDaBollo2.setPsp(psp);
+													verificaPagamentoMarcaDaBolloRisposta.setMarcaDaBollo(marcaDaBollo2);
+													verificaPagamentoMarcaDaBolloRisposta.setMarcaDaBolloInputStream(marcaDaBolloInputStream);
+
 													return verificaPagamentoMarcaDaBolloRisposta;
 												}
 											}
