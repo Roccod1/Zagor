@@ -35,4 +35,7 @@ CHANGE COLUMN `idCredito` `idCredito` VARCHAR(255) NULL DEFAULT NULL ;
 ALTER TABLE `servizi_digitali`.`pagamento` 
 ADD COLUMN `errore` LONGTEXT NULL AFTER `emailInviata`;
 
+-- 20221025
+ALTER TABLE `servizi_digitali`.`pagamento` 
+ADD COLUMN `riferimentoEsternoId` VARCHAR(100) NULL AFTER `stato`;
 

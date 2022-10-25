@@ -71,6 +71,7 @@ public class PagamentoWrapper
 		attributes.put("emailInviata", isEmailInviata());
 		attributes.put("stato", getStato());
 		attributes.put("errore", getErrore());
+		attributes.put("riferimentoEsternoId", getRiferimentoEsternoId());
 		attributes.put("richiestaId", getRichiestaId());
 
 		return attributes;
@@ -233,6 +234,13 @@ public class PagamentoWrapper
 
 		if (errore != null) {
 			setErrore(errore);
+		}
+
+		String riferimentoEsternoId = (String)attributes.get(
+			"riferimentoEsternoId");
+
+		if (riferimentoEsternoId != null) {
+			setRiferimentoEsternoId(riferimentoEsternoId);
 		}
 
 		Long richiestaId = (Long)attributes.get("richiestaId");
@@ -480,6 +488,16 @@ public class PagamentoWrapper
 	@Override
 	public long getRichiestaId() {
 		return model.getRichiestaId();
+	}
+
+	/**
+	 * Returns the riferimento esterno ID of this pagamento.
+	 *
+	 * @return the riferimento esterno ID of this pagamento
+	 */
+	@Override
+	public String getRiferimentoEsternoId() {
+		return model.getRiferimentoEsternoId();
 	}
 
 	/**
@@ -790,6 +808,16 @@ public class PagamentoWrapper
 	@Override
 	public void setRichiestaId(long richiestaId) {
 		model.setRichiestaId(richiestaId);
+	}
+
+	/**
+	 * Sets the riferimento esterno ID of this pagamento.
+	 *
+	 * @param riferimentoEsternoId the riferimento esterno ID of this pagamento
+	 */
+	@Override
+	public void setRiferimentoEsternoId(String riferimentoEsternoId) {
+		model.setRiferimentoEsternoId(riferimentoEsternoId);
 	}
 
 	/**

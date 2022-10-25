@@ -480,6 +480,21 @@ public interface PagamentoModel
 	public void setErrore(String errore);
 
 	/**
+	 * Returns the riferimento esterno ID of this pagamento.
+	 *
+	 * @return the riferimento esterno ID of this pagamento
+	 */
+	@AutoEscape
+	public String getRiferimentoEsternoId();
+
+	/**
+	 * Sets the riferimento esterno ID of this pagamento.
+	 *
+	 * @param riferimentoEsternoId the riferimento esterno ID of this pagamento
+	 */
+	public void setRiferimentoEsternoId(String riferimentoEsternoId);
+
+	/**
 	 * Returns the richiesta ID of this pagamento.
 	 *
 	 * @return the richiesta ID of this pagamento

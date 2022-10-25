@@ -88,7 +88,8 @@ public class PagamentoModelImpl
 		{"iud", Types.VARCHAR}, {"iuv", Types.VARCHAR},
 		{"idSessione", Types.VARCHAR}, {"pathAvviso", Types.VARCHAR},
 		{"emailInviata", Types.BOOLEAN}, {"stato", Types.VARCHAR},
-		{"errore", Types.VARCHAR}, {"richiestaId", Types.BIGINT}
+		{"errore", Types.VARCHAR}, {"riferimentoEsternoId", Types.VARCHAR},
+		{"richiestaId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -121,11 +122,12 @@ public class PagamentoModelImpl
 		TABLE_COLUMNS_MAP.put("emailInviata", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("stato", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("errore", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("riferimentoEsternoId", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("richiestaId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table pagamento (uuid_ VARCHAR(75) null,pagamentoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,idCredito VARCHAR(75) null,idFiscaleCliente VARCHAR(75) null,denominazioneCliente VARCHAR(75) null,emailQuietanza VARCHAR(75) null,causale VARCHAR(75) null,servizioId LONG,nomeServizio VARCHAR(75) null,importo DECIMAL(30, 16) null,commissioni DECIMAL(30, 16) null,canale VARCHAR(75) null,gateway VARCHAR(75) null,iud VARCHAR(75) null,iuv VARCHAR(75) null,idSessione VARCHAR(75) null,pathAvviso VARCHAR(75) null,emailInviata BOOLEAN,stato VARCHAR(75) null,errore VARCHAR(75) null,richiestaId LONG)";
+		"create table pagamento (uuid_ VARCHAR(75) null,pagamentoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,idCredito VARCHAR(75) null,idFiscaleCliente VARCHAR(75) null,denominazioneCliente VARCHAR(75) null,emailQuietanza VARCHAR(75) null,causale VARCHAR(75) null,servizioId LONG,nomeServizio VARCHAR(75) null,importo DECIMAL(30, 16) null,commissioni DECIMAL(30, 16) null,canale VARCHAR(75) null,gateway VARCHAR(75) null,iud VARCHAR(75) null,iuv VARCHAR(75) null,idSessione VARCHAR(75) null,pathAvviso VARCHAR(75) null,emailInviata BOOLEAN,stato VARCHAR(75) null,errore VARCHAR(75) null,riferimentoEsternoId VARCHAR(75) null,richiestaId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table pagamento";
 
@@ -449,6 +451,11 @@ public class PagamentoModelImpl
 		attributeGetterFunctions.put("errore", Pagamento::getErrore);
 		attributeSetterBiConsumers.put(
 			"errore", (BiConsumer<Pagamento, String>)Pagamento::setErrore);
+		attributeGetterFunctions.put(
+			"riferimentoEsternoId", Pagamento::getRiferimentoEsternoId);
+		attributeSetterBiConsumers.put(
+			"riferimentoEsternoId",
+			(BiConsumer<Pagamento, String>)Pagamento::setRiferimentoEsternoId);
 		attributeGetterFunctions.put("richiestaId", Pagamento::getRichiestaId);
 		attributeSetterBiConsumers.put(
 			"richiestaId",
@@ -1024,6 +1031,25 @@ public class PagamentoModelImpl
 	}
 
 	@Override
+	public String getRiferimentoEsternoId() {
+		if (_riferimentoEsternoId == null) {
+			return "";
+		}
+		else {
+			return _riferimentoEsternoId;
+		}
+	}
+
+	@Override
+	public void setRiferimentoEsternoId(String riferimentoEsternoId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_riferimentoEsternoId = riferimentoEsternoId;
+	}
+
+	@Override
 	public long getRichiestaId() {
 		return _richiestaId;
 	}
@@ -1135,6 +1161,7 @@ public class PagamentoModelImpl
 		pagamentoImpl.setEmailInviata(isEmailInviata());
 		pagamentoImpl.setStato(getStato());
 		pagamentoImpl.setErrore(getErrore());
+		pagamentoImpl.setRiferimentoEsternoId(getRiferimentoEsternoId());
 		pagamentoImpl.setRichiestaId(getRichiestaId());
 
 		pagamentoImpl.resetOriginalValues();
@@ -1190,6 +1217,8 @@ public class PagamentoModelImpl
 			this.<Boolean>getColumnOriginalValue("emailInviata"));
 		pagamentoImpl.setStato(this.<String>getColumnOriginalValue("stato"));
 		pagamentoImpl.setErrore(this.<String>getColumnOriginalValue("errore"));
+		pagamentoImpl.setRiferimentoEsternoId(
+			this.<String>getColumnOriginalValue("riferimentoEsternoId"));
 		pagamentoImpl.setRichiestaId(
 			this.<Long>getColumnOriginalValue("richiestaId"));
 
@@ -1433,6 +1462,16 @@ public class PagamentoModelImpl
 			pagamentoCacheModel.errore = null;
 		}
 
+		pagamentoCacheModel.riferimentoEsternoId = getRiferimentoEsternoId();
+
+		String riferimentoEsternoId = pagamentoCacheModel.riferimentoEsternoId;
+
+		if ((riferimentoEsternoId != null) &&
+			(riferimentoEsternoId.length() == 0)) {
+
+			pagamentoCacheModel.riferimentoEsternoId = null;
+		}
+
 		pagamentoCacheModel.richiestaId = getRichiestaId();
 
 		return pagamentoCacheModel;
@@ -1552,6 +1591,7 @@ public class PagamentoModelImpl
 	private boolean _emailInviata;
 	private String _stato;
 	private String _errore;
+	private String _riferimentoEsternoId;
 	private long _richiestaId;
 
 	public <T> T getColumnValue(String columnName) {
@@ -1610,6 +1650,8 @@ public class PagamentoModelImpl
 		_columnOriginalValues.put("emailInviata", _emailInviata);
 		_columnOriginalValues.put("stato", _stato);
 		_columnOriginalValues.put("errore", _errore);
+		_columnOriginalValues.put(
+			"riferimentoEsternoId", _riferimentoEsternoId);
 		_columnOriginalValues.put("richiestaId", _richiestaId);
 	}
 
@@ -1686,7 +1728,9 @@ public class PagamentoModelImpl
 
 		columnBitmasks.put("errore", 33554432L);
 
-		columnBitmasks.put("richiestaId", 67108864L);
+		columnBitmasks.put("riferimentoEsternoId", 67108864L);
+
+		columnBitmasks.put("richiestaId", 134217728L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}
