@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.File;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.time.Instant;
 
@@ -85,7 +86,7 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 
-		File file = uploadPortletRequest.getFile(PagamentoEbolloFrontendPortletKeys.FILE_TO_UPLOAD_ATTRIBUTE);
+		InputStream inputStream = uploadPortletRequest.getFileAsStream(PagamentoEbolloFrontendPortletKeys.FILE_TO_UPLOAD_ATTRIBUTE);
 
 		String fileName = uploadPortletRequest.getFileName(PagamentoEbolloFrontendPortletKeys.FILE_TO_UPLOAD_ATTRIBUTE);
 
@@ -113,7 +114,7 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 		}
 
 		try {
-			String redirectPagamentoBolloUrl = pagamentoEBolloService.pagaBollo(requestTime, file, fileName,
+			String redirectPagamentoBolloUrl = pagamentoEBolloService.pagaBollo(requestTime, inputStream, fileName,
 					siteGroupId, themeDisplay.getCompanyId(), servizioId, nomeServizio, codiceServizio, userId,
 					codiceOrganizzazione, provinciaResidenza, idFiscaleCliente, denominazioneCliente, emailQuietanza,
 					portletURL.toString());
