@@ -1,6 +1,5 @@
 package it.servizidigitali.gestionepagamenti.integration.common.client.model;
 
-import java.io.InputStream;
 import java.math.BigDecimal;
 
 import it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.StatoPagamento;
@@ -19,7 +18,7 @@ public class VerificaPagamentoRisposta {
 	private BigDecimal importoCommissioni;
 	private String codiceErrore;
 	private String descrizioneErrore;
-	private InputStream ricevutaTelematicaXml;
+	private byte[] ricevutaTelematicaXml;
 
 	/**
 	 * @return the codiceIuv
@@ -122,14 +121,15 @@ public class VerificaPagamentoRisposta {
 	/**
 	 * @return the ricevutaTelematicaXml
 	 */
-	public InputStream getRicevutaTelematicaXml() {
+	public byte[] getRicevutaTelematicaXml() {
 		return ricevutaTelematicaXml;
 	}
 
 	/**
 	 * @param ricevutaTelematicaXml the ricevutaTelematicaXml to set
 	 */
-	public void setRicevutaTelematicaXml(InputStream ricevutaTelematicaXml) {
+	public void setRicevutaTelematicaXml(byte[] ricevutaTelematicaXml) {
 		this.ricevutaTelematicaXml = ricevutaTelematicaXml;
 	}
+
 }

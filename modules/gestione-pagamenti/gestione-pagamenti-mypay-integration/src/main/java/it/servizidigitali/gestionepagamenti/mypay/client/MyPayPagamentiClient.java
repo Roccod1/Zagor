@@ -4,7 +4,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Base64;
@@ -137,9 +136,27 @@ public class MyPayPagamentiClient implements PagamentiClient {
 
 		VerificaPagamentoRisposta verificaPagamentoRisposta = new VerificaPagamentoRisposta();
 
+		String campoUtilizzato = null;
+		String campoUtilizzatoValore = null;
 		if (idSessione != null) {
 			iuv = null;
 			iud = null;
+			campoUtilizzato = "idSessione";
+			campoUtilizzatoValore = idSessione;
+		}
+		else {
+			if (iuv != null) {
+				campoUtilizzato = "iuv";
+				campoUtilizzatoValore = iuv;
+				idSessione = null;
+				iud = null;
+			}
+			else {
+				campoUtilizzato = "iud";
+				campoUtilizzatoValore = iud;
+				idSessione = null;
+				iuv = null;
+			}
 		}
 
 		PaaSILChiediPagatiConRicevutaRisposta chiediPagatiResp = null;
@@ -147,7 +164,7 @@ public class MyPayPagamentiClient implements PagamentiClient {
 			chiediPagatiResp = pagamentiServicePort.paaSILChiediPagatiConRicevuta(username, password, idSessione, iuv, iud);
 		}
 		catch (Exception ex) {
-			throw new PagamentiClientException("Errore durate la chiamata al servizio " + "per richiedere lo stato dei pagati", ex);
+			throw new PagamentiClientException("Errore durate la chiamata al servizio per richiedere lo stato dei pagati", ex);
 		}
 
 		FaultBean fault = chiediPagatiResp.getFault();
@@ -174,13 +191,12 @@ public class MyPayPagamentiClient implements PagamentiClient {
 		}
 		else {
 
-			InputStream rtInputStream = null;
-			if (chiediPagatiResp.getRt() == null) {
+			byte[] rt = chiediPagatiResp.getRt();
+			if (rt == null) {
 				log.warn("Errore durante la lettura della RT per iuv " + iuv + " : rt e' null");
 			}
 			else {
-				rtInputStream = new ByteArrayInputStream(chiediPagatiResp.getRt());
-				verificaPagamentoRisposta.setRicevutaTelematicaXml(rtInputStream);
+				verificaPagamentoRisposta.setRicevutaTelematicaXml(rt);
 			}
 
 			byte[] pagatiBytes = chiediPagatiResp.getPagati();
@@ -245,7 +261,7 @@ public class MyPayPagamentiClient implements PagamentiClient {
 													psp.setDenominazione(marcaDaBollo.getPSP().getDenominazione());
 													marcaDaBollo2.setPsp(psp);
 													verificaPagamentoMarcaDaBolloRisposta.setMarcaDaBollo(marcaDaBollo2);
-													verificaPagamentoMarcaDaBolloRisposta.setMarcaDaBolloInputStream(marcaDaBolloInputStream);
+													verificaPagamentoMarcaDaBolloRisposta.setMarcaDaBolloBytes(testoAllegato);
 
 													return verificaPagamentoMarcaDaBolloRisposta;
 												}
@@ -258,7 +274,8 @@ public class MyPayPagamentiClient implements PagamentiClient {
 					}
 				}
 				catch (Exception e) {
-					log.error("Errore durante la lettura della lista pagati per iuv " + iuv + " : " + e.getMessage(), e);
+					log.error("Errore durante la lettura della lista pagati per " + campoUtilizzato + ": " + campoUtilizzatoValore + " : " + e.getMessage(), e);
+					throw new PagamentiClientException(e);
 				}
 			}
 		}

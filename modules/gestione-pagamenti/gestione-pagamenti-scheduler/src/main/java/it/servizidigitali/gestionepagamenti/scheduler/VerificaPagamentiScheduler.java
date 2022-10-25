@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.ContentTypes;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +73,6 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 	private static final String RICEVUTA_TELEMATICA_PAGAMENTO_FILE_PREFIX = "ricevuta-telematica-pagamento-";
 	private static final String MARCA_DA_BOLLO_PAGAMENTO_FILE_PREFIX = "marca-da-bollo-pagamento-";
 	private static final String DESCRIZIONE_ALLEGATO_RICEVUTA_TELEMATICA_XML = "Ricevuta telematica XML pagamento ID: %s";
-	private static final String DESCRIZIONE_ALLEGATO_RICEVUTA_TELEMATICA_PDF = "Ricevuta telematica PDF pagamento ID: %s";
 	private static final String DESCRIZIONE_ALLEGATO_MARCA_DA_BOLLO = "Marca da Bollo - ID pagamento: %s";
 
 	private static final Log _log = LogFactoryUtil.getLog(VerificaPagamentiScheduler.class);
@@ -123,6 +123,7 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 			for (Pagamento pagamento : pagamentiInAttesa) {
 
 				long pagamentoId = pagamento.getPagamentoId();
+				String statoIniziale = pagamento.getStato();
 				try {
 					accountClientPagamentiEnteConfiguration = configurationProvider.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, pagamento.getGroupId());
 					PagamentiClient pagamentiClient = pagamentiClientFactory.getPagamentiClient(TipoPagamentiClient.valueOf(accountClientPagamentiEnteConfiguration.tipoPagamentiClient()));
@@ -130,6 +131,7 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 							accountClientPagamentiEnteConfiguration.clientPassword(), accountClientPagamentiEnteConfiguration.clientWsdlUrl());
 
 					it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.StatoPagamento statoPagamento = verificaPagamento.getStatoPagamento();
+
 					_log.info("verificaPagamento :: ID: " + pagamentoId + ", stato: " + statoPagamento);
 
 					String statoRichiesta = StatoRichiesta.CHIUSA_POSITIVAMENTE.name();
@@ -155,23 +157,34 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 						pagamento.setRiferimentoEsternoId(verificaPagamento.getIdRichiesta());
 
 						// Salvataggio RT XML
-						InputStream ricevutaTelematicaXmlInputStream = verificaPagamento.getRicevutaTelematicaXml();
-						if (ricevutaTelematicaXmlInputStream != null) {
+						byte[] ricevutaTelematicaXmlBytes = verificaPagamento.getRicevutaTelematicaXml();
+						if (ricevutaTelematicaXmlBytes != null && ricevutaTelematicaXmlBytes.length > 0) {
 							String fileNameRicevutaPagamentoXML = RICEVUTA_TELEMATICA_PAGAMENTO_FILE_PREFIX + pagamentoId + ".xml";
 							String descrizioneAllegatoRicevutaTelematicaXML = String.format(DESCRIZIONE_ALLEGATO_RICEVUTA_TELEMATICA_XML, pagamentoId);
 
-							salvaAllegato(pagamento, richiesta, servizio, fileNameRicevutaPagamentoXML, descrizioneAllegatoRicevutaTelematicaXML, ricevutaTelematicaXmlInputStream,
+							_log.debug("salvataggio file XML RT: " + fileNameRicevutaPagamentoXML);
+
+							salvaAllegato(pagamento, richiesta, servizio, fileNameRicevutaPagamentoXML, descrizioneAllegatoRicevutaTelematicaXML, new ByteArrayInputStream(ricevutaTelematicaXmlBytes),
 									ContentTypes.TEXT_XML);
+
+							_log.debug("salvataggio file XML RT: " + fileNameRicevutaPagamentoXML + " effettuato.");
 						}
 
 						if (verificaPagamento instanceof VerificaPagamentoMarcaDaBolloRisposta) {
-							InputStream marcaDaBolloInputStream = ((VerificaPagamentoMarcaDaBolloRisposta) verificaPagamento).getMarcaDaBolloInputStream();
+							byte[] marcaDaBolloBytes = ((VerificaPagamentoMarcaDaBolloRisposta) verificaPagamento).getMarcaDaBolloBytes();
 
-							// XML
-							String descrizioneAllegatoMarcaDaBollo = String.format(DESCRIZIONE_ALLEGATO_MARCA_DA_BOLLO, pagamentoId);
-							String fileNameMarcaDaBollo = MARCA_DA_BOLLO_PAGAMENTO_FILE_PREFIX + pagamentoId + ".xml";
+							if (marcaDaBolloBytes != null && marcaDaBolloBytes.length > 0) {
+								// XML
+								String descrizioneAllegatoMarcaDaBollo = String.format(DESCRIZIONE_ALLEGATO_MARCA_DA_BOLLO, pagamentoId);
+								String fileNameMarcaDaBollo = MARCA_DA_BOLLO_PAGAMENTO_FILE_PREFIX + pagamentoId + ".xml";
 
-							salvaAllegato(pagamento, richiesta, servizio, fileNameMarcaDaBollo, descrizioneAllegatoMarcaDaBollo, marcaDaBolloInputStream, ContentTypes.TEXT_XML);
+								_log.debug("salvataggio file XML Marca da bollo: " + fileNameMarcaDaBollo);
+
+								salvaAllegato(pagamento, richiesta, servizio, fileNameMarcaDaBollo, descrizioneAllegatoMarcaDaBollo, new ByteArrayInputStream(marcaDaBolloBytes),
+										ContentTypes.TEXT_XML);
+
+								_log.debug("salvataggio file XML Marca da bollo: " + fileNameMarcaDaBollo + " completato.");
+							}
 						}
 						break;
 
@@ -181,7 +194,9 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 
 					richiesta.setStato(statoRichiesta);
 					richiestaLocalService.updateRichiesta(richiesta);
-					pagamentoLocalService.updatePagamento(pagamento);
+					Pagamento pagamentoAggiornato = pagamentoLocalService.updatePagamento(pagamento);
+
+					_log.info("verificaPagamento :: pagamento con ID: " + pagamentoId + " aggiornato dallo stato: " + statoIniziale + " allo stato " + pagamentoAggiornato.getStato());
 				}
 				catch (Exception e) {
 					_log.error("doReceive :: errore durante la verifica del pagamento : " + pagamentoId + " :: " + e.getMessage(), e);

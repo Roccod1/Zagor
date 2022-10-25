@@ -1,7 +1,5 @@
 package it.servizidigitali.gestionepagamenti.integration.common.client.model;
 
-import java.io.InputStream;
-
 import it.servizidigitali.gestionepagamenti.integration.common.model.MarcaDaBollo;
 
 /**
@@ -11,7 +9,7 @@ import it.servizidigitali.gestionepagamenti.integration.common.model.MarcaDaBoll
 public class VerificaPagamentoMarcaDaBolloRisposta extends VerificaPagamentoRisposta {
 
 	private MarcaDaBollo marcaDaBollo;
-	private InputStream marcaDaBolloInputStream;
+	private byte[] marcaDaBolloBytes;
 
 	/**
 	 * @return the marcaDaBollo
@@ -28,17 +26,16 @@ public class VerificaPagamentoMarcaDaBolloRisposta extends VerificaPagamentoRisp
 	}
 
 	/**
-	 * @return the marcaDaBolloInputStream
+	 * @return the marcaDaBolloBytes
 	 */
-	public InputStream getMarcaDaBolloInputStream() {
-		return marcaDaBolloInputStream;
+	public byte[] getMarcaDaBolloBytes() {
+		return marcaDaBolloBytes;
 	}
 
 	/**
-	 * @param marcaDaBolloInputStream the marcaDaBolloInputStream to set
+	 * @param marcaDaBolloBytes the marcaDaBolloBytes to set
 	 */
-	public void setMarcaDaBolloInputStream(InputStream marcaDaBolloInputStream) {
-		this.marcaDaBolloInputStream = marcaDaBolloInputStream;
+	public void setMarcaDaBolloBytes(byte[] marcaDaBolloBytes) {
+		this.marcaDaBolloBytes = marcaDaBolloBytes;
 	}
-
 }
