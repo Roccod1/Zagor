@@ -165,7 +165,7 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 						}
 
 						if (verificaPagamento instanceof VerificaPagamentoMarcaDaBolloRisposta) {
-							InputStream marcaDaBolloInputStream = ((VerificaPagamentoMarcaDaBolloRisposta) verificaPagamento).getMarcaDaBollo();
+							InputStream marcaDaBolloInputStream = ((VerificaPagamentoMarcaDaBolloRisposta) verificaPagamento).getMarcaDaBolloInputStream();
 
 							// XML
 							String descrizioneAllegatoMarcaDaBollo = String.format(DESCRIZIONE_ALLEGATO_MARCA_DA_BOLLO, pagamentoId);
