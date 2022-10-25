@@ -1,0 +1,4 @@
+Bundle-Name: verifica-ebollo-frontend
+Bundle-SymbolicName: it.servizidigitali.verifica.ebollo
+Bundle-Version: 1.0.0
+Export-Package: it.servizidigitali.verifica.ebollo.constants
