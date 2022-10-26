@@ -39,127 +39,115 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
  * @author filierim
  */
 
-@Component(immediate = true, 
-		property = { 
-				"javax.portlet.name=" + ScrivaniaCittadinoPortletKeys.SCRIVANIACITTADINO, 
-				"mvc.command.name=" + ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_RICHIESTE
-		}, 
-		service = MVCResourceCommand.class
-)
+@Component(//
+		immediate = true, //
+		property = { //
+				"javax.portlet.name=" + ScrivaniaCittadinoPortletKeys.SCRIVANIACITTADINO, //
+				"mvc.command.name=" + ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_GET_RICHIESTE//
+		}, //
+		service = MVCResourceCommand.class//
+) //
 public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand {
 
 	private static final Log _log = LogFactoryUtil.getLog(GetRichiesteCittadinoResourceCommand.class);
 
 	@Reference
 	private RichiestaLocalService richiestaLocalService;
-	
+
 	@Reference
 	private ScrivaniaCittadinoMiddlewareService scirvaniaCittadinoMiddlewareService;
-	
+
 	@Reference
 	private AllegatoRichiestaLocalService allegatoRichiestaLocalService;
-	
+
 	@Override
 	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
 
-	       Map<String, Object> responseMap = new HashMap<String, Object>();
-		   ServiceContext serviceContext = null;
-		   ThemeDisplay themeDisplay = null;
-		   boolean hasNext = false;
+		Map<String, Object> responseMap = new HashMap<String, Object>();
+		ServiceContext serviceContext = null;
+		ThemeDisplay themeDisplay = null;
+		boolean hasNext = false;
 
-		   int cur = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_CUR_PARAM, SearchContainer.DEFAULT_CUR);
-//	       int delta = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_DELTA_PARAM);
-		   String sortName = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
-		   String sortType = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
-		   String filterOggettoNoteRichieste = ParamUtil.getString(resourceRequest, ScrivaniaCittadinoPortletKeys.FILTER_OGGETTO_RICHIESTE);
-		   String filterStatoRichieste = ParamUtil.getString(resourceRequest, ScrivaniaCittadinoPortletKeys.FILTER_STATO_RICHIESTE);
-		   
-		   List<Richiesta> listaRichieste = new ArrayList<Richiesta>();
-		   List<Richiesta> listaRichiesteModificabile = null;
-		   List<RichiestaAccordionDto> listaRichiestaFinal = new ArrayList<RichiestaAccordionDto>();
+		int cur = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_CUR_PARAM, SearchContainer.DEFAULT_CUR);
+		// int delta = ParamUtil.getInteger(resourceRequest, SearchContainer.DEFAULT_DELTA_PARAM);
+		String sortName = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_COL_PARAM);
+		String sortType = ParamUtil.getString(resourceRequest, SearchContainer.DEFAULT_ORDER_BY_TYPE_PARAM);
+		String filterOggettoNoteRichieste = ParamUtil.getString(resourceRequest, ScrivaniaCittadinoPortletKeys.FILTER_OGGETTO_RICHIESTE);
+		String filterStatoRichieste = ParamUtil.getString(resourceRequest, ScrivaniaCittadinoPortletKeys.FILTER_STATO_RICHIESTE);
 
-		   try {        	   
-				serviceContext = ServiceContextFactory.getInstance(resourceRequest);
-				themeDisplay = serviceContext.getThemeDisplay();
-				User loggedUser = themeDisplay.getUser();
-				
-				RichiestaFilters richiestaFilter = new RichiestaFilters();
-				richiestaFilter.setCodiceFiscale(loggedUser.getScreenName());
-				richiestaFilter.setCompanyId(themeDisplay.getSiteGroup().getCompanyId());
-				richiestaFilter.setGroupId(themeDisplay.getSiteGroup().getGroupId());
-				
-				if(Validator.isNotNull(filterOggettoNoteRichieste)) {
-					richiestaFilter.setOggettoNote(filterOggettoNoteRichieste);					
-				}
-				
-				if(Validator.isNotNull(filterStatoRichieste)) {
-					richiestaFilter.setTipo(filterStatoRichieste);					
-				}
-				
-				if(Validator.isNotNull(sortName)) {
-					richiestaFilter.setOrderByCol(sortName);					
-				}
-				
-				if(Validator.isNotNull(sortType)) {
-					richiestaFilter.setOrderByType(sortType);					
-				}
-				
-				int startEnd[] = calcolaStartEnd(cur, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
-				listaRichieste =  richiestaLocalService.search(richiestaFilter, startEnd[0], startEnd[1]);
-				
-				startEnd = calcolaStartEnd(cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
-				List<Richiesta> paginaSuccessiva = richiestaLocalService.getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(loggedUser.getScreenName(), themeDisplay.getSiteGroup().getOrganizationId(), cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA, sortName, sortType);
+		List<Richiesta> listaRichieste = new ArrayList<Richiesta>();
+		List<Richiesta> listaRichiesteModificabile = null;
+		List<RichiestaAccordionDto> listaRichiestaFinal = new ArrayList<RichiestaAccordionDto>();
 
-				List<Richiesta> pagamenti = scirvaniaCittadinoMiddlewareService.getPagamentiUtente(
-						loggedUser.getScreenName(), 
-						"", "", 
-						themeDisplay.getSiteGroup().getCompanyId(), 
-						themeDisplay.getSiteGroup().getOrganizationId(), 
-						themeDisplay.getSiteGroup().getGroupId(), 
-						true, 0, 0, "", "");
-				listaRichiesteModificabile = new ArrayList<Richiesta>(listaRichieste);
-				
-				for(Richiesta pagamento:pagamenti) {
-					if(listaRichiesteModificabile.contains(pagamento)) {
-						listaRichiesteModificabile.remove(pagamento);
-					}
+		try {
+			serviceContext = ServiceContextFactory.getInstance(resourceRequest);
+			themeDisplay = serviceContext.getThemeDisplay();
+			User loggedUser = themeDisplay.getUser();
+
+			RichiestaFilters richiestaFilter = new RichiestaFilters();
+			richiestaFilter.setCodiceFiscale(loggedUser.getScreenName());
+			richiestaFilter.setCompanyId(themeDisplay.getSiteGroup().getCompanyId());
+			richiestaFilter.setGroupId(themeDisplay.getSiteGroup().getGroupId());
+
+			if (Validator.isNotNull(filterOggettoNoteRichieste)) {
+				richiestaFilter.setOggettoNote(filterOggettoNoteRichieste);
+			}
+
+			if (Validator.isNotNull(filterStatoRichieste)) {
+				richiestaFilter.setTipo(filterStatoRichieste);
+			}
+
+			if (Validator.isNotNull(sortName)) {
+				richiestaFilter.setOrderByCol(sortName);
+			}
+
+			if (Validator.isNotNull(sortType)) {
+				richiestaFilter.setOrderByType(sortType);
+			}
+
+			int startEnd[] = calcolaStartEnd(cur, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
+			listaRichieste = richiestaLocalService.search(richiestaFilter, startEnd[0], startEnd[1]);
+
+			startEnd = calcolaStartEnd(cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA);
+			List<Richiesta> paginaSuccessiva = richiestaLocalService.getRichiesteByCodiceFiscaleUtenteAndOrganizationGroupid(loggedUser.getScreenName(),
+					themeDisplay.getSiteGroup().getOrganizationId(), cur + 1, ScrivaniaCittadinoPortletKeys.DEFAULT_DELTA, sortName, sortType);
+
+			List<Richiesta> pagamenti = scirvaniaCittadinoMiddlewareService.getPagamentiUtente(loggedUser.getScreenName(), "", "", themeDisplay.getSiteGroup().getCompanyId(),
+					themeDisplay.getSiteGroup().getOrganizationId(), themeDisplay.getSiteGroup().getGroupId(), true, 0, 0, "", "");
+			listaRichiesteModificabile = new ArrayList<Richiesta>(listaRichieste);
+
+			for (Richiesta pagamento : pagamenti) {
+				if (listaRichiesteModificabile.contains(pagamento)) {
+					listaRichiesteModificabile.remove(pagamento);
 				}
-				
-				RichiestaAccordionDto ra = null;
-				for(Richiesta richiesta: listaRichiesteModificabile) {
-					List<AllegatoRichiesta> tmp = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdGroupIdVisibile(richiesta.getRichiestaId(), true);
-					AllegatoRichiesta pdfRichiesta = allegatoRichiestaLocalService.getAllegatoRichiestaByRichiestaIdPrincipale(richiesta.getRichiestaId(), true);
-					
-					List<AllegatoRichiesta> listaAllegatiRichiesta = new ArrayList<AllegatoRichiesta>(tmp);
-					if(pdfRichiesta != null) {
-						listaAllegatiRichiesta.add(pdfRichiesta);
-					}
-					ra = new RichiestaAccordionDto();
-					ra.setRichiesta(richiesta);
-					ra.setAllegatiRichiesta(listaAllegatiRichiesta);
-					
-					listaRichiestaFinal.add(ra);
-				}
-				
-				if(Validator.isNotNull(paginaSuccessiva) && !paginaSuccessiva.isEmpty()) {
-					hasNext = true;
-				}
-				
-		   }catch(Exception e) {
-			   _log.error("doServeResource() :: "+e.getMessage(), e);
-			   throw new Exception(e);
-		   }
-		   
-//		   responseMap.put("listaRichieste", listaRichiesteModificabile != null && !listaRichiesteModificabile.isEmpty() ? listaRichiesteModificabile : listaRichieste);
-		   responseMap.put("listaRichieste", listaRichiestaFinal);
-		   responseMap.put("hasNext", hasNext);
-		   responseMap.put("cur", cur);
-		   
-		   
-		   String jsonObject = JSONFactoryUtil.looseSerializeDeep(responseMap);
-		   resourceResponse.getWriter().write(jsonObject);
+			}
+
+			for (Richiesta richiesta : listaRichiesteModificabile) {
+				List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdVisibile(richiesta.getRichiestaId(), true);
+				RichiestaAccordionDto richiestaAccordionDto = new RichiestaAccordionDto();
+				richiestaAccordionDto.setRichiesta(richiesta);
+				richiestaAccordionDto.setAllegatiRichiesta(allegatiRichiesta);
+				listaRichiestaFinal.add(richiestaAccordionDto);
+			}
+
+			if (Validator.isNotNull(paginaSuccessiva) && !paginaSuccessiva.isEmpty()) {
+				hasNext = true;
+			}
+
+		}
+		catch (Exception e) {
+			_log.error("doServeResource() :: " + e.getMessage(), e);
+			throw new Exception(e);
+		}
+
+		responseMap.put("listaRichieste", listaRichiestaFinal);
+		responseMap.put("hasNext", hasNext);
+		responseMap.put("cur", cur);
+
+		String jsonObject = JSONFactoryUtil.looseSerializeDeep(responseMap);
+		resourceResponse.getWriter().write(jsonObject);
 	}
-	
+
 	private int[] calcolaStartEnd(int cur, int delta) {
 		int startEnd[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
 		if (startEnd[0] <= 0 || startEnd[1] <= 0) {
