@@ -22,7 +22,7 @@ public interface ProfiloUtenteConfiguration {
 	@Meta.AD(deflt = "false", required = false, description = "Abilita/disabilita il fitro per il check utente senza email (con email fake)")
 	boolean ckeckUserWithoutEmailEnabled();
 
-	@Meta.AD(deflt = "/aggiorna-email", required = false, description = "Path pagina aggiornamento email sulla quale effettuare il redirect")
+	@Meta.AD(deflt = "/i-miei-dati?tabAttiva=sezioneContatti", required = false, description = "Path pagina aggiornamento email sulla quale effettuare il redirect")
 	String ckeckUserWithoutEmailRedirectPath();
 
 }
