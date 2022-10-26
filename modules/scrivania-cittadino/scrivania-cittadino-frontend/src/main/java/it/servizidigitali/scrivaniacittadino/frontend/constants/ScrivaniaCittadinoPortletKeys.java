@@ -42,10 +42,13 @@ public class ScrivaniaCittadinoPortletKeys
     public static final String PARAM_FILE_ID = "fileId";
     public static final String RICHIESTA = "richiesta";
     public static final String ALLEGATI_RICHIESTA = "allegatiRichiesta";
+    public static final String ALLEGATI_PROVVEDIMENTI_FINALI = "allegatiProvvedimentiFinali";
+
     public static final String COMMENTI_RICHIESTA = "commentiRichiesta";
     public static final String COMMENTI_RICHIESTA_COUNT = "commentiRichiestaCount";
     public static final String ATTIVITA_RICHIESTA = "attivitaRichiesta";
     public static final String ATTIVITA_RICHIESTA_COUNT = "attivitaRichiestaCount";
+    public static final String PDF_RICHIESTA = "pdfRichiesta";
     
     public static final String SEARCH_CONTAINER_NAME = "searchContainerName";
     public static final String SEARCH_CONTAINER_ATTIVITA = "attivita";
@@ -59,5 +62,9 @@ public class ScrivaniaCittadinoPortletKeys
     
 	public static final int DEFAULT_DELTA = 10;
 	public static final String CUR_ATTIVITA = "curAttivita";
+	public static final String DELTA_ATTIVITA = "deltaAttivita";
+
 	public static final String CUR_COMMENTI = "curCommenti";
+	public static final String DELTA_COMMENTI = "deltaCommenti";
+
 }

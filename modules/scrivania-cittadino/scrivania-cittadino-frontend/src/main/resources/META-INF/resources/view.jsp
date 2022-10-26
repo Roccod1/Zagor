@@ -1,9 +1,14 @@
 <%@ include file="init.jsp" %>
+<%@ include file="template.jsp" %>
 
 <liferay-ui:error key="<%=ScrivaniaCittadinoPortletKeys.ERROR_IMPOSSIBILE_OTTENERE_DETTAGLIO %>" message="non-e-stato-possibile-ottenere-il-dettaglio-della-richiesta-selezionata"/>
 
 <div>
-	<h5>${themeDisplay.realUser.fullName}</h5>
+	<h5>
+		<b>
+			${themeDisplay.realUser.fullName}
+		</b>	
+	</h5>
 	<small class="text-uppercase"><liferay-ui:message key="cf"/>: ${themeDisplay.user.screenName }</small>
 </div>
 
@@ -13,7 +18,7 @@
 	param="tabs" 
 	refresh="false"
 	tabsValues="<%=ScrivaniaCittadinoPortletKeys.SEZIONE_SCRIVANIA+','+ScrivaniaCittadinoPortletKeys.SEZIONE_ATTIVITA+','+ScrivaniaCittadinoPortletKeys.SEZIONE_MESSAGGI+','+ScrivaniaCittadinoPortletKeys.SEZIONE_SERVIZI %>"
-	value="${tabAttiva }"
+	value="${tabAttiva }" 
 	>
 		<liferay-ui:section>
 			<%@ include file="scrivania.jsp" %>
