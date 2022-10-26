@@ -54,7 +54,7 @@ public class MarcaDaBollo {
 	public class ImprontaDocumento {
 
 		private String algoritmo;
-		private byte[] valore;
+		private String valore;
 
 		/**
 		 * @return the algoritmo
@@ -73,14 +73,14 @@ public class MarcaDaBollo {
 		/**
 		 * @return the valore
 		 */
-		public byte[] getValore() {
+		public String getValore() {
 			return valore;
 		}
 
 		/**
 		 * @param valore the valore to set
 		 */
-		public void setValore(byte[] valore) {
+		public void setValore(String valore) {
 			this.valore = valore;
 		}
 
