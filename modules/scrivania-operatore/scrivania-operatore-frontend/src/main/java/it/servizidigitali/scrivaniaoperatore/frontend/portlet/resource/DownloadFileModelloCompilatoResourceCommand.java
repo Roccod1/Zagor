@@ -23,8 +23,8 @@ import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalServi
 
 @Component(immediate = true, property = { //
 		"javax.portlet.name=" + ScrivaniaOperatorePortletKeys.SCRIVANIAOPERATORE, //
-		"mvc.command.name=/downloadFileModelloCompilato"//
-}, service = { MVCResourceCommand.class }//
+		"mvc.command.name=/downloadFileModelloCompilato" }, //
+		service = { MVCResourceCommand.class }//
 ) //
 public class DownloadFileModelloCompilatoResourceCommand extends BaseMVCResourceCommand {
 
@@ -43,7 +43,7 @@ public class DownloadFileModelloCompilatoResourceCommand extends BaseMVCResource
 
 		long richiestaId = ParamUtil.getLong(resourceRequest, "richiestaId");
 
-		AllegatoRichiesta allegatoRichiestaByRichiestaIdPrincipale = allegatoRichiestaLocalService.getAllegatoRichiestaByRichiestaIdPrincipale(richiestaId, true);
+		AllegatoRichiesta allegatoRichiestaByRichiestaIdPrincipale = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdPrincipale(richiestaId, true).get(0);
 
 		File requestFile = fileServiceFactory.getActiveFileService().getRequestFile(allegatoRichiestaByRichiestaIdPrincipale.getIdDocumentale(), themeDisplay.getScopeGroupId());
 

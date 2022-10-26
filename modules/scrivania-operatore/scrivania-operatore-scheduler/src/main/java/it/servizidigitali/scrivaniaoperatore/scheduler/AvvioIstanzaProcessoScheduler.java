@@ -193,10 +193,15 @@ public class AvvioIstanzaProcessoScheduler extends BaseMessageListener {
 
 							// PDF principale
 							String pdfFirmatoJson = "";
-							AllegatoRichiesta allegatoPrincipaleRichiesta = allegatoRichiestaLocalService.getAllegatoRichiestaByRichiestaIdPrincipale(richiesta.getRichiestaId(), true);
-							FileAllegato allegatoPrincipale = getAllegatoPrincipale(allegatoPrincipaleRichiesta);
-							if (allegatoPrincipale != null) {
-								pdfFirmatoJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(allegatoPrincipale);
+							List<AllegatoRichiesta> allegatiRichiestaByRichiestaIdPrincipale = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdPrincipale(richiesta.getRichiestaId(),
+									true);
+
+							if (allegatiRichiestaByRichiestaIdPrincipale != null && !allegatiRichiestaByRichiestaIdPrincipale.isEmpty()) {
+								AllegatoRichiesta allegatoPrincipaleRichiesta = allegatiRichiestaByRichiestaIdPrincipale.get(0);
+								FileAllegato allegatoPrincipale = getAllegatoPrincipale(allegatoPrincipaleRichiesta);
+								if (allegatoPrincipale != null) {
+									pdfFirmatoJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(allegatoPrincipale);
+								}
 							}
 
 							Map<String, Object> variables = new HashMap<String, Object>();

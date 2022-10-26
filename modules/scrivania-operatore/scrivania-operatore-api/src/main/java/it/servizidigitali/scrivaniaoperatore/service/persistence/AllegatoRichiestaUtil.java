@@ -665,65 +665,186 @@ public class AllegatoRichiestaUtil {
 	}
 
 	/**
-	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; or throws a <code>NoSuchAllegatoRichiestaException</code> if it could not be found.
+	 * Returns all the allegato richiestas where richiestaId = &#63; and principale = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
-	 * @return the matching allegato richiesta
-	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
+	 * @return the matching allegato richiestas
 	 */
-	public static AllegatoRichiesta findByRichiestaIdPrincipale(
-			long richiestaId, boolean principale)
-		throws it.servizidigitali.scrivaniaoperatore.exception.
-			NoSuchAllegatoRichiestaException {
+	public static List<AllegatoRichiesta> findByRichiestaIdPrincipale(
+		long richiestaId, boolean principale) {
 
 		return getPersistence().findByRichiestaIdPrincipale(
 			richiestaId, principale);
 	}
 
 	/**
-	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 * Returns a range of all the allegato richiestas where richiestaId = &#63; and principale = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
+	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
-	 * @return the matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
+	 * @param start the lower bound of the range of allegato richiestas
+	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
+	 * @return the range of matching allegato richiestas
 	 */
-	public static AllegatoRichiesta fetchByRichiestaIdPrincipale(
-		long richiestaId, boolean principale) {
+	public static List<AllegatoRichiesta> findByRichiestaIdPrincipale(
+		long richiestaId, boolean principale, int start, int end) {
 
-		return getPersistence().fetchByRichiestaIdPrincipale(
-			richiestaId, principale);
+		return getPersistence().findByRichiestaIdPrincipale(
+			richiestaId, principale, start, end);
 	}
 
 	/**
-	 * Returns the allegato richiesta where richiestaId = &#63; and principale = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and principale = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
+	 * </p>
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
+	 * @param start the lower bound of the range of allegato richiestas
+	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching allegato richiestas
+	 */
+	public static List<AllegatoRichiesta> findByRichiestaIdPrincipale(
+		long richiestaId, boolean principale, int start, int end,
+		OrderByComparator<AllegatoRichiesta> orderByComparator) {
+
+		return getPersistence().findByRichiestaIdPrincipale(
+			richiestaId, principale, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the allegato richiestas where richiestaId = &#63; and principale = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>AllegatoRichiestaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param principale the principale
+	 * @param start the lower bound of the range of allegato richiestas
+	 * @param end the upper bound of the range of allegato richiestas (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @param useFinderCache whether to use the finder cache
-	 * @return the matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
+	 * @return the ordered range of matching allegato richiestas
 	 */
-	public static AllegatoRichiesta fetchByRichiestaIdPrincipale(
-		long richiestaId, boolean principale, boolean useFinderCache) {
+	public static List<AllegatoRichiesta> findByRichiestaIdPrincipale(
+		long richiestaId, boolean principale, int start, int end,
+		OrderByComparator<AllegatoRichiesta> orderByComparator,
+		boolean useFinderCache) {
 
-		return getPersistence().fetchByRichiestaIdPrincipale(
-			richiestaId, principale, useFinderCache);
+		return getPersistence().findByRichiestaIdPrincipale(
+			richiestaId, principale, start, end, orderByComparator,
+			useFinderCache);
 	}
 
 	/**
-	 * Removes the allegato richiesta where richiestaId = &#63; and principale = &#63; from the database.
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and principale = &#63;.
 	 *
 	 * @param richiestaId the richiesta ID
 	 * @param principale the principale
-	 * @return the allegato richiesta that was removed
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching allegato richiesta
+	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
 	 */
-	public static AllegatoRichiesta removeByRichiestaIdPrincipale(
-			long richiestaId, boolean principale)
+	public static AllegatoRichiesta findByRichiestaIdPrincipale_First(
+			long richiestaId, boolean principale,
+			OrderByComparator<AllegatoRichiesta> orderByComparator)
 		throws it.servizidigitali.scrivaniaoperatore.exception.
 			NoSuchAllegatoRichiestaException {
 
-		return getPersistence().removeByRichiestaIdPrincipale(
-			richiestaId, principale);
+		return getPersistence().findByRichiestaIdPrincipale_First(
+			richiestaId, principale, orderByComparator);
+	}
+
+	/**
+	 * Returns the first allegato richiesta in the ordered set where richiestaId = &#63; and principale = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param principale the principale
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
+	 */
+	public static AllegatoRichiesta fetchByRichiestaIdPrincipale_First(
+		long richiestaId, boolean principale,
+		OrderByComparator<AllegatoRichiesta> orderByComparator) {
+
+		return getPersistence().fetchByRichiestaIdPrincipale_First(
+			richiestaId, principale, orderByComparator);
+	}
+
+	/**
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and principale = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param principale the principale
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching allegato richiesta
+	 * @throws NoSuchAllegatoRichiestaException if a matching allegato richiesta could not be found
+	 */
+	public static AllegatoRichiesta findByRichiestaIdPrincipale_Last(
+			long richiestaId, boolean principale,
+			OrderByComparator<AllegatoRichiesta> orderByComparator)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchAllegatoRichiestaException {
+
+		return getPersistence().findByRichiestaIdPrincipale_Last(
+			richiestaId, principale, orderByComparator);
+	}
+
+	/**
+	 * Returns the last allegato richiesta in the ordered set where richiestaId = &#63; and principale = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param principale the principale
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching allegato richiesta, or <code>null</code> if a matching allegato richiesta could not be found
+	 */
+	public static AllegatoRichiesta fetchByRichiestaIdPrincipale_Last(
+		long richiestaId, boolean principale,
+		OrderByComparator<AllegatoRichiesta> orderByComparator) {
+
+		return getPersistence().fetchByRichiestaIdPrincipale_Last(
+			richiestaId, principale, orderByComparator);
+	}
+
+	/**
+	 * Returns the allegato richiestas before and after the current allegato richiesta in the ordered set where richiestaId = &#63; and principale = &#63;.
+	 *
+	 * @param allegatoRichiestaId the primary key of the current allegato richiesta
+	 * @param richiestaId the richiesta ID
+	 * @param principale the principale
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next allegato richiesta
+	 * @throws NoSuchAllegatoRichiestaException if a allegato richiesta with the primary key could not be found
+	 */
+	public static AllegatoRichiesta[] findByRichiestaIdPrincipale_PrevAndNext(
+			long allegatoRichiestaId, long richiestaId, boolean principale,
+			OrderByComparator<AllegatoRichiesta> orderByComparator)
+		throws it.servizidigitali.scrivaniaoperatore.exception.
+			NoSuchAllegatoRichiestaException {
+
+		return getPersistence().findByRichiestaIdPrincipale_PrevAndNext(
+			allegatoRichiestaId, richiestaId, principale, orderByComparator);
+	}
+
+	/**
+	 * Removes all the allegato richiestas where richiestaId = &#63; and principale = &#63; from the database.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param principale the principale
+	 */
+	public static void removeByRichiestaIdPrincipale(
+		long richiestaId, boolean principale) {
+
+		getPersistence().removeByRichiestaIdPrincipale(richiestaId, principale);
 	}
 
 	/**

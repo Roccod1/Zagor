@@ -29,13 +29,8 @@ import it.servizidigitali.scrivaniaoperatore.service.base.AllegatoRichiestaLocal
 public class AllegatoRichiestaLocalServiceImpl extends AllegatoRichiestaLocalServiceBaseImpl {
 
 	@Override
-	public AllegatoRichiesta getAllegatoRichiestaByRichiestaIdPrincipale(long richiestaId, boolean principale) {
-		try {
-			return allegatoRichiestaPersistence.findByRichiestaIdPrincipale(richiestaId, principale);
-		}
-		catch (NoSuchAllegatoRichiestaException e) {
-		}
-		return null;
+	public List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaIdPrincipale(long richiestaId, boolean principale) {
+		return allegatoRichiestaPersistence.findByRichiestaIdPrincipale(richiestaId, principale);
 	}
 
 	@Override
@@ -50,10 +45,11 @@ public class AllegatoRichiestaLocalServiceImpl extends AllegatoRichiestaLocalSer
 	}
 
 	@Override
-	public List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaIdGroupIdVisibile(long richiestaId, boolean visibile) {
+	public List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaIdVisibile(long richiestaId, boolean visibile) {
 		return allegatoRichiestaPersistence.findByRichiestaIdVisibile(richiestaId, visibile);
 	}
 
+	@Override
 	public void updateVisibilitaAllegatiRichiesta(List<String> ids, boolean visibile) {
 
 		if (ids != null && !ids.isEmpty()) {
