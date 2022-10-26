@@ -39,41 +39,42 @@ import it.servizidigitali.gestionepagamenti.integration.common.client.enumeratio
 import it.servizidigitali.gestionepagamenti.integration.common.model.MarcaDaBollo;
 import it.servizidigitali.gestionepagamenti.integration.common.service.PagamentiService;
 
-@Component(immediate = true, service = VerificaEBolloService.class, configurationPid = {"it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration"})
+@Component(immediate = true, service = VerificaEBolloService.class, configurationPid = { "it.servizidigitali.gestionepagamenti.common.configuration.ClientPagamentiEnteConfiguration" })
 public class VerificaEBolloService {
-	
+
 	@Reference
 	private PagamentiServiceFactory pagamentiServiceFactory;
 
 	private volatile ClientPagamentiEnteConfiguration accountClientPagamentiEnteConfiguration;
 	private ConfigurationProvider configurationProvider;
-	
+
 	private static final Log LOG = LogFactoryUtil.getLog(VerificaEBolloService.class.getName());
 
 	@Reference
 	protected void setConfigurationProvider(ConfigurationProvider configurationProvider) {
 		this.configurationProvider = configurationProvider;
 	}
-	
+
 	public boolean checkFileHashMatch(long groupId, File documento, File xmlBollo) {
-		
+
 		boolean match = false;
-		
+
 		try {
 			accountClientPagamentiEnteConfiguration = configurationProvider.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, groupId);
 			PagamentiService pagamentiService = pagamentiServiceFactory.getPagamentiService(TipoPagamentiClient.valueOf(accountClientPagamentiEnteConfiguration.tipoPagamentiClient()));
-			
+
 			MarcaDaBollo marcaDaBollo = pagamentiService.unmarshal(new FileInputStream(xmlBollo));
 			String xmlHashImpronta = new String(marcaDaBollo.getImprontaDocumento().getValore());
-			
+
 			String hashDocumento = this.getFileHash(documento);
-			
+
 			match = hashDocumento.equals(xmlHashImpronta);
-			
-		} catch (Exception e) {
+
+		}
+		catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
-		
+
 		return match;
 	}
 
@@ -96,7 +97,8 @@ public class VerificaEBolloService {
 
 			hashDocumento = builder.toString();
 
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 
@@ -106,7 +108,7 @@ public class VerificaEBolloService {
 	public boolean checkSignature(File xmlBollo) throws Exception {
 
 		boolean isValid = false;
-		
+
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -125,9 +127,10 @@ public class VerificaEBolloService {
 			XMLSignatureFactory factory = XMLSignatureFactory.getInstance("DOM");
 
 			XMLSignature signature = factory.unmarshalXMLSignature(valContext);
-			
+
 			isValid = signature.validate(valContext);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 
@@ -138,12 +141,14 @@ public class VerificaEBolloService {
 	 * A simple KeySelectorResult containing a public key.
 	 */
 	private static class SimpleKeySelectorResult implements KeySelectorResult {
+
 		private final Key key;
 
 		SimpleKeySelectorResult(Key key) {
 			this.key = key;
 		}
 
+		@Override
 		public Key getKey() {
 			return key;
 		}
@@ -151,8 +156,8 @@ public class VerificaEBolloService {
 
 	private static class KeyValueKeySelector extends KeySelector {
 
-		public KeySelectorResult select(KeyInfo keyInfo, KeySelector.Purpose purpose, AlgorithmMethod method,
-				XMLCryptoContext context) throws KeySelectorException {
+		@Override
+		public KeySelectorResult select(KeyInfo keyInfo, KeySelector.Purpose purpose, AlgorithmMethod method, XMLCryptoContext context) throws KeySelectorException {
 
 			if (keyInfo == null) {
 				throw new KeySelectorException("Null KeyInfo object!");
@@ -161,12 +166,13 @@ public class VerificaEBolloService {
 			List<XMLStructure> list = keyInfo.getContent();
 
 			for (int i = 0; i < list.size(); i++) {
-				XMLStructure xmlStructure = (XMLStructure) list.get(i);
+				XMLStructure xmlStructure = list.get(i);
 				if (xmlStructure instanceof KeyValue) {
 					PublicKey pk = null;
 					try {
 						pk = ((KeyValue) xmlStructure).getPublicKey();
-					} catch (KeyException ke) {
+					}
+					catch (KeyException ke) {
 						throw new KeySelectorException(ke);
 					}
 					// make sure algorithm is compatible with method
@@ -179,13 +185,13 @@ public class VerificaEBolloService {
 		}
 
 		static boolean algEquals(String algURI, String algName) {
-			if (algName.equalsIgnoreCase("DSA")
-					&& algURI.equalsIgnoreCase("http://www.w3.org/2009/xmldsig11#dsa-sha256")) {
+			if (algName.equalsIgnoreCase("DSA") && algURI.equalsIgnoreCase("http://www.w3.org/2009/xmldsig11#dsa-sha256")) {
 				return true;
-			} else if (algName.equalsIgnoreCase("RSA")
-					&& algURI.equalsIgnoreCase("http://www.w3.org/2001/04/xmldsig-more#rsa-sha256")) {
+			}
+			else if (algName.equalsIgnoreCase("RSA") && algURI.equalsIgnoreCase("http://www.w3.org/2001/04/xmldsig-more#rsa-sha256")) {
 				return true;
-			} else {
+			}
+			else {
 				return false;
 			}
 		}

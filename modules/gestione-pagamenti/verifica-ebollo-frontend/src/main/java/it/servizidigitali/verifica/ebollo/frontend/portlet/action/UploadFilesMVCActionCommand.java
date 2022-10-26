@@ -20,35 +20,53 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.verifica.ebollo.frontend.constants.VerificaEbolloFrontendPortletKeys;
 import it.servizidigitali.verifica.ebollo.frontend.service.VerificaEBolloService;
 
-@Component(immediate = true, property = {
-		"javax.portlet.name=" + VerificaEbolloFrontendPortletKeys.VERIFICAEBOLLOPORTLET,
-		"mvc.command.name=" + VerificaEbolloFrontendPortletKeys.UPLOAD_FILES_ACTION_COMMAND }, service = {
-				MVCActionCommand.class })
-public class UploadFilesMVCActionCommand extends BaseMVCActionCommand{
-	
+@Component(//
+		immediate = true, //
+		property = { //
+				"javax.portlet.name=" + VerificaEbolloFrontendPortletKeys.VERIFICAEBOLLOPORTLET, //
+				"mvc.command.name=" + VerificaEbolloFrontendPortletKeys.UPLOAD_FILES_ACTION_COMMAND//
+		}, //
+		service = { MVCActionCommand.class }//
+) //
+public class UploadFilesMVCActionCommand extends BaseMVCActionCommand {
+
 	private static final Log LOG = LogFactoryUtil.getLog(UploadFilesMVCActionCommand.class.getName());
-	
+
 	@Reference
 	private VerificaEBolloService verificaEBolloService;
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		
-		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 
-		File documento = uploadPortletRequest.getFile(VerificaEbolloFrontendPortletKeys.UPLOAD_DOCUMENTO_ATTRIBUTE);
-		
-		File xmlBollo = uploadPortletRequest.getFile(VerificaEbolloFrontendPortletKeys.UPLOAD_XML_BOLLO_ATTRIBUTE);
-		
-		actionRequest.setAttribute(VerificaEbolloFrontendPortletKeys.IS_SIGNATURE_VALID, verificaEBolloService.checkSignature(xmlBollo));
-		
-		actionRequest.setAttribute(VerificaEbolloFrontendPortletKeys.IS_FILE_HASH_MATCH, verificaEBolloService.checkFileHashMatch(themeDisplay.getSiteGroupId(), documento, xmlBollo));
-		
-		actionRequest.setAttribute(VerificaEbolloFrontendPortletKeys.CHECK_DONE_ATTRIBUTE, true);
-		
-		actionResponse.getRenderParameters().setValue("mvcPath", "/view.jsp");
+		File documentoFile = null;
+		File xmlBolloFile = null;
+		try {
+			ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+			UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
+
+			documentoFile = uploadPortletRequest.getFile(VerificaEbolloFrontendPortletKeys.UPLOAD_DOCUMENTO_ATTRIBUTE);
+
+			xmlBolloFile = uploadPortletRequest.getFile(VerificaEbolloFrontendPortletKeys.UPLOAD_XML_BOLLO_ATTRIBUTE);
+
+			actionRequest.setAttribute(VerificaEbolloFrontendPortletKeys.IS_SIGNATURE_VALID, verificaEBolloService.checkSignature(xmlBolloFile));
+
+			actionRequest.setAttribute(VerificaEbolloFrontendPortletKeys.IS_FILE_HASH_MATCH, verificaEBolloService.checkFileHashMatch(themeDisplay.getSiteGroupId(), documentoFile, xmlBolloFile));
+
+			actionRequest.setAttribute(VerificaEbolloFrontendPortletKeys.CHECK_DONE_ATTRIBUTE, true);
+
+			actionResponse.getRenderParameters().setValue("mvcPath", "/view.jsp");
+		}
+		catch (Exception e) {
+			LOG.error("doProcessAction :: " + e.getMessage(), e);
+		}
+		finally {
+			if (documentoFile != null && documentoFile.exists()) {
+				documentoFile.delete();
+			}
+			if (xmlBolloFile != null && xmlBolloFile.exists()) {
+				xmlBolloFile.delete();
+			}
+		}
 	}
-
 }
