@@ -158,9 +158,6 @@
 	</div>
 </script>
 
-<script id="prenotazioneTpl" type="text/x-jsrender">
-</script>
-
 <script type="text/javascript">
 	var messages = {
 			noResult:	"<liferay-ui:message key='nessun-risultato-da-visualizzare'/>"
@@ -173,7 +170,6 @@
 				richiesta: "#richiestaTpl",
  				pagamento: "#pagamentoTpl",
  				comunicazione: "#comunicazioneTpl",
-				prenotazione: "#prenotazioneTpl",
 			},
 		}
 	);
