@@ -95,10 +95,10 @@ public class EntityToSchemaModelConverter {
 		infoServizioEnte.setCodiceIpa(codIPA != null ? codIPA.toString() : null);
 		infoServizioEnte.setActive(servizioEnte.isAttivo());
 		infoServizioEnte.setCode(servizio.getCodice());
-		infoServizioEnte.setDescription(servizioEnte.getDescrizione());
+		infoServizioEnte.setDescription(servizio.getDescrizione());
 		infoServizioEnte.setId(servizioEnte.getServizioId());
 		infoServizioEnte.setNomeComune(organization.getName());
-		infoServizioEnte.setTitle(servizioEnte.getNome());
+		infoServizioEnte.setTitle(servizio.getNome());
 		infoServizioEnte.setUsableByChatbot(false);
 
 		List<Tipologia> tipologie = tipologiaLocalService.getServizioTipologias(servizio.getServizioId());
