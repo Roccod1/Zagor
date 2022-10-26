@@ -291,12 +291,22 @@ public class AllegatoRichiestaLocalServiceWrapper
 	@Override
 	public java.util.List
 		<it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta>
-			getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
+			getAllegatiRichiestaByRichiestaIdPrincipale(
+				long richiestaId, boolean principale) {
+
+		return _allegatoRichiestaLocalService.
+			getAllegatiRichiestaByRichiestaIdPrincipale(
+				richiestaId, principale);
+	}
+
+	@Override
+	public java.util.List
+		<it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta>
+			getAllegatiRichiestaByRichiestaIdVisibile(
 				long richiestaId, boolean visibile) {
 
 		return _allegatoRichiestaLocalService.
-			getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
-				richiestaId, visibile);
+			getAllegatiRichiestaByRichiestaIdVisibile(richiestaId, visibile);
 	}
 
 	/**
@@ -313,16 +323,6 @@ public class AllegatoRichiestaLocalServiceWrapper
 
 		return _allegatoRichiestaLocalService.getAllegatoRichiesta(
 			allegatoRichiestaId);
-	}
-
-	@Override
-	public it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta
-		getAllegatoRichiestaByRichiestaIdPrincipale(
-			long richiestaId, boolean principale) {
-
-		return _allegatoRichiestaLocalService.
-			getAllegatoRichiestaByRichiestaIdPrincipale(
-				richiestaId, principale);
 	}
 
 	/**

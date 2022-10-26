@@ -189,7 +189,7 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 						break;
 
 					default:
-						break;
+						return;
 					}
 
 					richiesta.setStato(statoRichiesta);

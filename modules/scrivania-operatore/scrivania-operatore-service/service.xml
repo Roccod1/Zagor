@@ -173,7 +173,7 @@
 			<finder-column name="url" />
 		</finder>
 
-		<finder name="RichiestaIdPrincipale" return-type="AllegatoRichiesta">
+		<finder name="RichiestaIdPrincipale" return-type="Collection">
 			<finder-column name="richiestaId" />
 			<finder-column name="principale" />
 		</finder>

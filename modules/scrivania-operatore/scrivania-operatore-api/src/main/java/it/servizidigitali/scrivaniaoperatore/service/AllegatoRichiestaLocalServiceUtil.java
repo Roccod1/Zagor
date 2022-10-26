@@ -254,10 +254,18 @@ public class AllegatoRichiestaLocalServiceUtil {
 	}
 
 	public static List<AllegatoRichiesta>
-		getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
+		getAllegatiRichiestaByRichiestaIdPrincipale(
+			long richiestaId, boolean principale) {
+
+		return getService().getAllegatiRichiestaByRichiestaIdPrincipale(
+			richiestaId, principale);
+	}
+
+	public static List<AllegatoRichiesta>
+		getAllegatiRichiestaByRichiestaIdVisibile(
 			long richiestaId, boolean visibile) {
 
-		return getService().getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
+		return getService().getAllegatiRichiestaByRichiestaIdVisibile(
 			richiestaId, visibile);
 	}
 
@@ -273,13 +281,6 @@ public class AllegatoRichiestaLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getAllegatoRichiesta(allegatoRichiestaId);
-	}
-
-	public static AllegatoRichiesta getAllegatoRichiestaByRichiestaIdPrincipale(
-		long richiestaId, boolean principale) {
-
-		return getService().getAllegatoRichiestaByRichiestaIdPrincipale(
-			richiestaId, principale);
 	}
 
 	/**

@@ -1,6 +1,33 @@
 <portlet:actionURL
 	name="<%=VerificaEbolloFrontendPortletKeys.UPLOAD_FILES_ACTION_COMMAND%>"
 	var="uploadFilesURL" />
+	
+<c:if test="${checkDone}">
+	<c:choose>
+		<c:when test="${isSignatureValid}">
+			<div class="alert alert-success" role="alert">
+				<liferay-ui:message key="message.signature.valid" />
+			</div>
+		</c:when>
+		<c:otherwise>
+			<div class="alert alert-danger" role="alert">
+				<liferay-ui:message key="message.signature.unvalid" />
+			</div>
+		</c:otherwise>
+	</c:choose>
+	<c:choose>
+		<c:when test="${isFileHashMatch}">
+			<div class="alert alert-success" role="alert">
+				<liferay-ui:message key="message.fileHash.match" />
+			</div>
+		</c:when>
+		<c:otherwise>
+			<div class="alert alert-danger" role="alert">
+				<liferay-ui:message key="message.fileHash.mismatch" />
+			</div>
+		</c:otherwise>
+	</c:choose>
+</c:if>
 
 <aui:form action="${uploadFilesURL}" id="uploadFileForm"
 	name="uploadFileForm" enctype="multipart/form-data">

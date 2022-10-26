@@ -229,9 +229,12 @@ public interface AllegatoRichiestaLocalService
 			long richiestaId, boolean interno);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<AllegatoRichiesta>
-		getAllegatiRichiestaByRichiestaIdGroupIdVisibile(
-			long richiestaId, boolean visibile);
+	public List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaIdPrincipale(
+		long richiestaId, boolean principale);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<AllegatoRichiesta> getAllegatiRichiestaByRichiestaIdVisibile(
+		long richiestaId, boolean visibile);
 
 	/**
 	 * Returns the allegato richiesta with the primary key.
@@ -243,10 +246,6 @@ public interface AllegatoRichiestaLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public AllegatoRichiesta getAllegatoRichiesta(long allegatoRichiestaId)
 		throws PortalException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public AllegatoRichiesta getAllegatoRichiestaByRichiestaIdPrincipale(
-		long richiestaId, boolean principale);
 
 	/**
 	 * Returns the allegato richiesta matching the UUID and group.
