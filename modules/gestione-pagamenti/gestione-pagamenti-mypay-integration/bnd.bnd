@@ -1,0 +1,19 @@
+Bundle-Name: gestione-pagamenti-mypay-integration
+Bundle-SymbolicName: it.servizidigitali.gestionepagamenti.mypay.integration
+Bundle-Version: 1.0.0
+
+Export-Package: \
+	it.servizidigitali.gestionepagamenti.mypay.*
+	
+Import-Package: \
+  	!com.sun.jimi.*,\
+  	!com.sun.net.ssl.*,\
+  	!javax.jms.*,\
+  	!javax.rmi.*,\
+  	!org.apache.*,\
+  	!org.exolab.castor.*,\
+  	!org.omg.*,\
+  	!sun.awt*,\
+  	*
+
+-fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning

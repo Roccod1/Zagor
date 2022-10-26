@@ -1,0 +1,4 @@
+Bundle-Name: gestione-pagamenti-frontend
+Bundle-SymbolicName: it.servizidigitali.gestionepagamenti.frontend
+Bundle-Version: 1.0.0
+Export-Package: it.servizidigitali.gestionepagamenti.frontend

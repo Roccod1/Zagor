@@ -87,7 +87,7 @@ public class RichiestaModelImpl
 		{"tokenVisualizzazione", Types.VARCHAR},
 		{"chiaveAssociazioneBackoffice", Types.VARCHAR},
 		{"delegaId", Types.BIGINT}, {"processInstanceId", Types.VARCHAR},
-		{"proceduraId", Types.BIGINT}
+		{"proceduraId", Types.BIGINT}, {"servizioId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -119,10 +119,11 @@ public class RichiestaModelImpl
 		TABLE_COLUMNS_MAP.put("delegaId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("processInstanceId", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("proceduraId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("servizioId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table richiesta (uuid_ VARCHAR(75) null,richiestaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codiceFiscale VARCHAR(75) null,partitaIva VARCHAR(75) null,email VARCHAR(75) null,codiceFiscaleDelegato VARCHAR(75) null,stato VARCHAR(75) null,numeroProtocollo VARCHAR(75) null,dataProtocollo DATE null,numeroProtocolloEsterno VARCHAR(75) null,dataProtocolloEsterno DATE null,oggetto VARCHAR(75) null,note VARCHAR(75) null,invioGuest BOOLEAN,tokenVisualizzazione VARCHAR(75) null,chiaveAssociazioneBackoffice VARCHAR(75) null,delegaId LONG,processInstanceId VARCHAR(75) null,proceduraId LONG)";
+		"create table richiesta (uuid_ VARCHAR(75) null,richiestaId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codiceFiscale VARCHAR(75) null,partitaIva VARCHAR(75) null,email VARCHAR(75) null,codiceFiscaleDelegato VARCHAR(75) null,stato VARCHAR(75) null,numeroProtocollo VARCHAR(75) null,dataProtocollo DATE null,numeroProtocolloEsterno VARCHAR(75) null,dataProtocolloEsterno DATE null,oggetto VARCHAR(75) null,note VARCHAR(75) null,invioGuest BOOLEAN,tokenVisualizzazione VARCHAR(75) null,chiaveAssociazioneBackoffice VARCHAR(75) null,delegaId LONG,processInstanceId VARCHAR(75) null,proceduraId LONG,servizioId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table richiesta";
 
@@ -190,26 +191,32 @@ public class RichiestaModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long STATO_COLUMN_BITMASK = 256L;
+	public static final long SERVIZIOID_COLUMN_BITMASK = 256L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long TOKENVISUALIZZAZIONE_COLUMN_BITMASK = 512L;
+	public static final long STATO_COLUMN_BITMASK = 512L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 1024L;
+	public static final long TOKENVISUALIZZAZIONE_COLUMN_BITMASK = 1024L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 2048L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long RICHIESTAID_COLUMN_BITMASK = 2048L;
+	public static final long RICHIESTAID_COLUMN_BITMASK = 4096L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -451,6 +458,10 @@ public class RichiestaModelImpl
 		attributeSetterBiConsumers.put(
 			"proceduraId",
 			(BiConsumer<Richiesta, Long>)Richiesta::setProceduraId);
+		attributeGetterFunctions.put("servizioId", Richiesta::getServizioId);
+		attributeSetterBiConsumers.put(
+			"servizioId",
+			(BiConsumer<Richiesta, Long>)Richiesta::setServizioId);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -1010,6 +1021,30 @@ public class RichiestaModelImpl
 	}
 
 	@Override
+	public long getServizioId() {
+		return _servizioId;
+	}
+
+	@Override
+	public void setServizioId(long servizioId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_servizioId = servizioId;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalServizioId() {
+		return GetterUtil.getLong(
+			this.<Long>getColumnOriginalValue("servizioId"));
+	}
+
+	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
 			PortalUtil.getClassNameId(Richiesta.class.getName()));
@@ -1097,6 +1132,7 @@ public class RichiestaModelImpl
 		richiestaImpl.setDelegaId(getDelegaId());
 		richiestaImpl.setProcessInstanceId(getProcessInstanceId());
 		richiestaImpl.setProceduraId(getProceduraId());
+		richiestaImpl.setServizioId(getServizioId());
 
 		richiestaImpl.resetOriginalValues();
 
@@ -1152,6 +1188,8 @@ public class RichiestaModelImpl
 			this.<String>getColumnOriginalValue("processInstanceId"));
 		richiestaImpl.setProceduraId(
 			this.<Long>getColumnOriginalValue("proceduraId"));
+		richiestaImpl.setServizioId(
+			this.<Long>getColumnOriginalValue("servizioId"));
 
 		return richiestaImpl;
 	}
@@ -1409,6 +1447,8 @@ public class RichiestaModelImpl
 
 		richiestaCacheModel.proceduraId = getProceduraId();
 
+		richiestaCacheModel.servizioId = getServizioId();
+
 		return richiestaCacheModel;
 	}
 
@@ -1525,6 +1565,7 @@ public class RichiestaModelImpl
 	private Long _delegaId;
 	private String _processInstanceId;
 	private long _proceduraId;
+	private long _servizioId;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1585,6 +1626,7 @@ public class RichiestaModelImpl
 		_columnOriginalValues.put("delegaId", _delegaId);
 		_columnOriginalValues.put("processInstanceId", _processInstanceId);
 		_columnOriginalValues.put("proceduraId", _proceduraId);
+		_columnOriginalValues.put("servizioId", _servizioId);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1657,6 +1699,8 @@ public class RichiestaModelImpl
 		columnBitmasks.put("processInstanceId", 8388608L);
 
 		columnBitmasks.put("proceduraId", 16777216L);
+
+		columnBitmasks.put("servizioId", 33554432L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

@@ -1293,6 +1293,149 @@ public interface RichiestaPersistence extends BasePersistence<Richiesta> {
 	public int countByProceduraId(long proceduraId);
 
 	/**
+	 * Returns all the richiestas where servizioId = &#63;.
+	 *
+	 * @param servizioId the servizio ID
+	 * @return the matching richiestas
+	 */
+	public java.util.List<Richiesta> findByServizioId(long servizioId);
+
+	/**
+	 * Returns a range of all the richiestas where servizioId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>RichiestaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param servizioId the servizio ID
+	 * @param start the lower bound of the range of richiestas
+	 * @param end the upper bound of the range of richiestas (not inclusive)
+	 * @return the range of matching richiestas
+	 */
+	public java.util.List<Richiesta> findByServizioId(
+		long servizioId, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the richiestas where servizioId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>RichiestaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param servizioId the servizio ID
+	 * @param start the lower bound of the range of richiestas
+	 * @param end the upper bound of the range of richiestas (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching richiestas
+	 */
+	public java.util.List<Richiesta> findByServizioId(
+		long servizioId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<Richiesta>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the richiestas where servizioId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>RichiestaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param servizioId the servizio ID
+	 * @param start the lower bound of the range of richiestas
+	 * @param end the upper bound of the range of richiestas (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching richiestas
+	 */
+	public java.util.List<Richiesta> findByServizioId(
+		long servizioId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<Richiesta>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first richiesta in the ordered set where servizioId = &#63;.
+	 *
+	 * @param servizioId the servizio ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching richiesta
+	 * @throws NoSuchRichiestaException if a matching richiesta could not be found
+	 */
+	public Richiesta findByServizioId_First(
+			long servizioId,
+			com.liferay.portal.kernel.util.OrderByComparator<Richiesta>
+				orderByComparator)
+		throws NoSuchRichiestaException;
+
+	/**
+	 * Returns the first richiesta in the ordered set where servizioId = &#63;.
+	 *
+	 * @param servizioId the servizio ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching richiesta, or <code>null</code> if a matching richiesta could not be found
+	 */
+	public Richiesta fetchByServizioId_First(
+		long servizioId,
+		com.liferay.portal.kernel.util.OrderByComparator<Richiesta>
+			orderByComparator);
+
+	/**
+	 * Returns the last richiesta in the ordered set where servizioId = &#63;.
+	 *
+	 * @param servizioId the servizio ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching richiesta
+	 * @throws NoSuchRichiestaException if a matching richiesta could not be found
+	 */
+	public Richiesta findByServizioId_Last(
+			long servizioId,
+			com.liferay.portal.kernel.util.OrderByComparator<Richiesta>
+				orderByComparator)
+		throws NoSuchRichiestaException;
+
+	/**
+	 * Returns the last richiesta in the ordered set where servizioId = &#63;.
+	 *
+	 * @param servizioId the servizio ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching richiesta, or <code>null</code> if a matching richiesta could not be found
+	 */
+	public Richiesta fetchByServizioId_Last(
+		long servizioId,
+		com.liferay.portal.kernel.util.OrderByComparator<Richiesta>
+			orderByComparator);
+
+	/**
+	 * Returns the richiestas before and after the current richiesta in the ordered set where servizioId = &#63;.
+	 *
+	 * @param richiestaId the primary key of the current richiesta
+	 * @param servizioId the servizio ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next richiesta
+	 * @throws NoSuchRichiestaException if a richiesta with the primary key could not be found
+	 */
+	public Richiesta[] findByServizioId_PrevAndNext(
+			long richiestaId, long servizioId,
+			com.liferay.portal.kernel.util.OrderByComparator<Richiesta>
+				orderByComparator)
+		throws NoSuchRichiestaException;
+
+	/**
+	 * Removes all the richiestas where servizioId = &#63; from the database.
+	 *
+	 * @param servizioId the servizio ID
+	 */
+	public void removeByServizioId(long servizioId);
+
+	/**
+	 * Returns the number of richiestas where servizioId = &#63;.
+	 *
+	 * @param servizioId the servizio ID
+	 * @return the number of matching richiestas
+	 */
+	public int countByServizioId(long servizioId);
+
+	/**
 	 * Returns the richiesta where processInstanceId = &#63; or throws a <code>NoSuchRichiestaException</code> if it could not be found.
 	 *
 	 * @param processInstanceId the process instance ID

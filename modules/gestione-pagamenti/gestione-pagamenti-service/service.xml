@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="it.servizidigitali.gestionepagamenti" auto-namespace-tables="false">
+	<namespace/>
+	
+	<entity 
+		name="Pagamento"
+		table="pagamento"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="pagamentoId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="idCredito" type="String" />
+		<column name="idFiscaleCliente" type="String" />
+		<column name="denominazioneCliente" type="String" />
+		<column name="emailQuietanza" type="String" />
+		<column name="causale" type="String" />
+		<column name="servizioId" type="long" />
+		<column name="nomeServizio" type="String" />
+		<column name="importo" type="BigDecimal" />
+		<column name="commissioni" type="BigDecimal" />
+		<column name="canale" type="String" />
+		<column name="gateway" type="String" />
+		<column name="iud" type="String" />
+		<column name="iuv" type="String" />
+		<column name="idSessione" type="String" />
+		<column name="pathAvviso" type="String" />
+		<column name="emailInviata" type="boolean" />
+		<column name="stato" type="String" />
+		<column name="errore" type="String" />
+		<column name="riferimentoEsternoId" type="String" />
+		<column name="richiestaId" type="long" />
+		
+		<!-- Finder methods -->
+		<finder name="IdCredito" return-type="Collection">
+			<finder-column name="idCredito" />
+		</finder>
+		
+		<finder name="IdFiscaleCliente" return-type="Collection">
+			<finder-column name="idFiscaleCliente" />
+		</finder>
+
+		<finder name="IdFiscaleClienteGroupId" return-type="Collection">
+			<finder-column name="idFiscaleCliente" />
+			<finder-column name="groupId" />
+		</finder>
+
+		<finder name="EmailInviata" return-type="Collection">
+			<finder-column name="emailInviata" />
+		</finder>
+
+		<finder name="Iud" return-type="Collection">
+			<finder-column name="iud" />
+		</finder>
+
+		<finder name="Iuv" return-type="Pagamento">
+			<finder-column name="iuv" />
+		</finder>
+
+		<finder name="IdSessione" return-type="Pagamento">
+			<finder-column name="idSessione" />
+		</finder>
+
+		<finder name="RichiestaId" return-type="Pagamento">
+			<finder-column name="richiestaId" />
+		</finder>
+
+		<finder name="Stato" return-type="Collection">
+			<finder-column name="stato" />
+		</finder>
+
+		<finder name="StatoGroupId" return-type="Collection">
+			<finder-column name="stato" />
+			<finder-column name="groupId" />
+		</finder>
+
+	</entity>
+</service-builder>

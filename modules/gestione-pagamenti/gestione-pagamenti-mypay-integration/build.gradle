@@ -1,0 +1,34 @@
+repositories {
+    flatDir {
+        dirs 'lib'
+    }
+}
+
+dependencies {
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+	compileOnly project(":modules:gestione-pagamenti:gestione-pagamenti-integration-common")
+	
+	compileInclude group: 'javax.xml.rpc', name: 'javax.xml.rpc-api', version: '1.1.2'
+	compileInclude group: 'com.liferay', name: 'javax.xml.ws', version: '2.3.0.LIFERAY-PATCHED-1'
+	compileInclude group: 'com.liferay', name: 'org.apache.axis', version: '1.4.LIFERAY-PATCHED-6'
+	compileInclude group: 'com.liferay', name: 'javax.xml.soap', version: '1.4.0.LIFERAY-PATCHED-1'
+	compileInclude group: 'com.liferay', name: 'org.apache.xmlbeans', version: '2.5.0.LIFERAY-PATCHED-1'
+	compileInclude fileTree(dir: 'lib', include: '*.jar')
+	compileInclude group: 'commons-discovery', name: 'commons-discovery', version: '0.5'
+}
+
+buildscript {
+	dependencies {
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.wsdl.builder", version: "3.0.2"
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.xsd.builder", version: "1.0.11"
+	}
+
+	repositories {
+		maven {
+			url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+		}
+	}
+}
+
+apply plugin: "com.liferay.wsdl.builder"
+apply plugin: "com.liferay.xsd.builder" 

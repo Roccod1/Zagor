@@ -62,7 +62,7 @@ public class RichiestaCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(51);
+		StringBundler sb = new StringBundler(53);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -114,6 +114,8 @@ public class RichiestaCacheModel
 		sb.append(processInstanceId);
 		sb.append(", proceduraId=");
 		sb.append(proceduraId);
+		sb.append(", servizioId=");
+		sb.append(servizioId);
 		sb.append("}");
 
 		return sb.toString();
@@ -261,6 +263,7 @@ public class RichiestaCacheModel
 		}
 
 		richiestaImpl.setProceduraId(proceduraId);
+		richiestaImpl.setServizioId(servizioId);
 
 		richiestaImpl.resetOriginalValues();
 
@@ -301,6 +304,8 @@ public class RichiestaCacheModel
 		processInstanceId = objectInput.readUTF();
 
 		proceduraId = objectInput.readLong();
+
+		servizioId = objectInput.readLong();
 	}
 
 	@Override
@@ -423,6 +428,8 @@ public class RichiestaCacheModel
 		}
 
 		objectOutput.writeLong(proceduraId);
+
+		objectOutput.writeLong(servizioId);
 	}
 
 	public String uuid;
@@ -450,5 +457,6 @@ public class RichiestaCacheModel
 	public long delegaId;
 	public String processInstanceId;
 	public long proceduraId;
+	public long servizioId;
 
 }

@@ -122,3 +122,8 @@ ADD COLUMN `definizioneAllegatoId` BIGINT NULL AFTER `visibile`;
 ALTER TABLE `servizi_digitali`.`allegato_richiesta` 
 ADD COLUMN `titolo` VARCHAR(100) NULL AFTER `nome`,
 ADD COLUMN `descrizione` VARCHAR(500) NULL AFTER `titolo`;
+
+-- 20221018
+ALTER TABLE `servizi_digitali`.`richiesta` 
+ADD COLUMN `servizioId` BIGINT NOT NULL AFTER `proceduraId`,
+CHANGE COLUMN `proceduraId` `proceduraId` BIGINT NULL ;

@@ -1,0 +1,10 @@
+Bundle-Name: gestione-pagamenti-api
+Bundle-SymbolicName: it.servizidigitali.gestionepagamenti.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	it.servizidigitali.gestionepagamenti.exception,\
+	it.servizidigitali.gestionepagamenti.model,\
+	it.servizidigitali.gestionepagamenti.service,\
+	it.servizidigitali.gestionepagamenti.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../gestione-pagamenti-service/service.xml

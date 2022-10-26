@@ -113,5 +113,6 @@
 		<field name="delegaId" type="Long" />
 		<field name="processInstanceId" type="String" />
 		<field name="proceduraId" type="long" />
+		<field name="servizioId" type="long" />
 	</model>
 </model-hints>
