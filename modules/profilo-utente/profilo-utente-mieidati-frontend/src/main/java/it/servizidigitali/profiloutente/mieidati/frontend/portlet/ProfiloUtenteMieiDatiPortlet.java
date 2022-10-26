@@ -102,7 +102,7 @@ public class ProfiloUtenteMieiDatiPortlet extends MVCPortlet {
 
 			datiAnagrafici = anagrafeIntegrationService.getDatiAnagrafici(user.getScreenName(), siteGroupOrganizationId, null);
 			if (datiAnagrafici != null && datiAnagrafici.getComponentiNucleoFamiliare() != null) {
-				_log.info("datiAnagrafici: " + datiAnagrafici.getComponentiNucleoFamiliare().size());
+				_log.debug("datiAnagrafici: " + datiAnagrafici.getComponentiNucleoFamiliare().size());
 				listaComponentiNucleoFamiliare = datiAnagrafici.getComponentiNucleoFamiliare();
 			}
 		}
