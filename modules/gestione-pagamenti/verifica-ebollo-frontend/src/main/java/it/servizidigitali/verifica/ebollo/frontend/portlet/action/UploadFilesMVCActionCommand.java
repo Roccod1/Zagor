@@ -30,7 +30,7 @@ import it.servizidigitali.verifica.ebollo.frontend.service.VerificaEBolloService
 ) //
 public class UploadFilesMVCActionCommand extends BaseMVCActionCommand {
 
-	private static final Log LOG = LogFactoryUtil.getLog(UploadFilesMVCActionCommand.class.getName());
+	private static final Log log = LogFactoryUtil.getLog(UploadFilesMVCActionCommand.class.getName());
 
 	@Reference
 	private VerificaEBolloService verificaEBolloService;
@@ -58,7 +58,7 @@ public class UploadFilesMVCActionCommand extends BaseMVCActionCommand {
 			actionResponse.getRenderParameters().setValue("mvcPath", "/view.jsp");
 		}
 		catch (Exception e) {
-			LOG.error("doProcessAction :: " + e.getMessage(), e);
+			log.error("doProcessAction :: " + e.getMessage(), e);
 		}
 		finally {
 			if (documentoFile != null && documentoFile.exists()) {

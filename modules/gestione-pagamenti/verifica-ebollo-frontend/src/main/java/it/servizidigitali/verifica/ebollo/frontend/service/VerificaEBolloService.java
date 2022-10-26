@@ -8,23 +8,21 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Files;
 import java.security.Key;
-import java.security.KeyException;
 import java.security.MessageDigest;
 import java.security.PublicKey;
-import java.util.List;
+import java.security.cert.X509Certificate;
 
 import javax.xml.crypto.AlgorithmMethod;
 import javax.xml.crypto.KeySelector;
 import javax.xml.crypto.KeySelectorException;
 import javax.xml.crypto.KeySelectorResult;
 import javax.xml.crypto.XMLCryptoContext;
-import javax.xml.crypto.XMLStructure;
 import javax.xml.crypto.dsig.SignatureMethod;
 import javax.xml.crypto.dsig.XMLSignature;
 import javax.xml.crypto.dsig.XMLSignatureFactory;
 import javax.xml.crypto.dsig.dom.DOMValidateContext;
 import javax.xml.crypto.dsig.keyinfo.KeyInfo;
-import javax.xml.crypto.dsig.keyinfo.KeyValue;
+import javax.xml.crypto.dsig.keyinfo.X509Data;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -48,7 +46,7 @@ public class VerificaEBolloService {
 	private volatile ClientPagamentiEnteConfiguration accountClientPagamentiEnteConfiguration;
 	private ConfigurationProvider configurationProvider;
 
-	private static final Log LOG = LogFactoryUtil.getLog(VerificaEBolloService.class.getName());
+	private static final Log log = LogFactoryUtil.getLog(VerificaEBolloService.class.getName());
 
 	@Reference
 	protected void setConfigurationProvider(ConfigurationProvider configurationProvider) {
@@ -64,15 +62,15 @@ public class VerificaEBolloService {
 			PagamentiService pagamentiService = pagamentiServiceFactory.getPagamentiService(TipoPagamentiClient.valueOf(accountClientPagamentiEnteConfiguration.tipoPagamentiClient()));
 
 			MarcaDaBollo marcaDaBollo = pagamentiService.unmarshal(new FileInputStream(xmlBollo));
-			String xmlHashImpronta = new String(marcaDaBollo.getImprontaDocumento().getValore());
+			String xmlHashImpronta = marcaDaBollo.getImprontaDocumento().getValore();
 
 			String hashDocumento = this.getFileHash(documento);
 
-			match = hashDocumento.equals(xmlHashImpronta);
+			match = hashDocumento.toString().equals(xmlHashImpronta);
 
 		}
 		catch (Exception e) {
-			LOG.error(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 		}
 
 		return match;
@@ -99,7 +97,7 @@ public class VerificaEBolloService {
 
 		}
 		catch (Exception e) {
-			LOG.error(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 		}
 
 		return hashDocumento;
@@ -131,7 +129,7 @@ public class VerificaEBolloService {
 			isValid = signature.validate(valContext);
 		}
 		catch (Exception e) {
-			LOG.error(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 		}
 
 		return isValid;
@@ -158,26 +156,20 @@ public class VerificaEBolloService {
 
 		@Override
 		public KeySelectorResult select(KeyInfo keyInfo, KeySelector.Purpose purpose, AlgorithmMethod method, XMLCryptoContext context) throws KeySelectorException {
-
 			if (keyInfo == null) {
 				throw new KeySelectorException("Null KeyInfo object!");
 			}
 			SignatureMethod sm = (SignatureMethod) method;
-			List<XMLStructure> list = keyInfo.getContent();
 
-			for (int i = 0; i < list.size(); i++) {
-				XMLStructure xmlStructure = list.get(i);
-				if (xmlStructure instanceof KeyValue) {
-					PublicKey pk = null;
-					try {
-						pk = ((KeyValue) xmlStructure).getPublicKey();
-					}
-					catch (KeyException ke) {
-						throw new KeySelectorException(ke);
-					}
-					// make sure algorithm is compatible with method
-					if (algEquals(sm.getAlgorithm(), pk.getAlgorithm())) {
-						return new SimpleKeySelectorResult(pk);
+			for (Object keyInfoContent : keyInfo.getContent()) {
+				if (keyInfoContent instanceof X509Data) {
+					for (Object x509Content : ((X509Data) keyInfoContent).getContent()) {
+						X509Certificate cert = (X509Certificate) x509Content;
+						PublicKey pk = cert.getPublicKey();
+						// make sure algorithm is compatible with method
+						if (algEquals(sm.getAlgorithm(), pk.getAlgorithm())) {
+							return new SimpleKeySelectorResult(pk);
+						}
 					}
 				}
 			}
@@ -185,10 +177,13 @@ public class VerificaEBolloService {
 		}
 
 		static boolean algEquals(String algURI, String algName) {
-			if (algName.equalsIgnoreCase("DSA") && algURI.equalsIgnoreCase("http://www.w3.org/2009/xmldsig11#dsa-sha256")) {
+			if (algName.equalsIgnoreCase("RSA") && algURI.equalsIgnoreCase(SignatureMethod.RSA_SHA256)) {
 				return true;
 			}
-			else if (algName.equalsIgnoreCase("RSA") && algURI.equalsIgnoreCase("http://www.w3.org/2001/04/xmldsig-more#rsa-sha256")) {
+			else if (algName.equalsIgnoreCase("DSA") && algURI.equalsIgnoreCase(SignatureMethod.DSA_SHA1)) {
+				return true;
+			}
+			else if (algName.equalsIgnoreCase("RSA") && algURI.equalsIgnoreCase(SignatureMethod.RSA_SHA1)) {
 				return true;
 			}
 			else {
