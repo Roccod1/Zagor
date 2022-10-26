@@ -67,7 +67,7 @@ public class PresentatoreFormFrontendService {
 
 	@Reference
 	private DestinazioneUsoLocalService destinazioneUsoLocalService;
-	
+
 	@Reference
 	private CounterLocalService counterLocalService;
 
@@ -144,13 +144,14 @@ public class PresentatoreFormFrontendService {
 		Richiesta richiestaBozza = getRichiestaBozza(screenName, proceduraId);
 		if (Validator.isNotNull(richiestaBozza)) {
 			IstanzaForm istanzaFormBozza = getIstanzaFormRichiesta(richiestaBozza.getRichiestaId(), formId);
-			
-			if(Validator.isNotNull(istanzaFormBozza)) {
+
+			if (Validator.isNotNull(istanzaFormBozza)) {
 				try {
 					istanzaFormLocalService.deleteIstanzaForm(istanzaFormBozza.getIstanzaFormId());
 					richiestaLocalService.deleteRichiesta(richiestaBozza.getRichiestaId());
-				}catch(Exception e) {
-					log.error("Errore durante l'eliminazione della richiesta in bozza dell'utente con CF : " + screenName + e.getMessage(),e);
+				}
+				catch (Exception e) {
+					log.error("Errore durante l'eliminazione della richiesta in bozza dell'utente con CF : " + screenName + e.getMessage(), e);
 				}
 			}
 
@@ -219,6 +220,7 @@ public class PresentatoreFormFrontendService {
 						richiesta.setOggetto(servizio.getNome());
 						richiesta.setProceduraId(proceduraId);
 						richiesta.setStato(StatoRichiesta.BOZZA.name());
+						richiesta.setServizioId(servizio.getServizioId());
 						richiesta.setGroupId(groupId);
 						richiesta = richiestaLocalService.updateRichiesta(richiesta);
 
@@ -261,29 +263,30 @@ public class PresentatoreFormFrontendService {
 		long companyId = themeDisplay.getCompanyId();
 		return destinazioneUsoLocalService.getDestinazioniUsoByOrganizationId(organizationId, groupId, companyId);
 	}
-	
-	public DestinazioneUso checkDestinazioneUso(long destinazioneUsoId, long servizioId, long organizationId, long groupId, long companyId){
+
+	public DestinazioneUso checkDestinazioneUso(long destinazioneUsoId, long servizioId, long organizationId, long groupId, long companyId) {
 		DestinazioneUso destinazioneUso = null;
-		
+
 		try {
-			
-			if(destinazioneUsoId>0) {
+
+			if (destinazioneUsoId > 0) {
 				DestinazioneUso destinazioneUsoSelezionato = destinazioneUsoLocalService.getDestinazioneUso(destinazioneUsoId);
-				
-				if(Validator.isNotNull(destinazioneUsoSelezionato)) {
+
+				if (Validator.isNotNull(destinazioneUsoSelezionato)) {
 					List<DestinazioneUso> listaDestinazioniServizio = destinazioneUsoLocalService.getDestinazioniUsoByServizioIdOrganizationId(servizioId, organizationId, groupId, companyId);
-					
-					if(Validator.isNotNull(listaDestinazioniServizio) && !listaDestinazioniServizio.isEmpty()) {
-						if(listaDestinazioniServizio.contains(destinazioneUsoSelezionato)) {
+
+					if (Validator.isNotNull(listaDestinazioniServizio) && !listaDestinazioniServizio.isEmpty()) {
+						if (listaDestinazioniServizio.contains(destinazioneUsoSelezionato)) {
 							destinazioneUso = destinazioneUsoSelezionato;
 						}
 					}
-				
+
 				}
 			}
-			
-		}catch(Exception e) {
-			log.error("PresentatoreFormFrontendService :: getDestinazioneUsoServizio :: " + e.getMessage(),e);
+
+		}
+		catch (Exception e) {
+			log.error("PresentatoreFormFrontendService :: getDestinazioneUsoServizio :: " + e.getMessage(), e);
 		}
 
 		return destinazioneUso;
