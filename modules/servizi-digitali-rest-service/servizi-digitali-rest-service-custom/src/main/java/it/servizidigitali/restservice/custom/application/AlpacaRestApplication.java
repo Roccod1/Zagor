@@ -14,6 +14,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Application;
 
 import org.osgi.service.component.annotations.Component;
@@ -95,14 +96,16 @@ public class AlpacaRestApplication extends Application {
 	@GET
 	@Path("/comuni")
 	@Produces("application/json")
-	public List<AlpacaDatasource> getComuni() {
+	public List<AlpacaDatasource> getComuni(@QueryParam("id-provincia") Long idProvincia, @QueryParam("sigla-provincia") String siglaProvincia,
+			@QueryParam("denominazione-regione") String denominazioneRegione) {
 
 		List<AlpacaDatasource> alpacaDatasources = new ArrayList<AlpacaDatasource>();
-
-		List<Comune> comuni = comuneLocalService.getComunes(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-		for (Comune comune : comuni) {
-			if (comune.getComuneId() > 0) {
-				alpacaDatasources.add(new AlpacaDatasource(comune.getDenominazione(), String.valueOf(comune.getComuneId())));
+		List<Comune> comuni = comuneLocalService.getComuniByIdProvinciaSiglaProvinciaDenominazioneRegione(idProvincia, siglaProvincia, denominazioneRegione);
+		if (comuni != null) {
+			for (Comune comune : comuni) {
+				if (comune.getComuneId() > 0) {
+					alpacaDatasources.add(new AlpacaDatasource(comune.getDenominazione(), String.valueOf(comune.getComuneId())));
+				}
 			}
 		}
 
@@ -110,18 +113,15 @@ public class AlpacaRestApplication extends Application {
 	}
 
 	@GET
-	@Path("/comuni/{siglaProvincia}")
+	@Path("/regioni")
 	@Produces("application/json")
-	public List<AlpacaDatasource> getComuniBySiglaProvincia(@PathParam(value = "siglaProvincia") String siglaProvincia) {
+	public List<ProvinciaDatasource> getRegioni() {
 
-		List<AlpacaDatasource> alpacaDatasources = new ArrayList<AlpacaDatasource>();
+		List<ProvinciaDatasource> alpacaDatasources = new ArrayList<ProvinciaDatasource>();
 
-		Provincia provinciaBySigla = provinciaLocalService.getProvinciaBySigla(siglaProvincia);
-		if (provinciaBySigla != null) {
-			List<Comune> comuni = comuneLocalService.getComuniByProvinciaId(provinciaBySigla.getProvinciaId());
-			for (Comune comune : comuni) {
-				alpacaDatasources.add(new AlpacaDatasource(comune.getDenominazione(), String.valueOf(comune.getComuneId())));
-			}
+		List<Provincia> province = provinciaLocalService.getProvincias(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		for (Provincia provincia : province) {
+			alpacaDatasources.add(new ProvinciaDatasource(provincia.getDenominazioneProvincia(), provincia.getSigla(), provincia.getProvinciaId()));
 		}
 
 		return alpacaDatasources;

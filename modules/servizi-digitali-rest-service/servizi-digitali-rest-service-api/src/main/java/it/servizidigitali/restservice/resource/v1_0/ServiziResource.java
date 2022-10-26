@@ -44,8 +44,8 @@ public interface ServiziResource {
 	}
 
 	public Page<InfoServizioEnte> getServiziEnte(
-			String nomeComune, Long codiceTipologiaServizio,
-			String amministrazione)
+			String nomeComune, Integer page, Integer size,
+			Long codiceTipologiaServizio, String amministrazione)
 		throws Exception;
 
 	public InfoServizioEnte getInfoServizioEnte(

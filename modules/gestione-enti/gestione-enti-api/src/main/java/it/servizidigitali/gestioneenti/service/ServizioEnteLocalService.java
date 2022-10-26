@@ -80,6 +80,8 @@ public interface ServizioEnteLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public ServizioEnte addServizioEnte(ServizioEnte servizioEnte);
 
+	public long countServiziEnteAttivi(long organizationId);
+
 	/**
 	 * @throws PortalException
 	 */

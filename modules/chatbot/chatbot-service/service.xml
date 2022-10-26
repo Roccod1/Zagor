@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="it.servizidigitali.chatbot" auto-namespace-tables="false">
+	<namespace/>
+	
+	<entity 
+		name="RichiestaCertificato"
+		table="richiesta_certificato"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="servizidigitaliDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="richiestaCertificatoId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="codiceFiscale" type="String" />
+		<column name="stato" type="String" />
+		<column name="errore" type="String" />
+		<column name="servizioId" type="long" />
+		<column name="destinazioneUsoId" type="long" />
+		
+		<!-- Finder methods -->
+		<finder name="CodiceFiscale" return-type="Collection">
+			<finder-column name="codiceFiscale" />
+		</finder>
+
+		<finder name="CodiceFiscaleGroupId" return-type="Collection">
+			<finder-column name="codiceFiscale" />
+			<finder-column name="groupId" />
+		</finder>
+
+		<finder name="Stato" return-type="Collection">
+			<finder-column name="stato" />
+		</finder>
+
+		<finder name="ServizioId" return-type="Collection">
+			<finder-column name="servizioId" />
+		</finder>
+
+		<finder name="ServizioIdGroupId" return-type="Richiesta">
+			<finder-column name="servizioId" />
+			<finder-column name="groupId" />
+		</finder>
+	</entity>
+</service-builder>

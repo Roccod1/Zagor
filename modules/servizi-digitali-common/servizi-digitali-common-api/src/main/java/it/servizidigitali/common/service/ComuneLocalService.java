@@ -242,6 +242,12 @@ public interface ComuneLocalService
 	public int getComunesCount();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Comune>
+		getComuniByIdProvinciaSiglaProvinciaDenominazioneRegione(
+			Long idProvincia, String siglaProvincia,
+			String denominazioneRegione);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Comune> getComuniByProvinciaId(long provinciaId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="it.servizidigitali.chatbot.model.RichiestaCertificato">
+		<field name="uuid" type="String" />
+		<field name="richiestaCertificatoId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="codiceFiscale" type="String" />
+		<field name="stato" type="String" />
+		<field name="errore" type="String" />
+		<field name="servizioId" type="long" />
+		<field name="destinazioneUsoId" type="long" />
+	</model>
+</model-hints>

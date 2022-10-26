@@ -1,0 +1,10 @@
+Bundle-Name: chatbot-service-api
+Bundle-SymbolicName: it.servizidigitali.chatbot.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	it.servizidigitali.chatbot.exception,\
+	it.servizidigitali.chatbot.model,\
+	it.servizidigitali.chatbot.service,\
+	it.servizidigitali.chatbot.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../chatbot-service/service.xml

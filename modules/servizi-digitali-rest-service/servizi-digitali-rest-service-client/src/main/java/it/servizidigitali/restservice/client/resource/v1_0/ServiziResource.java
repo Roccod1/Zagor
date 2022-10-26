@@ -28,13 +28,13 @@ public interface ServiziResource {
 	}
 
 	public Page<InfoServizioEnte> getServiziEnte(
-			String nomeComune, Long codiceTipologiaServizio,
-			String amministrazione)
+			String nomeComune, Integer page, Integer size,
+			Long codiceTipologiaServizio, String amministrazione)
 		throws Exception;
 
 	public HttpInvoker.HttpResponse getServiziEnteHttpResponse(
-			String nomeComune, Long codiceTipologiaServizio,
-			String amministrazione)
+			String nomeComune, Integer page, Integer size,
+			Long codiceTipologiaServizio, String amministrazione)
 		throws Exception;
 
 	public InfoServizioEnte getInfoServizioEnte(
@@ -124,12 +124,13 @@ public interface ServiziResource {
 	public static class ServiziResourceImpl implements ServiziResource {
 
 		public Page<InfoServizioEnte> getServiziEnte(
-				String nomeComune, Long codiceTipologiaServizio,
-				String amministrazione)
+				String nomeComune, Integer page, Integer size,
+				Long codiceTipologiaServizio, String amministrazione)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse = getServiziEnteHttpResponse(
-				nomeComune, codiceTipologiaServizio, amministrazione);
+				nomeComune, page, size, codiceTipologiaServizio,
+				amministrazione);
 
 			String content = httpResponse.getContent();
 
@@ -169,8 +170,8 @@ public interface ServiziResource {
 		}
 
 		public HttpInvoker.HttpResponse getServiziEnteHttpResponse(
-				String nomeComune, Long codiceTipologiaServizio,
-				String amministrazione)
+				String nomeComune, Integer page, Integer size,
+				Long codiceTipologiaServizio, String amministrazione)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -196,6 +197,14 @@ public interface ServiziResource {
 
 			if (nomeComune != null) {
 				httpInvoker.parameter("nomeComune", String.valueOf(nomeComune));
+			}
+
+			if (page != null) {
+				httpInvoker.parameter("page", String.valueOf(page));
+			}
+
+			if (size != null) {
+				httpInvoker.parameter("size", String.valueOf(size));
 			}
 
 			if (codiceTipologiaServizio != null) {

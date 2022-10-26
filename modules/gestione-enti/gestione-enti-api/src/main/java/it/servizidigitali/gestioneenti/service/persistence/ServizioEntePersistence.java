@@ -794,6 +794,164 @@ public interface ServizioEntePersistence extends BasePersistence<ServizioEnte> {
 	public int countByGroupIdPublicLayoutId(long groupId, long publicLayoutId);
 
 	/**
+	 * Returns all the servizio entes where organizationId = &#63; and attivo = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param attivo the attivo
+	 * @return the matching servizio entes
+	 */
+	public java.util.List<ServizioEnte> findByOrganizationIdAttivo(
+		long organizationId, boolean attivo);
+
+	/**
+	 * Returns a range of all the servizio entes where organizationId = &#63; and attivo = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ServizioEnteModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param attivo the attivo
+	 * @param start the lower bound of the range of servizio entes
+	 * @param end the upper bound of the range of servizio entes (not inclusive)
+	 * @return the range of matching servizio entes
+	 */
+	public java.util.List<ServizioEnte> findByOrganizationIdAttivo(
+		long organizationId, boolean attivo, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the servizio entes where organizationId = &#63; and attivo = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ServizioEnteModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param attivo the attivo
+	 * @param start the lower bound of the range of servizio entes
+	 * @param end the upper bound of the range of servizio entes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching servizio entes
+	 */
+	public java.util.List<ServizioEnte> findByOrganizationIdAttivo(
+		long organizationId, boolean attivo, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<ServizioEnte>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the servizio entes where organizationId = &#63; and attivo = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ServizioEnteModelImpl</code>.
+	 * </p>
+	 *
+	 * @param organizationId the organization ID
+	 * @param attivo the attivo
+	 * @param start the lower bound of the range of servizio entes
+	 * @param end the upper bound of the range of servizio entes (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching servizio entes
+	 */
+	public java.util.List<ServizioEnte> findByOrganizationIdAttivo(
+		long organizationId, boolean attivo, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<ServizioEnte>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first servizio ente in the ordered set where organizationId = &#63; and attivo = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param attivo the attivo
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching servizio ente
+	 * @throws NoSuchServizioEnteException if a matching servizio ente could not be found
+	 */
+	public ServizioEnte findByOrganizationIdAttivo_First(
+			long organizationId, boolean attivo,
+			com.liferay.portal.kernel.util.OrderByComparator<ServizioEnte>
+				orderByComparator)
+		throws NoSuchServizioEnteException;
+
+	/**
+	 * Returns the first servizio ente in the ordered set where organizationId = &#63; and attivo = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param attivo the attivo
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching servizio ente, or <code>null</code> if a matching servizio ente could not be found
+	 */
+	public ServizioEnte fetchByOrganizationIdAttivo_First(
+		long organizationId, boolean attivo,
+		com.liferay.portal.kernel.util.OrderByComparator<ServizioEnte>
+			orderByComparator);
+
+	/**
+	 * Returns the last servizio ente in the ordered set where organizationId = &#63; and attivo = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param attivo the attivo
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching servizio ente
+	 * @throws NoSuchServizioEnteException if a matching servizio ente could not be found
+	 */
+	public ServizioEnte findByOrganizationIdAttivo_Last(
+			long organizationId, boolean attivo,
+			com.liferay.portal.kernel.util.OrderByComparator<ServizioEnte>
+				orderByComparator)
+		throws NoSuchServizioEnteException;
+
+	/**
+	 * Returns the last servizio ente in the ordered set where organizationId = &#63; and attivo = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param attivo the attivo
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching servizio ente, or <code>null</code> if a matching servizio ente could not be found
+	 */
+	public ServizioEnte fetchByOrganizationIdAttivo_Last(
+		long organizationId, boolean attivo,
+		com.liferay.portal.kernel.util.OrderByComparator<ServizioEnte>
+			orderByComparator);
+
+	/**
+	 * Returns the servizio entes before and after the current servizio ente in the ordered set where organizationId = &#63; and attivo = &#63;.
+	 *
+	 * @param servizioEntePK the primary key of the current servizio ente
+	 * @param organizationId the organization ID
+	 * @param attivo the attivo
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next servizio ente
+	 * @throws NoSuchServizioEnteException if a servizio ente with the primary key could not be found
+	 */
+	public ServizioEnte[] findByOrganizationIdAttivo_PrevAndNext(
+			it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK
+				servizioEntePK,
+			long organizationId, boolean attivo,
+			com.liferay.portal.kernel.util.OrderByComparator<ServizioEnte>
+				orderByComparator)
+		throws NoSuchServizioEnteException;
+
+	/**
+	 * Removes all the servizio entes where organizationId = &#63; and attivo = &#63; from the database.
+	 *
+	 * @param organizationId the organization ID
+	 * @param attivo the attivo
+	 */
+	public void removeByOrganizationIdAttivo(
+		long organizationId, boolean attivo);
+
+	/**
+	 * Returns the number of servizio entes where organizationId = &#63; and attivo = &#63;.
+	 *
+	 * @param organizationId the organization ID
+	 * @param attivo the attivo
+	 * @return the number of matching servizio entes
+	 */
+	public int countByOrganizationIdAttivo(long organizationId, boolean attivo);
+
+	/**
 	 * Caches the servizio ente in the entity cache if it is enabled.
 	 *
 	 * @param servizioEnte the servizio ente

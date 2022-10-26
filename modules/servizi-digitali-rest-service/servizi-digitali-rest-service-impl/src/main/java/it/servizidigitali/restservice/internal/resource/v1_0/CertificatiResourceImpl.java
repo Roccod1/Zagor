@@ -1,24 +1,6 @@
 package it.servizidigitali.restservice.internal.resource.v1_0;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.liferay.expando.kernel.model.ExpandoColumn;
-import com.liferay.expando.kernel.model.ExpandoValue;
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
-import com.liferay.portal.kernel.exception.NoSuchUserException;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Organization;
-import com.liferay.portal.kernel.service.GroupLocalService;
-import com.liferay.portal.kernel.service.OrganizationLocalService;
-import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.portal.kernel.util.Validator;
-
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +13,32 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.expando.kernel.model.ExpandoColumn;
+import com.liferay.expando.kernel.model.ExpandoValue;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.NoSuchUserException;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.Validator;
+
 import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletService;
+import it.servizidigitali.chatbot.service.RichiestaCertificatoLocalService;
 import it.servizidigitali.common.utility.LayoutUtility;
 import it.servizidigitali.common.utility.enumeration.StatoRichiestaCertificato;
+import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneenti.model.ServizioEnte;
 import it.servizidigitali.gestioneenti.service.ServizioEnteLocalService;
 import it.servizidigitali.gestioneenti.service.persistence.ServizioEntePK;
@@ -45,6 +50,7 @@ import it.servizidigitali.gestioneprocedure.model.ProceduraForm;
 import it.servizidigitali.gestioneprocedure.service.ProceduraFormLocalService;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.gestioneservizi.model.Tipologia;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.gestioneservizi.service.TipologiaLocalService;
 import it.servizidigitali.presentatoreforms.common.model.AlpacaJsonStructure;
@@ -54,6 +60,8 @@ import it.servizidigitali.presentatoreforms.common.service.integration.exception
 import it.servizidigitali.presentatoreforms.common.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.common.util.AlpacaUtil;
 import it.servizidigitali.restservice.dto.v1_0.RichiestaCertificato;
+import it.servizidigitali.restservice.internal.constant.ServiziDigitaliRestConstants;
+import it.servizidigitali.restservice.internal.util.MessageUtil;
 import it.servizidigitali.restservice.jwt.utility.api.JwtUtilityService;
 import it.servizidigitali.restservice.jwt.utility.constant.JWTUtilityConstant;
 import it.servizidigitali.restservice.jwt.utility.exception.JwtException;
@@ -110,11 +118,13 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 
 	@Reference
 	private TipologiaLocalService tipologiaLocalService;
+	@Reference
+	private RichiestaCertificatoLocalService richiestaCertificatoLocalService;
 
 	@Override
 	public RichiestaCertificato checkInvioCertificato(@NotNull String userToken, String nomeComune, Long idDestinazioneUso, String codiceServizio, String amministrazione, String codiceFiscale)
 			throws Exception {
-
+		MessageUtil messageUtil = new MessageUtil(ServiziDigitaliRestConstants.BUNDLE_SYMBOLIC_NAME, null);
 		RichiestaCertificato richiestaCertificato = new RichiestaCertificato();
 
 		try {
@@ -139,27 +149,20 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				return richiestaCertificato;
 			}
 
-			// TODO verificare come mai non carica le tipologie
-			// List<Tipologia> tipologie = servizio.getListaTipologie();
-			// if (tipologie == null || tipologie.isEmpty()) {
-			// richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
-			// richiestaCertificato.setMessaggio("Servizio " + codiceServizio + " non trovato.");
-			// return richiestaCertificato;
-			// }
+			List<Tipologia> tipologie = tipologiaLocalService.getServizioTipologias(servizio.getServizioId());
+			if (tipologie == null || tipologie.isEmpty()) {
+				richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
+				richiestaCertificato.setMessaggio("Tipologie non trovate.");
+				return richiestaCertificato;
+			}
 
-			// boolean checkTipologia = false;
-			// for (Tipologia tipologia : tipologie) {
-			// if (tipologia.getCodice() != null &&
-			// tipologia.getCodice().equals(TipoServizio.CERTIFICATO)) {
-			// checkTipologia = true;
-			// }
-			// }
+			boolean checkTipologia = tipologie.stream().filter(x -> TipoServizio.CERTIFICATO.equals(TipoServizio.valueOf(x.getCodice()))).findFirst().isPresent();
 
-			// if (!checkTipologia) {
-			// richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
-			// richiestaCertificato.setMessaggio("Servizio " + codiceServizio + " non trovato.");
-			// return richiestaCertificato;
-			// }
+			if (!checkTipologia) {
+				richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
+				richiestaCertificato.setMessaggio("Tipologia certificato non trovato.");
+				return richiestaCertificato;
+			}
 
 			ServizioEntePK servizioEntePK = new ServizioEntePK(servizio.getServizioId(), organization.getOrganizationId());
 			ServizioEnte servizioEnte = servizioEnteLocalService.getServizioEnte(servizioEntePK);
@@ -177,10 +180,10 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
 				if (destinazioneUso != null && destinazioneUso.isPagamentoBollo()) {
 					richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
-					String messaggio = "Non &eacute; stato possibile procedere con la generazione automatica del {{nomeServizio}} in quanto la destinazione d'uso scelta prevede l'esecuzione di un pagamento elettronico. Accedi al servizio disponibile via web ({{linkServizio}}) per procedere con questa operazione.";
-					messaggio = messaggio.replace("{{nomeServizio}}", servizio.getNome());
 					String uri = layoutUtility.getPathByLayoutId(servizioEnte.getPrivateLayoutId(), organization.getGroupId(), organization.getCompanyId());
-					messaggio = messaggio.replace("{{linkServizio}}", uri);
+
+					String messaggio = messageUtil.getMessage("errorePagamentoElettonico", servizio.getNome(), uri);
+
 					richiestaCertificato.setMessaggio(messaggio);
 					return richiestaCertificato;
 				}
@@ -238,6 +241,7 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 	@Override
 	public RichiestaCertificato invioCertificato(@NotNull String userToken, String nomeComune, Long idDestinazioneUso, String codiceServizio, String amministrazione, String codiceFiscale)
 			throws Exception {
+		MessageUtil messageUtil = new MessageUtil(ServiziDigitaliRestConstants.BUNDLE_SYMBOLIC_NAME, null);
 
 		try {
 
@@ -245,7 +249,7 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 
 			Map<String, Object> claims = _jwtUtilityService.verifyJwtAndGetClaims(userToken);
 			String codiceFiscaleFromToken = (String) claims.get(JWTUtilityConstant.CLAIM_USERNAME);
-			Organization organization = getOrganization(null, amministrazione);
+			Organization organization = getOrganization(nomeComune, amministrazione);
 
 			Servizio servizio = servizioLocalService.getServizioByCodice(codiceServizio);
 			List<DestinazioneUso> destinazioniUso = destinazioneUsoLocalService.getDestinazioniUsoByServizioIdOrganizationId(servizio.getServizioId(), organization.getOrganizationId(),
@@ -257,28 +261,41 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
 				if (destinazioneUso != null && destinazioneUso.isPagamentoBollo()) {
 					richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
-					String messaggio = "Non &eacute; stato possibile procedere con la generazione automatica del {{nomeServizio}} in quanto la destinazione d'uso scelta prevede l'esecuzione di un pagamento elettronico. Accedi al servizio disponibile via web ({{linkServizio}}) per procedere con questa operazione.";
-					messaggio = messaggio.replace("{{nomeServizio}}", servizio.getNome());
 					String uri = layoutUtility.getPathByLayoutId(servizioEnte.getPrivateLayoutId(), organization.getGroupId(), organization.getCompanyId());
-					messaggio = messaggio.replace("{{linkServizio}}", uri);
+
+					String messaggio = messageUtil.getMessage("errorePagamentoElettonico", servizio.getNome(), uri);
+
 					richiestaCertificato.setMessaggio(messaggio);
 					return richiestaCertificato;
 				}
 			}
 
-			// richiestaCertificato.setDataInserimento(new Date());
-			// richiestaCertificato.setStato(StatoRichiestaCertificato.NUOVA.name());
-			// richiestaCertificato.setProfiloUtenteCittadino(profiloUtenteCittadino);
-			// richiestaCertificato.setCodiceFiscale(codiceFiscale);
-			// richiestaCertificato.setServizio(servizio);
-			// richiestaCertificato.setComuneIsa(comuneIsa);
-
-			if (idDestinazioneUso != null) {
-				DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
-				if (destinazioneUso != null) {
-					// richiestaCertificato.setDestinazioneUso(destinazioneUso);
-				}
-			}
+			User user = userLocalService.getUserByScreenName(organization.getCompanyId(), codiceFiscaleFromToken);
+			Date now = new Date();
+			
+			long id = CounterLocalServiceUtil.increment(
+					it.servizidigitali.chatbot.model.RichiestaCertificato.class.getName());
+			it.servizidigitali.chatbot.model.RichiestaCertificato rc = richiestaCertificatoLocalService
+					.createRichiestaCertificato(id);
+			rc.setGroupId(organization.getGroupId());
+			rc.setCompanyId(organization.getCompanyId());
+			rc.setUserId(user.getUserId());
+			rc.setUserName(user.getFullName());
+			rc.setCreateDate(now);
+			rc.setModifiedDate(now);
+			rc.setCodiceFiscale(codiceFiscaleFromToken);
+			rc.setStato(StatoRichiestaCertificato.NUOVA.name());
+			rc.setErrore(null);
+			rc.setServizioId(servizio.getServizioId());
+			rc.setDestinazioneUsoId(idDestinazioneUso);
+			
+			rc = richiestaCertificatoLocalService.updateRichiestaCertificato(rc);
+			
+			richiestaCertificato.setDataInserimento(rc.getCreateDate());
+			richiestaCertificato.setDataAggiornamento(rc.getModifiedDate());
+			richiestaCertificato.setEmail(user.getEmailAddress());
+			richiestaCertificato.setId(id);
+			richiestaCertificato.setStato(rc.getStato());
 
 			return richiestaCertificato;
 
