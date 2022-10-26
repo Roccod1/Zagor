@@ -232,6 +232,10 @@ public interface ProvinciaLocalService
 	public Provincia getProvincia(long provinciaId) throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Provincia> getProvinciaByDenominazioneRegione(
+		String denominazioneRegione);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Provincia getProvinciaBySigla(String sigla);
 
 	/**

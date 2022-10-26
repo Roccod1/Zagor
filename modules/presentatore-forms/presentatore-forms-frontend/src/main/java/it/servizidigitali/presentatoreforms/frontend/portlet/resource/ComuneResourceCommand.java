@@ -19,8 +19,8 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.common.model.Comune;
 import it.servizidigitali.common.service.ComuneLocalService;
+import it.servizidigitali.presentatoreforms.common.model.AlpacaDatasource;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
-import it.servizidigitali.presentatoreforms.frontend.util.model.AlpacaDatasource;
 
 @Component(immediate = true, property = { //
 		"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //

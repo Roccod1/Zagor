@@ -248,6 +248,9 @@ public interface ComuneLocalService
 			String denominazioneRegione);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Comune> getComuniByIdRegione(long idRegione);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Comune> getComuniByProvinciaId(long provinciaId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

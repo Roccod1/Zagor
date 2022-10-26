@@ -267,6 +267,10 @@ public class ComuneLocalServiceUtil {
 				idProvincia, siglaProvincia, denominazioneRegione);
 	}
 
+	public static List<Comune> getComuniByIdRegione(long idRegione) {
+		return getService().getComuniByIdRegione(idRegione);
+	}
+
 	public static List<Comune> getComuniByProvinciaId(long provinciaId) {
 		return getService().getComuniByProvinciaId(provinciaId);
 	}

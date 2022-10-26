@@ -301,6 +301,13 @@ public class ComuneLocalServiceWrapper
 
 	@Override
 	public java.util.List<it.servizidigitali.common.model.Comune>
+		getComuniByIdRegione(long idRegione) {
+
+		return _comuneLocalService.getComuniByIdRegione(idRegione);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.common.model.Comune>
 		getComuniByProvinciaId(long provinciaId) {
 
 		return _comuneLocalService.getComuniByProvinciaId(provinciaId);

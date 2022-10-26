@@ -97,7 +97,7 @@ function disableElement(element){
 		if(!toDisable.getValue()){
 			//toDisable.getControlEl().attr("disabled", true);
 			toDisable.options.disabled = true;
-			toDisable.refresh();
+			toDisable.disable();
 		}
 	}
 };
@@ -110,7 +110,7 @@ function enableElement(element){
 		var toEnable = element.parent.childrenByPropertyId[name];
 		if(toEnable.options.fieldClass.search('settorePrincipale') === -1){
 			toEnable.options.disabled = false;
-			toEnable.refresh();
+			toEnable.enable();
 		}		
 	}
 
@@ -124,7 +124,7 @@ function removeFlagPrincipale(element){
 		var toRemovePrincipale = element.parent.childrenByPropertyId[name];
 		if(toRemovePrincipale.options.fieldClass.search('settorePrincipale') !== -1){
 			toRemovePrincipale.options.fieldClass = toRemovePrincipale.options.fieldClass.replace(' settorePrincipale', '');
-			toRemovePrincipale.refresh();
+			toRemovePrincipale.getFieldEl().removeClass("settorePrincipale");
 		}
 	}
 
@@ -496,8 +496,8 @@ function removeFlagPrincipale(element){
 									
 									if(Number(counterHidden.getValue()) >= 5 && !checkBox.getValue()){
 										this.setValue();
-										this.options.helpers = ["Inserire uno dei settori selezionati!"];
-										this.refresh();
+										this.displayMessage();
+										this.displayMessage("Inserire uno dei settori selezionati!");
 									}else{	
 										removeFlagPrincipale(this);
 										enableElement(this);
@@ -520,14 +520,16 @@ function removeFlagPrincipale(element){
 												$('input[name=settoreMerceologico_'+ name + ']').click();
 	
 												settore.options.disabled = true;
+												settore.disable();
 												settore.options.fieldClass += " settorePrincipale";
-												settore.refresh();
-												
+												settore.getFieldEl().addClass("settorePrincipale");												
 											} else {
 												/* is checked */
 												settore.options.disabled = true;
+												settore.disable();
 												settore.options.fieldClass += " settorePrincipale";
-												settore.refresh();
+												settore.getFieldEl().addClass("settorePrincipale");												
+
 											}
 											
 											$('input[name=settoreMerciPenultimo_settorePrincipale]').val(this.getValue());
@@ -549,8 +551,10 @@ function removeFlagPrincipale(element){
 											var settore = $(".alpaca-form").alpaca('get').childrenByPropertyId['settoreMerciPenultimo'].childrenByPropertyId[name];
 												
 											settore.options.disabled = true;
+											settore.disable();
 											settore.options.fieldClass += " settorePrincipale";
-											settore.refresh();
+											settore.getFieldEl().addClass("settorePrincipale");												
+
 											
 											
 										}else if (this.name.search("settoreMerciUltimo") !== -1){
@@ -562,8 +566,10 @@ function removeFlagPrincipale(element){
 											var settore = $(".alpaca-form").alpaca('get').childrenByPropertyId['settoreMerciUltimo'].childrenByPropertyId[name];
 	
 											settore.options.disabled = true;
+											settore.disable();
 											settore.options.fieldClass += " settorePrincipale";
-											settore.refresh();
+											settore.getFieldEl().addClass("settorePrincipale");												
+
 											
 											
 										}
@@ -575,8 +581,8 @@ function removeFlagPrincipale(element){
 									}
 								} else {
 									this.setValue();
-									this.options.helpers = ["Inserire un valore intero tra 1 e " + totalCheck + "!"];
-									this.refresh();
+									this.displayMessage();
+									this.displayMessage("Inserire un valore intero tra 1 e " + totalCheck + "!");
 								}
 							}
 						}

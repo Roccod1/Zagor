@@ -107,6 +107,10 @@
 		<finder name="CodiceRegione" return-type="Collection">
 			<finder-column name="codiceRegione" />
 		</finder>
+		
+		<finder name="DenominazioneRegione" return-type="Collection">
+			<finder-column name="denominazioneRegione" />
+		</finder>
 
 		<finder name="Sigla" return-type="Provincia">
 			<finder-column name="sigla" />

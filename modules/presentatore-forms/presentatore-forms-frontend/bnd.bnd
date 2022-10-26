@@ -5,39 +5,4 @@ Bundle-Version: 1.0.0
 Export-Package: \
 	it.servizidigitali.presentatoreforms.frontend.constants
 
-Import-Package: \
-  	!com.sun.org.apache.xml.internal.utils,\
-  	!com.sun.org.apache.xpath.internal,\
-  	!com.sun.org.apache.xpath.internal.objects,\
-  	!org.apache.log,\
-  	!org.apache.tools.ant.*,\
-  	!org.apache.xml.utils,\
-  	!org.apache.xpath.*,\
-  	!org.jdom.*,\
-  	!org.mozilla.javascript,\
-  	!org.python.core,\
-  	!org.python.util,\
-  	!org.zeroturnaround.javarebel,\
-  	!antlr.*, \
-  	!com.adobe.*, \
-  	!com.drew.*, \
-  	!com.github.*, \
-  	!com.google.zxing.*, \
-  	!com.ibm.*, \
-  	!groovy.*, \
-  	!junit.*, \
-  	!mondrian.*, \
-  	!net.sf.jasperreports.annotations.*, \
-  	!net.sf.jasperreports.metadata.*, \
-  	!net.sourceforge.*, \
-  	!org.apache.*, \
-  	!org.codehaus.*, \
-  	!org.eclipse.jdt.*, \
-  	!org.kohsuke.*, \
-  	!org.krysalis.*, \
-  	!org.mozilla.javascript.*, \
-  	!org.olap4j.*, \
-  	!org.w3c.dom.svg.*, \
-  	*
-  	  	
  -fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning

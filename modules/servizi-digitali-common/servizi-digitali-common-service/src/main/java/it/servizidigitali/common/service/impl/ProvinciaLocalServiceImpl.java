@@ -14,6 +14,8 @@ package it.servizidigitali.common.service.impl;
 
 import com.liferay.portal.aop.AopService;
 
+import java.util.List;
+
 import org.osgi.service.component.annotations.Component;
 
 import it.servizidigitali.common.exception.NoSuchProvinciaException;
@@ -33,5 +35,9 @@ public class ProvinciaLocalServiceImpl extends ProvinciaLocalServiceBaseImpl {
 		catch (NoSuchProvinciaException e) {
 		}
 		return null;
+	}
+	
+	public List<Provincia> getProvinciaByDenominazioneRegione(String denominazioneRegione) {
+		return provinciaPersistence.findByDenominazioneRegione(denominazioneRegione);
 	}
 }

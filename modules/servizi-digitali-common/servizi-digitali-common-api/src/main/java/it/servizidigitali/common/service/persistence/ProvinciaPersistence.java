@@ -230,6 +230,150 @@ public interface ProvinciaPersistence extends BasePersistence<Provincia> {
 	public int countByCodiceRegione(long codiceRegione);
 
 	/**
+	 * Returns all the provincias where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @return the matching provincias
+	 */
+	public java.util.List<Provincia> findByDenominazioneRegione(
+		String denominazioneRegione);
+
+	/**
+	 * Returns a range of all the provincias where denominazioneRegione = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProvinciaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param start the lower bound of the range of provincias
+	 * @param end the upper bound of the range of provincias (not inclusive)
+	 * @return the range of matching provincias
+	 */
+	public java.util.List<Provincia> findByDenominazioneRegione(
+		String denominazioneRegione, int start, int end);
+
+	/**
+	 * Returns an ordered range of all the provincias where denominazioneRegione = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProvinciaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param start the lower bound of the range of provincias
+	 * @param end the upper bound of the range of provincias (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching provincias
+	 */
+	public java.util.List<Provincia> findByDenominazioneRegione(
+		String denominazioneRegione, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<Provincia>
+			orderByComparator);
+
+	/**
+	 * Returns an ordered range of all the provincias where denominazioneRegione = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProvinciaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param start the lower bound of the range of provincias
+	 * @param end the upper bound of the range of provincias (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching provincias
+	 */
+	public java.util.List<Provincia> findByDenominazioneRegione(
+		String denominazioneRegione, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<Provincia>
+			orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns the first provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching provincia
+	 * @throws NoSuchProvinciaException if a matching provincia could not be found
+	 */
+	public Provincia findByDenominazioneRegione_First(
+			String denominazioneRegione,
+			com.liferay.portal.kernel.util.OrderByComparator<Provincia>
+				orderByComparator)
+		throws NoSuchProvinciaException;
+
+	/**
+	 * Returns the first provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching provincia, or <code>null</code> if a matching provincia could not be found
+	 */
+	public Provincia fetchByDenominazioneRegione_First(
+		String denominazioneRegione,
+		com.liferay.portal.kernel.util.OrderByComparator<Provincia>
+			orderByComparator);
+
+	/**
+	 * Returns the last provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching provincia
+	 * @throws NoSuchProvinciaException if a matching provincia could not be found
+	 */
+	public Provincia findByDenominazioneRegione_Last(
+			String denominazioneRegione,
+			com.liferay.portal.kernel.util.OrderByComparator<Provincia>
+				orderByComparator)
+		throws NoSuchProvinciaException;
+
+	/**
+	 * Returns the last provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching provincia, or <code>null</code> if a matching provincia could not be found
+	 */
+	public Provincia fetchByDenominazioneRegione_Last(
+		String denominazioneRegione,
+		com.liferay.portal.kernel.util.OrderByComparator<Provincia>
+			orderByComparator);
+
+	/**
+	 * Returns the provincias before and after the current provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param provinciaId the primary key of the current provincia
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next provincia
+	 * @throws NoSuchProvinciaException if a provincia with the primary key could not be found
+	 */
+	public Provincia[] findByDenominazioneRegione_PrevAndNext(
+			long provinciaId, String denominazioneRegione,
+			com.liferay.portal.kernel.util.OrderByComparator<Provincia>
+				orderByComparator)
+		throws NoSuchProvinciaException;
+
+	/**
+	 * Removes all the provincias where denominazioneRegione = &#63; from the database.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 */
+	public void removeByDenominazioneRegione(String denominazioneRegione);
+
+	/**
+	 * Returns the number of provincias where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @return the number of matching provincias
+	 */
+	public int countByDenominazioneRegione(String denominazioneRegione);
+
+	/**
 	 * Returns the provincia where sigla = &#63; or throws a <code>NoSuchProvinciaException</code> if it could not be found.
 	 *
 	 * @param sigla the sigla

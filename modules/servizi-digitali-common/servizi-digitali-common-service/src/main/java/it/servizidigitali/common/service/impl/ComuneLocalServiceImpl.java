@@ -53,6 +53,11 @@ public class ComuneLocalServiceImpl extends ComuneLocalServiceBaseImpl {
 	public List<Comune> getComuniByProvinciaId(long provinciaId) {
 		return comunePersistence.findByIdProvincia(provinciaId);
 	}
+	
+	@Override
+	public List<Comune> getComuniByIdRegione(long idRegione) {
+		return comunePersistence.findByidRegione(idRegione);
+	}
 
 	public List<Comune> getComuniByIdProvinciaSiglaProvinciaDenominazioneRegione(Long idProvincia, String siglaProvincia, String denominazioneRegione) {
 		return comuneFinder.findByArguments(idProvincia, siglaProvincia, denominazioneRegione);

@@ -128,7 +128,13 @@ public class ProvinciaModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long SIGLA_COLUMN_BITMASK = 4L;
+	public static final long DENOMINAZIONEREGIONE_COLUMN_BITMASK = 4L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long SIGLA_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -461,6 +467,15 @@ public class ProvinciaModelImpl
 		}
 
 		_denominazioneRegione = denominazioneRegione;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public String getOriginalDenominazioneRegione() {
+		return getColumnOriginalValue("denominazioneRegione");
 	}
 
 	@Override

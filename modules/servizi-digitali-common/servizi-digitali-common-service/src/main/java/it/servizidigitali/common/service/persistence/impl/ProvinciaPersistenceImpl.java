@@ -833,6 +833,566 @@ public class ProvinciaPersistenceImpl
 	private static final String _FINDER_COLUMN_CODICEREGIONE_CODICEREGIONE_2 =
 		"provincia.codiceRegione = ?";
 
+	private FinderPath _finderPathWithPaginationFindByDenominazioneRegione;
+	private FinderPath _finderPathWithoutPaginationFindByDenominazioneRegione;
+	private FinderPath _finderPathCountByDenominazioneRegione;
+
+	/**
+	 * Returns all the provincias where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @return the matching provincias
+	 */
+	@Override
+	public List<Provincia> findByDenominazioneRegione(
+		String denominazioneRegione) {
+
+		return findByDenominazioneRegione(
+			denominazioneRegione, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the provincias where denominazioneRegione = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProvinciaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param start the lower bound of the range of provincias
+	 * @param end the upper bound of the range of provincias (not inclusive)
+	 * @return the range of matching provincias
+	 */
+	@Override
+	public List<Provincia> findByDenominazioneRegione(
+		String denominazioneRegione, int start, int end) {
+
+		return findByDenominazioneRegione(
+			denominazioneRegione, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the provincias where denominazioneRegione = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProvinciaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param start the lower bound of the range of provincias
+	 * @param end the upper bound of the range of provincias (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching provincias
+	 */
+	@Override
+	public List<Provincia> findByDenominazioneRegione(
+		String denominazioneRegione, int start, int end,
+		OrderByComparator<Provincia> orderByComparator) {
+
+		return findByDenominazioneRegione(
+			denominazioneRegione, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the provincias where denominazioneRegione = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>ProvinciaModelImpl</code>.
+	 * </p>
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param start the lower bound of the range of provincias
+	 * @param end the upper bound of the range of provincias (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching provincias
+	 */
+	@Override
+	public List<Provincia> findByDenominazioneRegione(
+		String denominazioneRegione, int start, int end,
+		OrderByComparator<Provincia> orderByComparator,
+		boolean useFinderCache) {
+
+		denominazioneRegione = Objects.toString(denominazioneRegione, "");
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath =
+					_finderPathWithoutPaginationFindByDenominazioneRegione;
+				finderArgs = new Object[] {denominazioneRegione};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByDenominazioneRegione;
+			finderArgs = new Object[] {
+				denominazioneRegione, start, end, orderByComparator
+			};
+		}
+
+		List<Provincia> list = null;
+
+		if (useFinderCache) {
+			list = (List<Provincia>)finderCache.getResult(
+				finderPath, finderArgs);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (Provincia provincia : list) {
+					if (!denominazioneRegione.equals(
+							provincia.getDenominazioneRegione())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(3);
+			}
+
+			sb.append(_SQL_SELECT_PROVINCIA_WHERE);
+
+			boolean bindDenominazioneRegione = false;
+
+			if (denominazioneRegione.isEmpty()) {
+				sb.append(
+					_FINDER_COLUMN_DENOMINAZIONEREGIONE_DENOMINAZIONEREGIONE_3);
+			}
+			else {
+				bindDenominazioneRegione = true;
+
+				sb.append(
+					_FINDER_COLUMN_DENOMINAZIONEREGIONE_DENOMINAZIONEREGIONE_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(ProvinciaModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindDenominazioneRegione) {
+					queryPos.add(denominazioneRegione);
+				}
+
+				list = (List<Provincia>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching provincia
+	 * @throws NoSuchProvinciaException if a matching provincia could not be found
+	 */
+	@Override
+	public Provincia findByDenominazioneRegione_First(
+			String denominazioneRegione,
+			OrderByComparator<Provincia> orderByComparator)
+		throws NoSuchProvinciaException {
+
+		Provincia provincia = fetchByDenominazioneRegione_First(
+			denominazioneRegione, orderByComparator);
+
+		if (provincia != null) {
+			return provincia;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("denominazioneRegione=");
+		sb.append(denominazioneRegione);
+
+		sb.append("}");
+
+		throw new NoSuchProvinciaException(sb.toString());
+	}
+
+	/**
+	 * Returns the first provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching provincia, or <code>null</code> if a matching provincia could not be found
+	 */
+	@Override
+	public Provincia fetchByDenominazioneRegione_First(
+		String denominazioneRegione,
+		OrderByComparator<Provincia> orderByComparator) {
+
+		List<Provincia> list = findByDenominazioneRegione(
+			denominazioneRegione, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching provincia
+	 * @throws NoSuchProvinciaException if a matching provincia could not be found
+	 */
+	@Override
+	public Provincia findByDenominazioneRegione_Last(
+			String denominazioneRegione,
+			OrderByComparator<Provincia> orderByComparator)
+		throws NoSuchProvinciaException {
+
+		Provincia provincia = fetchByDenominazioneRegione_Last(
+			denominazioneRegione, orderByComparator);
+
+		if (provincia != null) {
+			return provincia;
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("denominazioneRegione=");
+		sb.append(denominazioneRegione);
+
+		sb.append("}");
+
+		throw new NoSuchProvinciaException(sb.toString());
+	}
+
+	/**
+	 * Returns the last provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching provincia, or <code>null</code> if a matching provincia could not be found
+	 */
+	@Override
+	public Provincia fetchByDenominazioneRegione_Last(
+		String denominazioneRegione,
+		OrderByComparator<Provincia> orderByComparator) {
+
+		int count = countByDenominazioneRegione(denominazioneRegione);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Provincia> list = findByDenominazioneRegione(
+			denominazioneRegione, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the provincias before and after the current provincia in the ordered set where denominazioneRegione = &#63;.
+	 *
+	 * @param provinciaId the primary key of the current provincia
+	 * @param denominazioneRegione the denominazione regione
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next provincia
+	 * @throws NoSuchProvinciaException if a provincia with the primary key could not be found
+	 */
+	@Override
+	public Provincia[] findByDenominazioneRegione_PrevAndNext(
+			long provinciaId, String denominazioneRegione,
+			OrderByComparator<Provincia> orderByComparator)
+		throws NoSuchProvinciaException {
+
+		denominazioneRegione = Objects.toString(denominazioneRegione, "");
+
+		Provincia provincia = findByPrimaryKey(provinciaId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Provincia[] array = new ProvinciaImpl[3];
+
+			array[0] = getByDenominazioneRegione_PrevAndNext(
+				session, provincia, denominazioneRegione, orderByComparator,
+				true);
+
+			array[1] = provincia;
+
+			array[2] = getByDenominazioneRegione_PrevAndNext(
+				session, provincia, denominazioneRegione, orderByComparator,
+				false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Provincia getByDenominazioneRegione_PrevAndNext(
+		Session session, Provincia provincia, String denominazioneRegione,
+		OrderByComparator<Provincia> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(3);
+		}
+
+		sb.append(_SQL_SELECT_PROVINCIA_WHERE);
+
+		boolean bindDenominazioneRegione = false;
+
+		if (denominazioneRegione.isEmpty()) {
+			sb.append(
+				_FINDER_COLUMN_DENOMINAZIONEREGIONE_DENOMINAZIONEREGIONE_3);
+		}
+		else {
+			bindDenominazioneRegione = true;
+
+			sb.append(
+				_FINDER_COLUMN_DENOMINAZIONEREGIONE_DENOMINAZIONEREGIONE_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(ProvinciaModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		if (bindDenominazioneRegione) {
+			queryPos.add(denominazioneRegione);
+		}
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(provincia)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<Provincia> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the provincias where denominazioneRegione = &#63; from the database.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 */
+	@Override
+	public void removeByDenominazioneRegione(String denominazioneRegione) {
+		for (Provincia provincia :
+				findByDenominazioneRegione(
+					denominazioneRegione, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+					null)) {
+
+			remove(provincia);
+		}
+	}
+
+	/**
+	 * Returns the number of provincias where denominazioneRegione = &#63;.
+	 *
+	 * @param denominazioneRegione the denominazione regione
+	 * @return the number of matching provincias
+	 */
+	@Override
+	public int countByDenominazioneRegione(String denominazioneRegione) {
+		denominazioneRegione = Objects.toString(denominazioneRegione, "");
+
+		FinderPath finderPath = _finderPathCountByDenominazioneRegione;
+
+		Object[] finderArgs = new Object[] {denominazioneRegione};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_PROVINCIA_WHERE);
+
+			boolean bindDenominazioneRegione = false;
+
+			if (denominazioneRegione.isEmpty()) {
+				sb.append(
+					_FINDER_COLUMN_DENOMINAZIONEREGIONE_DENOMINAZIONEREGIONE_3);
+			}
+			else {
+				bindDenominazioneRegione = true;
+
+				sb.append(
+					_FINDER_COLUMN_DENOMINAZIONEREGIONE_DENOMINAZIONEREGIONE_2);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindDenominazioneRegione) {
+					queryPos.add(denominazioneRegione);
+				}
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_DENOMINAZIONEREGIONE_DENOMINAZIONEREGIONE_2 =
+			"provincia.denominazioneRegione = ?";
+
+	private static final String
+		_FINDER_COLUMN_DENOMINAZIONEREGIONE_DENOMINAZIONEREGIONE_3 =
+			"(provincia.denominazioneRegione IS NULL OR provincia.denominazioneRegione = '')";
+
 	private FinderPath _finderPathFetchBySigla;
 	private FinderPath _finderPathCountBySigla;
 
@@ -1632,6 +2192,26 @@ public class ProvinciaPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCodiceRegione",
 			new String[] {Long.class.getName()}, new String[] {"codiceRegione"},
 			false);
+
+		_finderPathWithPaginationFindByDenominazioneRegione = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByDenominazioneRegione",
+			new String[] {
+				String.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {"denominazioneRegione"}, true);
+
+		_finderPathWithoutPaginationFindByDenominazioneRegione = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByDenominazioneRegione", new String[] {String.class.getName()},
+			new String[] {"denominazioneRegione"}, true);
+
+		_finderPathCountByDenominazioneRegione = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByDenominazioneRegione",
+			new String[] {String.class.getName()},
+			new String[] {"denominazioneRegione"}, false);
 
 		_finderPathFetchBySigla = new FinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchBySigla",
