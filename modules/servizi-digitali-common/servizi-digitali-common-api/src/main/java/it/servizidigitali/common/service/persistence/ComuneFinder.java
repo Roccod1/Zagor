@@ -26,4 +26,9 @@ public interface ComuneFinder {
 	public it.servizidigitali.common.model.Comune findComuneByCodiceISTAT(
 		String codiceISTAT);
 
+	public java.util.List<it.servizidigitali.common.model.Comune>
+		findByArguments(
+			Long idProvincia, String siglaProvincia,
+			String denominazioneRegione);
+
 }
