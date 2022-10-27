@@ -27,10 +27,10 @@ public interface ClientPagamentiEnteConfiguration {
 	@Meta.AD(required = false)
 	String clientWsdlUrl();
 
-	@Meta.AD(required = false, name = "Prefisso URL ricevuta pagamento", deflt = "https://pagopa-test.rupar.puglia.it/pa/report/ricevutaTelematica.html?id=")
+	@Meta.AD(required = false, name = "Prefisso URL ricevuta pagamento")
 	String ricevutaPagamentoPrefixUrl();
 
-	@Meta.AD(required = false)
+	@Meta.AD(deflt = "16.00", required = false)
 	BigDecimal importoPagamentoMarcaBolloDigitale();
 
 	@Meta.AD(required = false, name = "Codice dovuto Pagamento Bollo Digitale")
