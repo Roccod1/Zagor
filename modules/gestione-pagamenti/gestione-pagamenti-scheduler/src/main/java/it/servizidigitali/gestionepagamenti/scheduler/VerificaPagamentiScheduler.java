@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -132,27 +133,49 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 
 					it.servizidigitali.gestionepagamenti.integration.common.client.enumeration.StatoPagamento statoPagamento = verificaPagamento.getStatoPagamento();
 
-					_log.info("verificaPagamento :: ID: " + pagamentoId + ", stato: " + statoPagamento);
-
-					String statoRichiesta = StatoRichiesta.CHIUSA_POSITIVAMENTE.name();
+					_log.debug("verificaPagamento :: ID: " + pagamentoId + ", stato: " + statoPagamento);
 
 					long richiestaId = pagamento.getRichiestaId();
 					Richiesta richiesta = richiestaLocalService.getRichiesta(richiestaId);
+
 					Servizio servizio = servizioLocalService.getServizio(richiesta.getServizioId());
 
+					StatoRichiesta statoRichiesta = StatoRichiesta.valueOf(richiesta.getStato());
 					switch (statoPagamento) {
+					case IN_CORSO:
+					case NON_INIZIATO:
+						// Controllo tempo massimo verifica prima di aggiornare lo stato in
+						// NON_CONFERMATO
+						String verificaPagamentiSchedulerMaxDelayVerification = accountClientPagamentiEnteConfiguration.maxDelayPagamentoVerification();
+						long maxDelayVerificationDays = Long.parseLong(verificaPagamentiSchedulerMaxDelayVerification);
+						Date modifiedDate = pagamento.getModifiedDate();
+						Date now = new Date();
+						long differenceDays = getDifferenceDays(modifiedDate, now);
+
+						_log.debug("verificaPagamento :: maxDelayVerificationDays: " + maxDelayVerificationDays + ", differenceDays: " + differenceDays);
+
+						if (differenceDays > maxDelayVerificationDays) {
+							pagamento.setStato(StatoPagamento.NON_CONFERMATO.name());
+							pagamento.setErrore("Superato il numero massimo di giorni per la verifica del pagamento");
+							statoRichiesta = StatoRichiesta.STATO_NON_DISPONIBILE;
+						}
+						else {
+							continue;
+						}
+						break;
 					case ERRORE:
-						pagamento.setErrore(verificaPagamento.getCodiceErrore() + " - " + verificaPagamento.getDescrizioneErrore());
 						pagamento.setStato(StatoPagamento.ERRORE.name());
-						statoRichiesta = StatoRichiesta.CHIUSA_NEGATIVAMENTE.name();
+						pagamento.setErrore(verificaPagamento.getCodiceErrore() + " - " + verificaPagamento.getDescrizioneErrore());
+						statoRichiesta = StatoRichiesta.CHIUSA_NEGATIVAMENTE;
 						break;
 					case ANNULLATO:
 						pagamento.setStato(StatoPagamento.ANNULLATO.name());
-						statoRichiesta = StatoRichiesta.ANNULLATA.name();
+						statoRichiesta = StatoRichiesta.ANNULLATA;
 						break;
 					case COMPLETATO:
-						pagamento.setIud(verificaPagamento.getCodiceIuv());
 						pagamento.setStato(StatoPagamento.COMPLETATO.name());
+						statoRichiesta = StatoRichiesta.CHIUSA_POSITIVAMENTE;
+						pagamento.setIud(verificaPagamento.getCodiceIuv());
 						pagamento.setCommissioni(verificaPagamento.getImportoCommissioni());
 						pagamento.setRiferimentoEsternoId(verificaPagamento.getIdRichiesta());
 
@@ -192,17 +215,28 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 						continue;
 					}
 
-					richiesta.setStato(statoRichiesta);
+					richiesta.setStato(statoRichiesta.name());
 					richiestaLocalService.updateRichiesta(richiesta);
 					Pagamento pagamentoAggiornato = pagamentoLocalService.updatePagamento(pagamento);
 
-					_log.info("verificaPagamento :: pagamento con ID: " + pagamentoId + " aggiornato dallo stato " + statoIniziale + " allo stato " + pagamentoAggiornato.getStato());
+					_log.debug("verificaPagamento :: pagamento con ID: " + pagamentoId + " aggiornato dallo stato " + statoIniziale + " allo stato " + pagamentoAggiornato.getStato());
 				}
 				catch (Exception e) {
 					_log.error("doReceive :: errore durante la verifica del pagamento : " + pagamentoId + " :: " + e.getMessage(), e);
 				}
 			}
 		}
+	}
+
+	/**
+	 *
+	 * @param d1
+	 * @param d2
+	 * @return
+	 */
+	private long getDifferenceDays(Date d1, Date d2) {
+		long diff = d2.getTime() - d1.getTime();
+		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 	}
 
 	/**
