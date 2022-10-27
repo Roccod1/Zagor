@@ -17,7 +17,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.File;
-import java.io.InputStream;
 import java.sql.Timestamp;
 import java.time.Instant;
 
@@ -35,10 +34,14 @@ import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.pagamento.ebollo.frontend.constants.PagamentoEbolloFrontendPortletKeys;
 import it.servizidigitali.pagamento.ebollo.frontend.service.PagamentoEBolloService;
 
-@Component(immediate = true, property = {
-		"javax.portlet.name=" + PagamentoEbolloFrontendPortletKeys.PAGAMENTOEBOLLOFRONTEND,
-		"mvc.command.name=" + PagamentoEbolloFrontendPortletKeys.UPLOAD_FILE_ACTION_COMMAND }, service = {
-				MVCActionCommand.class })
+@Component(immediate = true, //
+		property = { //
+				"javax.portlet.name=" + PagamentoEbolloFrontendPortletKeys.PAGAMENTOEBOLLOFRONTEND, //
+				"mvc.command.name=" + PagamentoEbolloFrontendPortletKeys.UPLOAD_FILE_ACTION_COMMAND //
+		}, //
+		service = { MVCActionCommand.class }//
+) //
+
 public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 
 	private static final Log LOG = LogFactoryUtil.getLog(UploadFileMVCActionCommand.class.getName());
@@ -70,23 +73,22 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 		if (siteOrganizationId != 0) {
 			try {
 				Organization organization = organizationLocalService.getOrganization(siteOrganizationId);
-				codiceOrganizzazione = organization.getExpandoBridge()
-						.getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo()).toString();
+				codiceOrganizzazione = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_IPA.getNomeAttributo()).toString();
 
-				String codiceIstat = organization.getExpandoBridge()
-						.getAttribute(OrganizationCustomAttributes.CODICE_ISTAT.getNomeAttributo()).toString();
+				String codiceIstat = organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_ISTAT.getNomeAttributo()).toString();
 				Comune comune = comuneLocalService.getComuneByCodiceISTAT(codiceIstat);
 				if (Validator.isNotNull(comune)) {
 					provinciaResidenza = comune.getProvincia().getSigla();
 				}
-			} catch (PortalException e) {
+			}
+			catch (PortalException e) {
 				LOG.error(e.getMessage(), e);
 			}
 		}
 
 		UploadPortletRequest uploadPortletRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 
-		InputStream inputStream = uploadPortletRequest.getFileAsStream(PagamentoEbolloFrontendPortletKeys.FILE_TO_UPLOAD_ATTRIBUTE);
+		File file = uploadPortletRequest.getFile(PagamentoEbolloFrontendPortletKeys.FILE_TO_UPLOAD_ATTRIBUTE);
 
 		String fileName = uploadPortletRequest.getFileName(PagamentoEbolloFrontendPortletKeys.FILE_TO_UPLOAD_ATTRIBUTE);
 
@@ -97,10 +99,8 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 		String emailQuietanza = user.getEmailAddress();
 		long userId = user.getUserId();
 
-		LiferayPortletURL portletURL = PortletURLFactoryUtil.create(actionRequest, themeDisplay.getPpid(),
-				themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
-		portletURL.getRenderParameters().setValue("mvcRenderCommandName",
-				PagamentoEbolloFrontendPortletKeys.ESITO_PAGAMENTO_RENDER_COMMAND);
+		LiferayPortletURL portletURL = PortletURLFactoryUtil.create(actionRequest, themeDisplay.getPpid(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+		portletURL.getRenderParameters().setValue("mvcRenderCommandName", PagamentoEbolloFrontendPortletKeys.ESITO_PAGAMENTO_RENDER_COMMAND);
 
 		long servizioId = 0;
 		String nomeServizio = null;
@@ -114,17 +114,15 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 		}
 
 		try {
-			String redirectPagamentoBolloUrl = pagamentoEBolloService.pagaBollo(requestTime, inputStream, fileName,
-					siteGroupId, themeDisplay.getCompanyId(), servizioId, nomeServizio, codiceServizio, userId,
-					codiceOrganizzazione, provinciaResidenza, idFiscaleCliente, denominazioneCliente, emailQuietanza,
-					portletURL.toString());
+			String redirectPagamentoBolloUrl = pagamentoEBolloService.pagaBollo(requestTime, file, fileName, siteGroupId, themeDisplay.getCompanyId(), servizioId, nomeServizio, codiceServizio, userId,
+					codiceOrganizzazione, provinciaResidenza, idFiscaleCliente, denominazioneCliente, emailQuietanza, portletURL.toString());
 
-			actionRequest.setAttribute(PagamentoEbolloFrontendPortletKeys.REDIRECT_PAGAMENTO_BOLLO_URL,
-					redirectPagamentoBolloUrl);
+			actionRequest.setAttribute(PagamentoEbolloFrontendPortletKeys.REDIRECT_PAGAMENTO_BOLLO_URL, redirectPagamentoBolloUrl);
 
 			actionResponse.getRenderParameters().setValue("mvcPath", "/redirect.jsp");
 
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			String errorMessage = e.getMessage();
 			LOG.error(errorMessage, e);
 
@@ -133,6 +131,11 @@ public class UploadFileMVCActionCommand extends BaseMVCActionCommand {
 			actionResponse.getRenderParameters().setValue("mvcPath", "/view.jsp");
 
 			return;
+		}
+		finally {
+			if (file != null && !file.exists()) {
+				file.delete();
+			}
 		}
 	}
 }

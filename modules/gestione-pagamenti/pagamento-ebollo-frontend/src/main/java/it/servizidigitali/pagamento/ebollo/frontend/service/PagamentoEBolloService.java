@@ -10,8 +10,10 @@ import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ContentTypes;
 
-import java.io.InputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.util.Map;
 import java.util.Random;
@@ -95,8 +97,8 @@ public class PagamentoEBolloService {
 		this.configurationProvider = configurationProvider;
 	}
 
-	public String pagaBollo(long requestTimeMillis, InputStream inputStream, String fileName, long siteGroupId, long companyId, long servizioId, String nomeServizio, String codiceServizio,
-			long userId, String codiceOrganizzazione, String provinciaResidenza, String idFiscaleCliente, String denominazioneCliente, String emailQuietanza, String callbackUrl) throws Exception {
+	public String pagaBollo(long requestTimeMillis, File file, String fileName, long siteGroupId, long companyId, long servizioId, String nomeServizio, String codiceServizio, long userId,
+			String codiceOrganizzazione, String provinciaResidenza, String idFiscaleCliente, String denominazioneCliente, String emailQuietanza, String callbackUrl) throws Exception {
 
 		accountClientPagamentiEnteConfiguration = configurationProvider.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, siteGroupId);
 
@@ -111,7 +113,7 @@ public class PagamentoEBolloService {
 		String iud = randomString(35);
 
 		MarcaDaBollo marcaDaBollo = new MarcaDaBollo();
-		marcaDaBollo.setHashDocumento(getFileHash(inputStream));
+		marcaDaBollo.setHashDocumento(getFileHash(file));
 		marcaDaBollo.setImporto(importoBollo);
 		marcaDaBollo.setCodiceDovuto(codiceDovuto);
 		marcaDaBollo.setCodiceOrganizzazione(codiceOrganizzazione);
@@ -125,8 +127,8 @@ public class PagamentoEBolloService {
 
 		PagamentoDovutoRisposta pagamentoDovutoRisposta = pagamentiClient.pagaDovuto(marcaDaBollo, username, password, wsdlUrl, callbackUrl);
 
-		Pagamento pagamento = this.manageRichiestaAndPagamento(inputStream, fileName, siteGroupId, companyId, userId, denominazioneCliente, idCredito, idFiscaleCliente, denominazioneCliente,
-				emailQuietanza, causale, servizioId, nomeServizio, codiceServizio, importoBollo, null, CanalePagamento.WEB.toString(), TipoPagamentiClient.MYPAY.toString(), iud, null,
+		Pagamento pagamento = this.manageRichiestaAndPagamento(file, fileName, siteGroupId, companyId, userId, denominazioneCliente, idCredito, idFiscaleCliente, denominazioneCliente, emailQuietanza,
+				causale, servizioId, nomeServizio, codiceServizio, importoBollo, null, CanalePagamento.WEB.toString(), TipoPagamentiClient.MYPAY.toString(), iud, null,
 				pagamentoDovutoRisposta.getIdSessione(), null, false, StatoPagamento.IN_ATTESA.toString(), 0);
 
 		log.info("Created new pagamento with id: " + pagamento.getPagamentoId());
@@ -135,12 +137,12 @@ public class PagamentoEBolloService {
 
 	}
 
-	private String getFileHash(InputStream inputStream) {
+	private String getFileHash(File file) {
 		String hashDocumento = null;
 
 		try {
 
-			byte[] fileBytes = inputStream.readAllBytes();
+			byte[] fileBytes = Files.readAllBytes(file.toPath());
 
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
 
@@ -173,7 +175,7 @@ public class PagamentoEBolloService {
 		return generatedString;
 	}
 
-	public Pagamento manageRichiestaAndPagamento(InputStream inputStream, String fileName, long groupId, long companyId, long userId, String userName, String idCredito, String idFiscaleCliente,
+	public Pagamento manageRichiestaAndPagamento(File file, String fileName, long groupId, long companyId, long userId, String userName, String idCredito, String idFiscaleCliente,
 			String denominazioneCliente, String emailQuietanza, String causale, long servizioId, String nomeServizio, String codiceServizio, BigDecimal importo, BigDecimal commissioni, String canale,
 			String gateway, String iud, String iuv, String idSessione, String pathAvviso, boolean emailInviata, String stato, long proceduraId) throws Exception {
 
@@ -198,7 +200,7 @@ public class PagamentoEBolloService {
 			richiestaId = richiesta.getRichiestaId();
 			String descrizioneAllegatoRichiesta = String.format(DESCRIZIONE_RICHIESTA, richiestaId);
 
-			idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(fileName, fileName, descrizioneAllegatoRichiesta, codiceServizio, richiestaId, inputStream,
+			idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(fileName, fileName, descrizioneAllegatoRichiesta, codiceServizio, richiestaId, new FileInputStream(file),
 					ContentTypes.APPLICATION_OCTET_STREAM, userId, groupId);
 
 			AllegatoRichiesta allegatoRichiesta = allegatoRichiestaLocalService.createAllegatoRichiesta(counterLocalService.increment());
