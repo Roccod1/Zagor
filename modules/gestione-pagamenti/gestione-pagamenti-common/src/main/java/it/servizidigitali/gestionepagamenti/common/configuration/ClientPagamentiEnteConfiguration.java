@@ -38,4 +38,7 @@ public interface ClientPagamentiEnteConfiguration {
 
 	@Meta.AD(required = false, name = "Prefisso causale Pagamento Bollo Digitale", deflt = "MARCA_BOLLO_DIGITALE")
 	String prefissoCausalePagamentoMarcaBolloDigitale();
+
+	@Meta.AD(deflt = "30", required = false, description = "Massimo numero di giorni entro i quali un pagamento deve essere verificato prima di passare lo stato in NON_CONFERMATO")
+	String maxDelayPagamentoVerification();
 }
