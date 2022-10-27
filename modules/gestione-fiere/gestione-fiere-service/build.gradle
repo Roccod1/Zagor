@@ -1,0 +1,11 @@
+dependencies {
+	compile project(":modules:gestione-fiere:gestione-fiere-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.portal.api"
+}
+
+buildService {
+	apiDir = "../gestione-fiere-api/src/main/java"
+}
+
+group = "it.servizidigitali.gestionefiere"
