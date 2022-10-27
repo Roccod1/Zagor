@@ -88,7 +88,7 @@ public class DettaglioRichiestaCittadino implements MVCRenderCommand {
 				int posizioni[] = new int[2];
 
 				if (Validator.isNotNull(richiesta)) {
-					List<AllegatoRichiesta> listaAllegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdVisibile(richiestaId, true);
+					List<AllegatoRichiesta> listaAllegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdPrincipale(richiestaId, false);
 
 					if (listaAllegatiRichiesta != null) {
 						for (AllegatoRichiesta allegato : listaAllegatiRichiesta) {
