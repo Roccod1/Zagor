@@ -58,6 +58,7 @@ public class RichiestaCertificatoWrapper
 		attributes.put("errore", getErrore());
 		attributes.put("servizioId", getServizioId());
 		attributes.put("destinazioneUsoId", getDestinazioneUsoId());
+		attributes.put("richiestaId", getRichiestaId());
 
 		return attributes;
 	}
@@ -141,6 +142,12 @@ public class RichiestaCertificatoWrapper
 
 		if (destinazioneUsoId != null) {
 			setDestinazioneUsoId(destinazioneUsoId);
+		}
+
+		Long richiestaId = (Long)attributes.get("richiestaId");
+
+		if (richiestaId != null) {
+			setRichiestaId(richiestaId);
 		}
 	}
 
@@ -237,6 +244,16 @@ public class RichiestaCertificatoWrapper
 	@Override
 	public long getRichiestaCertificatoId() {
 		return model.getRichiestaCertificatoId();
+	}
+
+	/**
+	 * Returns the richiesta ID of this richiesta certificato.
+	 *
+	 * @return the richiesta ID of this richiesta certificato
+	 */
+	@Override
+	public long getRichiestaId() {
+		return model.getRichiestaId();
 	}
 
 	/**
@@ -392,6 +409,16 @@ public class RichiestaCertificatoWrapper
 	@Override
 	public void setRichiestaCertificatoId(long richiestaCertificatoId) {
 		model.setRichiestaCertificatoId(richiestaCertificatoId);
+	}
+
+	/**
+	 * Sets the richiesta ID of this richiesta certificato.
+	 *
+	 * @param richiestaId the richiesta ID of this richiesta certificato
+	 */
+	@Override
+	public void setRichiestaId(long richiestaId) {
+		model.setRichiestaId(richiestaId);
 	}
 
 	/**

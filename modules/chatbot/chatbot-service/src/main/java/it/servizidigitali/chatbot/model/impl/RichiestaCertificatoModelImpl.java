@@ -80,7 +80,7 @@ public class RichiestaCertificatoModelImpl
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"codiceFiscale", Types.VARCHAR}, {"stato", Types.VARCHAR},
 		{"errore", Types.VARCHAR}, {"servizioId", Types.BIGINT},
-		{"destinazioneUsoId", Types.BIGINT}
+		{"destinazioneUsoId", Types.BIGINT}, {"richiestaId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -100,10 +100,11 @@ public class RichiestaCertificatoModelImpl
 		TABLE_COLUMNS_MAP.put("errore", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("servizioId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("destinazioneUsoId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("richiestaId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table richiesta_certificato (uuid_ VARCHAR(75) null,richiestaCertificatoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codiceFiscale VARCHAR(75) null,stato VARCHAR(75) null,errore VARCHAR(75) null,servizioId LONG,destinazioneUsoId LONG)";
+		"create table richiesta_certificato (uuid_ VARCHAR(75) null,richiestaCertificatoId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,codiceFiscale VARCHAR(75) null,stato VARCHAR(75) null,errore VARCHAR(75) null,servizioId LONG,destinazioneUsoId LONG,richiestaId LONG)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table richiesta_certificato";
@@ -142,26 +143,32 @@ public class RichiestaCertificatoModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long SERVIZIOID_COLUMN_BITMASK = 8L;
+	public static final long RICHIESTAID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long STATO_COLUMN_BITMASK = 16L;
+	public static final long SERVIZIOID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 32L;
+	public static final long STATO_COLUMN_BITMASK = 32L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 64L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long RICHIESTACERTIFICATOID_COLUMN_BITMASK = 64L;
+	public static final long RICHIESTACERTIFICATOID_COLUMN_BITMASK = 128L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -380,6 +387,12 @@ public class RichiestaCertificatoModelImpl
 			"destinazioneUsoId",
 			(BiConsumer<RichiestaCertificato, Long>)
 				RichiestaCertificato::setDestinazioneUsoId);
+		attributeGetterFunctions.put(
+			"richiestaId", RichiestaCertificato::getRichiestaId);
+		attributeSetterBiConsumers.put(
+			"richiestaId",
+			(BiConsumer<RichiestaCertificato, Long>)
+				RichiestaCertificato::setRichiestaId);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -673,6 +686,30 @@ public class RichiestaCertificatoModelImpl
 	}
 
 	@Override
+	public long getRichiestaId() {
+		return _richiestaId;
+	}
+
+	@Override
+	public void setRichiestaId(long richiestaId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_richiestaId = richiestaId;
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalRichiestaId() {
+		return GetterUtil.getLong(
+			this.<Long>getColumnOriginalValue("richiestaId"));
+	}
+
+	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
 			PortalUtil.getClassNameId(RichiestaCertificato.class.getName()));
@@ -750,6 +787,7 @@ public class RichiestaCertificatoModelImpl
 		richiestaCertificatoImpl.setErrore(getErrore());
 		richiestaCertificatoImpl.setServizioId(getServizioId());
 		richiestaCertificatoImpl.setDestinazioneUsoId(getDestinazioneUsoId());
+		richiestaCertificatoImpl.setRichiestaId(getRichiestaId());
 
 		richiestaCertificatoImpl.resetOriginalValues();
 
@@ -787,6 +825,8 @@ public class RichiestaCertificatoModelImpl
 			this.<Long>getColumnOriginalValue("servizioId"));
 		richiestaCertificatoImpl.setDestinazioneUsoId(
 			this.<Long>getColumnOriginalValue("destinazioneUsoId"));
+		richiestaCertificatoImpl.setRichiestaId(
+			this.<Long>getColumnOriginalValue("richiestaId"));
 
 		return richiestaCertificatoImpl;
 	}
@@ -939,6 +979,8 @@ public class RichiestaCertificatoModelImpl
 		richiestaCertificatoCacheModel.destinazioneUsoId =
 			getDestinazioneUsoId();
 
+		richiestaCertificatoCacheModel.richiestaId = getRichiestaId();
+
 		return richiestaCertificatoCacheModel;
 	}
 
@@ -1045,6 +1087,7 @@ public class RichiestaCertificatoModelImpl
 	private String _errore;
 	private long _servizioId;
 	private long _destinazioneUsoId;
+	private long _richiestaId;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1089,6 +1132,7 @@ public class RichiestaCertificatoModelImpl
 		_columnOriginalValues.put("errore", _errore);
 		_columnOriginalValues.put("servizioId", _servizioId);
 		_columnOriginalValues.put("destinazioneUsoId", _destinazioneUsoId);
+		_columnOriginalValues.put("richiestaId", _richiestaId);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1137,6 +1181,8 @@ public class RichiestaCertificatoModelImpl
 		columnBitmasks.put("servizioId", 2048L);
 
 		columnBitmasks.put("destinazioneUsoId", 4096L);
+
+		columnBitmasks.put("richiestaId", 8192L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

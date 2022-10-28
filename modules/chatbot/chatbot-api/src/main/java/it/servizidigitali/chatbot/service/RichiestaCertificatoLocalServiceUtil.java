@@ -362,6 +362,12 @@ public class RichiestaCertificatoLocalServiceUtil {
 		return getService().getRichiestaCertificatosCount();
 	}
 
+	public static List<RichiestaCertificato> getRichiesteCertificatoByStati(
+		List<String> stati) {
+
+		return getService().getRichiesteCertificatoByStati(stati);
+	}
+
 	public static List<RichiestaCertificato> getRichiesteCertificatoByStato(
 		String stato) {
 

@@ -320,6 +320,10 @@ public interface RichiestaCertificatoLocalService
 	public int getRichiestaCertificatosCount();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<RichiestaCertificato> getRichiesteCertificatoByStati(
+		List<String> stati);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<RichiestaCertificato> getRichiesteCertificatoByStato(
 		String stato);
 

@@ -65,7 +65,7 @@ public class RichiestaCertificatoCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -93,6 +93,8 @@ public class RichiestaCertificatoCacheModel
 		sb.append(servizioId);
 		sb.append(", destinazioneUsoId=");
 		sb.append(destinazioneUsoId);
+		sb.append(", richiestaId=");
+		sb.append(richiestaId);
 		sb.append("}");
 
 		return sb.toString();
@@ -160,6 +162,7 @@ public class RichiestaCertificatoCacheModel
 
 		richiestaCertificatoImpl.setServizioId(servizioId);
 		richiestaCertificatoImpl.setDestinazioneUsoId(destinazioneUsoId);
+		richiestaCertificatoImpl.setRichiestaId(richiestaId);
 
 		richiestaCertificatoImpl.resetOriginalValues();
 
@@ -187,6 +190,8 @@ public class RichiestaCertificatoCacheModel
 		servizioId = objectInput.readLong();
 
 		destinazioneUsoId = objectInput.readLong();
+
+		richiestaId = objectInput.readLong();
 	}
 
 	@Override
@@ -240,6 +245,8 @@ public class RichiestaCertificatoCacheModel
 		objectOutput.writeLong(servizioId);
 
 		objectOutput.writeLong(destinazioneUsoId);
+
+		objectOutput.writeLong(richiestaId);
 	}
 
 	public String uuid;
@@ -255,5 +262,6 @@ public class RichiestaCertificatoCacheModel
 	public String errore;
 	public long servizioId;
 	public long destinazioneUsoId;
+	public long richiestaId;
 
 }

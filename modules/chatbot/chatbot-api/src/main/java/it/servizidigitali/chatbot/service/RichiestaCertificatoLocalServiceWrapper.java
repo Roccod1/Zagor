@@ -413,6 +413,14 @@ public class RichiestaCertificatoLocalServiceWrapper
 
 	@Override
 	public java.util.List<it.servizidigitali.chatbot.model.RichiestaCertificato>
+		getRichiesteCertificatoByStati(java.util.List<String> stati) {
+
+		return _richiestaCertificatoLocalService.getRichiesteCertificatoByStati(
+			stati);
+	}
+
+	@Override
+	public java.util.List<it.servizidigitali.chatbot.model.RichiestaCertificato>
 		getRichiesteCertificatoByStato(String stato) {
 
 		return _richiestaCertificatoLocalService.getRichiesteCertificatoByStato(

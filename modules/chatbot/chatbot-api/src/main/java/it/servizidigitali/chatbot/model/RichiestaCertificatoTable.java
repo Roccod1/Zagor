@@ -70,6 +70,9 @@ public class RichiestaCertificatoTable
 	public final Column<RichiestaCertificatoTable, Long> destinazioneUsoId =
 		createColumn(
 			"destinazioneUsoId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<RichiestaCertificatoTable, Long> richiestaId =
+		createColumn(
+			"richiestaId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 
 	private RichiestaCertificatoTable() {
 		super("richiesta_certificato", RichiestaCertificatoTable::new);
