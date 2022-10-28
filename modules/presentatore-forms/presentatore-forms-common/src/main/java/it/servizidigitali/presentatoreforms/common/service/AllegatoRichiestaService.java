@@ -85,7 +85,7 @@ public class AllegatoRichiestaService {
 					String mimeType = MimeTypesUtil.getContentType(stream, nomeFile);
 					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId, stream, mimeType, userId,
 							groupId);
-					creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, definizioneAllegatoId, false, userId, userName, groupId, userId);
+					creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, definizioneAllegatoId, false, true, userId, userName, groupId, userId);
 				}
 			}
 		}
@@ -106,13 +106,14 @@ public class AllegatoRichiestaService {
 	 * @param richiestaId
 	 * @param definizioneAllegatoId
 	 * @param principale
+	 * @param visibile
 	 * @param userId
 	 * @param userName
 	 * @param groupId
 	 * @param companyId
 	 */
 	public void creaAllegatoRichiesta(String idDocumentale, String nomeFile, String titolo, String descrizione, String nomeServizio, long richiestaId, Long definizioneAllegatoId, boolean principale,
-			long userId, String userName, long groupId, long companyId) {
+			boolean visibile, long userId, String userName, long groupId, long companyId) {
 		AllegatoRichiesta allegatoRichiesta = allegatoRichiestaLocalService.createAllegatoRichiesta(counterLocalService.increment());
 
 		if (Validator.isNotNull(idDocumentale)) {
@@ -127,10 +128,7 @@ public class AllegatoRichiestaService {
 			allegatoRichiesta.setNome(nomeFile);
 			allegatoRichiesta.setTitolo(titolo);
 			allegatoRichiesta.setDescrizione(descrizione);
-
-			if (!principale) {
-				allegatoRichiesta.setVisibile(true);
-			}
+			allegatoRichiesta.setVisibile(visibile);
 
 			allegatoRichiestaLocalService.updateAllegatoRichiesta(allegatoRichiesta);
 		}
@@ -159,7 +157,7 @@ public class AllegatoRichiestaService {
 							groupId);
 
 					if (Validator.isNotNull(idDocumentale)) {
-						creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, null, true, userId, userName, groupId, companyId);
+						creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, null, true, true, userId, userName, groupId, companyId);
 					}
 				}
 			}
@@ -198,7 +196,7 @@ public class AllegatoRichiestaService {
 					idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId, is, mimeType, userId, groupId);
 
 					if (Validator.isNotNull(idDocumentale)) {
-						creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, null, true, userId, userName, groupId, companyId);
+						creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, null, true, true, userId, userName, groupId, companyId);
 					}
 				}
 
