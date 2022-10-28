@@ -3,6 +3,7 @@ package it.servizidigitali.presentatoreforms.common.service.impl;
 import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
@@ -10,9 +11,7 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutSetLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -25,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.portlet.PortletRequest;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -36,6 +33,7 @@ import it.servizidigitali.common.service.ComuneEsteroLocalService;
 import it.servizidigitali.common.service.ComuneLocalService;
 import it.servizidigitali.common.service.ProvinciaLocalService;
 import it.servizidigitali.common.service.StatoEsteroLocalService;
+import it.servizidigitali.common.utility.LayoutUtility;
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.common.utility.enumeration.TipoTemplate;
 import it.servizidigitali.common.utility.enumeration.TipoTemplateNativo;
@@ -97,9 +95,6 @@ public class AlpacaPDFService implements PDFService {
 	@Reference
 	private LayoutSetLocalService layoutSetLocalService;
 
-	// @Autowired
-	// private JwtTokenUtil jwtTokenUtil;
-
 	@Reference
 	private DestinazioneUsoLocalService destinazioneUsoLocalService;
 
@@ -112,33 +107,34 @@ public class AlpacaPDFService implements PDFService {
 	@Reference
 	private DLAppService dlAppService;
 
+	@Reference
+	private LayoutUtility layoutUtility;
+
 	@Override
 	public byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, Long idDestinazioneUso,
-			String numeroBollo, PortletRequest portletRequest) throws PDFServiceException {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+			String numeroBollo) throws PDFServiceException {
 
 		byte[] pdfContent = null;
 		try {
 
-			freemarkerTemplateEnteConfiguration = configurationProvider.getGroupConfiguration(FreemarkerTemplateEnteConfiguration.class, themeDisplay.getScopeGroupId());
+			long proceduraId = richiesta.getProceduraId();
+			Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
+			long groupId = procedura.getGroupId();
+			Group group = groupLocalService.getGroup(groupId);
+			long organizationId = group.getOrganizationId();
+
+			freemarkerTemplateEnteConfiguration = configurationProvider.getGroupConfiguration(FreemarkerTemplateEnteConfiguration.class, groupId);
 
 			Map<String, Object> data = new HashMap<String, Object>();
 			Configuration config = new Configuration(Configuration.VERSION_2_3_29);
 
 			String htmlContent = null;
 
-			long proceduraId = richiesta.getProceduraId();
-			Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
-			long groupId = procedura.getGroupId();
-
-			long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
-
-			DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
-
 			Organization organization = organizationLocalService.getOrganization(organizationId);
 
-			LayoutSet layout = layoutSetLocalService.getLayoutSet(themeDisplay.getSiteGroupId(), true);
+			LayoutSet layoutSet = layoutSetLocalService.getLayoutSet(groupId, true);
+
+			String portalUrl = layoutUtility.getSitePath(groupId, group.getCompanyId());
 
 			List<TemplatePdf> listaTemplate = templatePdfLocalService.getTemplatePdfByProceduraIdAndTipoTemplate(procedura.getProceduraId(), TipoTemplate.FREEMARKER.name());
 
@@ -150,9 +146,9 @@ public class AlpacaPDFService implements PDFService {
 
 			data.put("comune", organization.getName());
 
-			data.put("defaultThemeUrl", themeDisplay.getPathThemeRoot());
-			data.put("url", portletRequest.getContextPath());
-			data.put("portalUrl", themeDisplay.getPortalURL());
+			data.put("defaultThemeUrl", freemarkerTemplateEnteConfiguration.themeBasePath());
+			data.put("url", freemarkerTemplateEnteConfiguration.presentatoreFormsBasePath());
+			data.put("portalUrl", portalUrl);
 			data.put(PresentatoreFormsCommonPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 
 			// Attributi impostati attraverso le destinazioni uso
@@ -162,20 +158,23 @@ public class AlpacaPDFService implements PDFService {
 			data.put("timbraCertificato", "false");
 			data.put("showDescrizioneEsenzioneBollo", "true");
 
-			if (Validator.isNotNull(destinazioneUso)) {
-				data.put("descrizioneDestinazioneUso", destinazioneUso.getDescrizione());
+			String descrizioneDestinazioneUso = "";
+			if (Validator.isNotNull(idDestinazioneUso) && idDestinazioneUso != 0) {
+				DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
+				descrizioneDestinazioneUso = destinazioneUso.getDescrizione();
 			}
+			data.put("descrizioneDestinazioneUso", descrizioneDestinazioneUso);
 
 			if (Validator.isNotNull(numeroBollo)) {
 				numeroBolloDescrizione = "Identificativo Bollo: " + numeroBollo;
 			}
 
-			long logoId = layout.getLogoId();
+			long logoId = layoutSet.getLogoId();
 			data.put("logoId", logoId);
 
 			data.put("numeroBollo", numeroBolloDescrizione);
 
-			addParametriAggiuntivi(data, themeDisplay);
+			addParametriAggiuntivi(data, portalUrl);
 
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 
@@ -229,15 +228,12 @@ public class AlpacaPDFService implements PDFService {
 
 	@Override
 	public byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, boolean isDelega,
-			String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+			String dettagliRichiesta) throws PDFServiceException {
 
 		byte[] pdfContent = null;
 
 		try {
 
-			freemarkerTemplateEnteConfiguration = configurationProvider.getGroupConfiguration(FreemarkerTemplateEnteConfiguration.class, themeDisplay.getScopeGroupId());
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 			Map<String, Object> data = new HashMap<String, Object>();
@@ -248,31 +244,36 @@ public class AlpacaPDFService implements PDFService {
 			long proceduraId = richiesta.getProceduraId();
 			Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
 			long groupId = procedura.getGroupId();
+			Group group = groupLocalService.getGroup(groupId);
+
+			freemarkerTemplateEnteConfiguration = configurationProvider.getGroupConfiguration(FreemarkerTemplateEnteConfiguration.class, groupId);
 
 			long organizationId = groupLocalService.getGroup(groupId).getOrganizationId();
 
 			Organization organization = organizationLocalService.getOrganization(organizationId);
 
-			LayoutSet layout = layoutSetLocalService.getLayoutSet(themeDisplay.getSiteGroupId(), true);
+			LayoutSet layout = layoutSetLocalService.getLayoutSet(groupId, true);
 
 			List<TemplatePdf> listaTemplate = templatePdfLocalService.getTemplatePdfByProceduraIdAndTipoTemplate(procedura.getProceduraId(), TipoTemplate.FREEMARKER.name());
 
 			TemplatePdf templatePdf = null;
+
+			String portalUrl = layoutUtility.getSitePath(groupId, group.getCompanyId());
 
 			long logoId = layout.getLogoId();
 			data.put("logoId", logoId);
 
 			data.put("comune", organization.getName());
 
-			data.put("defaultThemeUrl", themeDisplay.getPathThemeRoot());
-			data.put("url", portletRequest.getContextPath());
-			data.put("portalUrl", themeDisplay.getPortalURL());
+			data.put("defaultThemeUrl", freemarkerTemplateEnteConfiguration.themeBasePath());
+			data.put("url", freemarkerTemplateEnteConfiguration.presentatoreFormsBasePath());
+			data.put("portalUrl", portalUrl);
 			data.put("delega", Boolean.toString(isDelega));
 			data.put("dataCorrente", sdf.format(new Date()));
 			data.put("dettagliRichiesta", dettagliRichiesta);
 			data.put(PresentatoreFormsCommonPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 
-			addParametriAggiuntivi(data, themeDisplay);
+			addParametriAggiuntivi(data, portalUrl);
 
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			Template template = null;
@@ -283,19 +284,20 @@ public class AlpacaPDFService implements PDFService {
 				boolean templateTrovato = false;
 
 				while (i < listaTemplate.size() && templateTrovato == false) {
-					
+
 					if (procedura.getStep2TipoServizio().equalsIgnoreCase(TipoServizio.AUTO_DICHIARAZIONE.name())) {
 						if (listaTemplate.get(i).getTipoTemplateNativo().equalsIgnoreCase(TipoTemplateNativo.AUTO_DICHIARAZIONE.name())) {
 							templateTrovato = true;
 							templatePdf = listaTemplate.get(i);
-						}					
-					}else {
+						}
+					}
+					else {
 						if (listaTemplate.get(i).getTipoTemplateNativo().equalsIgnoreCase(TipoTemplateNativo.DEFAULT.name())) {
 							templateTrovato = true;
 							templatePdf = listaTemplate.get(i);
-						}					
+						}
 					}
-					
+
 					i++;
 				}
 
@@ -346,9 +348,7 @@ public class AlpacaPDFService implements PDFService {
 		return pdfContent;
 	}
 
-	private void addParametriAggiuntivi(Map<String, Object> data, ThemeDisplay themeDisplay) {
-
-		String portalURL = themeDisplay.getPortalURL();
+	private void addParametriAggiuntivi(Map<String, Object> data, String portalURL) {
 
 		data.put("listaStatiEsteriUrlKey", portalURL + SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH + "/stati-esteri");
 		data.put("listaProvinceUrlKey", portalURL + SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH + "/province");

@@ -21,7 +21,6 @@ import javax.portlet.RenderResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import it.servizidigitali.common.utility.enumeration.TipoGenerazionePDF;
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
@@ -29,8 +28,7 @@ import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
 import it.servizidigitali.presentatoreforms.common.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.common.model.FormData;
-import it.servizidigitali.presentatoreforms.common.service.PDFService;
-import it.servizidigitali.presentatoreforms.common.service.PDFServiceFactory;
+import it.servizidigitali.presentatoreforms.common.service.CertificatoService;
 import it.servizidigitali.presentatoreforms.common.util.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
@@ -39,8 +37,14 @@ import it.servizidigitali.scrivaniaoperatore.model.DestinazioneUso;
 import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 
-@Component(immediate = true, property = { "javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS,
-		"mvc.command.name=" + PresentatoreFormsPortletKeys.SCEGLI_MODALITA_PAGAMENTO_RENDER_COMMAND }, service = MVCRenderCommand.class)
+@Component(//
+		immediate = true, //
+		property = { //
+				"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
+				"mvc.command.name=" + PresentatoreFormsPortletKeys.SCEGLI_MODALITA_PAGAMENTO_RENDER_COMMAND //
+		}, //
+		service = MVCRenderCommand.class//
+)
 public class ModalitaPagamentoRenderCommand implements MVCRenderCommand {
 
 	public static final Log _log = LogFactoryUtil.getLog(ModalitaPagamentoRenderCommand.class);
@@ -52,7 +56,7 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand {
 	private ServizioLocalService servizioLocalService;
 
 	@Reference
-	private PDFServiceFactory pdfServiceFactory;
+	private CertificatoService certificatoService;
 
 	boolean certificatiPdfPreviewEnabled = true; // Valore viene preso da configurazione d'ambiente
 
@@ -93,10 +97,7 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand {
 			servizio = servizioLocalService.getServizio(procedura.getServizioId());
 			istanzaForm = presentatoreFormFrontendService.getIstanzaFormRichiesta(richiesta.getRichiestaId(), form.getFormId());
 
-			PDFService pdfService = pdfServiceFactory.getPDFService(TipoGenerazionePDF.valueOf(procedura.getTipoGenerazionePDF()));
-
 			// Controllo se la destinazione uso è associata al servizio
-
 			DestinazioneUso destinazioneUso = presentatoreFormFrontendService.checkDestinazioneUso(Long.valueOf(destinazioneUsoId), servizio.getServizioId(), organizationId, groupId, companyId);
 
 			if (Validator.isNotNull(destinazioneUso)) {
@@ -127,8 +128,7 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand {
 						alpacaStructure.setOptions(AlpacaUtil.loadOptions(gson.toJson(alpacaStructure.getOptions()), form.getListaDefinizioneAllegato(), true, themeDisplay.getPortalURL()));
 						alpacaStructure.setData(jsonParser.parse(gson.toJson(alpacaStructure.getData())).getAsJsonObject());
 
-						byte[] pdfFile = pdfService.generaPDFCertificato(user.getScreenName(), user.getScreenName(), alpacaStructure, richiesta, destinazioneUso.getDestinazioneUsoId(), null,
-								renderRequest);
+						byte[] pdfFile = certificatoService.generaPDFCertificato(user.getScreenName(), user.getScreenName(), richiesta.getRichiestaId(), destinazioneUso.getDestinazioneUsoId(), null);
 
 						if (Validator.isNotNull(pdfFile)) {
 							encoded = new String(Base64.getEncoder().encode(pdfFile));

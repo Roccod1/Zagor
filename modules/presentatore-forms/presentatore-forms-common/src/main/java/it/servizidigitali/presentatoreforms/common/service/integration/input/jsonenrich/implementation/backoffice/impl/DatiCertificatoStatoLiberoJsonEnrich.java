@@ -25,7 +25,7 @@ import it.servizidigitali.common.model.StatoEstero;
 import it.servizidigitali.common.service.ComuneEsteroLocalService;
 import it.servizidigitali.common.service.ComuneLocalService;
 import it.servizidigitali.common.service.StatoEsteroLocalService;
-import it.servizidigitali.presentatoreforms.common.enumeration.CondizioniScaricamentoEnum;
+import it.servizidigitali.presentatoreforms.common.service.integration.enumeration.BackofficeServiceExceptionLanguageCode;
 import it.servizidigitali.presentatoreforms.common.service.integration.exception.BackofficeServiceException;
 import it.servizidigitali.presentatoreforms.common.service.integration.input.jsonenrich.implementation.backoffice.DatiAnagraficiJsonEnrich;
 import it.servizidigitali.presentatoreforms.common.service.integration.input.jsonenrich.model.EnrichmentModel;
@@ -70,7 +70,7 @@ public class DatiCertificatoStatoLiberoJsonEnrich implements DatiAnagraficiJsonE
 				log.error("enrich :: " + e.getMessage(), e);
 				throw new BackofficeServiceException("Errore durante il caricamento dell'organizzazione " + enrichmentModel.getOrganizationId(), e);
 			}
-			
+
 			// Nucleo familiare
 			List<DatiAnagrafici.ComponenteNucleoFamiliare> componentiNucleo = ((DatiAnagrafici) datiAnagrafici).getComponentiNucleoFamiliare();
 
@@ -92,12 +92,12 @@ public class DatiCertificatoStatoLiberoJsonEnrich implements DatiAnagraficiJsonE
 
 						// Condizioni scaricamento certificato
 						if (componente.getDataMorte() != null) {
-							throw new BackofficeServiceException(CondizioniScaricamentoEnum.SOGGETTO_DECEDUTO_CERTIFICATO_NON_DISPONIBILE.getKey());
+							throw new BackofficeServiceException(BackofficeServiceExceptionLanguageCode.SOGGETTO_DECEDUTO_CERTIFICATO_NON_DISPONIBILE);
 						}
 
 						if (componente != null && componente.getStatoCivile() != null && (!(componente.getStatoCivile().equals(StatoCivile.CELIBE_NUBILE)))) {
 
-							throw new BackofficeServiceException(CondizioniScaricamentoEnum.SOGGETTO_NON_LIBERO.getKey());
+							throw new BackofficeServiceException(BackofficeServiceExceptionLanguageCode.SOGGETTO_NON_LIBERO);
 						}
 						// Nome e cognome
 						fieldDataContainer.addProperty("nomeCognome", componente.getNome() + " " + componente.getCognome());
@@ -109,7 +109,7 @@ public class DatiCertificatoStatoLiberoJsonEnrich implements DatiAnagraficiJsonE
 
 						// TODO va controllata la cittadinanza e mostrato il comune italiano o
 						// estero a
-						// seconda dei casi o si dà per scontata cittadinanza italiana?
+						// seconda dei casi o si dï¿½ per scontata cittadinanza italiana?
 						String nomeComuneNascita = "";
 						String siglaProvinciaNascita = "";
 

@@ -15,6 +15,8 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,11 +34,11 @@ import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneservizi.model.Servizio;
 import it.servizidigitali.gestioneservizi.service.ServizioLocalService;
+import it.servizidigitali.presentatoreforms.common.service.AllegatoRichiestaService;
 import it.servizidigitali.presentatoreforms.common.service.AlpacaService;
 import it.servizidigitali.presentatoreforms.common.service.integration.input.jsonenrich.model.UserPreferences;
 import it.servizidigitali.presentatoreforms.common.service.integration.output.model.DichiarazioneRisposta;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
-import it.servizidigitali.presentatoreforms.frontend.service.AllegatoRichiestaService;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
 import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
@@ -105,17 +107,16 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand {
 			servizio = servizioLocalService.getServizio(procedura.getServizioId());
 			form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 			servizioEnte = presentatoreFormFrontendService.getServizioEnteByPage(themeDisplay);
-			
-			
-			if(Validator.isNotNull(servizioEnte)) {
+
+			if (Validator.isNotNull(servizioEnte)) {
 				String listaFormatiFirmaDigitale = servizioEnte.getFormatiFirmaDigitale();
-				
-				if(Validator.isNotNull(listaFormatiFirmaDigitale) && servizioEnte.getRichiestaFirma()) {
+
+				if (Validator.isNotNull(listaFormatiFirmaDigitale) && servizioEnte.getRichiestaFirma()) {
 					listaFormatiFirma = new ArrayList<String>(Arrays.asList(listaFormatiFirmaDigitale.split(" , ")));
 					firmaDigitaleAbilitata = true;
 				}
 			}
-			
+
 			if (Validator.isNotNull(procedura) && procedura.getProceduraId() > 0) {
 
 				Richiesta richiesta = presentatoreFormFrontendService.getRichiestaBozza(user.getScreenName(), procedura.getProceduraId());
@@ -139,11 +140,13 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand {
 								return;
 							}
 							else {
-								allegatoRichiestaService.salvaAllegatoFirmato(fileFirmato, servizio, richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
+								allegatoRichiestaService.salvaAllegatoFirmato(fileFirmato, servizio, richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId(),
+										themeDisplay.getCompanyId());
 							}
 						}
 						else {
-							allegatoRichiestaService.salvaAllegatoFirmato(fileFirmato, servizio, richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
+							allegatoRichiestaService.salvaAllegatoFirmato(fileFirmato, servizio, richiesta.getRichiestaId(), user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId(),
+									themeDisplay.getCompanyId());
 						}
 
 					}
@@ -161,9 +164,13 @@ public class SalvaInviaRichiestaActionCommand extends BaseMVCActionCommand {
 							File allegato = uploadPortletRequest.getFile("allegato-" + definizioneAllegato.getDefinizioneAllegatoId());
 
 							if (Validator.isNotNull(allegato)) {
+								byte[] bytes = Files.readAllBytes(Paths.get(allegato.getAbsolutePath()));
+
 								String nomeFile = uploadPortletRequest.getFileName("allegato-" + definizioneAllegato.getDefinizioneAllegatoId());
-								allegatoRichiestaService.salvaAllegatiRichiesta(allegato, nomeFile, servizio, richiesta.getRichiestaId(), definizioneAllegato.getDefinizioneAllegatoId(),
+								allegatoRichiestaService.salvaAllegatoRichiesta(bytes, nomeFile, servizio, richiesta.getRichiestaId(), definizioneAllegato.getDefinizioneAllegatoId(),
 										user.getFullName(), user.getUserId(), themeDisplay.getSiteGroupId());
+
+								allegato.delete();
 							}
 							else {
 								_log.error("SalvaInviaRichiestaActionCommand :: Non è presente l'allegato con ID definizione : " + definizioneAllegato.getDefinizioneAllegatoId());

@@ -26,20 +26,23 @@ import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.presentatoreforms.common.model.AlpacaJsonStructure;
 import it.servizidigitali.presentatoreforms.common.model.FormData;
+import it.servizidigitali.presentatoreforms.common.service.AllegatoRichiestaService;
 import it.servizidigitali.presentatoreforms.common.service.PDFService;
 import it.servizidigitali.presentatoreforms.common.service.PDFServiceFactory;
 import it.servizidigitali.presentatoreforms.common.util.AlpacaUtil;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
-import it.servizidigitali.presentatoreforms.frontend.service.AllegatoRichiestaService;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
 import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
-@Component(immediate = true, property = { //
-		"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
-		"mvc.command.name=" + PresentatoreFormsPortletKeys.DOWNLOAD_ISTANZA_PDF_RESOURCE_COMMAND //
-}, service = { MVCResourceCommand.class })
+@Component(immediate = true, //
+		property = { //
+				"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
+				"mvc.command.name=" + PresentatoreFormsPortletKeys.DOWNLOAD_ISTANZA_PDF_RESOURCE_COMMAND //
+		}, //
+		service = { MVCResourceCommand.class }//
+)
 public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 
 	public static final Log log = LogFactoryUtil.getLog(DownloadIstanzaPDFResourceCommand.class);
@@ -119,7 +122,7 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 
 				break;
 			default:
-				pdf = pdfService.generaPDFAlpacaForm(screenName, codiceFiscaleComponente, alpacaStructure, richiesta, false, dettagliRichiesta, resourceRequest);
+				pdf = pdfService.generaPDFAlpacaForm(screenName, codiceFiscaleComponente, alpacaStructure, richiesta, false, dettagliRichiesta);
 				break;
 			}
 

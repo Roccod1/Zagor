@@ -17,4 +17,10 @@ public interface FreemarkerTemplateEnteConfiguration {
 	@Meta.AD(deflt = "", required = false, name = "Template autodichiarazioni")
 	public String autoDichiarazioniAlpacaTemplate();
 
+	@Meta.AD(deflt = "/o/it.servizidigitali.presentatoreforms.frontend", required = false, name = "Path modulo presentatore forms")
+	public String presentatoreFormsBasePath();
+
+	@Meta.AD(deflt = "/o/portale-istituzionale-theme", required = false, name = "Path modulo tema")
+	public String themeBasePath();
+
 }
