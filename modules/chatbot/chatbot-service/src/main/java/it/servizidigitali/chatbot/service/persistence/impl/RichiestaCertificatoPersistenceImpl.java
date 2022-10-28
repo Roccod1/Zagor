@@ -3172,6 +3172,222 @@ public class RichiestaCertificatoPersistenceImpl
 	private static final String _FINDER_COLUMN_STATO_STATO_3 =
 		"(richiestaCertificato.stato IS NULL OR richiestaCertificato.stato = '')";
 
+	private FinderPath _finderPathFetchByRichiestaId;
+	private FinderPath _finderPathCountByRichiestaId;
+
+	/**
+	 * Returns the richiesta certificato where richiestaId = &#63; or throws a <code>NoSuchRichiestaCertificatoException</code> if it could not be found.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @return the matching richiesta certificato
+	 * @throws NoSuchRichiestaCertificatoException if a matching richiesta certificato could not be found
+	 */
+	@Override
+	public RichiestaCertificato findByRichiestaId(long richiestaId)
+		throws NoSuchRichiestaCertificatoException {
+
+		RichiestaCertificato richiestaCertificato = fetchByRichiestaId(
+			richiestaId);
+
+		if (richiestaCertificato == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("richiestaId=");
+			sb.append(richiestaId);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchRichiestaCertificatoException(sb.toString());
+		}
+
+		return richiestaCertificato;
+	}
+
+	/**
+	 * Returns the richiesta certificato where richiestaId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @return the matching richiesta certificato, or <code>null</code> if a matching richiesta certificato could not be found
+	 */
+	@Override
+	public RichiestaCertificato fetchByRichiestaId(long richiestaId) {
+		return fetchByRichiestaId(richiestaId, true);
+	}
+
+	/**
+	 * Returns the richiesta certificato where richiestaId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching richiesta certificato, or <code>null</code> if a matching richiesta certificato could not be found
+	 */
+	@Override
+	public RichiestaCertificato fetchByRichiestaId(
+		long richiestaId, boolean useFinderCache) {
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {richiestaId};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByRichiestaId, finderArgs);
+		}
+
+		if (result instanceof RichiestaCertificato) {
+			RichiestaCertificato richiestaCertificato =
+				(RichiestaCertificato)result;
+
+			if (richiestaId != richiestaCertificato.getRichiestaId()) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_SELECT_RICHIESTACERTIFICATO_WHERE);
+
+			sb.append(_FINDER_COLUMN_RICHIESTAID_RICHIESTAID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(richiestaId);
+
+				List<RichiestaCertificato> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByRichiestaId, finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {richiestaId};
+							}
+
+							_log.warn(
+								"RichiestaCertificatoPersistenceImpl.fetchByRichiestaId(long, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					RichiestaCertificato richiestaCertificato = list.get(0);
+
+					result = richiestaCertificato;
+
+					cacheResult(richiestaCertificato);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (RichiestaCertificato)result;
+		}
+	}
+
+	/**
+	 * Removes the richiesta certificato where richiestaId = &#63; from the database.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @return the richiesta certificato that was removed
+	 */
+	@Override
+	public RichiestaCertificato removeByRichiestaId(long richiestaId)
+		throws NoSuchRichiestaCertificatoException {
+
+		RichiestaCertificato richiestaCertificato = findByRichiestaId(
+			richiestaId);
+
+		return remove(richiestaCertificato);
+	}
+
+	/**
+	 * Returns the number of richiesta certificatos where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @return the number of matching richiesta certificatos
+	 */
+	@Override
+	public int countByRichiestaId(long richiestaId) {
+		FinderPath finderPath = _finderPathCountByRichiestaId;
+
+		Object[] finderArgs = new Object[] {richiestaId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(2);
+
+			sb.append(_SQL_COUNT_RICHIESTACERTIFICATO_WHERE);
+
+			sb.append(_FINDER_COLUMN_RICHIESTAID_RICHIESTAID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(richiestaId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_RICHIESTAID_RICHIESTAID_2 =
+		"richiestaCertificato.richiestaId = ?";
+
 	private FinderPath _finderPathWithPaginationFindByServizioId;
 	private FinderPath _finderPathWithoutPaginationFindByServizioId;
 	private FinderPath _finderPathCountByServizioId;
@@ -3956,6 +4172,11 @@ public class RichiestaCertificatoPersistenceImpl
 			richiestaCertificato);
 
 		finderCache.putResult(
+			_finderPathFetchByRichiestaId,
+			new Object[] {richiestaCertificato.getRichiestaId()},
+			richiestaCertificato);
+
+		finderCache.putResult(
 			_finderPathFetchByServizioIdGroupId,
 			new Object[] {
 				richiestaCertificato.getServizioId(),
@@ -4051,6 +4272,13 @@ public class RichiestaCertificatoPersistenceImpl
 		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, richiestaCertificatoModelImpl);
+
+		args = new Object[] {richiestaCertificatoModelImpl.getRichiestaId()};
+
+		finderCache.putResult(
+			_finderPathCountByRichiestaId, args, Long.valueOf(1));
+		finderCache.putResult(
+			_finderPathFetchByRichiestaId, args, richiestaCertificatoModelImpl);
 
 		args = new Object[] {
 			richiestaCertificatoModelImpl.getServizioId(),
@@ -4649,6 +4877,16 @@ public class RichiestaCertificatoPersistenceImpl
 		_finderPathCountByStato = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStato",
 			new String[] {String.class.getName()}, new String[] {"stato"},
+			false);
+
+		_finderPathFetchByRichiestaId = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByRichiestaId",
+			new String[] {Long.class.getName()}, new String[] {"richiestaId"},
+			true);
+
+		_finderPathCountByRichiestaId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByRichiestaId",
+			new String[] {Long.class.getName()}, new String[] {"richiestaId"},
 			false);
 
 		_finderPathWithPaginationFindByServizioId = new FinderPath(

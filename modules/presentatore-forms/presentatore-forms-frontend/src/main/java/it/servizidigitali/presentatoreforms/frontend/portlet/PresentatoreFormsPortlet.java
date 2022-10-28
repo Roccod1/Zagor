@@ -164,7 +164,7 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 								log.error("render :: " + e.getMessage(), e);
 								alpacaStructure.setData(data);
 
-								if (e.getConditionCode() != 0) {
+								if (e.getBackofficeServiceExceptionLanguageCode() != null) {
 									throw e;
 								}
 								if (tipoServizio != null && tipoServizio.equals(TipoServizio.VISURA) || tipoServizio.equals(TipoServizio.CERTIFICATO)) {

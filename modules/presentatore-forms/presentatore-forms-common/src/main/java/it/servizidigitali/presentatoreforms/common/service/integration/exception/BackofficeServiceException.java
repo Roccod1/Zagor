@@ -1,5 +1,7 @@
 package it.servizidigitali.presentatoreforms.common.service.integration.exception;
 
+import it.servizidigitali.presentatoreforms.common.service.integration.enumeration.BackofficeServiceExceptionLanguageCode;
+
 /**
  * Eccezione di runtime per le chiamate ai servizi di backoffice comunali.
  *
@@ -10,7 +12,7 @@ public class BackofficeServiceException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	private int conditionCode = 0;
+	private BackofficeServiceExceptionLanguageCode backofficeServiceExceptionLanguageCode;
 
 	public BackofficeServiceException(String message, Throwable e) {
 		super(message, e);
@@ -23,12 +25,16 @@ public class BackofficeServiceException extends RuntimeException {
 		super(message);
 	}
 
-	public BackofficeServiceException(int conditionCode) {
+	public BackofficeServiceException(BackofficeServiceExceptionLanguageCode backofficeServiceExceptionLanguageCode) {
 		super();
-		this.conditionCode = conditionCode;
+		this.backofficeServiceExceptionLanguageCode = backofficeServiceExceptionLanguageCode;
 	}
 
-	public int getConditionCode() {
-		return this.conditionCode;
+	/**
+	 * @return the backofficeServiceExceptionLanguageCode
+	 */
+	public BackofficeServiceExceptionLanguageCode getBackofficeServiceExceptionLanguageCode() {
+		return backofficeServiceExceptionLanguageCode;
 	}
+
 }

@@ -27,7 +27,13 @@ import it.servizidigitali.chatbot.service.base.RichiestaCertificatoLocalServiceB
 @Component(property = "model.class.name=it.servizidigitali.chatbot.model.RichiestaCertificato", service = AopService.class)
 public class RichiestaCertificatoLocalServiceImpl extends RichiestaCertificatoLocalServiceBaseImpl {
 
+	@Override
 	public List<RichiestaCertificato> getRichiesteCertificatoByStato(String stato) {
 		return richiestaCertificatoPersistence.findByStato(stato);
+	}
+
+	@Override
+	public List<RichiestaCertificato> getRichiesteCertificatoByStati(List<String> stati) {
+		return richiestaCertificatoFinder.findByStati(stati);
 	}
 }

@@ -17,8 +17,8 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.presentatoreforms.common.model.DatiFileAllegato;
+import it.servizidigitali.presentatoreforms.common.service.AllegatoRichiestaService;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
-import it.servizidigitali.presentatoreforms.frontend.service.AllegatoRichiestaService;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
 
 @Component(immediate = true, property = { //

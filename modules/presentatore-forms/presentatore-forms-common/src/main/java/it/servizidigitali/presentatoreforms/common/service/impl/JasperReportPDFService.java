@@ -5,14 +5,16 @@ import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Image;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.service.CompanyLocalService;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ImageLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,8 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import javax.portlet.PortletRequest;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -40,6 +40,7 @@ import it.servizidigitali.common.service.ComuneEsteroLocalService;
 import it.servizidigitali.common.service.ComuneLocalService;
 import it.servizidigitali.common.service.ProvinciaLocalService;
 import it.servizidigitali.common.service.StatoEsteroLocalService;
+import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.gestioneprocedure.model.TemplatePdf;
 import it.servizidigitali.gestioneprocedure.service.ProceduraLocalService;
 import it.servizidigitali.gestioneprocedure.service.TemplatePdfLocalService;
@@ -119,20 +120,27 @@ public class JasperReportPDFService implements PDFService {
 
 	@Reference
 	private DestinazioneUsoLocalService destinazioneUsoLocalService;
-	
+
 	@Reference
 	private OrganizationLocalService organizationLocalService;
 
+	@Reference
+	private GroupLocalService groupLocalService;
+
+	@Reference
+	private CompanyLocalService companyLocalService;
+
 	@Override
 	public byte[] generaPDFCertificato(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, Long idDestinazioneUso,
-			String numeroBollo, PortletRequest portletRequest) throws PDFServiceException {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		Image image = imageLocalService.getCompanyLogo(themeDisplay.getCompany().getLogoId());
+			String numeroBollo) throws PDFServiceException {
 
 		try {
 
 			long proceduraId = richiesta.getProceduraId();
+			Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
+			long groupId = procedura.getGroupId();
+			Group group = groupLocalService.getGroup(groupId);
+			long organizationId = group.getOrganizationId();
 
 			List<TemplatePdf> templatesPdf = templatePdfLocalService.getTemplatePdfByProceduraId(proceduraId);
 
@@ -141,8 +149,8 @@ public class JasperReportPDFService implements PDFService {
 			List<TemplatePdf> templatesPdfFigli = getTemplatesPdfFigli(templatesPdf);
 
 			DestinazioneUso destinazioneUso = destinazioneUsoLocalService.getDestinazioneUso(idDestinazioneUso);
-			
-			Organization organization = organizationLocalService.getOrganization(themeDisplay.getScopeGroup().getOrganizationId());
+
+			Organization organization = organizationLocalService.getOrganization(organizationId);
 
 			if (templatePdfPrincipale == null) {
 				throw new PDFServiceException("Report JRXML principale non presente.");
@@ -175,6 +183,9 @@ public class JasperReportPDFService implements PDFService {
 
 			addParametriAggiuntivi(param);
 
+			Company company = companyLocalService.getCompany(group.getCompanyId());
+			Image image = imageLocalService.getCompanyLogo(company.getLogoId());
+
 			if (Validator.isNotNull(image)) {
 				ByteArrayInputStream logoComune = new ByteArrayInputStream(image.getTextObj());
 				param.put(JR_PARAMETER_LOGO_COMUNE, logoComune);
@@ -183,7 +194,7 @@ public class JasperReportPDFService implements PDFService {
 			if (Validator.isNotNull(destinazioneUso)) {
 				param.put("descrizioneDestinazioneUso", destinazioneUso.getDescrizione());
 			}
-			
+
 			param.put(JR_PARAMETER_COMUNE, organization.getName());
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(reportPrincipaleJasperReport, param, jsonDataSource);
@@ -200,14 +211,16 @@ public class JasperReportPDFService implements PDFService {
 
 	@Override
 	public byte[] generaPDFAlpacaForm(String codiceFiscaleRichiedente, String codiceFiscaleComponente, AlpacaJsonStructure alpacaStructure, Richiesta richiesta, boolean isDelega,
-			String dettagliRichiesta, PortletRequest portletRequest) throws PDFServiceException {
+			String dettagliRichiesta) throws PDFServiceException {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		Image image = imageLocalService.getCompanyLogo(themeDisplay.getCompany().getLogoId());
 		Gson gson = new Gson();
 
 		try {
 			long proceduraId = richiesta.getProceduraId();
+			Procedura procedura = proceduraLocalService.getProcedura(proceduraId);
+			long groupId = procedura.getGroupId();
+			Group group = groupLocalService.getGroup(groupId);
+			long organizationId = group.getOrganizationId();
 
 			List<TemplatePdf> templatesPdf = templatePdfLocalService.getTemplatePdfByProceduraId(proceduraId);
 
@@ -224,8 +237,8 @@ public class JasperReportPDFService implements PDFService {
 			Object data = alpacaStructure.getData();
 
 			InputStream stream = new ByteArrayInputStream(gson.toJson(data).getBytes("UTF-8"));
-			
-			Organization organization = organizationLocalService.getOrganization(themeDisplay.getScopeGroup().getOrganizationId());
+
+			Organization organization = organizationLocalService.getOrganization(organizationId);
 
 			JRDataSource jsonDataSource = new JsonDataSource(stream);
 
@@ -246,12 +259,14 @@ public class JasperReportPDFService implements PDFService {
 			}
 
 			addParametriAggiuntivi(param);
+			Company company = companyLocalService.getCompany(group.getCompanyId());
+			Image image = imageLocalService.getCompanyLogo(company.getLogoId());
 
 			if (Validator.isNotNull(image)) {
 				ByteArrayInputStream logoComune = new ByteArrayInputStream(image.getTextObj());
 				param.put(JR_PARAMETER_LOGO_COMUNE, logoComune);
 			}
-			
+
 			param.put(JR_PARAMETER_COMUNE, organization.getName());
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(reportPrincipaleJasperReport, param, jsonDataSource);

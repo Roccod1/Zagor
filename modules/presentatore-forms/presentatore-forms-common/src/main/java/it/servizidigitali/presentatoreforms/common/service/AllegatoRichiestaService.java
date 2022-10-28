@@ -1,4 +1,4 @@
-package it.servizidigitali.presentatoreforms.frontend.service;
+package it.servizidigitali.presentatoreforms.common.service;
 
 import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.document.library.kernel.service.DLAppService;
@@ -49,15 +49,27 @@ public class AllegatoRichiestaService {
 
 	@Reference
 	private DLAppService dlAppService;
-	
+
 	@Reference
 	private SignatureVerification signatureVerification;
 
-	public void salvaAllegatiRichiesta(File allegato, String nomeFile, Servizio servizio, long richiestaId, Long definizioneAllegatoId, String userName, long userId, long groupId) throws Exception {
+	/**
+	 *
+	 * @param allegato
+	 * @param nomeFile
+	 * @param servizio
+	 * @param richiestaId
+	 * @param definizioneAllegatoId
+	 * @param userName
+	 * @param userId
+	 * @param groupId
+	 * @throws Exception
+	 */
+	public void salvaAllegatoRichiesta(byte[] allegato, String nomeFile, Servizio servizio, long richiestaId, Long definizioneAllegatoId, String userName, long userId, long groupId) throws Exception {
 
 		try {
 			if (Validator.isNotNull(allegato)) {
-				InputStream stream = new FileInputStream(allegato);
+				InputStream stream = new ByteArrayInputStream(allegato);
 				if (Validator.isNotNull(allegato)) {
 					String descrizione = null;
 					if (definizioneAllegatoId != null && !definizioneAllegatoId.equals(0L)) {
@@ -70,10 +82,10 @@ public class AllegatoRichiestaService {
 						}
 					}
 
-					String mimeType = MimeTypesUtil.getContentType(allegato);
+					String mimeType = MimeTypesUtil.getContentType(stream, nomeFile);
 					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId, stream, mimeType, userId,
 							groupId);
-					creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, definizioneAllegatoId, false, userName, groupId, userId);
+					creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, definizioneAllegatoId, false, true, userId, userName, groupId, userId);
 				}
 			}
 		}
@@ -84,12 +96,29 @@ public class AllegatoRichiestaService {
 
 	}
 
+	/**
+	 *
+	 * @param idDocumentale
+	 * @param nomeFile
+	 * @param titolo
+	 * @param descrizione
+	 * @param nomeServizio
+	 * @param richiestaId
+	 * @param definizioneAllegatoId
+	 * @param principale
+	 * @param visibile
+	 * @param userId
+	 * @param userName
+	 * @param groupId
+	 * @param companyId
+	 */
 	public void creaAllegatoRichiesta(String idDocumentale, String nomeFile, String titolo, String descrizione, String nomeServizio, long richiestaId, Long definizioneAllegatoId, boolean principale,
-			String userName, long groupId, long userId) {
+			boolean visibile, long userId, String userName, long groupId, long companyId) {
 		AllegatoRichiesta allegatoRichiesta = allegatoRichiestaLocalService.createAllegatoRichiesta(counterLocalService.increment());
 
 		if (Validator.isNotNull(idDocumentale)) {
 			allegatoRichiesta.setGroupId(groupId);
+			allegatoRichiesta.setCompanyId(companyId);
 			allegatoRichiesta.setUserId(userId);
 			allegatoRichiesta.setUserName(userName);
 			allegatoRichiesta.setRichiestaId(richiestaId);
@@ -99,16 +128,24 @@ public class AllegatoRichiestaService {
 			allegatoRichiesta.setNome(nomeFile);
 			allegatoRichiesta.setTitolo(titolo);
 			allegatoRichiesta.setDescrizione(descrizione);
-
-			if (!principale) {
-				allegatoRichiesta.setVisibile(true);
-			}
+			allegatoRichiesta.setVisibile(visibile);
 
 			allegatoRichiestaLocalService.updateAllegatoRichiesta(allegatoRichiesta);
 		}
 	}
 
-	public void salvaAllegatoFirmato(File allegato, Servizio servizio, long richiestaId, String userName, long userId, long groupId) throws Exception {
+	/**
+	 *
+	 * @param allegato
+	 * @param servizio
+	 * @param richiestaId
+	 * @param userName
+	 * @param userId
+	 * @param groupId
+	 * @param companyId
+	 * @throws Exception
+	 */
+	public void salvaAllegatoFirmato(File allegato, Servizio servizio, long richiestaId, String userName, long userId, long groupId, long companyId) throws Exception {
 		try {
 			if (Validator.isNotNull(allegato)) {
 				InputStream stream = new FileInputStream(allegato);
@@ -120,7 +157,7 @@ public class AllegatoRichiestaService {
 							groupId);
 
 					if (Validator.isNotNull(idDocumentale)) {
-						creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, null, true, userName, groupId, userId);
+						creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, null, true, true, userId, userName, groupId, companyId);
 					}
 				}
 			}
@@ -131,10 +168,22 @@ public class AllegatoRichiestaService {
 		}
 	}
 
-	public String salvaCertificato(byte[] certificato, Servizio servizio, long richiestaId, String userName, long userId, long groupId) throws Exception {
-		
+	/**
+	 *
+	 * @param certificato
+	 * @param servizio
+	 * @param richiestaId
+	 * @param userName
+	 * @param userId
+	 * @param groupId
+	 * @param companyId
+	 * @return
+	 * @throws Exception
+	 */
+	public String salvaCertificato(byte[] certificato, Servizio servizio, long richiestaId, String userName, long userId, long groupId, long companyId) throws Exception {
+
 		String idDocumentale = null;
-		
+
 		try {
 
 			if (Validator.isNotNull(certificato)) {
@@ -147,7 +196,7 @@ public class AllegatoRichiestaService {
 					idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId, is, mimeType, userId, groupId);
 
 					if (Validator.isNotNull(idDocumentale)) {
-						creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, null, true, userName, groupId, userId);
+						creaAllegatoRichiesta(idDocumentale, nomeFile, nomeFile, descrizione, servizio.getNome(), richiestaId, null, true, true, userId, userName, groupId, companyId);
 					}
 				}
 
@@ -158,33 +207,45 @@ public class AllegatoRichiestaService {
 			log.error(e.getMessage(), e);
 			throw e;
 		}
-		
+
 		return idDocumentale;
 	}
-	
-	public byte[] getCertificato(String idDocumentale) throws Exception{
+
+	/**
+	 *
+	 * @param idDocumentale
+	 * @return
+	 * @throws Exception
+	 */
+	public byte[] getCertificato(String idDocumentale) throws Exception {
 		byte[] certificato = null;
-		
+
 		try {
-			if(Validator.isNotNull(idDocumentale)) {
+			if (Validator.isNotNull(idDocumentale)) {
 				FileEntry certificatoFileEntry = dlAppService.getFileEntry(Long.valueOf(idDocumentale));
-				
-				if(Validator.isNotNull(certificatoFileEntry)) {
+
+				if (Validator.isNotNull(certificatoFileEntry)) {
 					InputStream is = certificatoFileEntry.getContentStream();
-					
-					if(Validator.isNotNull(is)) {
+
+					if (Validator.isNotNull(is)) {
 						certificato = is.readAllBytes();
 					}
 				}
 			}
-		}catch(Exception e) {
-			log.error(e.getMessage(),e);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage(), e);
 			throw e;
 		}
 
 		return certificato;
 	}
 
+	/**
+	 *
+	 * @param definizioneAllegatoId
+	 * @return
+	 */
 	public DatiFileAllegato getModelloAllegato(long definizioneAllegatoId) {
 		DatiFileAllegato modello = null;
 		DefinizioneAllegato allegato = null;
@@ -222,58 +283,70 @@ public class AllegatoRichiestaService {
 
 		return modello;
 	}
-	
+
+	/**
+	 *
+	 * @param pdfFirmato
+	 * @param erroriListaAllegati
+	 * @param listaFormatiFirma
+	 * @param richiestaId
+	 * @return
+	 */
 	public List<String> checkFirmaDigitaleDocumentoPrincipale(File pdfFirmato, List<String> erroriListaAllegati, List<String> listaFormatiFirma, long richiestaId) {
-		
+
 		// TODO: recuperare da db
 
 		String listaFormati = String.join(",", listaFormatiFirma);
-		
-		if(Validator.isNotNull(pdfFirmato)) {
-			 try {		
-		
-					byte[] byteArray = Files.readAllBytes(pdfFirmato.toPath());					 
-				 
-					Boolean isFirmaValida = signatureVerification.checkPkcs7Signature(byteArray,null,null);
 
-				
-				if(isFirmaValida) {
+		if (Validator.isNotNull(pdfFirmato)) {
+			try {
+
+				byte[] byteArray = Files.readAllBytes(pdfFirmato.toPath());
+
+				Boolean isFirmaValida = signatureVerification.checkPkcs7Signature(byteArray, null, null);
+
+				if (isFirmaValida) {
 					int i = 0;
 					Boolean isPdfFirmaDigitale = false;
-					while(i<listaFormatiFirma.size() && isPdfFirmaDigitale == false) {
-						
-						if(listaFormatiFirma.get(i).equalsIgnoreCase("PADES")) {
+					while (i < listaFormatiFirma.size() && isPdfFirmaDigitale == false) {
+
+						if (listaFormatiFirma.get(i).equalsIgnoreCase("PADES")) {
 							isPdfFirmaDigitale = signatureVerification.isPades(byteArray); // signature
 						}
-						
-						if(listaFormatiFirma.get(i).equalsIgnoreCase("CADES")) {
+
+						if (listaFormatiFirma.get(i).equalsIgnoreCase("CADES")) {
 							isPdfFirmaDigitale = signatureVerification.isCades(byteArray); // signature
 						}
-						
+
 						i++;
 					}
-					
-					if(!isPdfFirmaDigitale) {
+
+					if (!isPdfFirmaDigitale) {
 						log.error(":::: checkFirmaDigitaleDocumentoPrincipale ::: PDF della richiesta con ID : " + richiestaId + " non è firmato nei formati accettati ( " + listaFormati + " )");
-						erroriListaAllegati.add(0,"PDF non è firmato nei formati accettati ( " + listaFormati + " )");
+						erroriListaAllegati.add(0, "PDF non è firmato nei formati accettati ( " + listaFormati + " )");
 					}
-					
-				}else {
-					erroriListaAllegati.add(0,"PDF firmato con firma digitale non valida");
+
+				}
+				else {
+					erroriListaAllegati.add(0, "PDF firmato con firma digitale non valida");
 					log.error(":::: checkFirmaDigitaleDocumentoPrincipale :: PDF della richiesta con ID " + richiestaId + " presente con firma digitale non valida");
 				}
-			 }catch(IOException e) {
+			}
+			catch (IOException e) {
 				log.error(":::: checkFirmaDigitaleDocumentoPrincipale :: ERRORE");
 				log.error(e.getMessage());
-			 }catch(SignatureVerificationException e) {
-				log.error(":::: checkFirmaDigitaleDocumentoPrincipale :: ERRORE :: PDF firmato della richiesta con ID : " + richiestaId + "non contiene una firma digitale con uno dei formati ammessi : " + listaFormati);
-				log.error(e.getMessage());
-				erroriListaAllegati.add(0,"PDF firmato non contiene una firma digitale con uno dei formati ammessi : " + listaFormati);
 			}
-		}else {
+			catch (SignatureVerificationException e) {
+				log.error(":::: checkFirmaDigitaleDocumentoPrincipale :: ERRORE :: PDF firmato della richiesta con ID : " + richiestaId
+						+ "non contiene una firma digitale con uno dei formati ammessi : " + listaFormati);
+				log.error(e.getMessage());
+				erroriListaAllegati.add(0, "PDF firmato non contiene una firma digitale con uno dei formati ammessi : " + listaFormati);
+			}
+		}
+		else {
 			log.error("PDF Firmato non presente!");
 		}
-		
+
 		return erroriListaAllegati;
 	}
 }

@@ -33,6 +33,7 @@
 		<column name="errore" type="String" />
 		<column name="servizioId" type="long" />
 		<column name="destinazioneUsoId" type="long" />
+		<column name="richiestaId" type="long" />
 		
 		<!-- Finder methods -->
 		<finder name="CodiceFiscale" return-type="Collection">
@@ -46,6 +47,10 @@
 
 		<finder name="Stato" return-type="Collection">
 			<finder-column name="stato" />
+		</finder>
+
+		<finder name="RichiestaId" return-type="RichiestaCertificato">
+			<finder-column name="richiestaId" />
 		</finder>
 
 		<finder name="ServizioId" return-type="Collection">

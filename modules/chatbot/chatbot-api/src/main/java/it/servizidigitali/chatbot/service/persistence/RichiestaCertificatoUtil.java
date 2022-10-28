@@ -1098,6 +1098,66 @@ public class RichiestaCertificatoUtil {
 	}
 
 	/**
+	 * Returns the richiesta certificato where richiestaId = &#63; or throws a <code>NoSuchRichiestaCertificatoException</code> if it could not be found.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @return the matching richiesta certificato
+	 * @throws NoSuchRichiestaCertificatoException if a matching richiesta certificato could not be found
+	 */
+	public static RichiestaCertificato findByRichiestaId(long richiestaId)
+		throws it.servizidigitali.chatbot.exception.
+			NoSuchRichiestaCertificatoException {
+
+		return getPersistence().findByRichiestaId(richiestaId);
+	}
+
+	/**
+	 * Returns the richiesta certificato where richiestaId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @return the matching richiesta certificato, or <code>null</code> if a matching richiesta certificato could not be found
+	 */
+	public static RichiestaCertificato fetchByRichiestaId(long richiestaId) {
+		return getPersistence().fetchByRichiestaId(richiestaId);
+	}
+
+	/**
+	 * Returns the richiesta certificato where richiestaId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching richiesta certificato, or <code>null</code> if a matching richiesta certificato could not be found
+	 */
+	public static RichiestaCertificato fetchByRichiestaId(
+		long richiestaId, boolean useFinderCache) {
+
+		return getPersistence().fetchByRichiestaId(richiestaId, useFinderCache);
+	}
+
+	/**
+	 * Removes the richiesta certificato where richiestaId = &#63; from the database.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @return the richiesta certificato that was removed
+	 */
+	public static RichiestaCertificato removeByRichiestaId(long richiestaId)
+		throws it.servizidigitali.chatbot.exception.
+			NoSuchRichiestaCertificatoException {
+
+		return getPersistence().removeByRichiestaId(richiestaId);
+	}
+
+	/**
+	 * Returns the number of richiesta certificatos where richiestaId = &#63;.
+	 *
+	 * @param richiestaId the richiesta ID
+	 * @return the number of matching richiesta certificatos
+	 */
+	public static int countByRichiestaId(long richiestaId) {
+		return getPersistence().countByRichiestaId(richiestaId);
+	}
+
+	/**
 	 * Returns all the richiesta certificatos where servizioId = &#63;.
 	 *
 	 * @param servizioId the servizio ID

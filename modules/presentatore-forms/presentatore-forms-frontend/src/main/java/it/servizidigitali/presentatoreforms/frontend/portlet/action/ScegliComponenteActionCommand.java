@@ -114,7 +114,7 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 				log.error("render :: " + e.getMessage(), e);
 				alpacaStructure.setData(data);
 
-				if (e.getConditionCode() != 0) {
+				if (e.getBackofficeServiceExceptionLanguageCode() != null) {
 					throw e;
 				}
 

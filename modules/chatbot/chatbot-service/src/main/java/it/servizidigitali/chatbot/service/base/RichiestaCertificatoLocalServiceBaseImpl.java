@@ -48,6 +48,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import it.servizidigitali.chatbot.model.RichiestaCertificato;
 import it.servizidigitali.chatbot.service.RichiestaCertificatoLocalService;
 import it.servizidigitali.chatbot.service.RichiestaCertificatoLocalServiceUtil;
+import it.servizidigitali.chatbot.service.persistence.RichiestaCertificatoFinder;
 import it.servizidigitali.chatbot.service.persistence.RichiestaCertificatoPersistence;
 
 import java.io.Serializable;
@@ -629,6 +630,9 @@ public abstract class RichiestaCertificatoLocalServiceBaseImpl
 
 	@Reference
 	protected RichiestaCertificatoPersistence richiestaCertificatoPersistence;
+
+	@Reference
+	protected RichiestaCertificatoFinder richiestaCertificatoFinder;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService

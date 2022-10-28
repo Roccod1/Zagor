@@ -277,6 +277,20 @@ public interface RichiestaCertificatoModel
 	 */
 	public void setDestinazioneUsoId(long destinazioneUsoId);
 
+	/**
+	 * Returns the richiesta ID of this richiesta certificato.
+	 *
+	 * @return the richiesta ID of this richiesta certificato
+	 */
+	public long getRichiestaId();
+
+	/**
+	 * Sets the richiesta ID of this richiesta certificato.
+	 *
+	 * @param richiestaId the richiesta ID of this richiesta certificato
+	 */
+	public void setRichiestaId(long richiestaId);
+
 	@Override
 	public RichiestaCertificato cloneWithOriginalValues();
 

@@ -15,5 +15,6 @@
 		<field name="errore" type="String" />
 		<field name="servizioId" type="long" />
 		<field name="destinazioneUsoId" type="long" />
+		<field name="richiestaId" type="long" />
 	</model>
 </model-hints>
