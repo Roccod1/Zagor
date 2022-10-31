@@ -51,6 +51,7 @@ import it.servizidigitali.chatbot.model.RichiestaCertificato;
 import it.servizidigitali.chatbot.scheduler.configuration.InvioCertificatiSchedulerConfiguration;
 import it.servizidigitali.chatbot.service.RichiestaCertificatoLocalService;
 import it.servizidigitali.common.utility.LayoutUtility;
+import it.servizidigitali.common.utility.MessageUtility;
 import it.servizidigitali.common.utility.enumeration.StatoRichiestaCertificato;
 import it.servizidigitali.communication.configuration.TemplateComunicazioniEnteConfiguration;
 import it.servizidigitali.communication.enumeration.Canale;
@@ -94,13 +95,16 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
  *
  */
 @Component(immediate = true, //
-		service = InvioCertificatiScheduler.class, //
+		property = { //
+		}, service = InvioCertificatiScheduler.class, //
 		configurationPid = { //
 				"it.servizidigitali.chatbot.scheduler.configuration.InvioCertificatiSchedulerConfiguration", //
 				"it.servizidigitali.communication.configuration.TemplateComunicazioniEnteConfiguration"//
 		}//
 )
 public class InvioCertificatiScheduler extends BaseMessageListener {
+
+	private static final String PRESENTATOREFORMS_FRONTEND_BUNDLE_SYMBOLIC_NAME = "it.servizidigitali.presentatoreforms.frontend";
 
 	private static final Log log = LogFactoryUtil.getLog(InvioCertificatiScheduler.class);
 
@@ -309,6 +313,9 @@ public class InvioCertificatiScheduler extends BaseMessageListener {
 				if (e instanceof BackofficeServiceException) {
 					BackofficeServiceException backofficeServiceException = (BackofficeServiceException) e;
 					errorMessage = LanguageUtil.get(Locale.ITALY, backofficeServiceException.getBackofficeServiceExceptionLanguageCode().getLiferayLanguageKey());
+
+					MessageUtility messageUtility = new MessageUtility(PRESENTATOREFORMS_FRONTEND_BUNDLE_SYMBOLIC_NAME, Locale.ITALY);
+					errorMessage = messageUtility.getMessage(backofficeServiceException.getBackofficeServiceExceptionLanguageCode().getLiferayLanguageKey());
 
 					log.debug("doReceive :: errore invio certificato con ID: " + richiestaCertificato.getRichiestaCertificatoId() + " :: messaggio di errore : " + errorMessage);
 

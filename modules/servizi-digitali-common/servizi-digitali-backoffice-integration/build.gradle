@@ -8,14 +8,17 @@ dependencies {
     compileOnly group: "com.liferay.portal", name: "release.portal.api"
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-api")
 	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-common-utility")
+	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-libs")
 	compileInclude fileTree(dir: 'lib', include: '*.jar')
+	
+	compileOnly group: 'com.liferay', name: 'org.apache.axis', version: '1.4.LIFERAY-PATCHED-6'
+	compileOnly group: 'javax.xml.rpc', name: 'javax.xml.rpc-api', version: '1.1.2'
+	compileOnly group: 'commons-discovery', name: 'commons-discovery', version: '0.5'
+	
 	compileInclude group: 'com.liferay', name: 'org.apache.xmlbeans', version: '2.5.0.LIFERAY-PATCHED-1'
-	compileInclude group: 'com.liferay', name: 'org.apache.axis', version: '1.4.LIFERAY-PATCHED-6'
 	compileInclude group: 'com.liferay', name: 'javax.xml.soap', version: '1.4.0.LIFERAY-PATCHED-1'
 	compileInclude group: 'com.liferay', name: 'javax.xml.ws', version: '2.3.0.LIFERAY-PATCHED-1'
 	compileInclude group: 'com.liferay', name: 'javax.jws', version: '1.1.0.LIFERAY-PATCHED-1'
-	compileInclude group: 'javax.xml.rpc', name: 'javax.xml.rpc-api', version: '1.1.2'
-	compileInclude group: 'commons-discovery', name: 'commons-discovery', version: '0.5'
 	compileInclude group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
 	compileInclude group: 'org.apache.wss4j', name: 'wss4j-ws-security-common', version: '2.1.7'
 	compileInclude group: 'org.apache.cxf', name: 'cxf-rt-ws-security', version: '3.5.3'
