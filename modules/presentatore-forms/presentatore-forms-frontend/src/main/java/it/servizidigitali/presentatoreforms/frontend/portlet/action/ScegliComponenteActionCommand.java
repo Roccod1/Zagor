@@ -123,7 +123,7 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 				if (tipoServizio != null && tipoServizio.equals(TipoServizio.VISURA) || tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 					errorMessage = messageUtility.getMessage(PresentatoreFormsPortletKeys.DATI_ANAGRAFICI_BACKOFFICE_NON_DISPONIBILI);
 				}
-				throw new RuntimeException(errorMessage);
+				throw new RuntimeException(errorMessage, e);
 			}
 
 			// Sostituzione valore di data

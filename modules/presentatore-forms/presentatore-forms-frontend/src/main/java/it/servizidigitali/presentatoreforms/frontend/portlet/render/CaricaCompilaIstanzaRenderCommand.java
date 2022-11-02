@@ -170,7 +170,7 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 							if (tipoServizio != null && tipoServizio.equals(TipoServizio.VISURA) || tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 								errorMessage = messageUtility.getMessage(PresentatoreFormsPortletKeys.DATI_ANAGRAFICI_BACKOFFICE_NON_DISPONIBILI);
 							}
-							throw new RuntimeException(errorMessage);
+							throw new RuntimeException(errorMessage, e);
 						}
 
 						String dataString = gson.toJson(alpacaStructure.getData());
