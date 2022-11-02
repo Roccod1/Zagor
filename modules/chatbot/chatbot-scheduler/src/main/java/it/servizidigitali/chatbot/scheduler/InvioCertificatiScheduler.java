@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
@@ -312,8 +311,6 @@ public class InvioCertificatiScheduler extends BaseMessageListener {
 				String errorMessage = e.getMessage();
 				if (e instanceof BackofficeServiceException) {
 					BackofficeServiceException backofficeServiceException = (BackofficeServiceException) e;
-					errorMessage = LanguageUtil.get(Locale.ITALY, backofficeServiceException.getBackofficeServiceExceptionLanguageCode().getLiferayLanguageKey());
-
 					MessageUtility messageUtility = new MessageUtility(PRESENTATOREFORMS_FRONTEND_BUNDLE_SYMBOLIC_NAME, Locale.ITALY);
 					errorMessage = messageUtility.getMessage(backofficeServiceException.getBackofficeServiceExceptionLanguageCode().getLiferayLanguageKey());
 
