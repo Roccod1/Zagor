@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import it.servizidigitali.backoffice.integration.enums.StatoCivile;
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici;
 import it.servizidigitali.common.model.Comune;
 import it.servizidigitali.common.model.ComuneEstero;
@@ -25,6 +24,7 @@ import it.servizidigitali.common.model.StatoEstero;
 import it.servizidigitali.common.service.ComuneEsteroLocalService;
 import it.servizidigitali.common.service.ComuneLocalService;
 import it.servizidigitali.common.service.StatoEsteroLocalService;
+import it.servizidigitali.common.utility.enumeration.OrganizationCustomAttributes;
 import it.servizidigitali.presentatoreforms.common.service.integration.enumeration.BackofficeServiceExceptionLanguageCode;
 import it.servizidigitali.presentatoreforms.common.service.integration.exception.BackofficeServiceException;
 import it.servizidigitali.presentatoreforms.common.service.integration.input.jsonenrich.implementation.backoffice.DatiAnagraficiJsonEnrich;
@@ -35,10 +35,10 @@ import it.servizidigitali.presentatoreforms.common.util.EnrichmentUtilService;
  * @author ZONNOG
  *
  */
-@Component(name = "datiCertificatoStatoLiberoJsonEnrich", immediate = true, service = DatiAnagraficiJsonEnrich.class)
-public class DatiCertificatoStatoLiberoJsonEnrich implements DatiAnagraficiJsonEnrich {
+@Component(name = "certificatoResidenzaJsonEnrich", immediate = true, service = DatiAnagraficiJsonEnrich.class)
+public class CertificatoResidenzaJsonEnrich implements DatiAnagraficiJsonEnrich {
 
-	private static final Log log = LogFactoryUtil.getLog(DatiCertificatoStatoLiberoJsonEnrich.class.getName());
+	private static final Log log = LogFactoryUtil.getLog(CertificatoResidenzaJsonEnrich.class.getName());
 
 	@Reference
 	private ComuneLocalService comuneLocalService;
@@ -52,13 +52,14 @@ public class DatiCertificatoStatoLiberoJsonEnrich implements DatiAnagraficiJsonE
 	@Reference
 	private ComuneEsteroLocalService comuneEsteroLocalService;
 
-	private final DateFormat dfdash = new SimpleDateFormat("dd-MM-yyyy");
 
-	public String fieldNameDataContainerKey = "certificatoStatoLibero";
+	private final DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+
+	public final String certificatoResidenzaKey = "certificatoResidenza";
+	public final String autorizzazioneKey = "autorizzazione";
 
 	@Override
 	public <T> void enrich(EnrichmentModel<T> enrichmentModel) {
-
 		T datiAnagrafici = enrichmentModel.getSourceObject();
 		if (datiAnagrafici instanceof DatiAnagrafici) {
 
@@ -70,7 +71,10 @@ public class DatiCertificatoStatoLiberoJsonEnrich implements DatiAnagraficiJsonE
 				log.error("enrich :: " + e.getMessage(), e);
 				throw new BackofficeServiceException("Errore durante il caricamento dell'organizzazione " + enrichmentModel.getOrganizationId(), e);
 			}
+			Comune comuneByCodice = comuneLocalService
+					.getComuneByCodiceISTAT(organization.getExpandoBridge().getAttribute(OrganizationCustomAttributes.CODICE_ISTAT.getNomeAttributo()).toString());
 
+			
 			// Nucleo familiare
 			List<DatiAnagrafici.ComponenteNucleoFamiliare> componentiNucleo = ((DatiAnagrafici) datiAnagrafici).getComponentiNucleoFamiliare();
 
@@ -83,33 +87,37 @@ public class DatiCertificatoStatoLiberoJsonEnrich implements DatiAnagraficiJsonE
 			}
 			if (componentiList.size() == 1) {
 				DatiAnagrafici.ComponenteNucleoFamiliare componente = componentiList.get(0);
+
 				JsonObject alpacaJsonData = enrichmentModel.getAlpacaJsonData();
 
-				String fieldNameDataContainer = fieldNameDataContainerKey;
-				if (fieldNameDataContainer != null) {
-					JsonObject fieldDataContainer = alpacaJsonData.getAsJsonObject(fieldNameDataContainer);
-					if (fieldDataContainer != null) {
+				String certificatoResidenzaNameContainer = certificatoResidenzaKey;
+				if (certificatoResidenzaNameContainer != null) {
+
+					JsonObject certificatoResidenzaContainer = alpacaJsonData.getAsJsonObject(certificatoResidenzaNameContainer);
+					if (certificatoResidenzaContainer != null) {
 
 						// Condizioni scaricamento certificato
 						if (componente.getDataMorte() != null) {
 							throw new BackofficeServiceException(BackofficeServiceExceptionLanguageCode.SOGGETTO_DECEDUTO_CERTIFICATO_NON_DISPONIBILE);
 						}
 
-						if (componente != null && componente.getStatoCivile() != null && (!(componente.getStatoCivile().equals(StatoCivile.CELIBE_NUBILE)))) {
+						// Nome e Cognome
+						String nome = componente.getNome();
+						String cognome = componente.getCognome();
+						String nomeCognome = nome + ' ' + cognome;
+						certificatoResidenzaContainer.addProperty("nomeCognome", nomeCognome);
 
-							throw new BackofficeServiceException(BackofficeServiceExceptionLanguageCode.SOGGETTO_NON_LIBERO);
-						}
-						// Nome e cognome
-						fieldDataContainer.addProperty("nomeCognome", componente.getNome() + " " + componente.getCognome());
+						// Codice Fiscale
+						String codiceFiscale = "Cod. Fisc " + componente.getCodiceFiscale();
+						certificatoResidenzaContainer.addProperty("codiceFiscale", codiceFiscale);
 
 						// Data e luogo nascita //
-
 						String rigaNascita = EnrichmentUtilService.getBornLabelByGenderDichiarante(componente) + "il ";
 						rigaNascita = rigaNascita + EnrichmentUtilService.getDataNascitaComponente(componente) + " a ";
 
 						// TODO va controllata la cittadinanza e mostrato il comune italiano o
 						// estero a
-						// seconda dei casi o si d� per scontata cittadinanza italiana?
+						// seconda dei casi o si dà per scontata cittadinanza italiana?
 						String nomeComuneNascita = "";
 						String siglaProvinciaNascita = "";
 
@@ -142,95 +150,84 @@ public class DatiCertificatoStatoLiberoJsonEnrich implements DatiAnagraficiJsonE
 								rigaNascita = rigaNascita + nomeComuneNascita;
 								if (componente.getCodiceStatoEsteroNascita() != null) {
 									StatoEstero statoEsteroByCodiceStato = statoEsteroLocalService.getStatoEsteroByCodiceStato(componente.getCodiceStatoEsteroNascita());
-									siglaProvinciaNascita = statoEsteroByCodiceStato.getDenominazione();
-									rigaNascita = rigaNascita + " (" + siglaProvinciaNascita + ")";
-								}
-								else if (componente.getCodiceStatoEsteroNascita() != null) {
-									StatoEstero statoEsteroByCodiceStato = statoEsteroLocalService.getStatoEsteroByCodiceStato(componente.getCodiceStatoEsteroNascita());
 									nomeComuneNascita = nomeComuneNascita + " (" + statoEsteroByCodiceStato.getDenominazione() + ")";
 									rigaNascita = rigaNascita + " (" + statoEsteroByCodiceStato.getDenominazione() + ")";
 								}
 							}
+							else if (componente.getCodiceStatoEsteroNascita() != null) {
+								StatoEstero statoEsteroByCodiceStato = statoEsteroLocalService.getStatoEsteroByCodiceStato(componente.getCodiceStatoEsteroNascita());
+								rigaNascita = rigaNascita + " (" + statoEsteroByCodiceStato.getDenominazione() + ")";
+							}
 						}
-						fieldDataContainer.addProperty("rigaNascita", rigaNascita);
+						certificatoResidenzaContainer.addProperty("dataComuneNascita", rigaNascita);
 
-						// atto nascita //
-						String attoNascita = componente.getNumeroAttoNascita();
-
-						if (attoNascita == null) {
-							fieldDataContainer.addProperty("rigaAtto", "atto n. ");
-						}
-						else {
-							fieldDataContainer.addProperty("rigaAtto", "atto n. " + attoNascita);
-						}
-
-						// indirizzo //
 						String indirizzo = ((DatiAnagrafici) datiAnagrafici).getDescrizioneVia();
+
 						if (indirizzo != null) {
 
-							if (((DatiAnagrafici) datiAnagrafici).getToponimoIndirizzo() != null) {
-								indirizzo = ((DatiAnagrafici) datiAnagrafici).getToponimoIndirizzo() + " " + indirizzo;
-							}
+							// Comune residenza
+							if (comuneByCodice != null) {
 
-							indirizzo = indirizzo + " ";
+								if (((DatiAnagrafici) datiAnagrafici).getToponimoIndirizzo() != null) {
+									indirizzo = ((DatiAnagrafici) datiAnagrafici).getToponimoIndirizzo() + " " + indirizzo;
+								}
 
-							// numero civico //
-							String numeroCivico = ((DatiAnagrafici) datiAnagrafici).getNumeroCivico();
-							if (numeroCivico != null) {
-								numeroCivico = " n. " + numeroCivico;
+								// numero civico
+								String numeroCivico = ((DatiAnagrafici) datiAnagrafici).getNumeroCivico();
+								if (numeroCivico != null) {
+									numeroCivico = ", n. " + numeroCivico;
+								}
+								else {
+									numeroCivico = "";
+								}
+								// esponente
+								String esponente = ((DatiAnagrafici) datiAnagrafici).getEsponente();
+								if (esponente != null) {
+									esponente = " " + esponente;
+								}
+								else {
+									esponente = "";
+								}
+								// scala
+								String scala = ((DatiAnagrafici) datiAnagrafici).getScala();
+								if (scala != null) {
+									scala = ", Scala: " + scala;
+								}
+								else {
+									scala = "";
+								}
+								// piano
+								String piano = ((DatiAnagrafici) datiAnagrafici).getPiano();
+								if (piano != null) {
+									piano = ", Piano: " + piano;
+								}
+								else {
+									piano = "";
+								}
+								// interno
+								String interno = ((DatiAnagrafici) datiAnagrafici).getInterno();
+								if (interno != null) {
+									interno = ", Int. " + interno;
+								}
+								else {
+									interno = "";
+								}
+								certificatoResidenzaContainer.addProperty("indirizzoResidenza", indirizzo + numeroCivico + esponente + scala + piano + interno);
 							}
-							else {
-								numeroCivico = "";
-							}
-
-							// esponente del civico //
-							String esponente = ((DatiAnagrafici) datiAnagrafici).getEsponente();
-							if (esponente != null) {
-								esponente = " " + esponente;
-							}
-							else {
-								esponente = "";
-							}
-
-							// scala //
-							String scala = ((DatiAnagrafici) datiAnagrafici).getScala();
-							if (scala != null) {
-								scala = " scala " + scala;
-							}
-							else {
-								scala = "";
-							}
-
-							// piano //
-							String piano = ((DatiAnagrafici) datiAnagrafici).getPiano();
-							if (piano != null) {
-								piano = " piano " + piano;
-							}
-							else {
-								piano = "";
-							}
-
-							// interno //
-							String interno = ((DatiAnagrafici) datiAnagrafici).getInterno();
-							if (interno != null) {
-								interno = " interno " + interno;
-							}
-							else {
-								interno = "";
-							}
-							fieldDataContainer.addProperty("rigaIndirizzo", "abitante in " + indirizzo + numeroCivico + esponente + scala + piano + interno);
 						}
+						// cittaEmissione + Data odierna
 
-						// luogo e data del certificato //
-						String comuneFirma = organization.getName();
-						Date dataEmissione = new Date();
-						String infoVarie = "<h4><br> " + comuneFirma + ", " + dfdash.format(dataEmissione) + "</h4>";
-						fieldDataContainer.addProperty("infoVarie", infoVarie);
+						String citta = organization.getName().toUpperCase();
+						Date today = new Date();
+						String dftoday = df.format(today);
+						String cittaEmissione = "<h4><br> " + citta + ", " + dftoday + "</h4>";
+						certificatoResidenzaContainer.addProperty("cittaEmissione", cittaEmissione);
 
-						// Salvo
-						alpacaJsonData.add(fieldNameDataContainer, fieldDataContainer);
+						// Salvataggio
+						alpacaJsonData.add(certificatoResidenzaKey, certificatoResidenzaContainer);
 						enrichmentModel.setAlpacaJsonData(alpacaJsonData);
 					}
+
 				}
 			}
 		}
