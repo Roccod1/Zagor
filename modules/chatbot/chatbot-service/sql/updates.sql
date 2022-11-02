@@ -19,4 +19,4 @@ CHANGE COLUMN `organizationId` `destinazioneUsoId` BIGINT NULL DEFAULT NULL ;
 
 -- 20221028
 ALTER TABLE `servizi_digitali`.`richiesta_certificato` 
-ADD COLUMN `richiestaId` BIGINT NOT NULL AFTER `destinazioneUsoId`;
+ADD COLUMN `richiestaId` BIGINT NULL AFTER `destinazioneUsoId`;
