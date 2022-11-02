@@ -43,14 +43,17 @@ public class PresentatoreFormsPortletKeys {
 	public static final String JSP_HOME = "/home.jsp";
 	public static final String JSP_ESITO_INVIO = "/esitoInvio.jsp";
 	public static final String JSP_VIEW = "/view.jsp";
+	public static final String JSP_ERROR = "/error.jsp";
 	public static final String JSP_DOWNLOAD_CERTIFICATO = "/downloadCertificato.jsp";
 
 	// MESSAGGI DI ERRORE
+	public static final String GENERIC_ERROR_MESSAGE_KEY = "generic-error-message-key";
 	public static final String IMPOSSIBILE_RECUPERARE_RICHIESTA = "impossibile-recuperare-richiesta";
 	public static final String IMPOSSIBILE_RECUPERARE_SERVIZIO = "impossibile-recuperare-servizio";
 	public static final String IMPOSSIBILE_RECUPERARE_PROCEDURA = "impossibile-recuperare-procedura";
 	public static final String ERRORE_GENERICO = "error.generico";
 	public static final String SELEZIONARE_COMPONENTE_NUCLEO = "componente-nucleo-obbligatorio";
+	public static final String DATI_ANAGRAFICI_BACKOFFICE_NON_DISPONIBILI = "backoffice-service-exception-dati-anagrafici-non-disponibili";
 
 	// ATTRIBUTI
 	public static final String SELECT_COMPONENTI_NUCLEO_FAMILIARE = "selectComponentiNucleoFamiliare";

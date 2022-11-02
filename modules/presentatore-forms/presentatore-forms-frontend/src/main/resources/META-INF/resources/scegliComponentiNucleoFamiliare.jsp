@@ -5,20 +5,10 @@
 
 <liferay-ui:error key="<%=PresentatoreFormsPortletKeys.SELEZIONARE_COMPONENTE_NUCLEO %>" message="error.componenteNucleoFamiliare.required" />
 
-
 <div class="row-fluid">
 	<div class="page-header">
 		<h2 class="noMargin">${titoloPortletServizio}<c:if test="${not empty denominazioneComuneServizio}"> - ${denominazioneComuneServizio}</c:if></h2>
 	</div>
-	<%-- <c:if test="${not empty concorsoAttivo}">
-		<div class="row-fluid">
-			<div class="span12 text-right">
-				<spring:message code="label.concorso.validita" />:&nbsp;
-				<spring:message code="label.concorso.validita.da" />&nbsp;<fmt:formatDate value="${concorsoAttivo.dataApertura}" pattern="dd/MM/yyyy HH:mm"/>&nbsp;
-				<spring:message code="label.concorso.validita.a" />&nbsp;<fmt:formatDate value="${concorsoAttivo.dataChiusura}" pattern="dd/MM/yyyy HH:mm"/>
-			</div>
-		</div>
-	</c:if> --%>
 	<div class="span12 formpresenter-portlet">
 		<div class="alpaca-wizard">
 			<div class="alpaca-wizard-nav">

@@ -7,8 +7,13 @@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/journal" prefix="liferay-journal" %>
 
+<%@page import="com.liferay.portal.kernel.servlet.SessionErrors"%>
 <%@page import="it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys"%>
 
 <liferay-theme:defineObjects />
 
 <portlet:defineObjects />
+
+<liferay-ui:error key="generic-error-message-key">
+	<liferay-ui:message key="your-request-failed-with-message" arguments='<%= SessionErrors.get(liferayPortletRequest, "generic-error-message-key") %>' />
+</liferay-ui:error>

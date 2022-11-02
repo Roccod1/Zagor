@@ -24,6 +24,7 @@ import org.osgi.service.component.annotations.Reference;
 import it.servizidigitali.backoffice.integration.model.commmon.ComponenteNucleoFamiliare;
 import it.servizidigitali.backoffice.integration.model.commmon.IntegrationPreferences;
 import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletService;
+import it.servizidigitali.common.utility.MessageUtility;
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
@@ -100,7 +101,7 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 				formData = AlpacaUtil.loadFormData(form, jsonDataBozza, true, themeDisplay.getPortalURL());
 				alpacaStructure = formData.getAlpaca();
 
-				if (tipoServizio.equals(tipoServizio.CERTIFICATO)) {
+				if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 					List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
 					renderRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 					renderRequest.setAttribute(PresentatoreFormsPortletKeys.API_ALPACA_PATH, themeDisplay.getPortalURL() + PresentatoreFormsPortletKeys.SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH);
@@ -124,6 +125,14 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 						integrationPreferences.setUsaCache(procedura.isAbilitaCacheIntegrazioneBackoffice());
 
 						List<ComponenteNucleoFamiliare> componentiNucleoFamiliare = datiAnagraficiPortletService.getComponentiNucleoFamiliare(codiceFiscale, organizationId, integrationPreferences);
+
+						if (tipoServizio != null && (tipoServizio.equals(TipoServizio.VISURA) || tipoServizio.equals(TipoServizio.CERTIFICATO))
+								&& (componentiNucleoFamiliare == null || componentiNucleoFamiliare.isEmpty())) {
+							MessageUtility messageUtility = new MessageUtility(PresentatoreFormsPortletKeys.BUNDLE_SYMBOLIC_NAME, themeDisplay.getLocale());
+							String errorMessage = messageUtility.getMessage(PresentatoreFormsPortletKeys.DATI_ANAGRAFICI_BACKOFFICE_NON_DISPONIBILI);
+							throw new RuntimeException(errorMessage);
+						}
+
 						renderRequest.setAttribute(PresentatoreFormsPortletKeys.COMPONENTI_NUCLEO_FAMILIARE, componentiNucleoFamiliare);
 						renderRequest.setAttribute(PresentatoreFormsPortletKeys.CODICE_FISCALE_MANUALE, codiceFiscale);
 						renderRequest.setAttribute(PresentatoreFormsPortletKeys.FILTRO_COMPONENTI_FAMILIARI, filtroComponentiFamiliari);
@@ -152,14 +161,16 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 							log.error("render :: " + e.getMessage(), e);
 							alpacaStructure.setData(data);
 
+							String errorMessage = null;
+							MessageUtility messageUtility = new MessageUtility(PresentatoreFormsPortletKeys.BUNDLE_SYMBOLIC_NAME, themeDisplay.getLocale());
 							if (e.getBackofficeServiceExceptionLanguageCode() != null) {
-								throw e;
+								errorMessage = messageUtility.getMessage(e.getBackofficeServiceExceptionLanguageCode().getLiferayLanguageKey());
 							}
+
 							if (tipoServizio != null && tipoServizio.equals(TipoServizio.VISURA) || tipoServizio.equals(TipoServizio.CERTIFICATO)) {
-								log.error("renderizzaAlpacaForm :: impossibile caricare le informazioni dal backoffice per il Comune : " + themeDisplay.getScopeGroup().getName() + " :: "
-										+ e.getMessage(), e);
-								throw e;
+								errorMessage = messageUtility.getMessage(PresentatoreFormsPortletKeys.DATI_ANAGRAFICI_BACKOFFICE_NON_DISPONIBILI);
 							}
+							throw new RuntimeException(errorMessage);
 						}
 
 						String dataString = gson.toJson(alpacaStructure.getData());
@@ -176,6 +187,7 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 				}
 				catch (Exception e) {
 					log.error(e.getMessage(), e);
+					SessionErrors.add(renderRequest, PresentatoreFormsPortletKeys.GENERIC_ERROR_MESSAGE_KEY, e.getMessage());
 				}
 
 			}
