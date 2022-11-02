@@ -70,10 +70,10 @@ public class DatiRichiedenteJsonEnrich implements DatiAnagraficiJsonEnrich {
 
 			List<DatiAnagrafici.ComponenteNucleoFamiliare> componentiList = null;
 			if (enrichmentModel.getUserPreferences().getCodiceFiscaleComponente() != null) {
-				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equals(enrichmentModel.getUserPreferences().getCodiceFiscaleComponente())).collect(Collectors.toList());
+				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equalsIgnoreCase(enrichmentModel.getUserPreferences().getCodiceFiscaleComponente())).collect(Collectors.toList());
 			}
 			else {
-				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equals(enrichmentModel.getUserPreferences().getCodiceFiscaleRichiedente())).collect(Collectors.toList());
+				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equalsIgnoreCase(enrichmentModel.getUserPreferences().getCodiceFiscaleRichiedente())).collect(Collectors.toList());
 			}
 			if (componentiList.size() == 1) {
 

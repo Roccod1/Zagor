@@ -77,10 +77,10 @@ public class AnagrafeRichiedenteResidenzaJsonEnrich implements DatiAnagraficiJso
 			
 			List<DatiAnagrafici.ComponenteNucleoFamiliare> componentiList = null;
 			if (enrichmentModel.getUserPreferences().getCodiceFiscaleComponente() != null) {
-				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equals(enrichmentModel.getUserPreferences().getCodiceFiscaleComponente())).collect(Collectors.toList());
+				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equalsIgnoreCase(enrichmentModel.getUserPreferences().getCodiceFiscaleComponente())).collect(Collectors.toList());
 			}
 			else {
-				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equals(enrichmentModel.getUserPreferences().getCodiceFiscaleRichiedente())).collect(Collectors.toList());
+				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equalsIgnoreCase(enrichmentModel.getUserPreferences().getCodiceFiscaleRichiedente())).collect(Collectors.toList());
 			}
 
 			List<DatiAnagrafici.ComponenteNucleoFamiliare> altriComponentiList = null;
@@ -142,7 +142,7 @@ public class AnagrafeRichiedenteResidenzaJsonEnrich implements DatiAnagraficiJso
 							}
 						}
 
-						// Se il componente è nato in uno stato estero
+						// Se il componente ï¿½ nato in uno stato estero
 						if (dichiarante.getCodiceStatoEsteroNascita() != null || dichiarante.getDescrizioneStatoEsteroNascita() != null) {
 							StatoEstero statoEsteroByCodiceOrDenominazione = 
 									dichiarante.getCodiceStatoEsteroNascita() != null ?

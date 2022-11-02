@@ -81,10 +81,10 @@ public class CertificatoCostituzioneUnioneJsonEnrich implements DatiAnagraficiJs
 
 			List<DatiAnagrafici.ComponenteNucleoFamiliare> componentiList = null;
 			if (enrichmentModel.getUserPreferences().getCodiceFiscaleComponente() != null) {
-				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equals(enrichmentModel.getUserPreferences().getCodiceFiscaleComponente())).collect(Collectors.toList());
+				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equalsIgnoreCase(enrichmentModel.getUserPreferences().getCodiceFiscaleComponente())).collect(Collectors.toList());
 			}
 			else {
-				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equals(enrichmentModel.getUserPreferences().getCodiceFiscaleRichiedente())).collect(Collectors.toList());
+				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equalsIgnoreCase(enrichmentModel.getUserPreferences().getCodiceFiscaleRichiedente())).collect(Collectors.toList());
 			}
 			if (componentiList.size() == 1) {
 				DatiAnagrafici.ComponenteNucleoFamiliare componente = componentiList.get(0);
@@ -105,7 +105,7 @@ public class CertificatoCostituzioneUnioneJsonEnrich implements DatiAnagraficiJs
 					}
 
 					// Premessa
-					String premessaAtto = "<b>L'UFFICIALE DELLO STATO CIVILE</b><br>in conformità  alle risultanze degli Atti di Unione civile di questo Comune,<br>";
+					String premessaAtto = "<b>L'UFFICIALE DELLO STATO CIVILE</b><br>in conformitï¿½ alle risultanze degli Atti di Unione civile di questo Comune,<br>";
 
 					if (componente.getAnnoAttoUnioneCivile() != null) {
 						premessaAtto = premessaAtto + "dell'anno " + componente.getAnnoAttoUnioneCivile();
