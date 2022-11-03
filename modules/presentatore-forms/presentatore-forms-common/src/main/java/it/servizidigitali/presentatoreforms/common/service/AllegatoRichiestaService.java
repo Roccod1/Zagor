@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.util.Validator;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -23,6 +24,7 @@ import it.servizidigitali.file.utility.signature.SignatureVerification;
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.presentatoreforms.common.exception.PDFSignatureException;
 import it.servizidigitali.presentatoreforms.common.model.DatiFileAllegato;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
@@ -283,31 +285,28 @@ public class AllegatoRichiestaService {
 
 	/**
 	 *
-	 * @param allegatoBytes
-	 * @param erroriListaAllegati
-	 * @param listaFormatiFirma
-	 * @param richiestaId
-	 * @return
+	 * @param byteArray
+	 * @param tipiFirmaDigitale
+	 * @throws PDFSignatureException
 	 */
-	public List<String> checkFirmaDigitaleDocumentoPrincipale(byte[] byteArray, List<String> erroriListaAllegati, List<String> listaFormatiFirma, long richiestaId) {
-
-		String listaFormati = String.join(",", listaFormatiFirma);
+	public void checkFirmaDigitaleDocumento(byte[] byteArray, List<TipoFirmaDigitale> tipiFirmaDigitale) throws PDFSignatureException {
 
 		if (Validator.isNotNull(byteArray)) {
-			try {
 
+			String firmeDigitaliString = tipiFirmaDigitale.stream().map(TipoFirmaDigitale::name).collect(Collectors.joining(", "));
+			try {
 				Boolean isFirmaValida = signatureVerification.checkPkcs7Signature(byteArray, null, null);
 
 				if (isFirmaValida) {
 					int i = 0;
 					Boolean isPdfFirmaDigitale = false;
-					while (i < listaFormatiFirma.size() && isPdfFirmaDigitale == false) {
+					while (i < tipiFirmaDigitale.size() && isPdfFirmaDigitale == false) {
 
-						if (listaFormatiFirma.get(i).equalsIgnoreCase(TipoFirmaDigitale.PADES.name())) {
+						if (tipiFirmaDigitale.get(i).equals(TipoFirmaDigitale.PADES)) {
 							isPdfFirmaDigitale = signatureVerification.isPades(byteArray); // signature
 						}
 
-						if (listaFormatiFirma.get(i).equalsIgnoreCase(TipoFirmaDigitale.CADES.name())) {
+						if (tipiFirmaDigitale.get(i).equals(TipoFirmaDigitale.CADES)) {
 							isPdfFirmaDigitale = signatureVerification.isCades(byteArray); // signature
 						}
 
@@ -315,27 +314,21 @@ public class AllegatoRichiestaService {
 					}
 
 					if (!isPdfFirmaDigitale) {
-						log.error(":::: checkFirmaDigitaleDocumentoPrincipale ::: PDF della richiesta con ID : " + richiestaId + " non è firmato nei formati accettati ( " + listaFormati + " )");
-						erroriListaAllegati.add(0, "PDF non è firmato nei formati accettati ( " + listaFormati + " )");
+						throw new PDFSignatureException("Il file non è firmato nei formati accettati ( " + firmeDigitaliString + " )");
 					}
 
 				}
 				else {
-					erroriListaAllegati.add(0, "PDF firmato con firma digitale non valida");
-					log.error(":::: checkFirmaDigitaleDocumentoPrincipale :: PDF della richiesta con ID " + richiestaId + " presente con firma digitale non valida");
+					throw new PDFSignatureException("Il file non risulta firmato con una firma digitale valida");
 				}
 			}
 			catch (SignatureVerificationException e) {
-				log.error(":::: checkFirmaDigitaleDocumentoPrincipale :: ERRORE :: PDF firmato della richiesta con ID : " + richiestaId
-						+ "non contiene una firma digitale con uno dei formati ammessi : " + listaFormati);
-				log.error(e.getMessage());
-				erroriListaAllegati.add(0, "PDF firmato non contiene una firma digitale con uno dei formati ammessi : " + listaFormati);
+				log.error(e.getMessage(), e);
+				throw new PDFSignatureException("Il file non è firmato nei formati accettati ( " + firmeDigitaliString + " )");
 			}
 		}
 		else {
-			log.error("PDF Firmato non presente!");
+			throw new PDFSignatureException("File non presente");
 		}
-
-		return erroriListaAllegati;
 	}
 }
