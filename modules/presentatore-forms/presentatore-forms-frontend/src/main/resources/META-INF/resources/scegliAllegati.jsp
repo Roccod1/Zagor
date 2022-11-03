@@ -1,9 +1,11 @@
 <%@ include file="./init.jsp"%>
 
 <portlet:actionURL var="salvaUrl" name="<%=PresentatoreFormsPortletKeys.SALVA_INVIA_RICHIESTA_ACTION_COMMAND %>">
+	<portlet:param name="codiceFiscaleComponente" value="${selectComponentiNucleoFamiliare}" />
 </portlet:actionURL>
 
 <portlet:actionURL var="indietroUrl" name="<%=PresentatoreFormsPortletKeys.INDIETRO_ACTION_COMMAND %>">
+	<portlet:param name="codiceFiscaleComponente" value="${selectComponentiNucleoFamiliare}" />
 </portlet:actionURL>
 
 <portlet:resourceURL id="/downloadIstanza" var="downloadIstanzaUrl"/>
