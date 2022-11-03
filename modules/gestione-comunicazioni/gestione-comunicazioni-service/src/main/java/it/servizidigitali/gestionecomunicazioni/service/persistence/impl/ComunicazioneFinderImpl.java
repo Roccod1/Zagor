@@ -31,41 +31,44 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 
 	@Reference
 	private UserLocalService userLocalService;
-	
+
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Comunicazione> findByFilters(ComunicazioneFilters filters, int start, int end) {
 		Session session = null;
-		
+
 		try {
 			session = openSession();
-			
-			SQLQuery sqlQuery = generaQuery(session, filters, false, start, end);			
-			
-			List<Comunicazione> list = ((List<Object[]>)sqlQuery.list())
-					.stream()
-					.map(this::mapComunicazione)
-					.collect(Collectors.toList());
+
+			SQLQuery sqlQuery = generaQuery(session, filters, false, start, end);
+
+			List<Comunicazione> list = ((List<Object[]>) sqlQuery.list()).stream().map(this::mapComunicazione).collect(Collectors.toList());
 			return list;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new RuntimeException(e);
-		} finally {
+		}
+		finally {
 			closeSession(session);
 		}
 	}
 
+	@Override
 	public int countByFilters(ComunicazioneFilters filters) {
 		Session session = null;
-		
+
 		try {
 			session = openSession();
-			
-			SQLQuery sqlQuery = generaQuery(session, filters, true, 0, 0);			
-			
+
+			SQLQuery sqlQuery = generaQuery(session, filters, true, 0, 0);
+
 			int count = Integer.valueOf(sqlQuery.list().get(0).toString());
 			return count;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new RuntimeException(e);
-		} finally {
+		}
+		finally {
 			closeSession(session);
 		}
 	}
@@ -73,24 +76,26 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 	private SQLQuery generaQuery(Session session, ComunicazioneFilters filters, boolean countQuery, int start, int end) {
 		long[] ids;
 		if (filters.getUsername() != null) {
-			ids = searchUsers(filters.getUsername().toLowerCase());		
-		} else {
+			ids = searchUsers(filters.getUsername().toLowerCase());
+		}
+		else {
 			ids = null;
 		}
-		
-		
+
 		String sql;
 		if (countQuery) {
 			sql = "select count(*) ";
-		} else {
+		}
+		else {
 			sql = "select c.comunicazioneId, c.dataInvio, c.titolo, c.tipologiaComunicazioneId, c.destinatarioOrganizationId, c.descrizione, c.codiceServizio ";
 		}
-		
+
 		sql += "from comunicazione c left join lettura_comunicazione lc on c.comunicazioneId = lc.comunicazioneId where 1 = 1 ";
 		if (filters.getStato() != null) {
 			if (filters.getStato()) {
 				sql += "and lc.dataLettura is not NULL and lc.userId = ? ";
-			} else {
+			}
+			else {
 				sql += "and lc.dataLettura is NULL and (lc.userId = ? or lc.userId is NULL) ";
 			}
 		}
@@ -109,20 +114,24 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 		if (filters.getDataInvioA() != null) {
 			sql += "and c.dataInvio <= ? ";
 		}
-		if(Validator.isNotNull(filters.getTitoloDescrizione())) {
+		if (Validator.isNotNull(filters.getTitoloDescrizione())) {
 			sql += "and (c.titolo like concat('%', ?, '%') or c.descrizione like concat('%', ?, '%')) ";
 		}
-		if(Validator.isNotNull(filters.getOrderByCol())) {
+
+		sql += "and c.groupId = ? ";
+		sql += "and c.companyId = ? ";
+
+		if (Validator.isNotNull(filters.getOrderByCol())) {
 			sql += "order by ? ? ";
 		}
 		if (!countQuery) {
 			sql += "limit ?, ?";
 		}
-		
+
 		SQLQuery sqlQuery = session.createSQLQuery(sql);
-		
+
 		QueryPos queryPos = QueryPos.getInstance(sqlQuery);
-		
+
 		if (filters.getStato() != null) {
 			queryPos.add(filters.getUserId());
 		}
@@ -132,7 +141,7 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 		if (filters.getTipologia() != null) {
 			queryPos.add(filters.getTipologia());
 		}
-		if (filters.getUsername() != null) {	
+		if (filters.getUsername() != null) {
 			queryPos.add(ids);
 		}
 		if (filters.getDataInvioDa() != null) {
@@ -141,11 +150,15 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 		if (filters.getDataInvioA() != null) {
 			queryPos.add(filters.getDataInvioA());
 		}
-		if(Validator.isNotNull(filters.getTitoloDescrizione())) {
+		if (Validator.isNotNull(filters.getTitoloDescrizione())) {
 			queryPos.add(filters.getTitoloDescrizione());
 			queryPos.add(filters.getTitoloDescrizione());
 		}
-		if(Validator.isNotNull(filters.getOrderByCol())) {
+
+		queryPos.add(filters.getGroupId());
+		queryPos.add(filters.getCompanyId());
+
+		if (Validator.isNotNull(filters.getOrderByCol())) {
 			queryPos.add(filters.getOrderByCol());
 			queryPos.add(Validator.isNotNull(filters.getOrderByType()) ? filters.getOrderByType() : "asc");
 		}
@@ -153,17 +166,18 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 			queryPos.add(start);
 			queryPos.add(end - start);
 		}
-		
+
 		return sqlQuery;
 	}
-	
+
 	private String generateGroup(int length) {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("(");
 		for (int i = 0; i < length; i++) {
 			if (i == 0) {
 				buffer.append("?");
-			} else {
+			}
+			else {
 				buffer.append(", ?");
 			}
 		}
@@ -173,20 +187,20 @@ public class ComunicazioneFinderImpl extends ComunicazioneFinderBaseImpl impleme
 
 	private long[] searchUsers(String query) {
 		String pattern = StringPool.PERCENT + query + StringPool.PERCENT;
-		
+
 		DynamicQuery dq = DynamicQueryFactoryUtil.forClass(User.class, getClass().getClassLoader());
 		Criterion cfClause = RestrictionsFactoryUtil.ilike("screenName", pattern);
 		Criterion fnClause = RestrictionsFactoryUtil.ilike("firstName", pattern);
 		Criterion lnClause = RestrictionsFactoryUtil.ilike("lastName", pattern);
 		Criterion nameClause = RestrictionsFactoryUtil.or(fnClause, lnClause);
-		
+
 		dq.add(RestrictionsFactoryUtil.or(nameClause, cfClause));
 		dq.setProjection(ProjectionFactoryUtil.property("userId"));
-		
+
 		List<Long> ids = new ArrayList<>();
-		ids.addAll(userLocalService.<Long>dynamicQuery(dq));
+		ids.addAll(userLocalService.<Long> dynamicQuery(dq));
 		ids.add(0L);
-		
+
 		return ids.stream().mapToLong(x -> x).toArray();
 	}
 
