@@ -69,7 +69,7 @@ public class GeneraCertificatoRenderCommand implements MVCRenderCommand {
 		byte[] pdfCertificato = null;
 
 		long destinazioneUsoId = ParamUtil.getLong(renderRequest, "destinazioneUsoId");
-		String codiceFiscaleComponente = ParamUtil.getString(renderRequest, "codiceFiscaleComponente");
+		String codiceFiscaleComponente = ParamUtil.getString(renderRequest, PresentatoreFormsPortletKeys.CODICE_FISCALE_COMPONENTE);
 
 		try {
 			procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);

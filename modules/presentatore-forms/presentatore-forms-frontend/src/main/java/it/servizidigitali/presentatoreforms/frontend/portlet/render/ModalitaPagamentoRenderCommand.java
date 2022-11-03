@@ -119,7 +119,7 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand {
 					if (certificatiPdfPreviewEnabled) {
 
 						String jsonDataBozza = istanzaForm.getJson();
-						String codiceFiscaleComponente = ParamUtil.getString(renderRequest, "codiceFiscaleComponente");
+						String codiceFiscaleComponente = ParamUtil.getString(renderRequest, PresentatoreFormsPortletKeys.CODICE_FISCALE_COMPONENTE);
 
 						FormData formData = AlpacaUtil.loadFormData(form, jsonDataBozza, true, themeDisplay.getPortalURL());
 						AlpacaJsonStructure alpacaStructure = formData.getAlpaca();

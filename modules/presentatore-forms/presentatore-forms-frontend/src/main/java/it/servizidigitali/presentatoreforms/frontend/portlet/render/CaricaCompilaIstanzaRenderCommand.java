@@ -147,10 +147,6 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 						UserPreferences userPreferences = new UserPreferences();
 						userPreferences.setCodiceFiscaleRichiedente(screenName);
 
-						if (PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME) != null) {
-							userPreferences = (UserPreferences) PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME);
-						}
-
 						JsonObject data = gson.fromJson(gson.toJson(alpacaStructure.getData()), JsonObject.class);
 
 						try {

@@ -12,7 +12,6 @@ import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -157,11 +156,6 @@ public class PresentatoreFormsPortlet extends MVCPortlet {
 
 							UserPreferences userPreferences = new UserPreferences();
 							userPreferences.setCodiceFiscaleRichiedente(screenName);
-
-							if (PortalUtil.getHttpServletRequest(renderRequest).getSession().getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME) != null) {
-								userPreferences = (UserPreferences) PortalUtil.getHttpServletRequest(renderRequest).getSession()
-										.getAttribute(PresentatoreFormsPortletKeys.USER_PREFERENCES_ATTRIBUTE_NAME);
-							}
 
 							Gson gson = new Gson();
 							JsonObject data = gson.fromJson(gson.toJson(alpacaStructure.getData()), JsonObject.class);

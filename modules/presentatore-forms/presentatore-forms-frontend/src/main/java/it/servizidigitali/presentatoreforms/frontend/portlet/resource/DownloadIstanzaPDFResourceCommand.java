@@ -70,7 +70,7 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 		byte[] pdf = null;
 
 		String screenName = themeDisplay.getUser().getScreenName();
-		String codiceFiscaleComponente = ParamUtil.getString(resourceRequest, "codiceFiscaleComponente");
+		String codiceFiscaleComponente = ParamUtil.getString(resourceRequest, PresentatoreFormsPortletKeys.CODICE_FISCALE_COMPONENTE);
 
 		Gson gson = new Gson();
 
@@ -84,12 +84,12 @@ public class DownloadIstanzaPDFResourceCommand extends BaseMVCResourceCommand {
 				richiesta = richiestaLocalService.getRichiesta(richiestaId);
 			}
 
-			PDFService pdfService = pdfServiceFactory.getPDFService(TipoGenerazionePDF.valueOf(procedura.getTipoGenerazionePDF()));
-
 			if (Validator.isNull(procedura)) {
 				SessionErrors.add(resourceRequest, PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA);
 				return;
 			}
+
+			PDFService pdfService = pdfServiceFactory.getPDFService(TipoGenerazionePDF.valueOf(procedura.getTipoGenerazionePDF()));
 
 			Form form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 			istanzaForm = presentatoreFormFrontendService.getIstanzaFormRichiesta(richiesta.getRichiestaId(), form.getFormId());
