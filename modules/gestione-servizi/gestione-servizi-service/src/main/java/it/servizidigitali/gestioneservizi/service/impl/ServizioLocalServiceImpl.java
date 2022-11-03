@@ -197,16 +197,25 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl {
 		}
 		List<Servizio> listaServizi = servizioPersistence.findWithDynamicQuery(servizioDynamicQuery, inizio, fine, ordine);
 
-		setAreaTematicaListaServizi(listaServizi);
+		fillServizi(listaServizi);
 
 		// richiedo lista servizi paginata e ordinata
 		return servizioPersistence.findWithDynamicQuery(servizioDynamicQuery, inizio, fine, ordine);
 	}
 
-	private void setAreaTematicaListaServizi(List<Servizio> listaServizi) {
+	private void fillServizi(List<Servizio> listaServizi) {
 		for (Servizio servizio : listaServizi) {
 			setAreaTematica(servizio);
+			setTipologie(servizio);
 		}
+	}
+
+	/**
+	 * @param servizio
+	 */
+	private void setTipologie(Servizio servizio) {
+		List<Tipologia> listaTipologie = tipologiaPersistence.getServizioTipologias(servizio.getServizioId());
+		servizio.setListaTipologie(listaTipologie);
 	}
 
 	private void setAreaTematica(Servizio servizio) {
