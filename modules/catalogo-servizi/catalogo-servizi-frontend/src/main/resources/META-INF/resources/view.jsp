@@ -18,29 +18,36 @@
 	
 	<c:otherwise>
 		<div class="row">
-			<c:forEach items="${listaServizi }" var="servizio">
+			<c:forEach items="${listaServizi}" var="servizio">
 				<!--start card-->
 				<div class="col-12 col-sm-6 col-lg-4">
-					<div class="card-wrapper">
-						<div class="card shadow-none">
-							<div class="card-body pl-0 pr-0">
-							<div class="categoryicon-top">
-							<svg class="icon icon-sm">
-							  <use href="/o/portale-istituzionale-theme/svg/sprite.svg#it-settings"></use>
-							</svg>
-							<a href="#"><span class="text">${not empty servizio.areaTematica ? servizio.areaTematica.nome : "" }</span></a>
+					<div class="card-wrapper card-space">
+						<div class="card card-bg card-img rounded shadow">
+							<div class="card-body p-4">
+								<div class="category-top">
+									<svg class="icon icon-sm">
+									  <use href="/o/portale-istituzionale-theme/svg/sprite.svg#it-settings"></use>
+									</svg>
+									<span class="category">${not empty servizio.areaTematica ? servizio.areaTematica.nome : "" }</span>
+								</div>
+								<h3 class="card-title">${servizio.nome}</h3>
+								<p class="card-text">${servizio.descrizione}</p>
+								<c:forEach items="${servizio.listaTipologie}" var="tipologia">
+									<div class="chip chip-simple chip-primary chip-no-link">
+	                                	<span class="chip-label">${tipologia.nome}</span>
+	                                </div>
+								</c:forEach>
+								<portlet:renderURL var="schedaServizioURL">
+									<portlet:param name="mvcRenderCommandName" value="<%=CatalogoServiziPortletKeys.RENDER_SCHEDA_SERVIZIO_NAME %>" />
+									<portlet:param name="<%=CatalogoServiziPortletKeys.SERVIZIO_ID %>" value="${servizio.servizioId}" />
+								</portlet:renderURL>
+								<a class="read-more" href="${schedaServizioURL}">
+									<span class="text"><liferay-ui:message key="leggi-di-piu"/></span> 
+									<svg class="icon">
+										<use xlink:href="/o/portale-istituzionale-theme/svg/sprite.svg#it-arrow-right"></use>
+									</svg>
+								</a>
 							</div>
-							<h5 class="card-title big-heading">${servizio.nome }</h5>
-							
-							<p class="card-text">${servizio.descrizione }</p>
-							
-							<portlet:renderURL var="schedaServizioURL">
-								<portlet:param name="mvcRenderCommandName" value="<%=CatalogoServiziPortletKeys.RENDER_SCHEDA_SERVIZIO_NAME %>" />
-								<portlet:param name="<%=CatalogoServiziPortletKeys.SERVIZIO_ID %>" value="${servizio.servizioId }" />
-							</portlet:renderURL>
-							
-							
-							<a class="read-more" href="${schedaServizioURL }"><span class="text">Leggi di più</span> <svg class="icon"> <use xlink:href="/o/portale-istituzionale-theme/svg/sprite.svg#it-arrow-right"></use> </svg> </a></div>
 						</div>
 					</div>
 				</div>
