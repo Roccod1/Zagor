@@ -3,10 +3,13 @@
 <portlet:renderURL var="portletURL">
 </portlet:renderURL>
 
-
 <aui:form action="${portletURL}">
-	<aui:input name="queryNome" label="cerca-servizio" value="${queryNome}" />
-	<aui:button type="submit" value="cerca" />
+	<div class="form-row align-items-center">
+		<aui:input wrapperCssClass="col" name="queryNome" label="cerca-servizio" value="${queryNome}" />
+		<div class="form-group col-auto">
+			<aui:button cssClass="mt-4" type="submit" value="cerca" />
+		</div>
+	</div>
 </aui:form>
 
 <c:choose>
