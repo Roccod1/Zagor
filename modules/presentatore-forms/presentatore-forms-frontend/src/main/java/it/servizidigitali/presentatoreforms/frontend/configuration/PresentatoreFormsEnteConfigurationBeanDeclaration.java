@@ -10,11 +10,11 @@ import org.osgi.service.component.annotations.Component;
  *
  */
 @Component
-public class UploadFileRichiesteEnteConfigurationBeanDeclaration implements ConfigurationBeanDeclaration {
+public class PresentatoreFormsEnteConfigurationBeanDeclaration implements ConfigurationBeanDeclaration {
 
 	@Override
 	public Class<?> getConfigurationBeanClass() {
-		return UploadFileRichiesteEnteConfiguration.class;
+		return PresentatoreFormsEnteConfiguration.class;
 	}
 
 }

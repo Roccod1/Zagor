@@ -73,10 +73,10 @@ public class DatiAnagraficiSchedaFiereJsonEnrich implements DatiAnagraficiJsonEn
 
 			List<DatiAnagrafici.ComponenteNucleoFamiliare> componentiList = null;
 			if (enrichmentModel.getUserPreferences().getCodiceFiscaleComponente() != null) {
-				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equals(enrichmentModel.getUserPreferences().getCodiceFiscaleComponente())).collect(Collectors.toList());
+				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equalsIgnoreCase(enrichmentModel.getUserPreferences().getCodiceFiscaleComponente())).collect(Collectors.toList());
 			}
 			else {
-				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equals(enrichmentModel.getUserPreferences().getCodiceFiscaleRichiedente())).collect(Collectors.toList());
+				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equalsIgnoreCase(enrichmentModel.getUserPreferences().getCodiceFiscaleRichiedente())).collect(Collectors.toList());
 			}
 			if (componentiList.size() == 1) {
 				DatiAnagrafici.ComponenteNucleoFamiliare componente = componentiList.get(0);
@@ -126,7 +126,7 @@ public class DatiAnagraficiSchedaFiereJsonEnrich implements DatiAnagraficiJsonEn
 								}
 							}
 
-							// Se il componente è nato in uno stato estero
+							// Se il componente ï¿½ nato in uno stato estero
 							if (componente.getCodiceStatoEsteroNascita() != null || componente.getDescrizioneStatoEsteroNascita() != null) {
 								StatoEstero statoEsteroByCodiceOrDenominazione = 
 										componente.getCodiceStatoEsteroNascita() != null ?

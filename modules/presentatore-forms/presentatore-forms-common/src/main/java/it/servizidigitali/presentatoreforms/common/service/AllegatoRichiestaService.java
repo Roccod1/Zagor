@@ -10,22 +10,21 @@ import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.TipoFirmaDigitale;
 import it.servizidigitali.file.utility.exception.SignatureVerificationException;
 import it.servizidigitali.file.utility.factory.FileServiceFactory;
 import it.servizidigitali.file.utility.signature.SignatureVerification;
 import it.servizidigitali.gestioneforms.model.DefinizioneAllegato;
 import it.servizidigitali.gestioneforms.service.DefinizioneAllegatoLocalService;
 import it.servizidigitali.gestioneservizi.model.Servizio;
+import it.servizidigitali.presentatoreforms.common.exception.PDFSignatureException;
 import it.servizidigitali.presentatoreforms.common.model.DatiFileAllegato;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
@@ -145,14 +144,14 @@ public class AllegatoRichiestaService {
 	 * @param companyId
 	 * @throws Exception
 	 */
-	public void salvaAllegatoFirmato(File allegato, Servizio servizio, long richiestaId, String userName, long userId, long groupId, long companyId) throws Exception {
+	public void salvaDocumentoPrincipaleRichiesta(byte[] allegato, Servizio servizio, long richiestaId, String userName, long userId, long groupId, long companyId) throws Exception {
 		try {
 			if (Validator.isNotNull(allegato)) {
-				InputStream stream = new FileInputStream(allegato);
+				InputStream stream = new ByteArrayInputStream(allegato);
 				String nomeFile = "richiesta-" + richiestaId + ".pdf";
 				String descrizione = "Richiesta servizio '" + servizio.getNome() + "' - ID: " + richiestaId;
 				if (Validator.isNotNull(allegato)) {
-					String mimeType = MimeTypesUtil.getContentType(allegato);
+					String mimeType = MimeTypesUtil.getContentType(stream, nomeFile);
 					String idDocumentale = fileServiceFactory.getActiveFileService().saveRequestFile(nomeFile, nomeFile, descrizione, servizio.getCodice(), richiestaId, stream, mimeType, userId,
 							groupId);
 
@@ -286,35 +285,28 @@ public class AllegatoRichiestaService {
 
 	/**
 	 *
-	 * @param pdfFirmato
-	 * @param erroriListaAllegati
-	 * @param listaFormatiFirma
-	 * @param richiestaId
-	 * @return
+	 * @param byteArray
+	 * @param tipiFirmaDigitale
+	 * @throws PDFSignatureException
 	 */
-	public List<String> checkFirmaDigitaleDocumentoPrincipale(File pdfFirmato, List<String> erroriListaAllegati, List<String> listaFormatiFirma, long richiestaId) {
+	public void checkFirmaDigitaleDocumento(byte[] byteArray, List<TipoFirmaDigitale> tipiFirmaDigitale) throws PDFSignatureException {
 
-		// TODO: recuperare da db
+		if (Validator.isNotNull(byteArray)) {
 
-		String listaFormati = String.join(",", listaFormatiFirma);
-
-		if (Validator.isNotNull(pdfFirmato)) {
+			String firmeDigitaliString = tipiFirmaDigitale.stream().map(TipoFirmaDigitale::name).collect(Collectors.joining(", "));
 			try {
-
-				byte[] byteArray = Files.readAllBytes(pdfFirmato.toPath());
-
 				Boolean isFirmaValida = signatureVerification.checkPkcs7Signature(byteArray, null, null);
 
 				if (isFirmaValida) {
 					int i = 0;
 					Boolean isPdfFirmaDigitale = false;
-					while (i < listaFormatiFirma.size() && isPdfFirmaDigitale == false) {
+					while (i < tipiFirmaDigitale.size() && isPdfFirmaDigitale == false) {
 
-						if (listaFormatiFirma.get(i).equalsIgnoreCase("PADES")) {
+						if (tipiFirmaDigitale.get(i).equals(TipoFirmaDigitale.PADES)) {
 							isPdfFirmaDigitale = signatureVerification.isPades(byteArray); // signature
 						}
 
-						if (listaFormatiFirma.get(i).equalsIgnoreCase("CADES")) {
+						if (tipiFirmaDigitale.get(i).equals(TipoFirmaDigitale.CADES)) {
 							isPdfFirmaDigitale = signatureVerification.isCades(byteArray); // signature
 						}
 
@@ -322,31 +314,21 @@ public class AllegatoRichiestaService {
 					}
 
 					if (!isPdfFirmaDigitale) {
-						log.error(":::: checkFirmaDigitaleDocumentoPrincipale ::: PDF della richiesta con ID : " + richiestaId + " non è firmato nei formati accettati ( " + listaFormati + " )");
-						erroriListaAllegati.add(0, "PDF non è firmato nei formati accettati ( " + listaFormati + " )");
+						throw new PDFSignatureException("Il file non è firmato nei formati accettati ( " + firmeDigitaliString + " )");
 					}
 
 				}
 				else {
-					erroriListaAllegati.add(0, "PDF firmato con firma digitale non valida");
-					log.error(":::: checkFirmaDigitaleDocumentoPrincipale :: PDF della richiesta con ID " + richiestaId + " presente con firma digitale non valida");
+					throw new PDFSignatureException("Il file non risulta firmato con una firma digitale valida");
 				}
 			}
-			catch (IOException e) {
-				log.error(":::: checkFirmaDigitaleDocumentoPrincipale :: ERRORE");
-				log.error(e.getMessage());
-			}
 			catch (SignatureVerificationException e) {
-				log.error(":::: checkFirmaDigitaleDocumentoPrincipale :: ERRORE :: PDF firmato della richiesta con ID : " + richiestaId
-						+ "non contiene una firma digitale con uno dei formati ammessi : " + listaFormati);
-				log.error(e.getMessage());
-				erroriListaAllegati.add(0, "PDF firmato non contiene una firma digitale con uno dei formati ammessi : " + listaFormati);
+				log.error(e.getMessage(), e);
+				throw new PDFSignatureException("Il file non è firmato nei formati accettati ( " + firmeDigitaliString + " )");
 			}
 		}
 		else {
-			log.error("PDF Firmato non presente!");
+			throw new PDFSignatureException("File non presente");
 		}
-
-		return erroriListaAllegati;
 	}
 }

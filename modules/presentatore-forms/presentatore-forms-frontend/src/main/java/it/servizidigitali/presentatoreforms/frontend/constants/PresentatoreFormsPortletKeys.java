@@ -22,13 +22,6 @@ public class PresentatoreFormsPortletKeys {
 	public static final String SCEGLI_COMPONENTE_ACTION_COMMAND = "/scegliComponente";
 	public static final String DOWNLOAD_ISTANZA_PDF_RESOURCE_COMMAND = "/downloadIstanza";
 
-	public static final String COMUNE_RESOURCE_COMMAND = "/listaComuni";
-	public static final String COMUNI_ESTERI_RESOURCE_COMMAND = "/listaComuniEsteri";
-	public static final String PROVINCE_RESOURCE_COMMAND = "/listaProvince";
-	public static final String RELAZIONI_PARENTELA_RESOURCE_COMMAND = "/listaRelazioniParentele";
-	public static final String STATI_CIVILI_RESOURCE_COMMAND = "/listaStatiCivili";
-	public static final String STATI_ESTERI_RESOURCE_COMMAND = "/listaStatiEsteri";
-	public static final String TITOLI_STUDIO_RESOURCE_COMMAND = "/listaTitoliStudio";
 	public static final String INDIETRO_ACTION_COMMAND = "/indietro";
 	public static final String ANNULLA_ACTION_COMMAND = "/annulla";
 	public static final String DOWNLOAD_MODELLO_RESOURCE_COMMAND = "/downloadModello";
@@ -43,17 +36,21 @@ public class PresentatoreFormsPortletKeys {
 	public static final String JSP_HOME = "/home.jsp";
 	public static final String JSP_ESITO_INVIO = "/esitoInvio.jsp";
 	public static final String JSP_VIEW = "/view.jsp";
+	public static final String JSP_ERROR = "/error.jsp";
 	public static final String JSP_DOWNLOAD_CERTIFICATO = "/downloadCertificato.jsp";
 
 	// MESSAGGI DI ERRORE
+	public static final String GENERIC_ERROR_MESSAGE_KEY = "generic-error-message-key";
 	public static final String IMPOSSIBILE_RECUPERARE_RICHIESTA = "impossibile-recuperare-richiesta";
 	public static final String IMPOSSIBILE_RECUPERARE_SERVIZIO = "impossibile-recuperare-servizio";
 	public static final String IMPOSSIBILE_RECUPERARE_PROCEDURA = "impossibile-recuperare-procedura";
 	public static final String ERRORE_GENERICO = "error.generico";
 	public static final String SELEZIONARE_COMPONENTE_NUCLEO = "componente-nucleo-obbligatorio";
+	public static final String DATI_ANAGRAFICI_BACKOFFICE_NON_DISPONIBILI = "backoffice-service-exception-dati-anagrafici-non-disponibili";
 
 	// ATTRIBUTI
 	public static final String SELECT_COMPONENTI_NUCLEO_FAMILIARE = "selectComponentiNucleoFamiliare";
+	public static final String CODICE_FISCALE_COMPONENTE = "codiceFiscaleComponente";
 	public static final String TITOLO_PORTLET_SERVIZIO = "titoloPortletServizio";
 	public static final String DA_PAGARE = "daPagare";
 	public static final String ANTEPRIMA_CERTIFICATI = "certificatiPdfPreviewEnabled";

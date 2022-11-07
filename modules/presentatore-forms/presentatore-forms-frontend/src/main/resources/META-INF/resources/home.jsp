@@ -9,16 +9,6 @@
 		<div class="page-header">
 			<h2 class="noMargin">${titoloPortletServizio}</h2>
 		</div>
-<%-- 		<c:if test="${not empty concorsoAttivo}"> --%>
-<!-- 			<div class="row-fluid"> -->
-<!-- 				<div class="span12 text-right"> -->
-<!-- 					<spring:message code="label.concorso.validita" />:&nbsp; -->
-<%-- 					<spring:message code="label.concorso.validita.da" />&nbsp;<fmt:formatDate value="${concorsoAttivo.dataApertura}" pattern="dd/MM/yyyy HH:mm"/>&nbsp; --%>
-<%-- 					<spring:message code="label.concorso.validita.a" />&nbsp;<fmt:formatDate value="${concorsoAttivo.dataChiusura}" pattern="dd/MM/yyyy HH:mm"/> --%>
-<!-- 				</div> -->
-<!-- 			</div> -->
-<%-- 		</c:if> --%>
-	
 		<aui:row>
 			<aui:col span="12">
 				${descrizioneServizio}

@@ -16,6 +16,7 @@ public enum BackofficeServiceExceptionLanguageCode {
 	POSIZIONI_ELETTORALI_VUOTE("backoffice-service-exception-condizione-posizioni-elettorali-vuote"), //
 	SOGGETTO_NON_VEDOVO("backoffice-service-exception-condizione-vedovanza-non-verificata"), //
 	SOGGETTO_NON_IN_VITA("backoffice-service-exception-condizione-in-vita-non-verificata"), //
+	ATTO_NON_PRESENTE("backoffice-service-exception-condizione-atto-non-presente"), //
 	SOGGETTO_DECEDUTO_CERTIFICATO_NON_DISPONIBILE("backoffice-service-exception-condizione-deceduto-messaggio-generico");
 
 	private String liferayLanguageKey;

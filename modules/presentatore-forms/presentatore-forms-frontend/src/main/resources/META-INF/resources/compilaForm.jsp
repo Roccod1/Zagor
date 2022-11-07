@@ -2,9 +2,11 @@
 
 <portlet:renderURL var="scegliAllegatiUrl">
 	<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.SCEGLI_ALLEGATI_RENDER_COMMAND %>" />
+	<portlet:param name="codiceFiscaleComponente" value="${selectComponentiNucleoFamiliare}" />
 </portlet:renderURL>
 
 <portlet:actionURL var="salvaBozzaUrl" name="<%=PresentatoreFormsPortletKeys.SALVA_RICHIESTA_BOZZA_ACTION_COMMAND %>">
+	<portlet:param name="codiceFiscaleComponente" value="${selectComponentiNucleoFamiliare}" />
 </portlet:actionURL>
 
 <portlet:renderURL var="homeURL"></portlet:renderURL>

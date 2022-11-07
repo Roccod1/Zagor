@@ -6,7 +6,6 @@ Export-Package: \
 	it.servizidigitali.backoffice.integration.*
 	
 Import-Package: \
-  	!javax.xml.rpc.*,\
   	!com.ibm.wsdl.*,\
   	!com.sun.jimi.core.*,\
   	!com.sun.net.ssl.*,\

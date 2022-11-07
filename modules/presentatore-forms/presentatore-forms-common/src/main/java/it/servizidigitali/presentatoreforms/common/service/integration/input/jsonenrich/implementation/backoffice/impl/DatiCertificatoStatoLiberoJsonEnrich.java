@@ -35,7 +35,7 @@ import it.servizidigitali.presentatoreforms.common.util.EnrichmentUtilService;
  * @author ZONNOG
  *
  */
-@Component
+@Component(name = "datiCertificatoStatoLiberoJsonEnrich", immediate = true, service = DatiAnagraficiJsonEnrich.class)
 public class DatiCertificatoStatoLiberoJsonEnrich implements DatiAnagraficiJsonEnrich {
 
 	private static final Log log = LogFactoryUtil.getLog(DatiCertificatoStatoLiberoJsonEnrich.class.getName());
@@ -76,10 +76,10 @@ public class DatiCertificatoStatoLiberoJsonEnrich implements DatiAnagraficiJsonE
 
 			List<DatiAnagrafici.ComponenteNucleoFamiliare> componentiList = null;
 			if (enrichmentModel.getUserPreferences().getCodiceFiscaleComponente() != null) {
-				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equals(enrichmentModel.getUserPreferences().getCodiceFiscaleComponente())).collect(Collectors.toList());
+				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equalsIgnoreCase(enrichmentModel.getUserPreferences().getCodiceFiscaleComponente())).collect(Collectors.toList());
 			}
 			else {
-				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equals(enrichmentModel.getUserPreferences().getCodiceFiscaleRichiedente())).collect(Collectors.toList());
+				componentiList = componentiNucleo.stream().filter(p -> p.getCodiceFiscale().equalsIgnoreCase(enrichmentModel.getUserPreferences().getCodiceFiscaleRichiedente())).collect(Collectors.toList());
 			}
 			if (componentiList.size() == 1) {
 				DatiAnagrafici.ComponenteNucleoFamiliare componente = componentiList.get(0);

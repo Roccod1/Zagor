@@ -20,6 +20,7 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.MessageUtility;
 import it.servizidigitali.common.utility.enumeration.TipoServizio;
 import it.servizidigitali.gestioneforms.model.Form;
 import it.servizidigitali.gestioneprocedure.model.Procedura;
@@ -96,7 +97,7 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 			if (Validator.isNull(codiceFiscaleComponente)) {
 				SessionErrors.add(actionRequest, PresentatoreFormsPortletKeys.SELEZIONARE_COMPONENTE_NUCLEO);
 				log.error("Selezionare un componente del nucleo familiare!");
-				actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO);
+				actionResponse.getRenderParameters().setValue("mvcRenderCommand", "/");
 				return;
 			}
 
@@ -111,17 +112,18 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 				alpacaStructure.setData(data);
 			}
 			catch (BackofficeServiceException e) {
-				log.error("render :: " + e.getMessage(), e);
 				alpacaStructure.setData(data);
 
+				String errorMessage = null;
+				MessageUtility messageUtility = new MessageUtility(PresentatoreFormsPortletKeys.BUNDLE_SYMBOLIC_NAME, themeDisplay.getLocale());
 				if (e.getBackofficeServiceExceptionLanguageCode() != null) {
-					throw e;
+					errorMessage = messageUtility.getMessage(e.getBackofficeServiceExceptionLanguageCode().getLiferayLanguageKey());
 				}
 
 				if (tipoServizio != null && tipoServizio.equals(TipoServizio.VISURA) || tipoServizio.equals(TipoServizio.CERTIFICATO)) {
-					log.error("renderizzaAlpacaForm :: impossibile caricare le informazioni dal backoffice per il Comune : " + themeDisplay.getScopeGroup().getName() + " :: " + e.getMessage(), e);
-					throw e;
+					errorMessage = messageUtility.getMessage(PresentatoreFormsPortletKeys.DATI_ANAGRAFICI_BACKOFFICE_NON_DISPONIBILI);
 				}
+				throw new RuntimeException(errorMessage, e);
 			}
 
 			// Sostituzione valore di data
@@ -132,13 +134,13 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 			actionRequest.setAttribute(PresentatoreFormsPortletKeys.ALPACA_STRUCTURE, alpacaStructure);
 			actionRequest.setAttribute(PresentatoreFormsPortletKeys.API_ALPACA_PATH, themeDisplay.getPortalURL() + PresentatoreFormsPortletKeys.SERVIZI_DIGITALI_REST_CUSTOM_API_ALPACA_PATH);
 			actionRequest.setAttribute(PresentatoreFormsPortletKeys.TIPO_SERVIZIO_STEP2, procedura.getStep2TipoServizio());
+			actionRequest.setAttribute(PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE, codiceFiscaleComponente);
 
 			// Aggiunta destinazioni d'uso in pagina se certificato
 			if (tipoServizio.equals(TipoServizio.CERTIFICATO)) {
 				List<DestinazioneUso> destinazioniUso = presentatoreFormFrontendService.getDestinazioniUso(themeDisplay);
 				actionRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONI_USO, destinazioniUso);
 				actionRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, form.getNome());
-				actionRequest.setAttribute(PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE, codiceFiscaleComponente);
 				actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO);
 			}
 			else {
@@ -146,10 +148,9 @@ public class ScegliComponenteActionCommand extends BaseMVCActionCommand {
 			}
 		}
 		catch (Exception e) {
-			log.error(e);
-			actionResponse.getRenderParameters().setValue("mvcPath", PresentatoreFormsPortletKeys.JSP_SCEGLI_COMPONENTI_NUCLEO);
+			log.error(e.getMessage(), e);
+			SessionErrors.add(actionRequest, PresentatoreFormsPortletKeys.GENERIC_ERROR_MESSAGE_KEY, e.getMessage());
+			actionResponse.getRenderParameters().setValue("mvcRenderCommand", "/");
 		}
-
 	}
-
 }
