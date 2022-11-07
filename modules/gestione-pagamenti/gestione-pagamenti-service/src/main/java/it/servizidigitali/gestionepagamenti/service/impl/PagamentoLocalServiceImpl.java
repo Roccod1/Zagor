@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
+import it.servizidigitali.gestionepagamenti.exception.NoSuchPagamentoException;
 import it.servizidigitali.gestionepagamenti.model.Pagamento;
 import it.servizidigitali.gestionepagamenti.service.base.PagamentoLocalServiceBaseImpl;
 
@@ -31,12 +32,10 @@ import it.servizidigitali.gestionepagamenti.service.base.PagamentoLocalServiceBa
  */
 @Component(property = "model.class.name=it.servizidigitali.gestionepagamenti.model.Pagamento", service = AopService.class)
 public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
-	
+
 	@Override
-	public List<Pagamento> search(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
-			Date dataOperazioneA, long groupId, long servizioId, String stato, String gateway, String canale,
-			String codiceFiscale, String codiceIuv, long idPagamento, int inizio, int fine, String orderByCol,
-			String orderByType) {
+	public List<Pagamento> search(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa, Date dataOperazioneA, long groupId, long servizioId, String stato, String gateway,
+			String canale, String codiceFiscale, String codiceIuv, long idPagamento, int inizio, int fine, String orderByCol, String orderByType) {
 
 		boolean direzione = true;
 
@@ -48,21 +47,18 @@ public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
 			orderByCol = "pagamentoId";
 		}
 
-		OrderByComparator<Pagamento> comparator = OrderByComparatorFactoryUtil.create("Pagamento", orderByCol,
-				direzione);
+		OrderByComparator<Pagamento> comparator = OrderByComparatorFactoryUtil.create("Pagamento", orderByCol, direzione);
 
-		return this.pagamentoFinder.findByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
-				dataOperazioneA, groupId, servizioId, stato, gateway, canale, codiceFiscale, codiceIuv, idPagamento,
-				inizio, fine, comparator);
+		return this.pagamentoFinder.findByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, groupId, servizioId, stato, gateway, canale, codiceFiscale, codiceIuv,
+				idPagamento, inizio, fine, comparator);
 	}
 
 	@Override
-	public long countByFilters(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa,
-			Date dataOperazioneA, long groupId, long servizioId, String stato, String gateway, String canale,
+	public long countByFilters(Date dataInserimentoDa, Date dataInserimentoA, Date dataOperazioneDa, Date dataOperazioneA, long groupId, long servizioId, String stato, String gateway, String canale,
 			String codiceFiscale, String codiceIuv, long idPagamento) {
 
-		return this.pagamentoFinder.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa,
-				dataOperazioneA, groupId, servizioId, stato, gateway, canale, codiceFiscale, codiceIuv, idPagamento);
+		return this.pagamentoFinder.countByFilters(dataInserimentoDa, dataInserimentoA, dataOperazioneDa, dataOperazioneA, groupId, servizioId, stato, gateway, canale, codiceFiscale, codiceIuv,
+				idPagamento);
 	}
 
 	@Override
@@ -71,11 +67,10 @@ public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
 	}
 
 	@Override
-	public Pagamento create(long groupId, long userId, String userName, String idCredito, String idFiscaleCliente,
-			String denominazioneCliente, String emailQuietanza, String causale, long servizioId, String nomeServizio,
-			BigDecimal importo, BigDecimal commissioni, String canale, String gateway, String iud, String iuv,
-			String idSessione, String pathAvviso, boolean emailInviata, String stato, long richiestaId) {
-		
+	public Pagamento create(long groupId, long userId, String userName, String idCredito, String idFiscaleCliente, String denominazioneCliente, String emailQuietanza, String causale, long servizioId,
+			String nomeServizio, BigDecimal importo, BigDecimal commissioni, String canale, String gateway, String iud, String iuv, String idSessione, String pathAvviso, boolean emailInviata,
+			String stato, long richiestaId) {
+
 		Pagamento pagamento = pagamentoPersistence.create(counterLocalService.increment());
 
 		pagamento.setGroupId(groupId);
@@ -101,5 +96,15 @@ public class PagamentoLocalServiceImpl extends PagamentoLocalServiceBaseImpl {
 		pagamento.setRichiestaId(richiestaId);
 
 		return pagamentoPersistence.update(pagamento);
+	}
+
+	public Pagamento getPagamentoByRichistaId(long richiestaId) {
+		try {
+			Pagamento pagamento = pagamentoPersistence.findByRichiestaId(richiestaId);
+			return pagamento;
+		}
+		catch (NoSuchPagamentoException e) {
+		}
+		return null;
 	}
 }

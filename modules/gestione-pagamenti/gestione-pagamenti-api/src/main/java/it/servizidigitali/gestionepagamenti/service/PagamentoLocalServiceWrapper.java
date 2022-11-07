@@ -335,6 +335,13 @@ public class PagamentoLocalServiceWrapper
 		return _pagamentoLocalService.getPagamento(pagamentoId);
 	}
 
+	@Override
+	public it.servizidigitali.gestionepagamenti.model.Pagamento
+		getPagamentoByRichistaId(long richiestaId) {
+
+		return _pagamentoLocalService.getPagamentoByRichistaId(richiestaId);
+	}
+
 	/**
 	 * Returns the pagamento matching the UUID and group.
 	 *

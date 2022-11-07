@@ -299,6 +299,10 @@ public class PagamentoLocalServiceUtil {
 		return getService().getPagamento(pagamentoId);
 	}
 
+	public static Pagamento getPagamentoByRichistaId(long richiestaId) {
+		return getService().getPagamentoByRichistaId(richiestaId);
+	}
+
 	/**
 	 * Returns the pagamento matching the UUID and group.
 	 *

@@ -260,6 +260,9 @@ public interface PagamentoLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Pagamento getPagamento(long pagamentoId) throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Pagamento getPagamentoByRichistaId(long richiestaId);
+
 	/**
 	 * Returns the pagamento matching the UUID and group.
 	 *
