@@ -39,13 +39,14 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 	@Override
 	public List<Richiesta> findByFilters(RichiestaFilters filters, int start, int end) {
 		DynamicQuery dq = createQuery(filters);
-		
-		if(Validator.isNotNull(filters.getOrderByCol())){
+
+		if (Validator.isNotNull(filters.getOrderByCol())) {
 			boolean orderByType = "asc".equals(filters.getOrderByType()) ? true : false;
-			OrderByComparator<Richiesta> orderByComparator = OrderByComparatorFactoryUtil.create(Richiesta.class.getSimpleName(), Validator.isNotNull(filters.getOrderByCol()) ? filters.getOrderByCol() : "createDate", orderByType);
-			return richiestaPersistence.findWithDynamicQuery(dq, start, end, orderByComparator);			
+			OrderByComparator<Richiesta> orderByComparator = OrderByComparatorFactoryUtil.create(Richiesta.class.getSimpleName(),
+					Validator.isNotNull(filters.getOrderByCol()) ? filters.getOrderByCol() : "createDate", orderByType);
+			return richiestaPersistence.findWithDynamicQuery(dq, start, end, orderByComparator);
 		}
-		return richiestaPersistence.findWithDynamicQuery(dq, start, end);			
+		return richiestaPersistence.findWithDynamicQuery(dq, start, end);
 	}
 
 	@Override
@@ -112,11 +113,15 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 		if (filters.getProcedureIds() != null) {
 			dq.add(RestrictionsFactoryUtil.in("proceduraId", filters.getProcedureIds()));
 		}
-		
-		if(Validator.isNotNull(filters.getOggettoNote())) {
+
+		if (filters.getServiziIds() != null) {
+			dq.add(RestrictionsFactoryUtil.in("servizioId", filters.getServiziIds()));
+		}
+
+		if (Validator.isNotNull(filters.getOggettoNote())) {
 			String pattern = StringPool.PERCENT + filters.getOggettoNote() + StringPool.PERCENT;
-			
-			dq.add(RestrictionsFactoryUtil.or(RestrictionsFactoryUtil.ilike("oggetto", pattern), RestrictionsFactoryUtil.ilike("note", pattern)));	
+
+			dq.add(RestrictionsFactoryUtil.or(RestrictionsFactoryUtil.ilike("oggetto", pattern), RestrictionsFactoryUtil.ilike("note", pattern)));
 		}
 
 		return dq;
@@ -158,9 +163,10 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 
 		return richiestaPersistence.findWithDynamicQuery(dynamicQuery, start, end, comparator);
 	}
-	
-	public List<Richiesta> findRichiestaByCodiceFiscaleStatoProceduraId(String codiceFiscale, String stato, long proceduraId){
-		
+
+	@Override
+	public List<Richiesta> findRichiestaByCodiceFiscaleStatoProceduraId(String codiceFiscale, String stato, long proceduraId) {
+
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Richiesta.class, getClassLoader());
 
 		if (Validator.isNotNull(codiceFiscale)) {
@@ -170,15 +176,15 @@ public class RichiestaFinderImpl extends RichiestaFinderBaseImpl implements Rich
 		if (Validator.isNotNull(stato)) {
 			dynamicQuery.add(RestrictionsFactoryUtil.eq("stato", stato));
 		}
-		
+
 		if (proceduraId > 0) {
 			dynamicQuery.add(RestrictionsFactoryUtil.eq("proceduraId", proceduraId));
 		}
-		
+
 		dynamicQuery.addOrder(OrderFactoryUtil.desc("modifiedDate"));
-				
-		return richiestaPersistence.findWithDynamicQuery(dynamicQuery);	
-		
+
+		return richiestaPersistence.findWithDynamicQuery(dynamicQuery);
+
 	}
 
 }

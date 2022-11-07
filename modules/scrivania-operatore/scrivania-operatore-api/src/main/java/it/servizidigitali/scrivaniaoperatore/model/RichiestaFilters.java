@@ -14,12 +14,13 @@ public class RichiestaFilters {
 	private Boolean autenticazione;
 	private String tipo;
 	private Set<Long> procedureIds;
+	private Set<Long> serviziIds;
 	private Set<String> processInstanceIds;
 	private String oggettoNote;
 
 	private long groupId;
 	private long companyId;
-	
+
 	private String orderByCol;
 	private String orderByType;
 
@@ -213,5 +214,19 @@ public class RichiestaFilters {
 
 	public void setOggettoNote(String oggettoNote) {
 		this.oggettoNote = oggettoNote;
+	}
+
+	/**
+	 * @return the serviziIds
+	 */
+	public Set<Long> getServiziIds() {
+		return serviziIds;
+	}
+
+	/**
+	 * @param serviziIds the serviziIds to set
+	 */
+	public void setServiziIds(Set<Long> serviziIds) {
+		this.serviziIds = serviziIds;
 	}
 }
