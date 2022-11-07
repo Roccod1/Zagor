@@ -119,9 +119,16 @@
 			{{if note }}
 				<p class="mb-3">{{>note}}</p>
 			{{/if}}
-			<p>Pratica: {{>richiestaId }}</p>
-			<a href="${dettaglioRichiestaURL}&<portlet:namespace/>id={{>richiestaId}}"><span class="t-primary underline"><liferay-ui:message key="dettaglio"/></span></a>  
-			<a href="#"><span class="t-primary underline"><liferay-ui:message key="vai-al-servizio"/></span></a>  
+			  <a class="btn btn-outline-primary" href="${dettaglioRichiestaURL}&<portlet:namespace/>id={{>richiestaId}}">
+	      		<span class="t-primary underline">
+	        		<liferay-ui:message key="dettaglio" />
+	      		</span>
+	    		</a>
+	    		<a class="btn btn-outline-primary" href="#">
+	     		 <span class="t-primary underline">
+	        		<liferay-ui:message key="vai-al-servizio" />
+	      		</span>
+	    	</a>
 		</div>
 	</div>
 </script>

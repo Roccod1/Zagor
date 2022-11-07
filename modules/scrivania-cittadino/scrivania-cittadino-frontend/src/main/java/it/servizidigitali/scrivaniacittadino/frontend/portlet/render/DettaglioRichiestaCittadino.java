@@ -24,6 +24,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.scrivaniacittadino.frontend.constants.ScrivaniaCittadinoPortletKeys;
+import it.servizidigitali.scrivaniacittadino.frontend.service.ScrivaniaCittadinoMiddlewareService;
 import it.servizidigitali.scrivaniaoperatore.model.AllegatoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.AttivitaRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta;
@@ -37,8 +38,14 @@ import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
  * @author filierim
  */
 
-@Component(immediate = true, property = { "javax.portlet.name=" + ScrivaniaCittadinoPortletKeys.SCRIVANIACITTADINO,
-		"mvc.command.name=" + ScrivaniaCittadinoPortletKeys.RENDER_COMMAND_DETTAGLIO_RICHIESTA }, service = MVCRenderCommand.class)
+@Component(//
+		immediate = true, //
+		property = { //
+				"javax.portlet.name=" + ScrivaniaCittadinoPortletKeys.SCRIVANIACITTADINO, //
+				"mvc.command.name=" + ScrivaniaCittadinoPortletKeys.RENDER_COMMAND_DETTAGLIO_RICHIESTA//
+		}, //
+		service = MVCRenderCommand.class//
+)
 public class DettaglioRichiestaCittadino implements MVCRenderCommand {
 
 	private static final Log _log = LogFactoryUtil.getLog(DettaglioRichiestaCittadino.class);
@@ -54,6 +61,9 @@ public class DettaglioRichiestaCittadino implements MVCRenderCommand {
 
 	@Reference
 	private AttivitaRichiestaLocalService attivitaRichiestaLocalService;
+
+	@Reference
+	private ScrivaniaCittadinoMiddlewareService scrivaniaCittadinoMiddlewareService;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -111,6 +121,11 @@ public class DettaglioRichiestaCittadino implements MVCRenderCommand {
 
 					pdfRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdPrincipale(richiestaId, true).get(0);
 
+					// Se pagamento, aggiunta allegato ricevuta
+					String ricevutaTelematicaPDFPagamentoUrl = scrivaniaCittadinoMiddlewareService.getRicevutaTelematicaPDFPagamentoUrl(richiestaId, richiesta.getGroupId());
+					if (Validator.isNotNull(ricevutaTelematicaPDFPagamentoUrl)) {
+						renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.ALLEGATO_RICEVUTA_PAGAMENTO, ricevutaTelematicaPDFPagamentoUrl);
+					}
 				}
 
 				renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.ALLEGATI_RICHIESTA, listaAllegatiCittadino);
@@ -125,6 +140,7 @@ public class DettaglioRichiestaCittadino implements MVCRenderCommand {
 
 				renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.RICHIESTA, richiesta);
 				renderRequest.setAttribute(ScrivaniaCittadinoPortletKeys.SEARCH_CONTAINER_NAME, searchContainerName);
+
 				return ScrivaniaCittadinoPortletKeys.JSP_DETTAGLIO_RICHIESTA;
 			}
 			catch (PortalException e) {

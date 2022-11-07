@@ -114,6 +114,22 @@
 		</div>
 	</c:if>
 	
+	<c:if test="${not empty allegatoRicevutaPagamento}">
+		<div class="row">
+			<div class="col-12">
+				<h3 class="uppercase"><liferay-ui:message key="allegato-ricevuta-pagamento"></liferay-ui:message></h3>
+			</div>
+			<div class="col">
+				<div class="form-group">
+					<aui:button-row>
+						<aui:button target="_blank" href="${allegatoRicevutaPagamento}" cssClass="btn btn-secondary" icon="icon-file-alt" value="Download">
+						</aui:button>
+					</aui:button-row>
+				</div>
+			</div>
+		</div>
+	</c:if>
+	
 	<c:if test="${not empty allegatiProvvedimentiFinali  }">
 		<div class="row">
 			<div class="col-12">
