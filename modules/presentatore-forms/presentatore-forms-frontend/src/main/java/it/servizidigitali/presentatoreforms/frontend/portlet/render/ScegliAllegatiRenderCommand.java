@@ -34,7 +34,7 @@ import it.servizidigitali.gestioneprocedure.model.Procedura;
 import it.servizidigitali.presentatoreforms.common.model.DatiAllegato;
 import it.servizidigitali.presentatoreforms.common.model.DatiFileAllegato;
 import it.servizidigitali.presentatoreforms.common.util.AllegatoUtil;
-import it.servizidigitali.presentatoreforms.frontend.configuration.UploadFileRichiesteEnteConfiguration;
+import it.servizidigitali.presentatoreforms.frontend.configuration.PresentatoreFormsEnteConfiguration;
 import it.servizidigitali.presentatoreforms.frontend.constants.PresentatoreFormsPortletKeys;
 import it.servizidigitali.presentatoreforms.frontend.service.PresentatoreFormFrontendService;
 import it.servizidigitali.scrivaniaoperatore.model.IstanzaForm;
@@ -56,7 +56,7 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand {
 
 	private ConfigurationProvider configurationProvider;
 
-	private volatile UploadFileRichiesteEnteConfiguration uploadFileRichiesteEnteConfiguration;
+	private volatile PresentatoreFormsEnteConfiguration uploadFileRichiesteEnteConfiguration;
 
 	public static final Log _log = LogFactoryUtil.getLog(ScegliAllegatiRenderCommand.class);
 
@@ -96,7 +96,7 @@ public class ScegliAllegatiRenderCommand implements MVCRenderCommand {
 		boolean firmaDocumentoAbilitata = false;
 
 		try {
-			uploadFileRichiesteEnteConfiguration = configurationProvider.getGroupConfiguration(UploadFileRichiesteEnteConfiguration.class, themeDisplay.getScopeGroupId());
+			uploadFileRichiesteEnteConfiguration = configurationProvider.getGroupConfiguration(PresentatoreFormsEnteConfiguration.class, themeDisplay.getScopeGroupId());
 			procedura = presentatoreFormFrontendService.getCurrentProcedura(themeDisplay);
 			form = presentatoreFormFrontendService.getFormPrincipaleProcedura(procedura.getProceduraId());
 			richiesta = presentatoreFormFrontendService.getRichiestaBozza(user.getScreenName(), procedura.getProceduraId());
