@@ -52,7 +52,7 @@ public class AggiungiCommentoActionCommand extends BaseMVCActionCommand {
 			String testo = ParamUtil.getString(request, "testo");
 			boolean visibile = ParamUtil.getBoolean(request, "visibileAlCittadino");
 			
-			long id = counterLocalService.increment(CommentoRichiesta.class.getName());
+			long id = counterLocalService.increment();
 			CommentoRichiesta commentoRichiesta = commentoRichiestaLocalService.createCommentoRichiesta(id);
 			commentoRichiesta.setGroupId(context.getScopeGroupId());
 			commentoRichiesta.setCompanyId(context.getCompanyId());

@@ -57,7 +57,7 @@ public class ComunicazioneLocalServiceImpl extends ComunicazioneLocalServiceBase
 			}
 		}
 
-		long id = counterLocalService.increment(Comunicazione.class.getName());
+		long id = counterLocalService.increment();
 		Comunicazione model = comunicazionePersistence.create(id);
 		model.setGroupId(groupId);
 		model.setCompanyId(companyId);
@@ -83,6 +83,7 @@ public class ComunicazioneLocalServiceImpl extends ComunicazioneLocalServiceBase
 		return comunicazioneFinder.findByFilters(filters, start, end);
 	}
 
+	@Override
 	public List<Comunicazione> searchComunicazioni(ComunicazioneFilters filters) {
 		return comunicazioneFinder.findByFilters(filters, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 	}
@@ -91,7 +92,8 @@ public class ComunicazioneLocalServiceImpl extends ComunicazioneLocalServiceBase
 	public int countComunicazioni(ComunicazioneFilters filters) {
 		return comunicazioneFinder.countByFilters(filters);
 	}
-	
+
+	@Override
 	public List<Comunicazione> getNonInviate() {
 		return comunicazionePersistence.findByDataInvio(null);
 	}
