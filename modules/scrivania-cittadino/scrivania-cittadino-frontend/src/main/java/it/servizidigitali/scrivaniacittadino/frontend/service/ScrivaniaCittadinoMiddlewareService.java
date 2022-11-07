@@ -132,8 +132,9 @@ public class ScrivaniaCittadinoMiddlewareService {
 			accountClientPagamentiEnteConfiguration = configurationProvider.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, groupId);
 			String ricevutaPagamentoPrefixUrl = accountClientPagamentiEnteConfiguration.ricevutaPagamentoPrefixUrl();
 			Pagamento pagamentoByRichistaId = pagamentoLocalService.getPagamentoByRichistaId(richiestaId);
-			return ricevutaPagamentoPrefixUrl + pagamentoByRichistaId.getRiferimentoEsternoId();
-
+			if (Validator.isNotNull(pagamentoByRichistaId.getRiferimentoEsternoId())) {
+				return ricevutaPagamentoPrefixUrl + pagamentoByRichistaId.getRiferimentoEsternoId();
+			}
 		}
 		return null;
 	}
