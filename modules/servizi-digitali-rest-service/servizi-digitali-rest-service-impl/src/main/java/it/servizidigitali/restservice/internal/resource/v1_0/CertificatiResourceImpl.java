@@ -156,7 +156,13 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				return richiestaCertificato;
 			}
 
-			boolean checkTipologia = tipologie.stream().filter(x -> TipoServizio.CERTIFICATO.equals(TipoServizio.valueOf(x.getCodice()))).findFirst().isPresent();
+			boolean checkTipologia = tipologie.stream()
+					.map(x -> x.getCodice())
+					.filter(x -> x != null && !x.isBlank())
+					.map(x -> TipoServizio.valueOf(x))
+					.filter(x -> TipoServizio.CERTIFICATO.equals(x))
+					.findFirst()
+					.isPresent();
 
 			if (!checkTipologia) {
 				richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
@@ -206,6 +212,7 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 
 			alpacaService.loadData(data, gson.toJson(alpacaStructure.getSchema()), gson.toJson(alpacaStructure.getOptions()), procedura, userPreferences);
 
+			richiestaCertificato.setMessaggio("ok");
 		}
 		catch (JwtException e) {
 			throw new ForbiddenException(e.getDescription());

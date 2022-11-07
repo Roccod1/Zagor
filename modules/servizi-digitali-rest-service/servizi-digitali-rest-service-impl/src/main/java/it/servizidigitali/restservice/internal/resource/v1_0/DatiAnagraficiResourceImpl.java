@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.vulcan.pagination.Page;
 
 import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici;
+import it.servizidigitali.backoffice.integration.model.anagrafe.DatiAnagrafici.ComponenteNucleoFamiliare;
 import it.servizidigitali.backoffice.integration.service.AnagrafeIntegrationFactoryService;
 import it.servizidigitali.common.utility.OrganizationUtility;
 import it.servizidigitali.restservice.dto.v1_0.ComponenteNucleoFamiliareLight;
@@ -46,16 +47,20 @@ public class DatiAnagraficiResourceImpl extends BaseDatiAnagraficiResourceImpl {
 					.getDatiAnagrafici(codiceFiscale, organization.getOrganizationId(), null);
 
 			List<ComponenteNucleoFamiliareLight> res = new ArrayList<>();
-			datiAnagrafici.getComponentiNucleoFamiliare().forEach( c -> {
-				ComponenteNucleoFamiliareLight l = new ComponenteNucleoFamiliareLight();
-				l.setCodiceFiscale(c.getCodiceFiscale());
-				l.setCognome(c.getCognome());
-				l.setDataNascita(c.getDataNascita());
-				l.setNome(c.getNome());
-				l.setSesso(c.getSesso());
-
-				res.add(l);
-			});
+			List<ComponenteNucleoFamiliare> componenti = datiAnagrafici
+					.getComponentiNucleoFamiliare();
+			if (componenti != null) {
+				componenti.forEach( c -> {
+					ComponenteNucleoFamiliareLight l = new ComponenteNucleoFamiliareLight();
+					l.setCodiceFiscale(c.getCodiceFiscale());
+					l.setCognome(c.getCognome());
+					l.setDataNascita(c.getDataNascita());
+					l.setNome(c.getNome());
+					l.setSesso(c.getSesso());
+	
+					res.add(l);
+				});
+			}
 
 			Page<ComponenteNucleoFamiliareLight> page = Page.of(res);
 
