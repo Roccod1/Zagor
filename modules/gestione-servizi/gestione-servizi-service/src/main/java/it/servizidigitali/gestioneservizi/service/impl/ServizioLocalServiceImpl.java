@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -46,7 +47,7 @@ public class ServizioLocalServiceImpl extends ServizioLocalServiceBaseImpl {
 	private static final Log _log = LogFactoryUtil.getLog(ServizioLocalServiceImpl.class);
 
 	@Override
-	public Servizio getServizioById(Long servizioId) throws Exception {
+	public Servizio getServizioById(Long servizioId) throws PortalException {
 		_log.debug("getServizioById() :: INIZIO");
 
 		_log.debug("getServizioById() :: ID: " + servizioId);

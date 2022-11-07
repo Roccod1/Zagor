@@ -276,7 +276,7 @@ public interface ServizioLocalService
 	public Servizio getServizioByCodice(String codice);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public Servizio getServizioById(Long servizioId) throws Exception;
+	public Servizio getServizioById(Long servizioId) throws PortalException;
 
 	/**
 	 * Returns the servizio matching the UUID and group.
@@ -340,7 +340,7 @@ public interface ServizioLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Servizio> getServiziUtilizzabili(
-		List<Long> serviziEnteId, String nome, long areaTematicaId,
+		List<Long> serviziId, String nome, long areaTematicaId,
 		long tipologiaId, int cur, int delta, String orderByCol,
 		String orderByType);
 

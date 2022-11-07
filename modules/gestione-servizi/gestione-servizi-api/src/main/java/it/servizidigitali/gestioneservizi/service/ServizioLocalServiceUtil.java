@@ -339,7 +339,9 @@ public class ServizioLocalServiceUtil {
 		return getService().getServizioByCodice(codice);
 	}
 
-	public static Servizio getServizioById(Long servizioId) throws Exception {
+	public static Servizio getServizioById(Long servizioId)
+		throws PortalException {
+
 		return getService().getServizioById(servizioId);
 	}
 
@@ -414,12 +416,12 @@ public class ServizioLocalServiceUtil {
 	}
 
 	public static List<Servizio> getServiziUtilizzabili(
-		List<Long> serviziEnteId, String nome, long areaTematicaId,
+		List<Long> serviziId, String nome, long areaTematicaId,
 		long tipologiaId, int cur, int delta, String orderByCol,
 		String orderByType) {
 
 		return getService().getServiziUtilizzabili(
-			serviziEnteId, nome, areaTematicaId, tipologiaId, cur, delta,
+			serviziId, nome, areaTematicaId, tipologiaId, cur, delta,
 			orderByCol, orderByType);
 	}
 

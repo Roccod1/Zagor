@@ -392,7 +392,7 @@ public class ServizioLocalServiceWrapper
 	@Override
 	public it.servizidigitali.gestioneservizi.model.Servizio getServizioById(
 			Long servizioId)
-		throws Exception {
+		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _servizioLocalService.getServizioById(servizioId);
 	}
@@ -481,12 +481,12 @@ public class ServizioLocalServiceWrapper
 	@Override
 	public java.util.List<it.servizidigitali.gestioneservizi.model.Servizio>
 		getServiziUtilizzabili(
-			java.util.List<Long> serviziEnteId, String nome,
-			long areaTematicaId, long tipologiaId, int cur, int delta,
-			String orderByCol, String orderByType) {
+			java.util.List<Long> serviziId, String nome, long areaTematicaId,
+			long tipologiaId, int cur, int delta, String orderByCol,
+			String orderByType) {
 
 		return _servizioLocalService.getServiziUtilizzabili(
-			serviziEnteId, nome, areaTematicaId, tipologiaId, cur, delta,
+			serviziId, nome, areaTematicaId, tipologiaId, cur, delta,
 			orderByCol, orderByType);
 	}
 
