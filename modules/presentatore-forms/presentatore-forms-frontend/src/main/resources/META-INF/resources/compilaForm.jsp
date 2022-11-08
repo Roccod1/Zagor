@@ -5,6 +5,11 @@
 	<portlet:param name="codiceFiscaleComponente" value="${selectComponentiNucleoFamiliare}" />
 </portlet:renderURL>
 
+<portlet:renderURL var="scegliModalitaPagamentoUrl">
+	<portlet:param name="mvcRenderCommandName" value="<%=PresentatoreFormsPortletKeys.SCEGLI_MODALITA_PAGAMENTO_RENDER_COMMAND %>" />
+	<portlet:param name="codiceFiscaleComponente" value="${selectComponentiNucleoFamiliare}" />
+</portlet:renderURL>
+
 <portlet:actionURL var="salvaBozzaUrl" name="<%=PresentatoreFormsPortletKeys.SALVA_RICHIESTA_BOZZA_ACTION_COMMAND %>">
 	<portlet:param name="codiceFiscaleComponente" value="${selectComponentiNucleoFamiliare}" />
 </portlet:actionURL>
@@ -13,6 +18,29 @@
 
 <div class="row-fluid">
 	<div class="span12 formpresenter-portlet nuova-istanza">
+		<div id="errorDestinazioneUso" class="hidden alert alert-danger">
+			<liferay-ui:message key="error.destinazioneUso.required" />
+		</div>
+		<c:if test="${configurazioneTipoServizioStep2 == 'CERTIFICATO' && not empty destinazioniUso}">
+			<div class="row-fluid">
+				<div class="span12 text-center" id="destinazioneUsoContainer">
+					<aui:select name="destinazioneUso" id="destinazioneUsoSelect" label="label.destinazioneUso">
+						<c:forEach items="${destinazioniUso}" var="destinazioneUso">
+							<c:set var="denominazioneDestinazioneUso" value="${destinazioneUso.nome}"/>
+							<c:choose>
+								<c:when test="${fn:length(denominazioneDestinazioneUso) gt 100}">
+									<c:set var="denominazioneDestinazioneUso" value="${fn:substring(denominazioneDestinazioneUso, 0, 100)}..."/>
+								</c:when>
+							</c:choose>
+							<option value="${destinazioneUso.destinazioneUsoId}" title="${destinazioneUso.nome}">${denominazioneDestinazioneUso}</option>
+						</c:forEach>
+						<aui:validator name="required"/>
+					</aui:select>
+				</div>
+			</div>
+			<div class="row-fluid text-center" id="destinazioneUsoMsg">
+			</div>
+		</c:if>
 		<div id="formIscrizione"></div>
 	</div>
 </div>
@@ -46,7 +74,6 @@ var getAllProvinceUrl;
 var getComuniFiereUrl;
 var getQualificheUrl;
 
-
 /* Custom Fields JSON vars */
 var statiEsteriJsonCF = [];
 var provinceJsonCF = [];
@@ -56,28 +83,6 @@ var relazioniParentelaJsonCF = [];
 /* NOMINATIM OPENSTREETMAP*/
 var getAddressByCoordsUrl = 'https://nominatim.openstreetmap.org/reverse.php?format=json&zoom=16';
 var getCoordsByAddressUrl = 'https://nominatim.openstreetmap.org/search.php?format=json&limit=1&bounded=1&q=';
-
-$(document).ready(function() {
-	blockPageUI("<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '>Caricamento del Modulo...</div>"); 
-   	mainScript();
-});
-
-function blockPageUI(message) {
-	$('#wrapper').block({ 
-	    message: message,
-		baseZ:2000,
-	    css: {
-	    	border: 'none', 
-	        fontFamily: "'Titillium Web',sans-serif",
-	        opacity: .7, 
-	        color: '#ae1d3f',
-	     }
-	});
-}
-
-function unblockPageUI() {
-	$('#wrapper').unblock();
-}
 
 function __alpacaSearchField(obj, name) {
 	for (var key in obj) {
@@ -89,6 +94,22 @@ function __alpacaSearchField(obj, name) {
 	}
 	return null;
 }
+
+function blockPageUI(message) {
+	$('body').block({ 
+	    message: message
+	});
+}
+
+function unblockPageUI() {
+	$('body').unblock();
+}
+
+$(document).ready(function() {
+	blockPageUI("<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '>Caricamento del Modulo...</div>"); 
+   	mainScript();
+   	unblockPageUI();
+});
 
 function mainScript() {
 	console.log("timeout over in the jsp script");
@@ -114,7 +135,6 @@ function mainScript() {
 	var step3DaPagareUrl;
 	var downloadFile = false;
 	var showServiceEvaluationPage = false;
-	var destinazioneUsoId=null;
 	var nomeFile=null;
 	var idRichiesta=null;
 	
@@ -210,8 +230,6 @@ function mainScript() {
 		   	            	    	updated = true;
 	   	            	        	submitFormUrl = '';
 		   	            	        console.log('submitFormUrl: dopo = ' + submitFormUrl);
-		   	            	     	unblockPageUI();
-		   	            	     	blockPageUI("<div style='padding:20px 20px; color: #ae1d3f; background-color: #FFF '>La bozza della tua istanza &egrave; stata salvata e potr&agrave; essere successivamente completata. Potrai in qualsiasi momento recuperarla anche nella pagina 'La mia Scrivania' nella sezione 'Le mie Pratiche'</div><button class='btn btn-primary' type='button' onclick='$.unblockUI()'><b>OK</b></button><br><br>"); 
 		   	            	    },
 		   	            	    error: function (jqXHR, exception) {
 		   	            	    	if (isDebugEnabled) {
@@ -268,34 +286,30 @@ function mainScript() {
 								/*console.log("validation: OK!");*/
 							}
 		   	            	
+							var destinazioneUsoId = $('#<portlet:namespace />destinazioneUsoSelect').val();
+							
 							blockPageUI("<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '>Attendere...</div>"); 
 		   	            	
-		   	            	var submitForm = true;
-							
-		   	            	if(submitForm){
-		   	            		$.ajax({
-			   	            	    url: submitFormUrl,
-			   	            	    data: {"<portlet:namespace />dataForm" : dataTosend.dataForm},
-			   	            	    method: 'POST',
-			   	            	    success: function(data){
-			   	            	    	updated = true;
-		   	            	        	submitFormUrl = '';
-			   	            	        console.log('submitFormUrl: dopo = ' + submitFormUrl);
-			   	            	     	unblockPageUI();
-			   	            	     	blockPageUI("<div style='padding:20px 20px; color: #ae1d3f; background-color: #FFF '>La bozza della tua istanza &egrave; stata salvata e potr&agrave; essere successivamente completata. Potrai in qualsiasi momento recuperarla anche nella pagina 'La mia Scrivania' nella sezione 'Le mie Pratiche'</div><button class='btn btn-primary' type='button' onclick='$.unblockUI()'><b>OK</b></button><br><br>");
-				   	            	   	console.log("step3Url : " + step3Url);
-				   	            	   	window.location.href = step3Url;
-			   	            	    },
-			   	            	    error: function (jqXHR, exception) {
-			   	            	    	if (isDebugEnabled) {
-			   	            	        	console.log('ERRORE: salvaBozzaSubmit = ' + exception);
-			   	            	    	}
-			   	            	    }
-			   	            	}).always(function() {
-			   	            		/*In ogni caso deve essere nascosto il loader*/
-			   	            		unblockPageUI();
-			   	            	});
-		   	            	}
+	   	            		$.ajax({
+		   	            	    url: submitFormUrl,
+		   	            	    data: {"<portlet:namespace />dataForm" : dataTosend.dataForm, "<portlet:namespace />destinazioneUsoId" : destinazioneUsoId},
+		   	            	    method: 'POST',
+		   	            	    success: function(data){
+		   	            	    	updated = true;
+	   	            	        	submitFormUrl = '';
+		   	            	        console.log('submitFormUrl: dopo = ' + submitFormUrl);
+			   	            	   	console.log("step3Url : " + step3Url);
+			   	            	   	window.location.href = step3Url + "&<portlet:namespace />destinazioneUsoId=" + destinazioneUsoId;
+		   	            	    },
+		   	            	    error: function (jqXHR, exception) {
+		   	            	    	if (isDebugEnabled) {
+		   	            	        	console.log('ERRORE: salvaBozzaSubmit = ' + exception);
+		   	            	    	}
+		   	            	    }
+		   	            	}).always(function() {
+		   	            		/*In ogni caso deve essere nascosto il loader*/
+		   	            		unblockPageUI();
+		   	            	});
 
 	   	         		}
 			   	    },
@@ -321,7 +335,7 @@ function mainScript() {
 		   	            }
 		   	        },
 		   	        "pagaButton":{
-		   	            "title": 'Scegli Modalità Pagamento',
+		   	            "title": 'Scegli Modalit&agrave; Pagamento',
 		   	            "id": "pagaButton",
 		   	            "click": function(e) {
 		   	            	var userData = this.getValue();
@@ -333,7 +347,7 @@ function mainScript() {
 		   	            		console.log("dataTosend: ", JSON.parse(dataTosend.dataForm));
 		   	            	}
 		   	            	blockPageUI("<div style='padding:20px 0; color: #ae1d3f; background-color: #FFF '>Attendere...</div>"); 
-    						window.location.href = step3DaPagareUrl + '&idRichiesta=' + idRichiesta + '&success=ok&idServizio=${idServizio}' + destinazioneUsoId;
+    						window.location.href = step3DaPagareUrl + '&idRichiesta=' + idRichiesta + '&success=ok&idServizio=${idServizio}' + "&<portlet:namespace />destinazioneUsoId=" + destinazioneUsoId;
 		   	            }
 		   	        }
 		   	    }
@@ -341,7 +355,7 @@ function mainScript() {
 	   	};
 	}
 	
-	if (showServiceEvaluationPage && true) {
+	if (showServiceEvaluationPage) {
 		var showServiceEvaluationButton = {
            "title": '<liferay-ui:message key="button.valutaServizio" />',
            "id": "showServiceEvaluationButton",
@@ -372,7 +386,6 @@ function mainScript() {
    		"data": ${alpacaStructure.data},
    		"view": ${alpacaStructure.view},
    		"postRender": function(control) {
-   			unblockPageUI();
    			if(configurazioneTipoServizioStep2 == '${CERTIFICATO}') {
 	   			if (isDebugEnabled) {
 	   				console.log('configurazioneTipoServizioStep2 = CERTIFICATO, nascondo il salvaBozzaFormButton'); 
@@ -488,20 +501,5 @@ function mainScript() {
             }
         }
    	}); 
-   
-    $("#destinazioneUsoSelect").change(function() {
-    	if($("#destinazioneUsoError").length == 1){
-			$("destinazioneUsoError").remove();
-		}
-    	if($("#destinazioneUsoSelect").val() != ""){
-    		destinazioneUsoId = '&destinazioneUsoId=' + $("#destinazioneUsoSelect").val();	
-    	} 
-    	else {
-    		destinazioneUsoId = '&destinazioneUsoId=' + null;
-    	}
-    	$("button[data-key='scaricaCertificatoButton']").hide();
-		$("button[data-key='pagaButton']").hide();
-		$("button[data-key='submitButton']").removeAttr('disabled');
-    });
 }
 </script>

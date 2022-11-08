@@ -8,7 +8,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.List;
@@ -16,7 +16,6 @@ import java.util.List;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -69,8 +68,7 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-		HttpServletRequest request = PortalUtil.getHttpServletRequest(renderRequest);
-		String isBozza = PortalUtil.getOriginalServletRequest(request).getParameter("isBozza");
+		boolean isBozza = ParamUtil.getBoolean(renderRequest, "isBozza");
 
 		FormData formData = null;
 		AlpacaJsonStructure alpacaStructure = null;
@@ -92,11 +90,9 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 			String step2TipoServizio = procedura.getStep2TipoServizio();
 			TipoServizio tipoServizio = TipoServizio.valueOf(step2TipoServizio);
 
-			if (Boolean.valueOf(isBozza) && istanzaFormRichiesta != null) {
+			if (isBozza && istanzaFormRichiesta != null) {
 
-				if (!tipoServizio.equals(TipoServizio.CERTIFICATO)) {
-					jsonDataBozza = gson.toJson(gson.fromJson(istanzaFormRichiesta.getJson(), FormData.class));
-				}
+				jsonDataBozza = gson.toJson(gson.fromJson(istanzaFormRichiesta.getJson(), FormData.class));
 
 				formData = AlpacaUtil.loadFormData(form, jsonDataBozza, true, themeDisplay.getPortalURL());
 				alpacaStructure = formData.getAlpaca();
@@ -108,7 +104,6 @@ public class CaricaCompilaIstanzaRenderCommand implements MVCRenderCommand {
 					renderRequest.setAttribute(PresentatoreFormsPortletKeys.TIPO_SERVIZIO_STEP2, procedura.getStep2TipoServizio());
 					renderRequest.setAttribute(PresentatoreFormsPortletKeys.DESTINAZIONI_USO, destinazioniUso);
 					renderRequest.setAttribute(PresentatoreFormsPortletKeys.TITOLO_PORTLET_SERVIZIO, form.getNome());
-					return PresentatoreFormsPortletKeys.JSP_SCEGLI_DESTINAZIONE_USO;
 				}
 			}
 			else {

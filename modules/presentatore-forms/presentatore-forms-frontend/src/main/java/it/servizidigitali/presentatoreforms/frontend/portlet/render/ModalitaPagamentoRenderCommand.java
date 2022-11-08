@@ -132,11 +132,9 @@ public class ModalitaPagamentoRenderCommand implements MVCRenderCommand {
 
 						if (Validator.isNotNull(pdfFile)) {
 							encoded = new String(Base64.getEncoder().encode(pdfFile));
-
 							renderRequest.setAttribute(PresentatoreFormsPortletKeys.BASE_64_PDF_CERTIFICATO, encoded);
 							renderRequest.setAttribute(PresentatoreFormsPortletKeys.DOWNLOAD_CERTIFICATO, true);
 							renderRequest.setAttribute(PresentatoreFormsPortletKeys.SELECT_COMPONENTI_NUCLEO_FAMILIARE, codiceFiscaleComponente);
-
 						}
 
 					}
