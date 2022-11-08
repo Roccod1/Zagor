@@ -116,6 +116,9 @@ public class JwtUtilityServiceImpl implements JwtUtilityService {
 			return parsedTokenJWT;
 
 		}catch (Exception e) {
+			if (e instanceof JwtException) {
+				throw (JwtException)e;
+			}
 			_log.error("Impossibile effettuare il parsing del token jwt", e);
 			throw new JwtException("VERIFY_JWT_TOKEN", e.getMessage());
 		}
