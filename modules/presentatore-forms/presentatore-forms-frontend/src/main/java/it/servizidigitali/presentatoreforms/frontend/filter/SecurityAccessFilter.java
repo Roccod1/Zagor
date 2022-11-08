@@ -89,6 +89,7 @@ public class SecurityAccessFilter implements RenderFilter {
 		}
 
 		if (!filterEnabled) {
+			chain.doFilter(request, response);
 			return;
 		}
 
