@@ -1,21 +1,8 @@
 package it.servizidigitali.restservice.internal.resource.v1_0;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.ForbiddenException;
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.NotFoundException;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ServiceScope;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.expando.kernel.model.ExpandoColumn;
 import com.liferay.expando.kernel.model.ExpandoValue;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -33,6 +20,19 @@ import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Validator;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
 
 import it.servizidigitali.backoffice.integration.service.DatiAnagraficiPortletService;
 import it.servizidigitali.chatbot.service.RichiestaCertificatoLocalService;
@@ -118,8 +118,12 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 
 	@Reference
 	private TipologiaLocalService tipologiaLocalService;
+
 	@Reference
 	private RichiestaCertificatoLocalService richiestaCertificatoLocalService;
+
+	@Reference
+	private CounterLocalService counterLocalService;
 
 	@Override
 	public RichiestaCertificato checkInvioCertificato(@NotNull String userToken, String nomeComune, Long idDestinazioneUso, String codiceServizio, String amministrazione, String codiceFiscale)
@@ -156,13 +160,8 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 				return richiestaCertificato;
 			}
 
-			boolean checkTipologia = tipologie.stream()
-					.map(x -> x.getCodice())
-					.filter(x -> x != null && !x.isBlank())
-					.map(x -> TipoServizio.valueOf(x))
-					.filter(x -> TipoServizio.CERTIFICATO.equals(x))
-					.findFirst()
-					.isPresent();
+			boolean checkTipologia = tipologie.stream().map(x -> x.getCodice()).filter(x -> x != null && !x.isBlank()).map(x -> TipoServizio.valueOf(x)).filter(x -> TipoServizio.CERTIFICATO.equals(x))
+					.findFirst().isPresent();
 
 			if (!checkTipologia) {
 				richiestaCertificato.setStato(StatoRichiestaCertificato.ERRORE.name());
@@ -279,11 +278,9 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 
 			User user = userLocalService.getUserByScreenName(organization.getCompanyId(), codiceFiscaleFromToken);
 			Date now = new Date();
-			
-			long id = CounterLocalServiceUtil.increment(
-					it.servizidigitali.chatbot.model.RichiestaCertificato.class.getName());
-			it.servizidigitali.chatbot.model.RichiestaCertificato rc = richiestaCertificatoLocalService
-					.createRichiestaCertificato(id);
+
+			long id = counterLocalService.increment();
+			it.servizidigitali.chatbot.model.RichiestaCertificato rc = richiestaCertificatoLocalService.createRichiestaCertificato(id);
 			rc.setGroupId(organization.getGroupId());
 			rc.setCompanyId(organization.getCompanyId());
 			rc.setUserId(user.getUserId());
@@ -295,9 +292,9 @@ public class CertificatiResourceImpl extends BaseCertificatiResourceImpl {
 			rc.setErrore(null);
 			rc.setServizioId(servizio.getServizioId());
 			rc.setDestinazioneUsoId(idDestinazioneUso);
-			
+
 			rc = richiestaCertificatoLocalService.updateRichiestaCertificato(rc);
-			
+
 			richiestaCertificato.setDataInserimento(rc.getCreateDate());
 			richiestaCertificato.setDataAggiornamento(rc.getModifiedDate());
 			richiestaCertificato.setEmail(user.getEmailAddress());
