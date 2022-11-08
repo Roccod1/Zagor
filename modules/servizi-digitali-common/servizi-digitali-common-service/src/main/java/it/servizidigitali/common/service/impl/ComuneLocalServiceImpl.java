@@ -43,6 +43,18 @@ public class ComuneLocalServiceImpl extends ComuneLocalServiceBaseImpl {
 	}
 
 	@Override
+	public Comune getComuneByCodiceCatastale(String codiceCatastale) {
+		Comune comune = null;
+		try {
+			comune = comunePersistence.findByCodiceCatastale(codiceCatastale);
+			fillComune(comune);
+		}
+		catch (NoSuchComuneException e) {
+		}
+		return comune;
+	}
+	
+	@Override
 	public Comune getComuneByCodiceISTAT(String codiceIstat) {
 		Comune comune = comuneFinder.findComuneByCodiceISTAT(codiceIstat);
 		fillComune(comune);

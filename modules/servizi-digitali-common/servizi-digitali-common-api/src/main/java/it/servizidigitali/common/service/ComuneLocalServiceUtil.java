@@ -225,6 +225,10 @@ public class ComuneLocalServiceUtil {
 		return getService().getComune(comuneId);
 	}
 
+	public static Comune getComuneByCodiceCatastale(String codiceCatastale) {
+		return getService().getComuneByCodiceCatastale(codiceCatastale);
+	}
+
 	public static Comune getComuneByCodiceISTAT(String codiceIstat) {
 		return getService().getComuneByCodiceISTAT(codiceIstat);
 	}
