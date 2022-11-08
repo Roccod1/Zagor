@@ -103,9 +103,10 @@ public class EntityToSchemaModelConverter {
 
 		List<Tipologia> tipologie = tipologiaLocalService.getServizioTipologias(servizio.getServizioId());
 		for (Tipologia tipologia : tipologie) {
-			if (tipologia.getChatbotInlineIntent() != null) {
+			String intent = tipologia.getChatbotInlineIntent();
+			if (intent != null && !intent.isEmpty()) {
 				infoServizioEnte.setChatbotInline(true);
-				infoServizioEnte.setChatbotInlineIntent(tipologia.getChatbotInlineIntent());
+				infoServizioEnte.setChatbotInlineIntent(intent);
 				break;
 			}
 		}
