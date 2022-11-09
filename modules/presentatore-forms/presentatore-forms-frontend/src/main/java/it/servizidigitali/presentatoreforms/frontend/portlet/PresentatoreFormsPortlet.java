@@ -70,7 +70,8 @@ import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 				"javax.portlet.init-param.view-template=/view.jsp", //
 				"javax.portlet.name=" + PresentatoreFormsPortletKeys.PRESENTATOREFORMS, //
 				"javax.portlet.resource-bundle=content.Language", //
-				"javax.portlet.security-role-ref=power-user,user" }, //
+				"javax.portlet.security-role-ref=power-user,user", "javax.portlet.version=3.0"//
+		}, //
 		service = Portlet.class //
 )
 public class PresentatoreFormsPortlet extends MVCPortlet {

@@ -21,6 +21,7 @@ public class PresentatoreFormsPortletKeys {
 	public static final String SALVA_RICHIESTA_BOZZA_ACTION_COMMAND = "/salvaBozza";
 	public static final String SCEGLI_COMPONENTE_ACTION_COMMAND = "/scegliComponente";
 	public static final String DOWNLOAD_ISTANZA_PDF_RESOURCE_COMMAND = "/downloadIstanza";
+	public static final String ESITO_PAGAMENTO_RENDER_COMMAND = "/esitoPagamento";
 
 	public static final String INDIETRO_ACTION_COMMAND = "/indietro";
 	public static final String ANNULLA_ACTION_COMMAND = "/annulla";
@@ -35,9 +36,11 @@ public class PresentatoreFormsPortletKeys {
 	public static final String JSP_COMPILA_FORM = "/compilaForm.jsp";
 	public static final String JSP_HOME = "/home.jsp";
 	public static final String JSP_ESITO_INVIO = "/esitoInvio.jsp";
+	public static final String JSP_ESITO_PAGAMENTO = "/esitoPagamento.jsp";
 	public static final String JSP_VIEW = "/view.jsp";
 	public static final String JSP_ERROR = "/error.jsp";
 	public static final String JSP_DOWNLOAD_CERTIFICATO = "/downloadCertificato.jsp";
+	public static final String JSP_REDIRECT = "/redirect.jsp";
 
 	// MESSAGGI DI ERRORE
 	public static final String GENERIC_ERROR_MESSAGE_KEY = "generic-error-message-key";
@@ -75,6 +78,8 @@ public class PresentatoreFormsPortletKeys {
 	public static final String TIPO_SERVIZIO_STEP2 = "configurazioneTipoServizioStep2";
 	public static final String API_ALPACA_PATH = "apiAlpacaPath";
 	public static final String ID_DOCUMENTALE = "idDocumentale";
+	public static final String REDIRECT_URL = "redirectUrl";
+	public static final String ESITO_PAGAMENTO = "esitoPagamento";
 
 	// JSON
 	public static final String STATUS = "status";

@@ -7,18 +7,14 @@
 
 <portlet:renderURL var="homeURL"></portlet:renderURL>
 
-
 <script type="text/javascript" src="<%=request.getContextPath()%>/scripts/pdf.js" /></script>
 
 <liferay-ui:error key="<%=PresentatoreFormsPortletKeys.IMPOSSIBILE_RECUPERARE_PROCEDURA %>" message="error.generico" />
 
 <div class="page-header">
-		<b>${titoloPortletServizio}</b>
+	<b>${titoloPortletServizio}</b>
 </div>
-
 <aui:row>
-	
-	
 	<div class="content">
 		<div class="alpaca-wizard">
 			<div class="alpaca-wizard-nav">
@@ -66,49 +62,19 @@
 		<aui:row>
 			<aui:col span="12">
 				<c:choose>
-						<c:when test="${daPagare}">
-							<label class="text-center"> 
-								<liferay-ui:message key="label.certificato.ultimoStep.titolo.sceltaPagamento"/>
-							</label>
-							<div class="mt-3">
-								<c:choose>
-									<c:when test="${empty delega}">
-										<liferay-ui:message key="label.certificato.ultimoStep.descrizione.sceltaPagamento"/>
-									</c:when>
-									<c:otherwise>
-										<liferay-ui:message key="label.certificato.ultimoStep.descrizione.sceltaPagamento.delega"/>
-									</c:otherwise>
-								</c:choose>
-								<c:if test="${certificatiPdfPreviewEnabled}">
-									<div class="mt-3">
-										<div class="row-fluid bg_white">
-											<liferay-ui:message key="label.certificato.ultimoStep.preview"/>
-											<div class="span8 text-center offset2" id="certificatoPdfViewer"> </div>
-										</div>
-									</div>
-								</c:if>
-							</div>
-						</c:when>
-						<c:when test="${richiestaStatus != bozzaStatus && downloadCertificato}">
-							<label class="text-center"> 
-								<liferay-ui:message key="label.certificato.ultimoStep.titolo.downloadCertificato"/>
-							</label>
-							<div class="mt-3">
-								<c:choose>
-									<c:when test="${empty delega}">
-										<liferay-ui:message key="label.certificato.ultimoStep.descrizione.downloadCertificato"/>
-									</c:when>
-									<c:otherwise>
-										<liferay-ui:message key="label.certificato.ultimoStep.descrizione.downloadCertificato.delega"/>
-									</c:otherwise>
-								</c:choose>
-							</div>
-						</c:when>
-						<c:otherwise>
-							<label class="text-center">
-								<liferay-ui:message key="label.certificato.ultimoStep.titolo.generazioneCertificato"/>
-							</label>
-							
+					<c:when test="${daPagare}">
+						<label class="text-center"> 
+							<liferay-ui:message key="label.certificato.ultimoStep.titolo.sceltaPagamento"/>
+						</label>
+						<div class="mt-3">
+							<c:choose>
+								<c:when test="${empty delega}">
+									<liferay-ui:message key="label.certificato.ultimoStep.descrizione.sceltaPagamento"/>
+								</c:when>
+								<c:otherwise>
+									<liferay-ui:message key="label.certificato.ultimoStep.descrizione.sceltaPagamento.delega"/>
+								</c:otherwise>
+							</c:choose>
 							<c:if test="${certificatiPdfPreviewEnabled}">
 								<div class="mt-3">
 									<div class="row-fluid bg_white">
@@ -117,28 +83,55 @@
 									</div>
 								</div>
 							</c:if>
-							
+						</div>
+					</c:when>
+					<c:when test="${richiestaStatus != bozzaStatus && downloadCertificato}">
+						<label class="text-center"> 
+							<liferay-ui:message key="label.certificato.ultimoStep.titolo.downloadCertificato"/>
+						</label>
+						<div class="mt-3">
+							<c:choose>
+								<c:when test="${empty delega}">
+									<liferay-ui:message key="label.certificato.ultimoStep.descrizione.downloadCertificato"/>
+								</c:when>
+								<c:otherwise>
+									<liferay-ui:message key="label.certificato.ultimoStep.descrizione.downloadCertificato.delega"/>
+								</c:otherwise>
+							</c:choose>
+						</div>
+					</c:when>
+					<c:otherwise>
+						<label class="text-center">
+							<liferay-ui:message key="label.certificato.ultimoStep.titolo.generazioneCertificato"/>
+						</label>
+						
+						<c:if test="${certificatiPdfPreviewEnabled}">
 							<div class="mt-3">
-								<liferay-ui:message key="label.certificato.ultimoStep.descrizione.generazioneCertificato"/>
+								<div class="row-fluid bg_white">
+									<liferay-ui:message key="label.certificato.ultimoStep.preview"/>
+									<div class="span8 text-center offset2" id="certificatoPdfViewer"> </div>
+								</div>
 							</div>
-						</c:otherwise>
-					</c:choose>
+						</c:if>
+						
+						<div class="mt-3">
+							<liferay-ui:message key="label.certificato.ultimoStep.descrizione.generazioneCertificato"/>
+						</div>
+					</c:otherwise>
+				</c:choose>
 			</aui:col>
 		
 		</aui:row>
 		
 		<c:choose>
 			<c:when test="${richiestaStatus == bozzaStatus}">
-				
 				<aui:button-row>
 					<aui:button value="label.annulla" id="indietro" href="${homeURL}"/>
 					<aui:button value="label.procedi" id="salva-e-invia"/>
 				</aui:button-row>
 
 				<!-- Modale salva e invia -->
-				<div class="modal fade" id="salva-invia-modal" tabindex="-1"
-					 role="dialog"
-					aria-labelledby="salvaInviaModal">
+				<div class="modal fade" id="salva-invia-modal" tabindex="-1" role="dialog" aria-labelledby="salvaInviaModal">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
@@ -175,15 +168,12 @@
 									</c:otherwise>
 								</c:choose>
 							</div>
-							
-<!-- 							Provare a sostituire con aui button con i data-dismiss -->
 							<div class="modal-footer">
 								<aui:button-row>
 									<aui:button value="label.annulla" data-dismiss="modal"/>
 									<a id="salva-invia-modal-button" class="btn btn-primary" href="${generaCertificatoUrl}&<portlet:namespace />destinazioneUsoId=${destinazioneUsoId}">Procedi</a>
 								</aui:button-row>
 							</div>
-							
 						</div>
 					</div>
 				</div>
@@ -216,15 +206,10 @@
 				<div class="clearfix"></div>
 			</c:when>
 		</c:choose>
-	
 	</div>
-
-
 </aui:row>
 
-
 <script>
-
 	//Apre il modal
 	$('#<portlet:namespace />salva-e-invia').click(function(e) {
 		e.preventDefault();
@@ -272,7 +257,6 @@
 		
 	}
 
-
 	function renderPage(pageNumber, canvas, pdf){
 		 pdf.getPage(pageNumber).then(function(page) {
 		    console.log('Page loaded');
@@ -295,7 +279,4 @@
 		    });
 		  });
 	}
-
-
 </script>
-
