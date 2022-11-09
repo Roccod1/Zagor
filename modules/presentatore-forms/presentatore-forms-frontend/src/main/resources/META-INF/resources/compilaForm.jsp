@@ -16,14 +16,14 @@
 
 <portlet:renderURL var="homeURL"></portlet:renderURL>
 
-<div class="row-fluid">
-	<div class="span12 formpresenter-portlet nuova-istanza">
+<div class="row">
+	<div class="col-md-12 formpresenter-portlet nuova-istanza">
 		<div id="errorDestinazioneUso" class="hidden alert alert-danger">
 			<liferay-ui:message key="error.destinazioneUso.required" />
 		</div>
 		<c:if test="${configurazioneTipoServizioStep2 == 'CERTIFICATO' && not empty destinazioniUso}">
-			<div class="row-fluid">
-				<div class="span12 text-center" id="destinazioneUsoContainer">
+			<div class="row">
+				<div class="col-md-12 text-center" id="destinazioneUsoContainer">
 					<aui:select name="destinazioneUso" id="destinazioneUsoSelect" label="label.destinazioneUso">
 						<c:forEach items="${destinazioniUso}" var="destinazioneUso">
 							<c:set var="denominazioneDestinazioneUso" value="${destinazioneUso.nome}"/>
@@ -38,7 +38,7 @@
 					</aui:select>
 				</div>
 			</div>
-			<div class="row-fluid text-center" id="destinazioneUsoMsg">
+			<div class="row text-center" id="destinazioneUsoMsg">
 			</div>
 		</c:if>
 		<div id="formIscrizione"></div>
@@ -48,7 +48,6 @@
 <script type="text/javascript" data-senna-track="temporary">
 
 console.log("starting the jsp script in compilaForm");
-
 var logoInpsInnerUrl = '${pageContext.request.contextPath}' + '/images/INPS_logo.svg';
 var cfLoggedUser='${sessionScope.userPreferences.codiceFiscaleServizio}';
 var userToken = '${userToken}';

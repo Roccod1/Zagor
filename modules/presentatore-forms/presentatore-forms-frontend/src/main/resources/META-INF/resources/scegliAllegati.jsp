@@ -23,7 +23,7 @@ console.log("dentro scegli allegati");
 	</div>
 </c:if>
 
-<div class="row-fluid">
+<div class="row">
 	<div class="page-header">
 		<h2 class="noMargin">${titoloPortletServizio}</h2>
 	</div>
@@ -72,8 +72,8 @@ console.log("dentro scegli allegati");
       		
 		<aui:form action="${salvaUrl}" name="salva-form" enctype="multipart/form-data">
 		
-			<div class="row-fluid">
-				<div class="span12">
+			<div class="row">
+				<div class="col-md-12">
 					<div class="control-group">
 		        		<c:choose>
 		        			<c:when test="${firmaDocumentoAbilitata}">
@@ -153,8 +153,8 @@ console.log("dentro scegli allegati");
 
 			<!-- Allegati -->
 			<c:if test="${not empty allegati}">
-				<div class="row-fluid">
-					<div class="span12">
+				<div class="row">
+					<div class="col-md-12">
 						<fieldset>
 							<legend>
 								<liferay-ui:message key="label.allegati" />
@@ -180,8 +180,8 @@ console.log("dentro scegli allegati");
 
 									<div class="controls">
 									<input type="hidden" class="allegato" name="allegato-${allegato.definizione.definizioneAllegatoId}" value="${empty allegato.datiFile ? '' : allegato.datiFile.fileName }">
-										<div class="row-fluid">
-											<div class="span8">
+										<div class="row">
+											<div class="col-md-8">
 												<c:choose>
 													<c:when test="${not empty allegato.datiFile}">
 														<div>
@@ -207,7 +207,7 @@ console.log("dentro scegli allegati");
 												<div id="div-allegato-${allegato.definizione.definizioneAllegatoId}" <c:if test="${not empty allegato.documentiPersonali}"> style="display: none;"</c:if>>					
 										
 													<div class="control-group">
-												  	  	<div class="span8" style="margin-left:0px; display: inline-block">
+												  	  	<div class="col-md-8" style="margin-left:0px; display: inline-block">
 															<aui:input type="file" id="allegato-${allegato.definizione.definizioneAllegatoId}" name="allegato-${allegato.definizione.definizioneAllegatoId}" required="${allegato.definizione.obbligatorio}" label="" >
 																<aui:validator name="acceptFiles">"${allegato.definizione.tipiFileAmmessi}"</aui:validator>
 																<aui:validator name="custom" errorMessage="La dimensione del file non deve superare ${uploadFileMaxSizeLabel}">
