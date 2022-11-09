@@ -48,7 +48,6 @@
 <script type="text/javascript" data-senna-track="temporary">
 
 console.log("starting the jsp script in compilaForm");
-
 var logoInpsInnerUrl = '${pageContext.request.contextPath}' + '/images/INPS_logo.svg';
 var cfLoggedUser='${sessionScope.userPreferences.codiceFiscaleServizio}';
 var userToken = '${userToken}';
