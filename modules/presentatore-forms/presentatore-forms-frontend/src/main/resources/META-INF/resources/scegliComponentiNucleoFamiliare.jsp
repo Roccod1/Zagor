@@ -5,11 +5,11 @@
 
 <liferay-ui:error key="<%=PresentatoreFormsPortletKeys.SELEZIONARE_COMPONENTE_NUCLEO %>" message="error.componenteNucleoFamiliare.required" />
 
-<div class="row-fluid">
+<div class="row">
 	<div class="page-header">
 		<h2 class="noMargin">${titoloPortletServizio}<c:if test="${not empty denominazioneComuneServizio}"> - ${denominazioneComuneServizio}</c:if></h2>
 	</div>
-	<div class="span12 formpresenter-portlet">
+	<div class="col-md-12 formpresenter-portlet">
 		<div class="alpaca-wizard">
 			<div class="alpaca-wizard-nav">
 	           <nav class="navbar navbar-default" role="navigation">

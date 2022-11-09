@@ -81,9 +81,9 @@
 								</c:choose>
 								<c:if test="${certificatiPdfPreviewEnabled}">
 									<div class="mt-3">
-										<div class="row-fluid bg_white">
+										<div class="row bg_white">
 											<liferay-ui:message key="label.certificato.ultimoStep.preview"/>
-											<div class="span8 text-center offset2" id="certificatoPdfViewer"> </div>
+											<div class="col-md-8 text-center offset2" id="certificatoPdfViewer"> </div>
 										</div>
 									</div>
 								</c:if>
@@ -111,9 +111,9 @@
 							
 							<c:if test="${certificatiPdfPreviewEnabled}">
 								<div class="mt-3">
-									<div class="row-fluid bg_white">
+									<div class="row bg_white">
 										<liferay-ui:message key="label.certificato.ultimoStep.preview"/>
-										<div class="span8 text-center offset2" id="certificatoPdfViewer"> </div>
+										<div class="col-md-8 text-center offset2" id="certificatoPdfViewer"> </div>
 									</div>
 								</div>
 							</c:if>
