@@ -38,7 +38,8 @@ import org.osgi.service.component.annotations.Reference;
 				"dispatcher=FORWARD", //
 				"dispatcher=REQUEST", //
 				"url-pattern=/web/*", //
-				"url-pattern=/group/*" //
+				"url-pattern=/group/*", //
+				"url-regex-ignore-pattern=^/html/.+\\.(css|gif|html|ico|jpg|js|png)(\\?.*)?$"//
 		}, //
 		service = Filter.class//
 )

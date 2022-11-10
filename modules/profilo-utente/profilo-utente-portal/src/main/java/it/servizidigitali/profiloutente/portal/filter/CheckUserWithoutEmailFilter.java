@@ -39,6 +39,7 @@ import it.servizidigitali.profiloutente.portal.configuration.ProfiloUtenteConfig
 				"dispatcher=REQUEST", //
 				"url-pattern=/web/*", //
 				"url-pattern=/group/*", //
+				"url-regex-ignore-pattern=^/html/.+\\.(css|gif|html|ico|jpg|js|png)(\\?.*)?$", //
 				"after-filter=Check Privacy Filter" //
 		}, //
 		service = Filter.class, //
