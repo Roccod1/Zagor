@@ -16,6 +16,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +66,6 @@ public class ProfiloUtenteMieiDatiPortlet extends MVCPortlet {
 	@Override
 	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
 		// pulisco gli errori precedenti
-		SessionErrors.clear(renderRequest);
 		String tabAttiva = ParamUtil.getString(renderRequest, ProfiloUtenteMieiDatiPortletKeys.TAB_ATTIVA);
 		if (Validator.isNull(tabAttiva)) {
 			HttpServletRequest httpServletRequest = PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(renderRequest));
@@ -105,6 +105,12 @@ public class ProfiloUtenteMieiDatiPortlet extends MVCPortlet {
 				_log.debug("datiAnagrafici: " + datiAnagrafici.getComponentiNucleoFamiliare().size());
 				listaComponentiNucleoFamiliare = datiAnagrafici.getComponentiNucleoFamiliare();
 			}
+
+			Serializable loginSenzaEmailString = user.getExpandoBridge().getAttribute(ProfiloUtenteMieiDatiPortletKeys.EXPANDO_LOGIN_SENZA_EMAIL);
+			if (loginSenzaEmailString != null) {
+				renderRequest.setAttribute(ProfiloUtenteMieiDatiPortletKeys.LOGIN_SENZA_EMAIL, Boolean.parseBoolean(loginSenzaEmailString.toString()));
+			}
+
 		}
 		catch (BackofficeIntegrationClientException e) {
 			_log.error("render :: " + e.getMessage(), e);

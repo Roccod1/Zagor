@@ -63,7 +63,13 @@ public class CheckUserWithoutEmailFilter extends BaseFilter {
 
 		String redirectPath = profiloUtenteConfiguration.ckeckUserWithoutEmailRedirectPath();
 		User user = PortalUtil.getUser(request);
-		if (!PortalUtil.getCurrentURL(request).contains(redirectPath) && user != null && user.isActive() && !isAdministrator(user)) {
+		String currentURL = PortalUtil.getCurrentURL(request);
+		String redirectPathWithoutParameters = redirectPath;
+		if (redirectPath.contains("?")) {
+			redirectPathWithoutParameters = redirectPath.substring(0, redirectPath.lastIndexOf("?"));
+		}
+
+		if (!currentURL.contains(redirectPathWithoutParameters) && user != null && user.isActive() && !isAdministrator(user)) {
 
 			Serializable loginSenzaEmail = user.getExpandoBridge().getAttribute(UserCustomAttributes.LOGIN_SENZA_EMAIL.getNomeAttributo());
 			boolean loginSenzaEmailBoolean = loginSenzaEmail != null && Boolean.parseBoolean(loginSenzaEmail.toString());

@@ -30,6 +30,8 @@ public class ProfiloUtenteMieiDatiPortletKeys {
 
 	// parameter
 	public static final String UTENTE = "utente";
+	public static final String EMAIL_PRINCIPALE = "email";
+	public static final String EMAIL_PRINCIPALE_2 = "email2";
 	public static final String EMAIL_SECONDARIA = "emailSecondaria";
 	public static final String COMPONENTI_NUCLEO_FAMILIARE = "listaComponentiNucleoFamiliare";
 	public static final String CODICE_FISCALE = "codiceFiscale";
@@ -40,13 +42,16 @@ public class ProfiloUtenteMieiDatiPortletKeys {
 	public static final String ORGANIZATION = "organization";
 	public static final String ANPR = "anpr";
 	public static final String NOME_FONTE = "nomeFonte";
+	public static final String LOGIN_SENZA_EMAIL = "loginSenzaEmail";
 
 	// campi expando utente
 	public static final String EXPANDO_USER_PEC = UserCustomAttributes.PEC.getNomeAttributo();
 	public static final String EXPANDO_USER_EMAIL_AGGIUNTIVA = UserCustomAttributes.EMAIL_AGGIUNTIVA.getNomeAttributo();
+	public static final String EXPANDO_LOGIN_SENZA_EMAIL = UserCustomAttributes.LOGIN_SENZA_EMAIL.getNomeAttributo();
 	public static final String EXPANDO_ORGANIZATION_ANPR = OrganizationCustomAttributes.ANPR.getNomeAttributo();
 
 	// errori
 	public static final String ERRORE_BACKOFFICE = "erroreBackoffice";
 	public static final String ERRORE_GENERICO = "erroreGenerico";
+	public static final String ERRORE_AGGIORNAMENTO_EMAIL_PRINCIPALE = "errore-aggiornamento-email-principale";
 }
