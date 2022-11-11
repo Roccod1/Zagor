@@ -21,8 +21,8 @@
 		<div class="col">
 			<aui:select name="filterStatoRichiesta" label="stato">
 				<aui:option value=""><liferay-ui:message key="seleziona-opzione"/></aui:option>
-				<c:forEach items="${listaStato }" var="statoRichiesta">
-					<aui:option value="${statoRichiesta}">${statoRichiesta.toString().replace("_", " ")}</aui:option>
+				<c:forEach items="${listaStato}" var="statoRichiesta">
+					<aui:option value="${statoRichiesta}"><liferay-ui:message key="stato-richiesta-${statoRichiesta}"/></aui:option>
 				</c:forEach>
 			</aui:select>			
 		</div>
@@ -72,8 +72,8 @@
 		<div class="col">
 			<aui:select name="filterStatoPagamento" label="stato">
 				<aui:option value=""><liferay-ui:message key="seleziona-opzione"/></aui:option>
-				<c:forEach items="${listaStato }" var="statoRichiesta">
-					<aui:option value="${statoRichiesta}">${statoRichiesta.toString().replace("_", " ")}</aui:option>
+				<c:forEach items="${listaStato}" var="statoRichiesta">
+					<aui:option value="${statoRichiesta}"><liferay-ui:message key="stato-richiesta-${statoRichiesta}"/></aui:option>
 				</c:forEach>
 			</aui:select>			
 		</div>

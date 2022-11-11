@@ -1,3 +1,4 @@
+<%@page import="it.servizidigitali.richieste.common.enumeration.StatoRichiesta"%>
 <%@ include file="init.jsp" %>
 
 <portlet:renderURL var="homeURL">
@@ -29,7 +30,7 @@
 			<div class="form-group">
 				<label><liferay-ui:message key="stato"/></label>
 				<span class="form-control">
-					<c:out value="${richiesta.stato.replace(\"_\",\" \")}"/>
+					<liferay-ui:message key="stato-richiesta-${richiesta.stato}" />
 				</span>
 			</div>
 		</div>
@@ -75,81 +76,98 @@
 			</div>
 		</div>
 	</div>
-	
-	<c:if test="${not empty pdfRichiesta  }">
-		<div class="row">
-			<div class="col-12">
-				<h3 class="uppercase"><liferay-ui:message key="pdf-richiesta"></liferay-ui:message></h3>
-			</div>
-			<div class="col">
-				<div class="form-group">
-					<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_DOWNLOAD_FILE %>" var="pdfRichiestaURL">
-						<portlet:param name="<%=ScrivaniaCittadinoPortletKeys.PARAM_FILE_ID %>" value="${pdfRichiesta.idDocumentale}"/>
-					</portlet:resourceURL>
-					<aui:button name="allegatoRichiesta${pdfRichiesta.allegatoRichiestaId}" type="cancel" target="_blank" href="${pdfRichiestaURL }" cssClass="btn btn-secondary" icon="icon-file-alt" value="${not empty pdfRichiesta.titolo ? pdfRichiesta.titolo : pdfRichiesta.nome }">
-					</aui:button>
+	<c:set var="ATTESA_PAGAMENTO" value="<%=StatoRichiesta.ATTESA_PAGAMENTO%>"/>
+	<c:choose>
+		<c:when test="${richiesta.stato == ATTESA_PAGAMENTO}">
+			<div class="row">
+				<div class="col-12">
+					<h3 class="uppercase"><liferay-ui:message key="pdf-richiesta"></liferay-ui:message></h3>
+				</div>
+				<div class="col">
+					<div class="form-group alert alert-warning">
+						<liferay-ui:message key="pagamento-non-presente"/>
+					</div>
 				</div>
 			</div>
-		</div>
-	</c:if>
-	
-	<c:if test="${not empty allegatiRichiesta  }">
-		<div class="row">
-			<div class="col-12">
-				<h3 class="uppercase"><liferay-ui:message key="allegati"></liferay-ui:message></h3>
-			</div>
-			<div class="col">
-				<div class="form-group">
-					<aui:button-row>
-						<c:forEach items="${allegatiRichiesta }" var="allegatoRichiesta">
-							<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_DOWNLOAD_FILE %>" var="downloadAllegatoURL">
-								<portlet:param name="<%=ScrivaniaCittadinoPortletKeys.PARAM_FILE_ID %>" value="${allegatoRichiesta.idDocumentale}"/>
+		</c:when>
+		<c:otherwise>
+			<c:if test="${not empty pdfRichiesta}">
+				<div class="row">
+					<div class="col-12">
+						<h3 class="uppercase"><liferay-ui:message key="pdf-richiesta"></liferay-ui:message></h3>
+					</div>
+					<div class="col">
+						<div class="form-group">
+							<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_DOWNLOAD_FILE %>" var="pdfRichiestaURL">
+								<portlet:param name="<%=ScrivaniaCittadinoPortletKeys.PARAM_FILE_ID %>" value="${pdfRichiesta.idDocumentale}"/>
 							</portlet:resourceURL>
-							<aui:button name="allegatoRichiesta${allegatoRichiesta.allegatoRichiestaId}" type="cancel" target="_blank" href="${downloadAllegatoURL }" cssClass="btn btn-secondary" icon="icon-file-alt" value="${not empty allegatoRichiesta.titolo ? allegatoRichiesta.titolo : provvedimento.nome }">
+							<aui:button name="allegatoRichiesta${pdfRichiesta.allegatoRichiestaId}" type="cancel" target="_blank" href="${pdfRichiestaURL}" cssClass="btn btn-secondary" icon="icon-file-alt" value="${not empty pdfRichiesta.titolo ? pdfRichiesta.titolo : pdfRichiesta.nome}">
 							</aui:button>
-						</c:forEach>
-					</aui:button-row>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
-	</c:if>
+			</c:if>
+			
+			<c:if test="${not empty allegatiRichiesta}">
+				<div class="row">
+					<div class="col-12">
+						<h3 class="uppercase"><liferay-ui:message key="allegati"></liferay-ui:message></h3>
+					</div>
+					<div class="col">
+						<div class="form-group">
+							<aui:button-row>
+								<c:forEach items="${allegatiRichiesta }" var="allegatoRichiesta">
+									<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_DOWNLOAD_FILE %>" var="downloadAllegatoURL">
+										<portlet:param name="<%=ScrivaniaCittadinoPortletKeys.PARAM_FILE_ID %>" value="${allegatoRichiesta.idDocumentale}"/>
+									</portlet:resourceURL>
+									<aui:button name="allegatoRichiesta${allegatoRichiesta.allegatoRichiestaId}" type="cancel" target="_blank" href="${downloadAllegatoURL }" cssClass="btn btn-secondary" icon="icon-file-alt" value="${not empty allegatoRichiesta.titolo ? allegatoRichiesta.titolo : provvedimento.nome }">
+									</aui:button>
+								</c:forEach>
+							</aui:button-row>
+						</div>
+					</div>
+				</div>
+			</c:if>
+			
+			<c:if test="${not empty allegatoRicevutaPagamento}">
+				<div class="row">
+					<div class="col-12">
+						<h3 class="uppercase"><liferay-ui:message key="allegato-ricevuta-pagamento"></liferay-ui:message></h3>
+					</div>
+					<div class="col">
+						<div class="form-group">
+							<aui:button-row>
+								<aui:button target="_blank" href="${allegatoRicevutaPagamento}" cssClass="btn btn-secondary" icon="icon-file-alt" value="Download">
+								</aui:button>
+							</aui:button-row>
+						</div>
+					</div>
+				</div>
+			</c:if>
+			
+			<c:if test="${not empty allegatiProvvedimentiFinali}">
+				<div class="row">
+					<div class="col-12">
+						<h3 class="uppercase"><liferay-ui:message key="provvedimenti-finali"></liferay-ui:message></h3>
+					</div>
+					<div class="col">
+						<div class="form-group">
+							<aui:button-row>
+								<c:forEach items="${allegatiProvvedimentiFinali }" var="provvedimento">
+									<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_DOWNLOAD_FILE %>" var="downloadAllegatoURL">
+										<portlet:param name="<%=ScrivaniaCittadinoPortletKeys.PARAM_FILE_ID %>" value="${provvedimento.idDocumentale}"/>
+									</portlet:resourceURL>
+									<aui:button name="provvedimentoRichiesta${provvedimento.allegatoRichiestaId}" type="cancel" target="_blank" href="${downloadAllegatoURL }" cssClass="btn btn-secondary" icon="icon-file-alt" value="${not empty provvedimento.titolo ? provvedimento.titolo : provvedimento.nome }">
+									</aui:button>
+								</c:forEach>
+							</aui:button-row>
+						</div>
+					</div>
+				</div>
+			</c:if>
+		</c:otherwise>
+	</c:choose>
 	
-	<c:if test="${not empty allegatoRicevutaPagamento}">
-		<div class="row">
-			<div class="col-12">
-				<h3 class="uppercase"><liferay-ui:message key="allegato-ricevuta-pagamento"></liferay-ui:message></h3>
-			</div>
-			<div class="col">
-				<div class="form-group">
-					<aui:button-row>
-						<aui:button target="_blank" href="${allegatoRicevutaPagamento}" cssClass="btn btn-secondary" icon="icon-file-alt" value="Download">
-						</aui:button>
-					</aui:button-row>
-				</div>
-			</div>
-		</div>
-	</c:if>
-	
-	<c:if test="${not empty allegatiProvvedimentiFinali  }">
-		<div class="row">
-			<div class="col-12">
-				<h3 class="uppercase"><liferay-ui:message key="provvedimenti-finali"></liferay-ui:message></h3>
-			</div>
-			<div class="col">
-				<div class="form-group">
-					<aui:button-row>
-						<c:forEach items="${allegatiProvvedimentiFinali }" var="provvedimento">
-							<portlet:resourceURL id="<%=ScrivaniaCittadinoPortletKeys.RESOURCE_COMMAND_DOWNLOAD_FILE %>" var="downloadAllegatoURL">
-								<portlet:param name="<%=ScrivaniaCittadinoPortletKeys.PARAM_FILE_ID %>" value="${provvedimento.idDocumentale}"/>
-							</portlet:resourceURL>
-							<aui:button name="provvedimentoRichiesta${provvedimento.allegatoRichiestaId}" type="cancel" target="_blank" href="${downloadAllegatoURL }" cssClass="btn btn-secondary" icon="icon-file-alt" value="${not empty provvedimento.titolo ? provvedimento.titolo : provvedimento.nome }">
-							</aui:button>
-						</c:forEach>
-					</aui:button-row>
-				</div>
-			</div>
-		</div>
-	</c:if>
 	
 	<div class="row">
 		<div class="col-12">

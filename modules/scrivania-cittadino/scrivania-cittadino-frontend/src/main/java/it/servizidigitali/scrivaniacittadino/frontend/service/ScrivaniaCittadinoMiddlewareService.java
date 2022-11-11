@@ -126,12 +126,11 @@ public class ScrivaniaCittadinoMiddlewareService {
 	 */
 	public String getRicevutaTelematicaPDFPagamentoUrl(long richiestaId, long groupId) throws PortalException {
 
-		List<TipoServizio> tipiServizioByRichiesta = getTipiServizioByRichiesta(richiestaId);
+		Pagamento pagamentoByRichistaId = pagamentoLocalService.getPagamentoByRichistaId(richiestaId);
 
-		if (tipiServizioByRichiesta.contains(TipoServizio.PAGAMENTO)) {
+		if (pagamentoByRichistaId != null) {
 			accountClientPagamentiEnteConfiguration = configurationProvider.getGroupConfiguration(ClientPagamentiEnteConfiguration.class, groupId);
 			String ricevutaPagamentoPrefixUrl = accountClientPagamentiEnteConfiguration.ricevutaPagamentoPrefixUrl();
-			Pagamento pagamentoByRichistaId = pagamentoLocalService.getPagamentoByRichistaId(richiestaId);
 			if (Validator.isNotNull(pagamentoByRichistaId.getRiferimentoEsternoId())) {
 				return ricevutaPagamentoPrefixUrl + pagamentoByRichistaId.getRiferimentoEsternoId();
 			}

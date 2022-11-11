@@ -82,7 +82,7 @@
 		</aui:row>
 		<div class="form-actions text-center">
 			<button class="btn btn-custom" id="evaluationServiceDownloadLink">
-				<spring:message	code="button.valutaServizio" />
+				<liferay-ui:message key="button.valutaServizio"/>
 			</button>
 		</div>
 	</aui:col>

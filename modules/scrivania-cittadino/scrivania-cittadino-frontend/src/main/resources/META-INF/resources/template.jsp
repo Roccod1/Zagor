@@ -37,7 +37,6 @@
 </portlet:resourceURL>
 
 <script id="richiestaTpl" type="text/x-jsrender">
-
 	<div class="collapse-header" id="heading{{>richiesta.richiestaId }}">
 	  <button data-toggle="collapse" data-target="#collapse{{>richiesta.richiestaId }}" aria-expanded="false" aria-controls="collapse{{>richiesta.richiestaId }}">
 	    <div style="display:flex; justify-content:space-between">
@@ -50,50 +49,50 @@
 	    </div>
 	  </button>
 	</div>
-	<div class="collapse-body" style="padding-bottom: 10px;  padding-top: 0; ">
-	  {{if richiesta.dataProtocollo }}
-	  <div>
-	    {{localDate:richiesta.dataProtocollo}}
-	  </div>
-	  {{/if}}
-	  
-	  <div id="collapse{{>richiesta.richiestaId }}" class="collapse" role="region" aria-labelledby="heading{{>richiesta.richiestaId }}">
-	    <p>
-	      <liferay-ui:message key="protocollo" />: {{>richiesta.numeroProtocollo }}
-	    </p>
-
-{{if allegatiRichiesta.length > 0}}
-<div class="card-wrapper card-teaser-wrapper">
-{{for allegatiRichiesta}}
-
-	   <div class="card card-teaser rounded shadow py-1">
-    <svg class="icon">
-      <use href="/o/portale-istituzionale-theme/svg/sprite.svg#it-clip"></use>
-    </svg>
-    <div class="card-body">
-      <h5 class="card-title">
-        <a target="_blank" href="${downloadAllegatoURL}&<portlet:namespace/>fileId={{>idDocumentale}}">{{>titolo ? titolo : nome}}</a>
-      </h5>
-    </div>
-  </div>
-	  {{/for}}
-</div>
-{{/if}}
-
-
-	    <a class="btn btn-outline-primary" href="${dettaglioRichiestaURL}&<portlet:namespace/>id={{>richiesta.richiestaId}}">
-	      <span class="t-primary underline">
-	        <liferay-ui:message key="dettaglio" />
-	      </span>
-	    </a>
-	    <a class="btn btn-outline-primary" href="#">
-	      <span class="t-primary underline">
-	        <liferay-ui:message key="vai-al-servizio" />
-	      </span>
-	    </a>
-	  </div>
+	<div class="collapse-body" style="padding-bottom: 10px; padding-top: 10px;">
+		{{if richiesta.dataProtocollo }}
+			<div>
+	    		{{localDate:richiesta.dataProtocollo}}
+	 		</div>
+	  	{{/if}}
+		<div id="collapse{{>richiesta.richiestaId }}" class="collapse" role="region" aria-labelledby="heading{{>richiesta.richiestaId}}">
+	    	{{if richiesta.numeroProtocollo }}
+				<p>
+	      			<liferay-ui:message key="protocollo" />: {{>richiesta.numeroProtocollo }}
+	    		</p>
+			{{/if}}
+			{{if allegatiRichiesta && allegatiRichiesta.length > 0}}
+				<div class="card-wrapper card-teaser-wrapper">
+					{{for allegatiRichiesta}}
+	   					<div class="card card-teaser rounded shadow py-1">
+    						<svg class="icon">
+      							<use href="/o/portale-istituzionale-theme/svg/sprite.svg#it-clip"></use>
+    						</svg>
+    						<div class="card-body">
+      							<h5 class="card-title">
+									{{if url}}
+        								<a target="_blank" href="{{>url}}">{{>titolo ? titolo : nome}}</a>
+									{{else}}
+        								<a target="_blank" href="${downloadAllegatoURL}&<portlet:namespace/>fileId={{>idDocumentale}}">{{>titolo ? titolo : nome}}</a>
+									{{/if}}
+      							</h5>
+    						</div>
+  						</div>
+	  				{{/for}}
+				</div>
+			{{/if}}
+	   		<a class="btn btn-outline-primary" href="${dettaglioRichiestaURL}&<portlet:namespace/>id={{>richiesta.richiestaId}}">
+	      		<span class="t-primary underline">
+	        		<liferay-ui:message key="dettaglio" />
+	      		</span>
+	    	</a>
+	    	<a class="btn btn-outline-primary" href="#">
+	      		<span class="t-primary underline">
+	        		<liferay-ui:message key="vai-al-servizio" />
+	      		</span>
+	    	</a>
+	  	</div>
 	</div>
-	
 </script>
 
 <script id="pagamentoTpl" type="text/x-jsrender">
@@ -109,7 +108,7 @@
 			</div>
 		</button>
 	</div>
-	<div class="collapse-body" style="padding-bottom: 10px;  padding-top: 0; ">
+	<div class="collapse-body" style="padding-bottom: 10px;  padding-top: 10px; ">
 		{{if dataProtocollo }}
 		<div>
 			{{localDate:dataProtocollo}}
@@ -146,7 +145,7 @@
 			</div>
 		</button>
 	</div>
-	<div class="collapse-body" style="padding-bottom: 10px;  padding-top: 0; ">
+	<div class="collapse-body" style="padding-bottom: 10px;  padding-top: 10px; ">
 
 		{{if dataInvio}}
 			<div>

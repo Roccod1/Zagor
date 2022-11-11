@@ -26,6 +26,7 @@ import javax.portlet.ResourceResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.richieste.common.enumeration.StatoRichiesta;
 import it.servizidigitali.scrivaniacittadino.frontend.constants.ScrivaniaCittadinoPortletKeys;
 import it.servizidigitali.scrivaniacittadino.frontend.dto.RichiestaAccordionDto;
 import it.servizidigitali.scrivaniacittadino.frontend.service.ScrivaniaCittadinoMiddlewareService;
@@ -59,6 +60,9 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 
 	@Reference
 	private AllegatoRichiestaLocalService allegatoRichiestaLocalService;
+
+	@Reference
+	private ScrivaniaCittadinoMiddlewareService scrivaniaCittadinoMiddlewareService;
 
 	@Override
 	protected void doServeResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
@@ -126,7 +130,20 @@ public class GetRichiesteCittadinoResourceCommand extends BaseMVCResourceCommand
 				List<AllegatoRichiesta> allegatiRichiesta = allegatoRichiestaLocalService.getAllegatiRichiestaByRichiestaIdVisibile(richiesta.getRichiestaId(), true);
 				RichiestaAccordionDto richiestaAccordionDto = new RichiestaAccordionDto();
 				richiestaAccordionDto.setRichiesta(richiesta);
-				richiestaAccordionDto.setAllegatiRichiesta(allegatiRichiesta);
+				if (richiesta.getStato().equals(StatoRichiesta.CHIUSA_POSITIVAMENTE.name()) || richiesta.getStato().equals(StatoRichiesta.ATTESA_INTEGRAZIONI.name())) {
+					// Se pagamento, aggiunta allegato ricevuta
+					String ricevutaTelematicaPDFPagamentoUrl = scrivaniaCittadinoMiddlewareService.getRicevutaTelematicaPDFPagamentoUrl(richiesta.getRichiestaId(), richiesta.getGroupId());
+					if (Validator.isNotNull(ricevutaTelematicaPDFPagamentoUrl)) {
+						AllegatoRichiesta allegatoRichiestaRicevutaTelematicaPagamento = allegatoRichiestaLocalService.createAllegatoRichiesta(0);
+						allegatoRichiestaRicevutaTelematicaPagamento.setUrl(ricevutaTelematicaPDFPagamentoUrl);
+						allegatoRichiestaRicevutaTelematicaPagamento.setNome("Ricevuta telematica");
+						List<AllegatoRichiesta> allegatiRichiestaClone = new ArrayList<AllegatoRichiesta>(allegatiRichiesta);
+						allegatiRichiestaClone.add(allegatoRichiestaRicevutaTelematicaPagamento);
+						allegatiRichiesta = allegatiRichiestaClone;
+					}
+					richiestaAccordionDto.setAllegatiRichiesta(allegatiRichiesta);
+				}
+
 				listaRichiestaFinal.add(richiestaAccordionDto);
 			}
 
