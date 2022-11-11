@@ -23,7 +23,7 @@ console.log("dentro scegli allegati");
 	</div>
 </c:if>
 
-<div class="row">
+<div class="">
 	<div class="page-header">
 		<h2 class="noMargin">${titoloPortletServizio}</h2>
 	</div>
