@@ -36,4 +36,20 @@ public class IstanzaFormLocalServiceImpl extends IstanzaFormLocalServiceBaseImpl
 		}
 		return null;
 	}
+
+	public IstanzaForm createIstanzaForm(String json, long formId, long richiestaId, long userId, String userName, long groupId, long companyId) {
+
+		IstanzaForm istanzaForm = istanzaFormPersistence.create(counterLocalService.increment());
+		istanzaForm.setJson(json);
+		istanzaForm.setFormId(formId);
+		istanzaForm.setRichiestaId(richiestaId);
+		istanzaForm.setUserId(userId);
+		istanzaForm.setUserName(userName);
+		istanzaForm.setGroupId(groupId);
+		istanzaForm.setCompanyId(companyId);
+
+		istanzaForm = istanzaFormPersistence.update(istanzaForm);
+
+		return istanzaForm;
+	}
 }

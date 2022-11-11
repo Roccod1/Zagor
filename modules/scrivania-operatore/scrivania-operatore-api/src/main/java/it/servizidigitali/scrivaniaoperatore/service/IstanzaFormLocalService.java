@@ -87,6 +87,10 @@ public interface IstanzaFormLocalService
 	@Transactional(enabled = false)
 	public IstanzaForm createIstanzaForm(long istanzaFormId);
 
+	public IstanzaForm createIstanzaForm(
+		String json, long formId, long richiestaId, long userId,
+		String userName, long groupId, long companyId);
+
 	/**
 	 * @throws PortalException
 	 */

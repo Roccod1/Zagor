@@ -69,6 +69,16 @@ public class IstanzaFormLocalServiceWrapper
 		return _istanzaFormLocalService.createIstanzaForm(istanzaFormId);
 	}
 
+	@Override
+	public it.servizidigitali.scrivaniaoperatore.model.IstanzaForm
+		createIstanzaForm(
+			String json, long formId, long richiestaId, long userId,
+			String userName, long groupId, long companyId) {
+
+		return _istanzaFormLocalService.createIstanzaForm(
+			json, formId, richiestaId, userId, userName, groupId, companyId);
+	}
+
 	/**
 	 * @throws PortalException
 	 */

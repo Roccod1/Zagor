@@ -70,6 +70,14 @@ public class IstanzaFormLocalServiceUtil {
 		return getService().createIstanzaForm(istanzaFormId);
 	}
 
+	public static IstanzaForm createIstanzaForm(
+		String json, long formId, long richiestaId, long userId,
+		String userName, long groupId, long companyId) {
+
+		return getService().createIstanzaForm(
+			json, formId, richiestaId, userId, userName, groupId, companyId);
+	}
+
 	/**
 	 * @throws PortalException
 	 */

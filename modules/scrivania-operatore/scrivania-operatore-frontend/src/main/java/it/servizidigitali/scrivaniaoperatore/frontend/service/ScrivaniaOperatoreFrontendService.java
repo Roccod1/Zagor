@@ -63,6 +63,7 @@ import it.servizidigitali.scrivaniaoperatore.model.CommentoRichiesta;
 import it.servizidigitali.scrivaniaoperatore.model.Richiesta;
 import it.servizidigitali.scrivaniaoperatore.service.AllegatoRichiestaLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.CommentoRichiestaLocalService;
+import it.servizidigitali.scrivaniaoperatore.service.IstanzaFormLocalService;
 import it.servizidigitali.scrivaniaoperatore.service.RichiestaLocalService;
 
 /**
@@ -118,6 +119,9 @@ public class ScrivaniaOperatoreFrontendService {
 
 	@Reference
 	private FormLocalService formLocalService;
+
+	@Reference
+	private IstanzaFormLocalService istanzaFormLocalService;
 
 	/**
 	 *
@@ -600,14 +604,19 @@ public class ScrivaniaOperatoreFrontendService {
 					serviceContext.getCompanyId());
 		}
 
+		// Creazione istanze form aggiuntive
+		Richiesta richiesta = richiestaLocalService.getRichiesta(richiestaId);
+		for (Long formId : formIntegrativiIds) {
+			istanzaFormLocalService.createIstanzaForm(null, formId, richiestaId, richiesta.getUserId(), richiesta.getUserName(), richiesta.getGroupId(), richiesta.getCompanyId());
+		}
+
 		// Aggiornamento stato richiesta
+
 		richiestaLocalService.updateStatoRichiesta(richiestaId, StatoRichiesta.ATTESA_INTEGRAZIONI.name());
 
 		// invio email al cittadino
 		List<Canale> canali = utenteOrganizzazioneCanaleComunicazioneLocalService.getListaCanaleComunicazioneByUtenteOrganization(currentUser.getUserId(), organizationId).stream()
 				.map(x -> x.getCanale()).map(x -> Canale.getSupportedChannel(x.getCodice())).collect(Collectors.toList());
-
-		Richiesta richiesta = richiestaLocalService.getRichiesta(richiestaId);
 
 		String statoRichiestaLabel = getStatoRichiestaLabelValue(richiesta.getStato(), serviceContext.getLocale());
 
@@ -688,7 +697,7 @@ public class ScrivaniaOperatoreFrontendService {
 						continue;
 					}
 					IntegrazioneDTO integrazioneDTO = new IntegrazioneDTO();
-					integrazioneDTO.setId(proceduraForm.getProceduraId());
+					integrazioneDTO.setId(proceduraForm.getFormId());
 					integrazioneDTO.setNome(form.getNome());
 					integrazioneDTOs.add(integrazioneDTO);
 				}
