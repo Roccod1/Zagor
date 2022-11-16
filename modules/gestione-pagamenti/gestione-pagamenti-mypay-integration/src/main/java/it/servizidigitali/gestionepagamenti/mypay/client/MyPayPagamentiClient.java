@@ -222,6 +222,7 @@ public class MyPayPagamentiClient implements PagamentiClient {
 							}
 							else {
 								statoPagamento = StatoPagamento.ERRORE;
+								verificaPagamentoRisposta.setDescrizioneErrore("Pagamento non eseguito. Codice Esito: " + codiceEsitoPagamento);
 							}
 							verificaPagamentoRisposta.setStatoPagamento(statoPagamento);
 							verificaPagamentoRisposta.setImportoCommissioni(null);
