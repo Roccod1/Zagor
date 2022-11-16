@@ -165,7 +165,17 @@ public class VerificaPagamentiScheduler extends BaseMessageListener {
 						break;
 					case ERRORE:
 						pagamento.setStato(StatoPagamento.ERRORE.name());
-						pagamento.setErrore(verificaPagamento.getCodiceErrore() + " - " + verificaPagamento.getDescrizioneErrore());
+						String errore = null;
+						if (verificaPagamento.getCodiceErrore() != null && verificaPagamento.getDescrizioneErrore() != null) {
+							errore = verificaPagamento.getCodiceErrore() + " - " + verificaPagamento.getDescrizioneErrore();
+
+						}
+						else {
+							if (verificaPagamento.getDescrizioneErrore() != null) {
+								errore = verificaPagamento.getDescrizioneErrore();
+							}
+						}
+						pagamento.setErrore(errore);
 						statoRichiesta = StatoRichiesta.CHIUSA_NEGATIVAMENTE;
 						break;
 					case ANNULLATO:
