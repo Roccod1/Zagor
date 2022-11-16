@@ -1,11 +1,10 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
+ * The contents of this file are subject to the terms of the Liferay Enterprise Subscription License
+ * ("License"). You may not use this file except in compliance with the License. You can obtain a
+ * copy of the License by contacting Liferay, Inc. See the License for the specific language
+ * governing permissions and limitations under the License, including but not limited to
  * distribution rights of the Software.
  *
  *
@@ -21,6 +20,7 @@ import com.liferay.portal.kernel.exception.UserEmailAddressException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.CompanyLocalService;
@@ -47,7 +47,6 @@ import com.liferay.saml.runtime.configuration.SamlProviderConfigurationHelper;
 import com.liferay.saml.runtime.exception.SubjectException;
 
 import java.io.Serializable;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -55,116 +54,101 @@ import java.util.Map;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.common.utility.enumeration.TipoLogin;
 import it.servizidigitali.common.utility.enumeration.UserCustomAttributes;
 
 /**
  * @author Mika Koivisto
  */
-@Component(
-	immediate = true, property = "service.ranking:Integer=" + Integer.MIN_VALUE,
-	service = UserResolver.class
-)
+@Component(immediate = true, property = "service.ranking:Integer=" + Integer.MIN_VALUE, service = UserResolver.class)
 public class DefaultUserResolver implements UserResolver {
 
 	@Override
-	public User resolveUser(
-			UserResolverSAMLContext userResolverSAMLContext,
-			ServiceContext serviceContext)
-		throws Exception {
+	public User resolveUser(UserResolverSAMLContext userResolverSAMLContext, ServiceContext serviceContext) throws Exception {
 
-		String subjectNameFormat =
-			userResolverSAMLContext.resolveSubjectNameFormat();
+		String subjectNameFormat = userResolverSAMLContext.resolveSubjectNameFormat();
 
 		if (_log.isDebugEnabled()) {
-			String subjectNameIdentifier =
-				userResolverSAMLContext.resolveSubjectNameIdentifier();
+			String subjectNameIdentifier = userResolverSAMLContext.resolveSubjectNameIdentifier();
 
-			_log.debug(
-				StringBundler.concat(
-					"Resolving user with name ID format ", subjectNameFormat,
-					" and value ", subjectNameIdentifier));
+			_log.debug(StringBundler.concat("Resolving user with name ID format ", subjectNameFormat, " and value ", subjectNameIdentifier));
 		}
 
 		long companyId = CompanyThreadLocal.getCompanyId();
 
-		SamlSpIdpConnection samlSpIdpConnection =
-			_samlSpIdpConnectionLocalService.getSamlSpIdpConnection(
-				companyId, userResolverSAMLContext.resolvePeerEntityId());
+		SamlSpIdpConnection samlSpIdpConnection = _samlSpIdpConnectionLocalService.getSamlSpIdpConnection(companyId, userResolverSAMLContext.resolvePeerEntityId());
 
-		subjectNameFormat = _getNameIdFormat(
-			userResolverSAMLContext, samlSpIdpConnection.getNameIdFormat());
+		subjectNameFormat = _getNameIdFormat(userResolverSAMLContext, samlSpIdpConnection.getNameIdFormat());
 
-		User user = _importUser(
-			companyId, samlSpIdpConnection,
-			userResolverSAMLContext.resolveSubjectNameIdentifier(),
-			subjectNameFormat, userResolverSAMLContext, serviceContext);
-		
+		User user = _importUser(companyId, samlSpIdpConnection, userResolverSAMLContext.resolveSubjectNameIdentifier(), subjectNameFormat, userResolverSAMLContext, serviceContext);
+
 		return user;
 	}
 
-	private User _addUser(
-			long companyId, SamlSpIdpConnection samlSpIdpConnection,
-			Map<String, List<Serializable>> attributesMap,
-			ServiceContext serviceContext)
-		throws Exception {
+	private User _addUser(long companyId, SamlSpIdpConnection samlSpIdpConnection, Map<String, List<Serializable>> attributesMap, ServiceContext serviceContext) throws Exception {
 
 		if (_log.isDebugEnabled()) {
-			_log.debug(
-				"Adding user with attributes map " +
-					MapUtil.toString(attributesMap));
+			_log.debug("Adding user with attributes map " + MapUtil.toString(attributesMap));
 		}
 
 		Company company = _companyLocalService.getCompany(companyId);
-		String emailAddress = _getValueAsString("emailAddress", attributesMap);
+		String emailAddress = _getValueAsString(CompanyConstants.AUTH_TYPE_EA, attributesMap);
 
 		if (samlSpIdpConnection.isUnknownUsersAreStrangers()) {
 			if (!company.isStrangers()) {
-				throw new SubjectException(
-					"User is a stranger and company " + companyId +
-						" does not allow strangers to create accounts");
+				throw new SubjectException("User is a stranger and company " + companyId + " does not allow strangers to create accounts");
 			}
-			else if (Validator.isNotNull(emailAddress) &&
-					 !company.isStrangersWithMx() &&
-					 company.hasCompanyMx(emailAddress)) {
+			else if (Validator.isNotNull(emailAddress) && !company.isStrangersWithMx() && company.hasCompanyMx(emailAddress)) {
 
-				throw new UserEmailAddressException.MustNotUseCompanyMx(
-					emailAddress);
+				throw new UserEmailAddressException.MustNotUseCompanyMx(emailAddress);
 			}
 		}
-		
-		boolean userSenzaEmail = false;
+
+		String screenName = _getValueAsString(CompanyConstants.AUTH_TYPE_SN, attributesMap);
+		String spidCode = _getValueAsString("spidCode", attributesMap);
+
+		boolean loginSenzaEmail = false;
+		boolean loginSenzaCodiceFiscale = false;
+
+		TipoLogin tipoLogin = TipoLogin.SPID;
+
 		if (Validator.isNull(emailAddress)) {
-			//Generazione email fake + set custom attributes
-			emailAddress = _getValueAsString("screenName", attributesMap) + "@emailfakeservizidigitali.com";
-			userSenzaEmail = true;
+			// Generazione email fake + set custom attributes
+			emailAddress = screenName + "@emailfakeservizidigitali.com";
+			loginSenzaEmail = true;
+			tipoLogin = TipoLogin.CIE_CNS;
+		}
+
+		if (Validator.isNull(screenName)) {
+			// Generazione CF come spidCode + set custom attributes
+			screenName = spidCode;
+			loginSenzaCodiceFiscale = true;
+			tipoLogin = TipoLogin.EIDAS;
 		}
 
 		User user = _userLocalService.createUser(0);
 		user.setEmailAddress(emailAddress);
+		user.setScreenName(screenName);
 
 		user.setCompanyId(companyId);
 
 		user = _processUser(user, attributesMap, serviceContext);
 
+		user.getExpandoBridge().setAttribute(UserCustomAttributes.LOGIN_SENZA_EMAIL.getNomeAttributo(), loginSenzaEmail);
+		user.getExpandoBridge().setAttribute(UserCustomAttributes.LOGIN_SENZA_CODICE_FISCALE.getNomeAttributo(), loginSenzaCodiceFiscale);
+		user.getExpandoBridge().setAttribute(UserCustomAttributes.TIPO_LOGIN.getNomeAttributo(), tipoLogin.name());
+
 		if (_log.isDebugEnabled()) {
 			_log.debug("Added user " + user.toString());
-		}
-		
-		if (userSenzaEmail) {
-			user.getExpandoBridge().setAttribute(UserCustomAttributes.LOGIN_SENZA_EMAIL.getNomeAttributo(), true);
 		}
 
 		return user;
 	}
 
-	private Map<String, List<Serializable>> _getAttributesMap(
-		SamlSpIdpConnection samlSpIdpConnection,
-		UserResolverSAMLContext userResolverSAMLContext) {
+	private Map<String, List<Serializable>> _getAttributesMap(SamlSpIdpConnection samlSpIdpConnection, UserResolverSAMLContext userResolverSAMLContext) {
 
 		try {
-			return userResolverSAMLContext.
-				resolveBearerAssertionAttributesWithMapping(
-					samlSpIdpConnection.getNormalizedUserAttributeMappings());
+			return userResolverSAMLContext.resolveBearerAssertionAttributesWithMapping(samlSpIdpConnection.getNormalizedUserAttributeMappings());
 		}
 		catch (Exception exception) {
 			if (_log.isDebugEnabled()) {
@@ -178,9 +162,7 @@ public class DefaultUserResolver implements UserResolver {
 		return Collections.emptyMap();
 	}
 
-	private String _getNameIdFormat(
-		UserResolverSAMLContext userResolverSAMLContext,
-		String defaultNameIdFormat) {
+	private String _getNameIdFormat(UserResolverSAMLContext userResolverSAMLContext, String defaultNameIdFormat) {
 
 		String format = userResolverSAMLContext.resolveSubjectNameFormat();
 
@@ -205,22 +187,18 @@ public class DefaultUserResolver implements UserResolver {
 		return userFieldExpression.substring(0, prefixEndIndex);
 	}
 
-	private UserFieldExpressionResolver _getUserFieldExpressionResolver(
-		String userIdentifierExpression) {
+	private UserFieldExpressionResolver _getUserFieldExpressionResolver(String userIdentifierExpression) {
 
-		String userFieldExpressionResolverKey = _getPrefix(
-			userIdentifierExpression);
+		String userFieldExpressionResolverKey = _getPrefix(userIdentifierExpression);
 
 		if (Validator.isBlank(userFieldExpressionResolverKey)) {
 			userFieldExpressionResolverKey = userIdentifierExpression;
 		}
 
-		return _userFieldExpressionResolverRegistry.
-			getUserFieldExpressionResolver(userFieldExpressionResolverKey);
+		return _userFieldExpressionResolverRegistry.getUserFieldExpressionResolver(userFieldExpressionResolverKey);
 	}
 
-	private String _getValueAsString(
-		String key, Map<String, List<Serializable>> attributesMap) {
+	private String _getValueAsString(String key, Map<String, List<Serializable>> attributesMap) {
 
 		List<Serializable> values = attributesMap.get(key);
 
@@ -230,7 +208,7 @@ public class DefaultUserResolver implements UserResolver {
 
 		return removePrefixes(String.valueOf(values.get(0)));
 	}
-	
+
 	private String removePrefixes(String value) {
 		String result = value;
 		if (result.toUpperCase().contains("TINIT-") && !result.contains(StringPool.AT)) {
@@ -239,36 +217,21 @@ public class DefaultUserResolver implements UserResolver {
 		return result;
 	}
 
-	private User _importUser(
-			long companyId, SamlSpIdpConnection samlSpIdpConnection,
-			String subjectNameIdentifier, String nameIdFormat,
-			UserResolverSAMLContext userResolverSAMLContext,
-			ServiceContext serviceContext)
-		throws Exception {
+	private User _importUser(long companyId, SamlSpIdpConnection samlSpIdpConnection, String subjectNameIdentifier, String nameIdFormat, UserResolverSAMLContext userResolverSAMLContext,
+			ServiceContext serviceContext) throws Exception {
 
-		UserFieldExpressionResolver userFieldExpressionResolver =
-			_getUserFieldExpressionResolver(
-				samlSpIdpConnection.getUserIdentifierExpression());
+		UserFieldExpressionResolver userFieldExpressionResolver = _getUserFieldExpressionResolver(samlSpIdpConnection.getUserIdentifierExpression());
 
-		Map<String, List<Serializable>> attributesMap = _getAttributesMap(
-			samlSpIdpConnection, userResolverSAMLContext);
+		Map<String, List<Serializable>> attributesMap = _getAttributesMap(samlSpIdpConnection, userResolverSAMLContext);
 
-		String userFieldExpression = _removePrefix(
-			StringPool.BLANK,
-			GetterUtil.getString(
-				userFieldExpressionResolver.resolveUserFieldExpression(
-					attributesMap, userResolverSAMLContext)));
+		String userFieldExpression = _removePrefix(StringPool.BLANK, GetterUtil.getString(userFieldExpressionResolver.resolveUserFieldExpression(attributesMap, userResolverSAMLContext)));
 
 		if (Validator.isBlank(userFieldExpression)) {
 			if (_log.isDebugEnabled()) {
 				_log.debug("User field expression is null");
 			}
 
-			User user = _resolveByNameId(
-				companyId, nameIdFormat,
-				userResolverSAMLContext.resolveSubjectNameQualifier(),
-				subjectNameIdentifier,
-				userResolverSAMLContext.resolvePeerEntityId());
+			User user = _resolveByNameId(companyId, nameIdFormat, userResolverSAMLContext.resolveSubjectNameQualifier(), subjectNameIdentifier, userResolverSAMLContext.resolvePeerEntityId());
 
 			if (user != null) {
 				return _updateUser(user, attributesMap, serviceContext);
@@ -280,94 +243,82 @@ public class DefaultUserResolver implements UserResolver {
 		String searchFieldValue = subjectNameIdentifier;
 
 		if (attributesMap.containsKey(userFieldExpression)) {
-			searchFieldValue = _getValueAsString(
-				userFieldExpression, attributesMap);
+			searchFieldValue = _getValueAsString(userFieldExpression, attributesMap);
 
 			if (_log.isDebugEnabled()) {
-				_log.debug(
-					StringBundler.concat(
-						"User identifier expression is mapped to SAML ",
-						"attribute value \"", searchFieldValue, "\""));
+				_log.debug(StringBundler.concat("User identifier expression is mapped to SAML ", "attribute value \"", searchFieldValue, "\""));
 			}
 		}
 		else {
 			if (_log.isDebugEnabled()) {
-				_log.debug(
-					StringBundler.concat(
-						"Resolving user using subject naming identifier ",
-						subjectNameIdentifier, " and name ID format ",
-						nameIdFormat));
+				_log.debug(StringBundler.concat("Resolving user using subject naming identifier ", subjectNameIdentifier, " and name ID format ", nameIdFormat));
 			}
 		}
 
 		String prefix = _getPrefix(userFieldExpression);
 
-		UserFieldExpressionHandler userFieldExpressionHandler =
-			_userFieldExpressionHandlerRegistry.getFieldExpressionHandler(
-				prefix);
+		UserFieldExpressionHandler userFieldExpressionHandler = _userFieldExpressionHandlerRegistry.getFieldExpressionHandler(prefix);
 
 		User user;
 
-		if (Validator.isNotNull(userFieldExpression) &&
-			_samlProviderConfigurationHelper.isLDAPImportEnabled()) {
+		if (Validator.isNotNull(userFieldExpression) && _samlProviderConfigurationHelper.isLDAPImportEnabled()) {
 
-			user = userFieldExpressionHandler.getLdapUser(
-				companyId, searchFieldValue,
-				_removePrefix(prefix, userFieldExpression));
+			user = userFieldExpressionHandler.getLdapUser(companyId, searchFieldValue, _removePrefix(prefix, userFieldExpression));
 
 			if (user != null) {
 				if (_log.isDebugEnabled()) {
-					_log.debug(
-						"Matched and imported LDAP user " + user.toString());
+					_log.debug("Matched and imported LDAP user " + user.toString());
 				}
 
 				return user;
 			}
 		}
 
-		user = _resolveByNameId(
-			companyId, nameIdFormat,
-			userResolverSAMLContext.resolveSubjectNameQualifier(),
-			subjectNameIdentifier,
-			userResolverSAMLContext.resolvePeerEntityId());
+		user = _resolveByNameId(companyId, nameIdFormat, userResolverSAMLContext.resolveSubjectNameQualifier(), subjectNameIdentifier, userResolverSAMLContext.resolvePeerEntityId());
 
 		if (user == null) {
-			user = userFieldExpressionHandler.getUser(
-				companyId, searchFieldValue,
-				_removePrefix(prefix, userFieldExpression));
+			user = userFieldExpressionHandler.getUser(companyId, searchFieldValue, _removePrefix(prefix, userFieldExpression));
 		}
 
 		if (user == null) {
-			return _addUser(
-				companyId, samlSpIdpConnection, attributesMap, serviceContext);
+			return _addUser(companyId, samlSpIdpConnection, attributesMap, serviceContext);
 		}
 
-		return _updateUser(user, attributesMap, serviceContext);
+		User updatedUser = _updateUser(user, attributesMap, serviceContext);
+
+		// Aggiornamento tipologia login
+		String screenName = _getValueAsString(CompanyConstants.AUTH_TYPE_SN, attributesMap);
+		String emailAddress = _getValueAsString(CompanyConstants.AUTH_TYPE_EA, attributesMap);
+
+		TipoLogin tipoLogin = TipoLogin.SPID;
+
+		if (Validator.isNull(emailAddress)) {
+			tipoLogin = TipoLogin.CIE_CNS;
+		}
+
+		if (Validator.isNull(screenName)) {
+			tipoLogin = TipoLogin.EIDAS;
+		}
+
+		user.getExpandoBridge().setAttribute(UserCustomAttributes.TIPO_LOGIN.getNomeAttributo(), tipoLogin.name());
+
+		return updatedUser;
 	}
 
-	private User _processUser(
-			User user, Map<String, List<Serializable>> attributesMap,
-			ServiceContext serviceContext)
-		throws Exception {
+	private User _processUser(User user, Map<String, List<Serializable>> attributesMap, ServiceContext serviceContext) throws Exception {
 
-		UserProcessor userProcessor = _userProcessorFactory.create(
-			user, _userFieldExpressionHandlerRegistry);
+		UserProcessor userProcessor = _userProcessorFactory.create(user, _userFieldExpressionHandlerRegistry);
 
 		for (String key : attributesMap.keySet()) {
-			userProcessor.setValueArray(
-				key, new String[] {_getValueAsString(key, attributesMap)});
+			userProcessor.setValueArray(key, new String[] { _getValueAsString(key, attributesMap) });
 		}
 
 		return userProcessor.process(serviceContext);
 	}
 
-	private String _removePrefix(
-		String prefix, String prefixedUserFieldExpression) {
+	private String _removePrefix(String prefix, String prefixedUserFieldExpression) {
 
-		if ((prefixedUserFieldExpression.length() > prefix.length()) &&
-			(prefixedUserFieldExpression.charAt(prefix.length()) ==
-				CharPool.COLON) &&
-			prefixedUserFieldExpression.startsWith(prefix)) {
+		if ((prefixedUserFieldExpression.length() > prefix.length()) && (prefixedUserFieldExpression.charAt(prefix.length()) == CharPool.COLON) && prefixedUserFieldExpression.startsWith(prefix)) {
 
 			return prefixedUserFieldExpression.substring(prefix.length() + 1);
 		}
@@ -375,24 +326,14 @@ public class DefaultUserResolver implements UserResolver {
 		return prefixedUserFieldExpression;
 	}
 
-	private User _resolveByNameId(
-		long companyId, String subjectNameFormat, String subjectNameQualifier,
-		String subjectNameIdentifier, String samlIdpEntityId) {
+	private User _resolveByNameId(long companyId, String subjectNameFormat, String subjectNameQualifier, String subjectNameIdentifier, String samlIdpEntityId) {
 
-		SamlPeerBinding samlPeerBinding =
-			_samlPeerBindingLocalService.fetchSamlPeerBinding(
-				companyId, subjectNameFormat, subjectNameQualifier,
-				subjectNameIdentifier, samlIdpEntityId);
+		SamlPeerBinding samlPeerBinding = _samlPeerBindingLocalService.fetchSamlPeerBinding(companyId, subjectNameFormat, subjectNameQualifier, subjectNameIdentifier, samlIdpEntityId);
 
 		if (samlPeerBinding != null) {
 			if (_log.isDebugEnabled()) {
-				_log.debug(
-					StringBundler.concat(
-						"Matched known subject name identifier ",
-						subjectNameIdentifier, " of subject name format ",
-						subjectNameFormat, " with subject name qualifier \"",
-						subjectNameQualifier, "\" for SAML IDP entity ID ",
-						samlIdpEntityId));
+				_log.debug(StringBundler.concat("Matched known subject name identifier ", subjectNameIdentifier, " of subject name format ", subjectNameFormat, " with subject name qualifier \"",
+						subjectNameQualifier, "\" for SAML IDP entity ID ", samlIdpEntityId));
 			}
 
 			return _userLocalService.fetchUserById(samlPeerBinding.getUserId());
@@ -401,23 +342,16 @@ public class DefaultUserResolver implements UserResolver {
 		return null;
 	}
 
-	private User _updateUser(
-			User user, Map<String, List<Serializable>> attributesMap,
-			ServiceContext serviceContext)
-		throws Exception {
+	private User _updateUser(User user, Map<String, List<Serializable>> attributesMap, ServiceContext serviceContext) throws Exception {
 
 		if (_log.isDebugEnabled()) {
-			_log.debug(
-				StringBundler.concat(
-					"Updating user ", user.getUserId(), " with attributes map ",
-					MapUtil.toString(attributesMap)));
+			_log.debug(StringBundler.concat("Updating user ", user.getUserId(), " with attributes map ", MapUtil.toString(attributesMap)));
 		}
 
 		return _processUser(user, attributesMap, serviceContext);
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		DefaultUserResolver.class);
+	private static final Log _log = LogFactoryUtil.getLog(DefaultUserResolver.class);
 
 	@Reference
 	private CompanyLocalService _companyLocalService;
@@ -435,12 +369,10 @@ public class DefaultUserResolver implements UserResolver {
 	private SamlSpIdpConnectionLocalService _samlSpIdpConnectionLocalService;
 
 	@Reference
-	private UserFieldExpressionHandlerRegistry
-		_userFieldExpressionHandlerRegistry;
+	private UserFieldExpressionHandlerRegistry _userFieldExpressionHandlerRegistry;
 
 	@Reference
-	private UserFieldExpressionResolverRegistry
-		_userFieldExpressionResolverRegistry;
+	private UserFieldExpressionResolverRegistry _userFieldExpressionResolverRegistry;
 
 	@Reference
 	private UserImporter _userImporter;
