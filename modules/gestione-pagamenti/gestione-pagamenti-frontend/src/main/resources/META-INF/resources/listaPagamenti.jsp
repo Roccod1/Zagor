@@ -18,7 +18,7 @@
 
 <liferay-ui:search-container delta="${delta}"
 	emptyResultsMessage="message.listaPagamenti.empty"
-	total="${totalCountPagamenti}" cssClass="mt-2" iteratorURL="${iteratorURL}">
+	total="${totalCountPagamenti}" iteratorURL="${iteratorURL}">
 	
 	<liferay-ui:search-container-results results="${listaPagamenti}" />
 	

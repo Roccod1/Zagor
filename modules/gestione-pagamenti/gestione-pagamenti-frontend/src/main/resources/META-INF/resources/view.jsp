@@ -1,4 +1,8 @@
-<%@ include file="/init.jsp" %>
+<%@ include file="init.jsp" %>
+
+<div class="page-header">
+	<h2><liferay-ui:message key="elenco-pagamenti"/></h2>
+</div>
 
 <aui:container>
 	<aui:row>
