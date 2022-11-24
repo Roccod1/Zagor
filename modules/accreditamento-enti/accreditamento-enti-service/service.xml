@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="it.servizidigitali.accreditamentoenti" auto-namespace-tables="false">
+	<namespace/>
+	
+	<entity 
+		name="Example"
+		table="example"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="accreditamentoentiDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="exampleId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+	</entity>
+</service-builder>

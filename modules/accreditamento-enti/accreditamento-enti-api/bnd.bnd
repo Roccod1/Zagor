@@ -1,0 +1,10 @@
+Bundle-Name: accreditamento-enti-api
+Bundle-SymbolicName: accreditamento.enti.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	accreditamento.enti.exception,\
+	accreditamento.enti.model,\
+	accreditamento.enti.service,\
+	accreditamento.enti.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../accreditamento-enti-service/service.xml
