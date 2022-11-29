@@ -1,12 +1,27 @@
 package it.servizidigitali.accreditamentoenti.frontend.portlet;
 
+import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.util.ParamUtil;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import javax.portlet.Portlet;
+import javax.portlet.PortletException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.accreditamentoenti.frontend.constants.AccreditamentoEntiFrontendPortletKeys;
+import it.servizidigitali.accreditamentoenti.model.Ente;
+import it.servizidigitali.accreditamentoenti.service.EnteLocalService;
 
 /**
  * @author pindi
@@ -27,4 +42,32 @@ import it.servizidigitali.accreditamentoenti.frontend.constants.AccreditamentoEn
 		service = Portlet.class//
 ) //
 public class AccreditamentoEntiFrontendPortlet extends MVCPortlet {
+
+	private static final Log _log = LogFactoryUtil.getLog(AccreditamentoEntiFrontendPortlet.class);
+
+	@Reference
+	private EnteLocalService enteLocalService;
+
+	@Override
+	public void render(RenderRequest renderRequest, RenderResponse renderResponse)
+			throws IOException, PortletException {
+
+		List<Ente> enti = Collections.emptyList();
+
+		int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM,
+				AccreditamentoEntiFrontendPortletKeys.DEFAULT_CUR);
+		int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,
+				AccreditamentoEntiFrontendPortletKeys.DEFAULT_DELTA);
+		int posizioni[] = SearchPaginationUtil.calculateStartAndEnd(cur, delta);
+
+		try {
+			enti = enteLocalService.getEntes(posizioni[0], posizioni[1]);
+		} catch (Exception e) {
+			_log.error("Impossibile ottenere la lista dei servizi", e);
+		}
+
+		renderRequest.setAttribute(AccreditamentoEntiFrontendPortletKeys.LISTA_ENTI, enti);
+
+		super.render(renderRequest, renderResponse);
+	}
 }

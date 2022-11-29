@@ -5,8 +5,8 @@
 	<namespace/>
 	
 	<entity 
-		name="Example"
-		table="example"
+		name="Ente"
+		table="ente"
 		uuid="true"
 		local-service="true" 
 		remote-service="false" 
@@ -15,7 +15,7 @@
 		>
 
 		<!-- PK fields -->
-		<column name="exampleId" primary="true" type="long" />
+		<column name="enteId" primary="true" type="long" />
 
 		<!-- Group instance -->
 		<column name="groupId" type="long" />
@@ -28,5 +28,16 @@
 		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
+		<column name="denominazione" type="String" />
+		<column name="strutturaRiferimento" type="String" />
+		<column name="sitoWeb" type="String" />
+		<column name="tipo" type="String" />
+		<column name="codiceIPA" type="String" />
+		<column name="pec" type="String" />
+
+		<!-- Order -->
+		<order by="asc">
+			<order-column name="denominazione" />
+		</order>
 	</entity>
 </service-builder>

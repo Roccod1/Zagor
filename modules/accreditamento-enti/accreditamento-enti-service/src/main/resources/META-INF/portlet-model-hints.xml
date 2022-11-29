@@ -1,14 +1,20 @@
 <?xml version="1.0"?>
 
 <model-hints>
-	<model name="it.servizidigitali.accreditamentoenti.model.Example">
+	<model name="it.servizidigitali.accreditamentoenti.model.Ente">
 		<field name="uuid" type="String" />
-		<field name="exampleId" type="long" />
+		<field name="enteId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="userId" type="long" />
 		<field name="userName" type="String" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
+		<field name="denominazione" type="String" />
+		<field name="strutturaRiferimento" type="String" />
+		<field name="sitoWeb" type="String" />
+		<field name="tipo" type="String" />
+		<field name="codiceIPA" type="String" />
+		<field name="pec" type="String" />
 	</model>
 </model-hints>
