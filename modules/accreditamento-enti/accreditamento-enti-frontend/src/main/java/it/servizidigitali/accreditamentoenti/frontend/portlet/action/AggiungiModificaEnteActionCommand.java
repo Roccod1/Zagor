@@ -1,5 +1,6 @@
 package it.servizidigitali.accreditamentoenti.frontend.portlet.action;
 
+import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -40,6 +41,9 @@ public class AggiungiModificaEnteActionCommand extends BaseMVCActionCommand {
 	@Reference
 	private EnteLocalService enteLocalService;
 
+	@Reference
+	private CounterLocalService counterLocalService;
+
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
@@ -56,29 +60,10 @@ public class AggiungiModificaEnteActionCommand extends BaseMVCActionCommand {
 				AccreditamentoEntiFrontendPortletKeys.INDIRIZZO_PRECEDENTE);
 
 		try {
-			if (Validator.isNull(denominazione)) {
-				_log.error("Il campo denominazione è obbligatorio");
-				SessionErrors.add(actionRequest, AccreditamentoEntiFrontendPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
-				throw new Exception(AccreditamentoEntiFrontendPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
-			}
-
-			if (Validator.isNull(tipo)) {
-				_log.error("Il campo tipo è obbligatorio");
-				SessionErrors.add(actionRequest, AccreditamentoEntiFrontendPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
-				throw new Exception(AccreditamentoEntiFrontendPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
-			}
-
-			if (Validator.isNull(codiceIPA)) {
-				_log.error("Il campo codice IPA è obbligatorio");
-				SessionErrors.add(actionRequest, AccreditamentoEntiFrontendPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
-				throw new Exception(AccreditamentoEntiFrontendPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
-			}
-
-			if (Validator.isNull(pec)) {
-				_log.error("Il campo codice PEC è obbligatorio");
-				SessionErrors.add(actionRequest, AccreditamentoEntiFrontendPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
-				throw new Exception(AccreditamentoEntiFrontendPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
-			}
+			validateNotNullField(actionRequest, denominazione, "denominazione");
+			validateNotNullField(actionRequest, tipo, "tipo");
+			validateNotNullField(actionRequest, codiceIPA, "codiceIPA");
+			validateNotNullField(actionRequest, pec, "pec");
 
 			Ente ente = getEnte(actionRequest, enteId);
 
@@ -104,20 +89,26 @@ public class AggiungiModificaEnteActionCommand extends BaseMVCActionCommand {
 		actionResponse.sendRedirect(redirect);
 	}
 
+	private void validateNotNullField(ActionRequest actionRequest, String field, String fieldName) throws Exception {
+		if (Validator.isNull(field)) {
+			_log.error("Campo obbligatorio: " + fieldName);
+			SessionErrors.add(actionRequest, AccreditamentoEntiFrontendPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
+			throw new Exception(AccreditamentoEntiFrontendPortletKeys.ERRORE_CAMPI_OBBLIGATORI);
+		}
+	}
+
 	private Ente getEnte(ActionRequest actionRequest, Long enteId) throws Exception {
-		Ente ente;
 		if (Validator.isNotNull(enteId)) {
 			try {
-				ente = enteLocalService.getEnte(enteId);
+				return enteLocalService.getEnte(enteId);
 			} catch (Exception ex) {
 				_log.error(ex);
 				SessionErrors.add(actionRequest,
 						AccreditamentoEntiFrontendPortletKeys.ERRORE_IMPOSSIBILE_OTTENERE_ENTE);
 				throw new Exception(AccreditamentoEntiFrontendPortletKeys.ERRORE_IMPOSSIBILE_OTTENERE_ENTE);
 			}
-		} else {
-			ente = enteLocalService.createEnte(0);
 		}
-		return ente;
+		//new
+		return enteLocalService.createEnte(counterLocalService.increment());
 	}
 }
