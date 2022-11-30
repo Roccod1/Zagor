@@ -11,6 +11,9 @@ public class AccreditamentoEntiFrontendPortletKeys {
 	public static final String LISTA_ENTI = "listaEnti";
 	public static final String INDIRIZZO_PRECEDENTE = "indirizzoPrecedente";
 	public static final String AZIONI = "azioni";
+	public static final String ERRORE_CAMPI_OBBLIGATORI = "validazione-campi-obbligatori-fallita";
+	public static final String SALVATAGGIO_SUCCESSO = "salvataggio-successo";
+	public static final String ERRORE_SALVATAGGIO = "salvataggio-errore";
 
 	// messaggi sessione
 	public static final String ERRORE_IMPOSSIBILE_OTTENERE_ENTE = "errore-impossibile-ottenere-ente";
@@ -35,5 +38,6 @@ public class AccreditamentoEntiFrontendPortletKeys {
 
 	// path command
 	public static final String AGGIUNGI_MODIFICA_RENDER_COMMAND_NAME = "/aggiungiModifica";
+	public static final String SALVA_ACTION_COMMAND_NAME = "/salva";
 
 }

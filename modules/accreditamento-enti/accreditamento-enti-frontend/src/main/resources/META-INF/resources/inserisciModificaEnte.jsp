@@ -3,6 +3,10 @@
 <portlet:renderURL var="homeURL">
 </portlet:renderURL>
 
+<portlet:actionURL name="<%=AccreditamentoEntiFrontendPortletKeys.SALVA_ACTION_COMMAND_NAME %>" var="salvaURL">
+	<portlet:param name="<%=AccreditamentoEntiFrontendPortletKeys.INDIRIZZO_PRECEDENTE %>" value="${homeURL}"/>
+</portlet:actionURL>
+
 
 <div class="container pl-0 pr-0 mb-4 mt-4">
 	<aui:form method="post" action="${salvaURL}">

@@ -22,9 +22,13 @@ import it.servizidigitali.accreditamentoenti.service.EnteLocalService;
  * @author mancinig
  */
 
-@Component(immediate = true, property = {
-		"javax.portlet.name=" + AccreditamentoEntiFrontendPortletKeys.ACCREDITAMENTOENTIFRONTEND, "mvc.command.name="
-				+ AccreditamentoEntiFrontendPortletKeys.AGGIUNGI_MODIFICA_RENDER_COMMAND_NAME }, service = MVCRenderCommand.class)
+@Component(//
+		immediate = true, //
+		property = { //
+				"javax.portlet.name=" + AccreditamentoEntiFrontendPortletKeys.ACCREDITAMENTOENTIFRONTEND, //
+				"mvc.command.name=" + AccreditamentoEntiFrontendPortletKeys.AGGIUNGI_MODIFICA_RENDER_COMMAND_NAME//
+		}, //
+		service = MVCRenderCommand.class)
 public class AggiungiModificaEnteAccreditatoRenderCommand implements MVCRenderCommand {
 
 	private static final Log _log = LogFactoryUtil.getLog(AggiungiModificaEnteAccreditatoRenderCommand.class);
