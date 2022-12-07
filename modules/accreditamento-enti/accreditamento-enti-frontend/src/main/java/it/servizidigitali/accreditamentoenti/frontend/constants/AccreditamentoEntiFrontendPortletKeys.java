@@ -16,6 +16,7 @@ public class AccreditamentoEntiFrontendPortletKeys {
 	public static final String SALVATAGGIO_SUCCESSO = "salvataggio-successo";
 	public static final String ERRORE_SALVATAGGIO = "salvataggio-errore";
 	public static final String NEW_ROWS_INDEX = "newRowsIndex";
+	public static final String RESPONSABILI_TO_DELETE = "responsabiliToDelete";
 
 	// messaggi sessione
 	public static final String ERRORE_IMPOSSIBILE_OTTENERE_ENTE = "errore-impossibile-ottenere-ente";

@@ -5,7 +5,10 @@
 <aui:container>
 
 	<div id="utility">
-		<aui:input type="hidden" name="<%=AccreditamentoEntiFrontendPortletKeys.NEW_ROWS_INDEX %>" />
+		<aui:input type="hidden" cssClass="new-rows-index"
+			name="<%=AccreditamentoEntiFrontendPortletKeys.NEW_ROWS_INDEX%>" />
+		<aui:input type="hidden" cssClass="responsabili-to-delete"
+			name="<%=AccreditamentoEntiFrontendPortletKeys.RESPONSABILI_TO_DELETE%>" />
 	</div>
 
 	<table class="table table-bordered table-hover table-striped"
@@ -23,11 +26,11 @@
 		<tbody class="table-data">
 			<c:forEach items="${responsabili}" var="responsabile">
 				<tr>
-					<td class="table-cell first upper">${ responsabile.screenName }</td>
+					<td class="table-cell first upper cf-cell">${ responsabile.screenName }</td>
 					<td class="table-cell">${ responsabile.firstName }</td>
 					<td class="table-cell">${ responsabile.lastName }</td>
-					<td class="table-cell text-center last"><a><i
-							class="icon-trash"></i></a></td>
+					<td class="table-cell text-center last"><a
+						onclick="deleteResponsabile()"><i class="icon-trash"></i></a></td>
 				</tr>
 			</c:forEach>
 
@@ -51,7 +54,6 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		var portletNamespace = '<portlet:namespace/>';
-		console.log('Portlet namespace' + portletNamespace);
 
 		$('.add-responsabile').on('click', function() {
 			addRow(portletNamespace);

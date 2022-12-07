@@ -135,6 +135,10 @@ public class AggiungiModificaEnteActionCommand extends BaseMVCActionCommand {
 		for (String index : newIndexes) {
 			String cf = ParamUtil.getString(actionRequest,
 					AccreditamentoEntiFrontendPortletKeys.CODICE_FISCALE + index);
+			
+			if (cf == null || cf.isBlank()) {
+				continue;
+			}
 
 			try {
 				User user = userLocalService.getUserByScreenName(CompanyThreadLocal.getCompanyId(), cf);
