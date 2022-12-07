@@ -1,5 +1,9 @@
 <%@ include file="init.jsp"%>
 
+<%
+	List<User> responsabili = (List<User>) renderRequest.getAttribute(AccreditamentoEntiFrontendPortletKeys.RESPONSABILI);
+%>
+
 <portlet:renderURL var="homeURL">
 </portlet:renderURL>
 
@@ -79,10 +83,23 @@
 				</div>
 			</div>
 		</div>
+		
+		<div class="row">
+			<div class="col">
+				<div class="form-group">
+					<h5>
+						<liferay-ui:message key="lista-responsabili" />
+					</h5>
+					<%@ include file="listaResponsabili.jsp"%>
+				</div>
+			</div>
+		</div>
 
-		<aui:button-row cssClass="text-right">
-			<aui:button type="submit" value="salva" />
-			<aui:button type="cancel" value="annulla" href="${homeURL}" />
-		</aui:button-row>
+		<div>
+			<aui:button-row cssClass="text-right">
+				<aui:button type="submit" value="salva" />
+				<aui:button type="cancel" value="annulla" href="${homeURL}" />
+			</aui:button-row>
+		</div>
 	</aui:form>
 </div>

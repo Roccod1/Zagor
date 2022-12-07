@@ -2,7 +2,7 @@
 
 <liferay-ui:search-container delta="10"
 	emptyResultsMessage="nessun-risultato-trovato"
-	total="${totaleElementi}" iteratorURL="${iteratorURL}">
+	total="${totEnti}" iteratorURL="${iteratorURL}">
 	<liferay-ui:search-container-results results="<%=enti%>" />
 
 	<liferay-ui:search-container-row

@@ -1,12 +1,16 @@
 package it.servizidigitali.accreditamentoenti.frontend.portlet.action;
 
 import com.liferay.counter.kernel.service.CounterLocalService;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -21,7 +25,9 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.accreditamentoenti.frontend.constants.AccreditamentoEntiFrontendPortletKeys;
 import it.servizidigitali.accreditamentoenti.model.Ente;
+import it.servizidigitali.accreditamentoenti.model.ResponsabileEnte;
 import it.servizidigitali.accreditamentoenti.service.EnteLocalService;
+import it.servizidigitali.accreditamentoenti.service.ResponsabileEnteLocalService;
 
 /**
  * @author mancinig
@@ -43,6 +49,12 @@ public class AggiungiModificaEnteActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private CounterLocalService counterLocalService;
+
+	@Reference
+	private UserLocalService userLocalService;
+	
+	@Reference
+	private ResponsabileEnteLocalService responsabileEnteLocalService;
 
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
@@ -80,7 +92,10 @@ public class AggiungiModificaEnteActionCommand extends BaseMVCActionCommand {
 			ente.setPec(pec);
 			ente.setSitoWeb(sitoWeb);
 
-			enteLocalService.updateEnte(ente);
+			ente = enteLocalService.updateEnte(ente);
+
+			saveResponsabili(actionRequest, ente.getEnteId());
+
 			SessionMessages.add(actionRequest, AccreditamentoEntiFrontendPortletKeys.SALVATAGGIO_SUCCESSO);
 		} catch (Exception e) {
 			_log.error("Impossibile salvare/aggiornare l'ente con ID: " + enteId, e);
@@ -108,7 +123,33 @@ public class AggiungiModificaEnteActionCommand extends BaseMVCActionCommand {
 				throw new Exception(AccreditamentoEntiFrontendPortletKeys.ERRORE_IMPOSSIBILE_OTTENERE_ENTE);
 			}
 		}
-		//new
+		// new
 		return enteLocalService.createEnte(counterLocalService.increment());
+	}
+
+	private void saveResponsabili(ActionRequest actionRequest, long enteId) {
+		String newIndexesS = ParamUtil.getString(actionRequest, AccreditamentoEntiFrontendPortletKeys.NEW_ROWS_INDEX);
+
+		String[] newIndexes = newIndexesS.split(",");
+
+		for (String index : newIndexes) {
+			String cf = ParamUtil.getString(actionRequest,
+					AccreditamentoEntiFrontendPortletKeys.CODICE_FISCALE + index);
+
+			try {
+				User user = userLocalService.getUserByScreenName(CompanyThreadLocal.getCompanyId(), cf);
+				
+				//TODO check duplicati
+				ResponsabileEnte responsabileEnte = responsabileEnteLocalService.createResponsabileEnte(counterLocalService.increment());
+				responsabileEnte.setResponsabileUserId(user.getUserId());
+				responsabileEnte.setEnteId(enteId);
+				
+				responsabileEnteLocalService.updateResponsabileEnte(responsabileEnte);
+				
+			} catch (PortalException ex) {
+				// TODO manage error
+				_log.error("User not found: " + cf);
+			}
+		}
 	}
 }

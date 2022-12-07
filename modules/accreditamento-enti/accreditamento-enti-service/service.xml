@@ -40,4 +40,37 @@
 			<order-column name="denominazione" />
 		</order>
 	</entity>
+	
+	<entity 
+		name="ResponsabileEnte"
+		table="responsabile_ente"
+		uuid="true"
+		local-service="true" 
+		remote-service="false" 
+		data-source="accreditamentoentiDataSource" 
+		cache-enabled="true"
+		>
+
+		<!-- PK fields -->
+		<column name="responsabileEnteId" primary="true" type="long" />
+
+		<!-- Group instance -->
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+		<column name="responsabileUserId" type="long" />
+
+		<!-- Foreign key -->
+		<column name="enteId" type="long" />
+        <finder name="EnteId" return-type="Collection">
+            <finder-column name="enteId"></finder-column>
+        </finder>
+	</entity>
 </service-builder>

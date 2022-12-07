@@ -9,11 +9,13 @@ public class AccreditamentoEntiFrontendPortletKeys {
 
 	// attributi utility
 	public static final String LISTA_ENTI = "listaEnti";
+	public static final String TOTALE_ENTI = "totEnti";
 	public static final String INDIRIZZO_PRECEDENTE = "indirizzoPrecedente";
 	public static final String AZIONI = "azioni";
 	public static final String ERRORE_CAMPI_OBBLIGATORI = "validazione-campi-obbligatori-fallita";
 	public static final String SALVATAGGIO_SUCCESSO = "salvataggio-successo";
 	public static final String ERRORE_SALVATAGGIO = "salvataggio-errore";
+	public static final String NEW_ROWS_INDEX = "newRowsIndex";
 
 	// messaggi sessione
 	public static final String ERRORE_IMPOSSIBILE_OTTENERE_ENTE = "errore-impossibile-ottenere-ente";
@@ -31,6 +33,10 @@ public class AccreditamentoEntiFrontendPortletKeys {
 	public static final String STRUTTURA_DI_RIFERIMENTO = "strutturaRiferimento";
 	public static final String PEC = "pec";
 	public static final String SITO_WEB = "sitoWeb";
+	
+	//attributi responsabili
+	public static final String RESPONSABILI = "responsabili";
+	public static final String CODICE_FISCALE = "codiceFiscale";
 
 	// path jsp
 	public static final String JSP_HOME = "/view.jsp";

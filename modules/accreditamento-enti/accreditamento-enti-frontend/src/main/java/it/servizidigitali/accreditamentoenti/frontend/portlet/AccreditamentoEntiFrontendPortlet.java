@@ -54,6 +54,7 @@ public class AccreditamentoEntiFrontendPortlet extends MVCPortlet {
 
 		List<Ente> enti = Collections.emptyList();
 
+		int tot = 0;
 		int cur = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_CUR_PARAM,
 				AccreditamentoEntiFrontendPortletKeys.DEFAULT_CUR);
 		int delta = ParamUtil.getInteger(renderRequest, SearchContainer.DEFAULT_DELTA_PARAM,
@@ -62,11 +63,13 @@ public class AccreditamentoEntiFrontendPortlet extends MVCPortlet {
 
 		try {
 			enti = enteLocalService.getEntes(posizioni[0], posizioni[1]);
+			tot = enteLocalService.getEntesCount();
 		} catch (Exception e) {
 			_log.error("Impossibile ottenere la lista dei servizi", e);
 		}
 
 		renderRequest.setAttribute(AccreditamentoEntiFrontendPortletKeys.LISTA_ENTI, enti);
+		renderRequest.setAttribute(AccreditamentoEntiFrontendPortletKeys.TOTALE_ENTI, tot);
 
 		super.render(renderRequest, renderResponse);
 	}

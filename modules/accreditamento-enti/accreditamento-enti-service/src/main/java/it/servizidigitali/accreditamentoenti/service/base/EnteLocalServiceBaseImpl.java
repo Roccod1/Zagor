@@ -49,6 +49,7 @@ import it.servizidigitali.accreditamentoenti.model.Ente;
 import it.servizidigitali.accreditamentoenti.service.EnteLocalService;
 import it.servizidigitali.accreditamentoenti.service.EnteLocalServiceUtil;
 import it.servizidigitali.accreditamentoenti.service.persistence.EntePersistence;
+import it.servizidigitali.accreditamentoenti.service.persistence.ResponsabileEntePersistence;
 
 import java.io.Serializable;
 
@@ -580,6 +581,9 @@ public abstract class EnteLocalServiceBaseImpl
 
 	@Reference
 	protected EntePersistence entePersistence;
+
+	@Reference
+	protected ResponsabileEntePersistence responsabileEntePersistence;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService

@@ -1,11 +1,17 @@
 package it.servizidigitali.accreditamentoenti.frontend.portlet.render;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -16,7 +22,9 @@ import org.osgi.service.component.annotations.Reference;
 
 import it.servizidigitali.accreditamentoenti.frontend.constants.AccreditamentoEntiFrontendPortletKeys;
 import it.servizidigitali.accreditamentoenti.model.Ente;
+import it.servizidigitali.accreditamentoenti.model.ResponsabileEnte;
 import it.servizidigitali.accreditamentoenti.service.EnteLocalService;
+import it.servizidigitali.accreditamentoenti.service.ResponsabileEnteLocalService;
 
 /**
  * @author mancinig
@@ -35,6 +43,12 @@ public class AggiungiModificaEnteAccreditatoRenderCommand implements MVCRenderCo
 
 	@Reference
 	private EnteLocalService enteLocalService;
+
+	@Reference
+	private ResponsabileEnteLocalService responsabileEnteLocalService;
+
+	@Reference
+	private UserLocalService userLocalService;
 
 	@Override
 	public String render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException {
@@ -57,9 +71,25 @@ public class AggiungiModificaEnteAccreditatoRenderCommand implements MVCRenderCo
 		}
 
 		renderRequest.setAttribute(AccreditamentoEntiFrontendPortletKeys.ENTE, ente);
+		renderRequest.setAttribute(AccreditamentoEntiFrontendPortletKeys.RESPONSABILI, getResponsabili(enteId));
 		renderRequest.setAttribute(AccreditamentoEntiFrontendPortletKeys.INDIRIZZO_PRECEDENTE, indirizzoPrecedente);
 
 		return AccreditamentoEntiFrontendPortletKeys.JSP_INSERIMENTO_MODIFICA_ENTE;
+	}
+
+	private List<User> getResponsabili(long enteId) throws PortletException {
+		List<ResponsabileEnte> responsabili = responsabileEnteLocalService.getResponsabileEnteByEnteId(enteId);
+		List<User> users = new LinkedList<>();
+
+		for (ResponsabileEnte responsabile : responsabili) {
+			try {
+				users.add(userLocalService.getUser(responsabile.getResponsabileUserId()));
+			} catch (PortalException ex) {
+				_log.error("Error retrieving user: " + responsabile.getResponsabileEnteId(), ex);
+			}
+		}
+
+		return users;
 	}
 
 }

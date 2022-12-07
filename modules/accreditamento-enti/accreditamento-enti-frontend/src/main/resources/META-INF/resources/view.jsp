@@ -1,4 +1,3 @@
-<%@page import="java.util.Collections"%>
 <%@ include file="/init.jsp"%>
 
 <%

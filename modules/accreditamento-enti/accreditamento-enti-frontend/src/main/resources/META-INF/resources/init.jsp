@@ -15,6 +15,7 @@ taglib
 <%@page import="it.servizidigitali.accreditamentoenti.model.Ente" %>
 <%@page import="java.util.List"%>
 <%@page import="javax.portlet.RenderRequest"%>
+<%@page import="com.liferay.portal.kernel.model.User" %>
 
 <liferay-theme:defineObjects />
 
