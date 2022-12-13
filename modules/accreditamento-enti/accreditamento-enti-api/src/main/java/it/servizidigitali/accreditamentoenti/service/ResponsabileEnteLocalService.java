@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import it.servizidigitali.accreditamentoenti.exception.NoSuchResponsabileEnteException;
 import it.servizidigitali.accreditamentoenti.model.ResponsabileEnte;
 
 import java.io.Serializable;
@@ -254,6 +255,11 @@ public interface ResponsabileEnteLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ResponsabileEnte> getResponsabileEnteByEnteId(long enteId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public ResponsabileEnte getResponsabileEnteByResponsabileUserIdAndEnteId(
+			long responsabileUserId, long enteId)
+		throws NoSuchResponsabileEnteException;
 
 	/**
 	 * Returns the responsabile ente matching the UUID and group.

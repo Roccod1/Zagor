@@ -332,6 +332,18 @@ public class ResponsabileEnteLocalServiceWrapper
 			enteId);
 	}
 
+	@Override
+	public it.servizidigitali.accreditamentoenti.model.ResponsabileEnte
+			getResponsabileEnteByResponsabileUserIdAndEnteId(
+				long responsabileUserId, long enteId)
+		throws it.servizidigitali.accreditamentoenti.exception.
+			NoSuchResponsabileEnteException {
+
+		return _responsabileEnteLocalService.
+			getResponsabileEnteByResponsabileUserIdAndEnteId(
+				responsabileUserId, enteId);
+	}
+
 	/**
 	 * Returns the responsabile ente matching the UUID and group.
 	 *

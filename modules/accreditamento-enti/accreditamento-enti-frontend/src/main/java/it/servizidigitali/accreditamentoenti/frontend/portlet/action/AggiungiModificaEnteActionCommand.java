@@ -23,6 +23,7 @@ import javax.portlet.ActionResponse;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import it.servizidigitali.accreditamentoenti.exception.NoSuchResponsabileEnteException;
 import it.servizidigitali.accreditamentoenti.frontend.constants.AccreditamentoEntiFrontendPortletKeys;
 import it.servizidigitali.accreditamentoenti.model.Ente;
 import it.servizidigitali.accreditamentoenti.model.ResponsabileEnte;
@@ -52,7 +53,7 @@ public class AggiungiModificaEnteActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private UserLocalService userLocalService;
-	
+
 	@Reference
 	private ResponsabileEnteLocalService responsabileEnteLocalService;
 
@@ -94,7 +95,7 @@ public class AggiungiModificaEnteActionCommand extends BaseMVCActionCommand {
 
 			ente = enteLocalService.updateEnte(ente);
 
-			saveResponsabili(actionRequest, ente.getEnteId());
+			updateResponsabili(actionRequest, ente.getEnteId());
 
 			SessionMessages.add(actionRequest, AccreditamentoEntiFrontendPortletKeys.SALVATAGGIO_SUCCESSO);
 		} catch (Exception e) {
@@ -127,33 +128,99 @@ public class AggiungiModificaEnteActionCommand extends BaseMVCActionCommand {
 		return enteLocalService.createEnte(counterLocalService.increment());
 	}
 
+	private void updateResponsabili(ActionRequest actionRequest, long enteId) {
+
+		deleteResponsabili(actionRequest, enteId);
+
+		saveResponsabili(actionRequest, enteId);
+	}
+
 	private void saveResponsabili(ActionRequest actionRequest, long enteId) {
 		String newIndexesS = ParamUtil.getString(actionRequest, AccreditamentoEntiFrontendPortletKeys.NEW_ROWS_INDEX);
 
 		String[] newIndexes = newIndexesS.split(",");
 
+		if (newIndexes.length == 0) {
+			// nothing to save
+			return;
+		}
+
 		for (String index : newIndexes) {
 			String cf = ParamUtil.getString(actionRequest,
 					AccreditamentoEntiFrontendPortletKeys.CODICE_FISCALE + index);
-			
+
+			if (cf == null || cf.isBlank()) {
+				continue;
+			}
+
+			try {
+				long responsabileUserId = userLocalService.getUserByScreenName(CompanyThreadLocal.getCompanyId(), cf)
+						.getUserId();
+
+				if (existsResponsabile(responsabileUserId, enteId, cf)) {
+					continue;
+				}
+
+				saveResponsabile(responsabileUserId, enteId);
+
+			} catch (PortalException ex) {
+				_log.error("User not found: " + cf, ex);
+				SessionErrors.add(actionRequest, AccreditamentoEntiFrontendPortletKeys.ERRORE_SALVATAGGIO);
+			}
+		}
+	}
+
+	private ResponsabileEnte saveResponsabile(long responsabileUserId, long enteId) {
+		ResponsabileEnte responsabileEnte = responsabileEnteLocalService
+				.createResponsabileEnte(counterLocalService.increment());
+		responsabileEnte.setResponsabileUserId(responsabileUserId);
+		responsabileEnte.setEnteId(enteId);
+
+		responsabileEnteLocalService.updateResponsabileEnte(responsabileEnte);
+		return responsabileEnte;
+	}
+
+	private boolean existsResponsabile(long responsabileUserId, long enteId, String cf) {
+		try {
+			ResponsabileEnte responsabileEnte = responsabileEnteLocalService
+					.getResponsabileEnteByResponsabileUserIdAndEnteId(responsabileUserId, enteId);
+
+			if (responsabileEnte != null) {
+				_log.warn("Responsabile " + cf + " already present");
+				return true;
+			}
+		} catch (NoSuchResponsabileEnteException ex) {
+			_log.debug("Nuovo responsabile " + cf);
+		}
+		return false;
+	}
+
+	private void deleteResponsabili(ActionRequest actionRequest, long enteId) {
+		String cfToDeleteS = ParamUtil.getString(actionRequest,
+				AccreditamentoEntiFrontendPortletKeys.RESPONSABILI_TO_DELETE);
+
+		String[] cfToDelete = cfToDeleteS.split(",");
+
+		for (String cf : cfToDelete) {
+
 			if (cf == null || cf.isBlank()) {
 				continue;
 			}
 
 			try {
 				User user = userLocalService.getUserByScreenName(CompanyThreadLocal.getCompanyId(), cf);
-				
-				//TODO check duplicati
-				ResponsabileEnte responsabileEnte = responsabileEnteLocalService.createResponsabileEnte(counterLocalService.increment());
-				responsabileEnte.setResponsabileUserId(user.getUserId());
-				responsabileEnte.setEnteId(enteId);
-				
-				responsabileEnteLocalService.updateResponsabileEnte(responsabileEnte);
-				
+				_log.warn("Deleting " + cf);
+				ResponsabileEnte responsabileEnte = responsabileEnteLocalService
+						.getResponsabileEnteByResponsabileUserIdAndEnteId(user.getUserId(), enteId);
+				responsabileEnteLocalService.deletePersistedModel(responsabileEnte);
 			} catch (PortalException ex) {
-				// TODO manage error
-				_log.error("User not found: " + cf);
+				StringBuilder errorMessage = new StringBuilder("Nothing to delete, user not found: ")//
+						.append(cf).append(". ")//
+						.append("Error: ").append(ex.getMessage());
+				_log.error(errorMessage.toString());
 			}
+
 		}
+
 	}
 }

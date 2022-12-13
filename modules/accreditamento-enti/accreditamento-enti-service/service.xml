@@ -69,7 +69,13 @@
 
 		<!-- Foreign key -->
 		<column name="enteId" type="long" />
+		
+		<!-- Finder -->
         <finder name="EnteId" return-type="Collection">
+            <finder-column name="enteId"></finder-column>
+        </finder>
+        <finder name="ResponsabileUserIdAndEnteId" return-type="ResponsabileEnte">
+            <finder-column name="responsabileUserId"></finder-column>
             <finder-column name="enteId"></finder-column>
         </finder>
 	</entity>

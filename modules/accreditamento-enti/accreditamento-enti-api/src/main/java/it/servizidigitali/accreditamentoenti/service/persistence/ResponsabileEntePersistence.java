@@ -534,6 +534,60 @@ public interface ResponsabileEntePersistence
 	public int countByEnteId(long enteId);
 
 	/**
+	 * Returns the responsabile ente where responsabileUserId = &#63; and enteId = &#63; or throws a <code>NoSuchResponsabileEnteException</code> if it could not be found.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @return the matching responsabile ente
+	 * @throws NoSuchResponsabileEnteException if a matching responsabile ente could not be found
+	 */
+	public ResponsabileEnte findByResponsabileUserIdAndEnteId(
+			long responsabileUserId, long enteId)
+		throws NoSuchResponsabileEnteException;
+
+	/**
+	 * Returns the responsabile ente where responsabileUserId = &#63; and enteId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @return the matching responsabile ente, or <code>null</code> if a matching responsabile ente could not be found
+	 */
+	public ResponsabileEnte fetchByResponsabileUserIdAndEnteId(
+		long responsabileUserId, long enteId);
+
+	/**
+	 * Returns the responsabile ente where responsabileUserId = &#63; and enteId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching responsabile ente, or <code>null</code> if a matching responsabile ente could not be found
+	 */
+	public ResponsabileEnte fetchByResponsabileUserIdAndEnteId(
+		long responsabileUserId, long enteId, boolean useFinderCache);
+
+	/**
+	 * Removes the responsabile ente where responsabileUserId = &#63; and enteId = &#63; from the database.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @return the responsabile ente that was removed
+	 */
+	public ResponsabileEnte removeByResponsabileUserIdAndEnteId(
+			long responsabileUserId, long enteId)
+		throws NoSuchResponsabileEnteException;
+
+	/**
+	 * Returns the number of responsabile entes where responsabileUserId = &#63; and enteId = &#63;.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @return the number of matching responsabile entes
+	 */
+	public int countByResponsabileUserIdAndEnteId(
+		long responsabileUserId, long enteId);
+
+	/**
 	 * Caches the responsabile ente in the entity cache if it is enabled.
 	 *
 	 * @param responsabileEnte the responsabile ente

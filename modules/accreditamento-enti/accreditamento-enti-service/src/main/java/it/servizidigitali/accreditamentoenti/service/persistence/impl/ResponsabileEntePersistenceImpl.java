@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 
@@ -54,6 +55,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -1961,6 +1963,257 @@ public class ResponsabileEntePersistenceImpl
 	private static final String _FINDER_COLUMN_ENTEID_ENTEID_2 =
 		"responsabileEnte.enteId = ?";
 
+	private FinderPath _finderPathFetchByResponsabileUserIdAndEnteId;
+	private FinderPath _finderPathCountByResponsabileUserIdAndEnteId;
+
+	/**
+	 * Returns the responsabile ente where responsabileUserId = &#63; and enteId = &#63; or throws a <code>NoSuchResponsabileEnteException</code> if it could not be found.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @return the matching responsabile ente
+	 * @throws NoSuchResponsabileEnteException if a matching responsabile ente could not be found
+	 */
+	@Override
+	public ResponsabileEnte findByResponsabileUserIdAndEnteId(
+			long responsabileUserId, long enteId)
+		throws NoSuchResponsabileEnteException {
+
+		ResponsabileEnte responsabileEnte = fetchByResponsabileUserIdAndEnteId(
+			responsabileUserId, enteId);
+
+		if (responsabileEnte == null) {
+			StringBundler sb = new StringBundler(6);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("responsabileUserId=");
+			sb.append(responsabileUserId);
+
+			sb.append(", enteId=");
+			sb.append(enteId);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchResponsabileEnteException(sb.toString());
+		}
+
+		return responsabileEnte;
+	}
+
+	/**
+	 * Returns the responsabile ente where responsabileUserId = &#63; and enteId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @return the matching responsabile ente, or <code>null</code> if a matching responsabile ente could not be found
+	 */
+	@Override
+	public ResponsabileEnte fetchByResponsabileUserIdAndEnteId(
+		long responsabileUserId, long enteId) {
+
+		return fetchByResponsabileUserIdAndEnteId(
+			responsabileUserId, enteId, true);
+	}
+
+	/**
+	 * Returns the responsabile ente where responsabileUserId = &#63; and enteId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching responsabile ente, or <code>null</code> if a matching responsabile ente could not be found
+	 */
+	@Override
+	public ResponsabileEnte fetchByResponsabileUserIdAndEnteId(
+		long responsabileUserId, long enteId, boolean useFinderCache) {
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {responsabileUserId, enteId};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByResponsabileUserIdAndEnteId, finderArgs);
+		}
+
+		if (result instanceof ResponsabileEnte) {
+			ResponsabileEnte responsabileEnte = (ResponsabileEnte)result;
+
+			if ((responsabileUserId !=
+					responsabileEnte.getResponsabileUserId()) ||
+				(enteId != responsabileEnte.getEnteId())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_SELECT_RESPONSABILEENTE_WHERE);
+
+			sb.append(
+				_FINDER_COLUMN_RESPONSABILEUSERIDANDENTEID_RESPONSABILEUSERID_2);
+
+			sb.append(_FINDER_COLUMN_RESPONSABILEUSERIDANDENTEID_ENTEID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(responsabileUserId);
+
+				queryPos.add(enteId);
+
+				List<ResponsabileEnte> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByResponsabileUserIdAndEnteId,
+							finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {
+									responsabileUserId, enteId
+								};
+							}
+
+							_log.warn(
+								"ResponsabileEntePersistenceImpl.fetchByResponsabileUserIdAndEnteId(long, long, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					ResponsabileEnte responsabileEnte = list.get(0);
+
+					result = responsabileEnte;
+
+					cacheResult(responsabileEnte);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (ResponsabileEnte)result;
+		}
+	}
+
+	/**
+	 * Removes the responsabile ente where responsabileUserId = &#63; and enteId = &#63; from the database.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @return the responsabile ente that was removed
+	 */
+	@Override
+	public ResponsabileEnte removeByResponsabileUserIdAndEnteId(
+			long responsabileUserId, long enteId)
+		throws NoSuchResponsabileEnteException {
+
+		ResponsabileEnte responsabileEnte = findByResponsabileUserIdAndEnteId(
+			responsabileUserId, enteId);
+
+		return remove(responsabileEnte);
+	}
+
+	/**
+	 * Returns the number of responsabile entes where responsabileUserId = &#63; and enteId = &#63;.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @return the number of matching responsabile entes
+	 */
+	@Override
+	public int countByResponsabileUserIdAndEnteId(
+		long responsabileUserId, long enteId) {
+
+		FinderPath finderPath = _finderPathCountByResponsabileUserIdAndEnteId;
+
+		Object[] finderArgs = new Object[] {responsabileUserId, enteId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_RESPONSABILEENTE_WHERE);
+
+			sb.append(
+				_FINDER_COLUMN_RESPONSABILEUSERIDANDENTEID_RESPONSABILEUSERID_2);
+
+			sb.append(_FINDER_COLUMN_RESPONSABILEUSERIDANDENTEID_ENTEID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(responsabileUserId);
+
+				queryPos.add(enteId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String
+		_FINDER_COLUMN_RESPONSABILEUSERIDANDENTEID_RESPONSABILEUSERID_2 =
+			"responsabileEnte.responsabileUserId = ? AND ";
+
+	private static final String
+		_FINDER_COLUMN_RESPONSABILEUSERIDANDENTEID_ENTEID_2 =
+			"responsabileEnte.enteId = ?";
+
 	public ResponsabileEntePersistenceImpl() {
 		Map<String, String> dbColumnNames = new HashMap<String, String>();
 
@@ -1991,6 +2244,14 @@ public class ResponsabileEntePersistenceImpl
 			_finderPathFetchByUUID_G,
 			new Object[] {
 				responsabileEnte.getUuid(), responsabileEnte.getGroupId()
+			},
+			responsabileEnte);
+
+		finderCache.putResult(
+			_finderPathFetchByResponsabileUserIdAndEnteId,
+			new Object[] {
+				responsabileEnte.getResponsabileUserId(),
+				responsabileEnte.getEnteId()
 			},
 			responsabileEnte);
 	}
@@ -2076,6 +2337,18 @@ public class ResponsabileEntePersistenceImpl
 		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(
 			_finderPathFetchByUUID_G, args, responsabileEnteModelImpl);
+
+		args = new Object[] {
+			responsabileEnteModelImpl.getResponsabileUserId(),
+			responsabileEnteModelImpl.getEnteId()
+		};
+
+		finderCache.putResult(
+			_finderPathCountByResponsabileUserIdAndEnteId, args,
+			Long.valueOf(1));
+		finderCache.putResult(
+			_finderPathFetchByResponsabileUserIdAndEnteId, args,
+			responsabileEnteModelImpl);
 	}
 
 	/**
@@ -2614,6 +2887,17 @@ public class ResponsabileEntePersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByEnteId",
 			new String[] {Long.class.getName()}, new String[] {"enteId"},
 			false);
+
+		_finderPathFetchByResponsabileUserIdAndEnteId = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByResponsabileUserIdAndEnteId",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"responsabileUserId", "enteId"}, true);
+
+		_finderPathCountByResponsabileUserIdAndEnteId = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByResponsabileUserIdAndEnteId",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"responsabileUserId", "enteId"}, false);
 
 		_setResponsabileEnteUtilPersistence(this);
 	}

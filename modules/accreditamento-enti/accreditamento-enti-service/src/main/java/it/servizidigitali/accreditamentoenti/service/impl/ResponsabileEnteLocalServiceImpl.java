@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
+import it.servizidigitali.accreditamentoenti.exception.NoSuchResponsabileEnteException;
 import it.servizidigitali.accreditamentoenti.model.ResponsabileEnte;
 import it.servizidigitali.accreditamentoenti.service.base.ResponsabileEnteLocalServiceBaseImpl;
 
@@ -32,5 +33,11 @@ public class ResponsabileEnteLocalServiceImpl extends ResponsabileEnteLocalServi
 	@Override
 	public List<ResponsabileEnte> getResponsabileEnteByEnteId(long enteId) {
 		return responsabileEntePersistence.findByEnteId(enteId);
+	}
+
+	@Override
+	public ResponsabileEnte getResponsabileEnteByResponsabileUserIdAndEnteId(long responsabileUserId, long enteId)
+			throws NoSuchResponsabileEnteException {
+		return responsabileEntePersistence.findByResponsabileUserIdAndEnteId(responsabileUserId, enteId);
 	}
 }

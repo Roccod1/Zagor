@@ -291,6 +291,16 @@ public class ResponsabileEnteLocalServiceUtil {
 		return getService().getResponsabileEnteByEnteId(enteId);
 	}
 
+	public static ResponsabileEnte
+			getResponsabileEnteByResponsabileUserIdAndEnteId(
+				long responsabileUserId, long enteId)
+		throws it.servizidigitali.accreditamentoenti.exception.
+			NoSuchResponsabileEnteException {
+
+		return getService().getResponsabileEnteByResponsabileUserIdAndEnteId(
+			responsabileUserId, enteId);
+	}
+
 	/**
 	 * Returns the responsabile ente matching the UUID and group.
 	 *

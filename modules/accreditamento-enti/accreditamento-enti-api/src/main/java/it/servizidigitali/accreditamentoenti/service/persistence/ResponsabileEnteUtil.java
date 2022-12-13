@@ -710,6 +710,82 @@ public class ResponsabileEnteUtil {
 	}
 
 	/**
+	 * Returns the responsabile ente where responsabileUserId = &#63; and enteId = &#63; or throws a <code>NoSuchResponsabileEnteException</code> if it could not be found.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @return the matching responsabile ente
+	 * @throws NoSuchResponsabileEnteException if a matching responsabile ente could not be found
+	 */
+	public static ResponsabileEnte findByResponsabileUserIdAndEnteId(
+			long responsabileUserId, long enteId)
+		throws it.servizidigitali.accreditamentoenti.exception.
+			NoSuchResponsabileEnteException {
+
+		return getPersistence().findByResponsabileUserIdAndEnteId(
+			responsabileUserId, enteId);
+	}
+
+	/**
+	 * Returns the responsabile ente where responsabileUserId = &#63; and enteId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @return the matching responsabile ente, or <code>null</code> if a matching responsabile ente could not be found
+	 */
+	public static ResponsabileEnte fetchByResponsabileUserIdAndEnteId(
+		long responsabileUserId, long enteId) {
+
+		return getPersistence().fetchByResponsabileUserIdAndEnteId(
+			responsabileUserId, enteId);
+	}
+
+	/**
+	 * Returns the responsabile ente where responsabileUserId = &#63; and enteId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching responsabile ente, or <code>null</code> if a matching responsabile ente could not be found
+	 */
+	public static ResponsabileEnte fetchByResponsabileUserIdAndEnteId(
+		long responsabileUserId, long enteId, boolean useFinderCache) {
+
+		return getPersistence().fetchByResponsabileUserIdAndEnteId(
+			responsabileUserId, enteId, useFinderCache);
+	}
+
+	/**
+	 * Removes the responsabile ente where responsabileUserId = &#63; and enteId = &#63; from the database.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @return the responsabile ente that was removed
+	 */
+	public static ResponsabileEnte removeByResponsabileUserIdAndEnteId(
+			long responsabileUserId, long enteId)
+		throws it.servizidigitali.accreditamentoenti.exception.
+			NoSuchResponsabileEnteException {
+
+		return getPersistence().removeByResponsabileUserIdAndEnteId(
+			responsabileUserId, enteId);
+	}
+
+	/**
+	 * Returns the number of responsabile entes where responsabileUserId = &#63; and enteId = &#63;.
+	 *
+	 * @param responsabileUserId the responsabile user ID
+	 * @param enteId the ente ID
+	 * @return the number of matching responsabile entes
+	 */
+	public static int countByResponsabileUserIdAndEnteId(
+		long responsabileUserId, long enteId) {
+
+		return getPersistence().countByResponsabileUserIdAndEnteId(
+			responsabileUserId, enteId);
+	}
+
+	/**
 	 * Caches the responsabile ente in the entity cache if it is enabled.
 	 *
 	 * @param responsabileEnte the responsabile ente
