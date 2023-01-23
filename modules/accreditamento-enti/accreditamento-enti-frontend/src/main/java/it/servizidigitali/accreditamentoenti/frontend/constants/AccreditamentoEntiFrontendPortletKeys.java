@@ -17,6 +17,9 @@ public class AccreditamentoEntiFrontendPortletKeys {
 	public static final String ERRORE_SALVATAGGIO = "salvataggio-errore";
 	public static final String NEW_ROWS_INDEX = "newRowsIndex";
 	public static final String RESPONSABILI_TO_DELETE = "responsabiliToDelete";
+	public static final String CODICE_FISCALE_GET_USER = "cf";
+	public static final String NOME_GET_USER = "nome";
+	public static final String COGNOME_GET_USER = "cognome";
 
 	// messaggi sessione
 	public static final String ERRORE_IMPOSSIBILE_OTTENERE_ENTE = "errore-impossibile-ottenere-ente";
@@ -46,5 +49,6 @@ public class AccreditamentoEntiFrontendPortletKeys {
 	// path command
 	public static final String AGGIUNGI_MODIFICA_RENDER_COMMAND_NAME = "/aggiungiModifica";
 	public static final String SALVA_ACTION_COMMAND_NAME = "/salva";
+	public static final String GET_USER_BY_CF_RESOURCE_COMMAND_NAME = "/getUserByCF";
 
 }

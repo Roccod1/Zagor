@@ -32,6 +32,7 @@ import it.servizidigitali.accreditamentoenti.service.EnteLocalService;
 				"com.liferay.portlet.display-category=category.servizidigitali", //
 				"com.liferay.portlet.header-portlet-css=/css/main.css", //
 				"com.liferay.portlet.instanceable=true", //
+				"com.liferay.portlet.footer-portlet-javascript=/libs/jquery-blockui/jquery.blockUI.js", //
 				"javax.portlet.display-name=AccreditamentoEntiFrontend", //
 				"javax.portlet.init-param.template-path=/", //
 				"javax.portlet.init-param.view-template=/view.jsp", //

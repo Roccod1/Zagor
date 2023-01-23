@@ -1,6 +1,9 @@
 <%@ include file="init.jsp"%>
 <script type="text/javascript"
 	src="<%=request.getContextPath()%>/js/nuovoResponsabile.js"></script>
+	
+<portlet:resourceURL id="<%=AccreditamentoEntiFrontendPortletKeys.GET_USER_BY_CF_RESOURCE_COMMAND_NAME %>" var="getUserByCF">
+</portlet:resourceURL>
 
 <aui:container>
 
@@ -56,7 +59,7 @@
 		var portletNamespace = '<portlet:namespace/>';
 
 		$('.add-responsabile').on('click', function() {
-			addRow(portletNamespace);
+			addRow(portletNamespace, '${getUserByCF}');
 		});
 	});
 </script>
