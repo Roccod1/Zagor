@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>MyCollection - Admin</title>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>		
+		
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>		
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+		
+		<link rel="stylesheet" href="./css/style.css">
+		
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" 
+		crossorigin="anonymous" />
+
+		<script type="text/javascript">
+		
+				$(document).ready(function() {
+	
+
+					// dynamic version
+	
+					loadPhotos();
+					
+					$('.add-photo').on('click', function() {
+						
+						var newUrl = prompt('Nuovo indirizzo ');
+						var titolo = prompt('Titolo ');
+						var numero = prompt('Numero ');
+						
+						if (newUrl === null) {
+							
+						} else {
+							
+							$.ajax({
+								url : '/admin/api/fumetti',
+								method : 'post',
+								contentType : 'application/json',
+								data : JSON.stringify({
+									url : newUrl,
+									titolo : titolo,
+									numero : numero
+								}),
+								success : function(data) {
+									
+									loadPhotos();
+									
+									//alert('Photo added successfully');
+									var myToast = Toastify({
+										text: "fumetto added successfully",
+										duration: 2000
+									});
+	
+									myToast.showToast();								
+								}
+							});            		
+						}				
+					});
+					
+					$('tbody').on('click', '.edit', function() {
+						
+						var numero = $(this).data('numero');
+						var url = $(this).data('url');
+						var titolo = $(this).data('titolo');
+						
+						var newUrl = prompt('Edit current url', url);
+						var newTitolo = prompt('Edit current titolo', titolo);
+						var newNumero = prompt('Edit current numero', numero);
+						
+						if (newUrl === null) {
+							
+						} else if (newUrl === '') {
+							
+							alert('Url value is required');
+							
+						} else if (newTitolo === null) {
+							
+							alert('Titolo value is required');
+							
+						}else if (newTitolo === '') {
+							
+							alert('Titolo value is required');
+							
+						}else if (newNumero === '') {
+							
+							alert('Numero value is required');
+							
+						}else {
+							
+							$.ajax({
+								url : '/admin/api/fumetti/' + newNumero,
+								method : 'put',
+								contentType : 'application/json',
+								data : JSON.stringify({
+									url : newUrl,
+									titolo : newTitolo,
+									numero : newNumero
+								}),
+								success : function(data) {
+									
+									loadPhotos();
+									
+									//alert('Fumetto modified successfully');
+	
+									var myToast = Toastify({
+										text: "Fumetto modified successfully",
+										duration: 2000
+									});
+	
+									myToast.showToast();								
+								}
+							});            		
+						}
+						
+					});			
+					
+					$('tbody').on('click', '.delete', function() {
+						
+						var elementToRemove = $(this).parent();				
+						var numero = $(this).data('numero');
+						
+						$.ajax({
+							url : '/admin/api/fumetti/' + numero,
+							method : 'delete',
+							success : function(data) {
+								
+								elementToRemove.remove();
+	
+								var myToast = Toastify({
+									text: "Fumetto removed successfully",
+									duration: 2000
+								});
+	
+								myToast.showToast();								
+							}
+						});            		
+					});
+					
+					function loadPhotos() {
+						
+						$('tbody').html('');
+						
+						$.ajax({
+							url : '/admin/api/fumetti',
+							method : 'get',
+							success : function(data) {
+								
+								for(var i = data.length - 1; i >= 0; i--) {
+									
+									$('tbody').append('<tr><td>' + data[i].numero + '</td><td>' + data[i].url + '</td><td><img src="' + data[i].url + '" width="100" height = "100" /></td><td class="edit pointer" data-id="'+ data[i].id +'" data-url="'+ data[i].url +'" data-numero="'+ data[i].numero +'" data-titolo="'+ data[i].titolo +'"><i class="fa fa-pencil" aria-hidden="true"></i></td><td class="delete pointer" data-id="'+ data[i].id +'" data-numero="'+ data[i].numero +'"><i class="fa fa-trash" aria-hidden="true"></i></td></tr>');
+								}
+												
+							}
+						});
+					}
+				});
+				
+			</script>
+	</head>
+	<body>
+	
+		<header>
+	
+			<div>
+				<a href="./">Collezione</a>
+			</div>
+	
+		</header>
+	
+		<main class="admin">
+	
+			<div class="align-right">
+				<div class="btn btn-info add-photo">AGGIUNGI FUMETTO&nbsp;&nbsp;<i class="fa fa-plus" aria-hidden="true"></i></div>
+			</div>
+	
+			<table class="admin-table" border="0">
+				<thead>
+					<tr>
+						<th>Numero</th>
+						<th>Image preview</th>
+						<th>Copertina</th>
+						<th>Edit</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody>  
+				</tbody>
+			</table>
+	
+		</main>
+	
+	</body>
+</html>
