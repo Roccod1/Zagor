@@ -1,5 +1,6 @@
 package com.fumetto.bonelli.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,4 +15,5 @@ public interface IPhotoService {
 	public Photo create(Photo photo);
 	public Optional<Photo> update(int numero,  Photo foto);
 	public Boolean delete(int numero);
+	List<Photo> getByTitolo(String titolo);
 }

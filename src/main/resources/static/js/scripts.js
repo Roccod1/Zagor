@@ -37,17 +37,6 @@
 			});
 		}
 
-
-		// Aggiunta della funzione per gestire l'evento mouse-over per tooltip
-		function showTitleOnMouseOver() {
-			$(".grid-item img").mousemove(function(event) {
-				var numero = "Numero ";
-				numero += $(this).attr("numero");
-				$(this).attr("title", numero);
-			}).mouseout(function() {
-				$(this).removeAttr("title");
-			});
-		}
 						
 		// Listener per i click sugli elementi della paginazione
 		$(document).on('click', '.pagination a.page-link', function (e) {
@@ -60,9 +49,12 @@
 		$("#searchForm").submit(function (event) {
 			event.preventDefault();
 			var searchNumero = $("#searchInput").val();
+			var searchTitolo = $("#searchTitolo").val();
 			if (searchNumero) {
 				searchImageByNumero(searchNumero);
-			}
+			}else if (searchTitolo) {
+        		searchImageByTitolo(searchTitolo);
+    		}
 		});
 
 		// dynamic version
@@ -101,4 +93,45 @@
 		    },
 		  });
 		}
+		
+		function searchImageByTitolo(titolo) {
+    	$.ajax({
+        	url: "/api/fumetti/bytitolo/" + titolo,
+        	method: "get",
+        	success: function (data) {
+            	var $grid = $(".grid");
+            	$grid.empty();
+
+            	var $row = $('<div class="grid-row"></div>');
+            	for (var i = 0; i < data.length; i++) {
+                	var $item = $('<div class="grid-item"><img src="' + data[i].url + '" alt="" srcset="" titolo="' + data[i].titolo + '" numero="' + data[i].numero + '"></div>');
+                	$row.append($item);
+                	if ((i + 1) % 5 === 0 || i === data.length - 1) {
+                    	$grid.append($row);
+                    	$row = $('<div class="grid-row"></div>');
+                	}
+            	}
+            	showTitleOnMouseOver();
+        	},
+        	error: function (jqXHR, textStatus, errorThrown) {
+            	if (jqXHR.status === 404) {
+                	alert("Nessun fumetto trovato con il titolo specificato");
+            	} else {
+                	alert("Errore nella ricerca del fumetto");
+            	}
+        	},
+    	});
+	}
+	
+	// Aggiunta della funzione per gestire l'evento mouse-over per tooltip
+	function showTitleOnMouseOver() {
+		$(".grid-item img").mousemove(function(event) {
+			var numero = "Numero ";
+			numero += $(this).attr("numero");
+			$(this).attr("title", numero);
+		}).mouseout(function() {
+			$(this).removeAttr("title");
+		});
+	}
+
 					

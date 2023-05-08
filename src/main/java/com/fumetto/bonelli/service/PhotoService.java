@@ -1,6 +1,7 @@
 package com.fumetto.bonelli.service;
 
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -68,12 +69,15 @@ public class PhotoService implements IPhotoService{
 	
 	@Override
 	public Boolean delete(int numero) {
-		
 		Optional<Photo> foundFumetto=fumettoRepository.getByNumero(numero);
 		if(foundFumetto.isEmpty())
 			return false;
 		fumettoRepository.delete(foundFumetto.get());
 		return true;
 	}
-
+	
+	@Override
+    public List<Photo> getByTitolo(String titolo) {
+        return fumettoRepository.findByTitoloContainingIgnoreCase(titolo);
+    }
 }
