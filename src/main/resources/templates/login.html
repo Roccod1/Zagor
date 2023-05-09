@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>MyPhotos - Login</title>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+		
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha512-Dop/vW3iOtayerlYAqCgkVr2aTr2ErwwTYOvRFUpzl2VhCMJyjQF0Q9TjUXIo6JhuM/3i0vVEt2e/7QQmnHQqw==" crossorigin="anonymous" />
+		
+		<link rel="stylesheet" href="./css/style.css">
+		
+		<script type="text/javascript">
+			$(document).ready(function() {
+		
+				if(getUrlParameter("error")) {
+					
+					$(".bad-credentials").show();
+				}
+			});
+			
+			var getUrlParameter = function getUrlParameter(sParam) {
+			    var sPageURL = window.location.search.substring(1),
+			        sURLVariables = sPageURL.split('&'),
+			        sParameterName,
+			        i;
+
+			    for (i = 0; i < sURLVariables.length; i++) {
+			        sParameterName = sURLVariables[i].split('=');
+
+			        if (sParameterName[0] === sParam) {
+			            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+			        }
+			    }
+			};				
+			
+		</script>
+		
+	</head>
+	<body>
+	
+		<header>
+	
+			<div>
+				<a href="./">MyCollection</a>
+			</div>
+	
+		</header>
+	
+		<main class="admin">
+	
+			<h1>Welcome</h1>
+			<form name='f' action="login" method='POST'>
+			  <div class="form-group">
+			    <label for="username">Username</label>
+			    <input type="text" class="form-control" name="username" placeholder="Username">
+			  </div>
+			  <div class="form-group">
+			    <label for="password">Password</label>
+			    <input type="password" class="form-control" name="password" placeholder="Password">
+			  </div>
+			  
+				<div class="alert alert-danger bad-credentials" role="alert" style="display:none">BAD CREDENTIALS</div>				  
+			  
+			  <div class="align-right">
+				<button  name="submit" type="submit" class="btn btn-info">LOGIN</button>
+			  </div>
+			</form>						
+	
+		</main>
+	
+	
+	</body>
+</html>

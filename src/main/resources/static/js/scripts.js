@@ -16,27 +16,26 @@
 						var totalPages = Math.ceil(data.total / maxItemsPerPage);
 						var paginationHtml = '';
 						
-				//Inizio
-									// Calcola il range di pagine da mostrare
-					var startPage = Math.floor(page / maxPagesToShow) * maxPagesToShow;
-					var endPage = Math.min(startPage + maxPagesToShow, totalPages);
+						// Calcola il range di pagine da mostrare
+						var startPage = Math.floor(page / maxPagesToShow) * maxPagesToShow;
+						var endPage = Math.min(startPage + maxPagesToShow, totalPages);
 				
-					// Se non siamo alla prima pagina, mostra il pulsante per tornare indietro
-					if (page > 0) {
-						paginationHtml += '<li class="page-item"><a href="#" class="page-link" data-page="' + (page) + '">Prev</a></li>';
-					}
+						// Se non siamo alla prima pagina, mostra il pulsante per tornare indietro
+						if (page > 0) {
+							paginationHtml += '<li class="page-item"><a href="#" class="page-link" data-page="' + (page) + '">Prev</a></li>';
+						}
 	
-					// Genera i numeri di pagina
-					for (var i = startPage; i < endPage; i++) {
-						paginationHtml += '<li class="page-item' + (i === page ? ' active' : '') + '"><a href="#" class="page-link" data-page="' + (i+1) + '">' + (i+1) + '</a></li>';
-					}
+						// Genera i numeri di pagina
+						for (var i = startPage; i < endPage; i++) {
+							paginationHtml += '<li class="page-item' + (i === page ? ' active' : '') + '"><a href="#" class="page-link" data-page="' + (i+1) + '">' + (i+1) + '</a></li>';
+						}
 				
-					// Se non siamo all'ultima pagina, mostra il pulsante per andare avanti
-					if (page < totalPages - 1) {
-						paginationHtml += '<li class="page-item"><a href="#" class="page-link" data-page="' + (page + 2) + '">Next</a></li>';
-					}
+						// Se non siamo all'ultima pagina, mostra il pulsante per andare avanti
+						if (page < totalPages - 1) {
+							paginationHtml += '<li class="page-item"><a href="#" class="page-link" data-page="' + (page + 2) + '">Next</a></li>';
+						}
 	
-					$('.pagination').html(paginationHtml);
+						$('.pagination').html(paginationHtml);
 	
 						// Rimuovi gli elementi griglia esistenti
 						var $currentItems = $grid.find('.grid-item');
