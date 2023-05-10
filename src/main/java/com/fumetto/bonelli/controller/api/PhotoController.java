@@ -1,11 +1,14 @@
 package com.fumetto.bonelli.controller.api;
 
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
+import org.springframework.http.HttpHeaders;
 import com.fumetto.bonelli.model.Photo;
 import com.fumetto.bonelli.service.IPhotoService;
 import com.fumetto.bonelli.util.PagedResponse;
@@ -57,5 +60,15 @@ public class PhotoController {
     public ResponseEntity<List<Photo>> getByTitolo(@PathVariable String titolo) {
         List<Photo> foundPhotos = photoService.getByTitolo(titolo);
         return new ResponseEntity<>(foundPhotos, HttpStatus.OK);
+    }
+	
+	@GetMapping("/api/fumetti/download/{fileName:.+}")
+    public ResponseEntity<FileSystemResource> download(@PathVariable String fileName) {
+        Path path = Paths.get("c:/bonelliZagor", fileName+".cbr");
+        FileSystemResource resource = new FileSystemResource(path);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 }

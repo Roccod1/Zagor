@@ -51,6 +51,7 @@
 							}
 						}
 						showTitleOnMouseOver();
+						attachDownloadOnClick();
 					}
 				});
 			}
@@ -153,5 +154,13 @@
 				$(this).removeAttr("title");
 			});
 		}
+		
+		//Evento per scaricare le immagini con il click
+		function attachDownloadOnClick() {
+    		$(".grid-item img").click(function() {
+        	var fileName = $(this).attr("titolo"); 
+        window.location.href = "/api/fumetti/download/" + fileName;
+    });
+}
 	
 						
