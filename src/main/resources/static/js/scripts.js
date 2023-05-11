@@ -6,6 +6,7 @@
 			var maxPagesToShow = 10; // il numero massimo di pagine da mostrare nella paginazione alla volta
 							
 			function loadImages(page) {
+				$('#error-message').hide();
 				$.ajax({
 					url: '/api/fumetti',
 					data: { page: page },
@@ -52,6 +53,14 @@
 						}
 						showTitleOnMouseOver();
 						attachDownloadOnClick();
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						// Qui gestisci l'errore
+						if (jqXHR.status === 404) {
+						alert("Nessun fumetto trovato");
+						} else {
+							alert("Errore nel caricamento dei fumetti");
+						}
 					}
 				});
 			}
@@ -104,6 +113,7 @@
 			      $grid.append($item);
 	
 			      showTitleOnMouseOver();
+			      attachDownloadOnClick();
 			    },
 			    error: function (jqXHR, textStatus, errorThrown) {
 			      if (jqXHR.status === 404) {
@@ -111,7 +121,7 @@
 			      } else {
 			        alert("Errore nella ricerca del fumetto");
 			      }
-			    },
+			    }
 			  });
 			}
 			
@@ -133,6 +143,7 @@
 	                	}
 	            	}
 	            	showTitleOnMouseOver();
+	            	attachDownloadOnClick();
 	        	},
 	        	error: function (jqXHR, textStatus, errorThrown) {
 	            	if (jqXHR.status === 404) {
@@ -156,11 +167,39 @@
 		}
 		
 		//Evento per scaricare le immagini con il click
-		function attachDownloadOnClick() {
-    		$(".grid-item img").click(function() {
-        	var fileName = $(this).attr("titolo"); 
-        window.location.href = "/api/fumetti/download/" + fileName;
+	function attachDownloadOnClick() {
+    	$(".grid-item img").click(function() {
+        var fileName = $(this).attr("titolo"); 
+        var url = "/api/fumetti/download/" + fileName;
+        
+        // Conferma prima di avviare il download
+		var proceed = confirm("Sei sicuro di voler scaricare il fumetto = "+fileName);
+		if (!proceed) {
+			return;  
+		}
+        
+        $.ajax({
+            url: url,
+            method: 'GET',
+            headers: {
+        		'Content-Type': 'application/x-cbr'
+    		},
+            xhrFields: {
+                responseType: 'blob' // to deal with binary data
+            },
+            success: function (data, status, xhr) {
+                var blob = new Blob([data], {type: 'application/x-cbr'});
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = fileName+ '.cbr';
+                link.click();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Errore nel download dell'immagine");
+            }
+        });
     });
 }
+
 	
 						
