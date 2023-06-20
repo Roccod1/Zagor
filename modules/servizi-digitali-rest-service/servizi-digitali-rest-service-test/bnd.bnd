@@ -1,4 +1,0 @@
-Bundle-Name: servizi-digitali-rest-service-test
-Bundle-SymbolicName: it.servizidigitali.restservice.test
-Bundle-Version: 1.0.0
--includeresource: it.servizidigitali.restservice.client.jar=../servizi-digitali-rest-service-client/build/libs/it.servizidigitali.restservice.client-1.0.0.jar;lib:=true

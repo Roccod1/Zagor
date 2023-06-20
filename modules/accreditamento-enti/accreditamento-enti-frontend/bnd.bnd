@@ -1,4 +1,0 @@
-Bundle-Name: accreditamento-enti-frontend
-Bundle-SymbolicName: it.servizidigitali.accreditamentoenti.frontend
-Bundle-Version: 1.0.0
-Export-Package: it.servizidigitali.accreditamentoenti.frontend.constants

@@ -1,4 +1,0 @@
-Bundle-Name: gestione-procedure-frontend
-Bundle-SymbolicName: it.servizidigitali.gestioneprocedure.frontend
-Bundle-Version: 1.0.0
-Export-Package: it.servizidigitali.gestioneprocedure.frontend.constants

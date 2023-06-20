@@ -1,6 +1,0 @@
-Bundle-Name: gestione-pagamenti-integration-common
-Bundle-SymbolicName: it.servizidigitali.gestionepagamenti.integration.common
-Bundle-Version: 1.0.0
-
-Export-Package: \
-	it.servizidigitali.gestionepagamenti.integration.common.*

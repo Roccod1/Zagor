@@ -1,4 +1,0 @@
-Bundle-Name: profilo-utente-preferenze-frontend
-Bundle-SymbolicName: it.servizidigitali.profiloutente.preferenze.frontend
-Bundle-Version: 1.0.0
-Export-Package: it.servizidigitali.profiloutente.preferenze.frontend.constants

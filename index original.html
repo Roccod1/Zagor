@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyCollection</title>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+	integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+	crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" href="./css/style.css">
+
+<script type="text/javascript">
+	$(document).ready(
+					function() {
+						var $grid = $('.grid');
+						var currentPage = 0;
+						var maxItemsPerPage = 10;
+						
+						function loadImages(page) {
+						    $.ajax({
+						        url: '/api/fumetti',
+						        data: { page: page },
+						        method: 'get',
+						        success: function (data) {
+						            if (data.length === 0) {
+						                if (page > 0) {
+						                    currentPage--;
+						                }
+						                $('#next').prop('disabled', true); 
+						                return;
+						            }else {
+					                    $('#next').prop('disabled', false); 
+					                }
+						            
+					                if (data.length < maxItemsPerPage) {
+					                    $('#next').prop('disabled', true);
+					                } else {
+					                    $('#next').prop('disabled', false);
+					                }
+
+						         // Rimuovi gli elementi griglia esistenti
+						            var $currentItems = $grid.find('.grid-item');
+						            $grid.empty();
+
+						            for (var i = 0; i <= data.length - 1; i++) {
+						                var $item = $('<div class="grid-item"><img src="' + data[i].url + '" alt="" srcset="" titolo="' + data[i].titolo + '" numero="' + data[i].numero + '"></div>');
+						                if (i % 5 === 0) {
+						                    var $row = $('<div class="grid-row"></div>');
+						                    $grid.append($row);
+						                }
+						                $grid.append($item);
+						            }
+
+						            showTitleOnMouseOver();
+						        }
+						    });
+						}
+
+
+						// Aggiunta della funzione per gestire l'evento mouse-over per tooltip
+						function showTitleOnMouseOver() {
+							$(".grid-item img").mousemove(function(event) {
+								var numero = "Numero ";
+								numero += $(this).attr("numero");
+								$(this).attr("title", numero);
+							}).mouseout(function() {
+								$(this).removeAttr("title");
+							});
+						}
+						
+						// Listener per i click sugli elementi della paginazione
+						$(document).on('click', '.pagination a.page-link', function (e) {
+						    e.preventDefault();
+						    var page = $(this).data('page');
+						    loadImages(page);
+						});
+
+						// dynamic version
+
+						loadImages(currentPage);
+
+						$('#next').click(function() {
+							currentPage++;
+							loadImages(currentPage);
+							if (currentPage > 0) {
+								$('#previous').prop('disabled', false);
+							}
+						});
+
+						$('#previous').click(function() {
+							if (currentPage > 0) {
+								currentPage--;
+								loadImages(currentPage);
+								if (currentPage === 0) {
+									$('#previous').prop('disabled', true);
+								}
+							}
+						});
+						
+					});
+					
+</script>
+</head>
+<body>
+
+	<header>
+
+		<div>Collezione</div>
+		<div>
+			<a href="./admin">ADMIN</a>
+		</div>
+
+	</header>
+
+	<main>	
+		<div class="grid">
+			<div class="grid-sizer"></div>
+			<div class="grid-gutter"></div>
+		</div>	
+		<div class="pagination">
+			<button id="previous" disabled>Indietro</button>
+			<button id="next">Avanti</button>
+		</div>
+
+	</main>
+
+</body>
+</html>

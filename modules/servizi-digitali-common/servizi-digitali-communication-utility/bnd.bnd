@@ -1,6 +1,0 @@
-Bundle-Name: servizi-digitali-communication-utility
-Bundle-SymbolicName: it.servizidigitali.communication.utility
-Bundle-Version: 1.0.0
-
-Export-Package: \
-	it.servizidigitali.communication.*

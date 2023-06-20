@@ -1,4 +1,0 @@
-Bundle-Name: gestione-metriche-chatbot-frontend
-Bundle-SymbolicName: it.servizidigitali.gestionemetrichechatbot.frontend
-Bundle-Version: 1.0.0
-Export-Package: it.servizidigitali.gestionemetrichechatbot.frontend.constants

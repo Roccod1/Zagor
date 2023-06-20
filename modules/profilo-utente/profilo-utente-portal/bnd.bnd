@@ -1,6 +1,0 @@
-Bundle-Name: profilo-utente-portal
-Bundle-SymbolicName: it.servizidigitali.profiloutente.portal
-Bundle-Version: 1.0.0
-
-Export-Package: \
-	it.servizidigitali.profiloutente.portal.*

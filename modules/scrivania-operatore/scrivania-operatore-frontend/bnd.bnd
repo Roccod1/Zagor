@@ -1,4 +1,0 @@
-Bundle-Name: scrivania-operatore-frontend
-Bundle-SymbolicName: it.servizidigitali.scrivaniaoperatore.frontend
-Bundle-Version: 1.0.0
-Export-Package: it.servizidigitali.scrivaniaoperatore.frontend.constants

@@ -1,9 +1,0 @@
-Bundle-Name: chatbot-frontend
-Bundle-SymbolicName: it.servizidigitali.chatbot.frontend
-Bundle-Version: 1.0.0
-Export-Package: it.servizidigitali.chatbot.frontend.constants
-Import-Package: \
-	!com.google.crypto.tink.*,\
-	!org.bouncycastle.*,\
-	*
--metatype: *

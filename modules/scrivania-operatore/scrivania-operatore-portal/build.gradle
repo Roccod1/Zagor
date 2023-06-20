@@ -1,5 +1,0 @@
-dependencies {
-	compileOnly group: "com.liferay.portal", name: "release.portal.api"
-	compileOnly project(":modules:scrivania-operatore:scrivania-operatore-api")
-	compileOnly project(":modules:servizi-digitali-common:servizi-digitali-richieste-common")
-}

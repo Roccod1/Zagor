@@ -1,6 +1,0 @@
-Bundle-Name: servizi-digitali-rest-service-api
-Bundle-SymbolicName: it.servizidigitali.restservice.api
-Bundle-Version: 1.0.0
-Export-Package:\
-	it.servizidigitali.restservice.dto.v1_0,\
-	it.servizidigitali.restservice.resource.v1_0

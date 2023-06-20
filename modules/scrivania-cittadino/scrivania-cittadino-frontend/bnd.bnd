@@ -1,4 +1,0 @@
-Bundle-Name: scrivania-cittadino-frontend
-Bundle-SymbolicName: it.servizidigitali.scrivaniacittadino.frontend
-Bundle-Version: 1.0.0
-Export-Package: it.servizidigitali.scrivaniacittadino.frontend.constants

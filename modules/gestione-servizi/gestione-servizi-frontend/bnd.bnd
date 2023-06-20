@@ -1,4 +1,0 @@
-Bundle-Name: gestione-servizi-frontend
-Bundle-SymbolicName: it.servizidigitali.gestioneservizi.frontend
-Bundle-Version: 1.0.0
-Export-Package: it.servizidigitali.gestioneservizi.frontend.constants
